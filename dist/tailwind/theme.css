@@ -310,6 +310,7 @@
   --duration-fast: var(--sc-duration-fast);
   --duration-press: var(--sc-duration-press);
   --duration-base: var(--sc-duration-base);
+  --duration-exit: var(--sc-duration-exit);
   --duration-slow: var(--sc-duration-slow);
   --duration-spin: var(--sc-duration-spin);
   --default-transition-duration: var(--sc-duration-base);

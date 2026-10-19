@@ -187,13 +187,13 @@ Applies the emil-design-eng and mobile-native rules.
 
 | Element | Motion |
 | --- | --- |
-| Popover open | Opacity 0 → 1 and scale 0.96 → 1, from `transform-origin` at the field's top inline-start corner (the trigger). 200ms, `easing.enter`. Never from scale 0. |
-| Popover close | Opacity only, 120ms (`duration.fast`). Exits are faster than entrances. |
-| Sheet open | translateY(100%) → 0, 320ms (`duration.slow`), `cubic-bezier(0.32, 0.72, 0, 1)`. This is a proposed `easing.drawer` token. The scrim fades in over 200ms. |
-| Sheet close | Can be dragged down: a velocity flick over 0.11 px/ms dismisses it. Otherwise 200ms. |
-| Month change by pointer | The grid crossfades with a 12px shift in the direction of travel, 200ms. The shift is mirrored in RTL. |
+| Popover open | Opacity 0 → 1 and scale 0.96 (`scale.enter`) → 1, from `transform-origin` at the field's top inline-start corner (the trigger). 200ms, `easing.enter`. Never from scale 0. |
+| Popover close | Opacity only, 160ms (`duration.exit`), `easing.exit`. About 20% faster than the entrance. |
+| Sheet open | translateY(100%) → 0, 280ms (`duration.slow`), `easing.drawer` (`cubic-bezier(0.32, 0.72, 0, 1)`). The scrim fades in with it over 280ms, `easing.enter`. |
+| Sheet close | Can be dragged down: a velocity flick over 0.11 px/ms dismisses it. Otherwise back down over 224ms (`duration.slow` × 0.8), `easing.drawer`; the scrim fades out with it. |
+| Month change by pointer | The grid crossfades with a 12px shift in the direction of travel, 200ms. `easing.enter`. The shift is mirrored in RTL. |
 | Month change by keyboard | Instant. Keyboard actions are never animated. |
-| Day press (pointer) | scale(0.96) on `:active`, 120ms |
+| Day press (pointer) | scale(0.97) (`scale.press`) on `:active`, 150ms (`duration.press`), `easing.enter` |
 | Range band | Not animated; it follows the pointer instantly |
 | Reduced motion | No scale or translate; opacity fades only |
 
@@ -234,6 +234,4 @@ Applies the emil-design-eng and mobile-native rules.
 
 Methods: `open()`, `close()`, `setFocus()`.
 
-Tokens to add: `easing.drawer` = `[0.32, 0.72, 0, 1]`.
-
-Note: `easing.exit` is currently ease-in (`[0.3, 0, 1, 1]`). The motion guidance used here says UI exits should be quick ease-out or opacity-only. Review `easing.exit` before the components ship.
+Tokens used: `easing.drawer`, `easing.exit` (strong ease-out since the motion audit, `docs/motion-audit.md`), `duration.exit`, `scale.enter`, `scale.press`.

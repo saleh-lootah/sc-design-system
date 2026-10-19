@@ -14,15 +14,15 @@
         "value": 120,
         "unit": "ms"
       },
-      "$description": "Hover, colour and border changes, and every exit; exits run faster than entrances (emil-design-eng: make exit faster than enter)"
+      "$description": "Micro-interactions: hover, colour and border changes (guidance: micro-interactions 100-150ms)"
     },
     "press": {
       "$type": "duration",
       "$value": {
-        "value": 160,
+        "value": 150,
         "unit": "ms"
       },
-      "$description": "Press feedback: the scale on :active (review-animations STANDARDS: transform scale(0.97), 160ms ease-out)"
+      "$description": "Press feedback: the scale on :active (STANDARDS: transform scale(0.97) with ease-out; guidance: micro-interactions 100-150ms)"
     },
     "base": {
       "$type": "duration",
@@ -30,15 +30,23 @@
         "value": 200,
         "unit": "ms"
       },
-      "$description": "Entrances of tooltips, popovers, dropdowns and selects (STANDARDS: 125-250ms; UI animations stay under 300ms)"
+      "$description": "Entrances of tooltips, popovers, dropdowns and selects (STANDARDS: 125-250ms; guidance: standard UI 150-250ms)"
+    },
+    "exit": {
+      "$type": "duration",
+      "$value": {
+        "value": 160,
+        "unit": "ms"
+      },
+      "$description": "Exits of base-duration elements (popovers, dropdowns, bars): about 20% faster than the 200ms entrance, not more. Sheets and modals exit at calc(var(--sc-duration-slow) * 0.8) (emil-design-eng: exit faster than enter; guidance: about 20%)"
     },
     "slow": {
       "$type": "duration",
       "$value": {
-        "value": 320,
+        "value": 280,
         "unit": "ms"
       },
-      "$description": "Modals, drawers and bottom sheets only, never small UI (STANDARDS: modals and drawers 200-500ms)"
+      "$description": "Modals, drawers and bottom sheets only; larger elements move further, so slower (guidance: 200-300ms, UI stays under 300ms)"
     },
     "spin": {
       "$type": "duration",
@@ -74,7 +82,7 @@
         0.32,
         1
       ],
-      "$description": "Strong ease-out for anything leaving, paired with duration.fast (emil-design-eng: never ease-in on UI; it delays the moment the user is watching)"
+      "$description": "Strong ease-out for anything leaving, paired with duration.exit (emil-design-eng: never ease-in on UI; it delays the moment the user is watching)"
     },
     "standard": {
       "$type": "cubicBezier",

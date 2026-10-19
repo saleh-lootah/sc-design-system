@@ -221,7 +221,7 @@ describe('sc-button (e2e)', () => {
     const transformDuringPress = async () => {
       await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
       await page.mouse.down();
-      await new Promise((r) => setTimeout(r, 300)); // longer than the 160ms press transition
+      await new Promise((r) => setTimeout(r, 300)); // longer than the 150ms press transition
       const t = await inner(page, 'sc-button', 'getComputedStyle(control).transform');
       await page.mouse.up();
       return t;
@@ -240,7 +240,7 @@ describe('sc-button (e2e)', () => {
   it('keeps colour feedback but drops the press scale under reduced motion', async () => {
     const page = await newScPage(`<sc-button>Continue</sc-button>`);
     await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
-    expect(await inner(page, 'sc-button', 'getComputedStyle(control).transitionDuration')).toBe('0.12s, 0.12s, 0.16s');
+    expect(await inner(page, 'sc-button', 'getComputedStyle(control).transitionDuration')).toBe('0.12s, 0.12s, 0.15s');
     const box = (await (await page.$('sc-button'))!.boundingBox())!;
     await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
     await page.mouse.down();
