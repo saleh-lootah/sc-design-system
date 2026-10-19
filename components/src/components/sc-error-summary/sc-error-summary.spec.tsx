@@ -26,11 +26,12 @@ describe('sc-error-summary (spec)', () => {
     expect(root(page).querySelector('.description')).not.toHaveClass('description--empty');
   });
 
-  it('is focusable by script and an alert labelled by its heading', async () => {
+  it('is focusable by script, labelled by its heading, and not a live region', async () => {
     const page = await newSpecPage({ components: [ScErrorSummary], html: `<sc-error-summary no-autofocus><a href="#x">Error</a></sc-error-summary>` });
     const box = root(page).querySelector('[part="container"]')!;
     expect(box.getAttribute('tabindex')).toBe('-1');
-    expect(box.getAttribute('role')).toBe('alert');
+    expect(box.getAttribute('role')).toBe('group');
+    expect(box.hasAttribute('aria-live')).toBe(false);
     expect(box.getAttribute('aria-labelledby')).toBe('heading');
     expect(root(page).getElementById('heading')).not.toBeNull();
   });

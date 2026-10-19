@@ -93,11 +93,13 @@ surrounding `<form>`, and it delegates focus to the inner control.
 
 ### Used by
 
+ - [sc-date-range](../sc-date-range)
  - [sc-search](../sc-search)
 
 ### Graph
 ```mermaid
 graph TD;
+  sc-date-range --> sc-button
   sc-search --> sc-button
   style sc-button fill:#f9f,stroke:#333,stroke-width:4px
 ```

@@ -1,6 +1,6 @@
 # sc-table · specification
 
-Status: designed in Paper (page 09 · Components · Content and layout). Not yet built in Stencil.
+Status: designed in Paper (page 09 · Components · Content and layout) and built in Stencil (`src/components/sc-table`).
 
 A table compares rows of the same kind of thing across a few attributes: a person's fines, their payments, the status of their permit applications, a list of court hearings. Each row is one thing; each column is one attribute.
 
@@ -33,6 +33,7 @@ Each type sets the column's alignment, wrapping and figures. A column's header c
 
 Rules:
 - Digits are Latin in both languages: amounts, dates, references and counts.
+- In Arabic, write a numeric range with a word, not a dash: "عرض 1 إلى 20 من 1,284 مخالفة". The dash is direction-neutral, so in right-to-left text "1–20" displays as "20–1".
 - Amounts are never truncated or abbreviated.
 - A missing optional value shows "None" in `muted`. Never show an empty cell or a bare dash.
 

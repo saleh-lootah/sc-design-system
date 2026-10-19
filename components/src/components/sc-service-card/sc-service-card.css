@@ -67,7 +67,7 @@
   outline: none;
 }
 
-/* The link's hit area covers the whole card. */
+/* The title is the link; its hit area is stretched over the whole card. */
 .link::after {
   content: '';
   position: absolute;
@@ -119,6 +119,7 @@
     color var(--sc-duration-fast) var(--sc-easing-hover);
 }
 
+/* Hover only for a precise pointer, so touch doesn't leave a sticky hover state. */
 @media (hover: hover) and (pointer: fine) {
   .card:hover::before {
     opacity: 0;

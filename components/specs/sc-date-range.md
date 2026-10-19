@@ -1,6 +1,6 @@
 # sc-date-range · specification
 
-Status: designed in Paper (page 07 · Components · Form fields). Not yet built in Stencil.
+Status: designed in Paper (page 07 · Components · Form fields) and built in Stencil (`src/components/sc-date-range`).
 
 `sc-date-range` lets someone choose a start and an end date that relate to a calendar. Examples:
 - filtering payments or fines between two dates

@@ -24,7 +24,7 @@ A link to a service, as in "Most used services" on a channel home page. For a gr
 
 ### Behaviour
 
-The heading contains the link, so heading navigation lists every service and the link's name is just the title. The link's hit area is stretched over the whole card, so a click anywhere (except a chip link) follows it, and keyboard users meet one tab stop per card. The focus ring wraps the card. On hover the shadow deepens, the title underlines and the chevron fills with the channel colour.
+Only the title is the link: the card is not wrapped in an `<a>`. Screen readers hear a short link name ("Renew vehicle registration"), with the entity as its description, instead of the card's whole text. The heading contains the link, so heading navigation lists every service. The link's hit area is stretched over the card with `::after { inset: 0 }`, so a click anywhere (except a chip link) follows it, and keyboard users meet one tab stop per card. The focus ring wraps the card. With a mouse or trackpad (`(hover: hover) and (pointer: fine)`) hovering deepens the shadow, underlines the title and fills the chevron with the channel colour; touch screens get no hover state.
 
 ### Arabic
 
@@ -36,11 +36,15 @@ The chevron mirrors and sits on the left. Entity names have official Arabic form
 ## Overview
 
 A link to a service: its title, the entity that owns it, an optional channel chip and an
-end chevron. The whole card is one link target.
+end chevron.
 
-The title is a heading containing the link, so heading navigation finds every service;
-the link's hit area is stretched over the card. The owning entity is the link's
-description. A chip that is itself a link stays clickable on its own.
+Only the title is the link, so screen readers hear a short link name ("Renew vehicle
+registration"), not the whole card's text. The card is not wrapped in an `<a>`: the
+title link's hit area is stretched over the card with a pseudo-element (`::after`,
+`inset: 0`), so the whole card is still clickable and the focus ring wraps the card.
+The title is a heading containing the link, so heading navigation finds every service.
+The owning entity is the link's description. A chip that is itself a link stays
+clickable on its own.
 
 ## Properties
 

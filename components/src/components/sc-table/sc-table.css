@@ -1,0 +1,892 @@
+/*
+ * sc-table is scoped (light DOM): it styles the author's native <table>. Stencil rewrites
+ * `::slotted(table) x` to `.sc-table-s > table x`, which reaches every descendant of the
+ * slotted table, including the cells, checkboxes and skeleton rows the component injects.
+ *
+ * Stencil 4.45's scoper mangles an @media or @container block whose FIRST rule is a
+ * `::slotted(…)` rule, so such blocks open with a `:host { --_at: 1; }` anchor rule.
+ *
+ * Column types come from `data-type` on each cell (copied from its header):
+ *   text · reference · date · amount · status · action
+ */
+@import '../../styles/shared.css';
+@import '../../styles/type/title-s.css';
+@import '../../styles/type/title-m.css';
+@import '../../styles/type/label-s.css';
+@import '../../styles/type/label-m.css';
+@import '../../styles/type/body-s.css';
+
+:host {
+  /* Queried below for the stacked and scrolling layouts under 600px (--sc-breakpoint-medium). */
+  container: sc-table / inline-size;
+  display: block;
+  /* A size container doesn't size to its content, so it fills its container instead
+     (otherwise it collapses inside flex and grid items that shrink to fit). */
+  inline-size: 100%;
+  min-inline-size: 0;
+  color: var(--sc-color-ink);
+  font-family: var(--type-body-s-family);
+  --_pad-block: var(--sc-space-16);
+  --_pad-inline: var(--sc-space-16);
+  --_edge: var(--sc-space-8);
+  --_row-min: var(--sc-space-56);
+  --_select-w: calc(var(--sc-size-target-min) + var(--sc-space-16) + var(--sc-space-8));
+}
+
+:host([hidden]),
+[hidden] {
+  display: none !important;
+}
+
+:host([density='compact']) {
+  --_pad-block: var(--sc-space-12);
+  --_row-min: var(--sc-size-target-min);
+}
+
+/* Container ----------------------------------------------------------------------------- */
+
+.container {
+  position: relative;
+  /* Transparent until forced colours repaint it. */
+  border: var(--sc-size-border-hairline) solid transparent;
+  border-radius: var(--sc-radius-card);
+  background: var(--sc-color-surface);
+  box-shadow: var(--sc-elevation-1);
+  overflow: clip;
+}
+
+.scroller {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  outline: none;
+}
+
+.scroller:focus-visible {
+  outline: var(--sc-size-focus-ring) solid var(--sc-channel-action);
+  outline-offset: calc(-1 * var(--sc-size-focus-ring));
+}
+
+/* The table ----------------------------------------------------------------------------- */
+
+::slotted(table) {
+  inline-size: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+::slotted(table[data-sc-hidden]),
+::slotted(table) [data-sc-hidden] {
+  display: none !important;
+}
+
+::slotted(table) caption {
+  padding-block: var(--sc-space-20) var(--sc-space-12);
+  padding-inline: calc(var(--_pad-inline) + var(--_edge));
+  caption-side: top;
+  text-align: start;
+  color: var(--sc-color-ink-strong);
+  font-family: var(--type-title-s-family);
+  font-weight: var(--type-title-s-weight);
+  font-size: var(--type-title-s-size);
+  line-height: var(--type-title-s-leading);
+  letter-spacing: var(--type-title-s-tracking);
+}
+
+::slotted(table) caption.sc-table__caption--hidden,
+::slotted(table) .sc-visually-hidden {
+  position: absolute !important;
+  inline-size: 1px !important;
+  block-size: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+::slotted(table) th,
+::slotted(table) td {
+  box-sizing: border-box;
+  padding-block: var(--_pad-block);
+  padding-inline: var(--_pad-inline);
+  text-align: start;
+  vertical-align: middle;
+  font-family: var(--type-body-s-family);
+  font-weight: var(--type-body-s-weight);
+  font-size: var(--type-body-s-size);
+  line-height: var(--type-body-s-leading);
+  letter-spacing: var(--type-body-s-tracking);
+  color: var(--sc-color-ink);
+  overflow-wrap: break-word;
+}
+
+/* The first and last cells add space-8 toward the card edge. */
+::slotted(table) tr > :first-child {
+  padding-inline-start: calc(var(--_pad-inline) + var(--_edge));
+}
+::slotted(table) tr > :last-child {
+  padding-inline-end: calc(var(--_pad-inline) + var(--_edge));
+}
+
+/* Header row: label-s, muted, single line, a hairline rule under it, no fill. */
+::slotted(table) thead th,
+::slotted(table) thead td {
+  padding-block: var(--sc-space-12);
+  border-block-end: var(--sc-size-border-hairline) solid var(--sc-color-rule);
+  white-space: nowrap;
+  color: var(--sc-color-muted);
+  font-family: var(--sc-font-family-medium);
+  font-weight: var(--sc-font-weight-medium);
+  font-size: var(--type-label-s-size);
+  line-height: var(--type-label-s-leading);
+  letter-spacing: var(--type-label-s-tracking);
+}
+
+:host(:lang(ar)) ::slotted(table) thead th,
+:host(:lang(ar)) ::slotted(table) thead td {
+  font-family: var(--type-label-s-family);
+  font-weight: var(--type-label-s-weight);
+}
+
+/* Body rows: at least 56 (compact 44), a hairline rule between rows, no zebra, no vertical rules. */
+::slotted(table) tbody tr {
+  block-size: var(--_row-min);
+  transition: background-color var(--sc-duration-fast) ease;
+}
+
+::slotted(table) tbody tr + tr > * {
+  border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-rule);
+}
+
+/* Row header: title-s in ink-strong; it carries the row's link. */
+::slotted(table) tbody th,
+::slotted(table) tfoot th,
+::slotted(table) tfoot td {
+  color: var(--sc-color-ink-strong);
+  font-family: var(--type-title-s-family);
+  font-weight: var(--type-title-s-weight);
+  font-size: var(--type-title-s-size);
+  line-height: var(--type-title-s-leading);
+  letter-spacing: var(--type-title-s-tracking);
+}
+
+::slotted(table) a {
+  color: var(--sc-channel-action);
+  text-decoration: none;
+  text-underline-offset: 0.2em;
+}
+
+::slotted(table) tbody th a {
+  color: inherit;
+}
+
+::slotted(table) a:focus-visible {
+  outline: var(--sc-size-focus-ring) solid var(--sc-channel-action);
+  outline-offset: var(--sc-size-focus-offset);
+  border-radius: var(--sc-radius-xs);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :host {
+    --_at: 1;
+  }
+
+  ::slotted(table) a:hover {
+    text-decoration: underline;
+    text-decoration-thickness: var(--sc-size-border-control);
+  }
+  ::slotted(table) tbody tr:not([data-selected]):hover {
+    background: var(--sc-color-fill-quiet);
+  }
+}
+
+/* Totals row: a 1px control rule above it. */
+::slotted(table) tfoot tr > * {
+  border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-control);
+}
+
+/* Compact density uses body-s everywhere in the body (the default already does). */
+:host([density='compact']) ::slotted(table) tbody th {
+  font-size: var(--type-body-s-size);
+  line-height: var(--type-body-s-leading);
+}
+
+/* Column types ---------------------------------------------------------------------------- */
+
+::slotted(table) [data-type='reference'],
+::slotted(table) [data-type='date'],
+::slotted(table) [data-type='amount'] {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+::slotted(table) [data-type='reference'] {
+  unicode-bidi: isolate;
+}
+
+::slotted(table) [data-type='status'],
+::slotted(table) [data-type='action'] {
+  white-space: nowrap;
+}
+
+::slotted(table) [data-type='amount'],
+::slotted(table) [data-type='action'] {
+  text-align: end;
+}
+
+/* Text wraps to at most 3 lines and is never truncated: the column grows instead. */
+::slotted(table) td[data-type='text'] {
+  min-inline-size: 12ch;
+}
+
+::slotted(table) td[data-type='action'] a {
+  font-family: var(--type-label-m-family);
+  font-weight: var(--type-label-m-weight);
+  font-size: var(--type-label-m-size);
+  line-height: var(--type-label-m-leading);
+}
+
+::slotted(table) .sc-table__none {
+  color: var(--sc-color-muted);
+}
+
+/* Sorting --------------------------------------------------------------------------------- */
+
+::slotted(table) th:has(> .sc-table__sort) {
+  padding: 0;
+}
+
+::slotted(table) .sc-table__sort {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-space-4);
+  inline-size: 100%;
+  min-block-size: var(--sc-size-target-min);
+  margin: 0;
+  padding-block: var(--sc-space-12);
+  padding-inline: var(--_pad-inline);
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+  outline: none;
+}
+
+::slotted(table) tr > :first-child > .sc-table__sort {
+  padding-inline-start: calc(var(--_pad-inline) + var(--_edge));
+}
+::slotted(table) tr > :last-child > .sc-table__sort {
+  padding-inline-end: calc(var(--_pad-inline) + var(--_edge));
+}
+
+/* The sort glyph sits after the label (to its left in Arabic); end-aligned headers keep it there too. */
+::slotted(table) th[data-type='amount'] > .sc-table__sort,
+::slotted(table) th[data-type='action'] > .sc-table__sort {
+  justify-content: flex-end;
+}
+
+::slotted(table) .sc-table__sort:focus-visible {
+  outline: var(--sc-size-focus-ring) solid var(--sc-channel-action);
+  outline-offset: calc(-1 * var(--sc-size-focus-ring));
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :host {
+    --_at: 1;
+  }
+
+  ::slotted(table) .sc-table__sort:hover {
+    color: var(--sc-color-ink-strong);
+  }
+}
+
+::slotted(table) th[aria-sort='ascending'],
+::slotted(table) th[aria-sort='descending'] {
+  color: var(--sc-color-ink-strong);
+}
+
+::slotted(table) .sc-table__sort-glyph {
+  flex: none;
+  inline-size: var(--sc-size-icon-s);
+  block-size: var(--sc-size-icon-s);
+}
+
+::slotted(table) .sc-table__glyph-ascending,
+::slotted(table) .sc-table__glyph-descending {
+  display: none;
+}
+
+::slotted(table) .sc-table__glyph-none {
+  opacity: 0.4;
+}
+
+::slotted(table) th[aria-sort='ascending'] .sc-table__glyph-none,
+::slotted(table) th[aria-sort='descending'] .sc-table__glyph-none {
+  display: none;
+}
+
+::slotted(table) th[aria-sort='ascending'] .sc-table__glyph-ascending,
+::slotted(table) th[aria-sort='descending'] .sc-table__glyph-descending {
+  display: inline;
+}
+
+/* Selection ------------------------------------------------------------------------------- */
+
+::slotted(table) .sc-table__select {
+  inline-size: var(--_select-w);
+  padding-block: 0;
+  padding-inline-end: var(--sc-space-8);
+}
+
+::slotted(table) tr > .sc-table__select:first-child {
+  padding-inline-start: var(--sc-space-16);
+}
+
+/* The label is the 44px target around the 24px box. */
+::slotted(table) .sc-table__check {
+  position: relative;
+  display: grid;
+  place-items: center;
+  inline-size: var(--sc-size-target-min);
+  block-size: var(--sc-size-target-min);
+  cursor: pointer;
+}
+
+::slotted(table) .sc-table__box {
+  grid-area: 1 / 1;
+  box-sizing: border-box;
+  inline-size: var(--sc-size-icon-l);
+  block-size: var(--sc-size-icon-l);
+  margin: 0;
+  border: var(--sc-size-border-strong) solid var(--sc-color-control);
+  border-radius: var(--sc-radius-xs);
+  background: var(--sc-color-surface);
+  appearance: none;
+  cursor: pointer;
+  transition:
+    background-color var(--sc-duration-fast) var(--sc-easing-standard),
+    border-color var(--sc-duration-fast) var(--sc-easing-standard);
+}
+
+::slotted(table) .sc-table__box:focus-visible {
+  outline: var(--sc-size-focus-ring) solid var(--sc-channel-action);
+  outline-offset: var(--sc-size-focus-offset);
+  box-shadow: 0 0 0 var(--sc-size-focus-offset) var(--sc-color-surface);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :host {
+    --_at: 1;
+  }
+
+  ::slotted(table) .sc-table__check:hover .sc-table__box {
+    border-color: var(--sc-color-ink);
+  }
+}
+
+::slotted(table) .sc-table__box:checked,
+::slotted(table) .sc-table__box:indeterminate,
+::slotted(table) .sc-table__check:hover .sc-table__box:checked,
+::slotted(table) .sc-table__check:hover .sc-table__box:indeterminate {
+  border-color: var(--sc-channel-action);
+  background: var(--sc-channel-action);
+}
+
+/* A tick is a symbol, not an arrow: it never mirrors, so it is drawn in LTR. */
+::slotted(table) .sc-table__mark {
+  grid-area: 1 / 1;
+  box-sizing: border-box;
+  direction: ltr;
+  inline-size: var(--sc-space-8);
+  block-size: var(--sc-space-12);
+  margin-block-start: calc(-1 * var(--sc-space-2));
+  border-block-end: var(--sc-size-border-strong) solid var(--sc-color-on-action);
+  border-inline-end: var(--sc-size-border-strong) solid var(--sc-color-on-action);
+  transform: rotate(45deg);
+  pointer-events: none;
+  opacity: 0;
+}
+
+::slotted(table) .sc-table__box:checked + .sc-table__mark {
+  opacity: 1;
+}
+
+/* Indeterminate: a dash. */
+::slotted(table) .sc-table__box:indeterminate + .sc-table__mark {
+  inline-size: var(--sc-space-12);
+  block-size: 0;
+  margin: 0;
+  border-inline-end: 0;
+  transform: none;
+  opacity: 1;
+}
+
+::slotted(table) tbody tr[data-selected] {
+  background: var(--sc-color-fill-selected);
+}
+
+/* The selection bar: below the table, one primary action. */
+.selection-bar {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--sc-space-12) var(--sc-space-16);
+  margin-block-start: var(--sc-space-12);
+  padding-block: var(--sc-space-16);
+  padding-inline: var(--sc-space-24) var(--sc-space-16);
+  border: var(--sc-size-border-hairline) solid transparent;
+  border-radius: var(--sc-radius-card);
+  background: var(--sc-color-surface);
+  box-shadow: var(--sc-elevation-1);
+  opacity: 0;
+  /* Exit: opacity only, faster than the entrance. */
+  transition:
+    opacity var(--sc-duration-fast) ease,
+    display var(--sc-duration-fast) allow-discrete;
+}
+
+.selection-bar--open {
+  display: flex;
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--sc-duration-base) var(--sc-easing-enter),
+    transform var(--sc-duration-base) var(--sc-easing-enter);
+}
+
+@starting-style {
+  .selection-bar--open {
+    opacity: 0;
+    transform: translateY(var(--sc-space-8));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .selection-bar--open {
+    transform: none;
+  }
+}
+
+.selection-text {
+  margin: 0;
+  color: var(--sc-color-ink-strong);
+  font-family: var(--type-title-s-family);
+  font-weight: var(--type-title-s-weight);
+  font-size: var(--type-title-s-size);
+  line-height: var(--type-title-s-leading);
+  letter-spacing: var(--type-title-s-tracking);
+  font-variant-numeric: tabular-nums;
+}
+
+.selection-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sc-space-8);
+}
+
+/* States ---------------------------------------------------------------------------------- */
+
+/* Loading: skeleton bars at the real column widths. */
+::slotted(table) .sc-table__skeleton tr {
+  block-size: var(--_row-min);
+}
+
+::slotted(table) .sc-table__bar {
+  display: inline-block;
+  vertical-align: middle;
+  inline-size: 70%;
+  block-size: var(--sc-space-12);
+  border-radius: var(--sc-radius-xs);
+  background: var(--sc-color-fill-quiet);
+  animation: sc-table-pulse 1.2s ease-in-out infinite alternate;
+}
+
+::slotted(table) .sc-table__bar--amount,
+::slotted(table) .sc-table__bar--action {
+  inline-size: 40%;
+}
+
+::slotted(table) .sc-table__bar--status {
+  inline-size: var(--sc-space-64);
+  block-size: var(--sc-space-24);
+  border-radius: var(--sc-radius-pill);
+}
+
+@keyframes sc-table-pulse {
+  from {
+    opacity: 0.55;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host {
+    --_at: 1;
+  }
+
+  ::slotted(table) .sc-table__bar {
+    animation: none;
+    opacity: 0.75;
+  }
+}
+
+/* Empty, no results and error replace the body. */
+.state {
+  padding-block: var(--sc-space-48);
+  padding-inline: calc(var(--_pad-inline) + var(--_edge));
+}
+
+.state--error {
+  padding-block: var(--sc-space-24);
+}
+
+::slotted([slot='empty']) {
+  max-inline-size: var(--sc-size-measure);
+}
+
+::slotted([slot='empty']) > * {
+  margin: 0;
+  color: var(--sc-color-ink);
+  font-family: var(--type-body-s-family);
+  font-weight: var(--type-body-s-weight);
+  font-size: var(--type-body-s-size);
+  line-height: var(--type-body-s-leading);
+  letter-spacing: var(--type-body-s-tracking);
+}
+
+::slotted([slot='empty']) > :first-child {
+  color: var(--sc-color-ink-strong);
+  font-family: var(--type-title-s-family);
+  font-weight: var(--type-title-s-weight);
+  font-size: var(--type-title-s-size);
+  line-height: var(--type-title-s-leading);
+  letter-spacing: var(--type-title-s-tracking);
+}
+
+::slotted([slot='empty']) > * + * {
+  margin-block-start: var(--sc-space-4);
+}
+
+::slotted([slot='empty']) a {
+  color: var(--sc-channel-action);
+}
+
+/* Footer: count and pagination. */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--sc-space-12);
+  padding-block: var(--sc-space-16);
+  padding-inline: calc(var(--_pad-inline) + var(--_edge));
+  border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-rule);
+  color: var(--sc-color-muted);
+  font-family: var(--type-body-s-family);
+  font-weight: var(--type-body-s-weight);
+  font-size: var(--type-body-s-size);
+  line-height: var(--type-body-s-leading);
+  letter-spacing: var(--type-body-s-tracking);
+  font-variant-numeric: tabular-nums;
+}
+
+:host(.sc-table--empty) .footer,
+:host(.sc-table--error) .footer {
+  display: none;
+}
+
+::slotted([slot='footer']) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--sc-space-12);
+  inline-size: 100%;
+}
+
+/* An 8px shadow edge on whichever side has more content. */
+:host .container::before,
+:host .container::after {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  z-index: 2;
+  inline-size: var(--sc-space-8);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--sc-duration-fast) ease;
+}
+
+:host .container::before {
+  inset-inline-start: 0;
+  background: linear-gradient(90deg, oklab(from var(--sc-color-shadow) l a b / 10%), transparent);
+}
+
+:host .container::after {
+  inset-inline-end: 0;
+  background: linear-gradient(270deg, oklab(from var(--sc-color-shadow) l a b / 10%), transparent);
+}
+
+:host(:dir(rtl)) .container::before {
+  background: linear-gradient(270deg, oklab(from var(--sc-color-shadow) l a b / 10%), transparent);
+}
+
+:host(:dir(rtl)) .container::after {
+  background: linear-gradient(90deg, oklab(from var(--sc-color-shadow) l a b / 10%), transparent);
+}
+
+:host(.sc-table--edge-start) .container::before,
+:host(.sc-table--edge-end) .container::after {
+  opacity: 1;
+}
+
+/* Below 600px: stack ------------------------------------------------------------------------ */
+
+@container sc-table (max-width: 599.98px) {
+  :host([responsive='stack']) .container {
+    border: 0;
+    background: none;
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  :host([responsive='stack']) .scroller {
+    overflow: visible;
+  }
+
+  :host([responsive='stack']) ::slotted(table),
+  :host([responsive='stack']) ::slotted(table) tbody,
+  :host([responsive='stack']) ::slotted(table) tfoot {
+    display: block;
+  }
+
+  :host([responsive='stack']) ::slotted(table) caption {
+    display: block;
+    padding-block: 0 var(--sc-space-12);
+    padding-inline: 0;
+  }
+
+  /* The header row is replaced by the label above each value. */
+  :host([responsive='stack']) ::slotted(table) thead tr {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  /* Each row becomes a card. */
+  :host([responsive='stack']) ::slotted(table) tbody tr,
+  :host([responsive='stack']) ::slotted(table) tfoot tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--sc-space-12);
+    align-items: start;
+    block-size: auto;
+    padding-block: var(--sc-space-16);
+    padding-inline: var(--sc-space-16);
+    border: var(--sc-size-border-hairline) solid transparent;
+    border-radius: var(--sc-radius-card);
+    background: var(--sc-color-surface);
+    box-shadow: var(--sc-elevation-1);
+  }
+
+  :host([responsive='stack']) ::slotted(table) tbody tr + tr,
+  :host([responsive='stack']) ::slotted(table) tfoot tr {
+    margin-block-start: var(--sc-space-12);
+  }
+
+  :host([responsive='stack']) ::slotted(table) tbody tr[data-selected] {
+    background: color-mix(in oklab, var(--sc-color-surface), var(--sc-color-fill-selected));
+    box-shadow: var(--sc-elevation-1), inset 0 0 0 var(--sc-size-border-strong) var(--sc-channel-action);
+  }
+
+  :host([responsive='stack']) ::slotted(table) tbody tr > *,
+  :host([responsive='stack']) ::slotted(table) tfoot tr > * {
+    display: block;
+    grid-column: 1 / -1;
+    padding: 0;
+    border: 0;
+    white-space: normal;
+  }
+
+  :host([responsive='stack']) ::slotted(table) tbody tr:has(> .sc-table__select) {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  /* Title: the row header. Status: top inline-end. */
+  :host([responsive='stack']) ::slotted(table) tbody tr > th {
+    grid-row: 1;
+    grid-column: 1;
+    align-self: center;
+  }
+  :host([responsive='stack']) ::slotted(table) tbody tr > [data-type='status'] {
+    grid-row: 1;
+    grid-column: -2 / -1;
+    justify-self: end;
+  }
+  :host([responsive='stack']) ::slotted(table) tbody tr > .sc-table__select {
+    grid-row: 1;
+    grid-column: 1;
+    inline-size: auto;
+    margin-block: calc(-1 * var(--sc-space-12));
+    margin-inline-start: calc(-1 * var(--sc-space-12));
+  }
+  :host([responsive='stack']) ::slotted(table) tbody tr:has(> .sc-table__select) > th {
+    grid-column: 2;
+  }
+
+  /* Other cells: label and value pairs, as in a summary list. */
+  :host([responsive='stack']) ::slotted(table) tbody td[data-label]:not([data-type='status']):not([data-type='amount']):not([data-type='action'])::before {
+    content: attr(data-label);
+    display: block;
+    margin-block-end: var(--sc-space-2);
+    color: var(--sc-color-muted);
+    font-family: var(--type-label-s-family);
+    font-weight: var(--type-label-s-weight);
+    font-size: var(--type-label-s-size);
+    line-height: var(--type-label-s-leading);
+    letter-spacing: var(--type-label-s-tracking);
+  }
+
+  /* The amount is the last line, end-aligned, in title-m. */
+  :host([responsive='stack']) ::slotted(table) tbody tr > [data-type='amount'],
+  :host([responsive='stack']) ::slotted(table) tfoot tr > [data-type='amount'] {
+    order: 98;
+    text-align: end;
+    color: var(--sc-color-ink-strong);
+    font-family: var(--type-title-m-family);
+    font-weight: var(--type-title-m-weight);
+    font-size: var(--type-title-m-size);
+    line-height: var(--type-title-m-leading);
+    letter-spacing: var(--type-title-m-tracking);
+  }
+
+  /* The action becomes a full-width link row at the bottom. */
+  :host([responsive='stack']) ::slotted(table) tbody tr > [data-type='action'] {
+    order: 99;
+    padding-block-start: var(--sc-space-12);
+    border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-rule);
+    text-align: start;
+  }
+
+  :host([responsive='stack']) ::slotted(table) tbody tr > [data-type='action'] a {
+    display: flex;
+    align-items: center;
+    min-block-size: var(--sc-size-target-min);
+    margin-block: calc(-1 * var(--sc-space-8));
+    text-decoration: none;
+  }
+
+  :host([responsive='stack']) ::slotted(table) tfoot tr > :empty {
+    display: none;
+  }
+
+  :host([responsive='stack']) .state,
+  :host([responsive='stack']) .footer {
+    margin-block-start: var(--sc-space-12);
+    padding-inline: var(--sc-space-16);
+    border: 0;
+    border-radius: var(--sc-radius-card);
+    background: var(--sc-color-surface);
+    box-shadow: var(--sc-elevation-1);
+  }
+
+  /* Below 600px: scroll ------------------------------------------------------------------- */
+
+  :host([responsive='scroll']) .scroller {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+  }
+
+  :host([responsive='scroll']) ::slotted(table) {
+    inline-size: max-content;
+    min-inline-size: 100%;
+  }
+
+  /* The caption stays put while the columns scroll under it. */
+  :host([responsive='scroll']) ::slotted(table) caption {
+    position: sticky;
+    inset-inline-start: 0;
+  }
+
+  /* The row header column is sticky at inline-start. */
+  :host([responsive='scroll']) ::slotted(table) tr > th[scope='row'],
+  :host([responsive='scroll']) ::slotted(table) tr > .sc-table__select {
+    position: sticky;
+    inset-inline-start: 0;
+    z-index: 1;
+    background: var(--sc-color-surface);
+  }
+
+  :host([responsive='scroll']) ::slotted(table) tr > .sc-table__select ~ th[scope='row'] {
+    inset-inline-start: var(--_select-w);
+  }
+
+}
+
+/* Forced colours ---------------------------------------------------------------------------- */
+
+@media (forced-colors: active) {
+  .container,
+  .selection-bar {
+    border-color: CanvasText;
+  }
+
+  ::slotted(table) thead th,
+  ::slotted(table) thead td,
+  ::slotted(table) tbody tr + tr > *,
+  ::slotted(table) tfoot tr > * {
+    border-color: CanvasText;
+  }
+
+  ::slotted(table) tbody tr[data-selected] {
+    background: Highlight;
+    outline: var(--sc-size-border-strong) solid Highlight;
+  }
+
+  ::slotted(table) tbody tr[data-selected] > *,
+  ::slotted(table) tbody tr[data-selected] a {
+    color: HighlightText;
+  }
+
+  ::slotted(table) .sc-table__box,
+  ::slotted(table) .sc-table__mark {
+    forced-color-adjust: none;
+  }
+
+  ::slotted(table) .sc-table__box {
+    border-color: ButtonText;
+    background: Canvas;
+  }
+
+  ::slotted(table) .sc-table__box:checked,
+  ::slotted(table) .sc-table__box:indeterminate {
+    border-color: Highlight;
+    background: Highlight;
+  }
+
+  ::slotted(table) .sc-table__mark {
+    border-color: HighlightText;
+  }
+
+  ::slotted(table) .sc-table__bar {
+    background: GrayText;
+  }
+
+  ::slotted(table) .sc-table__sort:focus-visible,
+  ::slotted(table) .sc-table__box:focus-visible,
+  ::slotted(table) a:focus-visible,
+  .scroller:focus-visible {
+    outline-color: Highlight;
+  }
+}

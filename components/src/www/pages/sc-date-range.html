@@ -1,0 +1,99 @@
+<h1 class="pg-title sc-type-heading-xl" data-ar="نطاق التاريخ">Date range</h1>
+<p class="pg-lede sc-type-body-m" data-ar="لاختيار تاريخ بداية وتاريخ نهاية مرتبطين بالتقويم: تصفية المدفوعات بين تاريخين، أو ليالي الإقامة في فندق، أو مدة التصريح. لتاريخ واحد يعرفه الشخص استخدم حقل التاريخ.">
+  For a start and an end date that relate to a calendar: filtering payments between two dates, the nights of a hotel stay, how long a permit lasts. For one date people already know, use a date input.
+</p>
+
+<section class="pg-section" aria-labelledby="dr-usage">
+  <h2 id="dr-usage" class="sc-type-heading-m" data-ar="الاستخدام">Usage</h2>
+  <div class="pg-card">
+    <form id="dr-form" novalidate>
+      <sc-date-range
+        name="payments"
+        label="Show payments between"
+        data-ar-label="عرض المدفوعات بين"
+        hint="For example, 21 9 2026"
+        data-ar-hint="مثلًا، 21 9 2026"
+        start="2026-09-21"
+        end="2026-10-09"
+        max="2026-10-19"
+        today="2026-10-19"
+        max-days="365"
+        presets
+      ></sc-date-range>
+      <div class="pg-row" style="margin-block-start: var(--sc-space-24)">
+        <sc-button type="submit" data-ar="عرض المدفوعات">Show payments</sc-button>
+        <sc-button type="reset" variant="tertiary" data-ar="إعادة تعيين">Reset</sc-button>
+      </div>
+      <p class="pg-output" id="dr-output" role="status"></p>
+    </form>
+    <p class="pg-note">The demo fixes today at 19 October 2026 (<code>today</code>), with <code>max</code> = today, as on a payment filter. Below 600px the picker opens as a bottom sheet.</p>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="dr-states">
+  <h2 id="dr-states" class="sc-type-heading-m" data-ar="الحالات">States</h2>
+  <div class="pg-card">
+    <div class="pg-grid" style="grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr))">
+      <div class="pg-cell">
+        <span class="pg-label">empty · one month · no presets</span>
+        <sc-date-range label="When do you need the permit?" data-ar-label="متى تحتاج إلى التصريح؟" hint="For example, 1 11 2026" data-ar-hint="مثلًا، 1 11 2026" min="2026-10-19" today="2026-10-19" months="1" min-days="7" max-days="90"></sc-date-range>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">error · end before start</span>
+        <sc-date-range label="Show payments between" data-ar-label="عرض المدفوعات بين" start="2026-10-09" end="2026-09-21" today="2026-10-19" error="The end date must be the same as or after the start date" data-ar-error="يجب أن يكون تاريخ النهاية في يوم البداية أو بعده" error-parts="end"></sc-date-range>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">error · both · too long</span>
+        <sc-date-range label="Show fines between" data-ar-label="عرض المخالفات بين" start="2026-01-01" end="2026-10-19" today="2026-10-19" max-days="90" error="Choose a range of 90 days or fewer" data-ar-error="اختر مدة لا تزيد على 90 يومًا"></sc-date-range>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">optional · year boundary</span>
+        <sc-date-range label="Dates of your stay" data-ar-label="تواريخ إقامتك" optional start="2026-12-28" end="2027-01-03" today="2026-10-19" presets='[{"label":"This weekend","start":"2026-10-24","end":"2026-10-25"},{"label":"Next 7 nights","start":"2026-10-19","end":"2026-10-26"}]' data-ar-presets='[{"label":"عطلة نهاية الأسبوع","start":"2026-10-24","end":"2026-10-25"},{"label":"الليالي السبع القادمة","start":"2026-10-19","end":"2026-10-26"}]'></sc-date-range>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">disabled (avoid)</span>
+        <sc-date-range label="Permit dates" data-ar-label="تواريخ التصريح" start="2026-11-01" end="2026-11-30" disabled></sc-date-range>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="dr-arabic">
+  <h2 id="dr-arabic" class="sc-type-heading-m" data-ar="بالعربية">In Arabic</h2>
+  <div class="pg-card" lang="ar" dir="rtl">
+    <sc-date-range label="عرض المدفوعات بين" hint="مثلًا، 21 9 2026" start="2026-09-21" end="2026-10-09" max="2026-10-19" today="2026-10-19" presets></sc-date-range>
+    <p class="pg-note" lang="en" dir="ltr">This card is always lang="ar" dir="rtl": From (من) is on the right, the arrow points left, Monday is the rightmost column and Left Arrow moves to the next day.</p>
+  </div>
+</section>
+
+<script>
+  {
+    // data-ar-<attr>="…" swaps an attribute (label, hint, error…) when the toolbar is Arabic.
+    const preview = document.getElementById('preview');
+    const apply = () => {
+      const ar = preview.lang === 'ar';
+      for (const el of preview.querySelectorAll('*')) {
+        for (const { name, value } of [...el.attributes]) {
+          if (!name.startsWith('data-ar-')) continue;
+          const attr = name.slice(8);
+          if (!el.hasAttribute(`data-en-${attr}`)) el.setAttribute(`data-en-${attr}`, el.getAttribute(attr) ?? '');
+          el.setAttribute(attr, ar ? value : el.getAttribute(`data-en-${attr}`));
+        }
+      }
+    };
+    new MutationObserver(apply).observe(preview, { attributes: true, attributeFilter: ['lang'] });
+    apply();
+
+    const form = document.getElementById('dr-form');
+    const out = document.getElementById('dr-output');
+    form.addEventListener('submit', (ev) => {
+      ev.preventDefault();
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      out.textContent = (preview.lang === 'ar' ? 'تم الإرسال: ' : 'Submitted: ') + [...new FormData(form)].map(([k, v]) => `${k}=${v}`).join(', ');
+    });
+    form.addEventListener('reset', () => (out.textContent = preview.lang === 'ar' ? 'تمت إعادة تعيين النموذج' : 'Form reset'));
+  }
+</script>

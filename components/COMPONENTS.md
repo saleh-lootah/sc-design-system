@@ -1,6 +1,6 @@
 # Core components (Phase 3)
 
-The first 24 components, in four families. Each entry gives the purpose, the API and the states to build. Visual reference: Paper file `01M5A0E3KTNXQ1262CTCJDXCMP`, page "D+ · Native · Dubai Font", and the foundation boards in Paper file `01M5A6FZR8XR1M22Y7T8CDWGTP`. Follow `CONVENTIONS.md` for everything. All components are Stencil web components with the `sc-` prefix.
+The first 24 components, in four families, plus the components added after Phase 3 (DateRange, Table). Each entry gives the purpose, the API and the states to build. Visual reference: Paper file `01M5A0E3KTNXQ1262CTCJDXCMP`, page "D+ · Native · Dubai Font", and the foundation boards in Paper file `01M5A6FZR8XR1M22Y7T8CDWGTP`. Follow `CONVENTIONS.md` for everything. All components are Stencil web components with the `sc-` prefix.
 
 ---
 
@@ -34,7 +34,7 @@ The first 24 components, in four families. Each entry gives the purpose, the API
 
 ## Family 2 · Form fields
 
-**Field behaviour**: every field component (`sc-text-input`, `sc-textarea`, `sc-select`, `sc-radio-group`, `sc-checkbox-group`, `sc-date-input`) renders its own label, hint and error inside its shadow root. Props: `label`, `hint`, `error`, `optional`, `name`, `value`, `required`; slots `hint` and `error` for rich content.
+**Field behaviour**: every field component (`sc-text-input`, `sc-textarea`, `sc-select`, `sc-radio-group`, `sc-checkbox-group`, `sc-date-input`, `sc-date-range`) renders its own label, hint and error inside its shadow root. Props: `label`, `hint`, `error`, `optional`, `name`, `value`, `required`; slots `hint` and `error` for rich content.
 - It generates IDs and wires `aria-describedby` to the hint and the error.
 - Label weight follows the type role (Latin label-m Medium, Arabic label-m Bold).
 - `optional` appends "(optional)". Required fields are not marked.
@@ -61,6 +61,14 @@ The first 24 components, in four families. Each entry gives the purpose, the API
 **DateInput** (`sc-date-input`): Day, Month and Year fields (يوم / شهر / سنة).
 - In Arabic the same fields appear in right-to-left order.
 - Numeric input mode. An error can highlight a single part of the date.
+
+**DateRange** (`sc-date-range`): a start and an end date that relate to a calendar (filtering payments between two dates, a hotel stay, how long a permit lasts). For a single date people know, use DateInput. Spec: `specs/sc-date-range.md`.
+- One 54px frame with two typed segments (From / To · من / إلى), an arrow between them and a calendar button at inline-end. Typed "21/9/2026", "21 9 2026" or "21-09-2026" is formatted on blur ("21 Sep 2026").
+- The picker is a non-modal popover (one or two months, 6 weeks, Monday first, optional presets) on medium and wider screens, and a modal bottom sheet below 600px. Apply writes both dates; Escape or a click outside closes without changes.
+- `min`, `max`, `min-days`, `max-days` disable days; `presets` is `true` for the default list or a JSON list. Errors use `error` and `error-parts` (`start`, `end`, `both`); impossible ranges are reported on blur and never swapped.
+- Keyboard follows the ARIA APG date picker; arrows move visually, so in Arabic Left is the next day.
+- Submits `name-start` and `name-end` as ISO dates. Events `scChange` (`{ start, end }`), `scOpen`, `scClose`; methods `open()`, `close()`, `setFocus()`.
+- Motion: the popover scales 0.96 → 1 from the field's top inline-start corner over 200ms and exits with opacity over 120ms; the sheet slides up over 320ms with the `easing.drawer` token (`[0.32, 0.72, 0, 1]`).
 
 ---
 
@@ -125,3 +133,11 @@ The first 24 components, in four families. Each entry gives the purpose, the API
 - Sets `lang`, `dir` and `data-channel` at the root.
 
 **Footer** (`sc-footer`): help and contact, accessibility, privacy, terms, and "Government of Dubai". Uses `<footer>` and a list of links.
+
+**Table** (`sc-table`): compares rows of the same kind of thing (fines, payments, permit applications) across a few attributes. Scoped (light DOM): it styles and enhances a slotted native `<table>`, never a div grid. For the details of one thing, use SummaryList. Spec: `specs/sc-table.md`.
+- `caption` writes a native `<caption>` (required; `caption-hidden` hides it visually). Column types on the header cell, `data-type`: `text`, `reference`, `date`, `amount`, `status`, `action`, set alignment, wrapping and tabular figures. Empty cells read "None" (لا يوجد).
+- Sorting: `th[data-sort]` becomes a button with `aria-sort`; the component emits `scSort` (`{ column, direction }`) and announces the order; the service sorts the data.
+- Selection: `selectable` adds a labelled checkbox column (rows by `tr[data-id]`) with an indeterminate header checkbox, a `fill-selected` row and a selection bar with the count, the amount total and the `actions` slot; emits `scSelectionChange` (`{ ids }`).
+- States: `loading` (5 skeleton rows), `empty` slot (header hidden), `filtered` (no results, header kept), `error` slot (an `sc-callout tone="error"`), `density="compact"` (44px rows).
+- Below 600px: `responsive="stack"` (rows become cards) or `"scroll"` (a named scroll region with a sticky row header and an edge shadow).
+- Mirrors fully in Arabic through logical properties; digits stay Latin.

@@ -26,7 +26,7 @@ summary.errors = [{ href: '#plate-number', text: 'Enter the plate number using n
 ### Placement and behaviour
 
 - Put it at the top of `<main>`, above the `<h1>`, and only when there are errors. With no items it hides itself.
-- When it first has errors (on page load, or when `errors` goes from empty to filled) it moves focus to itself (`tabindex="-1"`, `role="alert"`), so screen readers read the heading and every error straight away. Don't move focus anywhere else on that page load. Use `no-autofocus` only if you move focus yourself with `setFocus()`.
+- When it first has errors (on page load, or when `errors` goes from empty to filled) it moves focus to itself (`tabindex="-1"`), so screen readers read the heading and every error straight away. It deliberately has no `role="alert"`: the focus move is the announcement, and a live region as well can make screen readers read the summary twice. The focused box is a group named by its heading (`aria-labelledby`). Don't move focus anywhere else on that page load. Use `no-autofocus` only if you move focus yourself with `setFocus()`.
 - Add "Error: " to the start of the page `<title>` too.
 - Following a link moves focus to the field and scrolls it into view, without changing the URL. It works with a plain `<input id>` and with field components (`sc-text-input`, `sc-date-input` …) that delegate focus to their inner control, and finds the target in the summary's own shadow root first, then in the document.
 - Slotted links are read from the light DOM (directly, or inside a `<ul>`) and rendered as a list inside the component; the list updates when they change. The `errors` property wins when it is set and not empty.
@@ -52,8 +52,10 @@ submitted. Each item links to its field; following a link moves focus to the fie
 
 Give it items either as links in the default slot (`<a href="#plate-number">…</a>`,
 optionally inside a `<ul>`) or through the `errors` property. When it first has items
-it moves focus to itself (`tabindex="-1"`, `role="alert"`), so keyboard and screen
-reader users hear the problem straight away.
+it moves focus to itself (`tabindex="-1"`), so keyboard and screen reader users hear
+the heading and errors straight away. It has no `role="alert"`: moving focus already
+announces it, and a live region on top can make screen readers read it twice (GOV.UK
+practice). The focused box is a `role="group"` named by its heading.
 
 ## Properties
 
