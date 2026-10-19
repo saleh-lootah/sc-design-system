@@ -59,3 +59,12 @@ Without npm, run the same scripts with `node scripts/<name>.mjs`.
 ### Colour on native platforms
 
 Colours stay OKLAB wherever the platform understands it: the CSS and Tailwind outputs use `oklab()` values, and `check:no-hex` enforces this. iOS and Android need numeric sRGB components, so only those two outputs convert. They use the same maths as `scripts/oklab.py`, and each converted colour has its source OKLAB value in a comment next to it. A few very light tints sit just outside sRGB and are clamped, exactly as `oklab.py` does. The build lists them.
+
+## Keeping secrets out of the repository
+
+Two checks stop secrets (API keys, tokens, private keys, passwords) from reaching this repository:
+
+- **GitHub push protection** is turned on. A push that contains a known provider secret is rejected before it lands.
+- **The Secret scan workflow** (`.github/workflows/secret-scan.yml`) runs gitleaks over the full history on every push and pull request, and fails if it finds anything.
+
+If either check flags something, remove the secret from the commit and revoke it at the provider: once it has been pushed, treat it as exposed. To check locally before pushing, install gitleaks and run `gitleaks git .` in this folder.
