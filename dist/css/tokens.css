@@ -260,6 +260,7 @@
   --sc-easing-standard: cubic-bezier(0.2, 0, 0, 1);
   --sc-easing-enter: cubic-bezier(0, 0, 0, 1);
   --sc-easing-exit: cubic-bezier(0.3, 0, 1, 1);
+  --sc-easing-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 
   /* Layout (breakpoints cannot be used inside @media; they are here for reference and scripts) */
   --sc-breakpoint-compact: 0px; /* Phones */

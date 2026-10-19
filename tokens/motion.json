@@ -64,6 +64,16 @@
         1,
         1
       ]
+    },
+    "drawer": {
+      "$type": "cubicBezier",
+      "$value": [
+        0.32,
+        0.72,
+        0,
+        1
+      ],
+      "$description": "Bottom sheets and drawers: a fast start that settles softly (iOS sheet curve)"
     }
   },
   "$description": "Under prefers-reduced-motion, all durations resolve to instant."

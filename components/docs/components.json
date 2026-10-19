@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-19T16:01:22",
+  "timestamp": "2026-10-19T17:47:29",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.45.2",
@@ -796,10 +796,14 @@
       ],
       "states": [],
       "dependents": [
+        "sc-date-range",
         "sc-search"
       ],
       "dependencies": [],
       "dependencyGraph": {
+        "sc-date-range": [
+          "sc-button"
+        ],
         "sc-search": [
           "sc-button"
         ]
@@ -2675,6 +2679,814 @@
       "dependents": [],
       "dependencies": [],
       "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/sc-date-range/sc-date-range.tsx",
+      "encapsulation": "shadow",
+      "tag": "sc-date-range",
+      "readme": "# sc-date-range\n\nA start and an end date that relate to a calendar: filtering payments or fines between two dates, the nights of a stay on Visit Dubai, how long a permit lasts. For a single date people already know (a date of birth, a policy start date), use `sc-date-input`: people type those faster than they find them in a calendar.\n\n## Usage\n\n```html\n<sc-date-range\n  name=\"payments\"\n  label=\"Show payments between\"\n  hint=\"For example, 21 9 2026\"\n  start=\"2026-09-21\"\n  end=\"2026-10-09\"\n  max=\"2026-10-19\"\n  max-days=\"365\"\n  presets\n></sc-date-range>\n```\n\n- **Field:** a `<fieldset>` and `<legend>`, the hint, then one 54px frame with two typed segments, From and To (من / إلى), an arrow between them (→, ← in Arabic) and a calendar button at inline-end. People can always type: \"21/9/2026\", \"21 9 2026\" and \"21-09-2026\" all work, and each segment is formatted on blur (\"21 Sep 2026\").\n- **Picker:** the calendar button opens a popover on medium and wider screens: one or two months (`months`, `auto` shows two from 720px), always 6 weeks, Monday first, and optional presets at inline-start. The first click sets the start, the second the end; a day before the start, or any day after a complete range, starts again. Apply writes both dates, closes the picker and returns focus to the button; Escape or a click outside closes without changes. Below 600px it is a modal bottom sheet with From / To chips, preset chips and a scrolling list of months; it can be dragged down to close.\n- **Presets:** `presets` shows Today, Last 7 days, Last 30 days, This month, Last month and This year (clamped to `min` / `max`). Pass a JSON list to replace them, for a booking calendar: `[{\"label\": \"This weekend\", \"start\": \"2026-10-24\", \"end\": \"2026-10-25\"}]`. A preset applies at once and doesn't close the picker.\n- **Limits:** `min` and `max` disable days outside them (for payment filters, `max` is today); `min-days` and `max-days` disable days that would make the range too short or too long once a start is chosen, and the footer says \"You can choose up to 90 days\".\n- **Keyboard** (ARIA APG date picker): arrows move a day and move visually, so in Arabic Left is the next day; Up and Down move a week; Home and End go to the start and end of the week; Page Up / Page Down change the month and Shift with them the year; Enter or Space chooses the day. Keyboard month changes are instant; pointer ones crossfade.\n- **Errors:** set `error` and `error-parts` (`start`, `end` or `both`) as on the other fields. The component also shows its own message on blur for an impossible range (end before start, a date that isn't real, outside `min`/`max`, too long or too short) and never swaps the dates; \"Enter a start date\" and \"Enter an end date\" wait for a submit.\n- **Forms:** submits `name-start` and `name-end` as ISO dates (empty until each is a real date) and resets to the initial range. Validity: `valueMissing` (with `required`, or a half-filled range), `badInput`, `rangeUnderflow`, `rangeOverflow`. `scChange` carries `{ start, end }`; `scOpen` and `scClose` fire with the picker. Methods: `open()`, `close()`, `setFocus()`.\n- **Today:** the `today` property fixes \"today\" (ISO) when the server's date matters, and in tests.\n- **Arabic:** the whole component mirrors: From is on the right, Monday is the rightmost column, the previous-month button is on the right and presets sit on the right. Month and weekday names are Arabic, digits stay Latin. Gregorian only for now.\n",
+      "docs": "A start and an end date that relate to a calendar: filtering payments between two dates,\nthe nights of a hotel stay, how long a permit lasts. For one date people already know\n(a date of birth), use `sc-date-input`.\n\nTwo typed segments (From / To, من / إلى) in one 54px frame, and a calendar button that\nopens a picker: a popover with one or two months and optional presets on medium and\nwider screens, a modal bottom sheet below 600px. People can always type instead\n(\"21/9/2026\", \"21 9 2026\", \"21-09-2026\").\n\nForm-associated: submits `name-start` and `name-end` as ISO dates (empty until each is a\nreal date). Reports `valueMissing` (with `required`), `badInput`, `rangeUnderflow` and\n`rangeOverflow`, and shows its own messages for impossible ranges on blur. Delegates focus\nto the start segment.",
+      "docsTags": [
+        {
+          "name": "slot",
+          "text": "label - Rich legend content, instead of the `label` prop."
+        },
+        {
+          "name": "slot",
+          "text": "hint - Rich hint content, instead of the `hint` prop."
+        },
+        {
+          "name": "slot",
+          "text": "error - Rich error content, instead of the `error` prop."
+        },
+        {
+          "name": "part",
+          "text": "field - The `<fieldset>` (gets the error bar)."
+        },
+        {
+          "name": "part",
+          "text": "label - The `<legend>`."
+        },
+        {
+          "name": "part",
+          "text": "hint - The hint."
+        },
+        {
+          "name": "part",
+          "text": "error - The error message."
+        },
+        {
+          "name": "part",
+          "text": "frame - The 54px frame around both segments and the calendar button."
+        },
+        {
+          "name": "part",
+          "text": "control - Each native `<input>`."
+        },
+        {
+          "name": "part",
+          "text": "calendar-button - The button that opens the picker."
+        },
+        {
+          "name": "part",
+          "text": "picker - The popover or bottom sheet."
+        }
+      ],
+      "usage": {},
+      "props": [
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "disabled",
+          "reflectToAttr": true,
+          "docs": "Disables the field. Avoid it.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "end",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "end",
+          "reflectToAttr": true,
+          "docs": "The end date, ISO (`2026-10-09`). Empty until it is a real date.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "''"
+            }
+          ],
+          "default": "''",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "error",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "error",
+          "reflectToAttr": true,
+          "docs": "The error message. Setting it shows the error state (it replaces the component's own messages).",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "errorParts",
+          "type": "\"both\" | \"end\" | \"start\"",
+          "complexType": {
+            "original": "'start' | 'end' | 'both'",
+            "resolved": "\"both\" | \"end\" | \"start\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "error-parts",
+          "reflectToAttr": false,
+          "docs": "Which segment the error marks: `start`, `end` or `both`.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'both'"
+            }
+          ],
+          "default": "'both'",
+          "values": [
+            {
+              "value": "both",
+              "type": "string"
+            },
+            {
+              "value": "end",
+              "type": "string"
+            },
+            {
+              "value": "start",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "headingLevel",
+          "type": "1 | 2 | 3 | 4 | 5 | 6 | undefined",
+          "complexType": {
+            "original": "HeadingLevel",
+            "resolved": "1 | 2 | 3 | 4 | 5 | 6 | undefined",
+            "references": {
+              "HeadingLevel": {
+                "location": "import",
+                "path": "../sc-text-input/field",
+                "id": "src/components/sc-text-input/field.tsx::HeadingLevel",
+                "referenceLocation": "HeadingLevel"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "heading-level",
+          "reflectToAttr": false,
+          "docs": "When set (1–6), the legend is also the page heading at this level.",
+          "docsTags": [],
+          "values": [
+            {
+              "value": "1",
+              "type": "number"
+            },
+            {
+              "value": "2",
+              "type": "number"
+            },
+            {
+              "value": "3",
+              "type": "number"
+            },
+            {
+              "value": "4",
+              "type": "number"
+            },
+            {
+              "value": "5",
+              "type": "number"
+            },
+            {
+              "value": "6",
+              "type": "number"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "hint",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "hint",
+          "reflectToAttr": false,
+          "docs": "An example in the typed order: \"For example, 21 9 2026\".",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "label",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "label",
+          "reflectToAttr": false,
+          "docs": "The question, shown as the legend: \"Show payments between\".",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "max",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "max",
+          "reflectToAttr": false,
+          "docs": "The latest day people can choose, ISO. For payment filters this is today.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "maxDays",
+          "type": "number | undefined",
+          "complexType": {
+            "original": "number",
+            "resolved": "number | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "max-days",
+          "reflectToAttr": false,
+          "docs": "The longest range, in days, counted inclusively. Days past the limit are disabled once a start is chosen.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "min",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "min",
+          "reflectToAttr": false,
+          "docs": "The earliest day people can choose, ISO.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "minDays",
+          "type": "number | undefined",
+          "complexType": {
+            "original": "number",
+            "resolved": "number | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "min-days",
+          "reflectToAttr": false,
+          "docs": "The shortest range, in days, counted inclusively.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "months",
+          "type": "\"auto\" | 1 | 2",
+          "complexType": {
+            "original": "1 | 2 | 'auto'",
+            "resolved": "\"auto\" | 1 | 2",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "months",
+          "reflectToAttr": false,
+          "docs": "Months shown in the popover: `1`, `2`, or `auto` (two when the window is at least 720px wide).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'auto'"
+            }
+          ],
+          "default": "'auto'",
+          "values": [
+            {
+              "value": "auto",
+              "type": "string"
+            },
+            {
+              "value": "1",
+              "type": "number"
+            },
+            {
+              "value": "2",
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "name",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "name",
+          "reflectToAttr": true,
+          "docs": "The name submitted with the form, as `name-start` and `name-end`.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "optional",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "optional",
+          "reflectToAttr": false,
+          "docs": "Appends \"(optional)\" to the legend.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "presets",
+          "type": "boolean | string",
+          "complexType": {
+            "original": "boolean | string",
+            "resolved": "boolean | string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "presets",
+          "reflectToAttr": false,
+          "docs": "Quick ranges at inline-start of the picker. `true` (or the bare attribute) shows Today,\nLast 7 days, Last 30 days, This month, Last month and This year. A JSON list replaces them:\n`[{\"label\": \"This weekend\", \"start\": \"2026-10-23\", \"end\": \"2026-10-24\"}]`.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "required",
+          "reflectToAttr": false,
+          "docs": "Requires both dates (`valueMissing` while either is empty).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "start",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "start",
+          "reflectToAttr": true,
+          "docs": "The start date, ISO (`2026-09-21`). Empty until it is a real date.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "''"
+            }
+          ],
+          "default": "''",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "strings",
+          "type": "null | string | undefined | unknown",
+          "complexType": {
+            "original": "StringsInput",
+            "resolved": "null | string | undefined | unknown",
+            "references": {
+              "StringsInput": {
+                "location": "import",
+                "path": "../sc-table/overrides",
+                "id": "src/components/sc-table/overrides.ts::StringsInput",
+                "referenceLocation": "StringsInput"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "strings",
+          "reflectToAttr": false,
+          "docs": "Overrides the built-in English and Arabic strings, as JSON (`{\"dateRangeFrom\": \"Check-in\"}`, or per language `{\"ar\": {…}}`).",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            },
+            {
+              "type": "unknown"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "today",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "today",
+          "reflectToAttr": false,
+          "docs": "Today's date, ISO. Defaults to the browser's date; set it when the server's \"today\" matters, and in tests.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "close",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<void>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "close() => Promise<void>",
+          "parameters": [],
+          "docs": "Closes the picker without changing the field.",
+          "docsTags": []
+        },
+        {
+          "name": "open",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<void>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "open() => Promise<void>",
+          "parameters": [],
+          "docs": "Opens the picker.",
+          "docsTags": []
+        },
+        {
+          "name": "setFocus",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<void>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "setFocus() => Promise<void>",
+          "parameters": [],
+          "docs": "Focuses the start segment.",
+          "docsTags": []
+        }
+      ],
+      "events": [
+        {
+          "event": "scChange",
+          "detail": "{ start: string; end: string; }",
+          "bubbles": true,
+          "complexType": {
+            "original": "{ start: string; end: string }",
+            "resolved": "{ start: string; end: string; }",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Fires when the range changes (Apply, or a committed typed date), with `{ start, end }`. A native `change` is also dispatched on the host.",
+          "docsTags": []
+        },
+        {
+          "event": "scClose",
+          "detail": "void",
+          "bubbles": true,
+          "complexType": {
+            "original": "void",
+            "resolved": "void",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Fires when the picker closes.",
+          "docsTags": []
+        },
+        {
+          "event": "scOpen",
+          "detail": "void",
+          "bubbles": true,
+          "complexType": {
+            "original": "void",
+            "resolved": "void",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Fires when the picker opens.",
+          "docsTags": []
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [
+        {
+          "name": "error",
+          "docs": "Rich error content, instead of the `error` prop."
+        },
+        {
+          "name": "hint",
+          "docs": "Rich hint content, instead of the `hint` prop."
+        },
+        {
+          "name": "label",
+          "docs": "Rich legend content, instead of the `label` prop."
+        }
+      ],
+      "parts": [
+        {
+          "name": "calendar-button",
+          "docs": "The button that opens the picker."
+        },
+        {
+          "name": "control",
+          "docs": "Each native `<input>`."
+        },
+        {
+          "name": "error",
+          "docs": "The error message."
+        },
+        {
+          "name": "field",
+          "docs": "The `<fieldset>` (gets the error bar)."
+        },
+        {
+          "name": "frame",
+          "docs": "The 54px frame around both segments and the calendar button."
+        },
+        {
+          "name": "hint",
+          "docs": "The hint."
+        },
+        {
+          "name": "label",
+          "docs": "The `<legend>`."
+        },
+        {
+          "name": "picker",
+          "docs": "The popover or bottom sheet."
+        }
+      ],
+      "states": [],
+      "dependents": [],
+      "dependencies": [
+        "sc-button"
+      ],
+      "dependencyGraph": {
+        "sc-date-range": [
+          "sc-button"
+        ]
+      }
     },
     {
       "filePath": "src/components/sc-error-summary/sc-error-summary.tsx",
@@ -5895,6 +6707,379 @@
       "dependencyGraph": {}
     },
     {
+      "filePath": "src/components/sc-table/sc-table.tsx",
+      "encapsulation": "scoped",
+      "tag": "sc-table",
+      "readme": "# sc-table\n\nA table compares rows of the same kind of thing across a few attributes: a person's fines, their payments, the status of their permit applications. Each row is one thing; each column is one attribute. For the details of one thing, use `sc-summary-list`. Never use a table for layout.\n\n## Usage\n\n```html\n<sc-table caption=\"Your fines\" selectable\n  strings='{\"tableSelectAll\": \"Select all fines on this page\", \"tableSelectRow\": \"Select fine {row}\"}'\n  selection-label=\"{count} fine selected|{count} fines selected\">\n  <table>\n    <thead>\n      <tr>\n        <th scope=\"col\" data-type=\"reference\">Reference</th>\n        <th scope=\"col\" data-type=\"date\" data-sort=\"date\" aria-sort=\"descending\">Date</th>\n        <th scope=\"col\">Offence</th>\n        <th scope=\"col\" data-type=\"status\">Status</th>\n        <th scope=\"col\" data-type=\"amount\" data-sort=\"amount\">Amount</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr data-id=\"F-2026-118204\">\n        <th scope=\"row\"><a href=\"/fines/F-2026-118204\"><sc-ltr>F-2026-118204</sc-ltr></a></th>\n        <td>14 Mar 2026</td>\n        <td>Speeding: 21 to 30 km/h over the limit</td>\n        <td><sc-status-tag tone=\"warning\">Unpaid</sc-status-tag></td>\n        <td data-value=\"600\">AED 600.00</td>\n      </tr>\n    </tbody>\n  </table>\n  <div slot=\"footer\"><span>Showing 1–20 of 1,284 fines</span> …Previous / Next…</div>\n  <sc-button slot=\"actions\">Pay 2 fines</sc-button>\n</sc-table>\n```\n\n- **Scoped, not shadowed.** The component styles and enhances your native `<table>`, so screen readers announce rows, columns and headers. Write `th scope=\"col\"` headers and a `th scope=\"row\"` as each row's first cell; it usually carries the row's link. Whole rows are never clickable.\n- **Caption** is required: `caption` writes a native `<caption>`. Use `caption-hidden` when a heading straight above says the same thing.\n- **Column types** go on the header cell as `data-type` and set alignment, wrapping and figures for the whole column: `text` (wraps, never truncated), `reference` (nowrap, tabular; wrap the value in `sc-ltr`), `date`, `amount` (end-aligned, nowrap: the column grows instead), `status` (an `sc-status-tag`), `action` (end-aligned). Digits are Latin in both languages.\n- **Missing values:** leave the cell empty and the component writes a muted \"None\" (لا يوجد). Never a bare dash.\n- **Sorting:** add `data-sort` (optionally with a column key, `data-sort=\"amount\"`) to a header. It becomes a button; Enter or a click cycles ascending and descending, one column at a time, sets `aria-sort` and announces \"Sorted by Amount, highest first\". The component only emits `scSort` with `{ column, direction }`: sort the data in the service (usually on the server) and re-render the rows. Sorting is never animated.\n- **Selection:** `selectable` adds a checkbox column at inline-start, identified by `tr[data-id]`, and a selection bar with the count, the total of the amount column (from `data-value`, or the cell text) and your `actions` slot. Label the checkboxes with `strings` (\"Select fine {row}\"). `selection-label` takes plural forms separated by `|` (English one|other; Arabic zero|one|two|few|many|other). `tr[data-selected]` preselects a row. `scSelectionChange` carries `{ ids }`.\n- **States:** `loading` shows 5 skeleton rows at the real column widths (the header stays). With no rows, the `empty` slot replaces the table: a `title-s` sentence and an optional next step (\"You have no fines\"; never \"No data\"). Add `filtered` for \"No results\" after a filter, which keeps the header. Put an `sc-callout tone=\"error\"` with a \"Try again\" button in the `error` slot when the data can't load. Counts in the footer follow plural rules: \"Showing 1 fine\", never \"1–1 of 1\".\n- **Density:** `compact` (44px rows) is for staff tools with long lists.\n- **Below 600px** (the component's own width), `responsive=\"stack\"` (default, up to about 6 columns) turns rows into cards: the row header is the title, the status sits at top inline-end, other cells become label and value pairs, the amount is the last line in `title-m` and the action a full-width link row. `responsive=\"scroll\"` keeps the table in a horizontal scroll region (focusable, named by the caption) with the row header sticky at inline-start and a shadow on the side with more content. A table wider than its container always scrolls rather than clipping.\n- **Screen-reader context:** `class=\"sc-visually-hidden\"` inside the table hides text visually: `View<span class=\"sc-visually-hidden\"> fine F-2026-118204</span>`.\n- **Arabic:** everything mirrors: the first column and the checkboxes are on the right, amounts and actions align left, and the sort glyph sits after the label. Rows grow with the Arabic leading; nothing is fixed-height.\n",
+      "docs": "A table compares rows of the same kind of thing across a few attributes: fines, payments,\npermit applications. It styles and enhances a slotted native `<table>`; it never rebuilds\none out of divs, so screen readers announce rows, columns and headers.\n\nThe component is scoped (light DOM). Mark up the table as usual: `th scope=\"col\"` in the\nheader, `th scope=\"row\"` as each row's first cell, and give header cells a column type with\n`data-type` (`text`, `reference`, `date`, `amount`, `status`, `action`) to set alignment,\nwrapping and figures. The component then:\n- writes the `caption` property into a native `<caption>` (the table's accessible name);\n- turns `th[data-sort]` headers into sort buttons with `aria-sort`, and emits `scSort`\n  (the service sorts the data, usually on the server);\n- with `selectable`, adds a checkbox column (rows are identified by `tr[data-id]`) and a\n  selection bar, and emits `scSelectionChange`;\n- fills empty cells with a muted \"None\";\n- below 600px, stacks rows as cards (`responsive=\"stack\"`) or scrolls sideways (`\"scroll\"`).\n\nUse `class=\"sc-visually-hidden\"` inside the table for context only screen readers need\n(\"View <span class=\"sc-visually-hidden\">fine F-2026-118204</span>\").",
+      "docsTags": [
+        {
+          "name": "slot",
+          "text": "- The native `<table>`."
+        },
+        {
+          "name": "slot",
+          "text": "footer - Count and pagination: \"Showing 1–20 of 1,284 fines\", Previous and Next."
+        },
+        {
+          "name": "slot",
+          "text": "empty - Shown in place of the body when there are no rows: \"You have no fines\"."
+        },
+        {
+          "name": "slot",
+          "text": "error - Shown in place of the body when the data could not load: an `sc-callout tone=\"error\"` with a \"Try again\" button."
+        },
+        {
+          "name": "slot",
+          "text": "actions - The selection bar's action: `<sc-button>Pay 2 fines</sc-button>`."
+        }
+      ],
+      "usage": {},
+      "props": [
+        {
+          "name": "caption",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "caption",
+          "reflectToAttr": false,
+          "docs": "The table's accessible name, written into a native `<caption>`: \"Your fines\". Required unless the table already has a `<caption>`.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "captionHidden",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "caption-hidden",
+          "reflectToAttr": true,
+          "docs": "Hides the caption visually (it is still announced). Use it when a heading straight above says the same thing.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "density",
+          "type": "\"compact\" | \"default\"",
+          "complexType": {
+            "original": "'default' | 'compact'",
+            "resolved": "\"compact\" | \"default\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "density",
+          "reflectToAttr": true,
+          "docs": "Row height: `default` (56) for the public, `compact` (44, body-s) for staff tools with long lists.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'default'"
+            }
+          ],
+          "default": "'default'",
+          "values": [
+            {
+              "value": "compact",
+              "type": "string"
+            },
+            {
+              "value": "default",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "filtered",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "filtered",
+          "reflectToAttr": true,
+          "docs": "The rows are the result of a filter: when there are none, the header stays (for \"No fines from 1 to 31 March 2026\").",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "loading",
+          "reflectToAttr": true,
+          "docs": "Shows 5 skeleton rows in place of the body. The header stays real.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "responsive",
+          "type": "\"scroll\" | \"stack\"",
+          "complexType": {
+            "original": "'stack' | 'scroll'",
+            "resolved": "\"scroll\" | \"stack\"",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "responsive",
+          "reflectToAttr": true,
+          "docs": "Behaviour below 600px: `stack` turns each row into a card (up to about 6 columns); `scroll` keeps the table in a horizontal scroll region.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'stack'"
+            }
+          ],
+          "default": "'stack'",
+          "values": [
+            {
+              "value": "scroll",
+              "type": "string"
+            },
+            {
+              "value": "stack",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "selectable",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "selectable",
+          "reflectToAttr": true,
+          "docs": "Adds a checkbox column at inline-start and a selection bar below the table. Rows are identified by `tr[data-id]`.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "selectionLabel",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "selection-label",
+          "reflectToAttr": false,
+          "docs": "The selection bar text, with `{count}`: \"{count} fines selected\". Plural forms are\nseparated by `|`: \"{count} fine selected|{count} fines selected\" (Arabic:\nzero|one|two|few|many|other). When the table has an amount column, the selected total follows it.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "strings",
+          "type": "null | string | undefined | unknown",
+          "complexType": {
+            "original": "StringsInput",
+            "resolved": "null | string | undefined | unknown",
+            "references": {
+              "StringsInput": {
+                "location": "import",
+                "path": "./overrides",
+                "id": "src/components/sc-table/overrides.ts::StringsInput",
+                "referenceLocation": "StringsInput"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "strings",
+          "reflectToAttr": false,
+          "docs": "Overrides the built-in English and Arabic strings, as JSON: `{\"tableSelectRow\": \"Select fine {row}\", \"tableSelectAll\": \"Select all fines on this page\"}`, or per language: `{\"ar\": {…}}`.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            },
+            {
+              "type": "unknown"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [
+        {
+          "event": "scSelectionChange",
+          "detail": "{ ids: string[]; }",
+          "bubbles": true,
+          "complexType": {
+            "original": "{ ids: string[] }",
+            "resolved": "{ ids: string[]; }",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Fires when the selection changes, with `{ ids }` (the selected rows' `data-id`).",
+          "docsTags": []
+        },
+        {
+          "event": "scSort",
+          "detail": "{ column: string; direction: SortDirection; }",
+          "bubbles": true,
+          "complexType": {
+            "original": "{ column: string; direction: SortDirection }",
+            "resolved": "{ column: string; direction: SortDirection; }",
+            "references": {
+              "SortDirection": {
+                "location": "local",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-ux-standards/design-system/components/src/components/sc-table/sc-table.tsx",
+                "id": "src/components/sc-table/sc-table.tsx::SortDirection"
+              }
+            }
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Fires when a sortable header is activated, with `{ column, direction }`. `column` is the header's `data-sort` value, or its text. The service sorts the rows.",
+          "docsTags": []
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [
+        {
+          "name": "",
+          "docs": "The native `<table>`."
+        },
+        {
+          "name": "actions",
+          "docs": "The selection bar's action: `<sc-button>Pay 2 fines</sc-button>`."
+        },
+        {
+          "name": "empty",
+          "docs": "Shown in place of the body when there are no rows: \"You have no fines\"."
+        },
+        {
+          "name": "error",
+          "docs": "Shown in place of the body when the data could not load: an `sc-callout tone=\"error\"` with a \"Try again\" button."
+        },
+        {
+          "name": "footer",
+          "docs": "Count and pagination: \"Showing 1–20 of 1,284 fines\", Previous and Next."
+        }
+      ],
+      "parts": [],
+      "states": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
       "filePath": "src/components/sc-text-input/sc-text-input.tsx",
       "encapsulation": "shadow",
       "tag": "sc-text-input",
@@ -7313,6 +8498,16 @@
       "declaration": "export type SummaryListAppearance = 'card' | 'plain';",
       "docstring": "",
       "path": "src/components/sc-summary-list/sc-summary-list.tsx"
+    },
+    "src/components/sc-table/overrides.ts::StringsInput": {
+      "declaration": "export type StringsInput = string | Record<string, unknown> | undefined | null;",
+      "docstring": "",
+      "path": "src/components/sc-table/overrides.ts"
+    },
+    "src/components/sc-table/sc-table.tsx::SortDirection": {
+      "declaration": "export type SortDirection = 'ascending' | 'descending';",
+      "docstring": "",
+      "path": "src/components/sc-table/sc-table.tsx"
     },
     "src/components/sc-text-input/sc-text-input.tsx::TextInputType": {
       "declaration": "export type TextInputType = 'text' | 'email' | 'tel' | 'url' | 'search' | 'password';",

@@ -1,0 +1,276 @@
+<h1 class="pg-title sc-type-heading-xl" data-ar="جدول">Table</h1>
+<p class="pg-lede sc-type-body-m" data-ar="يقارن الجدول صفوفًا من النوع نفسه عبر بعض الخصائص: المخالفات والمدفوعات وحالة طلبات التصاريح. لتفاصيل عنصر واحد استخدم قائمة الملخص.">
+  A table compares rows of the same kind of thing across a few attributes: fines, payments, the status of permit applications. For the details of one thing, use a summary list.
+</p>
+
+<section class="pg-section" aria-labelledby="tb-usage">
+  <h2 id="tb-usage" class="sc-type-heading-m" data-ar="الاستخدام">Usage</h2>
+  <div class="pg-card pg-ground">
+    <sc-table id="tb-fines" caption="Your fines" data-ar-caption="مخالفاتك" selectable selection-label="{count} fine selected|{count} fines selected" data-ar-selection-label="لم يتم تحديد أي مخالفة|تم تحديد مخالفة واحدة|تم تحديد مخالفتين|تم تحديد {count} مخالفات|تم تحديد {count} مخالفة|تم تحديد {count} مخالفة" strings='{"en": {"tableSelectAll": "Select all fines on this page", "tableSelectRow": "Select fine {row}"}, "ar": {"tableSelectAll": "تحديد كل المخالفات في هذه الصفحة", "tableSelectRow": "تحديد المخالفة {row}"}}'>
+      <table>
+        <thead>
+          <tr>
+            <th scope="col" data-type="reference"><span data-ar="الرقم المرجعي">Reference</span></th>
+            <th scope="col" data-type="date" data-sort="date" aria-sort="descending"><span data-ar="التاريخ">Date</span></th>
+            <th scope="col"><span data-ar="المخالفة">Offence</span></th>
+            <th scope="col" data-type="status"><span data-ar="الحالة">Status</span></th>
+            <th scope="col" data-type="amount" data-sort="amount"><span data-ar="المبلغ">Amount</span></th>
+            <th scope="col" data-type="action"><span class="sc-visually-hidden" data-ar="الإجراء">Action</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-id="F-2026-118204" data-date="2026-03-14">
+            <th scope="row"><a href="#F-2026-118204"><sc-ltr>F-2026-118204</sc-ltr></a></th>
+            <td data-ar="14 مارس 2026">14 Mar 2026</td>
+            <td data-ar="تجاوز السرعة المحددة بـ 21 إلى 30 كم/س">Speeding: 21 to 30 km/h over the limit</td>
+            <td><sc-status-tag tone="warning"><span data-ar="غير مدفوعة">Unpaid</span></sc-status-tag></td>
+            <td data-value="600" data-ar="600.00 درهم">AED 600.00</td>
+            <td><a href="#F-2026-118204"><span data-ar="عرض">View</span><span class="sc-visually-hidden"> fine F-2026-118204</span></a></td>
+          </tr>
+          <tr data-id="F-2026-107455" data-date="2026-03-02">
+            <th scope="row"><a href="#F-2026-107455"><sc-ltr>F-2026-107455</sc-ltr></a></th>
+            <td data-ar="2 مارس 2026">2 Mar 2026</td>
+            <td data-ar="إغلاق مسار أثناء الوقوف، ديرة">Blocking a lane while parking, Deira</td>
+            <td><sc-status-tag tone="warning"><span data-ar="غير مدفوعة">Unpaid</span></sc-status-tag></td>
+            <td data-value="1100" data-ar="1,100.00 درهم">AED 1,100.00</td>
+            <td><a href="#F-2026-107455"><span data-ar="عرض">View</span><span class="sc-visually-hidden"> fine F-2026-107455</span></a></td>
+          </tr>
+          <tr data-id="F-2026-081930" data-date="2026-02-19">
+            <th scope="row"><a href="#F-2026-081930"><sc-ltr>F-2026-081930</sc-ltr></a></th>
+            <td data-ar="19 فبراير 2026">19 Feb 2026</td>
+            <td data-ar="سالك: عبور بوابة دون رصيد كافٍ">Salik toll: passed a gate with no balance</td>
+            <td><sc-status-tag tone="success"><span data-ar="مدفوعة">Paid</span></sc-status-tag></td>
+            <td data-value="100" data-ar="100.00 درهم">AED 100.00</td>
+            <td><a href="#F-2026-081930"><span data-ar="عرض">View</span><span class="sc-visually-hidden"> fine F-2026-081930</span></a></td>
+          </tr>
+          <tr data-id="F-2026-063318" data-date="2026-01-27">
+            <th scope="row"><a href="#F-2026-063318"><sc-ltr>F-2026-063318</sc-ltr></a></th>
+            <td data-ar="27 يناير 2026">27 Jan 2026</td>
+            <td data-ar="تجاوز السرعة حتى 20 كم/س">Speeding: up to 20 km/h over the limit</td>
+            <td><sc-status-tag tone="neutral"><span data-ar="معترض عليها">Disputed</span></sc-status-tag></td>
+            <td data-value="300" data-ar="300.00 درهم">AED 300.00</td>
+            <td><a href="#F-2026-063318"><span data-ar="عرض">View</span><span class="sc-visually-hidden"> fine F-2026-063318</span></a></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th scope="row" colspan="4" data-ar="المجموع، 4 مخالفات">Total, 4 fines</th>
+            <td data-type="amount" data-ar="2,100.00 درهم">AED 2,100.00</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+      <div slot="footer">
+        <span data-ar="عرض 1–4 من 4 مخالفات">Showing 1–4 of 4 fines</span>
+      </div>
+      <sc-button slot="actions" id="tb-pay"><span data-ar="ادفع المخالفات">Pay fines</span></sc-button>
+    </sc-table>
+    <p class="pg-output" id="tb-output" role="status"></p>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="tb-states">
+  <h2 id="tb-states" class="sc-type-heading-m" data-ar="الحالات">States</h2>
+  <div class="pg-card pg-ground">
+    <div class="pg-grid" style="grid-template-columns: repeat(auto-fill, minmax(min(100%, 600px), 1fr))">
+      <div class="pg-cell">
+        <span class="pg-label">loading</span>
+        <sc-table caption="Your fines" data-ar-caption="مخالفاتك" caption-hidden loading>
+          <table>
+            <thead><tr><th data-type="reference" data-ar="الرقم المرجعي">Reference</th><th data-type="status" data-ar="الحالة">Status</th><th data-type="amount" data-ar="المبلغ">Amount</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </sc-table>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">empty</span>
+        <sc-table caption="Your fines" data-ar-caption="مخالفاتك" caption-hidden>
+          <table>
+            <thead><tr><th data-type="reference" data-ar="الرقم المرجعي">Reference</th><th data-type="status" data-ar="الحالة">Status</th><th data-type="amount" data-ar="المبلغ">Amount</th></tr></thead>
+            <tbody></tbody>
+          </table>
+          <div slot="empty">
+            <p data-ar="ليس لديك مخالفات">You have no fines</p>
+            <p data-ar="تظهر المخالفات الجديدة هنا فور تسجيلها.">New fines appear here as soon as they are issued.</p>
+          </div>
+        </sc-table>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">no results (filtered)</span>
+        <sc-table caption="Your fines" data-ar-caption="مخالفاتك" caption-hidden filtered>
+          <table>
+            <thead><tr><th data-type="reference" data-ar="الرقم المرجعي">Reference</th><th data-type="status" data-ar="الحالة">Status</th><th data-type="amount" data-ar="المبلغ">Amount</th></tr></thead>
+            <tbody></tbody>
+          </table>
+          <div slot="empty">
+            <p data-ar="لا توجد مخالفات من 1 إلى 31 مارس 2026">No fines from 1 to 31 March 2026</p>
+            <p><a href="#" data-ar="مسح التاريخين">Clear dates</a></p>
+          </div>
+        </sc-table>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">error</span>
+        <sc-table caption="Your fines" data-ar-caption="مخالفاتك" caption-hidden>
+          <table>
+            <thead><tr><th data-type="reference" data-ar="الرقم المرجعي">Reference</th><th data-type="status" data-ar="الحالة">Status</th><th data-type="amount" data-ar="المبلغ">Amount</th></tr></thead>
+            <tbody></tbody>
+          </table>
+          <sc-callout slot="error" tone="error">
+            <p style="margin: 0 0 var(--sc-space-12)" data-ar="تعذّر تحميل مخالفاتك. حاول مرة أخرى بعد بضع دقائق.">We could not load your fines. Try again in a few minutes.</p>
+            <sc-button variant="secondary" size="m"><span data-ar="حاول مرة أخرى">Try again</span></sc-button>
+          </sc-callout>
+        </sc-table>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">one row · missing value</span>
+        <sc-table caption="Your fines" data-ar-caption="مخالفاتك">
+          <table>
+            <thead><tr><th data-type="reference" data-ar="الرقم المرجعي">Reference</th><th data-ar="ملاحظة">Note</th><th data-type="amount" data-ar="المبلغ">Amount</th></tr></thead>
+            <tbody><tr><th scope="row"><sc-ltr>F-1</sc-ltr></th><td></td><td data-ar="0.50 درهم">AED 0.50</td></tr></tbody>
+          </table>
+          <div slot="footer"><span data-ar="عرض مخالفة واحدة">Showing 1 fine</span></div>
+        </sc-table>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">compact (staff tools)</span>
+        <sc-table caption="Plates checked today" data-ar-caption="اللوحات التي فُحصت اليوم" density="compact">
+          <table>
+            <thead><tr><th data-type="reference" data-ar="اللوحة">Plate</th><th data-type="status" data-ar="الحالة">Status</th><th data-type="amount" data-ar="الغرامات">Fines</th></tr></thead>
+            <tbody>
+              <tr><th scope="row"><sc-ltr>Dubai A 12345</sc-ltr></th><td><sc-status-tag tone="success"><span data-ar="سليمة">Clear</span></sc-status-tag></td><td data-ar="0.00 درهم">AED 0.00</td></tr>
+              <tr><th scope="row"><sc-ltr>Dubai K 4821</sc-ltr></th><td><sc-status-tag tone="warning"><span data-ar="غير مدفوعة">Unpaid</span></sc-status-tag></td><td data-ar="600.00 درهم">AED 600.00</td></tr>
+              <tr><th scope="row"><sc-ltr>Dubai P 907</sc-ltr></th><td><sc-status-tag tone="error"><span data-ar="محجوزة">Impounded</span></sc-status-tag></td><td data-ar="3,000.00 درهم">AED 3,000.00</td></tr>
+            </tbody>
+          </table>
+        </sc-table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="tb-responsive">
+  <h2 id="tb-responsive" class="sc-type-heading-m" data-ar="أقل من 600 بكسل">Below 600px</h2>
+  <div class="pg-card pg-ground">
+    <div class="pg-grid" style="grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr))">
+      <div class="pg-cell" style="max-inline-size: 390px">
+        <span class="pg-label">responsive="stack" (default)</span>
+        <sc-table caption="Your fines" data-ar-caption="مخالفاتك">
+          <table>
+            <thead><tr><th data-type="reference" data-ar="الرقم المرجعي">Reference</th><th data-type="date" data-ar="التاريخ">Date</th><th data-ar="المخالفة">Offence</th><th data-type="status" data-ar="الحالة">Status</th><th data-type="amount" data-ar="المبلغ">Amount</th><th data-type="action"><span class="sc-visually-hidden">Action</span></th></tr></thead>
+            <tbody>
+              <tr><th scope="row"><sc-ltr>F-2026-118204</sc-ltr></th><td data-ar="14 مارس 2026">14 Mar 2026</td><td data-ar="تجاوز السرعة المحددة بـ 21 إلى 30 كم/س">Speeding: 21 to 30 km/h over the limit</td><td><sc-status-tag tone="warning"><span data-ar="غير مدفوعة">Unpaid</span></sc-status-tag></td><td data-ar="600.00 درهم">AED 600.00</td><td><a href="#F-2026-118204"><span data-ar="عرض المخالفة">View fine</span><span class="sc-visually-hidden"> F-2026-118204</span></a></td></tr>
+              <tr><th scope="row"><sc-ltr>F-2026-081930</sc-ltr></th><td data-ar="19 فبراير 2026">19 Feb 2026</td><td data-ar="سالك: عبور بوابة دون رصيد كافٍ">Salik toll: passed a gate with no balance</td><td><sc-status-tag tone="success"><span data-ar="مدفوعة">Paid</span></sc-status-tag></td><td data-ar="100.00 درهم">AED 100.00</td><td><a href="#F-2026-081930"><span data-ar="عرض المخالفة">View fine</span><span class="sc-visually-hidden"> F-2026-081930</span></a></td></tr>
+            </tbody>
+          </table>
+        </sc-table>
+      </div>
+      <div class="pg-cell" style="max-inline-size: 390px">
+        <span class="pg-label">responsive="scroll"</span>
+        <sc-table caption="Parking permits compared" data-ar-caption="مقارنة تصاريح المواقف" responsive="scroll">
+          <table>
+            <thead><tr><th data-type="reference" data-ar="التصريح">Permit</th><th data-type="date" data-ar="يبدأ">Starts</th><th data-type="date" data-ar="ينتهي">Ends</th><th data-ar="المنطقة">Zone</th><th data-type="status" data-ar="الحالة">Status</th><th data-type="amount" data-ar="الرسوم">Fee</th></tr></thead>
+            <tbody>
+              <tr><th scope="row"><sc-ltr>P-2026-4410</sc-ltr></th><td data-ar="1 يناير 2026">1 Jan 2026</td><td data-ar="31 ديسمبر 2026">31 Dec 2026</td><td data-ar="المنطقة A، بر دبي">Zone A, Bur Dubai</td><td><sc-status-tag tone="success"><span data-ar="سارٍ">Active</span></sc-status-tag></td><td data-ar="2,500.00 درهم">AED 2,500.00</td></tr>
+              <tr><th scope="row"><sc-ltr>P-2025-9902</sc-ltr></th><td data-ar="1 يوليو 2025">1 Jul 2025</td><td data-ar="30 يونيو 2026">30 Jun 2026</td><td data-ar="المنطقة C، ديرة">Zone C, Deira</td><td><sc-status-tag tone="warning"><span data-ar="ينتهي قريبًا">Expires soon</span></sc-status-tag></td><td data-ar="1,800.00 درهم">AED 1,800.00</td></tr>
+            </tbody>
+          </table>
+        </sc-table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="tb-worst">
+  <h2 id="tb-worst" class="sc-type-heading-m" data-ar="أسوأ حالة">Worst case</h2>
+  <div class="pg-card pg-ground">
+    <sc-table caption="Your fines" data-ar-caption="مخالفاتك">
+      <table>
+        <thead><tr><th data-type="reference" data-ar="الرقم المرجعي">Reference</th><th data-ar="المخالفة">Offence</th><th data-type="status" data-ar="الحالة">Status</th><th data-type="amount" data-ar="المبلغ">Amount</th></tr></thead>
+        <tbody>
+          <tr><th scope="row"><sc-ltr>F-2026-118204</sc-ltr></th><td data-ar="تجاوز الحد الأقصى للسرعة بأكثر من 60 كم/س على شارع الشيخ محمد بن زايد">Exceeding the maximum speed limit by more than 60 km/h on Sheikh Mohammed bin Zayed Road</td><td><sc-status-tag tone="neutral"><span data-ar="بانتظار قرار المحكمة">Waiting for court decision</span></sc-status-tag></td><td data-ar="1,234,567.50 درهم">AED 1,234,567.50</td></tr>
+          <tr><th scope="row"><sc-ltr>F-1</sc-ltr></th><td></td><td><sc-status-tag tone="success"><span data-ar="مدفوعة">Paid</span></sc-status-tag></td><td data-ar="0.50 درهم">AED 0.50</td></tr>
+          <tr><th scope="row"><sc-ltr>F-2026-090017</sc-ltr></th><td data-ar="وقوف المركبة دبي A 12345 في موقف مخصص لأصحاب الهمم">Vehicle <sc-ltr>Dubai A 12345</sc-ltr> parked in a space for people of determination</td><td><sc-status-tag tone="warning"><span data-ar="غير مدفوعة">Unpaid</span></sc-status-tag></td><td data-ar="1,000.00 درهم">AED 1,000.00</td></tr>
+        </tbody>
+      </table>
+      <div slot="footer">
+        <span data-ar="عرض 1–20 من 1,284 مخالفة">Showing 1–20 of 1,284 fines</span>
+        <span class="pg-row">
+          <sc-button variant="secondary" size="m" icon="chevron-back" icon-position="start"><span data-ar="السابق">Previous</span></sc-button>
+          <sc-button variant="secondary" size="m" icon="chevron-forward"><span data-ar="التالي">Next</span></sc-button>
+        </span>
+      </div>
+    </sc-table>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="tb-arabic">
+  <h2 id="tb-arabic" class="sc-type-heading-m" data-ar="بالعربية">In Arabic</h2>
+  <div class="pg-card pg-ground" lang="ar" dir="rtl">
+    <sc-table caption="مخالفاتك" selectable strings='{"tableSelectAll": "تحديد كل المخالفات في هذه الصفحة", "tableSelectRow": "تحديد المخالفة {row}"}'>
+      <table>
+        <thead>
+          <tr>
+            <th scope="col" data-type="reference">الرقم المرجعي</th>
+            <th scope="col" data-type="date" data-sort="date" aria-sort="descending">التاريخ</th>
+            <th scope="col">المخالفة</th>
+            <th scope="col" data-type="status">الحالة</th>
+            <th scope="col" data-type="amount" data-sort="amount">المبلغ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-id="F-2026-118204"><th scope="row"><sc-ltr>F-2026-118204</sc-ltr></th><td>14 مارس 2026</td><td>تجاوز السرعة المحددة بـ 21 إلى 30 كم/س</td><td><sc-status-tag tone="warning">غير مدفوعة</sc-status-tag></td><td data-value="600">600.00 درهم</td></tr>
+          <tr data-id="F-2026-107455" data-selected><th scope="row"><sc-ltr>F-2026-107455</sc-ltr></th><td>2 مارس 2026</td><td>إغلاق مسار أثناء الوقوف، ديرة</td><td><sc-status-tag tone="warning">غير مدفوعة</sc-status-tag></td><td data-value="1100">1,100.00 درهم</td></tr>
+          <tr data-id="F-2026-081930"><th scope="row"><sc-ltr>F-2026-081930</sc-ltr></th><td>19 فبراير 2026</td><td>سالك: عبور بوابة دون رصيد كافٍ</td><td><sc-status-tag tone="success">مدفوعة</sc-status-tag></td><td data-value="100">100.00 درهم</td></tr>
+        </tbody>
+      </table>
+      <sc-button slot="actions">ادفع المخالفات</sc-button>
+    </sc-table>
+    <p class="pg-note" lang="en" dir="ltr">This card is always lang="ar" dir="rtl": the first column and the checkboxes are on the right, amounts align left, and the sort glyph sits after the label.</p>
+  </div>
+</section>
+
+<style>
+  .pg-ground {
+    background: var(--sc-color-grouped);
+    box-shadow: none;
+  }
+</style>
+
+<script>
+  {
+    // data-ar-<attr>="…" swaps an attribute (caption, selection-label…) when the toolbar is Arabic.
+    const preview = document.getElementById('preview');
+    const apply = () => {
+      const ar = preview.lang === 'ar';
+      for (const el of preview.querySelectorAll('*')) {
+        for (const { name, value } of [...el.attributes]) {
+          if (!name.startsWith('data-ar-')) continue;
+          const attr = name.slice(8);
+          if (!el.hasAttribute(`data-en-${attr}`)) el.setAttribute(`data-en-${attr}`, el.getAttribute(attr) ?? '');
+          el.setAttribute(attr, ar ? value : el.getAttribute(`data-en-${attr}`));
+        }
+      }
+    };
+    new MutationObserver(apply).observe(preview, { attributes: true, attributeFilter: ['lang'] });
+    apply();
+
+    // The service sorts the data: here, a client-side stand-in reorders the rows.
+    const table = document.getElementById('tb-fines');
+    const out = document.getElementById('tb-output');
+    const pay = document.getElementById('tb-pay');
+    table.addEventListener('scSort', (ev) => {
+      const { column, direction } = ev.detail;
+      const body = table.querySelector('tbody');
+      const key = (row) => (column === 'amount' ? Number(row.cells[row.cells.length - 2].dataset.value) : row.dataset.date);
+      const rows = [...body.rows].sort((a, b) => (key(a) > key(b) ? 1 : key(a) < key(b) ? -1 : 0) * (direction === 'ascending' ? 1 : -1));
+      body.append(...rows);
+      out.textContent = `scSort: ${column}, ${direction}`;
+    });
+    table.addEventListener('scSelectionChange', (ev) => {
+      const n = ev.detail.ids.length;
+      const ar = preview.lang === 'ar';
+      pay.textContent = ar ? (n === 1 ? 'ادفع مخالفة واحدة' : n === 2 ? 'ادفع مخالفتين' : `ادفع ${n} مخالفات`) : `Pay ${n} ${n === 1 ? 'fine' : 'fines'}`;
+      out.textContent = `scSelectionChange: ${ev.detail.ids.join(', ') || 'none'}`;
+    });
+  }
+</script>

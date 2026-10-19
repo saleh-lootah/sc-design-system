@@ -13,3 +13,5 @@ export { default as scTextarea } from './sc-textarea';
 export { default as scRadioGroup } from './sc-radio-group';
 export { default as scCheckboxGroup } from './sc-checkbox-group';
 export { default as scDateInput } from './sc-date-input';
+export { default as scTable } from './sc-table';
+export { default as scDateRange } from './sc-date-range';

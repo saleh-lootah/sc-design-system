@@ -304,6 +304,7 @@
   --ease-standard: var(--sc-easing-standard);
   --ease-enter: var(--sc-easing-enter);
   --ease-exit: var(--sc-easing-exit);
+  --ease-drawer: var(--sc-easing-drawer);
   --duration-spin: var(--sc-duration-spin);
   --duration-instant: var(--sc-duration-instant);
   --duration-fast: var(--sc-duration-fast);

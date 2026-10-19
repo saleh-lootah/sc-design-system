@@ -37,3 +37,5 @@ page('Form fields', 'sc-select', 'Select');
 page('Form fields', 'sc-radio-group', 'Radio group');
 page('Form fields', 'sc-checkbox-group', 'Checkbox group');
 page('Form fields', 'sc-date-input', 'Date input');
+page('Content and layout', 'sc-table', 'Table');
+page('Form fields', 'sc-date-range', 'Date range');

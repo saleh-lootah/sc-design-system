@@ -13,12 +13,14 @@ import { Channel } from "./i18n/strings";
 import { HeadingLevel } from "./components/sc-text-input/field";
 import { ContainerWidth } from "./components/sc-container/sc-container";
 import { Parts } from "./components/sc-date-input/date";
+import { StringsInput } from "./components/sc-table/overrides";
 import { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
 import { LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
 import { ScSearchDetail } from "./components/sc-search/sc-search";
 import { ServiceCardHeadingLevel } from "./components/sc-service-card/sc-service-card";
 import { StatusTagTone } from "./components/sc-status-tag/sc-status-tag";
 import { SummaryListAppearance } from "./components/sc-summary-list/sc-summary-list";
+import { SortDirection } from "./components/sc-table/sc-table";
 import { TextInputType, TextInputWidth } from "./components/sc-text-input/sc-text-input";
 export { ButtonIconPosition, ButtonSize, ButtonType, ButtonVariant } from "./components/sc-button/sc-button";
 export { IconName } from "./icons/index";
@@ -28,12 +30,14 @@ export { Channel } from "./i18n/strings";
 export { HeadingLevel } from "./components/sc-text-input/field";
 export { ContainerWidth } from "./components/sc-container/sc-container";
 export { Parts } from "./components/sc-date-input/date";
+export { StringsInput } from "./components/sc-table/overrides";
 export { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
 export { LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
 export { ScSearchDetail } from "./components/sc-search/sc-search";
 export { ServiceCardHeadingLevel } from "./components/sc-service-card/sc-service-card";
 export { StatusTagTone } from "./components/sc-status-tag/sc-status-tag";
 export { SummaryListAppearance } from "./components/sc-summary-list/sc-summary-list";
+export { SortDirection } from "./components/sc-table/sc-table";
 export { TextInputType, TextInputWidth } from "./components/sc-text-input/sc-text-input";
 export namespace Components {
     /**
@@ -395,6 +399,117 @@ export namespace Components {
           * @default ''
          */
         "value": string;
+    }
+    /**
+     * A start and an end date that relate to a calendar: filtering payments between two dates,
+     * the nights of a hotel stay, how long a permit lasts. For one date people already know
+     * (a date of birth), use `sc-date-input`.
+     * Two typed segments (From / To, من / إلى) in one 54px frame, and a calendar button that
+     * opens a picker: a popover with one or two months and optional presets on medium and
+     * wider screens, a modal bottom sheet below 600px. People can always type instead
+     * ("21/9/2026", "21 9 2026", "21-09-2026").
+     * Form-associated: submits `name-start` and `name-end` as ISO dates (empty until each is a
+     * real date). Reports `valueMissing` (with `required`), `badInput`, `rangeUnderflow` and
+     * `rangeOverflow`, and shows its own messages for impossible ranges on blur. Delegates focus
+     * to the start segment.
+     */
+    interface ScDateRange {
+        /**
+          * Closes the picker without changing the field.
+         */
+        "close": () => Promise<void>;
+        /**
+          * Disables the field. Avoid it.
+          * @default false
+         */
+        "disabled": boolean;
+        /**
+          * The end date, ISO (`2026-10-09`). Empty until it is a real date.
+          * @default ''
+         */
+        "end": string;
+        /**
+          * The error message. Setting it shows the error state (it replaces the component's own messages).
+         */
+        "error"?: string;
+        /**
+          * Which segment the error marks: `start`, `end` or `both`.
+          * @default 'both'
+         */
+        "errorParts": 'start' | 'end' | 'both';
+        /**
+          * When set (1–6), the legend is also the page heading at this level.
+         */
+        "headingLevel"?: HeadingLevel;
+        /**
+          * An example in the typed order: "For example, 21 9 2026".
+         */
+        "hint"?: string;
+        /**
+          * The question, shown as the legend: "Show payments between".
+         */
+        "label"?: string;
+        /**
+          * The latest day people can choose, ISO. For payment filters this is today.
+         */
+        "max"?: string;
+        /**
+          * The longest range, in days, counted inclusively. Days past the limit are disabled once a start is chosen.
+         */
+        "maxDays"?: number;
+        /**
+          * The earliest day people can choose, ISO.
+         */
+        "min"?: string;
+        /**
+          * The shortest range, in days, counted inclusively.
+         */
+        "minDays"?: number;
+        /**
+          * Months shown in the popover: `1`, `2`, or `auto` (two when the window is at least 720px wide).
+          * @default 'auto'
+         */
+        "months": 1 | 2 | 'auto';
+        /**
+          * The name submitted with the form, as `name-start` and `name-end`.
+         */
+        "name"?: string;
+        /**
+          * Opens the picker.
+         */
+        "open": () => Promise<void>;
+        /**
+          * Appends "(optional)" to the legend.
+          * @default false
+         */
+        "optional": boolean;
+        /**
+          * Quick ranges at inline-start of the picker. `true` (or the bare attribute) shows Today, Last 7 days, Last 30 days, This month, Last month and This year. A JSON list replaces them: `[{"label": "This weekend", "start": "2026-10-23", "end": "2026-10-24"}]`.
+          * @default false
+         */
+        "presets": boolean | string;
+        /**
+          * Requires both dates (`valueMissing` while either is empty).
+          * @default false
+         */
+        "required": boolean;
+        /**
+          * Focuses the start segment.
+         */
+        "setFocus": () => Promise<void>;
+        /**
+          * The start date, ISO (`2026-09-21`). Empty until it is a real date.
+          * @default ''
+         */
+        "start": string;
+        /**
+          * Overrides the built-in English and Arabic strings, as JSON (`{"dateRangeFrom": "Check-in"}`, or per language `{"ar": {…}}`).
+         */
+        "strings"?: StringsInput;
+        /**
+          * Today's date, ISO. Defaults to the browser's date; set it when the server's "today" matters, and in tests.
+         */
+        "today"?: string;
     }
     /**
      * Lists every error on the page, at the top of the main content, after a form is
@@ -896,6 +1011,68 @@ export namespace Components {
         "value"?: string;
     }
     /**
+     * A table compares rows of the same kind of thing across a few attributes: fines, payments,
+     * permit applications. It styles and enhances a slotted native `<table>`; it never rebuilds
+     * one out of divs, so screen readers announce rows, columns and headers.
+     * The component is scoped (light DOM). Mark up the table as usual: `th scope="col"` in the
+     * header, `th scope="row"` as each row's first cell, and give header cells a column type with
+     * `data-type` (`text`, `reference`, `date`, `amount`, `status`, `action`) to set alignment,
+     * wrapping and figures. The component then:
+     * - writes the `caption` property into a native `<caption>` (the table's accessible name);
+     * - turns `th[data-sort]` headers into sort buttons with `aria-sort`, and emits `scSort`
+     *   (the service sorts the data, usually on the server);
+     * - with `selectable`, adds a checkbox column (rows are identified by `tr[data-id]`) and a
+     *   selection bar, and emits `scSelectionChange`;
+     * - fills empty cells with a muted "None";
+     * - below 600px, stacks rows as cards (`responsive="stack"`) or scrolls sideways (`"scroll"`).
+     * Use `class="sc-visually-hidden"` inside the table for context only screen readers need
+     * ("View <span class="sc-visually-hidden">fine F-2026-118204</span>").
+     */
+    interface ScTable {
+        /**
+          * The table's accessible name, written into a native `<caption>`: "Your fines". Required unless the table already has a `<caption>`.
+         */
+        "caption"?: string;
+        /**
+          * Hides the caption visually (it is still announced). Use it when a heading straight above says the same thing.
+          * @default false
+         */
+        "captionHidden": boolean;
+        /**
+          * Row height: `default` (56) for the public, `compact` (44, body-s) for staff tools with long lists.
+          * @default 'default'
+         */
+        "density": 'default' | 'compact';
+        /**
+          * The rows are the result of a filter: when there are none, the header stays (for "No fines from 1 to 31 March 2026").
+          * @default false
+         */
+        "filtered": boolean;
+        /**
+          * Shows 5 skeleton rows in place of the body. The header stays real.
+          * @default false
+         */
+        "loading": boolean;
+        /**
+          * Behaviour below 600px: `stack` turns each row into a card (up to about 6 columns); `scroll` keeps the table in a horizontal scroll region.
+          * @default 'stack'
+         */
+        "responsive": 'stack' | 'scroll';
+        /**
+          * Adds a checkbox column at inline-start and a selection bar below the table. Rows are identified by `tr[data-id]`.
+          * @default false
+         */
+        "selectable": boolean;
+        /**
+          * The selection bar text, with `{count}`: "{count} fines selected". Plural forms are separated by `|`: "{count} fine selected|{count} fines selected" (Arabic: zero|one|two|few|many|other). When the table has an amount column, the selected total follows it.
+         */
+        "selectionLabel"?: string;
+        /**
+          * Overrides the built-in English and Arabic strings, as JSON: `{"tableSelectRow": "Select fine {row}", "tableSelectAll": "Select all fines on this page"}`, or per language: `{"ar": {…}}`.
+         */
+        "strings"?: StringsInput;
+    }
+    /**
      * A single-line answer, such as a plate number, an email address or a phone number.
      * Renders its own label, hint, error and native `<input>` in one shadow root, so the
      * label and `aria-describedby` work. The host is form-associated (it submits `value`
@@ -1071,6 +1248,10 @@ export interface ScDateInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLScDateInputElement;
 }
+export interface ScDateRangeCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLScDateRangeElement;
+}
 export interface ScLanguageSwitchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLScLanguageSwitchElement;
@@ -1086,6 +1267,10 @@ export interface ScSearchCustomEvent<T> extends CustomEvent<T> {
 export interface ScSelectCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLScSelectElement;
+}
+export interface ScTableCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLScTableElement;
 }
 export interface ScTextInputCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1282,6 +1467,38 @@ declare global {
     var HTMLScDateInputElement: {
         prototype: HTMLScDateInputElement;
         new (): HTMLScDateInputElement;
+    };
+    interface HTMLScDateRangeElementEventMap {
+        "scChange": { start: string; end: string };
+        "scOpen": void;
+        "scClose": void;
+    }
+    /**
+     * A start and an end date that relate to a calendar: filtering payments between two dates,
+     * the nights of a hotel stay, how long a permit lasts. For one date people already know
+     * (a date of birth), use `sc-date-input`.
+     * Two typed segments (From / To, من / إلى) in one 54px frame, and a calendar button that
+     * opens a picker: a popover with one or two months and optional presets on medium and
+     * wider screens, a modal bottom sheet below 600px. People can always type instead
+     * ("21/9/2026", "21 9 2026", "21-09-2026").
+     * Form-associated: submits `name-start` and `name-end` as ISO dates (empty until each is a
+     * real date). Reports `valueMissing` (with `required`), `badInput`, `rangeUnderflow` and
+     * `rangeOverflow`, and shows its own messages for impossible ranges on blur. Delegates focus
+     * to the start segment.
+     */
+    interface HTMLScDateRangeElement extends Components.ScDateRange, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLScDateRangeElementEventMap>(type: K, listener: (this: HTMLScDateRangeElement, ev: ScDateRangeCustomEvent<HTMLScDateRangeElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLScDateRangeElementEventMap>(type: K, listener: (this: HTMLScDateRangeElement, ev: ScDateRangeCustomEvent<HTMLScDateRangeElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLScDateRangeElement: {
+        prototype: HTMLScDateRangeElement;
+        new (): HTMLScDateRangeElement;
     };
     /**
      * Lists every error on the page, at the top of the main content, after a form is
@@ -1584,6 +1801,42 @@ declare global {
         prototype: HTMLScSummaryRowElement;
         new (): HTMLScSummaryRowElement;
     };
+    interface HTMLScTableElementEventMap {
+        "scSort": { column: string; direction: SortDirection };
+        "scSelectionChange": { ids: string[] };
+    }
+    /**
+     * A table compares rows of the same kind of thing across a few attributes: fines, payments,
+     * permit applications. It styles and enhances a slotted native `<table>`; it never rebuilds
+     * one out of divs, so screen readers announce rows, columns and headers.
+     * The component is scoped (light DOM). Mark up the table as usual: `th scope="col"` in the
+     * header, `th scope="row"` as each row's first cell, and give header cells a column type with
+     * `data-type` (`text`, `reference`, `date`, `amount`, `status`, `action`) to set alignment,
+     * wrapping and figures. The component then:
+     * - writes the `caption` property into a native `<caption>` (the table's accessible name);
+     * - turns `th[data-sort]` headers into sort buttons with `aria-sort`, and emits `scSort`
+     *   (the service sorts the data, usually on the server);
+     * - with `selectable`, adds a checkbox column (rows are identified by `tr[data-id]`) and a
+     *   selection bar, and emits `scSelectionChange`;
+     * - fills empty cells with a muted "None";
+     * - below 600px, stacks rows as cards (`responsive="stack"`) or scrolls sideways (`"scroll"`).
+     * Use `class="sc-visually-hidden"` inside the table for context only screen readers need
+     * ("View <span class="sc-visually-hidden">fine F-2026-118204</span>").
+     */
+    interface HTMLScTableElement extends Components.ScTable, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLScTableElementEventMap>(type: K, listener: (this: HTMLScTableElement, ev: ScTableCustomEvent<HTMLScTableElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLScTableElementEventMap>(type: K, listener: (this: HTMLScTableElement, ev: ScTableCustomEvent<HTMLScTableElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLScTableElement: {
+        prototype: HTMLScTableElement;
+        new (): HTMLScTableElement;
+    };
     interface HTMLScTextInputElementEventMap {
         "scInput": { value: string };
         "scChange": { value: string };
@@ -1645,6 +1898,7 @@ declare global {
         "sc-checkbox-group": HTMLScCheckboxGroupElement;
         "sc-container": HTMLScContainerElement;
         "sc-date-input": HTMLScDateInputElement;
+        "sc-date-range": HTMLScDateRangeElement;
         "sc-error-summary": HTMLScErrorSummaryElement;
         "sc-footer": HTMLScFooterElement;
         "sc-grid": HTMLScGridElement;
@@ -1663,6 +1917,7 @@ declare global {
         "sc-step-progress": HTMLScStepProgressElement;
         "sc-summary-list": HTMLScSummaryListElement;
         "sc-summary-row": HTMLScSummaryRowElement;
+        "sc-table": HTMLScTableElement;
         "sc-text-input": HTMLScTextInputElement;
         "sc-textarea": HTMLScTextareaElement;
     }
@@ -2065,6 +2320,121 @@ declare namespace LocalJSX {
           * @default ''
          */
         "value"?: string;
+    }
+    /**
+     * A start and an end date that relate to a calendar: filtering payments between two dates,
+     * the nights of a hotel stay, how long a permit lasts. For one date people already know
+     * (a date of birth), use `sc-date-input`.
+     * Two typed segments (From / To, من / إلى) in one 54px frame, and a calendar button that
+     * opens a picker: a popover with one or two months and optional presets on medium and
+     * wider screens, a modal bottom sheet below 600px. People can always type instead
+     * ("21/9/2026", "21 9 2026", "21-09-2026").
+     * Form-associated: submits `name-start` and `name-end` as ISO dates (empty until each is a
+     * real date). Reports `valueMissing` (with `required`), `badInput`, `rangeUnderflow` and
+     * `rangeOverflow`, and shows its own messages for impossible ranges on blur. Delegates focus
+     * to the start segment.
+     */
+    interface ScDateRange {
+        /**
+          * Disables the field. Avoid it.
+          * @default false
+         */
+        "disabled"?: boolean;
+        /**
+          * The end date, ISO (`2026-10-09`). Empty until it is a real date.
+          * @default ''
+         */
+        "end"?: string;
+        /**
+          * The error message. Setting it shows the error state (it replaces the component's own messages).
+         */
+        "error"?: string;
+        /**
+          * Which segment the error marks: `start`, `end` or `both`.
+          * @default 'both'
+         */
+        "errorParts"?: 'start' | 'end' | 'both';
+        /**
+          * The `id` of a `<form>` element to associate this element with.
+         */
+        "form"?: string;
+        /**
+          * When set (1–6), the legend is also the page heading at this level.
+         */
+        "headingLevel"?: HeadingLevel;
+        /**
+          * An example in the typed order: "For example, 21 9 2026".
+         */
+        "hint"?: string;
+        /**
+          * The question, shown as the legend: "Show payments between".
+         */
+        "label"?: string;
+        /**
+          * The latest day people can choose, ISO. For payment filters this is today.
+         */
+        "max"?: string;
+        /**
+          * The longest range, in days, counted inclusively. Days past the limit are disabled once a start is chosen.
+         */
+        "maxDays"?: number;
+        /**
+          * The earliest day people can choose, ISO.
+         */
+        "min"?: string;
+        /**
+          * The shortest range, in days, counted inclusively.
+         */
+        "minDays"?: number;
+        /**
+          * Months shown in the popover: `1`, `2`, or `auto` (two when the window is at least 720px wide).
+          * @default 'auto'
+         */
+        "months"?: 1 | 2 | 'auto';
+        /**
+          * The name submitted with the form, as `name-start` and `name-end`.
+         */
+        "name"?: string;
+        /**
+          * Fires when the range changes (Apply, or a committed typed date), with `{ start, end }`. A native `change` is also dispatched on the host.
+         */
+        "onScChange"?: (event: ScDateRangeCustomEvent<{ start: string; end: string }>) => void;
+        /**
+          * Fires when the picker closes.
+         */
+        "onScClose"?: (event: ScDateRangeCustomEvent<void>) => void;
+        /**
+          * Fires when the picker opens.
+         */
+        "onScOpen"?: (event: ScDateRangeCustomEvent<void>) => void;
+        /**
+          * Appends "(optional)" to the legend.
+          * @default false
+         */
+        "optional"?: boolean;
+        /**
+          * Quick ranges at inline-start of the picker. `true` (or the bare attribute) shows Today, Last 7 days, Last 30 days, This month, Last month and This year. A JSON list replaces them: `[{"label": "This weekend", "start": "2026-10-23", "end": "2026-10-24"}]`.
+          * @default false
+         */
+        "presets"?: boolean | string;
+        /**
+          * Requires both dates (`valueMissing` while either is empty).
+          * @default false
+         */
+        "required"?: boolean;
+        /**
+          * The start date, ISO (`2026-09-21`). Empty until it is a real date.
+          * @default ''
+         */
+        "start"?: string;
+        /**
+          * Overrides the built-in English and Arabic strings, as JSON (`{"dateRangeFrom": "Check-in"}`, or per language `{"ar": {…}}`).
+         */
+        "strings"?: StringsInput;
+        /**
+          * Today's date, ISO. Defaults to the browser's date; set it when the server's "today" matters, and in tests.
+         */
+        "today"?: string;
     }
     /**
      * Lists every error on the page, at the top of the main content, after a form is
@@ -2582,6 +2952,76 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     /**
+     * A table compares rows of the same kind of thing across a few attributes: fines, payments,
+     * permit applications. It styles and enhances a slotted native `<table>`; it never rebuilds
+     * one out of divs, so screen readers announce rows, columns and headers.
+     * The component is scoped (light DOM). Mark up the table as usual: `th scope="col"` in the
+     * header, `th scope="row"` as each row's first cell, and give header cells a column type with
+     * `data-type` (`text`, `reference`, `date`, `amount`, `status`, `action`) to set alignment,
+     * wrapping and figures. The component then:
+     * - writes the `caption` property into a native `<caption>` (the table's accessible name);
+     * - turns `th[data-sort]` headers into sort buttons with `aria-sort`, and emits `scSort`
+     *   (the service sorts the data, usually on the server);
+     * - with `selectable`, adds a checkbox column (rows are identified by `tr[data-id]`) and a
+     *   selection bar, and emits `scSelectionChange`;
+     * - fills empty cells with a muted "None";
+     * - below 600px, stacks rows as cards (`responsive="stack"`) or scrolls sideways (`"scroll"`).
+     * Use `class="sc-visually-hidden"` inside the table for context only screen readers need
+     * ("View <span class="sc-visually-hidden">fine F-2026-118204</span>").
+     */
+    interface ScTable {
+        /**
+          * The table's accessible name, written into a native `<caption>`: "Your fines". Required unless the table already has a `<caption>`.
+         */
+        "caption"?: string;
+        /**
+          * Hides the caption visually (it is still announced). Use it when a heading straight above says the same thing.
+          * @default false
+         */
+        "captionHidden"?: boolean;
+        /**
+          * Row height: `default` (56) for the public, `compact` (44, body-s) for staff tools with long lists.
+          * @default 'default'
+         */
+        "density"?: 'default' | 'compact';
+        /**
+          * The rows are the result of a filter: when there are none, the header stays (for "No fines from 1 to 31 March 2026").
+          * @default false
+         */
+        "filtered"?: boolean;
+        /**
+          * Shows 5 skeleton rows in place of the body. The header stays real.
+          * @default false
+         */
+        "loading"?: boolean;
+        /**
+          * Fires when the selection changes, with `{ ids }` (the selected rows' `data-id`).
+         */
+        "onScSelectionChange"?: (event: ScTableCustomEvent<{ ids: string[] }>) => void;
+        /**
+          * Fires when a sortable header is activated, with `{ column, direction }`. `column` is the header's `data-sort` value, or its text. The service sorts the rows.
+         */
+        "onScSort"?: (event: ScTableCustomEvent<{ column: string; direction: SortDirection }>) => void;
+        /**
+          * Behaviour below 600px: `stack` turns each row into a card (up to about 6 columns); `scroll` keeps the table in a horizontal scroll region.
+          * @default 'stack'
+         */
+        "responsive"?: 'stack' | 'scroll';
+        /**
+          * Adds a checkbox column at inline-start and a selection bar below the table. Rows are identified by `tr[data-id]`.
+          * @default false
+         */
+        "selectable"?: boolean;
+        /**
+          * The selection bar text, with `{count}`: "{count} fines selected". Plural forms are separated by `|`: "{count} fine selected|{count} fines selected" (Arabic: zero|one|two|few|many|other). When the table has an amount column, the selected total follows it.
+         */
+        "selectionLabel"?: string;
+        /**
+          * Overrides the built-in English and Arabic strings, as JSON: `{"tableSelectRow": "Select fine {row}", "tableSelectAll": "Select all fines on this page"}`, or per language: `{"ar": {…}}`.
+         */
+        "strings"?: StringsInput;
+    }
+    /**
      * A single-line answer, such as a plate number, an email address or a phone number.
      * Renders its own label, hint, error and native `<input>` in one shadow root, so the
      * label and `aria-describedby` work. The host is form-associated (it submits `value`
@@ -2845,6 +3285,27 @@ declare namespace LocalJSX {
         "autocomplete": string;
         "headingLevel": HeadingLevel;
     }
+    interface ScDateRangeAttributes {
+        "label": string;
+        "hint": string;
+        "error": string;
+        "errorParts": 'start' | 'end' | 'both';
+        "start": string;
+        "end": string;
+        "min": string;
+        "max": string;
+        "minDays": number;
+        "maxDays": number;
+        "presets": string;
+        "months": string;
+        "name": string;
+        "optional": boolean;
+        "required": boolean;
+        "disabled": boolean;
+        "headingLevel": HeadingLevel;
+        "strings": StringsInput;
+        "today": string;
+    }
     interface ScErrorSummaryAttributes {
         "heading": string;
         "headingLevel": ErrorSummaryHeadingLevel;
@@ -2948,6 +3409,17 @@ declare namespace LocalJSX {
         "actionText": string;
         "actionHiddenText": string;
     }
+    interface ScTableAttributes {
+        "caption": string;
+        "captionHidden": boolean;
+        "density": 'default' | 'compact';
+        "responsive": 'stack' | 'scroll';
+        "selectable": boolean;
+        "selectionLabel": string;
+        "loading": boolean;
+        "filtered": boolean;
+        "strings": StringsInput;
+    }
     interface ScTextInputAttributes {
         "label": string;
         "hint": string;
@@ -2998,6 +3470,7 @@ declare namespace LocalJSX {
         "sc-checkbox-group": Omit<ScCheckboxGroup, keyof ScCheckboxGroupAttributes> & { [K in keyof ScCheckboxGroup & keyof ScCheckboxGroupAttributes]?: ScCheckboxGroup[K] } & { [K in keyof ScCheckboxGroup & keyof ScCheckboxGroupAttributes as `attr:${K}`]?: ScCheckboxGroupAttributes[K] } & { [K in keyof ScCheckboxGroup & keyof ScCheckboxGroupAttributes as `prop:${K}`]?: ScCheckboxGroup[K] };
         "sc-container": Omit<ScContainer, keyof ScContainerAttributes> & { [K in keyof ScContainer & keyof ScContainerAttributes]?: ScContainer[K] } & { [K in keyof ScContainer & keyof ScContainerAttributes as `attr:${K}`]?: ScContainerAttributes[K] } & { [K in keyof ScContainer & keyof ScContainerAttributes as `prop:${K}`]?: ScContainer[K] };
         "sc-date-input": Omit<ScDateInput, keyof ScDateInputAttributes> & { [K in keyof ScDateInput & keyof ScDateInputAttributes]?: ScDateInput[K] } & { [K in keyof ScDateInput & keyof ScDateInputAttributes as `attr:${K}`]?: ScDateInputAttributes[K] } & { [K in keyof ScDateInput & keyof ScDateInputAttributes as `prop:${K}`]?: ScDateInput[K] };
+        "sc-date-range": Omit<ScDateRange, keyof ScDateRangeAttributes> & { [K in keyof ScDateRange & keyof ScDateRangeAttributes]?: ScDateRange[K] } & { [K in keyof ScDateRange & keyof ScDateRangeAttributes as `attr:${K}`]?: ScDateRangeAttributes[K] } & { [K in keyof ScDateRange & keyof ScDateRangeAttributes as `prop:${K}`]?: ScDateRange[K] };
         "sc-error-summary": Omit<ScErrorSummary, keyof ScErrorSummaryAttributes> & { [K in keyof ScErrorSummary & keyof ScErrorSummaryAttributes]?: ScErrorSummary[K] } & { [K in keyof ScErrorSummary & keyof ScErrorSummaryAttributes as `attr:${K}`]?: ScErrorSummaryAttributes[K] } & { [K in keyof ScErrorSummary & keyof ScErrorSummaryAttributes as `prop:${K}`]?: ScErrorSummary[K] };
         "sc-footer": Omit<ScFooter, keyof ScFooterAttributes> & { [K in keyof ScFooter & keyof ScFooterAttributes]?: ScFooter[K] } & { [K in keyof ScFooter & keyof ScFooterAttributes as `attr:${K}`]?: ScFooterAttributes[K] } & { [K in keyof ScFooter & keyof ScFooterAttributes as `prop:${K}`]?: ScFooter[K] };
         "sc-grid": Omit<ScGrid, keyof ScGridAttributes> & { [K in keyof ScGrid & keyof ScGridAttributes]?: ScGrid[K] } & { [K in keyof ScGrid & keyof ScGridAttributes as `attr:${K}`]?: ScGridAttributes[K] } & { [K in keyof ScGrid & keyof ScGridAttributes as `prop:${K}`]?: ScGrid[K] };
@@ -3016,6 +3489,7 @@ declare namespace LocalJSX {
         "sc-step-progress": Omit<ScStepProgress, keyof ScStepProgressAttributes> & { [K in keyof ScStepProgress & keyof ScStepProgressAttributes]?: ScStepProgress[K] } & { [K in keyof ScStepProgress & keyof ScStepProgressAttributes as `attr:${K}`]?: ScStepProgressAttributes[K] } & { [K in keyof ScStepProgress & keyof ScStepProgressAttributes as `prop:${K}`]?: ScStepProgress[K] };
         "sc-summary-list": Omit<ScSummaryList, keyof ScSummaryListAttributes> & { [K in keyof ScSummaryList & keyof ScSummaryListAttributes]?: ScSummaryList[K] } & { [K in keyof ScSummaryList & keyof ScSummaryListAttributes as `attr:${K}`]?: ScSummaryListAttributes[K] } & { [K in keyof ScSummaryList & keyof ScSummaryListAttributes as `prop:${K}`]?: ScSummaryList[K] };
         "sc-summary-row": Omit<ScSummaryRow, keyof ScSummaryRowAttributes> & { [K in keyof ScSummaryRow & keyof ScSummaryRowAttributes]?: ScSummaryRow[K] } & { [K in keyof ScSummaryRow & keyof ScSummaryRowAttributes as `attr:${K}`]?: ScSummaryRowAttributes[K] } & { [K in keyof ScSummaryRow & keyof ScSummaryRowAttributes as `prop:${K}`]?: ScSummaryRow[K] } & OneOf<"label", ScSummaryRow["label"], ScSummaryRowAttributes["label"]>;
+        "sc-table": Omit<ScTable, keyof ScTableAttributes> & { [K in keyof ScTable & keyof ScTableAttributes]?: ScTable[K] } & { [K in keyof ScTable & keyof ScTableAttributes as `attr:${K}`]?: ScTableAttributes[K] } & { [K in keyof ScTable & keyof ScTableAttributes as `prop:${K}`]?: ScTable[K] };
         "sc-text-input": Omit<ScTextInput, keyof ScTextInputAttributes> & { [K in keyof ScTextInput & keyof ScTextInputAttributes]?: ScTextInput[K] } & { [K in keyof ScTextInput & keyof ScTextInputAttributes as `attr:${K}`]?: ScTextInputAttributes[K] } & { [K in keyof ScTextInput & keyof ScTextInputAttributes as `prop:${K}`]?: ScTextInput[K] };
         "sc-textarea": Omit<ScTextarea, keyof ScTextareaAttributes> & { [K in keyof ScTextarea & keyof ScTextareaAttributes]?: ScTextarea[K] } & { [K in keyof ScTextarea & keyof ScTextareaAttributes as `attr:${K}`]?: ScTextareaAttributes[K] } & { [K in keyof ScTextarea & keyof ScTextareaAttributes as `prop:${K}`]?: ScTextarea[K] };
     }
@@ -3122,6 +3596,20 @@ declare module "@stencil/core" {
              * Delegates focus to the first box.
              */
             "sc-date-input": LocalJSX.IntrinsicElements["sc-date-input"] & JSXBase.HTMLAttributes<HTMLScDateInputElement>;
+            /**
+             * A start and an end date that relate to a calendar: filtering payments between two dates,
+             * the nights of a hotel stay, how long a permit lasts. For one date people already know
+             * (a date of birth), use `sc-date-input`.
+             * Two typed segments (From / To, من / إلى) in one 54px frame, and a calendar button that
+             * opens a picker: a popover with one or two months and optional presets on medium and
+             * wider screens, a modal bottom sheet below 600px. People can always type instead
+             * ("21/9/2026", "21 9 2026", "21-09-2026").
+             * Form-associated: submits `name-start` and `name-end` as ISO dates (empty until each is a
+             * real date). Reports `valueMissing` (with `required`), `badInput`, `rangeUnderflow` and
+             * `rangeOverflow`, and shows its own messages for impossible ranges on blur. Delegates focus
+             * to the start segment.
+             */
+            "sc-date-range": LocalJSX.IntrinsicElements["sc-date-range"] & JSXBase.HTMLAttributes<HTMLScDateRangeElement>;
             /**
              * Lists every error on the page, at the top of the main content, after a form is
              * submitted. Each item links to its field; following a link moves focus to the field.
@@ -3289,6 +3777,25 @@ declare module "@stencil/core" {
              * child of `sc-summary-list`; the list sets its `slot` attribute.
              */
             "sc-summary-row": LocalJSX.IntrinsicElements["sc-summary-row"] & JSXBase.HTMLAttributes<HTMLScSummaryRowElement>;
+            /**
+             * A table compares rows of the same kind of thing across a few attributes: fines, payments,
+             * permit applications. It styles and enhances a slotted native `<table>`; it never rebuilds
+             * one out of divs, so screen readers announce rows, columns and headers.
+             * The component is scoped (light DOM). Mark up the table as usual: `th scope="col"` in the
+             * header, `th scope="row"` as each row's first cell, and give header cells a column type with
+             * `data-type` (`text`, `reference`, `date`, `amount`, `status`, `action`) to set alignment,
+             * wrapping and figures. The component then:
+             * - writes the `caption` property into a native `<caption>` (the table's accessible name);
+             * - turns `th[data-sort]` headers into sort buttons with `aria-sort`, and emits `scSort`
+             *   (the service sorts the data, usually on the server);
+             * - with `selectable`, adds a checkbox column (rows are identified by `tr[data-id]`) and a
+             *   selection bar, and emits `scSelectionChange`;
+             * - fills empty cells with a muted "None";
+             * - below 600px, stacks rows as cards (`responsive="stack"`) or scrolls sideways (`"scroll"`).
+             * Use `class="sc-visually-hidden"` inside the table for context only screen readers need
+             * ("View <span class="sc-visually-hidden">fine F-2026-118204</span>").
+             */
+            "sc-table": LocalJSX.IntrinsicElements["sc-table"] & JSXBase.HTMLAttributes<HTMLScTableElement>;
             /**
              * A single-line answer, such as a plate number, an email address or a phone number.
              * Renders its own label, hint, error and native `<input>` in one shadow root, so the
