@@ -28,7 +28,7 @@ Each type sets the column's alignment, wrapping and figures. A column's header c
 | reference | start | nowrap | tabular, in an LTR isolate | F-2026-118204 (identical in AR) |
 | date | start | nowrap | tabular | 14 Mar 2026 · 14 مارس 2026 |
 | amount | end | nowrap; the column grows instead | tabular | AED 1,250.00 · 1,250.00 درهم |
-| status | start | nowrap; uses `sc-status-tag` | – | Unpaid · غير مدفوعة |
+| status | start | nowrap; uses `sc-status-tag` | – | Not paid · بانتظار الدفع |
 | action | end | nowrap | – | View · عرض (with visually hidden context: "View fine F-2026-118204") |
 
 Rules:
@@ -140,7 +140,7 @@ Applies the emil-design-eng rules.
         <th scope="row"><a href="/fines/F-2026-118204">F-2026-118204</a></th>
         <td>14 Mar 2026</td>
         <td>Speeding: 21 to 30 km/h over the limit</td>
-        <td><sc-status-tag tone="warning">Unpaid</sc-status-tag></td>
+        <td><sc-status-tag tone="warning">Not paid</sc-status-tag></td>
         <td>AED 600.00</td>
       </tr>
     </tbody>

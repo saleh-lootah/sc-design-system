@@ -71,7 +71,7 @@ describe('sc-date-range (spec)', () => {
     const r = root(page.body.querySelector('sc-date-range')!);
     expect(Array.from(r.querySelectorAll('.segment-label')).map((l) => l.textContent)).toEqual(['من', 'إلى']);
     expect(Array.from(r.querySelectorAll('input')).map((i) => i.getAttribute('value'))).toEqual(['21 سبتمبر 2026', '9 أكتوبر 2026']);
-    expect(r.querySelector('.calendar-button')!.getAttribute('aria-label')).toBe('اختر التاريخين، من 21 سبتمبر إلى 9 أكتوبر 2026');
+    expect(r.querySelector('.calendar-button')!.getAttribute('aria-label')).toBe('اختيار التاريخين، من 21 سبتمبر إلى 9 أكتوبر 2026');
   });
 
   it('marks only the segment named by error-parts', async () => {

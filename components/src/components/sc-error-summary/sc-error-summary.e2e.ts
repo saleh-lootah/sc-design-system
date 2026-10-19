@@ -140,7 +140,7 @@ describe('sc-error-summary (e2e)', () => {
     const heading = () => page.evaluate(() => document.querySelector('sc-error-summary')!.shadowRoot!.querySelector('h2')!.textContent);
     expect(await heading()).toBe('There is a problem');
     await setPageContext(page, { lang: 'ar' });
-    expect(await heading()).toBe('يوجد خطأ');
+    expect(await heading()).toBe('توجد مشكلة');
     const badgeRight = await page.evaluate(() => {
       const r = document.querySelector('sc-error-summary')!.shadowRoot!;
       return r.querySelector('.badge')!.getBoundingClientRect().left > r.querySelector('h2')!.getBoundingClientRect().left;

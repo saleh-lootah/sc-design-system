@@ -60,6 +60,6 @@ describe('sc-error-summary (spec)', () => {
 
   it('uses the Arabic heading from the closest lang', async () => {
     const page = await newSpecPage({ components: [ScErrorSummary], html: `<div lang="ar" dir="rtl"><sc-error-summary no-autofocus><a href="#x">خطأ</a></sc-error-summary></div>` });
-    expect(page.body.querySelector('sc-error-summary')!.shadowRoot!.querySelector('h2')!.textContent).toBe('يوجد خطأ');
+    expect(page.body.querySelector('sc-error-summary')!.shadowRoot!.querySelector('h2')!.textContent).toBe('توجد مشكلة');
   });
 });

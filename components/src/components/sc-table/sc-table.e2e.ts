@@ -7,9 +7,9 @@ const STRINGS = `strings='{"en": {"tableSelectAll": "Select all fines on this pa
 const fines = (lang: 'en' | 'ar', attrs = '') => {
   const en = lang === 'en';
   const rows = [
-    ['F-2026-118204', en ? '14 Mar 2026' : '14 مارس 2026', en ? 'Speeding: 21 to 30 km/h over the limit' : 'تجاوز السرعة المحددة بـ 21 إلى 30 كم/س', 'warning', en ? 'Unpaid' : 'غير مدفوعة', '600', en ? 'AED 600.00' : '600.00 درهم'],
-    ['F-2026-107455', en ? '2 Mar 2026' : '2 مارس 2026', en ? 'Blocking a lane while parking, Deira' : 'إغلاق مسار أثناء الوقوف، ديرة', 'warning', en ? 'Unpaid' : 'غير مدفوعة', '1100', en ? 'AED 1,100.00' : '1,100.00 درهم'],
-    ['F-2026-081930', en ? '19 Feb 2026' : '19 فبراير 2026', '', 'success', en ? 'Paid' : 'مدفوعة', '100', en ? 'AED 100.00' : '100.00 درهم'],
+    ['F-2026-118204', en ? '14 Mar 2026' : '14 مارس 2026', en ? 'Speeding: 21 to 30 km/h over the limit' : 'تجاوز السرعة المحددة بـ 21 إلى 30 كم/س', 'warning', en ? 'Not paid' : 'بانتظار الدفع', '600', en ? 'AED 600.00' : '600.00 درهم'],
+    ['F-2026-107455', en ? '2 Mar 2026' : '2 مارس 2026', en ? 'Blocking a lane while parking, Deira' : 'إغلاق مسار أثناء الوقوف، ديرة', 'warning', en ? 'Not paid' : 'بانتظار الدفع', '1100', en ? 'AED 1,100.00' : '1,100.00 درهم'],
+    ['F-2026-081930', en ? '19 Feb 2026' : '19 فبراير 2026', '', 'success', en ? 'Paid' : 'تم الدفع', '100', en ? 'AED 100.00' : '100.00 درهم'],
   ];
   return `
   <main>
@@ -43,7 +43,7 @@ const fines = (lang: 'en' | 'ar', attrs = '') => {
         </tbody>
       </table>
       <div slot="footer"><span>${en ? 'Showing 1–3 of 3 fines' : 'عرض 1–3 من 3 مخالفات'}</span></div>
-      <sc-button slot="actions">${en ? 'Pay fines' : 'ادفع المخالفات'}</sc-button>
+      <sc-button slot="actions">${en ? 'Pay fines' : 'دفع المخالفات'}</sc-button>
     </sc-table>
   </main>`;
 };

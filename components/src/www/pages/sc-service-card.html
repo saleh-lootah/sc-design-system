@@ -1,6 +1,6 @@
 <h1 class="pg-title sc-type-heading-xl" data-ar="بطاقة الخدمة">Service card</h1>
-<p class="pg-lede sc-type-body-m" data-ar="رابط إلى خدمة: العنوان والجهة المالكة وشارة قناة اختيارية. البطاقة كلها هدف الرابط.">
-  A link to a service: its title, the entity that owns it and an optional channel chip. The whole card is the link target.
+<p class="pg-lede sc-type-body-m" data-ar="رابط إلى خدمة: العنوان والجهة المالكة وشارة قناة اختيارية. العنوان وحده هو الرابط، وليست البطاقة كلها.">
+  A link to a service: its title, the entity that owns it and an optional channel chip. Only the title is the link, not the whole card.
 </p>
 
 <section class="pg-section" aria-labelledby="svc-grid">
@@ -29,8 +29,8 @@
       <span slot="chip" class="svc-chip" data-channel="justice" data-ar="متوفر أيضًا في عدالة دبي">Also on Dubai Justice</span>
     </sc-service-card>
   </sc-grid>
-  <p class="pg-note" data-ar="الشارة هنا عنصر مؤقت؛ استخدم sc-channel-chip. الشارة التي هي رابط («ابنِ في دبي») تبقى قابلة للنقر وحدها.">
-    The chip here is a placeholder; use sc-channel-chip. A chip that is a link ("Build in Dubai") stays clickable on its own.
+  <p class="pg-note" data-ar="الشارة هنا عنصر مؤقت؛ في الخدمة يُستخدم sc-channel-chip. الشارة التي هي رابط («ابنِ في دبي») رابط منفصل.">
+    The chip here is a placeholder; use sc-channel-chip. A chip that is a link ("Build in Dubai") is a separate link.
   </p>
 </section>
 
@@ -50,7 +50,7 @@
       <sc-service-card heading-level="2" href="#salik" entity="Roads and Transport Authority" data-ar-attrs='{"entity":"هيئة الطرق والمواصلات"}'><span data-ar="استرداد رصيد سالك غير المستخدم بعد بيع مركبتك">Get a refund of unused Salik credit after selling your vehicle</span></sc-service-card>
     </div>
   </div>
-  <p class="pg-note" data-ar="عند التمرير: ظل أعمق، وتسطير العنوان، وتعبئة السهم بلون القناة. السهم ينعكس في العربية.">Hover: a deeper shadow, an underlined title and a channel-filled chevron. The chevron mirrors in Arabic.</p>
+  <p class="pg-note" data-ar="عند التمرير فوق العنوان: يظهر خط تحته ويُملأ السهم بلون القناة. البطاقة نفسها ليست رابطًا. السهم ينعكس في العربية.">Hovering the title underlines it and fills the chevron with the channel colour. The card itself is not a link. The chevron mirrors in Arabic.</p>
 </section>
 
 <section class="pg-section" aria-labelledby="svc-arabic">

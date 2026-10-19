@@ -38,43 +38,66 @@ describe('sc-service-card (e2e)', () => {
     expect(await page.evaluate(() => location.hash)).toBe('#bills');
   });
 
-  it('shows a focus ring around the whole card', async () => {
+  it('shows the focus ring around the title link', async () => {
     const page = await newScPage(GRID);
     await page.keyboard.press('Tab');
-    const outline = await page.evaluate(() => {
-      const a = document.querySelector('#renew')!.shadowRoot!.querySelector('a')!;
-      return getComputedStyle(a, '::after').outlineWidth;
-    });
+    const outline = await page.evaluate(() => getComputedStyle(document.querySelector('#renew')!.shadowRoot!.querySelector('a')!).outlineWidth);
     expect(outline).toBe('3px');
   });
 
-  it('makes the whole card clickable, but a chip link keeps its own target', async () => {
+  it('links from the title only, not the whole card; a chip link keeps its own target (CMP-06)', async () => {
     const page = await newScPage(GRID);
-    // Bottom-end corner of the card, away from the title.
+    const centre = (sel: string) =>
+      page.evaluate((s: string) => {
+        const [host, inner] = s.split(' >>> ');
+        let el: Element = document.querySelector(host)!;
+        if (inner) el = el.shadowRoot!.querySelector(inner)!;
+        const r = el.getBoundingClientRect();
+        return [r.x + r.width / 2, r.y + r.height / 2];
+      }, sel);
+    // Bottom-end corner of the card, away from the title: nothing happens.
     const corner = await page.evaluate(() => {
       const r = document.querySelector('#bills')!.getBoundingClientRect();
       return [r.right - 12, r.bottom - 12];
     });
     await page.mouse.click(corner[0], corner[1]);
     await page.waitForChanges();
-    expect(await page.evaluate(() => location.hash)).toBe('#bills');
+    expect(await page.evaluate(() => location.hash)).toBe('');
 
-    // A plain chip lets the click through to the card.
-    const chip = await page.evaluate(() => {
-      const r = document.querySelector('#renew [slot="chip"]')!.getBoundingClientRect();
-      return [r.x + r.width / 2, r.y + r.height / 2];
-    });
+    // A plain chip is not a link.
+    const chip = await centre('#renew [slot="chip"]');
     await page.mouse.click(chip[0], chip[1]);
     await page.waitForChanges();
-    expect(await page.evaluate(() => location.hash)).toBe('#renew');
+    expect(await page.evaluate(() => location.hash)).toBe('');
 
-    const link = await page.evaluate(() => {
-      const r = document.querySelector('#chip-link')!.getBoundingClientRect();
-      return [r.x + r.width / 2, r.y + r.height / 2];
-    });
+    const title = await centre('#bills >>> .link');
+    await page.mouse.click(title[0], title[1]);
+    await page.waitForChanges();
+    expect(await page.evaluate(() => location.hash)).toBe('#bills');
+
+    const link = await centre('#chip-link');
     await page.mouse.click(link[0], link[1]);
     await page.waitForChanges();
     expect(await page.evaluate(() => location.hash)).toBe('#build');
+  });
+
+  it('gives the title link a target of at least 44 x 44 px (A11Y-04)', async () => {
+    const page = await newScPage(GRID);
+    const size = await page.evaluate(() => {
+      const a = document.querySelector('#bills')!.shadowRoot!.querySelector('.link')!;
+      const r = a.getBoundingClientRect();
+      const after = getComputedStyle(a, '::after');
+      return {
+        position: after.position,
+        height: r.height - parseFloat(after.top) - parseFloat(after.bottom),
+        width: r.width - parseFloat(after.left) - parseFloat(after.right),
+        card: document.querySelector('#bills')!.getBoundingClientRect().height,
+      };
+    });
+    expect(size.position).toBe('absolute');
+    expect(size.height).toBeGreaterThanOrEqual(44);
+    expect(size.width).toBeGreaterThanOrEqual(44);
+    expect(size.height).toBeLessThan(size.card);
   });
 
   it('names the link by the title and describes it by the entity', async () => {
@@ -93,18 +116,6 @@ describe('sc-service-card (e2e)', () => {
     expect(links.map((l) => l.name)).toEqual(['Renew vehicle registration', 'Pay water and electricity bills', 'Register a tenancy contract', 'Also on Build in Dubai']);
   });
 
-  it('stretches the title link over the card with ::after', async () => {
-    const page = await newScPage(GRID);
-    const result = await page.evaluate(() => {
-      const root = document.querySelector('#bills')!.shadowRoot!;
-      const after = getComputedStyle(root.querySelector('.link')!, '::after');
-      return { position: after.position, inset: after.inset, cardPosition: getComputedStyle(root.querySelector('.card')!).position };
-    });
-    expect(result.position).toBe('absolute');
-    expect(result.inset).toBe('0px');
-    expect(result.cardPosition).toBe('relative');
-  });
-
   it('shows the hover state only with a fine pointer', async () => {
     const underlinesOnHover = async (touch: boolean) => {
       const page = await newScPage(GRID);
@@ -112,7 +123,7 @@ describe('sc-service-card (e2e)', () => {
       // emulation can't set `pointer` on its own.
       await (await (page as unknown as CdpPage).createCDPSession()).send('Emulation.setTouchEmulationEnabled', { enabled: touch, maxTouchPoints: 5 });
       const box = await page.evaluate(() => {
-        const r = document.querySelector('#bills')!.getBoundingClientRect();
+        const r = document.querySelector('#bills')!.shadowRoot!.querySelector('.link')!.getBoundingClientRect();
         return [r.x + r.width / 2, r.y + r.height / 2];
       });
       await page.mouse.move(box[0], box[1]);

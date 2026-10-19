@@ -45,7 +45,7 @@ On medium and wider screens the picker is a popover anchored below the field.
   - English: Mo Tu We Th Fr Sa Su.
   - Arabic: single letters ن ث ر خ ج س ح, each with its full name as the accessible name.
 - **Day grid:**
-  - 7 columns of 40 visual cells. Each row is 44 high, so touch targets stay usable.
+  - 7 columns of 44, with 40px day circles. Each row is 44 high, so every day is a 44 × 44 target (A11Y-04).
   - There are always 6 rows, so the height never jumps between months.
   - Days outside the month are blank; they are not greyed numbers.
 - **Footer** (above a hairline `rule`):
@@ -94,6 +94,7 @@ In dark mode the same roles use their `-dark` tokens: `action-dark`, `subtle-dar
 - When start and end fall in different years, the summary shows both years: "28 Dec 2026 – 3 Jan 2027".
 - Same year: "21 Sep – 9 Oct 2026".
 - Same month: "1 – 31 Oct 2026".
+- In Arabic the range is written with words, never a dash, which would display reversed between two numbers (LANG-22A): "من 1 إلى 31 أكتوبر 2026"، "من 21 سبتمبر إلى 9 أكتوبر 2026".
 
 ## Responsive
 
@@ -114,11 +115,11 @@ The error shows in the same way as on other fields: a 3px `error` bar at inline-
 
 | Situation | Message (EN) | Message (AR) |
 | --- | --- | --- |
-| Start missing | Enter a start date | أدخل تاريخ البداية |
-| End missing | Enter an end date | أدخل تاريخ النهاية |
+| Start missing | Enter a start date | يُرجى إدخال تاريخ البداية |
+| End missing | Enter an end date | يُرجى إدخال تاريخ النهاية |
 | End before start | The end date must be the same as or after the start date | يجب أن يكون تاريخ النهاية في يوم البداية أو بعده |
 | Beyond max | The end date must be today or earlier | يجب أن يكون تاريخ النهاية اليوم أو قبله |
-| Too long | Choose a range of 90 days or fewer | اختر مدة لا تزيد على 90 يومًا |
+| Too long | Choose a range of 90 days or fewer | يُرجى اختيار مدة لا تزيد على 90 يومًا |
 | Not a real date | The start date must be a real date | يجب أن يكون تاريخ البداية تاريخًا صحيحًا |
 
 ## Worst-case data (break-ui)
@@ -129,7 +130,7 @@ The error shows in the same way as on other fields: a 3px `error` bar at inline-
 - **Six-week month:** August 2026, which starts on a Saturday. It needs all 6 rows, and the grid height doesn't change.
 - **Range across a month boundary:** in two-month view the band continues from one month into the next. In the phone list it continues across month headings.
 - **Max boundary:** `max` = today (19 Oct 2026) for payment filters. Every later day is disabled, and the next-month button is disabled once it would show only disabled days.
-- **Long Arabic month names:** "ديسمبر 2026" plus the previous/next buttons still fit in the 7×40 width.
+- **Long Arabic month names:** "ديسمبر 2026" plus the previous/next buttons still fit in the 7×44 width.
 - **Leap day:** 29 Feb 2028.
 - **Empty:** both segments show placeholders. Apply is disabled until both ends are set; the button says what is missing: "Choose a start date", then "Choose an end date".
 

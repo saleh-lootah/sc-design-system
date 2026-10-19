@@ -14,7 +14,7 @@ function inner(page: E2EPage, read: string) {
 const PAGE = `
   <sc-skip-link></sc-skip-link>
   <header style="padding-block: 72px 16px"><a href="#home">Dubai Now</a></header>
-  <main id="main"><h1>Renew your vehicle registration</h1><a href="#start">Start now</a></main>`;
+  <main id="main-content"><h1>Renew your vehicle registration</h1><a href="#start">Start now</a></main>`;
 
 describe('sc-skip-link (e2e)', () => {
   it('is hidden until focused, then visible as a 44px pill', async () => {
@@ -31,18 +31,18 @@ describe('sc-skip-link (e2e)', () => {
     await page.keyboard.press('Tab');
     await page.keyboard.press('Enter');
     await page.waitForChanges();
-    expect(await page.evaluate(() => document.activeElement!.id)).toBe('main');
-    expect(await page.evaluate(() => location.hash)).toBe('#main');
+    expect(await page.evaluate(() => document.activeElement!.id)).toBe('main-content');
+    expect(await page.evaluate(() => location.hash)).toBe('#main-content');
     await page.keyboard.press('Tab');
     expect(await page.evaluate(() => document.activeElement!.getAttribute('href'))).toBe('#start');
-    expect(await page.evaluate(() => document.getElementById('main')!.hasAttribute('tabindex'))).toBe(false);
+    expect(await page.evaluate(() => document.getElementById('main-content')!.hasAttribute('tabindex'))).toBe(false);
   });
 
   it('starts at the inline start and re-renders in Arabic', async () => {
     const page = await newScPage(PAGE);
     expect(await inner(page, 'control.textContent')).toBe('Skip to main content');
     await setPageContext(page, { lang: 'ar' });
-    expect(await inner(page, 'control.textContent')).toBe('انتقل إلى المحتوى الرئيسي');
+    expect(await inner(page, 'control.textContent')).toBe('الانتقال إلى المحتوى الرئيسي');
     await page.keyboard.press('Tab');
     const right = await inner(page, 'window.innerWidth - control.getBoundingClientRect().right');
     expect(right).toBeLessThan(20);

@@ -71,6 +71,20 @@ describe('sc-date-input (e2e)', () => {
     expect(await page.$eval('#d', (el) => el.matches(':valid'))).toBe(true);
   });
 
+  it('accepts Arabic-Indic digits and shows them back as Latin digits (LANG-21)', async () => {
+    const page = await newScPage(`<form><sc-date-input id="d" name="dob" label="تاريخ الميلاد"></sc-date-input></form>`, { lang: 'ar' });
+    await page.keyboard.press('Tab');
+    await page.keyboard.type('٢٧');
+    await page.keyboard.press('Tab');
+    await page.keyboard.type('۳');
+    await page.keyboard.press('Tab');
+    await page.keyboard.type('١٩٩٠');
+    await page.waitForChanges();
+    expect(await page.$eval('#d', (el) => (el as HTMLElement & { value: string }).value)).toBe('1990-03-27');
+    const boxes = await page.$eval('#d', (el) => Array.from(el.shadowRoot!.querySelectorAll('input')).map((i) => i.value));
+    expect(boxes).toEqual(['27', '3', '1990']);
+  });
+
   it('reports a date that does not exist as badInput, and an empty required date as valueMissing', async () => {
     const page = await newScPage(`<form><sc-date-input id="d" name="d" label="Start date" required></sc-date-input></form>`);
     expect(await page.$eval('#d', (el) => el.matches(':invalid'))).toBe(true);
@@ -107,7 +121,7 @@ describe('sc-date-input (e2e)', () => {
   });
 
   it('runs right to left in Arabic, Day on the right, with Arabic labels', async () => {
-    const page = await newScPage(`<sc-date-input id="d" label="تاريخ الميلاد" error="أدخل تاريخ ميلادك"></sc-date-input>`, { lang: 'ar' });
+    const page = await newScPage(`<sc-date-input id="d" label="تاريخ الميلاد" error="يُرجى إدخال تاريخ الميلاد"></sc-date-input>`, { lang: 'ar' });
     const x = (p: string) => part(page, '#d', p, 'i.getBoundingClientRect().left');
     expect(await x('day')).toBeGreaterThan(await x('month'));
     expect(await x('month')).toBeGreaterThan(await x('year'));

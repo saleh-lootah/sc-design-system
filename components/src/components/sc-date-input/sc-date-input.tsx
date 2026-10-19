@@ -1,4 +1,5 @@
 import { AttachInternals, Component, Element, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
+import { normaliseDigits } from '../../i18n/digits';
 import { LocaleController } from '../../i18n/locale';
 import { AlertCircle } from '../../icons/index'; // explicit /index: enables SVG rendering for this component (see CONTRIBUTING)
 import { FieldError, FieldHint, FieldLabel, HeadingLevel, IDS, describedBy, emitNativeChange, hasSlotted, headingLevel, formSupported } from '../sc-text-input/field';
@@ -183,7 +184,7 @@ export class ScDateInput {
   }
 
   private onInput = (part: DatePart) => (ev: Event) => {
-    this.parts = { ...this.parts, [part]: (ev.target as HTMLInputElement).value };
+    this.parts = { ...this.parts, [part]: normaliseDigits(ev.target as HTMLInputElement) };
     this.value = isoFromParts(this.parts);
     this.scInput.emit(this.detail());
   };

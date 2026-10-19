@@ -36,9 +36,12 @@
 
 .link,
 ::slotted(a) {
+  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   min-block-size: var(--sc-size-target-min);
+  min-inline-size: var(--sc-size-target-min);
   border-radius: var(--sc-radius-xs);
   color: var(--sc-color-ink-strong);
   font-family: var(--type-label-s-family);

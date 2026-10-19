@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-19T18:01:45",
+  "timestamp": "2026-10-19T18:29:47",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.45.2",
@@ -541,7 +541,7 @@
             "references": {
               "ButtonIconPosition": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonIconPosition"
               }
             }
@@ -636,7 +636,7 @@
             "references": {
               "ButtonSize": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonSize"
               }
             }
@@ -676,7 +676,7 @@
             "references": {
               "ButtonType": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonType"
               }
             }
@@ -720,7 +720,7 @@
             "references": {
               "ButtonVariant": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonVariant"
               }
             }
@@ -878,7 +878,7 @@
             "references": {
               "CalloutHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-callout/sc-callout.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-callout/sc-callout.tsx",
                 "id": "src/components/sc-callout/sc-callout.tsx::CalloutHeadingLevel"
               }
             }
@@ -927,7 +927,7 @@
             "references": {
               "CalloutTone": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-callout/sc-callout.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-callout/sc-callout.tsx",
                 "id": "src/components/sc-callout/sc-callout.tsx::CalloutTone"
               }
             }
@@ -1083,7 +1083,7 @@
             "references": {
               "CardLandmark": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-card/sc-card.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-card/sc-card.tsx",
                 "id": "src/components/sc-card/sc-card.tsx::CardLandmark"
               }
             }
@@ -1120,7 +1120,7 @@
             "references": {
               "CardPadding": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-card/sc-card.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-card/sc-card.tsx",
                 "id": "src/components/sc-card/sc-card.tsx::CardPadding"
               }
             }
@@ -2136,7 +2136,7 @@
             "references": {
               "ContainerWidth": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-container/sc-container.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-container/sc-container.tsx",
                 "id": "src/components/sc-container/sc-container.tsx::ContainerWidth"
               }
             }
@@ -2203,7 +2203,7 @@
       "filePath": "src/components/sc-date-input/sc-date-input.tsx",
       "encapsulation": "shadow",
       "tag": "sc-date-input",
-      "readme": "# sc-date-input\n\nA date people know: a date of birth, the start date on an insurance policy, the date a vehicle was exported. Don't use it for a date people need to pick from a calendar (an appointment): that needs a date picker.\n\n## Usage\n\n```html\n<sc-date-input\n  name=\"insuranceStart\"\n  label=\"When does your insurance policy start?\"\n  hint=\"For example, 27 3 2026\"\n></sc-date-input>\n```\n\n- Three labelled boxes, Day, Month and Year (يوم / شهر / سنة), in a `<fieldset>` with the question as the `<legend>`. Each box uses the numeric keyboard (`inputmode=\"numeric\"`).\n- **In Arabic** the boxes run right to left: Day on the right, Year on the left. Digits stay Latin.\n- **Hint:** give an example in the order of the boxes: \"For example, 27 3 2026\".\n- **Error on one part:** set `error` and `error-parts` to the boxes it's about, for example `error-parts=\"year\"` with \"The date your policy starts must include a year\". Only those boxes get the error border and `aria-invalid`. Without `error-parts`, the error highlights all three.\n- **Date of birth:** `autocomplete=\"bday\"` sets `bday-day`, `bday-month`, `bday-year` on the boxes.\n- `optional`, `heading-level` and `disabled` work as in the other fields.\n\n### Value and forms\n\n- `value` is an ISO date (`2026-03-27`). It's empty while the boxes don't make a real date (31 April, a 2-digit year). Setting `value` fills the boxes.\n- The form gets the ISO date under `name`, plus the raw parts as `name-day`, `name-month` and `name-year`, so the server can validate and re-display exactly what was typed.\n- Validity: `valueMissing` when `required` and every box is empty; `badInput` (\"Enter a real date\") when something is typed but it isn't a real date. Reset restores the initial `value`.\n- `scInput` and `scChange` carry `{ value, day, month, year }`. The host delegates focus to the Day box, so an error summary can focus the field by its `id`.\n",
+      "readme": "# sc-date-input\n\nA date people know: a date of birth, the start date on an insurance policy, the date a vehicle was exported. Don't use it for a date people need to pick from a calendar (an appointment): that needs a date picker.\n\n## Usage\n\n```html\n<sc-date-input\n  name=\"insuranceStart\"\n  label=\"When does your insurance policy start?\"\n  hint=\"For example, 27 3 2026\"\n></sc-date-input>\n```\n\n- Three labelled boxes, Day, Month and Year (يوم / شهر / سنة), in a `<fieldset>` with the question as the `<legend>`. Each box uses the numeric keyboard (`inputmode=\"numeric\"`).\n- **In Arabic** the boxes run right to left: Day on the right, Year on the left. Digits stay Latin.\n- **Hint:** give an example in the order of the boxes: \"For example, 27 3 2026\".\n- **Error on one part:** set `error` and `error-parts` to the boxes it's about, for example `error-parts=\"year\"` with \"The date your policy starts must include a year\". Only those boxes get the error border and `aria-invalid`. Without `error-parts`, the error highlights all three.\n- **Date of birth:** `autocomplete=\"bday\"` sets `bday-day`, `bday-month`, `bday-year` on the boxes.\n- `optional`, `heading-level` and `disabled` work as in the other fields.\n\n### Value and forms\n\n- `value` is an ISO date (`2026-03-27`). It's empty while the boxes don't make a real date (31 April, a 2-digit year). Setting `value` fills the boxes.\n- The form gets the ISO date under `name`, plus the raw parts as `name-day`, `name-month` and `name-year`, so the server can validate and re-display exactly what was typed.\n- Validity: `valueMissing` when `required` and every box is empty; `badInput` (\"The date must be a real date\") when something is typed but it isn't a real date. Reset restores the initial `value`.\n- `scInput` and `scChange` carry `{ value, day, month, year }`. The host delegates focus to the Day box, so an error summary can focus the field by its `id`.\n",
       "docs": "A date people know, such as a date of birth or the date on a document: Day, Month and\nYear boxes (يوم / شهر / سنة) with the numeric keyboard.\n\nA `<fieldset>` and `<legend>` with the hint and error, and three labelled native inputs,\nin one shadow root. In Arabic the boxes run right to left (Day on the right). An error can\nhighlight one part with `error-parts=\"year\"`.\n\nForm-associated: submits the date as an ISO string (`2026-03-07`, or empty while it isn't\na real date) under `name`, plus the raw parts as `name-day`, `name-month` and `name-year`\nso a server can re-display what was typed. Reports `valueMissing` and `badInput`.\nDelegates focus to the first box.",
       "docsTags": [
         {
@@ -3492,7 +3492,7 @@
       "filePath": "src/components/sc-error-summary/sc-error-summary.tsx",
       "encapsulation": "shadow",
       "tag": "sc-error-summary",
-      "readme": "# sc-error-summary\n\nLists every error on the page after the user submits a form, so they can see all the problems at once and jump to each field. Use it with the field's own error message: the summary never replaces it. Don't use it for problems that aren't about the user's answers (a failed payment, a service that's down): use `sc-callout tone=\"error\"` for those.\n\n## Usage\n\n```html\n<main>\n  <sc-error-summary>\n    <a href=\"#plate-code\">Enter the plate code</a>\n    <a href=\"#plate-number\">Enter the plate number using numbers only, like 12345</a>\n  </sc-error-summary>\n  <h1>What is your plate number?</h1>\n  …\n  <sc-text-input id=\"plate-number\" label=\"Plate number\" error=\"Enter the plate number using numbers only, like 12345\"></sc-text-input>\n</main>\n```\n\nOr from JavaScript, after client-side validation:\n\n```js\nconst summary = document.querySelector('sc-error-summary');\nsummary.errors = [{ href: '#plate-number', text: 'Enter the plate number using numbers only, like 12345' }];\n```\n\n### Placement and behaviour\n\n- Put it at the top of `<main>`, above the `<h1>`, and only when there are errors. With no items it hides itself.\n- When it first has errors (on page load, or when `errors` goes from empty to filled) it moves focus to itself (`tabindex=\"-1\"`), so screen readers read the heading and every error straight away. It deliberately has no `role=\"alert\"`: the focus move is the announcement, and a live region as well can make screen readers read the summary twice. The focused box is a group named by its heading (`aria-labelledby`). Don't move focus anywhere else on that page load. Use `no-autofocus` only if you move focus yourself with `setFocus()`.\n- Add \"Error: \" to the start of the page `<title>` too.\n- Following a link moves focus to the field and scrolls it into view, without changing the URL. It works with a plain `<input id>` and with field components (`sc-text-input`, `sc-date-input` …) that delegate focus to their inner control, and finds the target in the summary's own shadow root first, then in the document.\n- Slotted links are read from the light DOM (directly, or inside a `<ul>`) and rendered as a list inside the component; the list updates when they change. The `errors` property wins when it is set and not empty.\n\n### Content\n\n- Each item is the same message as the one shown next to the field, in the same order as the fields on the page.\n- Link to the field's `id`, not to the label. For a date, link to the first part with a problem.\n- The heading is \"There is a problem\" / \"يوجد خطأ\". Change it (`heading`) only when a more specific heading helps, e.g. \"Check your vehicle details\". Use the `description` slot for one short sentence when the errors need context.\n- In Arabic, keep plates and numbers left-to-right inside the message: `أدخل رقم اللوحة بالأرقام فقط، مثل <bdi dir=\"ltr\">12345</bdi>`.\n\n### Styling hooks\n\nParts: `container`, `heading`, `list`. The border and links use the error colour; the focus ring uses the channel action colour.\n",
+      "readme": "# sc-error-summary\n\nLists every error on the page after the user submits a form, so they can see all the problems at once and jump to each field. Use it with the field's own error message: the summary never replaces it. Don't use it for problems that aren't about the user's answers (a failed payment, a service that's down): use `sc-callout tone=\"error\"` for those.\n\n## Usage\n\n```html\n<main>\n  <sc-error-summary>\n    <a href=\"#plate-code\">Enter the plate code</a>\n    <a href=\"#plate-number\">Enter the plate number using numbers only, like 12345</a>\n  </sc-error-summary>\n  <h1>What is your plate number?</h1>\n  …\n  <sc-text-input id=\"plate-number\" label=\"Plate number\" error=\"Enter the plate number using numbers only, like 12345\"></sc-text-input>\n</main>\n```\n\nOr from JavaScript, after client-side validation:\n\n```js\nconst summary = document.querySelector('sc-error-summary');\nsummary.errors = [{ href: '#plate-number', text: 'Enter the plate number using numbers only, like 12345' }];\n```\n\n### Placement and behaviour\n\n- Put it at the top of `<main>`, above the `<h1>`, and only when there are errors. With no items it hides itself.\n- When it first has errors (on page load, or when `errors` goes from empty to filled) it moves focus to itself (`tabindex=\"-1\"`), so screen readers read the heading and every error straight away. It deliberately has no `role=\"alert\"`: the focus move is the announcement, and a live region as well can make screen readers read the summary twice. The focused box is a group named by its heading (`aria-labelledby`). Don't move focus anywhere else on that page load. Use `no-autofocus` only if you move focus yourself with `setFocus()`.\n- Add \"Error: \" to the start of the page `<title>` too.\n- Following a link moves focus to the field and scrolls it into view, without changing the URL. It works with a plain `<input id>` and with field components (`sc-text-input`, `sc-date-input` …) that delegate focus to their inner control, and finds the target in the summary's own shadow root first, then in the document.\n- Slotted links are read from the light DOM (directly, or inside a `<ul>`) and rendered as a list inside the component; the list updates when they change. The `errors` property wins when it is set and not empty.\n\n### Content\n\n- Each item is the same message as the one shown next to the field, in the same order as the fields on the page.\n- Link to the field's `id`, not to the label. For a date, link to the first part with a problem.\n- The heading is \"There is a problem\" / \"توجد مشكلة\". Change it (`heading`) only when a more specific heading helps, e.g. \"Check your vehicle details\". Use the `description` slot for one short sentence when the errors need context.\n- In Arabic, keep plates and numbers left-to-right inside the message: `يُرجى إدخال رقم اللوحة بالأرقام فقط، مثل <bdi dir=\"ltr\">12345</bdi>`.\n\n### Styling hooks\n\nParts: `container`, `heading`, `list`. The border and links use the error colour; the focus ring uses the channel action colour.\n",
       "docs": "Lists every error on the page, at the top of the main content, after a form is\nsubmitted. Each item links to its field; following a link moves focus to the field.\n\nGive it items either as links in the default slot (`<a href=\"#plate-number\">…</a>`,\noptionally inside a `<ul>`) or through the `errors` property. When it first has items\nit moves focus to itself (`tabindex=\"-1\"`), so keyboard and screen reader users hear\nthe heading and errors straight away. It has no `role=\"alert\"`: moving focus already\nannounces it, and a live region on top can make screen readers read it twice (GOV.UK\npractice). The focused box is a `role=\"group\"` named by its heading.",
       "docsTags": [
         {
@@ -3527,7 +3527,7 @@
             "references": {
               "ErrorSummaryItem": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-error-summary/sc-error-summary.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-error-summary/sc-error-summary.tsx",
                 "id": "src/components/sc-error-summary/sc-error-summary.tsx::ErrorSummaryItem"
               }
             }
@@ -3560,7 +3560,7 @@
           "mutable": false,
           "attr": "heading",
           "reflectToAttr": false,
-          "docs": "Overrides the heading text (default \"There is a problem\" / \"يوجد خطأ\" from strings).",
+          "docs": "Overrides the heading text (default \"There is a problem\" / \"توجد مشكلة\" from strings).",
           "docsTags": [],
           "values": [
             {
@@ -3584,7 +3584,7 @@
             "references": {
               "ErrorSummaryHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-error-summary/sc-error-summary.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-error-summary/sc-error-summary.tsx",
                 "id": "src/components/sc-error-summary/sc-error-summary.tsx::ErrorSummaryHeadingLevel"
               }
             }
@@ -4096,7 +4096,7 @@
             "references": {
               "LanguageSwitchDetail": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-language-switch/sc-language-switch.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-language-switch/sc-language-switch.tsx",
                 "id": "src/components/sc-language-switch/sc-language-switch.tsx::LanguageSwitchDetail"
               }
             }
@@ -5366,7 +5366,7 @@
             "references": {
               "ScSearchDetail": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-search/sc-search.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-search/sc-search.tsx",
                 "id": "src/components/sc-search/sc-search.tsx::ScSearchDetail"
               }
             }
@@ -5817,8 +5817,8 @@
       "filePath": "src/components/sc-service-card/sc-service-card.tsx",
       "encapsulation": "shadow",
       "tag": "sc-service-card",
-      "readme": "# sc-service-card\n\nA link to a service, as in \"Most used services\" on a channel home page. For a group of content that isn't a single link, use `sc-card`.\n\n## Usage\n\n```html\n<h2>Most used services</h2>\n<sc-grid span-medium=\"4\" span-expanded=\"4\">\n  <sc-service-card href=\"/services/renew-registration\" entity=\"Roads and Transport Authority\">\n    Renew vehicle registration\n    <sc-channel-chip slot=\"chip\" channel=\"transport\"></sc-channel-chip>\n  </sc-service-card>\n  <sc-service-card href=\"/services/pay-bills\" entity=\"Dubai Electricity and Water Authority\">\n    Pay water and electricity bills\n  </sc-service-card>\n</sc-grid>\n```\n\n- The title starts with a verb and names the task, not the department: \"Renew vehicle registration\", not \"Vehicle licensing\".\n- `entity` is the owning government entity, written in full (\"Roads and Transport Authority\", not \"RTA\"). It is the link's accessible description.\n- Set `heading-level` to fit the page outline: 3 under a \"Most used services\" `h2` (default).\n- Put a `sc-channel-chip` in the `chip` slot when the service also lives on another channel. A chip that is a link stays clickable on its own; a plain chip passes clicks to the card.\n\n### Behaviour\n\nOnly the title is the link: the card is not wrapped in an `<a>`. Screen readers hear a short link name (\"Renew vehicle registration\"), with the entity as its description, instead of the card's whole text. The heading contains the link, so heading navigation lists every service. The link's hit area is stretched over the card with `::after { inset: 0 }`, so a click anywhere (except a chip link) follows it, and keyboard users meet one tab stop per card. The focus ring wraps the card. With a mouse or trackpad (`(hover: hover) and (pointer: fine)`) hovering deepens the shadow, underlines the title and fills the chevron with the channel colour; touch screens get no hover state.\n\n### Arabic\n\nThe chevron mirrors and sits on the left. Entity names have official Arabic forms (\"هيئة الطرق والمواصلات\"); use them.\n",
-      "docs": "A link to a service: its title, the entity that owns it, an optional channel chip and an\nend chevron.\n\nOnly the title is the link, so screen readers hear a short link name (\"Renew vehicle\nregistration\"), not the whole card's text. The card is not wrapped in an `<a>`: the\ntitle link's hit area is stretched over the card with a pseudo-element (`::after`,\n`inset: 0`), so the whole card is still clickable and the focus ring wraps the card.\nThe title is a heading containing the link, so heading navigation finds every service.\nThe owning entity is the link's description. A chip that is itself a link stays\nclickable on its own.",
+      "readme": "# sc-service-card\n\nA link to a service, as in \"Most used services\" on a channel home page. For a group of content that isn't a single link, use `sc-card`.\n\n## Usage\n\n```html\n<h2>Most used services</h2>\n<sc-grid span-medium=\"4\" span-expanded=\"4\">\n  <sc-service-card href=\"/services/renew-registration\" entity=\"Roads and Transport Authority\">\n    Renew vehicle registration\n    <sc-channel-chip slot=\"chip\" channel=\"transport\"></sc-channel-chip>\n  </sc-service-card>\n  <sc-service-card href=\"/services/pay-bills\" entity=\"Dubai Electricity and Water Authority\">\n    Pay water and electricity bills\n  </sc-service-card>\n</sc-grid>\n```\n\n- The title starts with a verb and names the task, not the department: \"Renew vehicle registration\", not \"Vehicle licensing\".\n- `entity` is the owning government entity, written in full (\"Roads and Transport Authority\", not \"RTA\"). It is the link's accessible description.\n- Set `heading-level` to fit the page outline: 3 under a \"Most used services\" `h2` (default).\n- Put a `sc-channel-chip` in the `chip` slot when the service also lives on another channel. A chip that is a link is a separate link with its own target.\n\n### Behaviour\n\nOnly the title is the link (CMP-06 in the standard): the card is not wrapped in an `<a>`, and the link's hit area is not stretched over the card. Screen readers hear a short link name (\"Renew vehicle registration\"), with the entity as its description, instead of the card's whole text. The heading contains the link, so heading navigation lists every service, and keyboard users meet one tab stop per card (plus a chip, if it is a link). The title's hit area is at least 44 × 44 px; the focus ring goes round the title. With a mouse or trackpad (`(hover: hover) and (pointer: fine)`) hovering the title underlines it and fills the chevron with the channel colour; touch screens get no hover state. The chevron is decorative.\n\n### Arabic\n\nThe chevron mirrors and sits on the left. Entity names have official Arabic forms (\"هيئة الطرق والمواصلات\"); use them.\n",
+      "docs": "A link to a service: its title, the entity that owns it, an optional channel chip and an\nend chevron.\n\nOnly the title is the link (CMP-06), so screen readers hear a short link name (\"Renew\nvehicle registration\"), not the whole card's text. The card is not wrapped in an `<a>`\nand the link's hit area is not stretched over the card: it is the title, grown to at\nleast 44 x 44. The title is a heading containing the link, so heading navigation finds\nevery service. The owning entity is the link's description. A chip that is a link is a\nseparate link.",
       "docsTags": [
         {
           "name": "slot",
@@ -5890,7 +5890,7 @@
             "references": {
               "ServiceCardHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-service-card/sc-service-card.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-service-card/sc-service-card.tsx",
                 "id": "src/components/sc-service-card/sc-service-card.tsx::ServiceCardHeadingLevel"
               }
             }
@@ -6006,12 +6006,12 @@
       "filePath": "src/components/sc-skip-link/sc-skip-link.tsx",
       "encapsulation": "shadow",
       "tag": "sc-skip-link",
-      "readme": "# sc-skip-link\n\n\"Skip to main content\" / \"انتقل إلى المحتوى الرئيسي\". Lets keyboard and switch users jump past the app bar and navigation.\n\n## Usage\n\n```html\n<body>\n  <sc-skip-link></sc-skip-link>\n  <sc-app-bar>…</sc-app-bar>\n  <main id=\"main\">…</main>\n</body>\n```\n\n- Put it first in `<body>`, on every page. It's hidden until it receives keyboard focus, then shown as a pill at the top start corner (top left in English, top right in Arabic).\n- `href` defaults to `#main`. Point it at your `<main>` element's id if it differs.\n- Activating it moves focus to the target. If the target isn't focusable, the component adds `tabindex=\"-1\"` and removes it when focus leaves, so the next Tab continues from the main content in every browser.\n- The label comes from strings in the page language. Override it with the default slot only if the target isn't the main content.\n\n### Accessibility\n\nIt's a real link (`<a href=\"#main\">`), so it works before JavaScript loads its focus handling. It's positioned absolutely: give it a positioned ancestor only if you want it somewhere other than the top of the page.\n\n### Styling hooks\n\nPart: `control`.\n",
+      "readme": "# sc-skip-link\n\n\"Skip to main content\" / \"الانتقال إلى المحتوى الرئيسي\". Lets keyboard and switch users jump past the app bar and navigation.\n\n## Usage\n\n```html\n<body>\n  <sc-skip-link></sc-skip-link>\n  <sc-app-bar>…</sc-app-bar>\n  <main id=\"main-content\">…</main>\n</body>\n```\n\n- Put it first in `<body>`, on every page. It's hidden until it receives keyboard focus, then shown as a pill at the top start corner (top left in English, top right in Arabic).\n- `href` defaults to `#main-content`, the id `sc-page` gives its `<main>`. Point it at your `<main>` element's id if it differs.\n- Activating it moves focus to the target. If the target isn't focusable, the component adds `tabindex=\"-1\"` and removes it when focus leaves, so the next Tab continues from the main content in every browser.\n- The label comes from strings in the page language. Override it with the default slot only if the target isn't the main content.\n\n### Accessibility\n\nIt's a real link (`<a href=\"#main-content\">`), so it works before JavaScript loads its focus handling. It's positioned absolutely: give it a positioned ancestor only if you want it somewhere other than the top of the page.\n\n### Styling hooks\n\nPart: `control`.\n",
       "docs": "\"Skip to main content\": the first focusable element on every page. Hidden until it gets\nkeyboard focus, then shown at the top start corner. Activating it moves focus to the\ntarget (adding `tabindex=\"-1\"` for the moment it's needed), so the next Tab continues\nfrom the main content in every browser.\n\nPut it first inside `<body>`, before `sc-app-bar`.",
       "docsTags": [
         {
           "name": "slot",
-          "text": "- Overrides the label. Defaults to \"Skip to main content\" / \"انتقل إلى المحتوى الرئيسي\"."
+          "text": "- Overrides the label. Defaults to \"Skip to main content\" / \"الانتقال إلى المحتوى الرئيسي\"."
         },
         {
           "name": "part",
@@ -6031,14 +6031,14 @@
           "mutable": false,
           "attr": "href",
           "reflectToAttr": true,
-          "docs": "The fragment of the element to skip to, usually `<main id=\"main\">`.",
+          "docs": "The fragment of the element to skip to, `<main id=\"main-content\">` by default, the id `sc-page` renders.",
           "docsTags": [
             {
               "name": "default",
-              "text": "'#main'"
+              "text": "'#main-content'"
             }
           ],
-          "default": "'#main'",
+          "default": "'#main-content'",
           "values": [
             {
               "type": "string"
@@ -6057,7 +6057,7 @@
       "slots": [
         {
           "name": "",
-          "docs": "Overrides the label. Defaults to \"Skip to main content\" / \"انتقل إلى المحتوى الرئيسي\"."
+          "docs": "Overrides the label. Defaults to \"Skip to main content\" / \"الانتقال إلى المحتوى الرئيسي\"."
         }
       ],
       "parts": [
@@ -6169,7 +6169,7 @@
       "filePath": "src/components/sc-status-tag/sc-status-tag.tsx",
       "encapsulation": "shadow",
       "tag": "sc-status-tag",
-      "readme": "# sc-status-tag\n\nThe status of a task, application or payment, usually in a list or next to a heading: \"Paid\", \"Action needed\", \"In review\", \"Expires in 15 days\". For a message the user must read, use `sc-callout`.\n\n## Usage\n\n```html\n<sc-status-tag tone=\"error\">Action needed</sc-status-tag>\n<sc-status-tag tone=\"success\">Paid</sc-status-tag>\n<sc-status-tag tone=\"warning\">Expires in 15 days</sc-status-tag>\n<sc-status-tag>In review</sc-status-tag>\n<sc-status-tag tone=\"channel\">New</sc-status-tag>\n```\n\n### Which tone\n\n| Tone | Use it for |\n|---|---|\n| `neutral` (default) | A plain state with nothing to do yet: \"Draft\", \"In review\". |\n| `success` | Done: \"Paid\", \"Renewed\". |\n| `warning` | Needs attention soon: \"Expires in 15 days\". |\n| `error` | Blocked or failed: \"Action needed\", \"Payment failed\". |\n| `channel` | Highlights something in the current channel's colours: \"New\". Use sparingly. |\n\n### Content\n\n- Always write the status in words; the colour and dot only support them. Two or three words, sentence case, no full stop.\n- Use the same words for the same status everywhere in a service.\n- Digits stay Latin in Arabic (\"ينتهي خلال 15 يومًا\").\n- Not interactive and not announced on change. If the status changes while the user is on the page, also announce it (for example with a `role=\"status\"` region).\n\n### Styling hooks\n\nParts: `tag`, `dot`.\n",
+      "readme": "# sc-status-tag\n\nThe status of a task, application or payment, usually in a list or next to a heading: \"Paid\", \"Action needed\", \"In review\", \"Expires in 15 days\". For a message the user must read, use `sc-callout`.\n\n## Usage\n\n```html\n<sc-status-tag tone=\"error\">Action needed</sc-status-tag>\n<sc-status-tag tone=\"success\">Paid</sc-status-tag>\n<sc-status-tag tone=\"warning\">Expires in 15 days</sc-status-tag>\n<sc-status-tag>In review</sc-status-tag>\n<sc-status-tag tone=\"channel\">New</sc-status-tag>\n```\n\n### Which tone\n\n| Tone | Use it for |\n|---|---|\n| `neutral` (default) | A plain state with nothing to do yet: \"Draft\", \"In review\". |\n| `success` | Done: \"Paid\", \"Approved\", \"Completed\". |\n| `warning` | Needs attention soon: \"Expires in 15 days\". |\n| `error` | Blocked or failed: \"Action needed\", \"Payment failed\". |\n| `channel` | Highlights something in the current channel's colours: \"New\". Use sparingly. |\n\n### Status words\n\nServices show only the status words in the standard's status vocabulary (chapter 9.6), each with its fixed tone. Arabic forms agree with the noun they describe; task statuses agree with \"مهمة\".\n\n| Kind | Status | Arabic | Tone |\n|---|---|---|---|\n| Application | Draft | مسودة | `neutral` |\n| Application | Received | تم الاستلام | `neutral` |\n| Application | In review | قيد المراجعة | `neutral` |\n| Application | Action needed | إجراء مطلوب | `error` |\n| Application | Approved | تمت الموافقة | `success` |\n| Application | Not approved | لم تتم الموافقة | `neutral` |\n| Application | Completed | مكتمل | `success` |\n| Application | Withdrawn | تم السحب | `neutral` |\n| Application | Cancelled | تم الإلغاء | `neutral` |\n| Application | Expires in {n} days | ينتهي خلال {n} يومًا | `warning` |\n| Task | Not started | لم تبدأ | `neutral` |\n| Task | In progress | قيد التنفيذ | `neutral` |\n| Task | Completed | مكتملة | `success` |\n| Task | Cannot start yet | غير متاحة بعد | `neutral` |\n| Payment | Not paid | بانتظار الدفع | `warning` |\n| Payment | Checking payment | جارٍ التحقق من الدفع | `neutral` |\n| Payment | Paid | تم الدفع | `success` |\n| Payment | Payment failed | تعذّر الدفع | `error` |\n| Payment | Payment cancelled | تم إلغاء الدفع | `neutral` |\n| Payment | Refund requested | تم طلب الاسترداد | `neutral` |\n| Payment | Refund in progress | الاسترداد قيد التنفيذ | `neutral` |\n| Payment | Refunded | تم الاسترداد | `success` |\n\n\"Paid\" never stands for \"Approved\", and \"Received\" never stands for \"Completed\". The `channel` tone has no status in the vocabulary; whether it stays is an open question (see `docs/library-conformance.md`).\n\n### Content\n\n- Always write the status in words; the colour and dot only support them. Two or three words, sentence case, no full stop.\n- Use the words in the table below, the same everywhere in a service.\n- Digits stay Latin in Arabic (\"ينتهي خلال 15 يومًا\").\n- Not interactive and not announced on change. If the status changes while the user is on the page, also announce it (for example with a `role=\"status\"` region).\n\n### Styling hooks\n\nParts: `tag`, `dot`.\n",
       "docs": "The status of a task, application or payment: \"Paid\", \"Action needed\", \"In review\",\n\"Expires in 15 days\". A pill with a status dot and the status words.\n\nThe words carry the meaning; the colour and the dot only support them. It isn't\ninteractive and isn't announced on change (use `sc-callout` or a live region for that).",
       "docsTags": [
         {
@@ -6196,7 +6196,7 @@
             "references": {
               "StatusTagTone": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-status-tag/sc-status-tag.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-status-tag/sc-status-tag.tsx",
                 "id": "src/components/sc-status-tag/sc-status-tag.tsx::StatusTagTone"
               }
             }
@@ -6204,7 +6204,7 @@
           "mutable": false,
           "attr": "tone",
           "reflectToAttr": true,
-          "docs": "- `neutral`: no action needed yet, or a plain state (\"Draft\", \"In review\").\n- `success`: done (\"Paid\", \"Renewed\").\n- `warning`: needs attention soon (\"Expires in 15 days\").\n- `error`: blocked or failed (\"Action needed\", \"Payment failed\").\n- `channel`: highlights something in the current channel's colours (\"New\").",
+          "docs": "- `neutral`: no action needed yet, or a plain state (\"Draft\", \"In review\").\n- `success`: done (\"Paid\", \"Approved\", \"Completed\").\n- `warning`: needs attention soon (\"Expires in 15 days\").\n- `error`: blocked or failed (\"Action needed\", \"Payment failed\").\n- `channel`: highlights something in the current channel's colours (\"New\").",
           "docsTags": [
             {
               "name": "default",
@@ -6434,7 +6434,7 @@
       "filePath": "src/components/sc-summary-list/sc-summary-list.tsx",
       "encapsulation": "shadow",
       "tag": "sc-summary-list",
-      "readme": "# sc-summary-list\n\nThe \"Check your answers\" pattern: the answers a user gave, each with a way to change it, before they submit or pay.\n\n## Usage\n\n```html\n<h2>Renewal</h2>\n<sc-summary-list>\n  <sc-summary-row label=\"Vehicle\">Nissan Patrol 2021, white</sc-summary-row>\n  <sc-summary-row label=\"Plate\">Dubai <sc-ltr>A 48213</sc-ltr></sc-summary-row>\n  <sc-summary-row label=\"Renew for\" action-href=\"/renew/period\">1 year, until 3 November 2027</sc-summary-row>\n  <sc-summary-row label=\"Insurance\" action-href=\"/renew/insurance\">Valid until 14 March 2027</sc-summary-row>\n</sc-summary-list>\n```\n\n- Group answers under headings that match the journey's sections (\"Vehicle\", \"Renewal\"), one list per group.\n- Add `action-href` on each row the user can change. The link reads \"Change\" (\"تغيير\") with the key as visually hidden text, so screen reader users hear \"Change Insurance\". Use `action-hidden-text` when the key doesn't read well after \"Change\", and `action-text` only for a different verb.\n- Rows without an action keep the empty action column, so every value starts at the same place.\n- Keys are short nouns in sentence case. Values are the user's answer, written out (\"1 year, until 3 November 2027\"), not codes. Wrap plates, amounts, references and phone numbers in `<sc-ltr>`.\n- Use `appearance=\"plain\"` when the list sits inside another card.\n\n### Layout\n\nThe list responds to its own width (a container query), not the screen's. From 600px it shows key, value and a fixed 96px action column (`--sc-summary-list-action-width` changes it). Narrower, the key sits above the value and the action moves to the end of the row, as in D+ on mobile.\n\n### Semantics\n\nDescription lists can't span shadow roots: a `<dl>` must directly contain `<dt>`/`<dd>` or `<div>` groups, and axe checks that in the flattened tree. So the list renders the entire `<dl>` itself: one `<div>` per row with the `<dt>` (the row's `label`), the value `<dd>` and the action `<dd>`. Each `sc-summary-row` is slotted into its value `<dd>` (the list sets its `slot` attribute), so values stay in light DOM and can hold any inline markup. Only `sc-summary-row` children are listed; adding, removing, hiding or changing a row re-renders the list.\n\n### Arabic\n\nColumns mirror: key on the right, action on the left. The action text is \"تغيير\", followed by the hidden key in the page language.\n",
+      "readme": "# sc-summary-list\n\nThe \"Check your answers\" pattern: the answers a user gave, each with a way to change it, before they submit or pay.\n\n## Usage\n\n```html\n<h2>Renewal</h2>\n<sc-summary-list>\n  <sc-summary-row label=\"Vehicle\">Nissan Patrol 2021, white</sc-summary-row>\n  <sc-summary-row label=\"Plate\">Dubai <sc-ltr>A 48213</sc-ltr></sc-summary-row>\n  <sc-summary-row label=\"Renew for\" action-href=\"/renew/period\">1 year, until 3 November 2027</sc-summary-row>\n  <sc-summary-row label=\"Insurance\" action-href=\"/renew/insurance\">Valid until 14 March 2027</sc-summary-row>\n</sc-summary-list>\n```\n\n- Group answers under headings that match the journey's sections (\"Vehicle\", \"Renewal\"), one list per group.\n- Add `action-href` on each row the user can change. The link reads \"Change\" (\"تغيير\") with the key as visually hidden text, so screen reader users hear \"Change Insurance\". Use `action-hidden-text` when the key doesn't read well after \"Change\", and `action-text` only for a different verb.\n- Rows without an action keep the empty action column, so every value starts at the same place.\n- A row with no value (an optional question the user skipped) shows \"Not provided\" (\"لم يتم تقديمه\"), never an empty value. Leave the row empty rather than writing your own placeholder.\n- Keys are short nouns in sentence case. Values are the user's answer, written out (\"1 year, until 3 November 2027\"), not codes. Wrap plates, amounts, references and phone numbers in `<sc-ltr>`.\n- Use `appearance=\"plain\"` when the list sits inside another card.\n\n### Layout\n\nThe list responds to its own width (a container query), not the screen's. From 600px it shows key, value and a fixed 96px action column (`--sc-summary-list-action-width` changes it). Narrower, the key sits above the value and the action moves to the end of the row, as in D+ on mobile.\n\n### Semantics\n\nDescription lists can't span shadow roots: a `<dl>` must directly contain `<dt>`/`<dd>` or `<div>` groups, and axe checks that in the flattened tree. So the list renders the entire `<dl>` itself: one `<div>` per row with the `<dt>` (the row's `label`), the value `<dd>` and the action `<dd>`. Each `sc-summary-row` is slotted into its value `<dd>` (the list sets its `slot` attribute), so values stay in light DOM and can hold any inline markup. Only `sc-summary-row` children are listed; adding, removing, hiding or changing a row re-renders the list.\n\n### Arabic\n\nColumns mirror: key on the right, action on the left. The action text is \"تغيير\", followed by the hidden key in the page language.\n",
       "docs": "The \"Check your answers\" pattern: rows of a key, a value and an optional \"Change\" action,\nas one `<dl>`.\n\nDescription lists can't span shadow roots (a `<dl>` must directly contain `<dt>`/`<dd>`\nor `<div>` groups), so this component renders the whole `<dl>` in its own shadow root:\none `<div>` per row holding the `<dt>` (from the row's `label`), the value `<dd>` and the\naction `<dd>`. Each `sc-summary-row` child is assigned to a named slot inside its value\n`<dd>`, so rich values (addresses, `<sc-ltr>` plates) stay in light DOM.\n\nWide containers show three columns (key, value, a fixed-width action column, so rows\nalign). Below 600px of container width the key sits above the value, with the action at\nthe end.",
       "docsTags": [
         {
@@ -6473,7 +6473,7 @@
             "references": {
               "SummaryListAppearance": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-summary-list/sc-summary-list.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-summary-list/sc-summary-list.tsx",
                 "id": "src/components/sc-summary-list/sc-summary-list.tsx::SummaryListAppearance"
               }
             }
@@ -6552,12 +6552,12 @@
       "filePath": "src/components/sc-summary-row/sc-summary-row.tsx",
       "encapsulation": "shadow",
       "tag": "sc-summary-row",
-      "readme": "# sc-summary-row\n\nOne answer in a `sc-summary-list`. See that component for the full pattern.\n\n## Usage\n\n```html\n<sc-summary-row label=\"Delivery address\" action-href=\"/renew/address\">\n  Villa 14, Street 23<br />Al Sufouh 2, Dubai\n</sc-summary-row>\n<sc-summary-row label=\"Email\" value=\"saeed.almansoori@example.ae\"></sc-summary-row>\n```\n\n- Use it only as a direct child of `sc-summary-list`. The list renders the key, the action and the `<dl>` structure, and sets the row's `slot` attribute; don't set `slot` yourself.\n- `label` is the key (required). The value is the default slot, or `value` for plain text.\n- `action-href` adds the \"Change\" link; `action-text` and `action-hidden-text` override its words.\n",
+      "readme": "# sc-summary-row\n\nOne answer in a `sc-summary-list`. See that component for the full pattern.\n\n## Usage\n\n```html\n<sc-summary-row label=\"Delivery address\" action-href=\"/renew/address\">\n  Villa 14, Street 23<br />Al Sufouh 2, Dubai\n</sc-summary-row>\n<sc-summary-row label=\"Email\" value=\"saeed.almansoori@example.ae\"></sc-summary-row>\n```\n\n- Use it only as a direct child of `sc-summary-list`. The list renders the key, the action and the `<dl>` structure, and sets the row's `slot` attribute; don't set `slot` yourself.\n- `label` is the key (required). The value is the default slot, or `value` for plain text. With neither, the row shows \"Not provided\" (\"لم يتم تقديمه\"). Leave no whitespace between the tags of an empty row (`<sc-summary-row label=\"…\"></sc-summary-row>`): a slotted space counts as a value.\n- `action-href` adds the \"Change\" link; `action-text` and `action-hidden-text` override its words.\n",
       "docs": "One answer in a `sc-summary-list`: a key (`label`), a value (the default slot) and an\noptional \"Change\" action.\n\nThe row only carries data and its value. The parent `sc-summary-list` renders the\n`<dt>`, `<dd>` and action inside its own `<dl>`, and slots this element into the value\n`<dd>`, so the description list stays valid across shadow roots. Use it only as a direct\nchild of `sc-summary-list`; the list sets its `slot` attribute.",
       "docsTags": [
         {
           "name": "slot",
-          "text": "- The value. Text or inline markup; wrap plates, amounts and references in `<sc-ltr>`.\nUse `<br>` or separate block elements for an address. Falls back to the `value` prop."
+          "text": "- The value. Text or inline markup; wrap plates, amounts and references in `<sc-ltr>`.\nUse `<br>` or separate block elements for an address. Falls back to the `value` prop,\nthen to \"Not provided\" / \"لم يتم تقديمه\" (an optional question the user skipped)."
         }
       ],
       "usage": {},
@@ -6674,7 +6674,7 @@
           "mutable": false,
           "attr": "value",
           "reflectToAttr": false,
-          "docs": "A plain-text value, used when the default slot is empty.",
+          "docs": "A plain-text value, used when the default slot is empty. With neither, the row shows \"Not provided\".",
           "docsTags": [],
           "values": [
             {
@@ -6697,7 +6697,7 @@
       "slots": [
         {
           "name": "",
-          "docs": "The value. Text or inline markup; wrap plates, amounts and references in `<sc-ltr>`.\nUse `<br>` or separate block elements for an address. Falls back to the `value` prop."
+          "docs": "The value. Text or inline markup; wrap plates, amounts and references in `<sc-ltr>`.\nUse `<br>` or separate block elements for an address. Falls back to the `value` prop,\nthen to \"Not provided\" / \"لم يتم تقديمه\" (an optional question the user skipped)."
         }
       ],
       "parts": [],
@@ -6710,7 +6710,7 @@
       "filePath": "src/components/sc-table/sc-table.tsx",
       "encapsulation": "scoped",
       "tag": "sc-table",
-      "readme": "# sc-table\n\nA table compares rows of the same kind of thing across a few attributes: a person's fines, their payments, the status of their permit applications. Each row is one thing; each column is one attribute. For the details of one thing, use `sc-summary-list`. Never use a table for layout.\n\n## Usage\n\n```html\n<sc-table caption=\"Your fines\" selectable\n  strings='{\"tableSelectAll\": \"Select all fines on this page\", \"tableSelectRow\": \"Select fine {row}\"}'\n  selection-label=\"{count} fine selected|{count} fines selected\">\n  <table>\n    <thead>\n      <tr>\n        <th scope=\"col\" data-type=\"reference\">Reference</th>\n        <th scope=\"col\" data-type=\"date\" data-sort=\"date\" aria-sort=\"descending\">Date</th>\n        <th scope=\"col\">Offence</th>\n        <th scope=\"col\" data-type=\"status\">Status</th>\n        <th scope=\"col\" data-type=\"amount\" data-sort=\"amount\">Amount</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr data-id=\"F-2026-118204\">\n        <th scope=\"row\"><a href=\"/fines/F-2026-118204\"><sc-ltr>F-2026-118204</sc-ltr></a></th>\n        <td>14 Mar 2026</td>\n        <td>Speeding: 21 to 30 km/h over the limit</td>\n        <td><sc-status-tag tone=\"warning\">Unpaid</sc-status-tag></td>\n        <td data-value=\"600\">AED 600.00</td>\n      </tr>\n    </tbody>\n  </table>\n  <div slot=\"footer\"><span>Showing 1–20 of 1,284 fines</span> …Previous / Next…</div>\n  <sc-button slot=\"actions\">Pay 2 fines</sc-button>\n</sc-table>\n```\n\n- **Scoped, not shadowed.** The component styles and enhances your native `<table>`, so screen readers announce rows, columns and headers. Write `th scope=\"col\"` headers and a `th scope=\"row\"` as each row's first cell; it usually carries the row's link. Whole rows are never clickable.\n- **Caption** is required: `caption` writes a native `<caption>`. Use `caption-hidden` when a heading straight above says the same thing.\n- **Column types** go on the header cell as `data-type` and set alignment, wrapping and figures for the whole column: `text` (wraps, never truncated), `reference` (nowrap, tabular; wrap the value in `sc-ltr`), `date`, `amount` (end-aligned, nowrap: the column grows instead), `status` (an `sc-status-tag`), `action` (end-aligned). Digits are Latin in both languages.\n- **Missing values:** leave the cell empty and the component writes a muted \"None\" (لا يوجد). Never a bare dash.\n- **Sorting:** add `data-sort` (optionally with a column key, `data-sort=\"amount\"`) to a header. It becomes a button; Enter or a click cycles ascending and descending, one column at a time, sets `aria-sort` and announces \"Sorted by Amount, highest first\". The component only emits `scSort` with `{ column, direction }`: sort the data in the service (usually on the server) and re-render the rows. Sorting is never animated.\n- **Selection:** `selectable` adds a checkbox column at inline-start, identified by `tr[data-id]`, and a selection bar with the count, the total of the amount column (from `data-value`, or the cell text) and your `actions` slot. Label the checkboxes with `strings` (\"Select fine {row}\"). `selection-label` takes plural forms separated by `|` (English one|other; Arabic zero|one|two|few|many|other). `tr[data-selected]` preselects a row. `scSelectionChange` carries `{ ids }`.\n- **States:** `loading` shows 5 skeleton rows at the real column widths (the header stays). With no rows, the `empty` slot replaces the table: a `title-s` sentence and an optional next step (\"You have no fines\"; never \"No data\"). Add `filtered` for \"No results\" after a filter, which keeps the header. Put an `sc-callout tone=\"error\"` with a \"Try again\" button in the `error` slot when the data can't load. Counts in the footer follow plural rules: \"Showing 1 fine\", never \"1–1 of 1\".\n- **Density:** `compact` (44px rows) is for staff tools with long lists.\n- **Below 600px** (the component's own width), `responsive=\"stack\"` (default, up to about 6 columns) turns rows into cards: the row header is the title, the status sits at top inline-end, other cells become label and value pairs, the amount is the last line in `title-m` and the action a full-width link row. `responsive=\"scroll\"` keeps the table in a horizontal scroll region (focusable, named by the caption) with the row header sticky at inline-start and a shadow on the side with more content. A table wider than its container always scrolls rather than clipping.\n- **Screen-reader context:** `class=\"sc-visually-hidden\"` inside the table hides text visually: `View<span class=\"sc-visually-hidden\"> fine F-2026-118204</span>`.\n- **Arabic:** everything mirrors: the first column and the checkboxes are on the right, amounts and actions align left, and the sort glyph sits after the label. Rows grow with the Arabic leading; nothing is fixed-height.\n",
+      "readme": "# sc-table\n\nA table compares rows of the same kind of thing across a few attributes: a person's fines, their payments, the status of their permit applications. Each row is one thing; each column is one attribute. For the details of one thing, use `sc-summary-list`. Never use a table for layout.\n\n## Usage\n\n```html\n<sc-table caption=\"Your fines\" selectable\n  strings='{\"tableSelectAll\": \"Select all fines on this page\", \"tableSelectRow\": \"Select fine {row}\"}'\n  selection-label=\"{count} fine selected|{count} fines selected\">\n  <table>\n    <thead>\n      <tr>\n        <th scope=\"col\" data-type=\"reference\">Reference</th>\n        <th scope=\"col\" data-type=\"date\" data-sort=\"date\" aria-sort=\"descending\">Date</th>\n        <th scope=\"col\">Offence</th>\n        <th scope=\"col\" data-type=\"status\">Status</th>\n        <th scope=\"col\" data-type=\"amount\" data-sort=\"amount\">Amount</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr data-id=\"F-2026-118204\">\n        <th scope=\"row\"><a href=\"/fines/F-2026-118204\"><sc-ltr>F-2026-118204</sc-ltr></a></th>\n        <td>14 Mar 2026</td>\n        <td>Speeding: 21 to 30 km/h over the limit</td>\n        <td><sc-status-tag tone=\"warning\">Not paid</sc-status-tag></td>\n        <td data-value=\"600\">AED 600.00</td>\n      </tr>\n    </tbody>\n  </table>\n  <div slot=\"footer\"><span>Showing 1–20 of 1,284 fines</span> …Previous / Next…</div>\n  <sc-button slot=\"actions\">Pay 2 fines</sc-button>\n</sc-table>\n```\n\n- **Scoped, not shadowed.** The component styles and enhances your native `<table>`, so screen readers announce rows, columns and headers. Write `th scope=\"col\"` headers and a `th scope=\"row\"` as each row's first cell; it usually carries the row's link. Whole rows are never clickable.\n- **Caption** is required: `caption` writes a native `<caption>`. Use `caption-hidden` when a heading straight above says the same thing.\n- **Column types** go on the header cell as `data-type` and set alignment, wrapping and figures for the whole column: `text` (wraps, never truncated), `reference` (nowrap, tabular; wrap the value in `sc-ltr`), `date`, `amount` (end-aligned, nowrap: the column grows instead), `status` (an `sc-status-tag`), `action` (end-aligned). Digits are Latin in both languages.\n- **Missing values:** leave the cell empty and the component writes a muted \"None\" (لا يوجد). Never a bare dash.\n- **Sorting:** add `data-sort` (optionally with a column key, `data-sort=\"amount\"`) to a header. It becomes a button; Enter or a click cycles ascending and descending, one column at a time, sets `aria-sort` and announces \"Sorted by Amount, highest first\". The component only emits `scSort` with `{ column, direction }`: sort the data in the service (usually on the server) and re-render the rows. Sorting is never animated.\n- **Selection:** `selectable` adds a checkbox column at inline-start, identified by `tr[data-id]`, and a selection bar with the count, the total of the amount column (from `data-value`, or the cell text) and your `actions` slot. Label the checkboxes with `strings` (\"Select fine {row}\"). `selection-label` takes plural forms separated by `|` (English one|other; Arabic zero|one|two|few|many|other). `tr[data-selected]` preselects a row. `scSelectionChange` carries `{ ids }`.\n- **States:** `loading` shows 5 skeleton rows at the real column widths (the header stays). With no rows, the `empty` slot replaces the table: a `title-s` sentence and an optional next step (\"You have no fines\"; never \"No data\"). Add `filtered` for \"No results\" after a filter, which keeps the header. Put an `sc-callout tone=\"error\"` with a \"Try again\" button in the `error` slot when the data can't load. Counts in the footer follow plural rules: \"Showing 1 fine\", never \"1–1 of 1\".\n- **Density:** `compact` (44px rows) is for staff tools with long lists.\n- **Below 600px** (the component's own width), `responsive=\"stack\"` (default, up to about 6 columns) turns rows into cards: the row header is the title, the status sits at top inline-end, other cells become label and value pairs, the amount is the last line in `title-m` and the action a full-width link row. `responsive=\"scroll\"` keeps the table in a horizontal scroll region (focusable, named by the caption) with the row header sticky at inline-start and a shadow on the side with more content. A table wider than its container always scrolls rather than clipping.\n- **Screen-reader context:** `class=\"sc-visually-hidden\"` inside the table hides text visually: `View<span class=\"sc-visually-hidden\"> fine F-2026-118204</span>`.\n- **Arabic:** everything mirrors: the first column and the checkboxes are on the right, amounts and actions align left, and the sort glyph sits after the label. Rows grow with the Arabic leading; nothing is fixed-height.\n",
       "docs": "A table compares rows of the same kind of thing across a few attributes: fines, payments,\npermit applications. It styles and enhances a slotted native `<table>`; it never rebuilds\none out of divs, so screen readers announce rows, columns and headers.\n\nThe component is scoped (light DOM). Mark up the table as usual: `th scope=\"col\"` in the\nheader, `th scope=\"row\"` as each row's first cell, and give header cells a column type with\n`data-type` (`text`, `reference`, `date`, `amount`, `status`, `action`) to set alignment,\nwrapping and figures. The component then:\n- writes the `caption` property into a native `<caption>` (the table's accessible name);\n- turns `th[data-sort]` headers into sort buttons with `aria-sort`, and emits `scSort`\n  (the service sorts the data, usually on the server);\n- with `selectable`, adds a checkbox column (rows are identified by `tr[data-id]`) and a\n  selection bar, and emits `scSelectionChange`;\n- fills empty cells with a muted \"None\";\n- below 600px, stacks rows as cards (`responsive=\"stack\"`) or scrolls sideways (`\"scroll\"`).\n\nUse `class=\"sc-visually-hidden\"` inside the table for context only screen readers need\n(\"View <span class=\"sc-visually-hidden\">fine F-2026-118204</span>\").",
       "docsTags": [
         {
@@ -7038,7 +7038,7 @@
             "references": {
               "SortDirection": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-table/sc-table.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-table/sc-table.tsx",
                 "id": "src/components/sc-table/sc-table.tsx::SortDirection"
               }
             }
@@ -7664,7 +7664,7 @@
             "references": {
               "TextInputType": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-text-input/sc-text-input.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-text-input/sc-text-input.tsx",
                 "id": "src/components/sc-text-input/sc-text-input.tsx::TextInputType"
               }
             }
@@ -7749,7 +7749,7 @@
             "references": {
               "TextInputWidth": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-text-input/sc-text-input.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-text-input/sc-text-input.tsx",
                 "id": "src/components/sc-text-input/sc-text-input.tsx::TextInputWidth"
               }
             }

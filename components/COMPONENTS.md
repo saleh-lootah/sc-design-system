@@ -28,7 +28,7 @@ The first 24 components, in four families, plus the components added after Phase
 - The label is the other language's own name ("العربية" or "English") with the right `lang` attribute.
 - Props: `href`, or `onSwitch`.
 
-**SkipLink** (`sc-skip-link`): "Skip to main content" ("انتقل إلى المحتوى الرئيسي"). Visible on focus only.
+**SkipLink** (`sc-skip-link`): "Skip to main content" ("الانتقال إلى المحتوى الرئيسي"). Visible on focus only.
 
 ---
 

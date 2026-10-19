@@ -6,6 +6,6 @@ export default defineStrings({
     radioGroupRequired: 'Select an option',
   },
   ar: {
-    radioGroupRequired: 'اختر أحد الخيارات',
+    radioGroupRequired: 'يُرجى اختيار أحد الخيارات',
   },
 });

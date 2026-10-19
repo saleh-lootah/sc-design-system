@@ -7,13 +7,13 @@ export default defineStrings({
     dateInputMonth: 'Month',
     dateInputYear: 'Year',
     dateInputRequired: 'Enter a date',
-    dateInputInvalid: 'Enter a real date',
+    dateInputInvalid: 'The date must be a real date',
   },
   ar: {
     dateInputDay: 'يوم',
     dateInputMonth: 'شهر',
     dateInputYear: 'سنة',
-    dateInputRequired: 'أدخل التاريخ',
-    dateInputInvalid: 'أدخل تاريخًا صحيحًا',
+    dateInputRequired: 'يُرجى إدخال التاريخ',
+    dateInputInvalid: 'يجب أن يكون التاريخ تاريخًا صحيحًا',
   },
 });

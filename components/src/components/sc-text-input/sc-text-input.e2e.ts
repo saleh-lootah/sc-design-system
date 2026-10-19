@@ -39,7 +39,7 @@ const PLATE_AR = `
     <sc-select name="emirate" label="جهة الإصدار" value="dubai"><option value="dubai">دبي</option></sc-select>
     <sc-text-input name="plateCode" label="رمز اللوحة" hint="حرف أو حرفان باللغة الإنجليزية" value="A" width="4" ltr></sc-text-input>
     <sc-text-input id="plate-number" name="plateNumber" label="رقم اللوحة" hint="حتى 5 أرقام، مثل 12345"
-      error="أدخل رقم اللوحة بالأرقام فقط، مثل 12345" value="48B13" width="10" inputmode="numeric" ltr></sc-text-input>
+      error="يُرجى إدخال رقم اللوحة بالأرقام فقط، مثل 12345" value="48B13" width="10" inputmode="numeric" ltr></sc-text-input>
   </form>`;
 
 const ALL_STATES = `
@@ -91,7 +91,7 @@ describe('sc-text-input (e2e)', () => {
     expect(await inner(page, '#plate-number', 'getComputedStyle(input).textAlign')).toBe('end');
     const node = await axNode(page, '#plate-number');
     expect(node!.name).toBe('رقم اللوحة');
-    expect(node!.description).toBe('حتى 5 أرقام، مثل 12345 خطأ: أدخل رقم اللوحة بالأرقام فقط، مثل 12345');
+    expect(node!.description).toBe('حتى 5 أرقام، مثل 12345 خطأ: يُرجى إدخال رقم اللوحة بالأرقام فقط، مثل 12345');
   });
 
   it('submits its value, follows typing and resets with the form', async () => {
@@ -125,6 +125,22 @@ describe('sc-text-input (e2e)', () => {
     await page.waitForChanges();
     expect((await data()).plateNumber).toBe('48B13');
     expect(await inner(page, '#plate-number', 'input.value')).toBe('48B13');
+  });
+
+  it('turns Arabic-Indic digits into Latin digits as they are typed, keeping every other character (LANG-21)', async () => {
+    const page = await newScPage(
+      `<form><sc-text-input id="eid" name="eid" label="رقم الهوية الإماراتية" inputmode="numeric" width="20" ltr></sc-text-input></form>`,
+      { lang: 'ar' },
+    );
+    await page.click('#eid');
+    await page.keyboard.type('٧٨٤-۱۹۹۰-');
+    await page.keyboard.type('١٢٣');
+    await page.waitForChanges();
+    expect(await inner(page, '#eid', 'input.value')).toBe('784-1990-123');
+    expect(await page.$eval('#eid', (el) => (el as HTMLElement & { value: string }).value)).toBe('784-1990-123');
+    expect(await page.evaluate(() => new FormData(document.querySelector('form')!).get('eid'))).toBe('784-1990-123');
+    // The caret stays at the end, so typing carries on where it was.
+    expect(await inner(page, '#eid', 'input.selectionStart')).toBe(12);
   });
 
   it('reports native validity anchored to the inner input', async () => {

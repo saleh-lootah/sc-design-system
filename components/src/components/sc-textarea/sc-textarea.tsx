@@ -1,4 +1,5 @@
 import { AttachInternals, Component, Element, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
+import { normaliseDigits } from '../../i18n/digits';
 import { LocaleController } from '../../i18n/locale';
 import type { StringKey } from '../../i18n/strings';
 import { AlertCircle } from '../../icons/index'; // explicit /index: enables SVG rendering for this component (see CONTRIBUTING)
@@ -187,7 +188,7 @@ export class ScTextarea {
   };
 
   private onInput = (ev: Event) => {
-    this.value = (ev.target as HTMLTextAreaElement).value;
+    this.value = normaliseDigits(ev.target as HTMLTextAreaElement);
     this.scInput.emit({ value: this.value });
     if (this.limit) {
       clearTimeout(this.timer);

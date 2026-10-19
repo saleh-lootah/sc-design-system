@@ -3,6 +3,8 @@ import { defineStrings } from '../define';
 /**
  * sc-date-range: segment labels, calendar names, picker controls, summaries, announcements
  * and validation messages. Lists (months, weekdays) are comma-separated, Monday first.
+ * The compact summary under the field uses an en dash in English and words in Arabic, where
+ * a dash between two numbers ("1 – 31") would display reversed (LANG-22A).
  * Day counts have one key per plural category (Intl.PluralRules: English uses one and
  * other; Arabic uses all six). "Error:" and "(optional)" come from common.ts.
  */
@@ -41,7 +43,7 @@ export default defineStrings({
     dateRangeDaysFew: '{count} days',
     dateRangeDaysMany: '{count} days',
     dateRangeDaysOther: '{count} days',
-    dateRangeRangeSep: ' – ',
+    dateRangeSummary: '{start} – {end}',
     dateRangeTodaySuffix: ', today',
     dateRangeUnavailable: ', unavailable',
     dateRangeUpTo: 'You can choose up to {days}',
@@ -64,8 +66,8 @@ export default defineStrings({
     dateRangeTo: 'إلى',
     dateRangeStart: 'تاريخ البداية',
     dateRangeEnd: 'تاريخ النهاية',
-    dateRangeChoose: 'اختر التاريخين',
-    dateRangeChooseSet: 'اختر التاريخين، {range}',
+    dateRangeChoose: 'اختيار التاريخين',
+    dateRangeChooseSet: 'اختيار التاريخين، {range}',
     dateRangeFromChip: 'من {date}',
     dateRangeToChip: 'إلى {date}',
     dateRangeChipEmpty: 'غير محدد',
@@ -74,8 +76,8 @@ export default defineStrings({
     dateRangeClose: 'إغلاق',
     dateRangeClear: 'مسح',
     dateRangeApply: 'تطبيق',
-    dateRangeNeedStart: 'اختر تاريخ البداية',
-    dateRangeNeedEnd: 'اختر تاريخ النهاية',
+    dateRangeNeedStart: 'يُرجى اختيار تاريخ البداية',
+    dateRangeNeedEnd: 'يُرجى اختيار تاريخ النهاية',
     dateRangePresets: 'فترات سريعة',
     dateRangeToday: 'اليوم',
     dateRangeLast7: 'آخر 7 أيام',
@@ -93,21 +95,21 @@ export default defineStrings({
     dateRangeDaysFew: '{count} أيام',
     dateRangeDaysMany: '{count} يومًا',
     dateRangeDaysOther: '{count} يوم',
-    dateRangeRangeSep: ' – ',
+    dateRangeSummary: 'من {start} إلى {end}',
     dateRangeTodaySuffix: '، اليوم',
     dateRangeUnavailable: '، غير متاح',
     dateRangeUpTo: 'يمكنك اختيار {days} كحد أقصى',
-    dateRangeAnnounceStart: 'تاريخ البداية {date}. اختر الآن تاريخ النهاية.',
+    dateRangeAnnounceStart: 'تاريخ البداية {date}. يُرجى الآن اختيار تاريخ النهاية.',
     dateRangeAnnounceRange: 'من {start} إلى {end}، {days}.',
     dateRangeSpoken: 'من {start} إلى {end}',
-    dateRangeStartMissing: 'أدخل تاريخ البداية',
-    dateRangeEndMissing: 'أدخل تاريخ النهاية',
+    dateRangeStartMissing: 'يُرجى إدخال تاريخ البداية',
+    dateRangeEndMissing: 'يُرجى إدخال تاريخ النهاية',
     dateRangeEndBeforeStart: 'يجب أن يكون تاريخ النهاية في يوم البداية أو بعده',
     dateRangeBeyondMaxToday: 'يجب أن يكون تاريخ النهاية اليوم أو قبله',
     dateRangeBeyondMax: 'يجب أن يكون تاريخ النهاية {date} أو قبله',
     dateRangeBeforeMin: 'يجب أن يكون تاريخ البداية {date} أو بعده',
-    dateRangeTooLong: 'اختر مدة لا تزيد على {days}',
-    dateRangeTooShort: 'اختر مدة لا تقل عن {days}',
+    dateRangeTooLong: 'يُرجى اختيار مدة لا تزيد على {days}',
+    dateRangeTooShort: 'يُرجى اختيار مدة لا تقل عن {days}',
     dateRangeStartInvalid: 'يجب أن يكون تاريخ البداية تاريخًا صحيحًا',
     dateRangeEndInvalid: 'يجب أن يكون تاريخ النهاية تاريخًا صحيحًا',
   },

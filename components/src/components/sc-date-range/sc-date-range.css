@@ -8,7 +8,9 @@
 :host {
   /* Month change shift: 12px in the direction of travel, mirrored in right-to-left. */
   --_shift: 12px;
+  /* Day circles are 40px; each column and row is 44px, and so is each day's target (A11Y-04). */
   --_cell: 40px;
+  --_col: var(--sc-size-target-min);
   --_row: var(--sc-size-target-min);
 }
 
@@ -40,6 +42,7 @@
   padding-inline: var(--sc-space-16) var(--sc-space-8);
   border-radius: calc(var(--sc-radius-field) - var(--sc-size-border-control));
   text-align: start;
+  cursor: text;
 }
 
 .segment-label {
@@ -147,7 +150,7 @@
 }
 
 .month {
-  inline-size: calc(7 * var(--_cell));
+  inline-size: calc(7 * var(--_col));
 }
 
 .month-head {
@@ -240,7 +243,7 @@
 
 .day {
   position: relative;
-  inline-size: var(--_cell);
+  inline-size: var(--_col);
   block-size: var(--_row);
   padding: 0;
   text-align: center;
@@ -299,13 +302,29 @@
   transition: transform var(--sc-duration-fast) var(--sc-easing-standard);
 }
 
-.day-button--today {
-  box-shadow: inset 0 0 0 1.5px var(--sc-color-control);
+/* The 40px circle's target grows to 44 x 44 without moving it. */
+.day-button::after {
+  content: '';
+  position: absolute;
+  inset: min(0px, calc((var(--_cell) - var(--sc-size-target-min)) / 2));
 }
 
+.day-button--today {
+  box-shadow: inset 0 0 0 var(--sc-size-border-control) var(--sc-color-control);
+}
+
+/* The shared focus ring (A11Y-05), drawn above the neighbouring days. */
 .day-button:focus-visible {
-  outline: 2px solid var(--sc-channel-action);
-  outline-offset: 2px;
+  z-index: 1;
+  outline: var(--sc-size-focus-ring) solid var(--sc-channel-action);
+  outline-offset: var(--sc-size-focus-offset);
+  box-shadow: 0 0 0 var(--sc-size-focus-offset) var(--sc-color-surface);
+}
+
+.day-button--today:focus-visible {
+  box-shadow:
+    inset 0 0 0 var(--sc-size-border-control) var(--sc-color-control),
+    0 0 0 var(--sc-size-focus-offset) var(--sc-color-surface);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -729,6 +748,7 @@
   .segment:has(.control:focus-visible),
   .day-button:focus-visible {
     outline-color: Highlight;
+    box-shadow: none;
   }
   .segment--error {
     outline: var(--sc-size-border-strong) solid CanvasText;

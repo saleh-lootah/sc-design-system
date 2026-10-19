@@ -17,6 +17,7 @@ The "Check your answers" pattern: the answers a user gave, each with a way to ch
 - Group answers under headings that match the journey's sections ("Vehicle", "Renewal"), one list per group.
 - Add `action-href` on each row the user can change. The link reads "Change" ("تغيير") with the key as visually hidden text, so screen reader users hear "Change Insurance". Use `action-hidden-text` when the key doesn't read well after "Change", and `action-text` only for a different verb.
 - Rows without an action keep the empty action column, so every value starts at the same place.
+- A row with no value (an optional question the user skipped) shows "Not provided" ("لم يتم تقديمه"), never an empty value. Leave the row empty rather than writing your own placeholder.
 - Keys are short nouns in sentence case. Values are the user's answer, written out ("1 year, until 3 November 2027"), not codes. Wrap plates, amounts, references and phone numbers in `<sc-ltr>`.
 - Use `appearance="plain"` when the list sits inside another card.
 

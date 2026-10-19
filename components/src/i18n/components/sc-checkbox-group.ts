@@ -7,7 +7,7 @@ export default defineStrings({
     checkboxRequired: 'Select this box to continue',
   },
   ar: {
-    checkboxGroupRequired: 'اختر خيارًا واحدًا على الأقل',
-    checkboxRequired: 'حدّد هذا المربع للمتابعة',
+    checkboxGroupRequired: 'يُرجى اختيار خيار واحد على الأقل',
+    checkboxRequired: 'يُرجى تحديد هذا المربع للمتابعة',
   },
 });
