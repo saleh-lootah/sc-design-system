@@ -9,6 +9,12 @@
   box-sizing: border-box;
 }
 
+/* Block the Safari/iOS rubber-band at the page ends; the shell only, never the components. */
+html,
+body {
+  overscroll-behavior: none;
+}
+
 html {
   scroll-padding-top: calc(var(--pg-bar-height) + var(--sc-space-16));
 }
@@ -129,6 +135,7 @@ html {
   align-self: start;
   max-block-size: calc(100vh - var(--pg-bar-height));
   overflow: auto;
+  overscroll-behavior: contain;
   padding: var(--sc-space-24) var(--sc-space-16);
 }
 .pg-nav__group {
