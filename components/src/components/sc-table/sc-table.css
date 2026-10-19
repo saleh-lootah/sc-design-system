@@ -187,6 +187,29 @@
   border-radius: var(--sc-radius-xs);
 }
 
+/*
+ * A link in a body cell is a standalone target (A11Y-04): a transparent ::after grows its hit
+ * area to at least 44 x 44 without moving the layout, as in sc-channel-chip. Rows are already
+ * at least 44 tall, so the grown area stays inside the row. The link stays inline (inline-block
+ * would change the line box and so the row height); an inline element's ::after is measured
+ * against its line fragments, which is exact for a one-line link and covers the first to the
+ * last line of a wrapped one.
+ */
+::slotted(table) tbody td a,
+::slotted(table) tbody th a {
+  position: relative;
+}
+
+::slotted(table) tbody td a::after,
+::slotted(table) tbody th a::after {
+  content: '';
+  position: absolute;
+  /* Percentages are of the link's own box, so this holds at any text size and is 0 once the
+     link is 44 or more (the stacked action row, a long wrapped link). */
+  inset-block: min(0px, calc((100% - var(--sc-size-target-min)) / 2));
+  inset-inline: min(0px, calc((100% - var(--sc-size-target-min)) / 2));
+}
+
 @media (hover: hover) and (pointer: fine) {
   :host {
     --_at: 1;

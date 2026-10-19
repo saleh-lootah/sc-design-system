@@ -16,8 +16,8 @@
         <sc-language-switch appearance="plain" href="#other-language"></sc-language-switch>
       </div>
       <div class="pg-cell">
-        <span class="pg-label">no href · scSwitch</span>
-        <sc-language-switch id="ls-button"></sc-language-switch>
+        <span class="pg-label">href · scSwitch, preventDefault (single-page app)</span>
+        <sc-language-switch id="ls-button" href="#other-language"></sc-language-switch>
         <span class="pg-note" id="ls-out" role="status"></span>
       </div>
       <div class="pg-cell">
@@ -51,6 +51,7 @@
   {
     const out = document.getElementById('ls-out');
     document.getElementById('ls-button').addEventListener('scSwitch', (ev) => {
+      ev.preventDefault();
       out.textContent = `scSwitch → { lang: '${ev.detail.lang}' }`;
     });
   }

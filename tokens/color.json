@@ -386,6 +386,11 @@
           "alpha": 1.0
         },
         "$description": "Chips and quiet tinted fills"
+      },
+      "link-visited": {
+        "$type": "color",
+        "$value": "{channel.now.ink}",
+        "$description": "Visited links. The same as ink until a visited-link colour is chosen (OQ-20)."
       }
     },
     "transport": {
@@ -479,6 +484,11 @@
           "alpha": 1.0
         },
         "$description": "Chips and quiet tinted fills"
+      },
+      "link-visited": {
+        "$type": "color",
+        "$value": "{channel.transport.ink}",
+        "$description": "Visited links. The same as ink until a visited-link colour is chosen (OQ-20)."
       }
     },
     "visit": {
@@ -572,6 +582,11 @@
           "alpha": 1.0
         },
         "$description": "Chips and quiet tinted fills"
+      },
+      "link-visited": {
+        "$type": "color",
+        "$value": "{channel.visit.ink}",
+        "$description": "Visited links. The same as ink until a visited-link colour is chosen (OQ-20)."
       }
     },
     "justice": {
@@ -665,6 +680,11 @@
           "alpha": 1.0
         },
         "$description": "Chips and quiet tinted fills"
+      },
+      "link-visited": {
+        "$type": "color",
+        "$value": "{channel.justice.ink}",
+        "$description": "Visited links. The same as ink until a visited-link colour is chosen (OQ-20)."
       }
     },
     "build": {
@@ -758,6 +778,11 @@
           "alpha": 1.0
         },
         "$description": "Chips and quiet tinted fills"
+      },
+      "link-visited": {
+        "$type": "color",
+        "$value": "{channel.build.ink}",
+        "$description": "Visited links. The same as ink until a visited-link colour is chosen (OQ-20)."
       }
     },
     "invest": {
@@ -851,6 +876,11 @@
           "alpha": 1.0
         },
         "$description": "Chips and quiet tinted fills"
+      },
+      "link-visited": {
+        "$type": "color",
+        "$value": "{channel.invest.ink}",
+        "$description": "Visited links. The same as ink until a visited-link colour is chosen (OQ-20)."
       }
     },
     "trade": {
@@ -944,6 +974,11 @@
           "alpha": 1.0
         },
         "$description": "Chips and quiet tinted fills"
+      },
+      "link-visited": {
+        "$type": "color",
+        "$value": "{channel.trade.ink}",
+        "$description": "Visited links. The same as ink until a visited-link colour is chosen (OQ-20)."
       }
     }
   }

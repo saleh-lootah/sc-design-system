@@ -29,7 +29,7 @@ Goes somewhere. If it does something instead (submits, saves, deletes), use `sc-
 
 ### States
 
-Underlined in the channel action colour; the underline thickens on hover. Visited links use the channel ink colour (there is no visited token yet). Keyboard focus shows the 3px channel ring around the link, and wraps with it across lines.
+Underlined in the channel action colour; the underline thickens on hover. Visited links use `--sc-channel-link-visited`, which has the same value as channel ink until a visited-link colour is chosen. Keyboard focus shows the 3px channel ring around the link, and wraps with it across lines.
 
 ### Arabic
 

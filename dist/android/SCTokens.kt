@@ -103,6 +103,7 @@ data class SCChannel(
     val washEnd: Color,
     val ink: Color,
     val subtle: Color,
+    val linkVisited: Color,
 )
 
 object SCLightChannels {
@@ -115,6 +116,7 @@ object SCLightChannels {
         washEnd = Color(red = 0.8121f, green = 0.8657f, blue = 0.9841f, alpha = 1f), // oklab(0.896 -0.003 -0.044)
         ink = Color(red = 0.1178f, green = 0.165f, blue = 0.3696f, alpha = 1f), // oklab(0.307 0.0004 -0.094)
         subtle = Color(red = 0.8943f, green = 0.9339f, blue = 1f, alpha = 1f), // oklab(0.947 -0.004 -0.025)
+        linkVisited = Color(red = 0.1178f, green = 0.165f, blue = 0.3696f, alpha = 1f), // oklab(0.307 0.0004 -0.094)
     )
     val transport = SCChannel(
         name = "transport",
@@ -125,6 +127,7 @@ object SCLightChannels {
         washEnd = Color(red = 1f, green = 0.8083f, blue = 0.7093f, alpha = 1f), // oklab(0.888 0.043 0.049)
         ink = Color(red = 0.4163f, green = 0.18f, blue = 0.0545f, alpha = 1f), // oklab(0.379 0.068 0.068)
         subtle = Color(red = 1f, green = 0.9143f, blue = 0.8528f, alpha = 1f), // oklab(0.948 0.017 0.027)
+        linkVisited = Color(red = 0.4163f, green = 0.18f, blue = 0.0545f, alpha = 1f), // oklab(0.379 0.068 0.068)
     )
     val visit = SCChannel(
         name = "visit",
@@ -135,6 +138,7 @@ object SCLightChannels {
         washEnd = Color(red = 0.9564f, green = 0.7964f, blue = 0.7761f, alpha = 1f), // oklab(0.876 0.042 0.021)
         ink = Color(red = 0.369f, green = 0.1212f, blue = 0.1562f, alpha = 1f), // oklab(0.339 0.089 0.024)
         subtle = Color(red = 0.9831f, green = 0.9018f, blue = 0.8952f, alpha = 1f), // oklab(0.941 0.021 0.009)
+        linkVisited = Color(red = 0.369f, green = 0.1212f, blue = 0.1562f, alpha = 1f), // oklab(0.339 0.089 0.024)
     )
     val justice = SCChannel(
         name = "justice",
@@ -145,6 +149,7 @@ object SCLightChannels {
         washEnd = Color(red = 0.8631f, green = 0.8113f, blue = 0.9519f, alpha = 1f), // oklab(0.876 0.027 -0.043)
         ink = Color(red = 0.2343f, green = 0.1651f, blue = 0.3988f, alpha = 1f), // oklab(0.339 0.041 -0.092)
         subtle = Color(red = 0.9368f, green = 0.9064f, blue = 0.9809f, alpha = 1f), // oklab(0.94 0.015 -0.022)
+        linkVisited = Color(red = 0.2343f, green = 0.1651f, blue = 0.3988f, alpha = 1f), // oklab(0.339 0.041 -0.092)
     )
     val build = SCChannel(
         name = "build",
@@ -155,6 +160,7 @@ object SCLightChannels {
         washEnd = Color(red = 0.983f, green = 0.8668f, blue = 0.7218f, alpha = 1f), // oklab(0.913 0.017 0.056)
         ink = Color(red = 0.3528f, green = 0.2274f, blue = 0.0716f, alpha = 1f), // oklab(0.378 0.026 0.065)
         subtle = Color(red = 1f, green = 0.9414f, blue = 0.8629f, alpha = 1f), // oklab(0.962 0.008 0.03)
+        linkVisited = Color(red = 0.3528f, green = 0.2274f, blue = 0.0716f, alpha = 1f), // oklab(0.378 0.026 0.065)
     )
     val invest = SCChannel(
         name = "invest",
@@ -165,6 +171,7 @@ object SCLightChannels {
         washEnd = Color(red = 0.7833f, green = 0.9029f, blue = 0.8109f, alpha = 1f), // oklab(0.897 -0.04 0.021)
         ink = Color(red = 0.1305f, green = 0.2864f, blue = 0.1782f, alpha = 1f), // oklab(0.368 -0.058 0.031)
         subtle = Color(red = 0.8899f, green = 0.959f, blue = 0.9054f, alpha = 1f), // oklab(0.952 -0.023 0.012)
+        linkVisited = Color(red = 0.1305f, green = 0.2864f, blue = 0.1782f, alpha = 1f), // oklab(0.368 -0.058 0.031)
     )
     val trade = SCChannel(
         name = "trade",
@@ -175,6 +182,7 @@ object SCLightChannels {
         washEnd = Color(red = 0.8367f, green = 0.8825f, blue = 0.9346f, alpha = 1f), // oklab(0.905 -0.007 -0.021)
         ink = Color(red = 0.1363f, green = 0.2043f, blue = 0.2905f, alpha = 1f), // oklab(0.321 -0.012 -0.044)
         subtle = Color(red = 0.9167f, green = 0.9457f, blue = 0.9723f, alpha = 1f), // oklab(0.955 -0.005 -0.011)
+        linkVisited = Color(red = 0.1363f, green = 0.2043f, blue = 0.2905f, alpha = 1f), // oklab(0.321 -0.012 -0.044)
     )
     val all = listOf(now, transport, visit, justice, build, invest, trade)
 }
@@ -189,6 +197,7 @@ object SCDarkChannels {
         washEnd = Color(red = 0.1931f, green = 0.2319f, blue = 0.3282f, alpha = 1f), // oklab(0.355 -0.0022 -0.0449)
         ink = Color(red = 0.8738f, green = 0.9091f, blue = 0.9912f, alpha = 1f), // oklab(0.93 -0.0015 -0.03)
         subtle = Color(red = 0.1486f, green = 0.1778f, blue = 0.2498f, alpha = 1f), // oklab(0.3 -0.0017 -0.035)
+        linkVisited = Color(red = 0.8738f, green = 0.9091f, blue = 0.9912f, alpha = 1f), // oklab(0.93 -0.0015 -0.03)
     )
     val transport = SCChannel(
         name = "transport",
@@ -199,6 +208,7 @@ object SCDarkChannels {
         washEnd = Color(red = 0.314f, green = 0.2036f, blue = 0.1608f, alpha = 1f), // oklab(0.355 0.0334 0.0301)
         ink = Color(red = 0.9825f, green = 0.8859f, blue = 0.8492f, alpha = 1f), // oklab(0.93 0.0223 0.0201)
         subtle = Color(red = 0.2393f, green = 0.1568f, blue = 0.1249f, alpha = 1f), // oklab(0.3 0.026 0.0234)
+        linkVisited = Color(red = 0.9825f, green = 0.8859f, blue = 0.8492f, alpha = 1f), // oklab(0.93 0.0223 0.0201)
     )
     val visit = SCChannel(
         name = "visit",
@@ -209,6 +219,7 @@ object SCDarkChannels {
         washEnd = Color(red = 0.3152f, green = 0.1954f, blue = 0.2158f, alpha = 1f), // oklab(0.355 0.0445 0.0066)
         ink = Color(red = 0.9845f, green = 0.8788f, blue = 0.8931f, alpha = 1f), // oklab(0.93 0.0297 0.0044)
         subtle = Color(red = 0.2402f, green = 0.1507f, blue = 0.1657f, alpha = 1f), // oklab(0.3 0.0346 0.0051)
+        linkVisited = Color(red = 0.9845f, green = 0.8788f, blue = 0.8931f, alpha = 1f), // oklab(0.93 0.0297 0.0044)
     )
     val justice = SCChannel(
         name = "justice",
@@ -219,6 +230,7 @@ object SCDarkChannels {
         washEnd = Color(red = 0.2325f, green = 0.2189f, blue = 0.3213f, alpha = 1f), // oklab(0.355 0.0154 -0.0423)
         ink = Color(red = 0.9059f, green = 0.8978f, blue = 0.9851f, alpha = 1f), // oklab(0.93 0.0103 -0.0282)
         subtle = Color(red = 0.178f, green = 0.1681f, blue = 0.2445f, alpha = 1f), // oklab(0.3 0.012 -0.0329)
+        linkVisited = Color(red = 0.9059f, green = 0.8978f, blue = 0.9851f, alpha = 1f), // oklab(0.93 0.0103 -0.0282)
     )
     val build = SCChannel(
         name = "build",
@@ -229,6 +241,7 @@ object SCDarkChannels {
         washEnd = Color(red = 0.2974f, green = 0.2162f, blue = 0.1316f, alpha = 1f), // oklab(0.355 0.0178 0.0413)
         ink = Color(red = 0.9655f, green = 0.8961f, blue = 0.8286f, alpha = 1f), // oklab(0.93 0.0119 0.0276)
         subtle = Color(red = 0.2267f, green = 0.1662f, blue = 0.1036f, alpha = 1f), // oklab(0.3 0.0138 0.0322)
+        linkVisited = Color(red = 0.9655f, green = 0.8961f, blue = 0.8286f, alpha = 1f), // oklab(0.93 0.0119 0.0276)
     )
     val invest = SCChannel(
         name = "invest",
@@ -239,6 +252,7 @@ object SCDarkChannels {
         washEnd = Color(red = 0.1623f, green = 0.2615f, blue = 0.1885f, alpha = 1f), // oklab(0.355 -0.0397 0.0212)
         ink = Color(red = 0.8545f, green = 0.9335f, blue = 0.8714f, alpha = 1f), // oklab(0.93 -0.0265 0.0141)
         subtle = Color(red = 0.1265f, green = 0.1999f, blue = 0.1453f, alpha = 1f), // oklab(0.3 -0.0309 0.0165)
+        linkVisited = Color(red = 0.8545f, green = 0.9335f, blue = 0.8714f, alpha = 1f), // oklab(0.93 -0.0265 0.0141)
     )
     val trade = SCChannel(
         name = "trade",
@@ -249,6 +263,7 @@ object SCDarkChannels {
         washEnd = Color(red = 0.1596f, green = 0.2425f, blue = 0.3234f, alpha = 1f), // oklab(0.355 -0.0164 -0.0419)
         ink = Color(red = 0.8511f, green = 0.9182f, blue = 0.9866f, alpha = 1f), // oklab(0.93 -0.0109 -0.0279)
         subtle = Color(red = 0.1242f, green = 0.1858f, blue = 0.246f, alpha = 1f), // oklab(0.3 -0.0128 -0.0326)
+        linkVisited = Color(red = 0.8511f, green = 0.9182f, blue = 0.9866f, alpha = 1f), // oklab(0.93 -0.0109 -0.0279)
     )
     val all = listOf(now, transport, visit, justice, build, invest, trade)
 }

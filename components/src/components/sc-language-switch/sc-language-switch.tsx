@@ -2,6 +2,9 @@ import { Component, Element, Event, EventEmitter, Host, Prop, h } from '@stencil
 import { LocaleController } from '../../i18n/locale';
 import type { Lang } from '../../i18n/strings';
 
+/** Warn once per page about the deprecated button mode, not once per render. */
+let warnedButtonMode = false;
+
 export interface LanguageSwitchDetail {
   /** The language the user asked for. */
   lang: Lang;
@@ -12,10 +15,14 @@ export interface LanguageSwitchDetail {
  * language's own name, "العربية" on an English page and "English" on an Arabic page,
  * marked with its own `lang` and direction so screen readers pronounce it correctly.
  *
- * Renders an `<a href hreflang lang>` when `href` is set (preferred: the other-language page
- * has its own URL), or a `<button lang>` otherwise. Either way it fires `scSwitch`.
+ * Renders an `<a href hreflang lang>` to the same page in the other language (LANG-05: the
+ * switch is a link). It fires `scSwitch` on every activation; a single-page app calls
+ * `preventDefault()` on it and switches in place, and the link still works without script.
  *
- * @part control - The inner `<a>` or `<button>`.
+ * Without `href` it falls back to a `<button lang>`. That mode is deprecated and will be
+ * removed in the next major version: always set `href`.
+ *
+ * @part control - The inner `<a>` (or, deprecated, `<button>` when `href` is missing).
  * @part label - The language name.
  */
 @Component({
@@ -26,7 +33,10 @@ export interface LanguageSwitchDetail {
 export class ScLanguageSwitch {
   @Element() el!: HTMLElement;
 
-  /** The same page in the other language. Sets `hreflang` to that language. */
+  /**
+   * The same page in the other language. Sets `hreflang` to that language. Always set it:
+   * without it the switch renders a button, which is deprecated.
+   */
   @Prop({ reflect: true }) href?: string;
 
   /**
@@ -46,6 +56,13 @@ export class ScLanguageSwitch {
 
   connectedCallback() {
     this.locale.connect();
+  }
+
+  componentDidLoad() {
+    if (!this.href && !warnedButtonMode) {
+      warnedButtonMode = true;
+      console.warn('sc-language-switch: the button mode (no href) is deprecated. Set href to the same page in the other language; call preventDefault() on scSwitch to switch in place.');
+    }
   }
 
   disconnectedCallback() {

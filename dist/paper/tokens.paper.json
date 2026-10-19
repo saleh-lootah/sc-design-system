@@ -166,6 +166,11 @@
   },
   {
     "type": "color",
+    "name": "--sc-channel-now-link-visited",
+    "value": "oklab(0.307 0.0004 -0.094)"
+  },
+  {
+    "type": "color",
     "name": "--sc-channel-transport-action",
     "value": "oklab(0.501 0.111 0.1)"
   },
@@ -198,6 +203,11 @@
     "type": "color",
     "name": "--sc-channel-transport-subtle",
     "value": "oklab(0.948 0.017 0.027)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-channel-transport-link-visited",
+    "value": "oklab(0.379 0.068 0.068)"
   },
   {
     "type": "color",
@@ -236,6 +246,11 @@
   },
   {
     "type": "color",
+    "name": "--sc-channel-visit-link-visited",
+    "value": "oklab(0.339 0.089 0.024)"
+  },
+  {
+    "type": "color",
     "name": "--sc-channel-justice-action",
     "value": "oklab(0.495 0.068 -0.187)"
   },
@@ -268,6 +283,11 @@
     "type": "color",
     "name": "--sc-channel-justice-subtle",
     "value": "oklab(0.94 0.015 -0.022)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-channel-justice-link-visited",
+    "value": "oklab(0.339 0.041 -0.092)"
   },
   {
     "type": "color",
@@ -306,6 +326,11 @@
   },
   {
     "type": "color",
+    "name": "--sc-channel-build-link-visited",
+    "value": "oklab(0.378 0.026 0.065)"
+  },
+  {
+    "type": "color",
     "name": "--sc-channel-invest-action",
     "value": "oklab(0.513 -0.101 0.054)"
   },
@@ -341,6 +366,11 @@
   },
   {
     "type": "color",
+    "name": "--sc-channel-invest-link-visited",
+    "value": "oklab(0.368 -0.058 0.031)"
+  },
+  {
+    "type": "color",
     "name": "--sc-channel-trade-action",
     "value": "oklab(0.44 -0.018 -0.046)"
   },
@@ -373,6 +403,11 @@
     "type": "color",
     "name": "--sc-channel-trade-subtle",
     "value": "oklab(0.955 -0.005 -0.011)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-channel-trade-link-visited",
+    "value": "oklab(0.321 -0.012 -0.044)"
   },
   {
     "type": "color",
@@ -526,6 +561,11 @@
   },
   {
     "type": "color",
+    "name": "--sc-channel-now-link-visited-dark",
+    "value": "oklab(0.93 -0.0015 -0.03)"
+  },
+  {
+    "type": "color",
     "name": "--sc-channel-transport-action-dark",
     "value": "oklab(0.83 0.068 0.079)"
   },
@@ -558,6 +598,11 @@
     "type": "color",
     "name": "--sc-channel-transport-subtle-dark",
     "value": "oklab(0.3 0.026 0.0234)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-channel-transport-link-visited-dark",
+    "value": "oklab(0.93 0.0223 0.0201)"
   },
   {
     "type": "color",
@@ -596,6 +641,11 @@
   },
   {
     "type": "color",
+    "name": "--sc-channel-visit-link-visited-dark",
+    "value": "oklab(0.93 0.0297 0.0044)"
+  },
+  {
+    "type": "color",
     "name": "--sc-channel-justice-action-dark",
     "value": "oklab(0.81 0.034 -0.0935)"
   },
@@ -628,6 +678,11 @@
     "type": "color",
     "name": "--sc-channel-justice-subtle-dark",
     "value": "oklab(0.3 0.012 -0.0329)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-channel-justice-link-visited-dark",
+    "value": "oklab(0.93 0.0103 -0.0282)"
   },
   {
     "type": "color",
@@ -666,6 +721,11 @@
   },
   {
     "type": "color",
+    "name": "--sc-channel-build-link-visited-dark",
+    "value": "oklab(0.93 0.0119 0.0276)"
+  },
+  {
+    "type": "color",
     "name": "--sc-channel-invest-action-dark",
     "value": "oklab(0.81 -0.0505 0.027)"
   },
@@ -701,6 +761,11 @@
   },
   {
     "type": "color",
+    "name": "--sc-channel-invest-link-visited-dark",
+    "value": "oklab(0.93 -0.0265 0.0141)"
+  },
+  {
+    "type": "color",
     "name": "--sc-channel-trade-action-dark",
     "value": "oklab(0.779 -0.015 -0.043)"
   },
@@ -733,6 +798,11 @@
     "type": "color",
     "name": "--sc-channel-trade-subtle-dark",
     "value": "oklab(0.3 -0.0128 -0.0326)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-channel-trade-link-visited-dark",
+    "value": "oklab(0.93 -0.0109 -0.0279)"
   },
   {
     "type": "fontFamily",

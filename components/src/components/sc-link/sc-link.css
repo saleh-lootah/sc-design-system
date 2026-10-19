@@ -36,8 +36,8 @@
 }
 
 .link:visited {
-  /* No visited-link token yet: channel ink is darker (light) or lighter (dark) than action and passes 4.5:1. */
-  color: var(--sc-channel-ink);
+  /* Its own role, today the same value as channel ink (OQ-20); check:contrast checks it at 4.5:1. */
+  color: var(--sc-channel-link-visited);
 }
 
 @media (hover: hover) {

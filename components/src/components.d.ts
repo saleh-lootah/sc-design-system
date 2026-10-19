@@ -598,8 +598,11 @@ export namespace Components {
      * Switches to the same page in the other language. The label is always the other
      * language's own name, "العربية" on an English page and "English" on an Arabic page,
      * marked with its own `lang` and direction so screen readers pronounce it correctly.
-     * Renders an `<a href hreflang lang>` when `href` is set (preferred: the other-language page
-     * has its own URL), or a `<button lang>` otherwise. Either way it fires `scSwitch`.
+     * Renders an `<a href hreflang lang>` to the same page in the other language (LANG-05: the
+     * switch is a link). It fires `scSwitch` on every activation; a single-page app calls
+     * `preventDefault()` on it and switches in place, and the link still works without script.
+     * Without `href` it falls back to a `<button lang>`. That mode is deprecated and will be
+     * removed in the next major version: always set `href`.
      */
     interface ScLanguageSwitch {
         /**
@@ -608,7 +611,7 @@ export namespace Components {
          */
         "appearance": 'glass' | 'plain';
         /**
-          * The same page in the other language. Sets `hreflang` to that language.
+          * The same page in the other language. Sets `hreflang` to that language. Always set it: without it the switch renders a button, which is deprecated.
          */
         "href"?: string;
     }
@@ -670,6 +673,10 @@ export namespace Components {
      * - `<main>` is rendered in light DOM (the component is scoped, not shadowed) with
      *   `id="main-content"` and `tabindex="-1"`, so a skip link (`<a href="#main-content">`)
      *   anywhere on the page can reach it and move focus into it.
+     * - With `sync-document` and a sticky `sc-app-bar` in the header, it sets
+     *   `scroll-padding-block-start` on `<html>` to the bar's height plus `--sc-space-8`, so
+     *   focused elements and `#fragment` targets scroll into view below the bar, not under it
+     *   (WCAG 2.4.11). It follows the bar's size and removes the padding when no longer needed.
      */
     interface ScPage {
         /**
@@ -682,7 +689,7 @@ export namespace Components {
          */
         "mainId": string;
         /**
-          * Also sets `lang`, `dir` and `data-channel` on `<html>`. Use it when `sc-page` is the whole page, so browsers and screen readers get the page language from the document root.
+          * Also sets `lang`, `dir` and `data-channel` on `<html>`. Use it when `sc-page` is the whole page, so browsers and screen readers get the page language from the document root. With a sticky `sc-app-bar` in the header, it also sets `scroll-padding-block-start` on `<html>` so focus is never hidden under the bar.
           * @default false
          */
         "syncDocument": boolean;
@@ -869,8 +876,8 @@ export namespace Components {
         "value"?: string;
     }
     /**
-     * A link to a service: its title, the entity that owns it, an optional channel chip and an
-     * end chevron.
+     * A link to a service: its title, the entity that owns it and an optional channel chip.
+     * There is no end chevron: the card is not itself a link, so nothing on it may look like one.
      * Only the title is the link (CMP-06), so screen readers hear a short link name ("Renew
      * vehicle registration"), not the whole card's text. The card is not wrapped in an `<a>`
      * and the link's hit area is not stretched over the card: it is the title, grown to at
@@ -933,7 +940,7 @@ export namespace Components {
      */
     interface ScStatusTag {
         /**
-          * - `neutral`: no action needed yet, or a plain state ("Draft", "In review"). - `success`: done ("Paid", "Approved", "Completed"). - `warning`: needs attention soon ("Expires in 15 days"). - `error`: blocked or failed ("Action needed", "Payment failed"). - `channel`: highlights something in the current channel's colours ("New").
+          * - `neutral`: no action needed yet, or a plain state ("Draft", "In review"). - `success`: done ("Paid", "Approved", "Completed"). - `warning`: needs attention soon ("Expires in 15 days"). - `error`: blocked or failed ("Action needed", "Payment failed"). - `channel` (deprecated): highlights something in the current channel's colours. It is not   a status in the standard's vocabulary (9.6) and will be removed in the next major version.
           * @default 'neutral'
          */
         "tone": StatusTagTone;
@@ -1557,8 +1564,11 @@ declare global {
      * Switches to the same page in the other language. The label is always the other
      * language's own name, "العربية" on an English page and "English" on an Arabic page,
      * marked with its own `lang` and direction so screen readers pronounce it correctly.
-     * Renders an `<a href hreflang lang>` when `href` is set (preferred: the other-language page
-     * has its own URL), or a `<button lang>` otherwise. Either way it fires `scSwitch`.
+     * Renders an `<a href hreflang lang>` to the same page in the other language (LANG-05: the
+     * switch is a link). It fires `scSwitch` on every activation; a single-page app calls
+     * `preventDefault()` on it and switches in place, and the link still works without script.
+     * Without `href` it falls back to a `<button lang>`. That mode is deprecated and will be
+     * removed in the next major version: always set `href`.
      */
     interface HTMLScLanguageSwitchElement extends Components.ScLanguageSwitch, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScLanguageSwitchElementEventMap>(type: K, listener: (this: HTMLScLanguageSwitchElement, ev: ScLanguageSwitchCustomEvent<HTMLScLanguageSwitchElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1614,6 +1624,10 @@ declare global {
      * - `<main>` is rendered in light DOM (the component is scoped, not shadowed) with
      *   `id="main-content"` and `tabindex="-1"`, so a skip link (`<a href="#main-content">`)
      *   anywhere on the page can reach it and move focus into it.
+     * - With `sync-document` and a sticky `sc-app-bar` in the header, it sets
+     *   `scroll-padding-block-start` on `<html>` to the bar's height plus `--sc-space-8`, so
+     *   focused elements and `#fragment` targets scroll into view below the bar, not under it
+     *   (WCAG 2.4.11). It follows the bar's size and removes the padding when no longer needed.
      */
     interface HTMLScPageElement extends Components.ScPage, HTMLStencilElement {
     }
@@ -1712,8 +1726,8 @@ declare global {
         new (): HTMLScSelectElement;
     };
     /**
-     * A link to a service: its title, the entity that owns it, an optional channel chip and an
-     * end chevron.
+     * A link to a service: its title, the entity that owns it and an optional channel chip.
+     * There is no end chevron: the card is not itself a link, so nothing on it may look like one.
      * Only the title is the link (CMP-06), so screen readers hear a short link name ("Renew
      * vehicle registration"), not the whole card's text. The card is not wrapped in an `<a>`
      * and the link's hit area is not stretched over the card: it is the title, grown to at
@@ -2529,8 +2543,11 @@ declare namespace LocalJSX {
      * Switches to the same page in the other language. The label is always the other
      * language's own name, "العربية" on an English page and "English" on an Arabic page,
      * marked with its own `lang` and direction so screen readers pronounce it correctly.
-     * Renders an `<a href hreflang lang>` when `href` is set (preferred: the other-language page
-     * has its own URL), or a `<button lang>` otherwise. Either way it fires `scSwitch`.
+     * Renders an `<a href hreflang lang>` to the same page in the other language (LANG-05: the
+     * switch is a link). It fires `scSwitch` on every activation; a single-page app calls
+     * `preventDefault()` on it and switches in place, and the link still works without script.
+     * Without `href` it falls back to a `<button lang>`. That mode is deprecated and will be
+     * removed in the next major version: always set `href`.
      */
     interface ScLanguageSwitch {
         /**
@@ -2539,7 +2556,7 @@ declare namespace LocalJSX {
          */
         "appearance"?: 'glass' | 'plain';
         /**
-          * The same page in the other language. Sets `hreflang` to that language.
+          * The same page in the other language. Sets `hreflang` to that language. Always set it: without it the switch renders a button, which is deprecated.
          */
         "href"?: string;
         /**
@@ -2605,6 +2622,10 @@ declare namespace LocalJSX {
      * - `<main>` is rendered in light DOM (the component is scoped, not shadowed) with
      *   `id="main-content"` and `tabindex="-1"`, so a skip link (`<a href="#main-content">`)
      *   anywhere on the page can reach it and move focus into it.
+     * - With `sync-document` and a sticky `sc-app-bar` in the header, it sets
+     *   `scroll-padding-block-start` on `<html>` to the bar's height plus `--sc-space-8`, so
+     *   focused elements and `#fragment` targets scroll into view below the bar, not under it
+     *   (WCAG 2.4.11). It follows the bar's size and removes the padding when no longer needed.
      */
     interface ScPage {
         /**
@@ -2617,7 +2638,7 @@ declare namespace LocalJSX {
          */
         "mainId"?: string;
         /**
-          * Also sets `lang`, `dir` and `data-channel` on `<html>`. Use it when `sc-page` is the whole page, so browsers and screen readers get the page language from the document root.
+          * Also sets `lang`, `dir` and `data-channel` on `<html>`. Use it when `sc-page` is the whole page, so browsers and screen readers get the page language from the document root. With a sticky `sc-app-bar` in the header, it also sets `scroll-padding-block-start` on `<html>` so focus is never hidden under the bar.
           * @default false
          */
         "syncDocument"?: boolean;
@@ -2820,8 +2841,8 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     /**
-     * A link to a service: its title, the entity that owns it, an optional channel chip and an
-     * end chevron.
+     * A link to a service: its title, the entity that owns it and an optional channel chip.
+     * There is no end chevron: the card is not itself a link, so nothing on it may look like one.
      * Only the title is the link (CMP-06), so screen readers hear a short link name ("Renew
      * vehicle registration"), not the whole card's text. The card is not wrapped in an `<a>`
      * and the link's hit area is not stretched over the card: it is the title, grown to at
@@ -2884,7 +2905,7 @@ declare namespace LocalJSX {
      */
     interface ScStatusTag {
         /**
-          * - `neutral`: no action needed yet, or a plain state ("Draft", "In review"). - `success`: done ("Paid", "Approved", "Completed"). - `warning`: needs attention soon ("Expires in 15 days"). - `error`: blocked or failed ("Action needed", "Payment failed"). - `channel`: highlights something in the current channel's colours ("New").
+          * - `neutral`: no action needed yet, or a plain state ("Draft", "In review"). - `success`: done ("Paid", "Approved", "Completed"). - `warning`: needs attention soon ("Expires in 15 days"). - `error`: blocked or failed ("Action needed", "Payment failed"). - `channel` (deprecated): highlights something in the current channel's colours. It is not   a status in the standard's vocabulary (9.6) and will be removed in the next major version.
           * @default 'neutral'
          */
         "tone"?: StatusTagTone;
@@ -3659,8 +3680,11 @@ declare module "@stencil/core" {
              * Switches to the same page in the other language. The label is always the other
              * language's own name, "العربية" on an English page and "English" on an Arabic page,
              * marked with its own `lang` and direction so screen readers pronounce it correctly.
-             * Renders an `<a href hreflang lang>` when `href` is set (preferred: the other-language page
-             * has its own URL), or a `<button lang>` otherwise. Either way it fires `scSwitch`.
+             * Renders an `<a href hreflang lang>` to the same page in the other language (LANG-05: the
+             * switch is a link). It fires `scSwitch` on every activation; a single-page app calls
+             * `preventDefault()` on it and switches in place, and the link still works without script.
+             * Without `href` it falls back to a `<button lang>`. That mode is deprecated and will be
+             * removed in the next major version: always set `href`.
              */
             "sc-language-switch": LocalJSX.IntrinsicElements["sc-language-switch"] & JSXBase.HTMLAttributes<HTMLScLanguageSwitchElement>;
             /**
@@ -3693,6 +3717,10 @@ declare module "@stencil/core" {
              * - `<main>` is rendered in light DOM (the component is scoped, not shadowed) with
              *   `id="main-content"` and `tabindex="-1"`, so a skip link (`<a href="#main-content">`)
              *   anywhere on the page can reach it and move focus into it.
+             * - With `sync-document` and a sticky `sc-app-bar` in the header, it sets
+             *   `scroll-padding-block-start` on `<html>` to the bar's height plus `--sc-space-8`, so
+             *   focused elements and `#fragment` targets scroll into view below the bar, not under it
+             *   (WCAG 2.4.11). It follows the bar's size and removes the padding when no longer needed.
              */
             "sc-page": LocalJSX.IntrinsicElements["sc-page"] & JSXBase.HTMLAttributes<HTMLScPageElement>;
             /**
@@ -3733,8 +3761,8 @@ declare module "@stencil/core" {
              */
             "sc-select": LocalJSX.IntrinsicElements["sc-select"] & JSXBase.HTMLAttributes<HTMLScSelectElement>;
             /**
-             * A link to a service: its title, the entity that owns it, an optional channel chip and an
-             * end chevron.
+             * A link to a service: its title, the entity that owns it and an optional channel chip.
+             * There is no end chevron: the card is not itself a link, so nothing on it may look like one.
              * Only the title is the link (CMP-06), so screen readers hear a short link name ("Renew
              * vehicle registration"), not the whole card's text. The card is not wrapped in an `<a>`
              * and the link's hit area is not stretched over the card: it is the title, grown to at

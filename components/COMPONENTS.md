@@ -114,7 +114,7 @@ The first 24 components, in four families, plus the components added after Phase
 - Uses `<dl>`.
 
 **ServiceCard** (`sc-service-card`): a link to a service.
-- Contents: title, owning entity (attribution text), an optional ChannelChip, an end chevron in a fixed slot.
+- Contents: title, owning entity (attribution text) and an optional ChannelChip. No end chevron: only the title is a link (CMP-06).
 - The whole card is the link target. The heading level is a prop.
 
 **ChannelHero** (`sc-channel-hero`): the top wash of a channel page.

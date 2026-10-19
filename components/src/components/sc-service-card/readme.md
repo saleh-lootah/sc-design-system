@@ -24,19 +24,19 @@ A link to a service, as in "Most used services" on a channel home page. For a gr
 
 ### Behaviour
 
-Only the title is the link (CMP-06 in the standard): the card is not wrapped in an `<a>`, and the link's hit area is not stretched over the card. Screen readers hear a short link name ("Renew vehicle registration"), with the entity as its description, instead of the card's whole text. The heading contains the link, so heading navigation lists every service, and keyboard users meet one tab stop per card (plus a chip, if it is a link). The title's hit area is at least 44 × 44 px; the focus ring goes round the title. With a mouse or trackpad (`(hover: hover) and (pointer: fine)`) hovering the title underlines it and fills the chevron with the channel colour; touch screens get no hover state. The chevron is decorative.
+Only the title is the link (CMP-06 in the standard): the card is not wrapped in an `<a>`, and the link's hit area is not stretched over the card. Screen readers hear a short link name ("Renew vehicle registration"), with the entity as its description, instead of the card's whole text. The heading contains the link, so heading navigation lists every service, and keyboard users meet one tab stop per card (plus a chip, if it is a link). The title's hit area is at least 44 × 44 px; the focus ring goes round the title. With a mouse or trackpad (`(hover: hover) and (pointer: fine)`) hovering the title underlines it; touch screens get no hover state. There is no end chevron: the card is not a link, so nothing on it suggests that it is. (The `chevron` part is removed.)
 
 ### Arabic
 
-The chevron mirrors and sits on the left. Entity names have official Arabic forms ("هيئة الطرق والمواصلات"); use them.
+Entity names have official Arabic forms ("هيئة الطرق والمواصلات"); use them.
 
 <!-- Auto Generated Below -->
 
 
 ## Overview
 
-A link to a service: its title, the entity that owns it, an optional channel chip and an
-end chevron.
+A link to a service: its title, the entity that owns it and an optional channel chip.
+There is no end chevron: the card is not itself a link, so nothing on it may look like one.
 
 Only the title is the link (CMP-06), so screen readers hear a short link name ("Renew
 vehicle registration"), not the whole card's text. The card is not wrapped in an `<a>`
@@ -65,13 +65,12 @@ separate link.
 
 ## Shadow Parts
 
-| Part        | Description                     |
-| ----------- | ------------------------------- |
-| `"card"`    | The surface.                    |
-| `"chevron"` | The end chevron and its circle. |
-| `"entity"`  | The entity line.                |
-| `"link"`    | The `<a>` inside the heading.   |
-| `"title"`   | The heading.                    |
+| Part       | Description                   |
+| ---------- | ----------------------------- |
+| `"card"`   | The surface.                  |
+| `"entity"` | The entity line.              |
+| `"link"`   | The `<a>` inside the heading. |
+| `"title"`  | The heading.                  |
 
 
 ----------------------------------------------

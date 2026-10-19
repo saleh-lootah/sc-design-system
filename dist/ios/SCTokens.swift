@@ -136,6 +136,7 @@ public struct SCChannel: Sendable {
     public let washEnd: Color
     public let ink: Color
     public let subtle: Color
+    public let linkVisited: Color
 }
 
 public extension SCChannel {
@@ -168,6 +169,10 @@ public extension SCChannel {
         subtle: scDynamic(
             light: rgb(0.8943, 0.9339, 1), // oklab(0.947 -0.004 -0.025)
             dark: rgb(0.1486, 0.1778, 0.2498) // oklab(0.3 -0.0017 -0.035)
+        ),
+        linkVisited: scDynamic(
+            light: rgb(0.1178, 0.165, 0.3696), // oklab(0.307 0.0004 -0.094)
+            dark: rgb(0.8738, 0.9091, 0.9912) // oklab(0.93 -0.0015 -0.03)
         )
     )
     static let transport = SCChannel(
@@ -199,6 +204,10 @@ public extension SCChannel {
         subtle: scDynamic(
             light: rgb(1, 0.9143, 0.8528), // oklab(0.948 0.017 0.027)
             dark: rgb(0.2393, 0.1568, 0.1249) // oklab(0.3 0.026 0.0234)
+        ),
+        linkVisited: scDynamic(
+            light: rgb(0.4163, 0.18, 0.0545), // oklab(0.379 0.068 0.068)
+            dark: rgb(0.9825, 0.8859, 0.8492) // oklab(0.93 0.0223 0.0201)
         )
     )
     static let visit = SCChannel(
@@ -230,6 +239,10 @@ public extension SCChannel {
         subtle: scDynamic(
             light: rgb(0.9831, 0.9018, 0.8952), // oklab(0.941 0.021 0.009)
             dark: rgb(0.2402, 0.1507, 0.1657) // oklab(0.3 0.0346 0.0051)
+        ),
+        linkVisited: scDynamic(
+            light: rgb(0.369, 0.1212, 0.1562), // oklab(0.339 0.089 0.024)
+            dark: rgb(0.9845, 0.8788, 0.8931) // oklab(0.93 0.0297 0.0044)
         )
     )
     static let justice = SCChannel(
@@ -261,6 +274,10 @@ public extension SCChannel {
         subtle: scDynamic(
             light: rgb(0.9368, 0.9064, 0.9809), // oklab(0.94 0.015 -0.022)
             dark: rgb(0.178, 0.1681, 0.2445) // oklab(0.3 0.012 -0.0329)
+        ),
+        linkVisited: scDynamic(
+            light: rgb(0.2343, 0.1651, 0.3988), // oklab(0.339 0.041 -0.092)
+            dark: rgb(0.9059, 0.8978, 0.9851) // oklab(0.93 0.0103 -0.0282)
         )
     )
     static let build = SCChannel(
@@ -292,6 +309,10 @@ public extension SCChannel {
         subtle: scDynamic(
             light: rgb(1, 0.9414, 0.8629), // oklab(0.962 0.008 0.03)
             dark: rgb(0.2267, 0.1662, 0.1036) // oklab(0.3 0.0138 0.0322)
+        ),
+        linkVisited: scDynamic(
+            light: rgb(0.3528, 0.2274, 0.0716), // oklab(0.378 0.026 0.065)
+            dark: rgb(0.9655, 0.8961, 0.8286) // oklab(0.93 0.0119 0.0276)
         )
     )
     static let invest = SCChannel(
@@ -323,6 +344,10 @@ public extension SCChannel {
         subtle: scDynamic(
             light: rgb(0.8899, 0.959, 0.9054), // oklab(0.952 -0.023 0.012)
             dark: rgb(0.1265, 0.1999, 0.1453) // oklab(0.3 -0.0309 0.0165)
+        ),
+        linkVisited: scDynamic(
+            light: rgb(0.1305, 0.2864, 0.1782), // oklab(0.368 -0.058 0.031)
+            dark: rgb(0.8545, 0.9335, 0.8714) // oklab(0.93 -0.0265 0.0141)
         )
     )
     static let trade = SCChannel(
@@ -354,6 +379,10 @@ public extension SCChannel {
         subtle: scDynamic(
             light: rgb(0.9167, 0.9457, 0.9723), // oklab(0.955 -0.005 -0.011)
             dark: rgb(0.1242, 0.1858, 0.246) // oklab(0.3 -0.0128 -0.0326)
+        ),
+        linkVisited: scDynamic(
+            light: rgb(0.1363, 0.2043, 0.2905), // oklab(0.321 -0.012 -0.044)
+            dark: rgb(0.8511, 0.9182, 0.9866) // oklab(0.93 -0.0109 -0.0279)
         )
     )
     static let all: [SCChannel] = [.now, .transport, .visit, .justice, .build, .invest, .trade]

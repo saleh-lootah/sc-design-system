@@ -235,6 +235,57 @@ describe('sc-table (e2e)', () => {
     }
   });
 
+  it('gives links in body cells a target of at least 44 x 44 px without changing the row height (A11Y-04)', async () => {
+    for (const density of ['default', 'compact']) {
+      const page = await newScPage(`
+        <main>
+          <h1>Fines</h1>
+          <sc-table caption="Your fines" density="${density}">
+            <table>
+              <thead><tr><th scope="col">Reference</th><th scope="col">Offence</th><th scope="col" data-type="action"><span class="sc-visually-hidden">Action</span></th></tr></thead>
+              <tbody>
+                <tr><th scope="row"><a href="#a">F-1</a></th><td>Speeding</td><td><a href="#a">View<span class="sc-visually-hidden"> F-1</span></a></td></tr>
+                <tr><th scope="row">F-2</th><td>Speeding</td><td>View</td></tr>
+              </tbody>
+            </table>
+          </sc-table>
+        </main>`);
+      const size = await page.evaluate(() => {
+        const rows = document.querySelectorAll('sc-table tbody tr');
+        const target = (a: Element) => {
+          const r = a.getBoundingClientRect();
+          const after = getComputedStyle(a, '::after');
+          return {
+            position: after.position,
+            height: r.height - parseFloat(after.top) - parseFloat(after.bottom),
+            width: r.width - parseFloat(after.left) - parseFloat(after.right),
+          };
+        };
+        const height = () => rows[0].getBoundingClientRect().height;
+        const withTarget = height();
+        // The same row with the grown hit area switched off.
+        const off = document.createElement('style');
+        off.textContent = 'sc-table tbody a { position: static !important; } sc-table tbody a::after { display: none !important; }';
+        document.head.append(off);
+        const withoutTarget = height();
+        off.remove();
+        return {
+          links: [...rows[0].querySelectorAll('a')].map(target),
+          rows: [withTarget, withoutTarget],
+        };
+      });
+      expect(size.links).toHaveLength(2);
+      for (const link of size.links) {
+        expect(link.position).toBe('absolute');
+        // Chromium lays out in 1/64px units, so a computed 44 can read back as 43.98.
+        expect(link.height).toBeGreaterThanOrEqual(44 - 1 / 32);
+        expect(link.width).toBeGreaterThanOrEqual(44 - 1 / 32);
+      }
+      // The grown hit area does not change the row's height.
+      expect(size.rows[0]).toBe(size.rows[1]);
+    }
+  });
+
   for (const ctx of contexts) {
     it(`has no axe violations (${ctx.lang}, ${ctx.theme})`, async () => {
       const page = await newScPage(fines(ctx.lang), ctx);

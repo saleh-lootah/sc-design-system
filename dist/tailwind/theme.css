@@ -37,6 +37,7 @@
   --color-channel-now-wash-end: var(--sc-channel-now-wash-end);
   --color-channel-now-ink: var(--sc-channel-now-ink);
   --color-channel-now-subtle: var(--sc-channel-now-subtle);
+  --color-channel-now-link-visited: var(--sc-channel-now-link-visited);
   --color-channel-transport-action: var(--sc-channel-transport-action);
   --color-channel-transport-action-hover: var(--sc-channel-transport-action-hover);
   --color-channel-transport-action-pressed: var(--sc-channel-transport-action-pressed);
@@ -44,6 +45,7 @@
   --color-channel-transport-wash-end: var(--sc-channel-transport-wash-end);
   --color-channel-transport-ink: var(--sc-channel-transport-ink);
   --color-channel-transport-subtle: var(--sc-channel-transport-subtle);
+  --color-channel-transport-link-visited: var(--sc-channel-transport-link-visited);
   --color-channel-visit-action: var(--sc-channel-visit-action);
   --color-channel-visit-action-hover: var(--sc-channel-visit-action-hover);
   --color-channel-visit-action-pressed: var(--sc-channel-visit-action-pressed);
@@ -51,6 +53,7 @@
   --color-channel-visit-wash-end: var(--sc-channel-visit-wash-end);
   --color-channel-visit-ink: var(--sc-channel-visit-ink);
   --color-channel-visit-subtle: var(--sc-channel-visit-subtle);
+  --color-channel-visit-link-visited: var(--sc-channel-visit-link-visited);
   --color-channel-justice-action: var(--sc-channel-justice-action);
   --color-channel-justice-action-hover: var(--sc-channel-justice-action-hover);
   --color-channel-justice-action-pressed: var(--sc-channel-justice-action-pressed);
@@ -58,6 +61,7 @@
   --color-channel-justice-wash-end: var(--sc-channel-justice-wash-end);
   --color-channel-justice-ink: var(--sc-channel-justice-ink);
   --color-channel-justice-subtle: var(--sc-channel-justice-subtle);
+  --color-channel-justice-link-visited: var(--sc-channel-justice-link-visited);
   --color-channel-build-action: var(--sc-channel-build-action);
   --color-channel-build-action-hover: var(--sc-channel-build-action-hover);
   --color-channel-build-action-pressed: var(--sc-channel-build-action-pressed);
@@ -65,6 +69,7 @@
   --color-channel-build-wash-end: var(--sc-channel-build-wash-end);
   --color-channel-build-ink: var(--sc-channel-build-ink);
   --color-channel-build-subtle: var(--sc-channel-build-subtle);
+  --color-channel-build-link-visited: var(--sc-channel-build-link-visited);
   --color-channel-invest-action: var(--sc-channel-invest-action);
   --color-channel-invest-action-hover: var(--sc-channel-invest-action-hover);
   --color-channel-invest-action-pressed: var(--sc-channel-invest-action-pressed);
@@ -72,6 +77,7 @@
   --color-channel-invest-wash-end: var(--sc-channel-invest-wash-end);
   --color-channel-invest-ink: var(--sc-channel-invest-ink);
   --color-channel-invest-subtle: var(--sc-channel-invest-subtle);
+  --color-channel-invest-link-visited: var(--sc-channel-invest-link-visited);
   --color-channel-trade-action: var(--sc-channel-trade-action);
   --color-channel-trade-action-hover: var(--sc-channel-trade-action-hover);
   --color-channel-trade-action-pressed: var(--sc-channel-trade-action-pressed);
@@ -79,6 +85,7 @@
   --color-channel-trade-wash-end: var(--sc-channel-trade-wash-end);
   --color-channel-trade-ink: var(--sc-channel-trade-ink);
   --color-channel-trade-subtle: var(--sc-channel-trade-subtle);
+  --color-channel-trade-link-visited: var(--sc-channel-trade-link-visited);
   --color-channel-action: var(--sc-channel-action);
   --color-channel-action-hover: var(--sc-channel-action-hover);
   --color-channel-action-pressed: var(--sc-channel-action-pressed);
@@ -86,6 +93,7 @@
   --color-channel-wash-end: var(--sc-channel-wash-end);
   --color-channel-ink: var(--sc-channel-ink);
   --color-channel-subtle: var(--sc-channel-subtle);
+  --color-channel-link-visited: var(--sc-channel-link-visited);
 
   /* Spacing: 1 unit = 1px, so p-16 is 16px, matching --sc-space-16. */
   --spacing: 1px;

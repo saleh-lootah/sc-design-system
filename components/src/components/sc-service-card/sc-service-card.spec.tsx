@@ -4,7 +4,7 @@ import { ScServiceCard } from './sc-service-card';
 const shadow = (root: HTMLElement) => root.shadowRoot!;
 
 describe('sc-service-card (spec)', () => {
-  it('renders an h3 containing the link, the entity as its description and a directional chevron', async () => {
+  it('renders an h3 containing the link, the entity as its description, and no chevron', async () => {
     const page = await newSpecPage({
       components: [ScServiceCard],
       html: `<sc-service-card href="/renew" entity="Roads and Transport Authority">Renew vehicle registration</sc-service-card>`,
@@ -16,8 +16,7 @@ describe('sc-service-card (spec)', () => {
     expect(link.getAttribute('aria-describedby')).toBe('entity');
     expect(root.querySelector('#entity')!.textContent).toBe('Roads and Transport Authority');
     expect(root.querySelector('#entity')).not.toHaveClass('is-empty');
-    expect(root.querySelector('.chevron svg')).toHaveClass('icon-directional');
-    expect(root.querySelector('.chevron')!.getAttribute('aria-hidden')).toBe('true');
+    expect(root.querySelector('.chevron, svg')).toBeNull();
   });
 
   it('makes only the title the link, not the whole card', async () => {
@@ -30,10 +29,9 @@ describe('sc-service-card (spec)', () => {
     expect(root.querySelector('[part="card"]')!.tagName).toBe('DIV');
     const link = root.querySelector('a')!;
     expect(link.closest('.title')).not.toBeNull();
-    // The entity, chip and chevron sit outside the link, so they aren't part of its name.
+    // The entity and chip sit outside the link, so they aren't part of its name.
     expect(link.contains(root.querySelector('#entity'))).toBe(false);
     expect(link.contains(root.querySelector('.chip'))).toBe(false);
-    expect(link.contains(root.querySelector('.chevron'))).toBe(false);
     expect(link.querySelectorAll('slot').length).toBe(1);
     expect(link.querySelector('slot')!.hasAttribute('name')).toBe(false);
   });

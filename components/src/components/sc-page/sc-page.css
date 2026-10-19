@@ -10,6 +10,15 @@
   display: none;
 }
 
+/*
+ * A <div slot="header"> that wraps the skip link and the app bar (as in the standard's page
+ * shell) takes no box of its own, so a sticky sc-app-bar inside it sticks to the whole page,
+ * not just to the wrapper's height.
+ */
+::slotted(div[slot='header']) {
+  display: contents;
+}
+
 /* The footer sits at the bottom of short pages. */
 .main {
   display: block;

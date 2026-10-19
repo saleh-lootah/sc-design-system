@@ -39,8 +39,12 @@ function pairs() {
     list.push(['color.on-action', c('action'), TEXT]);
     list.push(['color.on-action', c('action-pressed'), TEXT]);
     list.push(['color.on-action', c('action-hover'), TEXT]);
-    list.push([c('action'), 'color.surface', UI]);
+    // The focus ring (A11Y-05): 3px of action, separated from the control by a 2px gap painted
+    // in surface, drawn on any page background. Action against surface covers the gap side; the
+    // other backgrounds cover the outside of the ring.
+    for (const bg of ['surface', 'canvas', 'grouped']) list.push([c('action'), `color.${bg}`, UI]);
     list.push([c('ink'), c('wash-end'), TEXT]);
+    for (const bg of ['surface', 'canvas', 'grouped']) list.push([c('link-visited'), `color.${bg}`, TEXT]);
     list.push([c('action'), c('subtle'), TEXT]);
   }
   return list;

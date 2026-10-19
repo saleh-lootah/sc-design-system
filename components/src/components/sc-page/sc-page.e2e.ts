@@ -1,3 +1,4 @@
+import { E2EPage } from '@stencil/core/testing';
 import { expectNoAxeViolations } from '../../test/axe';
 import { contexts, newScPage, setPageContext } from '../../test/page';
 
@@ -79,6 +80,91 @@ describe('sc-page (e2e)', () => {
     const page = await newScPage(`<sc-page lang="ar" channel="trade" sync-document><p>Content</p></sc-page>`);
     const html = await page.evaluate(() => [document.documentElement.lang, document.documentElement.dir, document.documentElement.dataset.channel]);
     expect(html).toEqual(['ar', 'rtl', 'trade']);
+  });
+
+  describe('sticky app bar (WCAG 2.4.11)', () => {
+    /** A long page with a sticky bar and a link far below it. */
+    const STICKY = `
+      <sc-page channel="now" sync-document>
+        <sc-app-bar slot="header" sticky><span slot="title">Dubai Now</span></sc-app-bar>
+        <div style="block-size: 1500px"></div>
+        <a id="renew" href="#renew">Renew vehicle registration</a>
+        <div style="block-size: 1500px"></div>
+      </sc-page>`;
+
+    const padding = (page: E2EPage) => page.evaluate(() => getComputedStyle(document.documentElement).scrollPaddingTop);
+    const barBottom = (page: E2EPage) => page.evaluate(() => Math.ceil(document.querySelector('sc-app-bar')!.getBoundingClientRect().bottom));
+    const waitForPadding = (page: E2EPage) => page.waitForFunction(() => document.documentElement.style.scrollPaddingBlockStart !== '');
+
+    it('pads the document scroll by the bar height plus 8px', async () => {
+      const page = await newScPage(STICKY);
+      await page.setViewport({ width: 1024, height: 600 });
+      await waitForPadding(page);
+      const height = await page.evaluate(() => Math.ceil(document.querySelector('sc-app-bar')!.getBoundingClientRect().height));
+      expect(height).toBeGreaterThan(0);
+      expect(await padding(page)).toBe(`${height + 8}px`);
+    });
+
+    it('scrolls a focused element clear of the bar', async () => {
+      const page = await newScPage(STICKY);
+      await page.setViewport({ width: 1024, height: 600 });
+      await waitForPadding(page);
+      // Scroll so the link sits under the bar, then focus it: the browser scrolls it into view.
+      await page.evaluate(() => {
+        const link = document.getElementById('renew')!;
+        window.scrollTo(0, link.getBoundingClientRect().top + window.scrollY - 2);
+      });
+      const top = () => page.evaluate(() => document.getElementById('renew')!.getBoundingClientRect().top);
+      expect(await top()).toBeLessThan(await barBottom(page));
+      await page.evaluate(() => document.getElementById('renew')!.focus());
+      await page.waitForChanges();
+      expect(await top()).toBeGreaterThanOrEqual(await barBottom(page));
+    });
+
+    it('keeps a bar inside a <div slot="header"> wrapper stuck to the top', async () => {
+      const page = await newScPage(`
+        <sc-page channel="now" sync-document>
+          <div slot="header"><sc-skip-link></sc-skip-link><sc-app-bar sticky><span slot="title">Dubai Now</span></sc-app-bar></div>
+          <div style="block-size: 3000px"></div>
+        </sc-page>`);
+      await page.setViewport({ width: 1024, height: 600 });
+      await waitForPadding(page);
+      await page.evaluate(() => window.scrollTo(0, 1200));
+      await page.waitForChanges();
+      expect(await page.evaluate(() => Math.round(document.querySelector('sc-app-bar')!.getBoundingClientRect().top))).toBe(0);
+    });
+
+    it('stops padding when the bar is not sticky, and restores <html> when the page is removed', async () => {
+      const page = await newScPage(STICKY);
+      await waitForPadding(page);
+      await page.evaluate(() => document.querySelector('sc-app-bar')!.removeAttribute('sticky'));
+      await page.waitForChanges();
+      expect(await page.evaluate(() => document.documentElement.style.scrollPaddingBlockStart)).toBe('');
+      expect(await padding(page)).toBe('auto');
+      await page.evaluate(() => document.querySelector('sc-app-bar')!.setAttribute('sticky', ''));
+      await waitForPadding(page);
+
+      await page.evaluate(() => document.querySelector('sc-page')!.remove());
+      await page.waitForChanges();
+      expect(await page.evaluate(() => document.documentElement.style.scrollPaddingBlockStart)).toBe('');
+      expect(await padding(page)).toBe('auto');
+
+      // A value the service set itself comes back once the page is gone.
+      await page.evaluate((markup: string) => {
+        document.documentElement.style.scrollPaddingBlockStart = '20px';
+        document.body.insertAdjacentHTML('beforeend', markup);
+      }, STICKY);
+      await page.waitForFunction(() => document.documentElement.style.scrollPaddingBlockStart.startsWith('calc'));
+      await page.evaluate(() => document.querySelector('sc-page')!.remove());
+      await page.waitForChanges();
+      expect(await padding(page)).toBe('20px');
+    });
+
+    it('leaves <html> alone without sync-document', async () => {
+      const page = await newScPage(STICKY.replace(' sync-document', ''));
+      await page.waitForChanges();
+      expect(await page.evaluate(() => document.documentElement.style.scrollPaddingBlockStart)).toBe('');
+    });
   });
 
   it('keeps the strings in sync with the page language context', async () => {

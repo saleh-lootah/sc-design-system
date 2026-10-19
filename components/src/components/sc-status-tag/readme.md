@@ -9,7 +9,6 @@ The status of a task, application or payment, usually in a list or next to a hea
 <sc-status-tag tone="success">Paid</sc-status-tag>
 <sc-status-tag tone="warning">Expires in 15 days</sc-status-tag>
 <sc-status-tag>In review</sc-status-tag>
-<sc-status-tag tone="channel">New</sc-status-tag>
 ```
 
 ### Which tone
@@ -20,7 +19,7 @@ The status of a task, application or payment, usually in a list or next to a hea
 | `success` | Done: "Paid", "Approved", "Completed". |
 | `warning` | Needs attention soon: "Expires in 15 days". |
 | `error` | Blocked or failed: "Action needed", "Payment failed". |
-| `channel` | Highlights something in the current channel's colours: "New". Use sparingly. |
+| `channel` | Deprecated: not a status in the vocabulary below. It logs a console warning and will be removed in the next major version. |
 
 ### Status words
 
@@ -51,7 +50,7 @@ Services show only the status words in the standard's status vocabulary (chapter
 | Payment | Refund in progress | الاسترداد قيد التنفيذ | `neutral` |
 | Payment | Refunded | تم الاسترداد | `success` |
 
-"Paid" never stands for "Approved", and "Received" never stands for "Completed". The `channel` tone has no status in the vocabulary; whether it stays is an open question (see `docs/library-conformance.md`).
+"Paid" never stands for "Approved", and "Received" never stands for "Completed".
 
 ### Content
 
@@ -77,9 +76,9 @@ interactive and isn't announced on change (use `sc-callout` or a live region for
 
 ## Properties
 
-| Property | Attribute | Description                                                                                                                                                                                                                                                                                                                              | Type                                                          | Default     |
-| -------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- | ----------- |
-| `tone`   | `tone`    | - `neutral`: no action needed yet, or a plain state ("Draft", "In review"). - `success`: done ("Paid", "Approved", "Completed"). - `warning`: needs attention soon ("Expires in 15 days"). - `error`: blocked or failed ("Action needed", "Payment failed"). - `channel`: highlights something in the current channel's colours ("New"). | `"channel" \| "error" \| "neutral" \| "success" \| "warning"` | `'neutral'` |
+| Property | Attribute | Description                                                                                                                                                                                                                                                                                                                                                                                                                                          | Type                                                          | Default     |
+| -------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- | ----------- |
+| `tone`   | `tone`    | - `neutral`: no action needed yet, or a plain state ("Draft", "In review"). - `success`: done ("Paid", "Approved", "Completed"). - `warning`: needs attention soon ("Expires in 15 days"). - `error`: blocked or failed ("Action needed", "Payment failed"). - `channel` (deprecated): highlights something in the current channel's colours. It is not   a status in the standard's vocabulary (9.6) and will be removed in the next major version. | `"channel" \| "error" \| "neutral" \| "success" \| "warning"` | `'neutral'` |
 
 
 ## Slots

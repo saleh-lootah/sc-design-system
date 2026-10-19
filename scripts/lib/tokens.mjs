@@ -8,7 +8,7 @@ export const TOKENS_DIR = join(ROOT, 'tokens');
 export const DIST_DIR = join(ROOT, 'dist');
 
 export const CHANNELS = ['now', 'transport', 'visit', 'justice', 'build', 'invest', 'trade'];
-export const CHANNEL_ROLES = ['action', 'action-hover', 'action-pressed', 'wash-start', 'wash-end', 'ink', 'subtle'];
+export const CHANNEL_ROLES = ['action', 'action-hover', 'action-pressed', 'wash-start', 'wash-end', 'ink', 'subtle', 'link-visited'];
 
 function readJson(name) {
   return JSON.parse(readFileSync(join(TOKENS_DIR, name), 'utf8'));

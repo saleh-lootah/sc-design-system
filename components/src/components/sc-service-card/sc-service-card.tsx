@@ -1,11 +1,10 @@
 import { Component, Element, Host, Prop, State, h } from '@stencil/core';
-import { ChevronForward } from '../../icons/index'; // explicit /index: Stencil only scans file imports for <svg>
 
 export type ServiceCardHeadingLevel = 2 | 3 | 4 | 5 | 6;
 
 /**
- * A link to a service: its title, the entity that owns it, an optional channel chip and an
- * end chevron.
+ * A link to a service: its title, the entity that owns it and an optional channel chip.
+ * There is no end chevron: the card is not itself a link, so nothing on it may look like one.
  *
  * Only the title is the link (CMP-06), so screen readers hear a short link name ("Renew
  * vehicle registration"), not the whole card's text. The card is not wrapped in an `<a>`
@@ -22,7 +21,6 @@ export type ServiceCardHeadingLevel = 2 | 3 | 4 | 5 | 6;
  * @part link - The `<a>` inside the heading.
  * @part title - The heading.
  * @part entity - The entity line.
- * @part chevron - The end chevron and its circle.
  */
 @Component({
   tag: 'sc-service-card',
@@ -80,9 +78,6 @@ export class ScServiceCard {
               <slot name="chip" onSlotchange={this.onChipSlotChange} />
             </div>
           </div>
-          <span class="chevron" part="chevron" aria-hidden="true">
-            <ChevronForward />
-          </span>
         </div>
       </Host>
     );

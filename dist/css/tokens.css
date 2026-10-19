@@ -36,6 +36,7 @@
   --sc-channel-now-wash-end: oklab(0.896 -0.003 -0.044);
   --sc-channel-now-ink: oklab(0.307 0.0004 -0.094);
   --sc-channel-now-subtle: oklab(0.947 -0.004 -0.025);
+  --sc-channel-now-link-visited: oklab(0.307 0.0004 -0.094);
   --sc-channel-transport-action: oklab(0.501 0.111 0.1);
   --sc-channel-transport-action-hover: oklab(0.471 0.1047 0.0943);
   --sc-channel-transport-action-pressed: oklab(0.441 0.0984 0.0886);
@@ -43,6 +44,7 @@
   --sc-channel-transport-wash-end: oklab(0.888 0.043 0.049);
   --sc-channel-transport-ink: oklab(0.379 0.068 0.068);
   --sc-channel-transport-subtle: oklab(0.948 0.017 0.027);
+  --sc-channel-transport-link-visited: oklab(0.379 0.068 0.068);
   --sc-channel-visit-action: oklab(0.501 0.176 0.026);
   --sc-channel-visit-action-hover: oklab(0.471 0.1707 0.0252);
   --sc-channel-visit-action-pressed: oklab(0.441 0.1654 0.0244);
@@ -50,6 +52,7 @@
   --sc-channel-visit-wash-end: oklab(0.876 0.042 0.021);
   --sc-channel-visit-ink: oklab(0.339 0.089 0.024);
   --sc-channel-visit-subtle: oklab(0.941 0.021 0.009);
+  --sc-channel-visit-link-visited: oklab(0.339 0.089 0.024);
   --sc-channel-justice-action: oklab(0.495 0.068 -0.187);
   --sc-channel-justice-action-hover: oklab(0.465 0.066 -0.1814);
   --sc-channel-justice-action-pressed: oklab(0.435 0.0639 -0.1758);
@@ -57,6 +60,7 @@
   --sc-channel-justice-wash-end: oklab(0.876 0.027 -0.043);
   --sc-channel-justice-ink: oklab(0.339 0.041 -0.092);
   --sc-channel-justice-subtle: oklab(0.94 0.015 -0.022);
+  --sc-channel-justice-link-visited: oklab(0.339 0.041 -0.092);
   --sc-channel-build-action: oklab(0.494 0.043 0.1);
   --sc-channel-build-action-hover: oklab(0.464 0.0401 0.0933);
   --sc-channel-build-action-pressed: oklab(0.434 0.0373 0.0867);
@@ -64,6 +68,7 @@
   --sc-channel-build-wash-end: oklab(0.913 0.017 0.056);
   --sc-channel-build-ink: oklab(0.378 0.026 0.065);
   --sc-channel-build-subtle: oklab(0.962 0.008 0.03);
+  --sc-channel-build-link-visited: oklab(0.378 0.026 0.065);
   --sc-channel-invest-action: oklab(0.513 -0.101 0.054);
   --sc-channel-invest-action-hover: oklab(0.483 -0.098 0.0524);
   --sc-channel-invest-action-pressed: oklab(0.453 -0.0949 0.0508);
@@ -71,6 +76,7 @@
   --sc-channel-invest-wash-end: oklab(0.897 -0.04 0.021);
   --sc-channel-invest-ink: oklab(0.368 -0.058 0.031);
   --sc-channel-invest-subtle: oklab(0.952 -0.023 0.012);
+  --sc-channel-invest-link-visited: oklab(0.368 -0.058 0.031);
   --sc-channel-trade-action: oklab(0.44 -0.018 -0.046);
   --sc-channel-trade-action-hover: oklab(0.41 -0.0175 -0.0446);
   --sc-channel-trade-action-pressed: oklab(0.38 -0.0169 -0.0432);
@@ -78,6 +84,7 @@
   --sc-channel-trade-wash-end: oklab(0.905 -0.007 -0.021);
   --sc-channel-trade-ink: oklab(0.321 -0.012 -0.044);
   --sc-channel-trade-subtle: oklab(0.955 -0.005 -0.011);
+  --sc-channel-trade-link-visited: oklab(0.321 -0.012 -0.044);
 
   /* Active channel (default: now). Set data-channel on any element to switch. */
   --sc-channel-action: var(--sc-channel-now-action);
@@ -87,6 +94,7 @@
   --sc-channel-wash-end: var(--sc-channel-now-wash-end);
   --sc-channel-ink: var(--sc-channel-now-ink);
   --sc-channel-subtle: var(--sc-channel-now-subtle);
+  --sc-channel-link-visited: var(--sc-channel-now-link-visited);
 
   /* Font */
   --sc-font-family-light: "Dubai W23 Light", "Dubai", system-ui, sans-serif;
@@ -292,6 +300,7 @@
   --sc-channel-wash-end: var(--sc-channel-now-wash-end);
   --sc-channel-ink: var(--sc-channel-now-ink);
   --sc-channel-subtle: var(--sc-channel-now-subtle);
+  --sc-channel-link-visited: var(--sc-channel-now-link-visited);
 }
 [data-channel="transport"] {
   --sc-channel-action: var(--sc-channel-transport-action);
@@ -301,6 +310,7 @@
   --sc-channel-wash-end: var(--sc-channel-transport-wash-end);
   --sc-channel-ink: var(--sc-channel-transport-ink);
   --sc-channel-subtle: var(--sc-channel-transport-subtle);
+  --sc-channel-link-visited: var(--sc-channel-transport-link-visited);
 }
 [data-channel="visit"] {
   --sc-channel-action: var(--sc-channel-visit-action);
@@ -310,6 +320,7 @@
   --sc-channel-wash-end: var(--sc-channel-visit-wash-end);
   --sc-channel-ink: var(--sc-channel-visit-ink);
   --sc-channel-subtle: var(--sc-channel-visit-subtle);
+  --sc-channel-link-visited: var(--sc-channel-visit-link-visited);
 }
 [data-channel="justice"] {
   --sc-channel-action: var(--sc-channel-justice-action);
@@ -319,6 +330,7 @@
   --sc-channel-wash-end: var(--sc-channel-justice-wash-end);
   --sc-channel-ink: var(--sc-channel-justice-ink);
   --sc-channel-subtle: var(--sc-channel-justice-subtle);
+  --sc-channel-link-visited: var(--sc-channel-justice-link-visited);
 }
 [data-channel="build"] {
   --sc-channel-action: var(--sc-channel-build-action);
@@ -328,6 +340,7 @@
   --sc-channel-wash-end: var(--sc-channel-build-wash-end);
   --sc-channel-ink: var(--sc-channel-build-ink);
   --sc-channel-subtle: var(--sc-channel-build-subtle);
+  --sc-channel-link-visited: var(--sc-channel-build-link-visited);
 }
 [data-channel="invest"] {
   --sc-channel-action: var(--sc-channel-invest-action);
@@ -337,6 +350,7 @@
   --sc-channel-wash-end: var(--sc-channel-invest-wash-end);
   --sc-channel-ink: var(--sc-channel-invest-ink);
   --sc-channel-subtle: var(--sc-channel-invest-subtle);
+  --sc-channel-link-visited: var(--sc-channel-invest-link-visited);
 }
 [data-channel="trade"] {
   --sc-channel-action: var(--sc-channel-trade-action);
@@ -346,6 +360,7 @@
   --sc-channel-wash-end: var(--sc-channel-trade-wash-end);
   --sc-channel-ink: var(--sc-channel-trade-ink);
   --sc-channel-subtle: var(--sc-channel-trade-subtle);
+  --sc-channel-link-visited: var(--sc-channel-trade-link-visited);
 }
 
 /* Dark mode: follows the system unless data-theme="light" is set */
@@ -382,6 +397,7 @@
     --sc-channel-now-wash-end: oklab(0.355 -0.0022 -0.0449);
     --sc-channel-now-ink: oklab(0.93 -0.0015 -0.03);
     --sc-channel-now-subtle: oklab(0.3 -0.0017 -0.035);
+    --sc-channel-now-link-visited: oklab(0.93 -0.0015 -0.03);
     --sc-channel-transport-action: oklab(0.83 0.068 0.079);
     --sc-channel-transport-action-hover: oklab(0.78 0.0774 0.0698);
     --sc-channel-transport-action-pressed: oklab(0.75 0.0774 0.0698);
@@ -389,6 +405,7 @@
     --sc-channel-transport-wash-end: oklab(0.355 0.0334 0.0301);
     --sc-channel-transport-ink: oklab(0.93 0.0223 0.0201);
     --sc-channel-transport-subtle: oklab(0.3 0.026 0.0234);
+    --sc-channel-transport-link-visited: oklab(0.93 0.0223 0.0201);
     --sc-channel-visit-action: oklab(0.81 0.088 0.013);
     --sc-channel-visit-action-hover: oklab(0.78 0.088 0.013);
     --sc-channel-visit-action-pressed: oklab(0.75 0.088 0.013);
@@ -396,6 +413,7 @@
     --sc-channel-visit-wash-end: oklab(0.355 0.0445 0.0066);
     --sc-channel-visit-ink: oklab(0.93 0.0297 0.0044);
     --sc-channel-visit-subtle: oklab(0.3 0.0346 0.0051);
+    --sc-channel-visit-link-visited: oklab(0.93 0.0297 0.0044);
     --sc-channel-justice-action: oklab(0.81 0.034 -0.0935);
     --sc-channel-justice-action-hover: oklab(0.78 0.034 -0.0935);
     --sc-channel-justice-action-pressed: oklab(0.75 0.034 -0.0935);
@@ -403,6 +421,7 @@
     --sc-channel-justice-wash-end: oklab(0.355 0.0154 -0.0423);
     --sc-channel-justice-ink: oklab(0.93 0.0103 -0.0282);
     --sc-channel-justice-subtle: oklab(0.3 0.012 -0.0329);
+    --sc-channel-justice-link-visited: oklab(0.93 0.0103 -0.0282);
     --sc-channel-build-action: oklab(0.81 0.0215 0.05);
     --sc-channel-build-action-hover: oklab(0.78 0.0215 0.05);
     --sc-channel-build-action-pressed: oklab(0.75 0.0215 0.05);
@@ -410,6 +429,7 @@
     --sc-channel-build-wash-end: oklab(0.355 0.0178 0.0413);
     --sc-channel-build-ink: oklab(0.93 0.0119 0.0276);
     --sc-channel-build-subtle: oklab(0.3 0.0138 0.0322);
+    --sc-channel-build-link-visited: oklab(0.93 0.0119 0.0276);
     --sc-channel-invest-action: oklab(0.81 -0.0505 0.027);
     --sc-channel-invest-action-hover: oklab(0.78 -0.0505 0.027);
     --sc-channel-invest-action-pressed: oklab(0.75 -0.0505 0.027);
@@ -417,6 +437,7 @@
     --sc-channel-invest-wash-end: oklab(0.355 -0.0397 0.0212);
     --sc-channel-invest-ink: oklab(0.93 -0.0265 0.0141);
     --sc-channel-invest-subtle: oklab(0.3 -0.0309 0.0165);
+    --sc-channel-invest-link-visited: oklab(0.93 -0.0265 0.0141);
     --sc-channel-trade-action: oklab(0.779 -0.015 -0.043);
     --sc-channel-trade-action-hover: oklab(0.78 -0.0166 -0.0424);
     --sc-channel-trade-action-pressed: oklab(0.75 -0.0166 -0.0424);
@@ -424,6 +445,7 @@
     --sc-channel-trade-wash-end: oklab(0.355 -0.0164 -0.0419);
     --sc-channel-trade-ink: oklab(0.93 -0.0109 -0.0279);
     --sc-channel-trade-subtle: oklab(0.3 -0.0128 -0.0326);
+    --sc-channel-trade-link-visited: oklab(0.93 -0.0109 -0.0279);
   }
 }
 
@@ -460,6 +482,7 @@
   --sc-channel-now-wash-end: oklab(0.355 -0.0022 -0.0449);
   --sc-channel-now-ink: oklab(0.93 -0.0015 -0.03);
   --sc-channel-now-subtle: oklab(0.3 -0.0017 -0.035);
+  --sc-channel-now-link-visited: oklab(0.93 -0.0015 -0.03);
   --sc-channel-transport-action: oklab(0.83 0.068 0.079);
   --sc-channel-transport-action-hover: oklab(0.78 0.0774 0.0698);
   --sc-channel-transport-action-pressed: oklab(0.75 0.0774 0.0698);
@@ -467,6 +490,7 @@
   --sc-channel-transport-wash-end: oklab(0.355 0.0334 0.0301);
   --sc-channel-transport-ink: oklab(0.93 0.0223 0.0201);
   --sc-channel-transport-subtle: oklab(0.3 0.026 0.0234);
+  --sc-channel-transport-link-visited: oklab(0.93 0.0223 0.0201);
   --sc-channel-visit-action: oklab(0.81 0.088 0.013);
   --sc-channel-visit-action-hover: oklab(0.78 0.088 0.013);
   --sc-channel-visit-action-pressed: oklab(0.75 0.088 0.013);
@@ -474,6 +498,7 @@
   --sc-channel-visit-wash-end: oklab(0.355 0.0445 0.0066);
   --sc-channel-visit-ink: oklab(0.93 0.0297 0.0044);
   --sc-channel-visit-subtle: oklab(0.3 0.0346 0.0051);
+  --sc-channel-visit-link-visited: oklab(0.93 0.0297 0.0044);
   --sc-channel-justice-action: oklab(0.81 0.034 -0.0935);
   --sc-channel-justice-action-hover: oklab(0.78 0.034 -0.0935);
   --sc-channel-justice-action-pressed: oklab(0.75 0.034 -0.0935);
@@ -481,6 +506,7 @@
   --sc-channel-justice-wash-end: oklab(0.355 0.0154 -0.0423);
   --sc-channel-justice-ink: oklab(0.93 0.0103 -0.0282);
   --sc-channel-justice-subtle: oklab(0.3 0.012 -0.0329);
+  --sc-channel-justice-link-visited: oklab(0.93 0.0103 -0.0282);
   --sc-channel-build-action: oklab(0.81 0.0215 0.05);
   --sc-channel-build-action-hover: oklab(0.78 0.0215 0.05);
   --sc-channel-build-action-pressed: oklab(0.75 0.0215 0.05);
@@ -488,6 +514,7 @@
   --sc-channel-build-wash-end: oklab(0.355 0.0178 0.0413);
   --sc-channel-build-ink: oklab(0.93 0.0119 0.0276);
   --sc-channel-build-subtle: oklab(0.3 0.0138 0.0322);
+  --sc-channel-build-link-visited: oklab(0.93 0.0119 0.0276);
   --sc-channel-invest-action: oklab(0.81 -0.0505 0.027);
   --sc-channel-invest-action-hover: oklab(0.78 -0.0505 0.027);
   --sc-channel-invest-action-pressed: oklab(0.75 -0.0505 0.027);
@@ -495,6 +522,7 @@
   --sc-channel-invest-wash-end: oklab(0.355 -0.0397 0.0212);
   --sc-channel-invest-ink: oklab(0.93 -0.0265 0.0141);
   --sc-channel-invest-subtle: oklab(0.3 -0.0309 0.0165);
+  --sc-channel-invest-link-visited: oklab(0.93 -0.0265 0.0141);
   --sc-channel-trade-action: oklab(0.779 -0.015 -0.043);
   --sc-channel-trade-action-hover: oklab(0.78 -0.0166 -0.0424);
   --sc-channel-trade-action-pressed: oklab(0.75 -0.0166 -0.0424);
@@ -502,6 +530,7 @@
   --sc-channel-trade-wash-end: oklab(0.355 -0.0164 -0.0419);
   --sc-channel-trade-ink: oklab(0.93 -0.0109 -0.0279);
   --sc-channel-trade-subtle: oklab(0.3 -0.0128 -0.0326);
+  --sc-channel-trade-link-visited: oklab(0.93 -0.0109 -0.0279);
 }
 
 /* Reduced motion: every duration resolves to instant */

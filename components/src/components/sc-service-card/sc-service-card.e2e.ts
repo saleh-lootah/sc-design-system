@@ -153,21 +153,6 @@ describe('sc-service-card (e2e)', () => {
     for (const rule of hoverRules) expect(rule.media?.replace(/\s+/g, ' ')).toBe('(hover: hover) and (pointer: fine)');
   });
 
-  it('mirrors the chevron in Arabic and puts it at the left', async () => {
-    const page = await newScPage(GRID, { lang: 'ar' });
-    const result = await page.evaluate(() => {
-      const root = document.querySelector('#renew')!.shadowRoot!;
-      const svg = root.querySelector('.chevron svg')!;
-      return {
-        transform: getComputedStyle(svg).transform,
-        chevronX: root.querySelector('.chevron')!.getBoundingClientRect().x,
-        titleX: root.querySelector('.title')!.getBoundingClientRect().x,
-      };
-    });
-    expect(result.transform).toBe('matrix(-1, 0, 0, 1, 0, 0)');
-    expect(result.chevronX).toBeLessThan(result.titleX);
-  });
-
   it('keeps the card edge and link colour in forced colours', async () => {
     const page = await newScPage(GRID);
     // Puppeteer's emulateMediaFeatures doesn't list forced-colors; Chromium's CDP does.
