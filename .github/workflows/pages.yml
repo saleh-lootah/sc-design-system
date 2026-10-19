@@ -1,0 +1,68 @@
+# Builds the tokens and the Stencil component playground, then publishes the
+# playground to GitHub Pages: https://saleh-lootah.github.io/sc-design-system/
+name: Publish component library
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time; a newer push replaces a queued one.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      # e2e tests are not run here, so Puppeteer doesn't need a browser.
+      PUPPETEER_SKIP_DOWNLOAD: 'true'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: components/package-lock.json
+
+      - name: Build tokens and run token checks
+        run: npm run build
+
+      - name: Install component dependencies
+        working-directory: components
+        run: npm ci
+
+      - name: Check component sources
+        working-directory: components
+        run: npm run check:literals
+
+      - name: Build components and playground
+        working-directory: components
+        run: npm run build
+
+      - name: Run unit tests
+        working-directory: components
+        run: npx stencil test --spec
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: components/www
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
