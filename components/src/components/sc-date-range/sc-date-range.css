@@ -331,23 +331,7 @@
   cursor: default;
 }
 
-/* Month change by pointer: crossfade with a shift in the direction of travel. */
-.months--slide-next .month {
-  --_from: var(--_shift);
-  animation: sc-date-range-month var(--sc-duration-base) var(--sc-easing-standard);
-}
-
-.months--slide-prev .month {
-  --_from: calc(-1 * var(--_shift));
-  animation: sc-date-range-month var(--sc-duration-base) var(--sc-easing-standard);
-}
-
-@keyframes sc-date-range-month {
-  from {
-    opacity: 0;
-    transform: translateX(var(--_from));
-  }
-}
+/* Month change by pointer: a WAAPI crossfade with a --_shift slide (see slideMonths()). */
 
 /* Presets and footer -------------------------------------------------------------------------- */
 
@@ -506,7 +490,7 @@
 
 .picker--sheet[open] {
   display: flex;
-  transform: translateY(var(--_drag, 0px));
+  transform: translateY(0);
   transition:
     transform var(--sc-duration-slow) var(--sc-easing-drawer),
     display var(--sc-duration-slow) allow-discrete,

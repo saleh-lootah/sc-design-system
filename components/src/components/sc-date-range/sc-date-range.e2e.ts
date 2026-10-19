@@ -120,8 +120,8 @@ describe('sc-date-range (e2e)', () => {
     await page.keyboard.up('Shift');
     await page.waitForChanges();
     expect(await focused(page)).toBe('2027-09-21');
-    // Keyboard month changes are instant: no slide animation class.
-    expect(await inner(page, `!!root.querySelector('[class*="months--slide"]')`)).toBe(false);
+    // Keyboard month changes are instant: nothing animates.
+    expect(await inner(page, `root.querySelector('.months').getAnimations().length`)).toBe(0);
     // Moving past the last visible month brings it in as the last month.
     expect(await inner(page, `[...root.querySelectorAll('.month-title')].map((h) => h.textContent)`)).toEqual(['August 2027', 'September 2027']);
   });
@@ -229,10 +229,24 @@ describe('sc-date-range (e2e)', () => {
     expect(await pending()).toEqual(['2026-10-13', '2026-10-19']);
     expect(await inner(page, `root.querySelectorAll('.preset')[1].getAttribute('aria-pressed')`)).toBe('true');
     expect(await inner(page, `root.querySelector('.picker--popover').matches(':popover-open')`)).toBe(true);
-    // Pointer month change crossfades with a shift in the direction of travel.
+    expect(await inner(page, `[...root.querySelectorAll('.month-title')].map((h) => h.textContent)`)).toEqual(['September 2026', 'October 2026']);
+    // Pointer month change crossfades with a shift in the direction of travel (WAAPI, so a
+    // second click retargets the running animation instead of stacking or restarting it).
+    await page.evaluate(() => {
+      const w = window as unknown as { slides: string[] };
+      w.slides = [];
+      const animate = Element.prototype.animate;
+      Element.prototype.animate = function (this: Element, frames: Keyframe[], options?: number | KeyframeAnimationOptions) {
+        if (this.classList.contains('months')) w.slides.push(String(frames[0].transform));
+        return animate.call(this, frames, options);
+      };
+    });
     await inner(page, `root.querySelector('.nav--prev').click()`);
     await page.waitForChanges();
-    expect(await inner(page, `!!root.querySelector('.months--slide-prev')`)).toBe(true);
+    await inner(page, `root.querySelector('.nav--next').click()`);
+    await page.waitForChanges();
+    expect(await page.evaluate(() => (window as unknown as { slides: string[] }).slides)).toEqual(['translateX(-12px)', 'translateX(12px)']);
+    expect(await inner(page, `root.querySelector('.months').getAnimations().length`)).toBeLessThanOrEqual(1);
     // A click outside closes it without changing the field.
     await page.mouse.click(5, 5);
     await page.waitForChanges();

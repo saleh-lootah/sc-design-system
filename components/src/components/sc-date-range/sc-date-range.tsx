@@ -174,8 +174,6 @@ export class ScDateRange {
   @State() focusDate = '';
   @State() view: YearMonth = { year: 2026, month: 0 };
   @State() hover = '';
-  @State() slide: '' | 'next' | 'prev' = '';
-  @State() slideKey = 0;
   @State() announcement = '';
   /** The component's own error, shown after blur, Apply or a failed submit. */
   @State() shown?: Problem;
@@ -192,7 +190,9 @@ export class ScDateRange {
   /** True while the component sets start/end itself, so the watcher keeps the typed text. */
   private internal = false;
   private locale = new LocaleController(this);
-  private drag?: { y: number; t: number; dy: number; v: number };
+  private drag?: { id: number; y: number; t: number; dy: number };
+  /** A pointer month change waiting for its render, so the new months can slide in. */
+  private pendingSlide: 0 | 1 | -1 = 0;
 
   connectedCallback() {
     this.locale.connect();
@@ -222,6 +222,10 @@ export class ScDateRange {
     if (this.pendingShow) {
       this.pendingShow = false;
       this.show();
+    }
+    if (this.pendingSlide) {
+      this.slideMonths(this.pendingSlide);
+      this.pendingSlide = 0;
     }
     if (this.shouldFocusDay) {
       this.shouldFocusDay = false;
@@ -447,7 +451,6 @@ export class ScDateRange {
     this.pending = { start: s, end: e && s && e >= s ? e : '' };
     this.target = undefined;
     this.hover = '';
-    this.slide = '';
     this.announcement = '';
     this.focusDate = this.pending.start || this.clamp(this.todayValue);
     this.view = ymOf(this.focusDate);
@@ -554,8 +557,7 @@ export class ScDateRange {
   private go(by: -1 | 1) {
     if (!this.canGo(by)) return;
     this.view = shiftMonth(this.view, by);
-    this.slide = by > 0 ? 'next' : 'prev';
-    this.slideKey++;
+    this.pendingSlide = by;
     // Keep the roving focus target inside the visible months.
     const months = this.visibleMonths();
     const first = firstOfMonth(months[0]);
@@ -563,11 +565,36 @@ export class ScDateRange {
     if (!this.focusDate || this.focusDate < first || this.focusDate > last) this.focusDate = this.clamp(addMonths(this.focusDate || first, by));
   }
 
+  /**
+   * Month change by pointer: the months crossfade in with a 12px shift in the direction of
+   * travel (mirrored in RTL). WAAPI rather than @keyframes, so clicking Next several times
+   * retargets from the current frame instead of restarting from zero. Under reduced motion
+   * the duration token is 0ms, so nothing moves. Keyboard month changes never call this.
+   */
+  private slideMonths(by: 1 | -1) {
+    const months = this.pickerEl?.querySelector<HTMLElement>('.months');
+    if (!months?.animate) return;
+    const styles = getComputedStyle(months);
+    const duration = parseFloat(styles.getPropertyValue('--sc-duration-base')) || 0;
+    if (!duration) return;
+    const shift = parseFloat(styles.getPropertyValue('--_shift')) || 0;
+    // Start from wherever a running slide has got to.
+    const running = months.getAnimations();
+    const from = running.length ? Number(styles.opacity) : 0;
+    running.forEach((a) => a.cancel());
+    months.animate(
+      [
+        { opacity: from, transform: `translateX(${by * shift}px)` },
+        { opacity: 1, transform: 'none' },
+      ],
+      { duration, easing: styles.getPropertyValue('--sc-easing-standard').trim() || 'ease-out' },
+    );
+  }
+
   /** Moves the keyboard focus to a day, scrolling the months instantly (keyboard actions are never animated). */
   private moveFocus(iso: string) {
     const previous = this.focusDate;
     this.focusDate = iso;
-    this.slide = '';
     if (this.mode === 'popover') {
       const m = ymOf(iso);
       const months = this.visibleMonths();
@@ -726,11 +753,9 @@ export class ScDateRange {
     const months = this.visibleMonths();
     const endMonth = ymOf(preset.end);
     if (this.mode === 'popover') {
-      // Show the end of the range in the last visible month.
-      const first = shiftMonth(endMonth, -(months.length - 1));
-      const startMonth = ymOf(preset.start);
-      this.view = compareMonth(startMonth, first) > 0 ? startMonth : first;
-      this.slide = '';
+      // Show the end of the range in the last visible month (with max = today, the month
+      // after it would be all unavailable days).
+      this.view = shiftMonth(endMonth, -(months.length - 1));
     }
     this.announce();
   }
@@ -738,27 +763,33 @@ export class ScDateRange {
   // Sheet drag -------------------------------------------------------------------------------
 
   private onDragStart = (ev: PointerEvent) => {
-    if (ev.button !== 0) return;
-    this.drag = { y: ev.clientY, t: ev.timeStamp, dy: 0, v: 0 };
+    // One pointer at a time: a second finger mid-drag would make the sheet jump.
+    if (ev.button !== 0 || this.drag) return;
+    this.drag = { id: ev.pointerId, y: ev.clientY, t: ev.timeStamp, dy: 0 };
+    // The grab area holds no buttons, so capturing the pointer can't swallow a tap.
+    (ev.currentTarget as HTMLElement).setPointerCapture?.(ev.pointerId);
     this.sheet?.classList.add('picker--dragging');
   };
 
   private onDragMove = (ev: PointerEvent) => {
-    if (!this.drag || !this.sheet) return;
-    const dy = Math.max(0, ev.clientY - this.drag.y);
-    const dt = Math.max(1, ev.timeStamp - this.drag.t);
-    this.drag = { y: this.drag.y, t: ev.timeStamp, dy, v: (dy - this.drag.dy) / dt };
-    this.sheet.style.setProperty('--_drag', `${dy}px`);
+    if (!this.drag || ev.pointerId !== this.drag.id || !this.sheet) return;
+    const raw = ev.clientY - this.drag.y;
+    // Down follows the finger; up meets rising resistance instead of a hard stop.
+    const dy = raw >= 0 ? raw : -Math.min(24, Math.sqrt(-raw) * 2);
+    this.drag = { ...this.drag, dy };
+    // Set the transform on the sheet itself: a custom property would restyle every descendant.
+    this.sheet.style.transform = `translateY(${dy}px)`;
   };
 
-  /** A downward flick faster than 0.11 px/ms (or a drag past a third of the sheet) dismisses it; otherwise it settles back. */
-  private onDragEnd = () => {
-    if (!this.drag || !this.sheet) return;
-    const { dy, v } = this.drag;
+  /** A downward flick faster than 0.11 px/ms dismisses the sheet (no distance needed), as does a drag past a third of it; otherwise it settles back. */
+  private onDragEnd = (ev: PointerEvent) => {
+    if (!this.drag || ev.pointerId !== this.drag.id || !this.sheet) return;
+    const { dy, t } = this.drag;
+    const velocity = dy / Math.max(1, ev.timeStamp - t);
     this.drag = undefined;
     this.sheet.classList.remove('picker--dragging');
-    this.sheet.style.removeProperty('--_drag');
-    if (v > 0.11 || dy > this.sheet.offsetHeight / 3) this.closePicker(true);
+    this.sheet.style.removeProperty('transform');
+    if (velocity > 0.11 || dy > this.sheet.offsetHeight / 3) this.closePicker(true);
   };
 
   // Rendering --------------------------------------------------------------------------------
@@ -956,7 +987,7 @@ export class ScDateRange {
       ),
       <div class="picker-body">
         {!sheet && presetButtons}
-        <div class={{ 'months': true, [`months--slide-${this.slide}`]: !!this.slide }} key={`months-${this.slideKey}`}>
+        <div class="months">
           {months.map((m, i) => this.renderMonth(m, i, months.length))}
         </div>
       </div>,
