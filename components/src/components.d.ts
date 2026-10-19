@@ -401,8 +401,10 @@ export namespace Components {
      * submitted. Each item links to its field; following a link moves focus to the field.
      * Give it items either as links in the default slot (`<a href="#plate-number">…</a>`,
      * optionally inside a `<ul>`) or through the `errors` property. When it first has items
-     * it moves focus to itself (`tabindex="-1"`, `role="alert"`), so keyboard and screen
-     * reader users hear the problem straight away.
+     * it moves focus to itself (`tabindex="-1"`), so keyboard and screen reader users hear
+     * the heading and errors straight away. It has no `role="alert"`: moving focus already
+     * announces it, and a live region on top can make screen readers read it twice (GOV.UK
+     * practice). The focused box is a `role="group"` named by its heading.
      */
     interface ScErrorSummary {
         /**
@@ -753,10 +755,14 @@ export namespace Components {
     }
     /**
      * A link to a service: its title, the entity that owns it, an optional channel chip and an
-     * end chevron. The whole card is one link target.
-     * The title is a heading containing the link, so heading navigation finds every service;
-     * the link's hit area is stretched over the card. The owning entity is the link's
-     * description. A chip that is itself a link stays clickable on its own.
+     * end chevron.
+     * Only the title is the link, so screen readers hear a short link name ("Renew vehicle
+     * registration"), not the whole card's text. The card is not wrapped in an `<a>`: the
+     * title link's hit area is stretched over the card with a pseudo-element (`::after`,
+     * `inset: 0`), so the whole card is still clickable and the focus ring wraps the card.
+     * The title is a heading containing the link, so heading navigation finds every service.
+     * The owning entity is the link's description. A chip that is itself a link stays
+     * clickable on its own.
      */
     interface ScServiceCard {
         /**
@@ -1288,8 +1294,10 @@ declare global {
      * submitted. Each item links to its field; following a link moves focus to the field.
      * Give it items either as links in the default slot (`<a href="#plate-number">…</a>`,
      * optionally inside a `<ul>`) or through the `errors` property. When it first has items
-     * it moves focus to itself (`tabindex="-1"`, `role="alert"`), so keyboard and screen
-     * reader users hear the problem straight away.
+     * it moves focus to itself (`tabindex="-1"`), so keyboard and screen reader users hear
+     * the heading and errors straight away. It has no `role="alert"`: moving focus already
+     * announces it, and a live region on top can make screen readers read it twice (GOV.UK
+     * practice). The focused box is a `role="group"` named by its heading.
      */
     interface HTMLScErrorSummaryElement extends Components.ScErrorSummary, HTMLStencilElement {
     }
@@ -1489,10 +1497,14 @@ declare global {
     };
     /**
      * A link to a service: its title, the entity that owns it, an optional channel chip and an
-     * end chevron. The whole card is one link target.
-     * The title is a heading containing the link, so heading navigation finds every service;
-     * the link's hit area is stretched over the card. The owning entity is the link's
-     * description. A chip that is itself a link stays clickable on its own.
+     * end chevron.
+     * Only the title is the link, so screen readers hear a short link name ("Renew vehicle
+     * registration"), not the whole card's text. The card is not wrapped in an `<a>`: the
+     * title link's hit area is stretched over the card with a pseudo-element (`::after`,
+     * `inset: 0`), so the whole card is still clickable and the focus ring wraps the card.
+     * The title is a heading containing the link, so heading navigation finds every service.
+     * The owning entity is the link's description. A chip that is itself a link stays
+     * clickable on its own.
      */
     interface HTMLScServiceCardElement extends Components.ScServiceCard, HTMLStencilElement {
     }
@@ -2071,8 +2083,10 @@ declare namespace LocalJSX {
      * submitted. Each item links to its field; following a link moves focus to the field.
      * Give it items either as links in the default slot (`<a href="#plate-number">…</a>`,
      * optionally inside a `<ul>`) or through the `errors` property. When it first has items
-     * it moves focus to itself (`tabindex="-1"`, `role="alert"`), so keyboard and screen
-     * reader users hear the problem straight away.
+     * it moves focus to itself (`tabindex="-1"`), so keyboard and screen reader users hear
+     * the heading and errors straight away. It has no `role="alert"`: moving focus already
+     * announces it, and a live region on top can make screen readers read it twice (GOV.UK
+     * practice). The focused box is a `role="group"` named by its heading.
      */
     interface ScErrorSummary {
         /**
@@ -2439,10 +2453,14 @@ declare namespace LocalJSX {
     }
     /**
      * A link to a service: its title, the entity that owns it, an optional channel chip and an
-     * end chevron. The whole card is one link target.
-     * The title is a heading containing the link, so heading navigation finds every service;
-     * the link's hit area is stretched over the card. The owning entity is the link's
-     * description. A chip that is itself a link stays clickable on its own.
+     * end chevron.
+     * Only the title is the link, so screen readers hear a short link name ("Renew vehicle
+     * registration"), not the whole card's text. The card is not wrapped in an `<a>`: the
+     * title link's hit area is stretched over the card with a pseudo-element (`::after`,
+     * `inset: 0`), so the whole card is still clickable and the focus ring wraps the card.
+     * The title is a heading containing the link, so heading navigation finds every service.
+     * The owning entity is the link's description. A chip that is itself a link stays
+     * clickable on its own.
      */
     interface ScServiceCard {
         /**
@@ -3127,8 +3145,10 @@ declare module "@stencil/core" {
              * submitted. Each item links to its field; following a link moves focus to the field.
              * Give it items either as links in the default slot (`<a href="#plate-number">…</a>`,
              * optionally inside a `<ul>`) or through the `errors` property. When it first has items
-             * it moves focus to itself (`tabindex="-1"`, `role="alert"`), so keyboard and screen
-             * reader users hear the problem straight away.
+             * it moves focus to itself (`tabindex="-1"`), so keyboard and screen reader users hear
+             * the heading and errors straight away. It has no `role="alert"`: moving focus already
+             * announces it, and a live region on top can make screen readers read it twice (GOV.UK
+             * practice). The focused box is a `role="group"` named by its heading.
              */
             "sc-error-summary": LocalJSX.IntrinsicElements["sc-error-summary"] & JSXBase.HTMLAttributes<HTMLScErrorSummaryElement>;
             /**
@@ -3229,10 +3249,14 @@ declare module "@stencil/core" {
             "sc-select": LocalJSX.IntrinsicElements["sc-select"] & JSXBase.HTMLAttributes<HTMLScSelectElement>;
             /**
              * A link to a service: its title, the entity that owns it, an optional channel chip and an
-             * end chevron. The whole card is one link target.
-             * The title is a heading containing the link, so heading navigation finds every service;
-             * the link's hit area is stretched over the card. The owning entity is the link's
-             * description. A chip that is itself a link stays clickable on its own.
+             * end chevron.
+             * Only the title is the link, so screen readers hear a short link name ("Renew vehicle
+             * registration"), not the whole card's text. The card is not wrapped in an `<a>`: the
+             * title link's hit area is stretched over the card with a pseudo-element (`::after`,
+             * `inset: 0`), so the whole card is still clickable and the focus ring wraps the card.
+             * The title is a heading containing the link, so heading navigation finds every service.
+             * The owning entity is the link's description. A chip that is itself a link stays
+             * clickable on its own.
              */
             "sc-service-card": LocalJSX.IntrinsicElements["sc-service-card"] & JSXBase.HTMLAttributes<HTMLScServiceCardElement>;
             /**

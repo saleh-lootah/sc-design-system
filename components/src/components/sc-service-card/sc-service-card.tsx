@@ -5,11 +5,15 @@ export type ServiceCardHeadingLevel = 2 | 3 | 4 | 5 | 6;
 
 /**
  * A link to a service: its title, the entity that owns it, an optional channel chip and an
- * end chevron. The whole card is one link target.
+ * end chevron.
  *
- * The title is a heading containing the link, so heading navigation finds every service;
- * the link's hit area is stretched over the card. The owning entity is the link's
- * description. A chip that is itself a link stays clickable on its own.
+ * Only the title is the link, so screen readers hear a short link name ("Renew vehicle
+ * registration"), not the whole card's text. The card is not wrapped in an `<a>`: the
+ * title link's hit area is stretched over the card with a pseudo-element (`::after`,
+ * `inset: 0`), so the whole card is still clickable and the focus ring wraps the card.
+ * The title is a heading containing the link, so heading navigation finds every service.
+ * The owning entity is the link's description. A chip that is itself a link stays
+ * clickable on its own.
  *
  * @slot - The service title, e.g. "Renew vehicle registration". Text only.
  * @slot entity - The owning entity, when it needs markup. Otherwise use the `entity` prop.

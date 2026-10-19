@@ -20,6 +20,24 @@ describe('sc-service-card (spec)', () => {
     expect(root.querySelector('.chevron')!.getAttribute('aria-hidden')).toBe('true');
   });
 
+  it('makes only the title the link, not the whole card', async () => {
+    const page = await newSpecPage({
+      components: [ScServiceCard],
+      html: `<sc-service-card href="/renew" entity="Roads and Transport Authority">Renew vehicle registration<span slot="chip">Also on Dubai Transport</span></sc-service-card>`,
+    });
+    const root = shadow(page.root!);
+    expect(root.querySelectorAll('a').length).toBe(1);
+    expect(root.querySelector('[part="card"]')!.tagName).toBe('DIV');
+    const link = root.querySelector('a')!;
+    expect(link.closest('.title')).not.toBeNull();
+    // The entity, chip and chevron sit outside the link, so they aren't part of its name.
+    expect(link.contains(root.querySelector('#entity'))).toBe(false);
+    expect(link.contains(root.querySelector('.chip'))).toBe(false);
+    expect(link.contains(root.querySelector('.chevron'))).toBe(false);
+    expect(link.querySelectorAll('slot').length).toBe(1);
+    expect(link.querySelector('slot')!.hasAttribute('name')).toBe(false);
+  });
+
   it.each([2, 4, 6])('uses heading level %i', async (level) => {
     const page = await newSpecPage({ components: [ScServiceCard], html: `<sc-service-card href="#" heading-level="${level}">Pay fines</sc-service-card>` });
     expect(shadow(page.root!).querySelector(`h${level} a`)).not.toBeNull();

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-19T16:01:22",
+  "timestamp": "2026-10-19T17:49:19",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.45.2",
@@ -541,7 +541,7 @@
             "references": {
               "ButtonIconPosition": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-ux-standards/design-system/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-a11y-wt/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonIconPosition"
               }
             }
@@ -636,7 +636,7 @@
             "references": {
               "ButtonSize": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-ux-standards/design-system/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-a11y-wt/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonSize"
               }
             }
@@ -676,7 +676,7 @@
             "references": {
               "ButtonType": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-ux-standards/design-system/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-a11y-wt/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonType"
               }
             }
@@ -720,7 +720,7 @@
             "references": {
               "ButtonVariant": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-ux-standards/design-system/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-a11y-wt/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonVariant"
               }
             }
@@ -874,7 +874,7 @@
             "references": {
               "CalloutHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-ux-standards/design-system/components/src/components/sc-callout/sc-callout.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-a11y-wt/components/src/components/sc-callout/sc-callout.tsx",
                 "id": "src/components/sc-callout/sc-callout.tsx::CalloutHeadingLevel"
               }
             }
@@ -923,7 +923,7 @@
             "references": {
               "CalloutTone": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-ux-standards/design-system/components/src/components/sc-callout/sc-callout.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-a11y-wt/components/src/components/sc-callout/sc-callout.tsx",
                 "id": "src/components/sc-callout/sc-callout.tsx::CalloutTone"
               }
             }
@@ -1079,7 +1079,7 @@
             "references": {
               "CardLandmark": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-ux-standards/design-system/components/src/components/sc-card/sc-card.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-a11y-wt/components/src/components/sc-card/sc-card.tsx",
                 "id": "src/components/sc-card/sc-card.tsx::CardLandmark"
               }
             }
@@ -1116,7 +1116,7 @@
             "references": {
               "CardPadding": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-ux-standards/design-system/components/src/components/sc-card/sc-card.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-a11y-wt/components/src/components/sc-card/sc-card.tsx",
                 "id": "src/components/sc-card/sc-card.tsx::CardPadding"
               }
             }
@@ -2132,7 +2132,7 @@
             "references": {
               "ContainerWidth": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-ux-standards/design-system/components/src/components/sc-container/sc-container.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-a11y-wt/components/src/components/sc-container/sc-container.tsx",
                 "id": "src/components/sc-container/sc-container.tsx::ContainerWidth"
               }
             }
@@ -2680,8 +2680,8 @@
       "filePath": "src/components/sc-error-summary/sc-error-summary.tsx",
       "encapsulation": "shadow",
       "tag": "sc-error-summary",
-      "readme": "# sc-error-summary\n\nLists every error on the page after the user submits a form, so they can see all the problems at once and jump to each field. Use it with the field's own error message: the summary never replaces it. Don't use it for problems that aren't about the user's answers (a failed payment, a service that's down): use `sc-callout tone=\"error\"` for those.\n\n## Usage\n\n```html\n<main>\n  <sc-error-summary>\n    <a href=\"#plate-code\">Enter the plate code</a>\n    <a href=\"#plate-number\">Enter the plate number using numbers only, like 12345</a>\n  </sc-error-summary>\n  <h1>What is your plate number?</h1>\n  …\n  <sc-text-input id=\"plate-number\" label=\"Plate number\" error=\"Enter the plate number using numbers only, like 12345\"></sc-text-input>\n</main>\n```\n\nOr from JavaScript, after client-side validation:\n\n```js\nconst summary = document.querySelector('sc-error-summary');\nsummary.errors = [{ href: '#plate-number', text: 'Enter the plate number using numbers only, like 12345' }];\n```\n\n### Placement and behaviour\n\n- Put it at the top of `<main>`, above the `<h1>`, and only when there are errors. With no items it hides itself.\n- When it first has errors (on page load, or when `errors` goes from empty to filled) it moves focus to itself (`tabindex=\"-1\"`, `role=\"alert\"`), so screen readers read the heading and every error straight away. Don't move focus anywhere else on that page load. Use `no-autofocus` only if you move focus yourself with `setFocus()`.\n- Add \"Error: \" to the start of the page `<title>` too.\n- Following a link moves focus to the field and scrolls it into view, without changing the URL. It works with a plain `<input id>` and with field components (`sc-text-input`, `sc-date-input` …) that delegate focus to their inner control, and finds the target in the summary's own shadow root first, then in the document.\n- Slotted links are read from the light DOM (directly, or inside a `<ul>`) and rendered as a list inside the component; the list updates when they change. The `errors` property wins when it is set and not empty.\n\n### Content\n\n- Each item is the same message as the one shown next to the field, in the same order as the fields on the page.\n- Link to the field's `id`, not to the label. For a date, link to the first part with a problem.\n- The heading is \"There is a problem\" / \"يوجد خطأ\". Change it (`heading`) only when a more specific heading helps, e.g. \"Check your vehicle details\". Use the `description` slot for one short sentence when the errors need context.\n- In Arabic, keep plates and numbers left-to-right inside the message: `أدخل رقم اللوحة بالأرقام فقط، مثل <bdi dir=\"ltr\">12345</bdi>`.\n\n### Styling hooks\n\nParts: `container`, `heading`, `list`. The border and links use the error colour; the focus ring uses the channel action colour.\n",
-      "docs": "Lists every error on the page, at the top of the main content, after a form is\nsubmitted. Each item links to its field; following a link moves focus to the field.\n\nGive it items either as links in the default slot (`<a href=\"#plate-number\">…</a>`,\noptionally inside a `<ul>`) or through the `errors` property. When it first has items\nit moves focus to itself (`tabindex=\"-1\"`, `role=\"alert\"`), so keyboard and screen\nreader users hear the problem straight away.",
+      "readme": "# sc-error-summary\n\nLists every error on the page after the user submits a form, so they can see all the problems at once and jump to each field. Use it with the field's own error message: the summary never replaces it. Don't use it for problems that aren't about the user's answers (a failed payment, a service that's down): use `sc-callout tone=\"error\"` for those.\n\n## Usage\n\n```html\n<main>\n  <sc-error-summary>\n    <a href=\"#plate-code\">Enter the plate code</a>\n    <a href=\"#plate-number\">Enter the plate number using numbers only, like 12345</a>\n  </sc-error-summary>\n  <h1>What is your plate number?</h1>\n  …\n  <sc-text-input id=\"plate-number\" label=\"Plate number\" error=\"Enter the plate number using numbers only, like 12345\"></sc-text-input>\n</main>\n```\n\nOr from JavaScript, after client-side validation:\n\n```js\nconst summary = document.querySelector('sc-error-summary');\nsummary.errors = [{ href: '#plate-number', text: 'Enter the plate number using numbers only, like 12345' }];\n```\n\n### Placement and behaviour\n\n- Put it at the top of `<main>`, above the `<h1>`, and only when there are errors. With no items it hides itself.\n- When it first has errors (on page load, or when `errors` goes from empty to filled) it moves focus to itself (`tabindex=\"-1\"`), so screen readers read the heading and every error straight away. It deliberately has no `role=\"alert\"`: the focus move is the announcement, and a live region as well can make screen readers read the summary twice. The focused box is a group named by its heading (`aria-labelledby`). Don't move focus anywhere else on that page load. Use `no-autofocus` only if you move focus yourself with `setFocus()`.\n- Add \"Error: \" to the start of the page `<title>` too.\n- Following a link moves focus to the field and scrolls it into view, without changing the URL. It works with a plain `<input id>` and with field components (`sc-text-input`, `sc-date-input` …) that delegate focus to their inner control, and finds the target in the summary's own shadow root first, then in the document.\n- Slotted links are read from the light DOM (directly, or inside a `<ul>`) and rendered as a list inside the component; the list updates when they change. The `errors` property wins when it is set and not empty.\n\n### Content\n\n- Each item is the same message as the one shown next to the field, in the same order as the fields on the page.\n- Link to the field's `id`, not to the label. For a date, link to the first part with a problem.\n- The heading is \"There is a problem\" / \"يوجد خطأ\". Change it (`heading`) only when a more specific heading helps, e.g. \"Check your vehicle details\". Use the `description` slot for one short sentence when the errors need context.\n- In Arabic, keep plates and numbers left-to-right inside the message: `أدخل رقم اللوحة بالأرقام فقط، مثل <bdi dir=\"ltr\">12345</bdi>`.\n\n### Styling hooks\n\nParts: `container`, `heading`, `list`. The border and links use the error colour; the focus ring uses the channel action colour.\n",
+      "docs": "Lists every error on the page, at the top of the main content, after a form is\nsubmitted. Each item links to its field; following a link moves focus to the field.\n\nGive it items either as links in the default slot (`<a href=\"#plate-number\">…</a>`,\noptionally inside a `<ul>`) or through the `errors` property. When it first has items\nit moves focus to itself (`tabindex=\"-1\"`), so keyboard and screen reader users hear\nthe heading and errors straight away. It has no `role=\"alert\"`: moving focus already\nannounces it, and a live region on top can make screen readers read it twice (GOV.UK\npractice). The focused box is a `role=\"group\"` named by its heading.",
       "docsTags": [
         {
           "name": "slot",
@@ -2715,7 +2715,7 @@
             "references": {
               "ErrorSummaryItem": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-ux-standards/design-system/components/src/components/sc-error-summary/sc-error-summary.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-a11y-wt/components/src/components/sc-error-summary/sc-error-summary.tsx",
                 "id": "src/components/sc-error-summary/sc-error-summary.tsx::ErrorSummaryItem"
               }
             }
@@ -2772,7 +2772,7 @@
             "references": {
               "ErrorSummaryHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-ux-standards/design-system/components/src/components/sc-error-summary/sc-error-summary.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-a11y-wt/components/src/components/sc-error-summary/sc-error-summary.tsx",
                 "id": "src/components/sc-error-summary/sc-error-summary.tsx::ErrorSummaryHeadingLevel"
               }
             }
@@ -3284,7 +3284,7 @@
             "references": {
               "LanguageSwitchDetail": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-ux-standards/design-system/components/src/components/sc-language-switch/sc-language-switch.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-a11y-wt/components/src/components/sc-language-switch/sc-language-switch.tsx",
                 "id": "src/components/sc-language-switch/sc-language-switch.tsx::LanguageSwitchDetail"
               }
             }
@@ -4554,7 +4554,7 @@
             "references": {
               "ScSearchDetail": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-ux-standards/design-system/components/src/components/sc-search/sc-search.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-a11y-wt/components/src/components/sc-search/sc-search.tsx",
                 "id": "src/components/sc-search/sc-search.tsx::ScSearchDetail"
               }
             }
@@ -5005,8 +5005,8 @@
       "filePath": "src/components/sc-service-card/sc-service-card.tsx",
       "encapsulation": "shadow",
       "tag": "sc-service-card",
-      "readme": "# sc-service-card\n\nA link to a service, as in \"Most used services\" on a channel home page. For a group of content that isn't a single link, use `sc-card`.\n\n## Usage\n\n```html\n<h2>Most used services</h2>\n<sc-grid span-medium=\"4\" span-expanded=\"4\">\n  <sc-service-card href=\"/services/renew-registration\" entity=\"Roads and Transport Authority\">\n    Renew vehicle registration\n    <sc-channel-chip slot=\"chip\" channel=\"transport\"></sc-channel-chip>\n  </sc-service-card>\n  <sc-service-card href=\"/services/pay-bills\" entity=\"Dubai Electricity and Water Authority\">\n    Pay water and electricity bills\n  </sc-service-card>\n</sc-grid>\n```\n\n- The title starts with a verb and names the task, not the department: \"Renew vehicle registration\", not \"Vehicle licensing\".\n- `entity` is the owning government entity, written in full (\"Roads and Transport Authority\", not \"RTA\"). It is the link's accessible description.\n- Set `heading-level` to fit the page outline: 3 under a \"Most used services\" `h2` (default).\n- Put a `sc-channel-chip` in the `chip` slot when the service also lives on another channel. A chip that is a link stays clickable on its own; a plain chip passes clicks to the card.\n\n### Behaviour\n\nThe heading contains the link, so heading navigation lists every service and the link's name is just the title. The link's hit area is stretched over the whole card, so a click anywhere (except a chip link) follows it, and keyboard users meet one tab stop per card. The focus ring wraps the card. On hover the shadow deepens, the title underlines and the chevron fills with the channel colour.\n\n### Arabic\n\nThe chevron mirrors and sits on the left. Entity names have official Arabic forms (\"هيئة الطرق والمواصلات\"); use them.\n",
-      "docs": "A link to a service: its title, the entity that owns it, an optional channel chip and an\nend chevron. The whole card is one link target.\n\nThe title is a heading containing the link, so heading navigation finds every service;\nthe link's hit area is stretched over the card. The owning entity is the link's\ndescription. A chip that is itself a link stays clickable on its own.",
+      "readme": "# sc-service-card\n\nA link to a service, as in \"Most used services\" on a channel home page. For a group of content that isn't a single link, use `sc-card`.\n\n## Usage\n\n```html\n<h2>Most used services</h2>\n<sc-grid span-medium=\"4\" span-expanded=\"4\">\n  <sc-service-card href=\"/services/renew-registration\" entity=\"Roads and Transport Authority\">\n    Renew vehicle registration\n    <sc-channel-chip slot=\"chip\" channel=\"transport\"></sc-channel-chip>\n  </sc-service-card>\n  <sc-service-card href=\"/services/pay-bills\" entity=\"Dubai Electricity and Water Authority\">\n    Pay water and electricity bills\n  </sc-service-card>\n</sc-grid>\n```\n\n- The title starts with a verb and names the task, not the department: \"Renew vehicle registration\", not \"Vehicle licensing\".\n- `entity` is the owning government entity, written in full (\"Roads and Transport Authority\", not \"RTA\"). It is the link's accessible description.\n- Set `heading-level` to fit the page outline: 3 under a \"Most used services\" `h2` (default).\n- Put a `sc-channel-chip` in the `chip` slot when the service also lives on another channel. A chip that is a link stays clickable on its own; a plain chip passes clicks to the card.\n\n### Behaviour\n\nOnly the title is the link: the card is not wrapped in an `<a>`. Screen readers hear a short link name (\"Renew vehicle registration\"), with the entity as its description, instead of the card's whole text. The heading contains the link, so heading navigation lists every service. The link's hit area is stretched over the card with `::after { inset: 0 }`, so a click anywhere (except a chip link) follows it, and keyboard users meet one tab stop per card. The focus ring wraps the card. With a mouse or trackpad (`(hover: hover) and (pointer: fine)`) hovering deepens the shadow, underlines the title and fills the chevron with the channel colour; touch screens get no hover state.\n\n### Arabic\n\nThe chevron mirrors and sits on the left. Entity names have official Arabic forms (\"هيئة الطرق والمواصلات\"); use them.\n",
+      "docs": "A link to a service: its title, the entity that owns it, an optional channel chip and an\nend chevron.\n\nOnly the title is the link, so screen readers hear a short link name (\"Renew vehicle\nregistration\"), not the whole card's text. The card is not wrapped in an `<a>`: the\ntitle link's hit area is stretched over the card with a pseudo-element (`::after`,\n`inset: 0`), so the whole card is still clickable and the focus ring wraps the card.\nThe title is a heading containing the link, so heading navigation finds every service.\nThe owning entity is the link's description. A chip that is itself a link stays\nclickable on its own.",
       "docsTags": [
         {
           "name": "slot",
@@ -5078,7 +5078,7 @@
             "references": {
               "ServiceCardHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-ux-standards/design-system/components/src/components/sc-service-card/sc-service-card.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-a11y-wt/components/src/components/sc-service-card/sc-service-card.tsx",
                 "id": "src/components/sc-service-card/sc-service-card.tsx::ServiceCardHeadingLevel"
               }
             }
@@ -5384,7 +5384,7 @@
             "references": {
               "StatusTagTone": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-ux-standards/design-system/components/src/components/sc-status-tag/sc-status-tag.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-a11y-wt/components/src/components/sc-status-tag/sc-status-tag.tsx",
                 "id": "src/components/sc-status-tag/sc-status-tag.tsx::StatusTagTone"
               }
             }
@@ -5661,7 +5661,7 @@
             "references": {
               "SummaryListAppearance": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-ux-standards/design-system/components/src/components/sc-summary-list/sc-summary-list.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-a11y-wt/components/src/components/sc-summary-list/sc-summary-list.tsx",
                 "id": "src/components/sc-summary-list/sc-summary-list.tsx::SummaryListAppearance"
               }
             }
@@ -6479,7 +6479,7 @@
             "references": {
               "TextInputType": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-ux-standards/design-system/components/src/components/sc-text-input/sc-text-input.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-a11y-wt/components/src/components/sc-text-input/sc-text-input.tsx",
                 "id": "src/components/sc-text-input/sc-text-input.tsx::TextInputType"
               }
             }
@@ -6564,7 +6564,7 @@
             "references": {
               "TextInputWidth": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-ux-standards/design-system/components/src/components/sc-text-input/sc-text-input.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-a11y-wt/components/src/components/sc-text-input/sc-text-input.tsx",
                 "id": "src/components/sc-text-input/sc-text-input.tsx::TextInputWidth"
               }
             }

@@ -56,11 +56,12 @@ function clickItem(page: E2EPage, index: number) {
 }
 
 describe('sc-error-summary (e2e)', () => {
-  it('moves focus to itself on load and is announced as an alert', async () => {
+  it('moves focus to itself on load without also being an alert', async () => {
     const page = await newScPage(FORM);
     expect(await focusPath(page)).toBe('sc-error-summary>div[container]');
     const role = await page.evaluate(() => document.querySelector('sc-error-summary')!.shadowRoot!.querySelector('[part=container]')!.getAttribute('role'));
-    expect(role).toBe('alert');
+    expect(role).not.toBe('alert');
+    expect(role).toBe('group');
   });
 
   it('does not move focus with no-autofocus, and setFocus() moves it', async () => {
