@@ -1,0 +1,163 @@
+<h1 class="pg-title sc-type-heading-xl" data-ar="حقل النص">Text input</h1>
+<p class="pg-lede sc-type-body-m" data-ar="لإجابة من سطر واحد. يعرض الحقل التسمية والتلميح والخطأ بنفسه، ويُرسل قيمته مع النموذج.">
+  For a single-line answer. The field renders its own label, hint and error, and submits its value with the form.
+</p>
+
+<section class="pg-section" aria-labelledby="ti-plate">
+  <h2 id="ti-plate" class="sc-type-heading-m" data-ar="سؤال رقم اللوحة (مع أخطاء)">Plate number question (with errors)</h2>
+  <div class="pg-card pg-narrow" style="max-inline-size: 420px">
+    <form id="ti-plate-form" novalidate>
+      <p class="sc-type-heading-l" style="margin: 0 0 var(--sc-space-8); color: var(--sc-color-ink-strong)" data-ar="ما رقم لوحة مركبتك؟">What is your plate number?</p>
+      <p class="sc-type-body-m" style="margin: 0 0 var(--sc-space-24); color: var(--sc-color-muted)" data-ar="تجده على لوحة المركبة أو في بطاقة ملكية المركبة.">You can find it on the plate or on the vehicle ownership card.</p>
+      <div style="display: grid; gap: var(--sc-space-24)">
+        <sc-select id="emirate" name="emirate" label="Issuing authority" data-ar-label="جهة الإصدار" value="dubai">
+          <option value="dubai" data-ar="دبي">Dubai</option>
+          <option value="abu-dhabi" data-ar="أبوظبي">Abu Dhabi</option>
+          <option value="sharjah" data-ar="الشارقة">Sharjah</option>
+          <option value="ajman" data-ar="عجمان">Ajman</option>
+          <option value="uaq" data-ar="أم القيوين">Umm Al Quwain</option>
+          <option value="rak" data-ar="رأس الخيمة">Ras Al Khaimah</option>
+          <option value="fujairah" data-ar="الفجيرة">Fujairah</option>
+        </sc-select>
+        <sc-text-input id="plate-code" name="plateCode" label="Plate code" data-ar-label="رمز اللوحة" hint="1 or 2 English letters" data-ar-hint="حرف أو حرفان باللغة الإنجليزية" value="A" width="4" ltr autocomplete="off"></sc-text-input>
+        <sc-text-input
+          id="plate-number"
+          name="plateNumber"
+          label="Plate number"
+          data-ar-label="رقم اللوحة"
+          hint="Up to 5 digits, for example 12345"
+          data-ar-hint="حتى 5 أرقام، مثل 12345"
+          error="Enter numbers only, like 12345"
+          data-ar-error="أدخل رقم اللوحة بالأرقام فقط، مثل 12345"
+          value="48B13"
+          width="10"
+          inputmode="numeric"
+          ltr
+          autocomplete="off"
+        ></sc-text-input>
+      </div>
+      <div class="pg-row" style="margin-block-start: var(--sc-space-32)">
+        <sc-button type="submit" icon="arrow-forward" full-width data-ar="متابعة">Continue</sc-button>
+      </div>
+      <p class="pg-output" id="ti-plate-output" role="status"></p>
+    </form>
+    <p class="pg-note" data-ar="القيم التي تبقى من اليسار إلى اليمين (اللوحات والهواتف والبريد) تستخدم ltr وتبقى في بداية الحقل بالعربية.">Values that stay left-to-right (plates, phones, emails) use <code>ltr</code> and still sit at the start of the field in Arabic.</p>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="ti-states">
+  <h2 id="ti-states" class="sc-type-heading-m" data-ar="الحالات">States</h2>
+  <div class="pg-card">
+    <div class="pg-grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); justify-items: stretch">
+      <div class="pg-cell">
+        <span class="pg-label">default</span>
+        <sc-text-input label="Full name" data-ar-label="الاسم الكامل" autocomplete="name"></sc-text-input>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">hint</span>
+        <sc-text-input label="Emirates ID number" data-ar-label="رقم الهوية الإماراتية" hint="15 digits, starting with 784" data-ar-hint="15 رقمًا، أولها 784" inputmode="numeric" ltr></sc-text-input>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">focus (keyboard)</span>
+        <sc-text-input label="Plate number" data-ar-label="رقم اللوحة" value="12345" width="10" ltr data-demo-focus></sc-text-input>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">error</span>
+        <sc-text-input label="Email address" data-ar-label="البريد الإلكتروني" type="email" value="name@example" error="Enter an email address in the correct format, like name@example.com" data-ar-error="أدخل البريد الإلكتروني بالصيغة الصحيحة، مثل name@example.com" ltr autocomplete="email"></sc-text-input>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">optional</span>
+        <sc-text-input label="Building name" data-ar-label="اسم المبنى" optional></sc-text-input>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">disabled (avoid)</span>
+        <sc-text-input label="Chassis number" data-ar-label="رقم الهيكل" value="JTMHV05J604123456" ltr disabled></sc-text-input>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="ti-widths">
+  <h2 id="ti-widths" class="sc-type-heading-m" data-ar="العرض">Widths</h2>
+  <div class="pg-card">
+    <div style="display: grid; gap: var(--sc-space-16)">
+      <sc-text-input label="2 characters" data-ar-label="حرفان" width="2"></sc-text-input>
+      <sc-text-input label="4 characters" data-ar-label="4 أحرف" width="4"></sc-text-input>
+      <sc-text-input label="5 characters" data-ar-label="5 أحرف" width="5"></sc-text-input>
+      <sc-text-input label="10 characters" data-ar-label="10 أحرف" width="10"></sc-text-input>
+      <sc-text-input label="20 characters" data-ar-label="20 حرفًا" width="20"></sc-text-input>
+      <sc-text-input label="Full width" data-ar-label="العرض الكامل"></sc-text-input>
+    </div>
+    <p class="pg-note" data-ar="طابِق عرض الحقل مع طول الإجابة المتوقعة.">Match the width to the answer you expect.</p>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="ti-affix">
+  <h2 id="ti-affix" class="sc-type-heading-m" data-ar="بادئة ولاحقة">Prefix and suffix</h2>
+  <div class="pg-card">
+    <div class="pg-grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); justify-items: stretch">
+      <sc-text-input label="Amount" data-ar-label="المبلغ" prefix-text="AED" data-ar-prefix-text="درهم" width="10" inputmode="decimal" ltr></sc-text-input>
+      <sc-text-input label="Odometer reading" data-ar-label="قراءة عداد المسافة" suffix-text="km" data-ar-suffix-text="كم" width="10" inputmode="numeric"></sc-text-input>
+      <sc-text-input label="Mobile number" data-ar-label="رقم الهاتف المتحرك" prefix-text="+971" type="tel" width="20" ltr autocomplete="tel-national"></sc-text-input>
+    </div>
+    <p class="pg-note" data-ar="البادئة واللاحقة جزء من وصف الحقل، فتُقرأ مع التسمية.">The prefix and suffix are part of the field's description, so they are read with the label.</p>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="ti-heading">
+  <h2 id="ti-heading" class="sc-type-heading-m" data-ar="التسمية كعنوان للصفحة">Label as the page heading</h2>
+  <div class="pg-card">
+    <sc-text-input label="What is your plate number?" data-ar-label="ما رقم لوحة مركبتك؟" hint="Up to 5 digits, for example 12345" data-ar-hint="حتى 5 أرقام، مثل 12345" heading-level="2" width="10" inputmode="numeric" ltr></sc-text-input>
+    <p class="pg-note" data-ar="مع heading-level تُعرض التسمية داخل عنوان، عندما يكون الحقل هو السؤال الوحيد في الصفحة.">With heading-level the label sits inside a heading, for a page with one question.</p>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="ti-arabic">
+  <h2 id="ti-arabic" class="sc-type-heading-m" data-ar="بالعربية">In Arabic</h2>
+  <div class="pg-card" lang="ar" dir="rtl" style="max-inline-size: 420px">
+    <p class="sc-type-heading-l" style="margin: 0 0 var(--sc-space-8); color: var(--sc-color-ink-strong)">ما رقم لوحة مركبتك؟</p>
+    <p class="sc-type-body-m" style="margin: 0 0 var(--sc-space-24); color: var(--sc-color-muted)">تجده على لوحة المركبة أو في بطاقة ملكية المركبة.</p>
+    <div style="display: grid; gap: var(--sc-space-24)">
+      <sc-select label="جهة الإصدار" value="dubai">
+        <option value="dubai">دبي</option>
+        <option value="abu-dhabi">أبوظبي</option>
+        <option value="sharjah">الشارقة</option>
+      </sc-select>
+      <sc-text-input label="رمز اللوحة" hint="حرف أو حرفان باللغة الإنجليزية" value="A" width="4" ltr></sc-text-input>
+      <sc-text-input label="رقم اللوحة" hint="حتى 5 أرقام، مثل 12345" error="أدخل رقم اللوحة بالأرقام فقط، مثل 12345" value="48B13" width="10" inputmode="numeric" ltr></sc-text-input>
+      <sc-text-input label="المبلغ" prefix-text="درهم" value="450.00" width="10" ltr></sc-text-input>
+    </div>
+    <p class="pg-note" lang="en" dir="ltr">This card is always lang="ar" dir="rtl", whatever the toolbar says.</p>
+  </div>
+</section>
+
+<script>
+  {
+    // data-ar-<attr>="…" swaps an attribute (label, hint, error…) when the toolbar is Arabic.
+    const preview = document.getElementById('preview');
+    window.scFieldsApply = () => {
+      const ar = preview.lang === 'ar';
+      for (const el of preview.querySelectorAll('*')) {
+        for (const { name, value } of [...el.attributes]) {
+          if (!name.startsWith('data-ar-')) continue;
+          const attr = name.slice(8);
+          if (!el.hasAttribute(`data-en-${attr}`)) el.setAttribute(`data-en-${attr}`, el.getAttribute(attr) ?? '');
+          el.setAttribute(attr, ar ? value : el.getAttribute(`data-en-${attr}`));
+        }
+      }
+    };
+    if (!window.scFieldsObserver) {
+      window.scFieldsObserver = new MutationObserver(() => window.scFieldsApply());
+      window.scFieldsObserver.observe(preview, { attributes: true, attributeFilter: ['lang'] });
+    }
+    window.scFieldsApply();
+
+    const form = document.getElementById('ti-plate-form');
+    const out = document.getElementById('ti-plate-output');
+    form.addEventListener('submit', (ev) => {
+      ev.preventDefault();
+      const data = [...new FormData(form)].map(([k, v]) => `${k}=${v}`).join(', ');
+      out.textContent = (preview.lang === 'ar' ? 'تم الإرسال: ' : 'Submitted: ') + data;
+    });
+  }
+</script>

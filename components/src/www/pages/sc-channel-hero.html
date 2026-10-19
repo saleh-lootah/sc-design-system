@@ -1,0 +1,91 @@
+<h1 class="pg-title sc-type-heading-xl" data-ar="واجهة القناة">Channel hero</h1>
+<p class="pg-lede sc-type-body-m" data-ar="الغسلة اللونية أعلى صفحة القناة: تدرّج من لون بداية الغسلة إلى نهايتها، مع عنوان تمهيدي وعنوان رئيسي ومقدمة وبحث.">
+  The top wash of a channel page: a gradient from the channel's wash-start to wash-end, with an eyebrow, the H1, a lede and search.
+</p>
+
+<section class="pg-section" aria-labelledby="ch-home">
+  <h2 id="ch-home" class="sc-type-heading-m" data-ar="الصفحة الرئيسية لدبي الآن">Dubai Now home</h2>
+  <div class="ch-frame">
+    <sc-channel-hero>
+      <p slot="eyebrow" data-ar="خدمات حكومية لكل من يعيش في دبي">Government services for everyone who lives in Dubai</p>
+      <h2 slot="heading" data-ar="ماذا تريد أن تفعل؟">What do you need to do?</h2>
+      <sc-search label-hidden label="Search services" placeholder="Try “renew car registration” or “school fees”"
+        data-ar-attrs='{"label":"ابحث في الخدمات","placeholder":"جرّب «تجديد تسجيل السيارة» أو «الرسوم المدرسية»"}'></sc-search>
+      <p class="ch-popular"><span data-ar="الأكثر طلبًا الآن">Popular now</span>
+        <a href="#renew" data-ar="تجديد تسجيل المركبة">Renew vehicle registration</a>
+        <a href="#bills" data-ar="دفع فواتير الكهرباء والمياه">Pay water and electricity</a>
+        <a href="#tenancy" data-ar="تسجيل عقد إيجار">Register a tenancy contract</a>
+      </p>
+    </sc-channel-hero>
+  </div>
+  <p class="pg-note" data-ar="في صفحة حقيقية يكون العنوان h1. هنا h2 لأن الصفحة لها عنوانها الخاص.">On a real page the heading is an h1; here it's an h2 because the playground page has its own.</p>
+</section>
+
+<section class="pg-section" aria-labelledby="ch-lede">
+  <h2 id="ch-lede" class="sc-type-heading-m" data-ar="مع مقدمة، في قناة أخرى">With a lede, in another channel</h2>
+  <div class="ch-frame" data-channel="transport">
+    <sc-channel-hero>
+      <p slot="eyebrow" data-ar="مواصلات دبي">Dubai Transport</p>
+      <h2 slot="heading" data-ar="مركبتك ورخصتك والتنقل في دبي">Your vehicle, your licence and getting around Dubai</h2>
+      <p slot="lede" data-ar="جدّد التسجيل، وادفع المخالفات، واحصل على تصاريح المواقف، في مكان واحد.">Renew registration, pay fines and get parking permits, in one place.</p>
+    </sc-channel-hero>
+  </div>
+  <p class="pg-note" data-ar="هذا الإطار يضبط data-channel=&quot;transport&quot;، فتتغير الغسلة وألوان البحث.">This frame sets data-channel="transport", so the wash and the search colours change.</p>
+</section>
+
+<section class="pg-section" aria-labelledby="ch-arabic">
+  <h2 id="ch-arabic" class="sc-type-heading-m" data-ar="بالعربية">In Arabic</h2>
+  <div class="ch-frame" lang="ar" dir="rtl">
+    <sc-channel-hero>
+      <p slot="eyebrow">خدمات حكومية لكل من يعيش في دبي</p>
+      <h2 slot="heading">ماذا تريد أن تفعل؟</h2>
+      <sc-search label-hidden label="ابحث في الخدمات" placeholder="جرّب «تجديد تسجيل السيارة» أو «الرسوم المدرسية»"></sc-search>
+    </sc-channel-hero>
+  </div>
+</section>
+
+<style>
+  .ch-frame {
+    overflow: hidden;
+    border-radius: var(--sc-radius-panel);
+    box-shadow: var(--sc-elevation-1);
+  }
+  .ch-popular {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sc-space-8) var(--sc-space-12);
+    margin-block: var(--sc-space-20) 0;
+    color: var(--sc-color-muted);
+    font-size: var(--sc-text-latin-label-s);
+    line-height: var(--sc-leading-latin-label-s);
+  }
+  .ch-popular a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--sc-size-target-min);
+    padding-inline: var(--sc-space-16);
+    border-radius: var(--sc-radius-pill);
+    background: var(--sc-color-surface);
+    color: var(--sc-channel-action);
+    font-family: var(--sc-font-family-medium);
+    text-decoration: none;
+  }
+</style>
+
+<script>
+  {
+    const preview = document.getElementById("preview");
+    const swap = () => {
+      const ar = preview.lang === "ar";
+      for (const el of preview.querySelectorAll("[data-ar-attrs]")) {
+        const map = JSON.parse(el.dataset.arAttrs);
+        if (!el.dataset.enAttrs) el.dataset.enAttrs = JSON.stringify(Object.fromEntries(Object.keys(map).map((k) => [k, el.getAttribute(k)])));
+        const src = ar ? map : JSON.parse(el.dataset.enAttrs);
+        for (const [k, v] of Object.entries(src)) if (v != null) el.setAttribute(k, v);
+      }
+    };
+    swap();
+    new MutationObserver(swap).observe(preview, { attributes: true, attributeFilter: ["lang"] });
+  }
+</script>

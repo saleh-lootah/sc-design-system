@@ -1,0 +1,108 @@
+<h1 class="pg-title sc-type-heading-xl" data-ar="بطاقة الخدمة">Service card</h1>
+<p class="pg-lede sc-type-body-m" data-ar="رابط إلى خدمة: العنوان والجهة المالكة وشارة قناة اختيارية. البطاقة كلها هدف الرابط.">
+  A link to a service: its title, the entity that owns it and an optional channel chip. The whole card is the link target.
+</p>
+
+<section class="pg-section" aria-labelledby="svc-grid">
+  <h2 id="svc-grid" class="sc-type-heading-m" data-ar="الخدمات الأكثر استخدامًا">Most used services</h2>
+  <sc-grid span-medium="4" span-expanded="4">
+    <sc-service-card href="#renew" entity="Roads and Transport Authority" data-ar-attrs='{"entity":"هيئة الطرق والمواصلات"}'>
+      <span data-ar="تجديد تسجيل المركبة">Renew vehicle registration</span>
+      <span slot="chip" class="svc-chip" data-channel="transport" data-ar="متوفر أيضًا في مواصلات دبي">Also on Dubai Transport</span>
+    </sc-service-card>
+    <sc-service-card href="#bills" entity="Dubai Electricity and Water Authority" data-ar-attrs='{"entity":"هيئة كهرباء ومياه دبي"}'>
+      <span data-ar="دفع فواتير الكهرباء والمياه">Pay water and electricity bills</span>
+    </sc-service-card>
+    <sc-service-card href="#tenancy" entity="Dubai Land Department" data-ar-attrs='{"entity":"دائرة الأراضي والأملاك"}'>
+      <span data-ar="تسجيل عقد إيجار">Register a tenancy contract</span>
+      <a slot="chip" class="svc-chip" data-channel="build" href="#build" data-ar="متوفر أيضًا في ابنِ في دبي">Also on Build in Dubai</a>
+    </sc-service-card>
+    <sc-service-card href="#fines" entity="Dubai Police" data-ar-attrs='{"entity":"شرطة دبي"}'>
+      <span data-ar="دفع المخالفات المرورية">Pay traffic fines</span>
+      <span slot="chip" class="svc-chip" data-channel="transport" data-ar="متوفر أيضًا في مواصلات دبي">Also on Dubai Transport</span>
+    </sc-service-card>
+    <sc-service-card href="#fitness" entity="Dubai Health Authority" data-ar-attrs='{"entity":"هيئة الصحة بدبي"}'>
+      <span data-ar="حجز فحص اللياقة الطبية">Book a medical fitness test</span>
+    </sc-service-card>
+    <sc-service-card href="#conduct" entity="Dubai Police" data-ar-attrs='{"entity":"شرطة دبي"}'>
+      <span data-ar="الحصول على شهادة حسن السيرة والسلوك">Get a good conduct certificate</span>
+      <span slot="chip" class="svc-chip" data-channel="justice" data-ar="متوفر أيضًا في عدالة دبي">Also on Dubai Justice</span>
+    </sc-service-card>
+  </sc-grid>
+  <p class="pg-note" data-ar="الشارة هنا عنصر مؤقت؛ استخدم sc-channel-chip. الشارة التي هي رابط («ابنِ في دبي») تبقى قابلة للنقر وحدها.">
+    The chip here is a placeholder; use sc-channel-chip. A chip that is a link ("Build in Dubai") stays clickable on its own.
+  </p>
+</section>
+
+<section class="pg-section" aria-labelledby="svc-states">
+  <h2 id="svc-states" class="sc-type-heading-m" data-ar="الحالات">States</h2>
+  <div class="pg-grid">
+    <div class="pg-cell">
+      <span class="pg-label">default · h3</span>
+      <sc-service-card href="#renew" entity="Roads and Transport Authority" data-ar-attrs='{"entity":"هيئة الطرق والمواصلات"}'><span data-ar="تجديد تسجيل المركبة">Renew vehicle registration</span></sc-service-card>
+    </div>
+    <div class="pg-cell">
+      <span class="pg-label">focus (keyboard)</span>
+      <sc-service-card data-demo-focus href="#renew" entity="Roads and Transport Authority" data-ar-attrs='{"entity":"هيئة الطرق والمواصلات"}'><span data-ar="تجديد تسجيل المركبة">Renew vehicle registration</span></sc-service-card>
+    </div>
+    <div class="pg-cell">
+      <span class="pg-label">heading-level="2" · long title</span>
+      <sc-service-card heading-level="2" href="#salik" entity="Roads and Transport Authority" data-ar-attrs='{"entity":"هيئة الطرق والمواصلات"}'><span data-ar="استرداد رصيد سالك غير المستخدم بعد بيع مركبتك">Get a refund of unused Salik credit after selling your vehicle</span></sc-service-card>
+    </div>
+  </div>
+  <p class="pg-note" data-ar="عند التمرير: ظل أعمق، وتسطير العنوان، وتعبئة السهم بلون القناة. السهم ينعكس في العربية.">Hover: a deeper shadow, an underlined title and a channel-filled chevron. The chevron mirrors in Arabic.</p>
+</section>
+
+<section class="pg-section" aria-labelledby="svc-arabic">
+  <h2 id="svc-arabic" class="sc-type-heading-m" data-ar="بالعربية">In Arabic</h2>
+  <div lang="ar" dir="rtl">
+    <sc-grid span-medium="4" span-expanded="4">
+      <sc-service-card href="#renew" entity="هيئة الطرق والمواصلات">تجديد تسجيل المركبة<span slot="chip" class="svc-chip" data-channel="transport">متوفر أيضًا في مواصلات دبي</span></sc-service-card>
+      <sc-service-card href="#bills" entity="هيئة كهرباء ومياه دبي">دفع فواتير الكهرباء والمياه</sc-service-card>
+      <sc-service-card href="#tenancy" entity="دائرة الأراضي والأملاك">تسجيل عقد إيجار</sc-service-card>
+    </sc-grid>
+  </div>
+</section>
+
+<style>
+  /* Placeholder for sc-channel-chip (built separately). */
+  .svc-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sc-space-6);
+    padding-block: var(--sc-space-4);
+    padding-inline: var(--sc-space-12);
+    border-radius: var(--sc-radius-pill);
+    background: var(--sc-channel-subtle);
+    color: var(--sc-channel-ink);
+    font-family: var(--sc-font-family-medium);
+    font-weight: var(--sc-font-weight-medium);
+    font-size: var(--sc-text-latin-label-s);
+    line-height: var(--sc-leading-latin-label-s);
+    text-decoration: none;
+  }
+  .svc-chip::before {
+    content: '';
+    inline-size: var(--sc-space-6);
+    block-size: var(--sc-space-6);
+    border-radius: var(--sc-radius-pill);
+    background: var(--sc-channel-action);
+  }
+</style>
+
+<script>
+  {
+    const preview = document.getElementById('preview');
+    const swap = () => {
+      const ar = preview.lang === 'ar';
+      for (const el of preview.querySelectorAll('[data-ar-attrs]')) {
+        const map = JSON.parse(el.dataset.arAttrs);
+        if (!el.dataset.enAttrs) el.dataset.enAttrs = JSON.stringify(Object.fromEntries(Object.keys(map).map((k) => [k, el.getAttribute(k)])));
+        const src = ar ? map : JSON.parse(el.dataset.enAttrs);
+        for (const [k, v] of Object.entries(src)) if (v != null) el.setAttribute(k, v);
+      }
+    };
+    swap();
+    new MutationObserver(swap).observe(preview, { attributes: true, attributeFilter: ['lang'] });
+  }
+</script>

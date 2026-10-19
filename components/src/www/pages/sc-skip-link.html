@@ -1,0 +1,49 @@
+<h1 class="pg-title sc-type-heading-xl" data-ar="رابط التخطي">Skip link</h1>
+<p class="pg-lede sc-type-body-m" data-ar="أول عنصر قابل للتركيز في كل صفحة. مخفي حتى يصل إليه المستخدم بمفتاح Tab، ثم ينقل التركيز إلى المحتوى الرئيسي.">
+  The first focusable element on every page. Hidden until the user tabs to it, then it moves focus to the main content.
+</p>
+
+<section class="pg-section" aria-labelledby="sk-demo">
+  <h2 id="sk-demo" class="sc-type-heading-m" data-ar="عند التركيز">When focused</h2>
+  <div class="pg-card" style="position: relative; padding-block-start: var(--sc-space-80); min-block-size: 220px">
+    <sc-skip-link href="#sk-main" data-demo-focus></sc-skip-link>
+    <div id="sk-main" class="sk-main">
+      <p class="sc-type-heading-m" style="margin: 0 0 var(--sc-space-8)" data-ar="جدّد تسجيل مركبتك">Renew your vehicle registration</p>
+      <p class="pg-note" style="margin: 0" data-ar="اضغط Enter على رابط التخطي: ينتقل التركيز إلى هنا، ويتابع Tab التالي من هذا المحتوى.">Press Enter on the skip link: focus moves here, and the next Tab continues from this content.</p>
+    </div>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="sk-arabic">
+  <h2 id="sk-arabic" class="sc-type-heading-m" data-ar="بالعربية">In Arabic</h2>
+  <div class="pg-card" lang="ar" dir="rtl" style="position: relative; padding-block-start: var(--sc-space-80); min-block-size: 160px">
+    <sc-skip-link href="#sk-main-ar"></sc-skip-link>
+    <div id="sk-main-ar" class="sk-main">
+      <p class="pg-note" style="margin: 0">يظهر في أعلى يمين الصفحة عند التركيز. اضغط Tab للوصول إليه.</p>
+    </div>
+    <p class="pg-note" lang="en" dir="ltr">Always lang="ar" dir="rtl". Tab into this card to see it at the top right.</p>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="sk-use">
+  <h2 id="sk-use" class="sc-type-heading-m" data-ar="الاستخدام">Usage</h2>
+  <div class="pg-card">
+    <code class="pg-code" dir="ltr" style="display: block; text-align: start; white-space: pre">&lt;body&gt;
+  &lt;sc-skip-link&gt;&lt;/sc-skip-link&gt;
+  &lt;sc-app-bar&gt;…&lt;/sc-app-bar&gt;
+  &lt;main id="main"&gt;…&lt;/main&gt;
+&lt;/body&gt;</code>
+  </div>
+</section>
+
+<style>
+  .sk-main {
+    padding: var(--sc-space-16);
+    border-radius: var(--sc-radius-s);
+    background: var(--sc-color-fill-quiet);
+  }
+  .sk-main:focus {
+    outline: var(--sc-size-focus-ring) solid var(--sc-channel-action);
+    outline-offset: var(--sc-size-focus-offset);
+  }
+</style>

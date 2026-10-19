@@ -1,0 +1,71 @@
+<h1 class="pg-title sc-type-heading-xl" data-ar="البطاقة">Card</h1>
+<p class="pg-lede sc-type-body-m" data-ar="حاوية سطحية: تعبئة السطح، وزوايا البطاقة، وارتفاع المستوى 1.">
+  A surface container: surface fill, card radius and elevation 1.
+</p>
+
+<section class="pg-section" aria-labelledby="cd-padding">
+  <h2 id="cd-padding" class="sc-type-heading-m" data-ar="الحشو">Padding</h2>
+  <div class="pg-grid cd-grid">
+    <div class="pg-cell">
+      <span class="pg-label">padding="l" · 24px (default)</span>
+      <sc-card>
+        <h3 class="sc-type-title-m" data-ar="الانتقال إلى منزل جديد؟">Moving to a new home?</h3>
+        <p class="sc-type-body-m" data-ar="سبع خدمات من خمس جهات حكومية، بالترتيب الذي يحتاجه معظم الناس.">Seven services from five government entities, in the order most people need them.</p>
+      </sc-card>
+    </div>
+    <div class="pg-cell">
+      <span class="pg-label">padding="m" · 16px</span>
+      <sc-card padding="m">
+        <h3 class="sc-type-title-m" data-ar="الانتقال إلى منزل جديد؟">Moving to a new home?</h3>
+        <p class="sc-type-body-m" data-ar="سبع خدمات من خمس جهات حكومية، بالترتيب الذي يحتاجه معظم الناس.">Seven services from five government entities, in the order most people need them.</p>
+      </sc-card>
+    </div>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="cd-landmark">
+  <h2 id="cd-landmark" class="sc-type-heading-m" data-ar="كمَعلَم">As a landmark</h2>
+  <div class="pg-grid cd-grid">
+    <div class="pg-cell">
+      <span class="pg-label">landmark="section" → region</span>
+      <sc-card landmark="section">
+        <h3 class="sc-type-title-m" data-ar="مهامي">My tasks</h3>
+        <p class="sc-type-body-m" data-ar="ينتهي تسجيل مركبتك خلال 15 يومًا.">Your vehicle registration expires in 15 days.</p>
+        <sc-button size="m" variant="secondary" href="#renew" data-ar="تجديد التسجيل">Renew registration</sc-button>
+      </sc-card>
+    </div>
+    <div class="pg-cell">
+      <span class="pg-label">landmark="article"</span>
+      <sc-card landmark="article">
+        <h3 class="sc-type-title-m" data-ar="تغييرات على رسوم المواقف">Changes to parking fees</h3>
+        <p class="sc-type-body-m" data-ar="تبدأ الرسوم الجديدة في 1 يناير 2027.">New fees start on 1 January 2027.</p>
+      </sc-card>
+    </div>
+  </div>
+  <p class="pg-note" data-ar="يسمّي أول عنوان داخل البطاقة المَعلَم (aria-labelledby على العنصر المضيف).">The first heading inside names the landmark (aria-labelledby on the host).</p>
+</section>
+
+<section class="pg-section" aria-labelledby="cd-arabic">
+  <h2 id="cd-arabic" class="sc-type-heading-m" data-ar="بالعربية">In Arabic</h2>
+  <div lang="ar" dir="rtl" class="cd-grid">
+    <sc-card landmark="section">
+      <h3 class="sc-type-title-m">الانتقال إلى منزل جديد؟</h3>
+      <p class="sc-type-body-m">سبع خدمات من خمس جهات حكومية، بالترتيب الذي يحتاجه معظم الناس.</p>
+    </sc-card>
+  </div>
+</section>
+
+<style>
+  .cd-grid {
+    max-inline-size: 760px;
+  }
+  .cd-grid sc-card h3 {
+    margin-block-end: var(--sc-space-8);
+  }
+  .cd-grid sc-card p {
+    margin-block: 0;
+  }
+  .cd-grid sc-card p + sc-button {
+    margin-block-start: var(--sc-space-16);
+  }
+</style>

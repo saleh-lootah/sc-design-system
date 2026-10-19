@@ -1,0 +1,262 @@
+<h1 class="pg-title sc-type-heading-xl" data-ar="شريط التطبيق">App bar</h1>
+<p class="pg-lede sc-type-body-m" data-ar="الشريط العلوي لكل شاشة جوال وصفحة سطح مكتب: زجاج شفاف جزئيًا، وزر رجوع في البداية، واسم القناة بخط عريض، ومبدّل اللغة في النهاية.">
+  The top bar of every mobile screen and desktop page: translucent glass, a back link at the start, the channel name in bold, and the language switch at the end.
+</p>
+
+<style>
+  .ab-phone {
+    position: relative;
+    inline-size: 100%;
+    max-inline-size: 402px;
+    block-size: 560px;
+    overflow: auto;
+    border-radius: var(--sc-radius-sheet);
+    background: var(--sc-color-canvas);
+    box-shadow: var(--sc-elevation-3);
+    scrollbar-width: none;
+  }
+  .ab-wash {
+    position: absolute;
+    inset: 0 0 auto;
+    block-size: 300px;
+    background: linear-gradient(to bottom in oklab, var(--sc-channel-wash-end), var(--sc-color-canvas));
+    pointer-events: none;
+  }
+  .ab-phone sc-app-bar {
+    position: sticky;
+  }
+  .ab-body {
+    position: relative;
+    display: grid;
+    gap: var(--sc-space-16);
+    padding: var(--sc-space-16) var(--sc-space-20) var(--sc-space-48);
+  }
+  .ab-capsule {
+    display: grid;
+    gap: var(--sc-space-8);
+    padding: var(--sc-space-16) var(--sc-space-20);
+    border-radius: var(--sc-radius-card);
+    background: var(--sc-color-surface);
+    box-shadow: var(--sc-elevation-1);
+  }
+  .ab-track {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--sc-space-4);
+  }
+  .ab-track span {
+    block-size: var(--sc-size-progress);
+    border-radius: var(--sc-radius-pill);
+    background: var(--sc-color-control);
+  }
+  .ab-track span.on {
+    background: var(--sc-channel-action);
+  }
+  .ab-q {
+    margin: var(--sc-space-8) 0 0;
+    color: var(--sc-color-ink-strong);
+  }
+  .ab-filler {
+    block-size: 72px;
+    border-radius: var(--sc-radius-field);
+    background: var(--sc-color-fill-quiet);
+  }
+  .ab-desktop {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--sc-radius-panel);
+    background: var(--sc-color-canvas);
+    box-shadow: var(--sc-elevation-1);
+  }
+  .ab-desktop .ab-wash {
+    block-size: 260px;
+  }
+  .ab-desktop-body {
+    position: relative;
+    padding: var(--sc-space-48) var(--sc-space-48) var(--sc-space-56);
+  }
+  .ab-mark {
+    inline-size: var(--sc-size-icon-l);
+    block-size: var(--sc-size-icon-l);
+    color: var(--sc-channel-action);
+    flex: none;
+  }
+  .ab-nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sc-space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .ab-nav a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--sc-size-target-min);
+    padding-inline: var(--sc-space-12);
+    border-radius: var(--sc-radius-control);
+    color: var(--sc-color-ink);
+    text-decoration: none;
+    font-family: var(--sc-font-family-medium);
+    font-weight: var(--sc-font-weight-medium);
+    font-size: var(--sc-text-latin-label-m);
+    line-height: var(--sc-leading-latin-label-m);
+  }
+  .ab-nav:lang(ar) a {
+    font-family: var(--sc-font-family-bold);
+    font-weight: var(--sc-font-weight-bold);
+    font-size: var(--sc-text-arabic-label-m);
+    line-height: var(--sc-leading-arabic-label-m);
+  }
+  .ab-nav a[aria-current='page'] {
+    background: var(--sc-color-fill-quiet);
+    color: var(--sc-color-ink-strong);
+  }
+  .ab-nav a:hover {
+    background: var(--sc-color-fill-quiet);
+  }
+  .ab-nav a:focus-visible {
+    outline: var(--sc-size-focus-ring) solid var(--sc-channel-action);
+    outline-offset: var(--sc-size-focus-offset);
+  }
+  .ab-h1 {
+    margin: 0;
+    color: var(--sc-color-ink-strong);
+  }
+  .ab-pair {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--sc-space-32);
+    justify-items: center;
+  }
+  .ab-plain {
+    padding: var(--sc-space-24);
+    border-radius: var(--sc-radius-card);
+    background: linear-gradient(in oklab, var(--sc-channel-wash-start), var(--sc-channel-wash-end));
+  }
+  .ab-plain sc-app-bar + sc-app-bar {
+    margin-block-start: var(--sc-space-16);
+  }
+</style>
+
+<section class="pg-section" aria-labelledby="ab-mobile">
+  <h2 id="ab-mobile" class="sc-type-heading-m" data-ar="شاشة جوال · بالإنجليزية والعربية">Mobile screen · English and Arabic</h2>
+  <div class="pg-card">
+    <div class="ab-pair">
+      <div class="ab-phone" lang="en" dir="ltr" data-channel="transport" tabindex="0" aria-label="Mobile example in English">
+        <div class="ab-wash"></div>
+        <sc-app-bar sticky landmark="false">
+          <sc-back-link slot="start" href="#previous"></sc-back-link>
+          <span slot="title">Dubai Transport</span>
+          <sc-language-switch slot="end" href="#ar"></sc-language-switch>
+        </sc-app-bar>
+        <div class="ab-body">
+          <div class="ab-capsule">
+            <span class="sc-type-label-m">Plate number <span style="color: var(--sc-color-muted)">· Step 2 of 4</span></span>
+            <div class="ab-track" aria-hidden="true"><span class="on"></span><span class="on"></span><span></span><span></span></div>
+          </div>
+          <p class="ab-q sc-type-heading-l">What is your plate number?</p>
+          <p class="sc-type-body-m" style="margin: 0; color: var(--sc-color-muted)">It's on your number plate and your vehicle registration card.</p>
+          <div class="ab-filler"></div>
+          <div class="ab-filler"></div>
+          <sc-button full-width icon="arrow-forward">Continue</sc-button>
+          <div class="ab-filler"></div>
+        </div>
+      </div>
+
+      <div class="ab-phone" lang="ar" dir="rtl" data-channel="transport" tabindex="0" aria-label="مثال جوال بالعربية">
+        <div class="ab-wash"></div>
+        <sc-app-bar sticky landmark="false">
+          <sc-back-link slot="start" href="#previous"></sc-back-link>
+          <span slot="title">مواصلات دبي</span>
+          <sc-language-switch slot="end" href="#en"></sc-language-switch>
+        </sc-app-bar>
+        <div class="ab-body">
+          <div class="ab-capsule">
+            <span class="sc-type-label-m">رقم اللوحة <span style="color: var(--sc-color-muted)">· الخطوة 2 من 4</span></span>
+            <div class="ab-track" aria-hidden="true"><span class="on"></span><span class="on"></span><span></span><span></span></div>
+          </div>
+          <p class="ab-q sc-type-heading-l">ما رقم لوحة مركبتك؟</p>
+          <p class="sc-type-body-m" style="margin: 0; color: var(--sc-color-muted)">تجده على لوحة المركبة أو في بطاقة ملكية المركبة.</p>
+          <div class="ab-filler"></div>
+          <div class="ab-filler"></div>
+          <sc-button full-width icon="arrow-forward">متابعة</sc-button>
+          <div class="ab-filler"></div>
+        </div>
+      </div>
+    </div>
+    <p class="pg-note" data-ar="هذان المثالان دائمًا في قناة مواصلات دبي. مرّر داخل الإطار: الشريط ثابت، والمحتوى يمر تحت الزجاج.">Both examples are fixed to Dubai Transport. Scroll inside a frame: the bar is sticky and the content passes under the glass.</p>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="ab-desktop">
+  <h2 id="ab-desktop" class="sc-type-heading-m" data-ar="ترويسة سطح المكتب · بالإنجليزية والعربية">Desktop header · English and Arabic</h2>
+  <div class="ab-desktop" lang="en" dir="ltr">
+    <div class="ab-wash"></div>
+    <sc-app-bar align="start" shape="floating" landmark="false">
+      <svg slot="title" class="ab-mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="3" /><circle cx="12" cy="12" r="3.2" fill="currentColor" /></svg>
+      <span slot="title">Dubai Now</span>
+      <nav class="ab-nav" aria-label="Main">
+        <ul>
+          <li><a href="#services" aria-current="page">Services</a></li>
+          <li><a href="#life-events">Life events</a></li>
+          <li><a href="#tasks">My tasks</a></li>
+          <li><a href="#payments">Payments</a></li>
+          <li><a href="#help">Help</a></li>
+        </ul>
+      </nav>
+      <sc-language-switch slot="end" appearance="plain" href="#ar"></sc-language-switch>
+      <sc-button slot="end" size="m" href="#sign-in">Sign in with UAE PASS</sc-button>
+    </sc-app-bar>
+    <div class="ab-desktop-body">
+      <p class="ab-h1 sc-type-heading-xl">What do you need to do?</p>
+    </div>
+  </div>
+  <div style="block-size: var(--sc-space-24)"></div>
+  <div class="ab-desktop" lang="ar" dir="rtl">
+    <div class="ab-wash"></div>
+    <sc-app-bar align="start" shape="floating" landmark="false">
+      <svg slot="title" class="ab-mark" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="3" /><circle cx="12" cy="12" r="3.2" fill="currentColor" /></svg>
+      <span slot="title">دبي الآن</span>
+      <nav class="ab-nav" aria-label="الرئيسية">
+        <ul>
+          <li><a href="#services" aria-current="page">الخدمات</a></li>
+          <li><a href="#life-events">مناسبات الحياة</a></li>
+          <li><a href="#tasks">مهامي</a></li>
+          <li><a href="#payments">المدفوعات</a></li>
+          <li><a href="#help">المساعدة</a></li>
+        </ul>
+      </nav>
+      <sc-language-switch slot="end" appearance="plain" href="#en"></sc-language-switch>
+      <sc-button slot="end" size="m" href="#sign-in">الدخول بالهوية الرقمية</sc-button>
+    </sc-app-bar>
+    <div class="ab-desktop-body">
+      <p class="ab-h1 sc-type-heading-xl">ماذا تريد أن تفعل؟</p>
+    </div>
+  </div>
+  <p class="pg-note" data-ar="align=&quot;start&quot; و shape=&quot;floating&quot;: العنوان في البداية، والتنقل في المنتصف، وعناصر النهاية في الطرف الآخر. هذه الأمثلة تتبع قناة شريط الأدوات.">align="start" and shape="floating": title at the start, navigation next to it, end controls at the far end. These follow the toolbar channel.</p>
+</section>
+
+<section class="pg-section" aria-labelledby="ab-variants">
+  <h2 id="ab-variants" class="sc-type-heading-m" data-ar="الخيارات">Options</h2>
+  <div class="ab-plain">
+    <span class="pg-label">align="center" · shape="bar" (default)</span>
+    <sc-app-bar landmark="false">
+      <sc-back-link slot="start" href="#previous"></sc-back-link>
+      <span slot="title" data-ar="دبي الآن">Dubai Now</span>
+      <sc-language-switch slot="end" href="#other"></sc-language-switch>
+    </sc-app-bar>
+    <div style="block-size: var(--sc-space-16)"></div>
+    <span class="pg-label">title only</span>
+    <sc-app-bar landmark="false">
+      <span slot="title" data-ar="زوروا دبي">Visit Dubai</span>
+    </sc-app-bar>
+    <div style="block-size: var(--sc-space-16)"></div>
+    <span class="pg-label">long title, end only</span>
+    <sc-app-bar landmark="false">
+      <span slot="title" data-ar="تجديد تسجيل المركبة">Renew vehicle registration</span>
+      <sc-language-switch slot="end" href="#other"></sc-language-switch>
+    </sc-app-bar>
+  </div>
+  <p class="pg-note" data-ar="تحت «تقليل الشفافية» يصبح الشريط سطحًا صلبًا، وفي وضع الألوان القسرية يستخدم ألوان النظام.">Under reduced transparency the bar becomes a solid surface; in forced colours it uses system colours.</p>
+</section>

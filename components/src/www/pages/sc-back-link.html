@@ -1,0 +1,72 @@
+<h1 class="pg-title sc-type-heading-xl" data-ar="رابط الرجوع">Back link</h1>
+<p class="pg-lede sc-type-body-m" data-ar="يعيدك إلى الخطوة السابقة. كبسولة زجاجية بارتفاع 44 بكسل، وسهمها ينعكس في العربية.">
+  Takes the user to the previous step. A 44px glass pill whose chevron mirrors in Arabic.
+</p>
+
+<section class="pg-section" aria-labelledby="bl-variants">
+  <h2 id="bl-variants" class="sc-type-heading-m" data-ar="الأنواع">Variants</h2>
+  <div class="pg-card" style="background: linear-gradient(in oklab, var(--sc-channel-wash-start), var(--sc-channel-wash-end))">
+    <div class="pg-grid">
+      <div class="pg-cell">
+        <span class="pg-label">href · &lt;a&gt;</span>
+        <sc-back-link href="#previous"></sc-back-link>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">no href · &lt;button&gt;</span>
+        <sc-back-link id="bl-button"></sc-back-link>
+        <span class="pg-note" id="bl-out" role="status"></span>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">appearance="plain"</span>
+        <sc-back-link appearance="plain" href="#previous"></sc-back-link>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">custom label</span>
+        <sc-back-link href="#vehicles" data-ar="العودة إلى مركباتي">Back to my vehicles</sc-back-link>
+      </div>
+    </div>
+    <p class="pg-note" data-ar="الزجاج شفاف جزئيًا فوق لون القناة، ويتحول إلى سطح صلب عند تفعيل «تقليل الشفافية».">The glass is translucent over the channel wash, and turns solid when the user asks for reduced transparency.</p>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="bl-states">
+  <h2 id="bl-states" class="sc-type-heading-m" data-ar="الحالات">States</h2>
+  <div class="pg-card">
+    <div class="pg-grid">
+      <div class="pg-cell">
+        <span class="pg-label">default</span>
+        <sc-back-link href="#previous"></sc-back-link>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">hover / pressed</span>
+        <sc-back-link href="#previous"></sc-back-link>
+        <span class="pg-note" data-ar="طبقة تعبئة هادئة فوق الزجاج.">A quiet fill layered over the glass.</span>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">focus (keyboard)</span>
+        <sc-back-link href="#previous" data-demo-focus></sc-back-link>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="bl-arabic">
+  <h2 id="bl-arabic" class="sc-type-heading-m" data-ar="بالعربية">In Arabic</h2>
+  <div class="pg-card" lang="ar" dir="rtl" style="background: linear-gradient(in oklab, var(--sc-channel-wash-start), var(--sc-channel-wash-end))">
+    <div class="pg-row">
+      <sc-back-link href="#previous"></sc-back-link>
+      <sc-back-link></sc-back-link>
+      <sc-back-link appearance="plain" href="#previous"></sc-back-link>
+    </div>
+    <p class="pg-note" lang="en" dir="ltr">Always lang="ar" dir="rtl". The chevron points right, toward the start of the line.</p>
+  </div>
+</section>
+
+<script>
+  {
+    const out = document.getElementById('bl-out');
+    document.getElementById('bl-button').addEventListener('click', () => {
+      out.textContent = document.getElementById('preview').lang === 'ar' ? 'تم الضغط: عُد في الموجّه' : 'Clicked: go back in your router';
+    });
+  }
+</script>

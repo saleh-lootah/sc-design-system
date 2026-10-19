@@ -1,0 +1,85 @@
+<h1 class="pg-title sc-type-heading-xl" data-ar="حقل التاريخ">Date input</h1>
+<p class="pg-lede sc-type-body-m" data-ar="لتاريخ يعرفه الشخص، مثل تاريخ الميلاد أو تاريخ مستند: يوم وشهر وسنة بلوحة المفاتيح الرقمية.">
+  For a date people know, such as a date of birth or the date on a document: day, month and year with the number keyboard.
+</p>
+
+<section class="pg-section" aria-labelledby="di-default">
+  <h2 id="di-default" class="sc-type-heading-m" data-ar="الاستخدام">Usage</h2>
+  <div class="pg-card">
+    <form id="di-form" novalidate>
+      <sc-date-input name="insuranceStart" label="When does your insurance policy start?" data-ar-label="متى تبدأ وثيقة التأمين؟" hint="For example, 27 3 2026" data-ar-hint="مثلًا، 27 3 2026" value="2026-03-27" data-demo-focus></sc-date-input>
+      <div class="pg-row" style="margin-block-start: var(--sc-space-24)">
+        <sc-button type="submit" data-ar="متابعة">Continue</sc-button>
+        <sc-button type="reset" variant="tertiary" data-ar="مسح">Clear</sc-button>
+      </div>
+      <p class="pg-output" id="di-output" role="status"></p>
+    </form>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="di-states">
+  <h2 id="di-states" class="sc-type-heading-m" data-ar="الحالات">States</h2>
+  <div class="pg-card">
+    <div class="pg-grid" style="grid-template-columns: repeat(auto-fill, minmax(340px, 1fr))">
+      <div class="pg-cell">
+        <span class="pg-label">error · one part (year)</span>
+        <sc-date-input label="When does your insurance policy start?" data-ar-label="متى تبدأ وثيقة التأمين؟" hint="For example, 27 3 2026" data-ar-hint="مثلًا، 27 3 2026" error="The date your policy starts must include a year" data-ar-error="يجب أن يتضمن تاريخ بدء الوثيقة السنة" error-parts="year" value=""></sc-date-input>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">error · whole date</span>
+        <sc-date-input label="Date of birth" data-ar-label="تاريخ الميلاد" error="Enter your date of birth" data-ar-error="أدخل تاريخ ميلادك" autocomplete="bday"></sc-date-input>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">optional</span>
+        <sc-date-input label="Date the vehicle was exported" data-ar-label="تاريخ تصدير المركبة" optional></sc-date-input>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">disabled (avoid)</span>
+        <sc-date-input label="Registration expiry date" data-ar-label="تاريخ انتهاء التسجيل" value="2026-11-15" disabled></sc-date-input>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="di-arabic">
+  <h2 id="di-arabic" class="sc-type-heading-m" data-ar="بالعربية">In Arabic</h2>
+  <div class="pg-card" lang="ar" dir="rtl">
+    <div class="pg-grid" style="grid-template-columns: repeat(auto-fill, minmax(340px, 1fr))">
+      <sc-date-input label="متى تبدأ وثيقة التأمين؟" hint="مثلًا، 27 3 2026" value="2026-03-27"></sc-date-input>
+      <sc-date-input label="تاريخ الميلاد" error="يجب أن يتضمن تاريخ الميلاد السنة" error-parts="year"></sc-date-input>
+    </div>
+    <p class="pg-note" lang="en" dir="ltr">This card is always lang="ar" dir="rtl": يوم / شهر / سنة run right to left, Day on the right.</p>
+  </div>
+</section>
+
+<script>
+  {
+    // data-ar-<attr>="…" swaps an attribute (label, hint, error…) when the toolbar is Arabic.
+    const preview = document.getElementById('preview');
+    window.scFieldsApply = () => {
+      const ar = preview.lang === 'ar';
+      for (const el of preview.querySelectorAll('*')) {
+        for (const { name, value } of [...el.attributes]) {
+          if (!name.startsWith('data-ar-')) continue;
+          const attr = name.slice(8);
+          if (!el.hasAttribute(`data-en-${attr}`)) el.setAttribute(`data-en-${attr}`, el.getAttribute(attr) ?? '');
+          el.setAttribute(attr, ar ? value : el.getAttribute(`data-en-${attr}`));
+        }
+      }
+    };
+    if (!window.scFieldsObserver) {
+      window.scFieldsObserver = new MutationObserver(() => window.scFieldsApply());
+      window.scFieldsObserver.observe(preview, { attributes: true, attributeFilter: ['lang'] });
+    }
+    window.scFieldsApply();
+
+
+    const form = document.getElementById('di-form');
+    const out = document.getElementById('di-output');
+    form.addEventListener('submit', (ev) => {
+      ev.preventDefault();
+      out.textContent = (preview.lang === 'ar' ? 'تم الإرسال: ' : 'Submitted: ') + [...new FormData(form)].map(([k, v]) => `${k}=${v}`).join(', ');
+    });
+    form.addEventListener('reset', () => (out.textContent = preview.lang === 'ar' ? 'تمت إعادة تعيين النموذج' : 'Form reset'));
+  }
+</script>

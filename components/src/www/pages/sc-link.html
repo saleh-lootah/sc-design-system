@@ -1,0 +1,96 @@
+<h1 class="pg-title sc-type-heading-xl" data-ar="الرابط">Link</h1>
+<p class="pg-lede sc-type-body-m" data-ar="ينقلك إلى مكان آخر. اكتب نص الرابط بحيث يوضح وجهته، ولا تكتب «انقر هنا».">
+  Goes somewhere. Write link text that says where it goes, never "click here".
+</p>
+
+<section class="pg-section" aria-labelledby="l-inline">
+  <h2 id="l-inline" class="sc-type-heading-m" data-ar="داخل النص">Inline</h2>
+  <div class="pg-card">
+    <p class="sc-type-body-l" data-only-lang="en" style="margin: 0; max-inline-size: var(--sc-size-measure)">
+      To renew, you need a valid <sc-link href="#insurance">insurance certificate</sc-link> and a passed
+      <sc-link href="#test">vehicle test</sc-link>. Check that you have no unpaid <sc-link href="#fines">traffic fines</sc-link> first.
+    </p>
+    <p class="sc-type-body-l" data-only-lang="ar" style="margin: 0; max-inline-size: var(--sc-size-measure)">
+      للتجديد، تحتاج إلى <sc-link href="#insurance">شهادة تأمين</sc-link> سارية و<sc-link href="#test">فحص مركبة</sc-link> ناجح.
+      تأكد أولًا من عدم وجود <sc-link href="#fines">مخالفات مرورية</sc-link> غير مدفوعة.
+    </p>
+    <p class="pg-note" data-ar="الروابط داخل النص تأخذ خط الجملة، وتظهر بلون إجراء القناة مع خط سفلي. الرابط الذي تمت زيارته يظهر بلون حبر القناة.">Inline links take the sentence's type, in the channel action colour with an underline. Visited links use the channel ink colour.</p>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="l-states">
+  <h2 id="l-states" class="sc-type-heading-m" data-ar="الحالات">States</h2>
+  <div class="pg-card">
+    <div class="pg-grid">
+      <div class="pg-cell">
+        <span class="pg-label">default</span>
+        <p class="sc-type-body-m" style="margin: 0"><sc-link href="#fees-guide" data-ar="دليل الرسوم">Fees guide</sc-link></p>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">hover</span>
+        <p class="sc-type-body-m" style="margin: 0"><sc-link href="#fees-guide-2" data-ar="مرّر المؤشر فوقي">Hover over me</sc-link></p>
+        <span class="pg-note" data-ar="يصبح الخط السفلي أسمك.">The underline thickens.</span>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">focus (keyboard)</span>
+        <p class="sc-type-body-m" style="margin: 0"><sc-link href="#fees-guide-3" data-demo-focus data-ar="دليل الرسوم">Fees guide</sc-link></p>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">visited</span>
+        <p class="sc-type-body-m" style="margin: 0"><sc-link href="" data-ar="هذه الصفحة">This page</sc-link></p>
+        <span class="pg-note" data-ar="يشير هذا الرابط إلى الصفحة الحالية، لذا يظهر كرابط تمت زيارته.">Links to the current page, so it shows as visited.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="l-external">
+  <h2 id="l-external" class="sc-type-heading-m" data-ar="رابط خارجي">External</h2>
+  <div class="pg-card">
+    <p class="sc-type-body-m" style="margin: 0">
+      <span data-ar="اقرأ">Read the</span>
+      <sc-link href="https://www.rta.ae" external data-ar="دليل رسوم هيئة الطرق والمواصلات">RTA fees guide</sc-link>
+      <span data-ar="قبل الدفع.">before you pay.</span>
+    </p>
+    <p class="pg-note" data-ar="يفتح في علامة تبويب جديدة، ويضيف أيقونة تنعكس في العربية، ونصًا مخفيًا «(يفتح في علامة تبويب جديدة)». استخدمه فقط عندما يؤدي ترك الصفحة إلى فقدان تقدّم المستخدم.">Opens in a new tab, adds an icon that mirrors in Arabic and the visually hidden "(opens in new tab)". Use it only when leaving the page would lose the user's progress.</p>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="l-standalone">
+  <h2 id="l-standalone" class="sc-type-heading-m" data-ar="رابط مستقل">Standalone</h2>
+  <div class="pg-card">
+    <div class="pg-row">
+      <sc-link href="#services" standalone data-ar="عرض كل الخدمات">View all services</sc-link>
+      <sc-link href="#history" standalone data-ar="سجل المدفوعات">Payment history</sc-link>
+      <sc-link href="https://www.rta.ae" standalone external data-ar="موقع هيئة الطرق والمواصلات">RTA website</sc-link>
+    </div>
+    <p class="pg-note" data-ar="رابط بمفرده في سطر، بمساحة لمس 44 بكسل وسهم في النهاية ينعكس في العربية.">A link on its own line: a 44px target and an end chevron that mirrors in Arabic.</p>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="l-arabic">
+  <h2 id="l-arabic" class="sc-type-heading-m" data-ar="بالعربية">In Arabic</h2>
+  <div class="pg-card" lang="ar" dir="rtl">
+    <p class="sc-type-body-l" style="margin: 0 0 var(--sc-space-16); max-inline-size: var(--sc-size-measure)">
+      للتجديد، تحتاج إلى <sc-link href="#insurance">شهادة تأمين</sc-link> سارية و<sc-link href="#test">فحص مركبة</sc-link> ناجح.
+      اقرأ <sc-link href="https://www.rta.ae" external>دليل الرسوم</sc-link> قبل الدفع.
+    </p>
+    <div class="pg-row">
+      <sc-link href="#services" standalone>عرض كل الخدمات</sc-link>
+      <sc-link href="https://www.rta.ae" standalone external>موقع الهيئة</sc-link>
+    </div>
+    <p class="pg-note" lang="en" dir="ltr">This card is always lang="ar" dir="rtl", whatever the toolbar says.</p>
+  </div>
+</section>
+
+<script>
+  {
+    // Show the paragraph written in the preview language (mixed-content sentences can't use data-ar).
+    const preview = document.getElementById('preview');
+    const sync = () => {
+      for (const el of preview.querySelectorAll('[data-only-lang]')) el.hidden = el.dataset.onlyLang !== preview.lang;
+    };
+    sync();
+    new MutationObserver(sync).observe(preview, { attributes: true, attributeFilter: ['lang'] });
+  }
+</script>

@@ -1,0 +1,55 @@
+<h1 class="pg-title sc-type-heading-xl" data-ar="الشبكة">Grid</h1>
+<p class="pg-lede sc-type-body-m" data-ar="4 أعمدة على الهاتف، و8 من 600 بكسل، و12 من 1024، مع فواصل 16 و20 و24 بكسل من رموز التخطيط.">
+  4 columns on phones, 8 from 600px and 12 from 1024px, with 16, 20 and 24px gutters from the layout tokens.
+</p>
+
+<section class="pg-section" aria-labelledby="gr-cols">
+  <h2 id="gr-cols" class="sc-type-heading-m" data-ar="الأعمدة">Columns</h2>
+  <sc-grid span="1">
+    <div class="gr-cell">1</div><div class="gr-cell">2</div><div class="gr-cell">3</div><div class="gr-cell">4</div>
+    <div class="gr-cell">5</div><div class="gr-cell">6</div><div class="gr-cell">7</div><div class="gr-cell">8</div>
+    <div class="gr-cell">9</div><div class="gr-cell">10</div><div class="gr-cell">11</div><div class="gr-cell">12</div>
+  </sc-grid>
+</section>
+
+<section class="pg-section" aria-labelledby="gr-cards">
+  <h2 id="gr-cards" class="sc-type-heading-m" data-ar="ثلاثة في الصف">Three to a row</h2>
+  <sc-grid span-medium="4" span-expanded="4">
+    <div class="gr-cell" data-ar="span-expanded=4">span-expanded="4"</div>
+    <div class="gr-cell" data-ar="span-medium=4">span-medium="4"</div>
+    <div class="gr-cell" data-ar="بعرض كامل على الهاتف">full width on phones</div>
+  </sc-grid>
+</section>
+
+<section class="pg-section" aria-labelledby="gr-mixed">
+  <h2 id="gr-mixed" class="sc-type-heading-m" data-ar="عرض لكل عنصر">Per-item width</h2>
+  <sc-grid>
+    <div class="gr-cell" style="--sc-grid-span: 8">--sc-grid-span: 8</div>
+    <div class="gr-cell" style="--sc-grid-span: 4">--sc-grid-span: 4</div>
+  </sc-grid>
+  <p class="pg-note" data-ar="يُحدّ العرض بعدد الأعمدة المتاحة، لذا يصبح 8 عرضًا كاملًا على الهاتف.">Spans are capped at the columns available, so 8 becomes full width on a phone.</p>
+</section>
+
+<section class="pg-section" aria-labelledby="gr-arabic">
+  <h2 id="gr-arabic" class="sc-type-heading-m" data-ar="بالعربية">In Arabic</h2>
+  <div lang="ar" dir="rtl">
+    <sc-grid span-expanded="4" span-medium="4">
+      <div class="gr-cell">الأول</div><div class="gr-cell">الثاني</div><div class="gr-cell">الثالث</div>
+    </sc-grid>
+  </div>
+  <p class="pg-note" data-ar="الأعمدة تبدأ من اليمين في العربية.">Columns start from the right in Arabic.</p>
+</section>
+
+<style>
+  .gr-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-block-size: var(--sc-space-64);
+    padding: var(--sc-space-8);
+    border-radius: var(--sc-radius-s);
+    background: var(--sc-channel-subtle);
+    color: var(--sc-channel-ink);
+    text-align: center;
+  }
+</style>

@@ -1,0 +1,71 @@
+<h1 class="pg-title sc-type-heading-xl" data-ar="تقدّم الخطوات">Step progress</h1>
+<p class="pg-lede sc-type-body-m" data-ar="«الخطوة 2 من 4». النص يحمل المعنى، والمسار زخرفي. يمتلئ من بداية السطر، أي من اليمين بالعربية.">
+  "Step 2 of 4". The text carries the meaning and the track is decorative. It fills from the inline start, so from the right in Arabic.
+</p>
+
+<section class="pg-section" aria-labelledby="sp-steps">
+  <h2 id="sp-steps" class="sc-type-heading-m" data-ar="الخطوات">Steps</h2>
+  <div class="pg-card" style="max-inline-size: 420px">
+    <sc-step-progress current="1" total="4" label="Vehicle" data-label-ar="المركبة"></sc-step-progress>
+    <div style="block-size: var(--sc-space-24)"></div>
+    <sc-step-progress current="2" total="4" label="Plate number" data-label-ar="رقم اللوحة"></sc-step-progress>
+    <div style="block-size: var(--sc-space-24)"></div>
+    <sc-step-progress current="3" total="4" label="Check your answers" data-label-ar="راجع إجاباتك"></sc-step-progress>
+    <div style="block-size: var(--sc-space-24)"></div>
+    <sc-step-progress current="4" total="4" label="Pay" data-label-ar="الدفع"></sc-step-progress>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="sp-capsule">
+  <h2 id="sp-capsule" class="sc-type-heading-m" data-ar="في كبسولة التقدّم">In the progress capsule</h2>
+  <div style="max-inline-size: 420px; padding: var(--sc-space-16); border: var(--sc-size-border-hairline) solid var(--sc-color-glass-edge); border-radius: var(--sc-radius-card); background: var(--sc-color-glass); box-shadow: var(--sc-elevation-1)">
+    <sc-step-progress current="2" total="4" label="Plate number" data-label-ar="رقم اللوحة"></sc-step-progress>
+  </div>
+  <p class="pg-note" data-ar="كما في D+: كبسولة زجاجية أعلى الصفحة. الكبسولة من التخطيط، وليست جزءًا من المكوّن.">As in D+: a glass capsule at the top of the page. The capsule is layout, not part of the component.</p>
+</section>
+
+<section class="pg-section" aria-labelledby="sp-variants">
+  <h2 id="sp-variants" class="sc-type-heading-m" data-ar="بدون اسم، وعدد خطوات مختلف">Without a label, other lengths</h2>
+  <div class="pg-card" style="max-inline-size: 420px">
+    <sc-step-progress current="1" total="2"></sc-step-progress>
+    <div style="block-size: var(--sc-space-24)"></div>
+    <sc-step-progress current="5" total="7"></sc-step-progress>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="sp-channels">
+  <h2 id="sp-channels" class="sc-type-heading-m" data-ar="القنوات السبع">All seven channels</h2>
+  <div class="pg-card">
+    <div class="pg-grid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr))">
+      <div class="pg-cell" style="justify-items: stretch" data-channel="now"><span class="pg-label">now</span><sc-step-progress current="2" total="4" label="Plate number" data-label-ar="رقم اللوحة"></sc-step-progress></div>
+      <div class="pg-cell" style="justify-items: stretch" data-channel="transport"><span class="pg-label">transport</span><sc-step-progress current="2" total="4" label="Plate number" data-label-ar="رقم اللوحة"></sc-step-progress></div>
+      <div class="pg-cell" style="justify-items: stretch" data-channel="visit"><span class="pg-label">visit</span><sc-step-progress current="2" total="4" label="Plate number" data-label-ar="رقم اللوحة"></sc-step-progress></div>
+      <div class="pg-cell" style="justify-items: stretch" data-channel="justice"><span class="pg-label">justice</span><sc-step-progress current="2" total="4" label="Plate number" data-label-ar="رقم اللوحة"></sc-step-progress></div>
+      <div class="pg-cell" style="justify-items: stretch" data-channel="build"><span class="pg-label">build</span><sc-step-progress current="2" total="4" label="Plate number" data-label-ar="رقم اللوحة"></sc-step-progress></div>
+      <div class="pg-cell" style="justify-items: stretch" data-channel="invest"><span class="pg-label">invest</span><sc-step-progress current="2" total="4" label="Plate number" data-label-ar="رقم اللوحة"></sc-step-progress></div>
+      <div class="pg-cell" style="justify-items: stretch" data-channel="trade"><span class="pg-label">trade</span><sc-step-progress current="2" total="4" label="Plate number" data-label-ar="رقم اللوحة"></sc-step-progress></div>
+    </div>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="sp-arabic">
+  <h2 id="sp-arabic" class="sc-type-heading-m" data-ar="بالعربية">In Arabic</h2>
+  <div class="pg-card" lang="ar" dir="rtl" style="max-inline-size: 420px">
+    <sc-step-progress current="2" total="4" label="رقم اللوحة"></sc-step-progress>
+    <div style="block-size: var(--sc-space-24)"></div>
+    <sc-step-progress current="4" total="4" label="الدفع"></sc-step-progress>
+    <p class="pg-note" lang="en" dir="ltr">Always lang="ar" dir="rtl". Fills from the right; digits stay Latin.</p>
+  </div>
+</section>
+
+<script>
+  {
+    const preview = document.getElementById('preview');
+    for (const el of preview.querySelectorAll('[data-label-ar]')) {
+      const en = el.getAttribute('label');
+      const apply = () => el.setAttribute('label', preview.lang === 'ar' ? el.dataset.labelAr : en);
+      apply();
+      new MutationObserver(apply).observe(preview, { attributes: true, attributeFilter: ['lang'] });
+    }
+  }
+</script>

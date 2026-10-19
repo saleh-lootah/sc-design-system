@@ -1,0 +1,167 @@
+<h1 class="pg-title sc-type-heading-xl" data-ar="الزر">Button</h1>
+<p class="pg-lede sc-type-body-m" data-ar="يبدأ إجراءً. استخدم فعلًا في التسمية، وزرًا أساسيًا واحدًا في كل صفحة.">
+  Starts an action. Label it with a verb, and use one primary button per page.
+</p>
+
+<section class="pg-section" aria-labelledby="b-variants">
+  <h2 id="b-variants" class="sc-type-heading-m" data-ar="الأنواع">Variants</h2>
+  <div class="pg-card">
+    <div class="pg-grid">
+      <div class="pg-cell">
+        <span class="pg-label">primary</span>
+        <sc-button variant="primary" data-ar="متابعة">Continue</sc-button>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">secondary</span>
+        <sc-button variant="secondary" data-ar="حفظ وإكمال لاحقًا">Save and finish later</sc-button>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">tertiary</span>
+        <sc-button variant="tertiary" data-ar="إلغاء">Cancel</sc-button>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">destructive</span>
+        <sc-button variant="destructive" data-ar="حذف المسودة">Delete draft</sc-button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="b-sizes">
+  <h2 id="b-sizes" class="sc-type-heading-m" data-ar="الأحجام">Sizes</h2>
+  <div class="pg-card">
+    <div class="pg-row">
+      <span class="pg-label" style="min-inline-size: 80px">l · 54px</span>
+      <sc-button data-ar="متابعة">Continue</sc-button>
+      <sc-button variant="secondary" data-ar="تغيير">Change</sc-button>
+      <sc-button variant="tertiary" data-ar="إلغاء">Cancel</sc-button>
+      <sc-button variant="destructive" data-ar="حذف">Delete</sc-button>
+    </div>
+    <div class="pg-row">
+      <span class="pg-label" style="min-inline-size: 80px">m · 44px</span>
+      <sc-button size="m" data-ar="متابعة">Continue</sc-button>
+      <sc-button size="m" variant="secondary" data-ar="تغيير">Change</sc-button>
+      <sc-button size="m" variant="tertiary" data-ar="إلغاء">Cancel</sc-button>
+      <sc-button size="m" variant="destructive" data-ar="حذف">Delete</sc-button>
+    </div>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="b-states">
+  <h2 id="b-states" class="sc-type-heading-m" data-ar="الحالات">States</h2>
+  <div class="pg-card">
+    <div class="pg-grid">
+      <div class="pg-cell">
+        <span class="pg-label">default</span>
+        <sc-button data-ar="متابعة">Continue</sc-button>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">hover / pressed</span>
+        <sc-button data-ar="مرّر المؤشر فوقي">Hover over me</sc-button>
+        <span class="pg-note" data-ar="يقترب لون التمرير من اللون المضغوط، ويستخدم الضغط اللون المضغوط للقناة. للأجهزة ذات المؤشر فقط.">Hover blends toward, and pressing uses, the channel pressed colour. Pointer devices only.</span>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">focus (keyboard)</span>
+        <sc-button data-demo-focus data-ar="متابعة">Continue</sc-button>
+        <span class="pg-note" data-ar="حلقة بلون القناة بسماكة 3 بكسل وفراغ 2 بكسل، عند التنقل بلوحة المفاتيح فقط.">3px channel ring with a 2px surface gap, for keyboard focus only.</span>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">loading</span>
+        <sc-button loading data-ar="الدفع عبر دبي باي">Pay with Dubai Pay</sc-button>
+        <span class="pg-note" data-ar="يحافظ على عرضه، ويضبط aria-busy، ويعلن «جارٍ التحميل»، ويتجاهل النقرات.">Keeps its width, sets aria-busy, announces "Loading", ignores clicks.</span>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">disabled (avoid)</span>
+        <sc-button disabled data-ar="متابعة">Continue</sc-button>
+        <span class="pg-note" data-ar="الزر المعطّل لا يوضح السبب ولا يمكن التركيز عليه. أبقِه مفعّلًا واعرض رسالة خطأ بدلًا من ذلك.">Disabled buttons give no reason and can't be focused. Keep it enabled and show an error instead.</span>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">loading · secondary</span>
+        <sc-button loading variant="secondary" data-ar="حفظ">Save</sc-button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="b-icons">
+  <h2 id="b-icons" class="sc-type-heading-m" data-ar="مع أيقونة">With an icon</h2>
+  <div class="pg-card">
+    <div class="pg-row">
+      <sc-button icon="arrow-forward" data-ar="متابعة">Continue</sc-button>
+      <sc-button icon="search" icon-position="start" variant="secondary" data-ar="البحث في الخدمات">Search services</sc-button>
+      <sc-button icon="arrow-forward" size="m" variant="tertiary" data-ar="عرض كل الخدمات">View all services</sc-button>
+    </div>
+    <p class="pg-note" data-ar="ينعكس سهم التقدم في العربية. أيقونة البحث لا تنعكس أبدًا.">The forward arrow mirrors in Arabic. The search icon never mirrors.</p>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="b-link">
+  <h2 id="b-link" class="sc-type-heading-m" data-ar="كرابط">As a link</h2>
+  <div class="pg-card">
+    <div class="pg-row">
+      <sc-button href="#start" icon="arrow-forward" data-ar="ابدأ الآن">Start now</sc-button>
+      <sc-button href="#vehicles" variant="secondary" data-ar="مركباتي">My vehicles</sc-button>
+    </div>
+    <p class="pg-note" data-ar="مع href يُعرض الزر كرابط: استخدمه عندما ينقلك الإجراء إلى صفحة أخرى.">With href, the button renders a link: use it when the action goes to another page.</p>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="b-form">
+  <h2 id="b-form" class="sc-type-heading-m" data-ar="داخل نموذج">Inside a form</h2>
+  <div class="pg-card">
+    <form id="b-demo-form">
+      <label class="pg-field">
+        <span class="sc-type-label-m" data-ar="رقم اللوحة">Plate number</span>
+        <input name="plate" value="A 12345" autocomplete="off" dir="ltr" />
+      </label>
+      <div class="pg-row">
+        <sc-button type="submit" icon="arrow-forward" data-ar="متابعة">Continue</sc-button>
+        <sc-button type="reset" variant="tertiary" data-ar="مسح">Clear</sc-button>
+      </div>
+      <p class="pg-output" id="b-demo-output" role="status"></p>
+    </form>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="b-full">
+  <h2 id="b-full" class="sc-type-heading-m" data-ar="بعرض كامل">Full width</h2>
+  <div class="pg-card pg-narrow">
+    <sc-button full-width icon="arrow-forward" data-ar="تجديد التسجيل">Renew registration</sc-button>
+    <div style="block-size: var(--sc-space-12)"></div>
+    <sc-button full-width variant="secondary" data-ar="حفظ وإكمال لاحقًا">Save and finish later</sc-button>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="b-arabic">
+  <h2 id="b-arabic" class="sc-type-heading-m" data-ar="بالعربية">In Arabic</h2>
+  <div class="pg-card" lang="ar" dir="rtl">
+    <div class="pg-row">
+      <sc-button icon="arrow-forward">متابعة</sc-button>
+      <sc-button variant="secondary">حفظ وإكمال لاحقًا</sc-button>
+      <sc-button variant="tertiary">إلغاء</sc-button>
+      <sc-button variant="destructive">حذف المسودة</sc-button>
+    </div>
+    <div class="pg-row">
+      <sc-button size="m" icon="arrow-forward">متابعة</sc-button>
+      <sc-button loading>الدفع عبر دبي باي</sc-button>
+      <sc-button href="#start" variant="secondary" icon="arrow-forward">ابدأ الآن</sc-button>
+    </div>
+    <p class="pg-note" lang="en" dir="ltr">This card is always lang="ar" dir="rtl", whatever the toolbar says.</p>
+  </div>
+</section>
+
+<script>
+  {
+    const form = document.getElementById('b-demo-form');
+    const out = document.getElementById('b-demo-output');
+    const ar = () => document.getElementById('preview').lang === 'ar';
+    form.addEventListener('submit', (ev) => {
+      ev.preventDefault();
+      const plate = new FormData(form).get('plate');
+      out.textContent = ar() ? `تم الإرسال: plate=${plate}` : `Submitted: plate=${plate}`;
+    });
+    form.addEventListener('reset', () => {
+      out.textContent = ar() ? 'تمت إعادة تعيين النموذج' : 'Form reset';
+    });
+  }
+</script>

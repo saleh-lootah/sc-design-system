@@ -1,0 +1,116 @@
+<h1 class="pg-title sc-type-heading-xl" data-ar="قائمة الملخص">Summary list</h1>
+<p class="pg-lede sc-type-body-m" data-ar="نمط «راجع إجاباتك»: مفتاح وقيمة وإجراء «تغيير» اختياري، في قائمة وصف واحدة.">
+  The "Check your answers" pattern: a key, a value and an optional "Change" action, in one description list.
+</p>
+
+<section class="pg-section" aria-labelledby="sl-cya">
+  <h2 id="sl-cya" class="sc-type-heading-m" data-ar="راجع إجاباتك (عرض واسع)">Check your answers (wide)</h2>
+  <div class="sl-page">
+    <h3 class="sc-type-title-m sl-heading" data-ar="المركبة">Vehicle</h3>
+    <sc-summary-list>
+      <sc-summary-row label="Vehicle" data-ar-attrs='{"label":"المركبة"}' data-ar="نيسان باترول 2021، أبيض">Nissan Patrol 2021, white</sc-summary-row>
+      <sc-summary-row label="Plate" data-ar-attrs='{"label":"رقم اللوحة"}'><span data-ar="دبي">Dubai</span> <sc-ltr>A 48213</sc-ltr></sc-summary-row>
+      <sc-summary-row label="Registration expires" data-ar-attrs='{"label":"ينتهي التسجيل في"}' data-ar="3 نوفمبر 2026">3 November 2026</sc-summary-row>
+    </sc-summary-list>
+
+    <h3 class="sc-type-title-m sl-heading" data-ar="التجديد">Renewal</h3>
+    <sc-summary-list>
+      <sc-summary-row label="Renew for" action-href="#renew-for" data-ar-attrs='{"label":"مدة التجديد"}' data-ar="سنة واحدة، حتى 3 نوفمبر 2027">1 year, until 3 November 2027</sc-summary-row>
+      <sc-summary-row label="Technical inspection" action-href="#inspection" data-ar-attrs='{"label":"الفحص الفني"}' data-ar="اجتاز الفحص في 12 أكتوبر 2026">Passed on 12 October 2026</sc-summary-row>
+      <sc-summary-row label="Insurance" action-href="#insurance" data-ar-attrs='{"label":"التأمين"}' data-ar="ساري حتى 14 مارس 2027">Valid until 14 March 2027</sc-summary-row>
+      <sc-summary-row label="Registration card" action-href="#card" data-ar-attrs='{"label":"بطاقة التسجيل"}' data-ar="بطاقة رقمية في دبي الآن">Digital card in Dubai Now</sc-summary-row>
+      <sc-summary-row label="Delivery address" action-href="#address" data-ar-attrs='{"label":"عنوان التوصيل"}'>
+        <span data-ar="فيلا 14، شارع 23">Villa 14, Street 23</span><br />
+        <span data-ar="الصفوح 2، دبي">Al Sufouh 2, Dubai</span>
+      </sc-summary-row>
+    </sc-summary-list>
+    <p class="pg-note" data-ar="الصفوف التي ليس لها إجراء تحتفظ بعمود الإجراء، لذا تبقى القيم محاذية.">Rows without an action keep the action column, so values stay aligned.</p>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="sl-narrow">
+  <h2 id="sl-narrow" class="sc-type-heading-m" data-ar="ضيق (أقل من 600 بكسل)">Narrow (under 600px)</h2>
+  <div class="pg-grid sl-pair">
+    <div lang="en" dir="ltr">
+      <span class="pg-label">English</span>
+      <h3 class="sc-type-title-m sl-heading">Renewal</h3>
+      <sc-summary-list>
+        <sc-summary-row label="Renew for" action-href="#renew-for">1 year, until 3 November 2027</sc-summary-row>
+        <sc-summary-row label="Technical inspection" action-href="#inspection">Passed on 12 October 2026</sc-summary-row>
+        <sc-summary-row label="Insurance" action-href="#insurance">Valid until 14 March 2027</sc-summary-row>
+        <sc-summary-row label="Registration card" action-href="#card">Digital card in Dubai Now</sc-summary-row>
+      </sc-summary-list>
+    </div>
+    <div lang="ar" dir="rtl">
+      <span class="pg-label">العربية</span>
+      <h3 class="sc-type-title-m sl-heading">التجديد</h3>
+      <sc-summary-list>
+        <sc-summary-row label="مدة التجديد" action-href="#renew-for">سنة واحدة، حتى 3 نوفمبر 2027</sc-summary-row>
+        <sc-summary-row label="الفحص الفني" action-href="#inspection">اجتاز الفحص في 12 أكتوبر 2026</sc-summary-row>
+        <sc-summary-row label="التأمين" action-href="#insurance">ساري حتى 14 مارس 2027</sc-summary-row>
+        <sc-summary-row label="بطاقة التسجيل" action-href="#card">بطاقة رقمية في دبي الآن</sc-summary-row>
+      </sc-summary-list>
+    </div>
+  </div>
+  <p class="pg-note" data-ar="يستجيب التخطيط لعرض القائمة نفسها (استعلام الحاوية)، لا لعرض الشاشة.">The layout responds to the list's own width (a container query), not the screen's.</p>
+</section>
+
+<section class="pg-section" aria-labelledby="sl-arabic">
+  <h2 id="sl-arabic" class="sc-type-heading-m" data-ar="بالعربية">In Arabic</h2>
+  <div class="sl-page" lang="ar" dir="rtl">
+    <h3 class="sc-type-title-m sl-heading">المركبة</h3>
+    <sc-summary-list>
+      <sc-summary-row label="المركبة">نيسان باترول 2021، أبيض</sc-summary-row>
+      <sc-summary-row label="رقم اللوحة">دبي <sc-ltr>A 48213</sc-ltr></sc-summary-row>
+      <sc-summary-row label="مدة التجديد" action-href="#renew-for">سنة واحدة، حتى 3 نوفمبر 2027</sc-summary-row>
+      <sc-summary-row label="التأمين" action-href="#insurance">ساري حتى 14 مارس 2027</sc-summary-row>
+    </sc-summary-list>
+    <p class="pg-note" lang="en" dir="ltr">This block is always lang="ar" dir="rtl". The hidden action text reads "تغيير مدة التجديد".</p>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="sl-plain">
+  <h2 id="sl-plain" class="sc-type-heading-m" data-ar="بدون بطاقة">Plain (inside another card)</h2>
+  <div class="pg-card">
+    <sc-summary-list appearance="plain">
+      <sc-summary-row label="Plate" action-href="#plate" data-ar-attrs='{"label":"رقم اللوحة"}'><span data-ar="دبي">Dubai</span> <sc-ltr>A 48213</sc-ltr></sc-summary-row>
+      <sc-summary-row label="Mobile number" action-href="#mobile" action-text="Edit" data-ar-attrs='{"label":"رقم الهاتف المتحرك","action-text":"تعديل"}'><sc-ltr>+971 50 123 4567</sc-ltr></sc-summary-row>
+      <sc-summary-row label="Email" value="saeed.almansoori@example.ae" data-ar-attrs='{"label":"البريد الإلكتروني"}'></sc-summary-row>
+    </sc-summary-list>
+    <p class="pg-note" data-ar="«action-text» يغيّر نص الإجراء؛ و«value» يعرض قيمة نصية بسيطة.">action-text changes the action's words; value gives a plain-text value.</p>
+  </div>
+</section>
+
+<style>
+  .sl-page {
+    max-inline-size: var(--sc-container-reading);
+  }
+  .sl-heading {
+    margin-block: var(--sc-space-24) var(--sc-space-12);
+  }
+  .sl-heading:first-child,
+  .pg-label + .sl-heading {
+    margin-block-start: var(--sc-space-8);
+  }
+  .sl-pair > div {
+    max-inline-size: 380px;
+  }
+</style>
+
+<script>
+  {
+    // Swaps attributes listed in data-ar-attrs when the toolbar language changes.
+    const preview = document.getElementById('preview');
+    const swap = () => {
+      const ar = preview.lang === 'ar';
+      for (const el of preview.querySelectorAll('[data-ar-attrs]')) {
+        const map = JSON.parse(el.dataset.arAttrs);
+        if (!el.dataset.enAttrs) el.dataset.enAttrs = JSON.stringify(Object.fromEntries(Object.keys(map).map((k) => [k, el.getAttribute(k)])));
+        const src = ar ? map : JSON.parse(el.dataset.enAttrs);
+        for (const [k, v] of Object.entries(src)) if (v != null) el.setAttribute(k, v);
+      }
+    };
+    swap();
+    new MutationObserver(swap).observe(preview, { attributes: true, attributeFilter: ['lang'] });
+  }
+</script>

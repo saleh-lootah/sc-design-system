@@ -1,0 +1,99 @@
+<h1 class="pg-title sc-type-heading-xl" data-ar="مربع النص">Textarea</h1>
+<p class="pg-lede sc-type-body-m" data-ar="لإجابة أطول، مثل سبب أو وصف. يمكن أن يعرض عدد الأحرف المتبقية.">
+  For a longer answer, such as a reason or a description. It can show how many characters are left.
+</p>
+
+<section class="pg-section" aria-labelledby="ta-count">
+  <h2 id="ta-count" class="sc-type-heading-m" data-ar="مع عدد الأحرف">With a character count</h2>
+  <div class="pg-card" style="max-inline-size: 640px">
+    <form id="ta-form" novalidate>
+      <sc-textarea
+        name="reason"
+        label="Why are you cancelling the registration?"
+        data-ar-label="لماذا تلغي تسجيل المركبة؟"
+        hint="For example, the vehicle was sold or exported"
+        data-ar-hint="مثلًا، بيعت المركبة أو صُدّرت"
+        maxlength="200"
+        value="The vehicle was sold to a dealer in Sharjah on 3 March."
+        data-ar-value="بيعت المركبة إلى وكيل في الشارقة في 3 مارس."
+        data-demo-focus
+      ></sc-textarea>
+      <div class="pg-row" style="margin-block-start: var(--sc-space-24)">
+        <sc-button type="submit" data-ar="متابعة">Continue</sc-button>
+        <sc-button type="reset" variant="tertiary" data-ar="مسح">Clear</sc-button>
+      </div>
+      <p class="pg-output" id="ta-output" role="status"></p>
+    </form>
+    <p class="pg-note" data-ar="يتغيّر العدد الظاهر مع كل حرف، لكن قارئ الشاشة يسمعه بهدوء بعد توقف الكتابة لثانية واحدة فقط.">The visible count changes with every keystroke; screen readers hear it politely, only after typing pauses for a second.</p>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="ta-states">
+  <h2 id="ta-states" class="sc-type-heading-m" data-ar="الحالات">States</h2>
+  <div class="pg-card">
+    <div class="pg-grid" style="grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); justify-items: stretch">
+      <div class="pg-cell" style="justify-items: stretch">
+        <span class="pg-label">default</span>
+        <sc-textarea label="Describe the damage" data-ar-label="صف الضرر" rows="3"></sc-textarea>
+      </div>
+      <div class="pg-cell" style="justify-items: stretch">
+        <span class="pg-label">over the limit</span>
+        <sc-textarea label="Add a note for the inspector" data-ar-label="أضف ملاحظة للفاحص" maxlength="20" rows="3" value="Please call before arriving at the centre" data-ar-value="يُرجى الاتصال قبل الوصول إلى مركز الفحص"></sc-textarea>
+      </div>
+      <div class="pg-cell" style="justify-items: stretch">
+        <span class="pg-label">error</span>
+        <sc-textarea label="Why are you cancelling the registration?" data-ar-label="لماذا تلغي تسجيل المركبة؟" error="Enter why you are cancelling the registration" data-ar-error="أدخل سبب إلغاء تسجيل المركبة" rows="3"></sc-textarea>
+      </div>
+      <div class="pg-cell" style="justify-items: stretch">
+        <span class="pg-label">optional</span>
+        <sc-textarea label="Anything else we should know" data-ar-label="هل هناك ما يجب أن نعرفه" optional rows="3"></sc-textarea>
+      </div>
+      <div class="pg-cell" style="justify-items: stretch">
+        <span class="pg-label">disabled (avoid)</span>
+        <sc-textarea label="Inspector's note" data-ar-label="ملاحظة الفاحص" disabled rows="3" value="Passed. No issues found." data-ar-value="ناجح. لا توجد ملاحظات."></sc-textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="ta-arabic">
+  <h2 id="ta-arabic" class="sc-type-heading-m" data-ar="بالعربية">In Arabic</h2>
+  <div class="pg-card" lang="ar" dir="rtl" style="max-inline-size: 640px">
+    <sc-textarea label="لماذا تلغي تسجيل المركبة؟" hint="مثلًا، بيعت المركبة أو صُدّرت" maxlength="200" rows="4" value="بيعت المركبة إلى وكيل في الشارقة."></sc-textarea>
+    <div style="block-size: var(--sc-space-24)"></div>
+    <sc-textarea label="أضف ملاحظة للفاحص" maxlength="12" rows="2" value="يرجى الاتصال قبل الوصول"></sc-textarea>
+    <p class="pg-note" lang="en" dir="ltr">This card is always lang="ar" dir="rtl". Arabic counts use the right plural form: حرف واحد، حرفان، 3 أحرف، 120 حرفًا.</p>
+  </div>
+</section>
+
+<script>
+  {
+    // data-ar-<attr>="…" swaps an attribute (label, hint, error…) when the toolbar is Arabic.
+    const preview = document.getElementById('preview');
+    window.scFieldsApply = () => {
+      const ar = preview.lang === 'ar';
+      for (const el of preview.querySelectorAll('*')) {
+        for (const { name, value } of [...el.attributes]) {
+          if (!name.startsWith('data-ar-')) continue;
+          const attr = name.slice(8);
+          if (!el.hasAttribute(`data-en-${attr}`)) el.setAttribute(`data-en-${attr}`, el.getAttribute(attr) ?? '');
+          el.setAttribute(attr, ar ? value : el.getAttribute(`data-en-${attr}`));
+        }
+      }
+    };
+    if (!window.scFieldsObserver) {
+      window.scFieldsObserver = new MutationObserver(() => window.scFieldsApply());
+      window.scFieldsObserver.observe(preview, { attributes: true, attributeFilter: ['lang'] });
+    }
+    window.scFieldsApply();
+
+
+    const form = document.getElementById('ta-form');
+    const out = document.getElementById('ta-output');
+    form.addEventListener('submit', (ev) => {
+      ev.preventDefault();
+      out.textContent = (preview.lang === 'ar' ? 'تم الإرسال: ' : 'Submitted: ') + `reason=${new FormData(form).get('reason')}`;
+    });
+    form.addEventListener('reset', () => (out.textContent = preview.lang === 'ar' ? 'تمت إعادة تعيين النموذج' : 'Form reset'));
+  }
+</script>

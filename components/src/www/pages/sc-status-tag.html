@@ -1,0 +1,57 @@
+<h1 class="pg-title sc-type-heading-xl" data-ar="وسم الحالة">Status tag</h1>
+<p class="pg-lede sc-type-body-m" data-ar="حالة مهمة أو دفعة. الكلمات تحمل المعنى؛ اللون والنقطة يدعمانها فقط.">
+  The status of a task or payment. The words carry the meaning; the colour and the dot only support them.
+</p>
+
+<section class="pg-section" aria-labelledby="t-tones">
+  <h2 id="t-tones" class="sc-type-heading-m" data-ar="الأنواع">Tones</h2>
+  <div class="pg-card">
+    <div class="pg-grid">
+      <div class="pg-cell"><span class="pg-label">neutral</span><sc-status-tag tone="neutral" data-ar="قيد المراجعة">In review</sc-status-tag></div>
+      <div class="pg-cell"><span class="pg-label">success</span><sc-status-tag tone="success" data-ar="مدفوع">Paid</sc-status-tag></div>
+      <div class="pg-cell"><span class="pg-label">warning</span><sc-status-tag tone="warning" data-ar="ينتهي خلال 15 يومًا">Expires in 15 days</sc-status-tag></div>
+      <div class="pg-cell"><span class="pg-label">error</span><sc-status-tag tone="error" data-ar="مطلوب إجراء">Action needed</sc-status-tag></div>
+      <div class="pg-cell"><span class="pg-label">channel</span><sc-status-tag tone="channel" data-ar="جديد">New</sc-status-tag></div>
+    </div>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="t-tasks">
+  <h2 id="t-tasks" class="sc-type-heading-m" data-ar="في قائمة المهام">In a task list</h2>
+  <div class="pg-card" style="max-inline-size: 560px">
+    <div class="pg-row" style="justify-content: space-between"><span class="sc-type-body-m" data-ar="تجديد تسجيل المركبة">Vehicle registration renewal</span><sc-status-tag tone="error" data-ar="مطلوب إجراء">Action needed</sc-status-tag></div>
+    <div class="pg-row" style="justify-content: space-between"><span class="sc-type-body-m" data-ar="مخالفة مرورية">Traffic fine</span><sc-status-tag tone="success" data-ar="مدفوع">Paid</sc-status-tag></div>
+    <div class="pg-row" style="justify-content: space-between"><span class="sc-type-body-m" data-ar="رخصة القيادة">Driving licence</span><sc-status-tag tone="warning" data-ar="ينتهي خلال 15 يومًا">Expires in 15 days</sc-status-tag></div>
+    <div class="pg-row" style="justify-content: space-between"><span class="sc-type-body-m" data-ar="طلب لوحة مميزة">Special plate request</span><sc-status-tag data-ar="قيد المراجعة">In review</sc-status-tag></div>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="t-channels">
+  <h2 id="t-channels" class="sc-type-heading-m" data-ar="نوع القناة في القنوات السبع">Channel tone in all seven channels</h2>
+  <div class="pg-card">
+    <div class="pg-grid">
+      <div class="pg-cell" data-channel="now"><span class="pg-label">now</span><sc-status-tag tone="channel" data-ar="جديد">New</sc-status-tag></div>
+      <div class="pg-cell" data-channel="transport"><span class="pg-label">transport</span><sc-status-tag tone="channel" data-ar="جديد">New</sc-status-tag></div>
+      <div class="pg-cell" data-channel="visit"><span class="pg-label">visit</span><sc-status-tag tone="channel" data-ar="جديد">New</sc-status-tag></div>
+      <div class="pg-cell" data-channel="justice"><span class="pg-label">justice</span><sc-status-tag tone="channel" data-ar="جديد">New</sc-status-tag></div>
+      <div class="pg-cell" data-channel="build"><span class="pg-label">build</span><sc-status-tag tone="channel" data-ar="جديد">New</sc-status-tag></div>
+      <div class="pg-cell" data-channel="invest"><span class="pg-label">invest</span><sc-status-tag tone="channel" data-ar="جديد">New</sc-status-tag></div>
+      <div class="pg-cell" data-channel="trade"><span class="pg-label">trade</span><sc-status-tag tone="channel" data-ar="جديد">New</sc-status-tag></div>
+    </div>
+    <p class="pg-note" data-ar="يأخذ نوع القناة لونَي subtle وink من أقرب data-channel.">The channel tone takes subtle and ink from the closest data-channel.</p>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="t-arabic">
+  <h2 id="t-arabic" class="sc-type-heading-m" data-ar="بالعربية">In Arabic</h2>
+  <div class="pg-card" lang="ar" dir="rtl">
+    <div class="pg-row">
+      <sc-status-tag>قيد المراجعة</sc-status-tag>
+      <sc-status-tag tone="success">مدفوع</sc-status-tag>
+      <sc-status-tag tone="warning">ينتهي خلال 15 يومًا</sc-status-tag>
+      <sc-status-tag tone="error">مطلوب إجراء</sc-status-tag>
+      <sc-status-tag tone="channel">جديد</sc-status-tag>
+    </div>
+    <p class="pg-note" lang="en" dir="ltr">This card is always lang="ar" dir="rtl", whatever the toolbar says. Digits stay Latin.</p>
+  </div>
+</section>

@@ -1,0 +1,107 @@
+<h1 class="pg-title sc-type-heading-xl" data-ar="مربعات الاختيار">Checkbox group</h1>
+<p class="pg-lede sc-type-body-m" data-ar="لعدة اختيارات من قائمة قصيرة، أو لمربع واحد بمفرده لتأكيد عبارة. المسافة تحدد المربع وتلغي تحديده.">
+  Several choices from a short list, or one box on its own to confirm a statement. Space checks and unchecks a box.
+</p>
+
+<section class="pg-section" aria-labelledby="cg-default">
+  <h2 id="cg-default" class="sc-type-heading-m" data-ar="الاستخدام">Usage</h2>
+  <div class="pg-card">
+    <form id="cg-form" novalidate>
+      <sc-checkbox-group name="documents" label="Which documents do you have?" data-ar-label="ما المستندات المتوفرة لديك؟" hint="Select all that apply" data-ar-hint="اختر كل ما ينطبق">
+        <sc-checkbox value="insurance" checked data-ar="وثيقة تأمين سارية">Valid insurance policy</sc-checkbox>
+        <sc-checkbox value="inspection" hint="From a centre approved by RTA" data-ar-hint="من مركز معتمد من هيئة الطرق والمواصلات" data-ar="شهادة الفحص الفني">Technical inspection certificate</sc-checkbox>
+        <sc-checkbox value="fines" data-ar="إيصال سداد المخالفات">Receipt for paid fines</sc-checkbox>
+      </sc-checkbox-group>
+      <div style="block-size: var(--sc-space-24)"></div>
+      <sc-checkbox name="confirm" value="yes" data-demo-focus data-ar="أؤكد أن بيانات المركبة صحيحة">I confirm the vehicle details are correct</sc-checkbox>
+      <div class="pg-row" style="margin-block-start: var(--sc-space-24)">
+        <sc-button type="submit" data-ar="متابعة">Continue</sc-button>
+        <sc-button type="reset" variant="tertiary" data-ar="مسح">Clear</sc-button>
+      </div>
+      <p class="pg-output" id="cg-output" role="status"></p>
+    </form>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="cg-states">
+  <h2 id="cg-states" class="sc-type-heading-m" data-ar="الحالات">States</h2>
+  <div class="pg-card">
+    <div class="pg-grid" style="grid-template-columns: repeat(auto-fill, minmax(340px, 1fr))">
+      <div class="pg-cell">
+        <span class="pg-label">group error</span>
+        <sc-checkbox-group label="Which documents do you have?" data-ar-label="ما المستندات المتوفرة لديك؟" error="Select at least one document" data-ar-error="اختر مستندًا واحدًا على الأقل">
+          <sc-checkbox value="insurance" data-ar="وثيقة تأمين سارية">Valid insurance policy</sc-checkbox>
+          <sc-checkbox value="inspection" data-ar="شهادة الفحص الفني">Technical inspection certificate</sc-checkbox>
+        </sc-checkbox-group>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">single checkbox · error</span>
+        <sc-checkbox error="Confirm the vehicle details are correct" data-ar-error="أكّد أن بيانات المركبة صحيحة" data-ar="أؤكد أن بيانات المركبة صحيحة">I confirm the vehicle details are correct</sc-checkbox>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">inline · optional</span>
+        <sc-checkbox-group label="Send reminders by" data-ar-label="أرسل التذكيرات عبر" inline optional>
+          <sc-checkbox value="sms" checked data-ar="رسالة نصية">SMS</sc-checkbox>
+          <sc-checkbox value="email" data-ar="البريد الإلكتروني">Email</sc-checkbox>
+        </sc-checkbox-group>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">disabled (avoid)</span>
+        <sc-checkbox-group label="Included in your renewal" data-ar-label="مشمول في التجديد" disabled>
+          <sc-checkbox value="card" checked data-ar="بطاقة الملكية">Registration card</sc-checkbox>
+          <sc-checkbox value="sticker" data-ar="ملصق الزجاج">Windscreen sticker</sc-checkbox>
+        </sc-checkbox-group>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="cg-arabic">
+  <h2 id="cg-arabic" class="sc-type-heading-m" data-ar="بالعربية">In Arabic</h2>
+  <div class="pg-card" lang="ar" dir="rtl">
+    <div class="pg-grid" style="grid-template-columns: repeat(auto-fill, minmax(340px, 1fr))">
+      <sc-checkbox-group label="ما المستندات المتوفرة لديك؟" hint="اختر كل ما ينطبق">
+        <sc-checkbox value="insurance" checked>وثيقة تأمين سارية</sc-checkbox>
+        <sc-checkbox value="inspection" hint="من مركز معتمد من هيئة الطرق والمواصلات">شهادة الفحص الفني</sc-checkbox>
+      </sc-checkbox-group>
+      <sc-checkbox-group label="ما المستندات المتوفرة لديك؟" error="اختر مستندًا واحدًا على الأقل">
+        <sc-checkbox value="insurance">وثيقة تأمين سارية</sc-checkbox>
+        <sc-checkbox value="inspection">شهادة الفحص الفني</sc-checkbox>
+      </sc-checkbox-group>
+    </div>
+    <p class="pg-note" lang="en" dir="ltr">This card is always lang="ar" dir="rtl". The tick is a symbol and does not mirror.</p>
+  </div>
+</section>
+
+<script>
+  {
+    // data-ar-<attr>="…" swaps an attribute (label, hint, error…) when the toolbar is Arabic.
+    const preview = document.getElementById('preview');
+    window.scFieldsApply = () => {
+      const ar = preview.lang === 'ar';
+      for (const el of preview.querySelectorAll('*')) {
+        for (const { name, value } of [...el.attributes]) {
+          if (!name.startsWith('data-ar-')) continue;
+          const attr = name.slice(8);
+          if (!el.hasAttribute(`data-en-${attr}`)) el.setAttribute(`data-en-${attr}`, el.getAttribute(attr) ?? '');
+          el.setAttribute(attr, ar ? value : el.getAttribute(`data-en-${attr}`));
+        }
+      }
+    };
+    if (!window.scFieldsObserver) {
+      window.scFieldsObserver = new MutationObserver(() => window.scFieldsApply());
+      window.scFieldsObserver.observe(preview, { attributes: true, attributeFilter: ['lang'] });
+    }
+    window.scFieldsApply();
+
+
+    const form = document.getElementById('cg-form');
+    const out = document.getElementById('cg-output');
+    form.addEventListener('submit', (ev) => {
+      ev.preventDefault();
+      const data = [...new FormData(form)].map(([k, v]) => `${k}=${v}`).join(', ');
+      out.textContent = (preview.lang === 'ar' ? 'تم الإرسال: ' : 'Submitted: ') + (data || '—');
+    });
+    form.addEventListener('reset', () => (out.textContent = preview.lang === 'ar' ? 'تمت إعادة تعيين النموذج' : 'Form reset'));
+  }
+</script>

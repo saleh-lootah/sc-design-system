@@ -1,0 +1,40 @@
+<h1 class="pg-title sc-type-heading-xl" data-ar="الحاوية">Container</h1>
+<p class="pg-lede sc-type-body-m" data-ar="يوسّط المحتوى ويضبط هوامش الصفحة: 20 بكسل على الهاتف، و32 من 600، و48 من 1024، و80 من 1440، بحد أقصى 1280 للمحتوى.">
+  Centres content and sets the page margins: 20px on phones, 32px from 600px, 48px from 1024px and 80px from 1440px, with content capped at 1280px.
+</p>
+
+<section class="pg-section" aria-labelledby="ct-page">
+  <h2 id="ct-page" class="sc-type-heading-m" data-ar="عرض الصفحة">Page width</h2>
+  <div class="ct-frame">
+    <sc-container><div class="ct-fill" data-ar="المحتوى (حتى 1280 بكسل)">Content (up to 1280px)</div></sc-container>
+  </div>
+  <p class="pg-note" data-ar="المساحة المظللة هي الهامش؛ يتبع عرض النافذة.">The shaded space is the margin; it follows the window width.</p>
+</section>
+
+<section class="pg-section" aria-labelledby="ct-reading">
+  <h2 id="ct-reading" class="sc-type-heading-m" data-ar="عرض القراءة">Reading width</h2>
+  <div class="ct-frame">
+    <sc-container width="reading"><div class="ct-fill" data-ar="صفحات الأسئلة والنص الجاري (حتى 680 بكسل، محاذاة إلى البداية)">Question pages and running text (up to 680px, aligned to the start)</div></sc-container>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="ct-arabic">
+  <h2 id="ct-arabic" class="sc-type-heading-m" data-ar="بالعربية">In Arabic</h2>
+  <div class="ct-frame" lang="ar" dir="rtl">
+    <sc-container width="reading"><div class="ct-fill">عرض القراءة يبدأ من اليمين في العربية</div></sc-container>
+  </div>
+</section>
+
+<style>
+  .ct-frame {
+    padding-block: var(--sc-space-16);
+    border-radius: var(--sc-radius-card);
+    background: repeating-linear-gradient(135deg, var(--sc-color-fill-quiet) 0 var(--sc-space-8), transparent var(--sc-space-8) var(--sc-space-16));
+  }
+  .ct-fill {
+    padding: var(--sc-space-16);
+    border-radius: var(--sc-radius-s);
+    background: var(--sc-channel-subtle);
+    color: var(--sc-channel-ink);
+  }
+</style>

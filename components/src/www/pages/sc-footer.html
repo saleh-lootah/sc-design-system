@@ -1,0 +1,39 @@
+<h1 class="pg-title sc-type-heading-xl" data-ar="التذييل">Footer</h1>
+<p class="pg-lede sc-type-body-m" data-ar="المساعدة والتواصل، وإمكانية الوصول، والخصوصية، والشروط، و«حكومة دبي». يستخدم footer وقائمة روابط.">
+  Help and contact, accessibility, privacy, terms and "Government of Dubai". Uses a footer element and a list of links.
+</p>
+
+<section class="pg-section" aria-labelledby="ft-default">
+  <h2 id="ft-default" class="sc-type-heading-m" data-ar="الروابط القياسية">Standard links</h2>
+  <div class="ft-frame">
+    <sc-footer help-href="#help" accessibility-href="#accessibility" privacy-href="#privacy" terms-href="#terms"></sc-footer>
+  </div>
+  <p class="pg-note" data-ar="نصوص الروابط من ملف النصوص، بلغة الصفحة.">Link text comes from strings, in the page language.</p>
+</section>
+
+<section class="pg-section" aria-labelledby="ft-extra">
+  <h2 id="ft-extra" class="sc-type-heading-m" data-ar="مع روابط إضافية ونص مخصص">With extra links and custom end text</h2>
+  <div class="ft-frame">
+    <sc-footer help-href="#help" accessibility-href="#accessibility" privacy-href="#privacy" terms-href="#terms">
+      <a href="#cookies" data-ar="ملفات تعريف الارتباط">Cookies</a>
+      <a href="#feedback" data-ar="شاركنا رأيك">Give feedback</a>
+      <span slot="meta" data-ar="حكومة دبي · محتوى تجريبي لمراجعة التصميم">Government of Dubai · Example content for design review</span>
+    </sc-footer>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="ft-arabic">
+  <h2 id="ft-arabic" class="sc-type-heading-m" data-ar="بالعربية">In Arabic</h2>
+  <div class="ft-frame" lang="ar" dir="rtl">
+    <sc-footer help-href="#help" accessibility-href="#accessibility" privacy-href="#privacy" terms-href="#terms"></sc-footer>
+  </div>
+</section>
+
+<style>
+  .ft-frame {
+    overflow: hidden;
+    border-radius: var(--sc-radius-card);
+    background: var(--sc-color-canvas);
+    box-shadow: var(--sc-elevation-1);
+  }
+</style>

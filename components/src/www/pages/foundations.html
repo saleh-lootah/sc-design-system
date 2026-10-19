@@ -1,0 +1,122 @@
+<h1 class="pg-title sc-type-heading-xl" data-ar="الأساسيات">Foundations</h1>
+<p class="pg-lede sc-type-body-m" data-ar="خط دبي بتباعد أسطر محكم، وسبع قنوات تحدد لون الواجهة. كل القيم من الرموز في tokens.css.">
+  Dubai Font with tight leading, and seven channels that set the colour of everything. Every value comes from tokens.css.
+</p>
+
+<section class="pg-section" aria-labelledby="fd-channels">
+  <h2 id="fd-channels" class="sc-type-heading-m" data-ar="القنوات">Channels</h2>
+  <div class="pg-grid" id="fd-channel-grid"></div>
+  <p class="pg-note" data-ar="كل بطاقة تضبط data-channel على نفسها. يغيّر شريط الأدوات القناة لبقية الصفحة.">
+    Each card sets data-channel on itself. The toolbar changes the channel for the rest of the page.
+  </p>
+</section>
+
+<section class="pg-section" aria-labelledby="fd-latin">
+  <h2 id="fd-latin" class="sc-type-heading-m" data-ar="الأنماط اللاتينية">Latin type roles</h2>
+  <div class="pg-card" lang="en" dir="ltr" id="fd-latin-roles"></div>
+</section>
+
+<section class="pg-section" aria-labelledby="fd-arabic">
+  <h2 id="fd-arabic" class="sc-type-heading-m" data-ar="الأنماط العربية">Arabic type roles</h2>
+  <div class="pg-card" lang="ar" dir="rtl" id="fd-arabic-roles"></div>
+</section>
+
+<style>
+  .fd-swatch {
+    overflow: hidden;
+    border-radius: var(--sc-radius-card);
+    background: var(--sc-color-surface);
+    box-shadow: var(--sc-elevation-1);
+  }
+  .fd-swatch__wash {
+    display: flex;
+    align-items: end;
+    min-block-size: 96px;
+    padding: var(--sc-space-16);
+    background: linear-gradient(160deg in oklab, var(--sc-channel-wash-start), var(--sc-channel-wash-end));
+    color: var(--sc-channel-ink);
+  }
+  .fd-swatch__body {
+    display: grid;
+    gap: var(--sc-space-12);
+    padding: var(--sc-space-16);
+  }
+  .fd-chips {
+    display: flex;
+    gap: var(--sc-space-8);
+  }
+  .fd-chip {
+    inline-size: 36px;
+    block-size: 36px;
+    border-radius: var(--sc-radius-pill);
+    box-shadow: inset 0 0 0 1px var(--sc-color-rule);
+  }
+  .fd-role {
+    display: grid;
+    grid-template-columns: 160px minmax(0, 1fr);
+    gap: var(--sc-space-16);
+    align-items: baseline;
+    padding-block: var(--sc-space-12);
+    border-block-end: 1px solid var(--sc-color-rule);
+  }
+  .fd-role:last-child {
+    border-block-end: 0;
+  }
+  .fd-role__meta {
+    display: grid;
+    color: var(--sc-color-muted);
+  }
+  .fd-role__sample {
+    color: var(--sc-color-ink-strong);
+    overflow-wrap: anywhere;
+  }
+</style>
+
+<script>
+  {
+    const channels = [
+      ['now', 'Dubai Now', 'دبي الآن'],
+      ['transport', 'Dubai Transport', 'مواصلات دبي'],
+      ['visit', 'Visit Dubai', 'زوروا دبي'],
+      ['justice', 'Dubai Justice', 'عدالة دبي'],
+      ['build', 'Build in Dubai', 'ابنِ في دبي'],
+      ['invest', 'Invest in Dubai', 'استثمر في دبي'],
+      ['trade', 'Dubai Trade', 'دبي التجارية'],
+    ];
+    const grid = document.getElementById('fd-channel-grid');
+    grid.innerHTML = channels
+      .map(
+        ([id, en, ar]) => `
+        <article class="fd-swatch" data-channel="${id}">
+          <div class="fd-swatch__wash"><span class="sc-type-title-m" data-ar="${ar}">${en}</span></div>
+          <div class="fd-swatch__body">
+            <div class="fd-chips" role="img" aria-label="action, pressed, subtle, ink">
+              <span class="fd-chip" style="background: var(--sc-channel-action)"></span>
+              <span class="fd-chip" style="background: var(--sc-channel-action-pressed)"></span>
+              <span class="fd-chip" style="background: var(--sc-channel-subtle)"></span>
+              <span class="fd-chip" style="background: var(--sc-channel-ink)"></span>
+            </div>
+            <span class="pg-code">data-channel="${id}"</span>
+            <sc-button size="m" data-ar="متابعة">Continue</sc-button>
+          </div>
+        </article>`,
+      )
+      .join('');
+
+    const latin = ['display-xl', 'display-l', 'heading-xl', 'heading-l', 'heading-m', 'title-l', 'title-m', 'title-s', 'body-l', 'body-m', 'body-s', 'label-m', 'label-s', 'eyebrow', 'caption', 'caption-s', 'value', 'numeral-l'];
+    const arabic = ['display-l', 'heading-l', 'heading-m', 'title-s', 'body-l', 'body-m', 'body-s', 'label-m', 'hint', 'error', 'caption'];
+    const css = getComputedStyle(document.documentElement);
+    const v = (name) => css.getPropertyValue(name).trim();
+    const row = (script, role, sample) => {
+      const size = v(`--sc-text-${script}-${role}`);
+      const leading = v(`--sc-leading-${script}-${role}`);
+      const cls = script === 'latin' ? `sc-type-${role}` : `sc-type-ar-${role}`;
+      return `<div class="fd-role">
+        <div class="fd-role__meta" lang="en" dir="ltr"><span class="sc-type-label-m">${role}</span><span class="sc-type-caption">${size} / ${leading}</span></div>
+        <div class="fd-role__sample ${cls}">${role === 'numeral-l' ? 'AED 450.00' : sample}</div>
+      </div>`;
+    };
+    document.getElementById('fd-latin-roles').innerHTML = latin.map((r) => row('latin', r, 'Renew your vehicle registration')).join('');
+    document.getElementById('fd-arabic-roles').innerHTML = arabic.map((r) => row('arabic', r, 'جدّد تسجيل مركبتك')).join('');
+  }
+</script>

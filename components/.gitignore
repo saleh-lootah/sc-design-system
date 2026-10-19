@@ -1,7 +1,8 @@
 node_modules/
-dist/
-loader/
-www/
-.stencil/
+# Build output at the package root only; src/www is the playground source.
+/dist/
+/loader/
+/www/
+/.stencil/
+/screenshot/
 *.log
-screenshot/

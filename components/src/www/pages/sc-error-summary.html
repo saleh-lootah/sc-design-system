@@ -1,0 +1,131 @@
+<h1 class="pg-title sc-type-heading-xl" data-ar="ملخص الأخطاء">Error summary</h1>
+<p class="pg-lede sc-type-body-m" data-ar="يعرض كل الأخطاء أعلى الصفحة بعد إرسال النموذج. كل عنصر رابط ينقل التركيز إلى الحقل المعني.">
+  Lists every error at the top of the page after a form is submitted. Each item links to its field and moves focus there.
+</p>
+
+<section class="pg-section" aria-labelledby="es-default">
+  <h2 id="es-default" class="sc-type-heading-m" data-ar="مع روابط داخل المكوّن">With slotted links</h2>
+  <div class="pg-card">
+    <sc-error-summary no-autofocus>
+      <a href="#es-plate" data-ar="أدخل رقم اللوحة بالأرقام فقط، مثل 12345">Enter the plate number using numbers only, like 12345</a>
+      <a href="#es-code" data-ar="أدخل رمز اللوحة">Enter the plate code</a>
+    </sc-error-summary>
+    <p class="pg-note" data-ar="الروابط تُقرأ من محتوى العنصر وتُعرض كقائمة. على الصفحات الحقيقية ينتقل التركيز إلى الملخص عند تحميله؛ أوقفناه هنا (no-autofocus) كي لا يسرق التركيز من صفحة العرض.">
+      Links are read from the light DOM and rendered as a list. On real pages focus moves to the summary when it loads; it is turned off here (no-autofocus) so the demo page keeps its focus.
+    </p>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="es-focus">
+  <h2 id="es-focus" class="sc-type-heading-m" data-ar="التركيز">Focus</h2>
+  <div class="pg-card">
+    <sc-error-summary id="es-focused">
+      <a href="#es-plate" data-ar="أدخل رقم اللوحة">Enter the plate number</a>
+    </sc-error-summary>
+    <p class="pg-note" data-ar="عند التحميل ينتقل التركيز إلى الملخص (tabindex=-1، role=alert) فيُعلن عنه فورًا.">
+      On load, focus moves to the summary (tabindex -1, role alert) so it is announced straight away.
+    </p>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="es-form">
+  <h2 id="es-form" class="sc-type-heading-m" data-ar="داخل نموذج">In a form</h2>
+  <div class="pg-card pg-narrow" style="max-inline-size: 520px">
+    <sc-error-summary id="es-live" no-autofocus></sc-error-summary>
+    <form id="es-demo-form" novalidate style="margin-block-start: var(--sc-space-16)">
+      <label class="pg-field">
+        <span class="sc-type-label-m" data-ar="رمز اللوحة (حقل عادي)">Plate code (plain input)</span>
+        <input id="es-code" name="code" autocomplete="off" dir="ltr" />
+      </label>
+      <div class="pg-field">
+        <span class="sc-type-label-m" id="es-plate-label" data-ar="رقم اللوحة (مكوّن مع delegatesFocus)">Plate number (host with delegatesFocus)</span>
+        <es-demo-field id="es-plate" aria-labelledby="es-plate-label"></es-demo-field>
+      </div>
+      <div class="pg-row">
+        <sc-button type="submit" icon="arrow-forward" data-ar="متابعة">Continue</sc-button>
+        <sc-button type="reset" variant="tertiary" data-ar="مسح">Clear</sc-button>
+      </div>
+    </form>
+    <p class="pg-note" data-ar="أرسل النموذج فارغًا: يظهر الملخص ويأخذ التركيز (setFocus). اتبع رابطًا لنقل التركيز إلى الحقل، سواء كان حقلًا عاديًا أو مكوّنًا يفوّض التركيز.">
+      Submit it empty: the summary appears and takes focus (setFocus). Follow a link to move focus to the field, whether it's a plain input or a host that delegates focus.
+    </p>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="es-desc">
+  <h2 id="es-desc" class="sc-type-heading-m" data-ar="مع وصف وعنوان مخصص">With a description and a custom heading</h2>
+  <div class="pg-card">
+    <sc-error-summary no-autofocus heading="Check your vehicle details" data-heading-ar="تحقق من بيانات مركبتك">
+      <p slot="description" data-ar="لم نتمكن من العثور على مركبة بهذه البيانات.">We couldn't find a vehicle with these details.</p>
+      <a href="#es-plate" data-ar="تحقق من رقم اللوحة">Check the plate number</a>
+    </sc-error-summary>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="es-arabic">
+  <h2 id="es-arabic" class="sc-type-heading-m" data-ar="بالعربية">In Arabic</h2>
+  <div class="pg-card" lang="ar" dir="rtl">
+    <sc-error-summary no-autofocus>
+      <a href="#es-plate">أدخل رقم اللوحة بالأرقام فقط، مثل <bdi dir="ltr">12345</bdi></a>
+      <a href="#es-code">أدخل رمز اللوحة</a>
+    </sc-error-summary>
+    <p class="pg-note" lang="en" dir="ltr">This card is always lang="ar" dir="rtl", whatever the toolbar says.</p>
+  </div>
+</section>
+
+<script>
+  {
+    // A stand-in for a form-associated field component: a host that delegates focus to its inner input.
+    if (!customElements.get('es-demo-field')) {
+      customElements.define(
+        'es-demo-field',
+        class extends HTMLElement {
+          static formAssociated = true;
+          constructor() {
+            super();
+            this.internals = this.attachInternals();
+            const root = this.attachShadow({ mode: 'open', delegatesFocus: true });
+            root.innerHTML = `<style>input{box-sizing:border-box;inline-size:100%;max-inline-size:320px;min-block-size:var(--sc-size-control-l);padding-inline:var(--sc-space-16);border:var(--sc-size-border-control) solid var(--sc-color-control);border-radius:var(--sc-radius-field);background:var(--sc-color-surface);color:var(--sc-color-ink);font:inherit}input:focus-visible{outline:var(--sc-size-focus-ring) solid var(--sc-channel-action);outline-offset:var(--sc-size-focus-offset)}:host([invalid]) input{border-color:var(--sc-color-error);border-width:var(--sc-size-border-strong)}</style><input dir="ltr" autocomplete="off" />`;
+            this.input = root.querySelector('input');
+            this.input.addEventListener('input', () => this.internals.setFormValue(this.input.value));
+          }
+          connectedCallback() {
+            const label = this.getAttribute('aria-labelledby');
+            const text = label && document.getElementById(label)?.textContent;
+            if (text) this.input.setAttribute('aria-label', text);
+          }
+          get value() { return this.input.value; }
+          formResetCallback() { this.input.value = ''; this.internals.setFormValue(''); }
+        },
+      );
+    }
+
+    const preview = document.getElementById('preview');
+    const ar = () => preview.lang === 'ar';
+    for (const el of preview.querySelectorAll('[data-heading-ar]')) {
+      const en = el.getAttribute('heading');
+      const apply = () => el.setAttribute('heading', ar() ? el.dataset.headingAr : en);
+      apply();
+      new MutationObserver(apply).observe(preview, { attributes: true, attributeFilter: ['lang'] });
+    }
+
+    const form = document.getElementById('es-demo-form');
+    const summary = document.getElementById('es-live');
+    const code = document.getElementById('es-code');
+    const plate = document.getElementById('es-plate');
+    form.addEventListener('submit', (ev) => {
+      ev.preventDefault();
+      const errors = [];
+      if (!code.value.trim()) errors.push({ href: '#es-code', text: ar() ? 'أدخل رمز اللوحة' : 'Enter the plate code' });
+      if (!/^\d{1,5}$/.test(plate.value.trim()))
+        errors.push({ href: '#es-plate', text: ar() ? 'أدخل رقم اللوحة بالأرقام فقط، مثل 12345' : 'Enter the plate number using numbers only, like 12345' });
+      plate.toggleAttribute('invalid', errors.some((e) => e.href === '#es-plate'));
+      summary.errors = errors;
+      if (errors.length) requestAnimationFrame(() => summary.setFocus());
+    });
+    form.addEventListener('reset', () => {
+      summary.errors = [];
+      plate.removeAttribute('invalid');
+    });
+  }
+</script>
