@@ -214,6 +214,41 @@ describe('sc-button (e2e)', () => {
     expect(transport).not.toBe(now);
   });
 
+  it('transitions exact properties and scales to 0.97 on a pointer press, not a keyboard press', async () => {
+    const page = await newScPage(`<sc-button>Continue</sc-button>`);
+    expect(await inner(page, 'sc-button', 'getComputedStyle(control).transitionProperty')).toBe('background-color, color, transform');
+    const box = (await (await page.$('sc-button'))!.boundingBox())!;
+    const transformDuringPress = async () => {
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      await page.mouse.down();
+      await new Promise((r) => setTimeout(r, 300)); // longer than the 150ms press transition
+      const t = await inner(page, 'sc-button', 'getComputedStyle(control).transform');
+      await page.mouse.up();
+      return t;
+    };
+    expect(await transformDuringPress()).toBe('matrix(0.97, 0, 0, 0.97, 0, 0)');
+
+    // Space on a keyboard-focused button changes colour instantly and does not scale.
+    const kb = await newScPage(`<sc-button>Continue</sc-button>`);
+    await kb.keyboard.press('Tab');
+    await kb.keyboard.down('Space');
+    expect(await inner(kb, 'sc-button', 'getComputedStyle(control).transform')).toBe('none');
+    expect(await inner(kb, 'sc-button', 'getComputedStyle(control).transitionDuration')).toBe('0s');
+    await kb.keyboard.up('Space');
+  });
+
+  it('keeps colour feedback but drops the press scale under reduced motion', async () => {
+    const page = await newScPage(`<sc-button>Continue</sc-button>`);
+    await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+    expect(await inner(page, 'sc-button', 'getComputedStyle(control).transitionDuration')).toBe('0.12s, 0.12s, 0.15s');
+    const box = (await (await page.$('sc-button'))!.boundingBox())!;
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.down();
+    await new Promise((r) => setTimeout(r, 300));
+    expect(await inner(page, 'sc-button', 'getComputedStyle(control).transform')).toBe('matrix(1, 0, 0, 1, 0, 0)');
+    await page.mouse.up();
+  });
+
   for (const ctx of contexts) {
     it(`has no axe violations (${ctx.lang}, ${ctx.theme})`, async () => {
       const page = await newScPage(ALL_STATES, ctx);

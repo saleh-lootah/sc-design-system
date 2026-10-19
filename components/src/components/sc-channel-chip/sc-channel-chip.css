@@ -27,7 +27,14 @@
   background: var(--sc-channel-subtle);
   color: var(--sc-channel-ink);
   text-decoration: none;
-  transition: background-color var(--sc-duration-fast) var(--sc-easing-standard);
+  transition: background-color var(--sc-duration-fast) var(--sc-easing-hover);
+}
+
+.chip--link {
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color var(--sc-duration-fast) var(--sc-easing-hover),
+    transform var(--sc-duration-press) var(--sc-easing-enter);
 }
 
 /* The pill is about 30px; the link's hit area grows to the 44px minimum without moving the layout. */
@@ -60,7 +67,7 @@
   overflow-wrap: anywhere;
 }
 
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   .chip--link:hover {
     background: color-mix(in oklab, var(--sc-channel-subtle), var(--sc-channel-wash-end));
   }
@@ -72,6 +79,15 @@
 
 .chip--link:active {
   background: var(--sc-channel-wash-end);
+}
+
+/* Press feedback for pointer and touch; keyboard activation is instant. */
+.chip--link:active:not(:focus-visible) {
+  transform: scale(var(--sc-scale-press));
+}
+
+.chip--link:focus-visible {
+  transition: none;
 }
 
 @media (forced-colors: active) {

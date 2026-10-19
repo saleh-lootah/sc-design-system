@@ -56,8 +56,9 @@
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
   transition:
-    background-color var(--sc-duration-fast) var(--sc-easing-standard),
-    color var(--sc-duration-fast) var(--sc-easing-standard);
+    background-color var(--sc-duration-fast) var(--sc-easing-hover),
+    color var(--sc-duration-fast) var(--sc-easing-hover),
+    transform var(--sc-duration-press) var(--sc-easing-enter);
 }
 
 .control--m {
@@ -99,7 +100,7 @@
 
 /* States ------------------------------------------------------------------------------- */
 
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   .control:hover {
     background: var(--_bg-hover);
   }
@@ -112,6 +113,16 @@
 .control:active {
   background: var(--_bg-pressed);
   color: var(--_fg-pressed);
+}
+
+/* Press feedback for pointer and touch. Keyboard presses (Space while :focus-visible) change
+   state instantly: no scale and no transition. --sc-scale-press is 1 under reduced motion. */
+.control:active:not(:focus-visible, :disabled, [aria-disabled='true'], .is-loading) {
+  transform: scale(var(--sc-scale-press));
+}
+
+.control:focus-visible {
+  transition: none;
 }
 
 .control:disabled,

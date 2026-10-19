@@ -105,7 +105,7 @@
   background: transparent;
   color: var(--sc-color-ink);
   cursor: pointer;
-  transition: background-color var(--sc-duration-fast) ease;
+  transition: background-color var(--sc-duration-fast) var(--sc-easing-hover);
 }
 
 .frame--open .calendar-button {
@@ -299,7 +299,7 @@
   font-variant-numeric: tabular-nums;
   cursor: pointer;
   outline: none;
-  transition: transform var(--sc-duration-fast) var(--sc-easing-standard);
+  transition: transform var(--sc-duration-press) var(--sc-easing-enter);
 }
 
 /* The 40px circle's target grows to 44 x 44 without moving it. */
@@ -335,7 +335,7 @@
 
 /* Pointer press only: after keyboard navigation the button is :focus-visible and doesn't scale. */
 .day-button:not(.day-button--disabled):active:not(:focus-visible) {
-  transform: scale(0.96);
+  transform: scale(var(--sc-scale-press));
 }
 
 .day-button--end,
@@ -436,11 +436,11 @@
   /* From the trigger corner: the field's top inline-start (bottom when flipped above it). */
   transform-origin: 0 0;
   opacity: 0;
-  /* Exit: opacity only, faster than the entrance. */
+  /* Exit: opacity only, about 20% faster than the entrance. */
   transition:
-    opacity var(--sc-duration-fast) ease,
-    display var(--sc-duration-fast) allow-discrete,
-    overlay var(--sc-duration-fast) allow-discrete;
+    opacity var(--sc-duration-exit) var(--sc-easing-exit),
+    display var(--sc-duration-exit) allow-discrete,
+    overlay var(--sc-duration-exit) allow-discrete;
 }
 
 :host(:dir(rtl)) .picker--popover {
@@ -468,7 +468,7 @@
 @starting-style {
   .picker--popover:popover-open {
     opacity: 0;
-    transform: scale(0.96);
+    transform: scale(var(--sc-scale-enter));
   }
 }
 
@@ -501,10 +501,12 @@
   overflow: hidden;
   --_cell: var(--sc-size-target-min);
   transform: translateY(100%);
+  /* Exit: back the way it came, on the same curve, about 20% faster than the entrance. */
+  --_sheet-exit: calc(var(--sc-duration-slow) * 0.8);
   transition:
-    transform var(--sc-duration-base) var(--sc-easing-standard),
-    display var(--sc-duration-base) allow-discrete,
-    overlay var(--sc-duration-base) allow-discrete;
+    transform var(--_sheet-exit) var(--sc-easing-drawer),
+    display var(--_sheet-exit) allow-discrete,
+    overlay var(--_sheet-exit) allow-discrete;
 }
 
 .picker--sheet[open] {
@@ -530,13 +532,18 @@
   background: oklab(from var(--sc-color-shadow) l a b / 28%);
   opacity: 0;
   transition:
-    opacity var(--sc-duration-base) ease,
-    display var(--sc-duration-base) allow-discrete,
-    overlay var(--sc-duration-base) allow-discrete;
+    opacity calc(var(--sc-duration-slow) * 0.8) var(--sc-easing-exit),
+    display calc(var(--sc-duration-slow) * 0.8) allow-discrete,
+    overlay calc(var(--sc-duration-slow) * 0.8) allow-discrete;
 }
 
+/* The scrim fades in step with the sheet. */
 .picker--sheet[open]::backdrop {
   opacity: 1;
+  transition:
+    opacity var(--sc-duration-slow) var(--sc-easing-enter),
+    display var(--sc-duration-slow) allow-discrete,
+    overlay var(--sc-duration-slow) allow-discrete;
 }
 
 @starting-style {

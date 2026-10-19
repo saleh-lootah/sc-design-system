@@ -572,7 +572,7 @@ export class ScDateRange {
    * Month change by pointer: the months crossfade in with a 12px shift in the direction of
    * travel (mirrored in RTL). WAAPI rather than @keyframes, so clicking Next several times
    * retargets from the current frame instead of restarting from zero. Under reduced motion
-   * the duration token is 0ms, so nothing moves. Keyboard month changes never call this.
+   * --_shift is 0px, so the months only crossfade. Keyboard month changes never call this.
    */
   private slideMonths(by: 1 | -1) {
     const months = this.pickerEl?.querySelector<HTMLElement>('.months');
@@ -590,7 +590,7 @@ export class ScDateRange {
         { opacity: from, transform: `translateX(${by * shift}px)` },
         { opacity: 1, transform: 'none' },
       ],
-      { duration, easing: styles.getPropertyValue('--sc-easing-standard').trim() || 'ease-out' },
+      { duration, easing: styles.getPropertyValue('--sc-easing-enter').trim() || 'ease-out' },
     );
   }
 

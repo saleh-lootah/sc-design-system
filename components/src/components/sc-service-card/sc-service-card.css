@@ -23,6 +23,8 @@
   background: var(--sc-color-surface);
   color: var(--sc-color-ink);
   box-shadow: var(--sc-elevation-1);
+  -webkit-tap-highlight-color: transparent;
+  transition: transform var(--sc-duration-press) var(--sc-easing-enter);
 }
 
 .body {
@@ -81,6 +83,16 @@
     text-decoration-thickness: var(--sc-size-border-control);
     text-underline-offset: 0.2em;
   }
+}
+
+/* Press feedback when the title link is pressed (the card itself is not interactive, CMP-06).
+   Activating the link from the keyboard is instant. */
+.card:has(.link:active):not(:has(.link:focus-visible)) {
+  transform: scale(var(--sc-scale-press));
+}
+
+.card:has(.link:focus-visible) {
+  transition: none;
 }
 
 @media (forced-colors: active) {

@@ -55,15 +55,21 @@
   appearance: none;
   cursor: pointer;
   transition:
-    background-color var(--sc-duration-fast) var(--sc-easing-standard),
-    border-color var(--sc-duration-fast) var(--sc-easing-standard);
+    background-color var(--sc-duration-fast) var(--sc-easing-hover),
+    border-color var(--sc-duration-fast) var(--sc-easing-hover);
+}
+
+/* Toggling with Space while the box has keyboard focus is instant: no fade on the fill or mark. */
+.box:focus-visible,
+.box:focus-visible + .mark {
+  transition: none;
 }
 
 .box--radio {
   border-radius: var(--sc-radius-pill);
 }
 
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   .option:hover .box:not(:disabled) {
     border-color: var(--sc-color-ink);
   }
@@ -102,7 +108,7 @@
   box-sizing: border-box;
   pointer-events: none;
   opacity: 0;
-  transition: opacity var(--sc-duration-fast) var(--sc-easing-standard);
+  transition: opacity var(--sc-duration-fast) var(--sc-easing-hover);
 }
 
 .box:checked + .mark {

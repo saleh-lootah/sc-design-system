@@ -260,15 +260,20 @@
   --sc-elevation-3: 0px 2px 6px 0px oklab(0 0 0 / 0.06), 0px 16px 40px 0px oklab(0 0 0 / 0.12); /* Sheets, popovers, dialogs */
 
   /* Motion */
-  --sc-duration-spin: 800ms;
-  --sc-duration-instant: 0ms;
-  --sc-duration-fast: 120ms;
-  --sc-duration-base: 200ms;
-  --sc-duration-slow: 320ms;
-  --sc-easing-standard: cubic-bezier(0.2, 0, 0, 1);
-  --sc-easing-enter: cubic-bezier(0, 0, 0, 1);
-  --sc-easing-exit: cubic-bezier(0.3, 0, 1, 1);
-  --sc-easing-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --sc-duration-instant: 0ms; /* No animation. Keyboard-initiated actions and anything seen 100+ times a day (emil-design-eng: never animate keyboard-initiated actions) */
+  --sc-duration-fast: 120ms; /* Micro-interactions: hover, colour and border changes (guidance: micro-interactions 100-150ms) */
+  --sc-duration-press: 150ms; /* Press feedback: the scale on :active (STANDARDS: transform scale(0.97) with ease-out; guidance: micro-interactions 100-150ms) */
+  --sc-duration-base: 200ms; /* Entrances of tooltips, popovers, dropdowns and selects (STANDARDS: 125-250ms; guidance: standard UI 150-250ms) */
+  --sc-duration-exit: 160ms; /* Exits of base-duration elements (popovers, dropdowns, bars): about 20% faster than the 200ms entrance, not more. Sheets and modals exit at calc(var(--sc-duration-slow) * 0.8) (emil-design-eng: exit faster than enter; guidance: about 20%) */
+  --sc-duration-slow: 280ms; /* Modals, drawers and bottom sheets only; larger elements move further, so slower (guidance: 200-300ms, UI stays under 300ms) */
+  --sc-duration-spin: 600ms; /* One rotation of the loading spinner, linear; stops under reduced motion (emil-design-eng: a faster spinner makes loading feel faster) */
+  --sc-easing-enter: cubic-bezier(0.23, 1, 0.32, 1); /* Strong ease-out for anything entering, and the default (emil-design-eng: entering or exiting uses ease-out; built-in curves are too weak) */
+  --sc-easing-exit: cubic-bezier(0.23, 1, 0.32, 1); /* Strong ease-out for anything leaving, paired with duration.exit (emil-design-eng: never ease-in on UI; it delays the moment the user is watching) */
+  --sc-easing-standard: cubic-bezier(0.77, 0, 0.175, 1); /* Strong ease-in-out for elements already on screen that move or morph (emil-design-eng: moving or morphing on screen uses ease-in-out) */
+  --sc-easing-hover: cubic-bezier(0.25, 0.1, 0.25, 1); /* CSS ease, for hover and colour changes (emil-design-eng: hover or colour change uses ease) */
+  --sc-easing-drawer: cubic-bezier(0.32, 0.72, 0, 1); /* Bottom sheets and drawers: a fast start that settles softly (STANDARDS: iOS-like drawer curve) */
+  --sc-scale-press: 0.97; /* transform: scale() on :active for buttons, cards, chips and day cells; resolves to 1 under reduced motion (STANDARDS: subtle, 0.95-0.98) */
+  --sc-scale-enter: 0.96; /* Starting scale, with opacity 0, for popovers and dropdowns growing from their trigger; resolves to 1 under reduced motion (STANDARDS: never scale(0), start from 0.9-0.97) */
 
   /* Layout (breakpoints cannot be used inside @media; they are here for reference and scripts) */
   --sc-breakpoint-compact: 0px; /* Phones */
@@ -533,14 +538,12 @@
   --sc-channel-trade-link-visited: oklab(0.93 -0.0109 -0.0279);
 }
 
-/* Reduced motion: every duration resolves to instant */
+/* Reduced motion: movement stops (spin, scale); opacity and colour transitions keep their durations */
 @media (prefers-reduced-motion: reduce) {
   :root {
     --sc-duration-spin: 0ms;
-    --sc-duration-instant: 0ms;
-    --sc-duration-fast: 0ms;
-    --sc-duration-base: 0ms;
-    --sc-duration-slow: 0ms;
+    --sc-scale-press: 1;
+    --sc-scale-enter: 1;
   }
 }
 

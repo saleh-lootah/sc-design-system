@@ -103,7 +103,7 @@
   overflow-wrap: anywhere;
 }
 
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   .link:hover {
     color: var(--sc-color-error-hover);
     text-decoration-thickness: var(--sc-size-border-strong);

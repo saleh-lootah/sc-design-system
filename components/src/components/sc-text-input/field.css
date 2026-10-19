@@ -152,10 +152,10 @@ legend.label + * {
   /* Thickens the border in the error state without moving the text. */
   box-shadow: inset 0 0 0 var(--_border-extra) var(--_border);
   overflow: hidden;
-  transition: border-color var(--sc-duration-fast) var(--sc-easing-standard);
+  transition: border-color var(--sc-duration-fast) var(--sc-easing-hover);
 }
 
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   .frame:hover {
     --_border: var(--sc-color-ink);
   }

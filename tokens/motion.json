@@ -1,69 +1,108 @@
 {
   "duration": {
-    "spin": {
-      "$type": "duration",
-      "$value": {
-        "value": 800,
-        "unit": "ms"
-      },
-      "$description": "One rotation of the loading spinner; stops under reduced motion"
-    },
     "instant": {
       "$type": "duration",
       "$value": {
         "value": 0,
         "unit": "ms"
-      }
+      },
+      "$description": "No animation. Keyboard-initiated actions and anything seen 100+ times a day (emil-design-eng: never animate keyboard-initiated actions)"
     },
     "fast": {
       "$type": "duration",
       "$value": {
         "value": 120,
         "unit": "ms"
-      }
+      },
+      "$description": "Micro-interactions: hover, colour and border changes (guidance: micro-interactions 100-150ms)"
+    },
+    "press": {
+      "$type": "duration",
+      "$value": {
+        "value": 150,
+        "unit": "ms"
+      },
+      "$description": "Press feedback: the scale on :active (STANDARDS: transform scale(0.97) with ease-out; guidance: micro-interactions 100-150ms)"
     },
     "base": {
       "$type": "duration",
       "$value": {
         "value": 200,
         "unit": "ms"
-      }
+      },
+      "$description": "Entrances of tooltips, popovers, dropdowns and selects (STANDARDS: 125-250ms; guidance: standard UI 150-250ms)"
+    },
+    "exit": {
+      "$type": "duration",
+      "$value": {
+        "value": 160,
+        "unit": "ms"
+      },
+      "$description": "Exits of base-duration elements (popovers, dropdowns, bars): about 20% faster than the 200ms entrance, not more. Sheets and modals exit at calc(var(--sc-duration-slow) * 0.8) (emil-design-eng: exit faster than enter; guidance: about 20%)"
     },
     "slow": {
       "$type": "duration",
       "$value": {
-        "value": 320,
+        "value": 280,
         "unit": "ms"
+      },
+      "$description": "Modals, drawers and bottom sheets only; larger elements move further, so slower (guidance: 200-300ms, UI stays under 300ms)"
+    },
+    "spin": {
+      "$type": "duration",
+      "$value": {
+        "value": 600,
+        "unit": "ms"
+      },
+      "$description": "One rotation of the loading spinner, linear; stops under reduced motion (emil-design-eng: a faster spinner makes loading feel faster)",
+      "$extensions": {
+        "reducedMotion": {
+          "value": 0,
+          "unit": "ms"
+        }
       }
     }
   },
   "easing": {
-    "standard": {
-      "$type": "cubicBezier",
-      "$value": [
-        0.2,
-        0,
-        0,
-        1
-      ]
-    },
     "enter": {
       "$type": "cubicBezier",
       "$value": [
-        0,
-        0,
-        0,
+        0.23,
+        1,
+        0.32,
         1
-      ]
+      ],
+      "$description": "Strong ease-out for anything entering, and the default (emil-design-eng: entering or exiting uses ease-out; built-in curves are too weak)"
     },
     "exit": {
       "$type": "cubicBezier",
       "$value": [
-        0.3,
-        0,
+        0.23,
         1,
+        0.32,
         1
-      ]
+      ],
+      "$description": "Strong ease-out for anything leaving, paired with duration.exit (emil-design-eng: never ease-in on UI; it delays the moment the user is watching)"
+    },
+    "standard": {
+      "$type": "cubicBezier",
+      "$value": [
+        0.77,
+        0,
+        0.175,
+        1
+      ],
+      "$description": "Strong ease-in-out for elements already on screen that move or morph (emil-design-eng: moving or morphing on screen uses ease-in-out)"
+    },
+    "hover": {
+      "$type": "cubicBezier",
+      "$value": [
+        0.25,
+        0.1,
+        0.25,
+        1
+      ],
+      "$description": "CSS ease, for hover and colour changes (emil-design-eng: hover or colour change uses ease)"
     },
     "drawer": {
       "$type": "cubicBezier",
@@ -73,8 +112,26 @@
         0,
         1
       ],
-      "$description": "Bottom sheets and drawers: a fast start that settles softly (iOS sheet curve)"
+      "$description": "Bottom sheets and drawers: a fast start that settles softly (STANDARDS: iOS-like drawer curve)"
     }
   },
-  "$description": "Under prefers-reduced-motion, all durations resolve to instant."
+  "scale": {
+    "press": {
+      "$type": "number",
+      "$value": 0.97,
+      "$description": "transform: scale() on :active for buttons, cards, chips and day cells; resolves to 1 under reduced motion (STANDARDS: subtle, 0.95-0.98)",
+      "$extensions": {
+        "reducedMotion": 1
+      }
+    },
+    "enter": {
+      "$type": "number",
+      "$value": 0.96,
+      "$description": "Starting scale, with opacity 0, for popovers and dropdowns growing from their trigger; resolves to 1 under reduced motion (STANDARDS: never scale(0), start from 0.9-0.97)",
+      "$extensions": {
+        "reducedMotion": 1
+      }
+    }
+  },
+  "$description": "Distilled from github.com/emilkowalski/skills. Under prefers-reduced-motion, movement stops (spin and scale tokens resolve to their reducedMotion value) but opacity and colour transitions keep their durations: fewer and gentler animations, not zero."
 }

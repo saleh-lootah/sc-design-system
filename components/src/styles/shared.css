@@ -11,9 +11,10 @@
  *   .icon-directional  mirrored in right-to-left (arrows, chevrons); never use on time, media, objects or logos
  *   .spin              continuous rotation for spinners; static under prefers-reduced-motion
  *
- * Reduced motion: every --sc-duration-* already resolves to 0ms under
- * prefers-reduced-motion (tokens.css), so transitions written with duration tokens need
- * nothing extra. Only keyframe animations need the guard below.
+ * Motion (see CONVENTIONS.md, "Motion"): transitions name exact properties and use
+ * --sc-duration-* and --sc-easing-* tokens. Under prefers-reduced-motion, opacity and colour
+ * transitions keep their timing; movement stops because --sc-scale-press, --sc-scale-enter
+ * and --sc-duration-spin change in tokens.css. Any other transform needs its own guard.
  *
  * Forced colours (Windows High Contrast): give controls a transparent border, which the
  * system repaints in ButtonText, and use system colours for state, as the focus ring does.

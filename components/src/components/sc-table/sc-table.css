@@ -152,7 +152,7 @@
 /* Body rows: at least 56 (compact 44), a hairline rule between rows, no zebra, no vertical rules. */
 ::slotted(table) tbody tr {
   block-size: var(--_row-min);
-  transition: background-color var(--sc-duration-fast) ease;
+  transition: background-color var(--sc-duration-fast) var(--sc-easing-hover);
 }
 
 ::slotted(table) tbody tr + tr > * {
@@ -393,8 +393,8 @@
   appearance: none;
   cursor: pointer;
   transition:
-    background-color var(--sc-duration-fast) var(--sc-easing-standard),
-    border-color var(--sc-duration-fast) var(--sc-easing-standard);
+    background-color var(--sc-duration-fast) var(--sc-easing-hover),
+    border-color var(--sc-duration-fast) var(--sc-easing-hover);
 }
 
 ::slotted(table) .sc-table__box:focus-visible {
@@ -469,10 +469,10 @@
   background: var(--sc-color-surface);
   box-shadow: var(--sc-elevation-1);
   opacity: 0;
-  /* Exit: opacity only, faster than the entrance. */
+  /* Exit: opacity only, about 20% faster than the entrance. */
   transition:
-    opacity var(--sc-duration-fast) ease,
-    display var(--sc-duration-fast) allow-discrete;
+    opacity var(--sc-duration-exit) var(--sc-easing-exit),
+    display var(--sc-duration-exit) allow-discrete;
 }
 
 .selection-bar--open {
@@ -646,7 +646,7 @@
   inline-size: var(--sc-space-8);
   pointer-events: none;
   opacity: 0;
-  transition: opacity var(--sc-duration-fast) ease;
+  transition: opacity var(--sc-duration-fast) var(--sc-easing-hover);
 }
 
 :host .container::before {

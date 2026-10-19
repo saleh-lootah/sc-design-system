@@ -116,8 +116,8 @@ Digits stay Latin. References and plates are wrapped in `sc-ltr`.
 Applies the emil-design-eng rules.
 
 - **Sorting:** rows reorder instantly. Sorting is repeated and often keyboard-triggered, so it is not animated.
-- **Row hover:** `background-color` over 120ms (`duration.fast`), ease.
-- **Selection bar:** enters with opacity 0 → 1 and translateY 8px → 0 over 200ms, using `easing.enter`. It exits with opacity only over 120ms.
+- **Row hover:** `background-color` over 120ms (`duration.fast`), `easing.hover` (ease).
+- **Selection bar:** enters with opacity 0 → 1 and translateY 8px → 0 over 200ms, using `easing.enter`. It exits with opacity only over 160ms (`duration.exit`, about 20% faster than the entrance), using `easing.exit`.
 - **Skeleton:** opacity pulse only.
 - **Reduced motion:** no translate; opacity changes stay.
 
