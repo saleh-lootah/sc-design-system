@@ -1,0 +1,129 @@
+# Shared Channels UX Standard: changes from 1.0 to 2.0
+
+This log maps each item in the review of version 1.0 (`ux-standard-review.md`) to where version 2.0 (`shared-channels-ux-standard.md`, 19 October 2026) resolves it. Section numbers refer to version 2.0. "Open" means the standard does not assert the fact and lists it as an open question (OQ) instead.
+
+Summary: 53 of the 56 findings are resolved in the text. 3 are resolved in the text but depend on confirmations that only owners or counsel can give, so their substance stays open: finding 20 (legal instruments), finding 40 (brand styling) and finding 41 (provider button wording). All 23 decision contradictions and all 28 GOV.UK gaps are addressed; the keep list (review section 5) is carried over as noted below.
+
+## Findings
+
+| # | Resolution | Where |
+| --- | --- | --- |
+| 1 | Resolved. shadcn/ui, React, Radix, Base UI and Sonner removed. The library is described as StencilJS web components with the `sc-` prefix, framework-agnostic, no runtime dependency, wrappers later. Every pattern names real `sc-` components | 0.4, 10.1, 10.2, 13 |
+| 2 | Resolved. Channel theming contract: one `data-channel` per page, channel roles only, entities get attribution text only and supply no colours, fonts, radii or header logos | 3.2 (SVC-01 to SVC-03), 8.1 |
+| 3 | Resolved. Hex palette deleted. Colours given by token name with OKLAB values; OKLAB-only and no-teal rules are MUSTs, with `check:no-hex`, `check:teal`, `check:contrast` | 8.1 (FND-03 to FND-05) |
+| 4 | Resolved. Dubai Font only; separate Latin and Arabic scales from `typography.json` with sizes, leading and weights; tight leading; 1.4.12 tested instead of a 1.6 minimum; no entity font choice | 8.2 (FND-10 to FND-13), 5.7 |
+| 5 | Resolved. Focus ring from `CONVENTIONS.md` (3px channel action, 2px surface offset, `:focus-visible`), 3:1 contrast requirement, forced-colours fallback. Pipeline coverage of the ring is OQ-26 | 6.2 (A11Y-05) |
+| 6 | Resolved. Light and dark themes both required, with the same checks | 8.1 (FND-08, FND-09), 6.2 (A11Y-07) |
+| 7 | Resolved. Latin-digit output rule in both languages, isolation, and input normalisation | 5.5 (LANG-20 to LANG-23), 5.4 |
+| 8 | Resolved. Platform chapter from `MOBILE.md`: Flutter and React Native named, kits and Dart/TS tokens marked as later phase, interim rules and parity checklist | 7 (PLAT-01 to PLAT-12), OQ-17 |
+| 9 | Resolved. MUST/SHOULD/MAY defined once; requirements rewritten as testable statements with identifiers; hedging words removed (remaining uses of "approved" and "verified" describe real states, such as an approved application) | 0.3, throughout |
+| 10 | Resolved. Every chapter ends with "How we check"; evidence per assessment phase and met / not met outcomes | Each chapter, 17.2 |
+| 11 | Resolved. Boilerplate component specs dropped. The standard indexes components with when to use and when not to use, and points to each component readme as the specification (API, states, Arabic behaviour) | 10.2 |
+| 12 | Resolved. Each topic has one home; other sections link to it. Session timeout in 13.10, check answers in 11.4 and 13.11, UAE PASS in 13.4, Dubai Pay in 13.12, language switching in 5.2, catalogue record in 3.4 and Appendix B | 0.3, throughout |
+| 13 | Resolved. One bilingual status vocabulary for applications, tasks, payments and refunds, each mapped to an `sc-status-tag` tone and a business state | 9.6 |
+| 14 | Resolved. Language switch labelled with the other language's own name; the wrong example removed | 5.2 (LANG-05) |
+| 15 | Resolved. The repeated disclaimer removed; Arabic review is a release requirement recorded once per release | 9.3 (CNT-16) |
+| 16 | Resolved. Arabic content style: plain MSA, no dialect, gender-neutral address (verbal nouns, "يُرجى" + verbal noun, "يمكنك", passives), punctuation, transliteration, glossary ownership. Examples rewritten to follow it | 9.3, 9.5 |
+| 17 | Resolved. Arabic typography: Arabic roles, no letter-spacing, 16px minimum, no italics, no justification or tatweel, no text-transform, mixed-script rule, diacritics, reading width | 5.7 (LANG-25 to LANG-33) |
+| 18 | Resolved. One chapter for direction, bidi (`sc-ltr`, `<bdi>`, U+2066–U+2069), numerals and a mirror / do-not-mirror table covering icons, chevrons, media controls, numerals and charts | 5.3 to 5.6 |
+| 19 | Resolved. Drafting artefacts, defensive UK framing and SC-004 removed; authority stated once; normal bibliography | 0.1, Appendix E |
+| 20 | Partly open. Legal chapter states what every service needs regardless (LEG-01 to LEG-04) and uses "people of determination". The instruments themselves are not named as applying until counsel confirms them | 4, OQ-5 to OQ-9 |
+| 21 | Resolved. 12-point service standard; assessments at alpha, beta and live; panel make-up including Arabic content and accessibility specialists; met / not met; reassessment; report template | 2, 17.2, Appendix D |
+| 22 | Resolved. Component index rebuilt from the `sc-` library (all 33 tags), plus a prioritised backlog of planned components | 10.2, 10.4 |
+| 23 | Resolved. Invented "Custom Government …" names removed; each pattern names real components or planned ones from the backlog | 13, 10.4 |
+| 24 | Resolved. GOV.UK-correct rule stated (focus, no `role="alert"`); component change noted as in progress | 10.3 (CMP-05) |
+| 25 | Resolved. Decision: title link only, no whole-card or stretched link; fees and eligibility moved to the service detail page; component change noted as in progress | 10.3 (CMP-06), 11.2 |
+| 26 | Resolved. One target-size rule: 44 × 44 minimum, 54px primary controls, inline links under WCAG 2.5.8, `sc-table` compact as the only other exception | 6.2 (A11Y-04) |
+| 27 | Resolved. One status box; rules are normative; open decisions in chapter 19 | 0.1, 19 |
+| 28 | Resolved. Bilingual style guide (dates, times, time zone, calendar, money, phone, numbers, references, links, buttons) and error message templates | 9.4, 9.5 |
+| 29 | Resolved. "Ask users for" chapter: names, Emirates ID, passport, nationality, date of birth, email, phone, address, Makani, plate, trade licence, IBAN, amount, verification code, card (Dubai Pay only), sex, equality information | 12 |
+| 30 | Resolved. Page templates: shell and title, service detail, question, check answers, confirmation, task list, error pages, cookies, privacy and accessibility pages | 11 |
+| 31 | Resolved. Cookie rules: off by default, equal-weight accept and reject, nothing before consent, cookies page, stored choice; `sc-cookie-banner` planned; legal basis is OQ-27 | 14.4, 10.4 |
+| 32 | Resolved. Support matrix with browsers, screen readers in Arabic and English, contrast themes, zoom and text scaling | 6.4 |
+| 33 | Resolved. Foundations chapter documenting every token group with rules and build checks | 8 |
+| 34 | Resolved. References to non-existent artefacts removed; this Markdown file named as canonical. Whether the artefacts exist elsewhere is OQ-15 | 0.1, OQ-15 |
+| 35 | Resolved. SC-028, SC-094 and the schema example merged into one record rule and one appendix | 3.4 (SVC-10), Appendix B |
+| 36 | Resolved. Bibliography rebuilt, one entry per source | Appendix E |
+| 37 | Resolved. 2.4.8 Location noted as AAA and outside the baseline | Appendix A |
+| 38 | Resolved. Heading reads "WCAG 2.2 register" | Appendix A |
+| 39 | Resolved. UK spelling throughout; W3C criterion names kept as published | Throughout, Appendix A |
+| 40 | Partly open. "UAE PASS" and "Dubai Pay" used consistently; official styling to be confirmed | OQ-3, OQ-4 |
+| 41 | Partly open. Authored button copy removed; the provider's own button assets and wording are required, and the Arabic name is to be confirmed | 13.4 (ID-02), OQ-3 |
+| 42 | Resolved. Example rewritten as a matched, gender-neutral pair: "Who are you acting for?" / "نيابةً عمّن يُقدَّم هذا الطلب؟" | 13.5 |
+| 43 | Resolved. Token naming described from the build outputs (`--sc-*` CSS, Tailwind, Swift, Kotlin, Paper) | 8, 0.4 |
+| 44 | Resolved. Radius rule removed; radius tokens documented | 8.3 (FND-16) |
+| 45 | Resolved. Replaced with `--sc-color-rule` and `--sc-color-control` and their OKLAB values | 8.1 (FND-07) |
+| 46 | Resolved. Examples are labelled and shown in English and Arabic together (tables or "Example: EN / AR") | Throughout |
+| 47 | Resolved. Core Web Vitals are a release gate with real-user monitoring as the source; native budgets deferred to the kits phase | 15 (PERF-02, PERF-07), OQ-19 |
+| 48 | Resolved. Every round includes Arabic and English users and people with access needs; named groups across alpha and beta; recruitment route is OQ-14 | 16 (RES-02) |
+| 49 | Resolved. Gregorian by default; Hijri is a service decision to confirm | 9.4, OQ-11 |
+| 50 | Resolved. Dubai time (GST, UTC+4, no daylight saving) for all times and deadlines | 9.4 |
+| 51 | Resolved. Toast not planned; outcomes use `sc-callout` or the planned notification banner | 10.4 |
+| 52 | Resolved. Contents grouped into four parts and appendices | Contents |
+| 53 | Resolved. One rule: no service goes live with incomplete translation; the "translation unavailable" variant removed | 5.1 (LANG-02) |
+| 54 | Resolved. The language control is a link to the equivalent page, never a button or menu | 5.2 (LANG-05) |
+| 55 | Resolved in text, scope open. Staff tools are in scope when delivered through Shared Channels, with compact density; per-channel scope is OQ-13 | 0.2, OQ-13 |
+| 56 | Resolved. Bilingual accessibility statement template | 6.6, Appendix C |
+
+## Decision contradictions (review section 3A)
+
+| # | Resolution |
+| --- | --- |
+| C1–C7 | shadcn/ui, React and Sonner removed; `sc-` library described (0.4, 10.1); toast not planned (10.4); framework wrappers mentioned as a later step (10.1) |
+| C8–C10 | Entity theming replaced by channel theming; entities attribution only (3.2) |
+| C11–C12 | Hex values and the teal-band greens deleted; OKLAB tokens and `check:teal` (8.1) |
+| C13–C15 | Dubai Font only, token leading and the two scales (8.2) |
+| C16 | Latin-digit output rule (5.5) |
+| C17 | Phasing from `MOBILE.md` (7.1) |
+| C18 | Dark mode supported (8.1) |
+| C19 | Focus ring per conventions (6.2) |
+| C20 | `--sc-*` naming from the build (0.4, 8) |
+| C21 | Radius tokens (8.3) |
+| C22 | Error summary: rule kept, component change in progress (10.3) |
+| C23 | Service card: title link only, component change in progress (10.3) |
+
+## GOV.UK gaps (review section 4)
+
+| # | Gap | Where |
+| --- | --- | --- |
+| 1 | Principles | 1 |
+| 2 | Service standard | 2 |
+| 3 | Assessment process | 17.2, Appendix D |
+| 4 | Research with users with access needs | 16 |
+| 5 | Content design and style guide | 9 |
+| 6 | Arabic plain-language rules | 9.3 |
+| 7 | Foundations | 8 |
+| 8 | Page templates | 11 |
+| 9 | "Ask users for" | 12 |
+| 10 | Question pages | 11.3, 13.6 |
+| 11 | Start pages | 11.2 |
+| 12 | Check answers | 11.4, 13.11 |
+| 13 | Confirmation pages | 11.5, 13.13; `sc-panel` planned |
+| 14 | Task lists | 11.6, 9.6; `sc-task-list` planned |
+| 15 | Error handling and error pages | 9.5, 11.7, 13.18 |
+| 16 | Cookies and consent | 14.4 |
+| 17 | Timeouts | 13.10; values are OQ-18 |
+| 18 | Offline and poor connectivity in apps | 13.18 (FAIL-04) |
+| 19 | Sign in, save and return, account area, shared devices | 13.4, 13.9, 13.14, 14.3 (PRV-11) |
+| 20 | Language switching, URLs, `hreflang`, user text | 5.2 |
+| 21 | Arabic typography and bidi | 5.4, 5.7 |
+| 22 | Supported browsers and assistive technology | 6.4 |
+| 23 | Accessibility statement template | Appendix C |
+| 24 | Performance and native budgets | 15; native budgets OQ-19 |
+| 25 | Notifications, sender, Arabic SMS, link safety | 13.15; SMS segment length OQ-12 |
+| 26 | Contribution model | 18.1 |
+| 27 | Versioning, changelog, deprecation | 18.2 |
+| 28 | Channel-specific guidance and cross-listing | 3.1, 3.4 (SVC-13) |
+
+## Keep list (review section 5)
+
+Carried over and rewritten to the new rules: channel and ownership model (3.1); canonical record and no duplicate transactions (3.4); catalogue schema (Appendix B); task-led naming (3.3); fee and timing honesty (9.4, SVC-15); parity as a release defect and state kept on switching (5.1, 5.2); do-not-mirror rules (5.6); no flags (LANG-05); honest accessibility statement (6.6, A11Y-03); WCAG 2.2 register (Appendix A, as a table); timing rules (13.10); identity rules (13.4); representation (13.5); payment integrity (13.12); "received" vs "complete" (TPL-16, CNT-19); upload rules (13.7); add another (13.8); save and resume (13.9); address rules (12.3); quick exit (13.19); professional tables (13.20); cross-channel continuation (13.21); failure taxonomy (13.18); recovery-state tables (13); network profile and Core Web Vitals (15); governance roles (17.1); exception management (17.3); outcome measures (17.5); "Change" links name their question and "Completed" means saved and valid (TPL-10, 9.6); Dubai time zone made global (9.4).
+
+## Items to verify (review section 7)
+
+None is asserted. Items 1–16 are OQ-1 to OQ-16. New open questions found while rewriting are OQ-17 to OQ-28, including the motion token changes required by the new motion rules (OQ-22 to OQ-25 and OQ-28).
+
+## Other changes in 2.0
+
+- Motion rules rewritten from Emil Kowalski's skills (8.7), with the token conflicts (`easing.exit` is ease-in; spinner speed; reduced-motion durations; missing ease-in-out token) listed as OQ-22 to OQ-25.
+- Known component gaps recorded: imperative Arabic default strings in `sc-skip-link` and `sc-date-range`, the `sc-skip-link` default target versus `sc-page`'s `main-content`, and the missing visited-link token (10.3, OQ-20).
