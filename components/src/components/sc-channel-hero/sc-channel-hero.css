@@ -31,7 +31,9 @@
 
 .eyebrow {
   margin-block-end: var(--sc-space-12);
-  color: var(--sc-color-muted);
+  /* Channel ink, not muted: muted falls below 4.5:1 on some channel washes. Ink on the
+     wash is contrast-checked for every channel in light and dark. */
+  color: var(--sc-channel-ink);
 }
 
 /* Phones: heading-xl. From 1024px (--sc-breakpoint-expanded, repeated because media

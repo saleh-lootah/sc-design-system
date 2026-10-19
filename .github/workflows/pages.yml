@@ -20,6 +20,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     env:
       # e2e tests are not run here, so Puppeteer doesn't need a browser.
       PUPPETEER_SKIP_DOWNLOAD: 'true'
