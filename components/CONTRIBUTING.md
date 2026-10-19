@@ -108,7 +108,7 @@ Start every component stylesheet with the shared helpers and the type roles you 
 - `icon` (sized by `--icon-size`, default `--sc-size-icon-m`) and `icon-directional` (mirrored by `:host(:dir(rtl))`).
 - `spin`: spinner rotation, static under `prefers-reduced-motion`.
 
-**Colour.** Tokens only: `--sc-color-*` and channel roles `--sc-channel-action`, `-action-pressed`, `-subtle`, `-ink`, `-wash-start`, `-wash-end`. Never name a channel. Mixing two tokens is fine (`color-mix(in oklab, var(--sc-channel-action), var(--sc-channel-action-pressed))` is the button's hover). Transitions use `--sc-duration-*` and `--sc-easing-*` (they become 0ms under reduced motion automatically).
+**Colour.** Tokens only: `--sc-color-*` and channel roles `--sc-channel-action`, `-action-pressed`, `-subtle`, `-ink`, `-wash-start`, `-wash-end`. Never name a channel. Mixing two tokens is fine (`color-mix(in oklab, var(--sc-channel-action), var(--sc-channel-action-pressed))` is the button's hover). Transitions use `--sc-duration-*` and `--sc-easing-*` and follow the Motion rules in [CONVENTIONS.md](CONVENTIONS.md#motion).
 
 **Forced colours.** Give controls `border: 1px solid transparent` (the system repaints it) and add a `@media (forced-colors: active)` block using system colours (`ButtonText`, `LinkText`, `GrayText`, `Highlight`). See the end of `sc-button.css`.
 

@@ -301,16 +301,19 @@
 
   /* Motion */
   --ease-*: initial;
-  --ease-standard: var(--sc-easing-standard);
   --ease-enter: var(--sc-easing-enter);
   --ease-exit: var(--sc-easing-exit);
-  --duration-spin: var(--sc-duration-spin);
+  --ease-standard: var(--sc-easing-standard);
+  --ease-hover: var(--sc-easing-hover);
+  --ease-drawer: var(--sc-easing-drawer);
   --duration-instant: var(--sc-duration-instant);
   --duration-fast: var(--sc-duration-fast);
+  --duration-press: var(--sc-duration-press);
   --duration-base: var(--sc-duration-base);
   --duration-slow: var(--sc-duration-slow);
+  --duration-spin: var(--sc-duration-spin);
   --default-transition-duration: var(--sc-duration-base);
-  --default-transition-timing-function: var(--sc-easing-standard);
+  --default-transition-timing-function: var(--sc-easing-enter);
 
   /* Containers */
   --container-max: var(--sc-container-max);

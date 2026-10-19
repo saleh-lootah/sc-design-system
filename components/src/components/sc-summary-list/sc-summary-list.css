@@ -108,9 +108,11 @@
   text-underline-offset: 0.2em;
 }
 
-.link:hover {
-  text-decoration: underline;
-  text-decoration-thickness: var(--sc-size-border-control);
+@media (hover: hover) and (pointer: fine) {
+  .link:hover {
+    text-decoration: underline;
+    text-decoration-thickness: var(--sc-size-border-control);
+  }
 }
 
 .link:active {

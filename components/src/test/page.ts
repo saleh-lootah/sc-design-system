@@ -43,6 +43,26 @@ export async function setPageContext(page: E2EPage, { lang = 'en', theme = 'ligh
   );
   // The locale controller re-renders on the next mutation-observer tick.
   await page.waitForChanges();
+  await settleTransitions(page);
+}
+
+/**
+ * Jumps running colour transitions (a channel or theme switch starts them) to their end, so
+ * computed colours and axe contrast checks read the end state, not a frame mid-fade. Uses
+ * finish() rather than waiting, because background tabs throttle frames. getAnimations()
+ * flushes style first, so transitions the switch just started are included. Infinite
+ * animations, such as the spinner, are left alone.
+ */
+export async function settleTransitions(page: E2EPage): Promise<void> {
+  await page.evaluate(() => {
+    const all = (root: Document | ShadowRoot): Animation[] => [
+      ...root.getAnimations(),
+      ...[...root.querySelectorAll('*')].flatMap((el) => (el.shadowRoot ? all(el.shadowRoot) : [])),
+    ];
+    for (const a of all(document)) {
+      if (a.effect?.getComputedTiming().iterations !== Infinity) a.finish();
+    }
+  });
 }
 
 /** Opens a page with the context applied first, so components connect in the right language. */

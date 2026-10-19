@@ -24,7 +24,7 @@
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
   -webkit-tap-highlight-color: transparent;
-  transition: color var(--sc-duration-fast) var(--sc-easing-standard);
+  transition: color var(--sc-duration-fast) var(--sc-easing-hover);
 }
 
 /* The underline sits on the label so the icon and its gap aren't underlined. */
@@ -40,7 +40,7 @@
   color: var(--sc-channel-ink);
 }
 
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   .link:hover {
     color: var(--sc-channel-action-hover);
   }

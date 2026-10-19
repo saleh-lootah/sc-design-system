@@ -26,8 +26,9 @@
   padding-inline: var(--sc-space-12) var(--sc-space-16);
   border: var(--sc-size-border-hairline) solid var(--sc-color-glass-edge);
   border-radius: var(--sc-radius-control);
-  /* The tint layer gives hover and pressed states without losing the glass underneath. */
-  background: linear-gradient(var(--_tint), var(--_tint)), var(--_bg);
+  position: relative;
+  isolation: isolate;
+  background: var(--_bg);
   box-shadow: var(--sc-elevation-2);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
   backdrop-filter: blur(24px) saturate(180%);
@@ -38,7 +39,21 @@
   user-select: none;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
-  transition: background-color var(--sc-duration-fast) var(--sc-easing-standard);
+  transition: transform var(--sc-duration-press) var(--sc-easing-enter);
+}
+
+/* The tint layer gives hover and pressed states without losing the glass underneath. It is a
+   pseudo-element so its background-color can transition (a gradient layer cannot). */
+.control::before {
+  content: '';
+  position: absolute;
+  /* Out to the border edge, where the old background layer reached. */
+  inset: calc(var(--sc-size-border-hairline) * -1);
+  z-index: -1;
+  border-radius: inherit;
+  background-color: var(--_tint);
+  pointer-events: none;
+  transition: background-color var(--sc-duration-fast) var(--sc-easing-hover);
 }
 
 .control--plain {
@@ -50,7 +65,7 @@
   padding-inline: var(--sc-space-8) var(--sc-space-12);
 }
 
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   .control:hover {
     --_tint: var(--sc-color-fill-quiet);
   }
@@ -62,6 +77,16 @@
 
 .control:active {
   --_tint: var(--sc-color-fill-selected);
+}
+
+/* Press feedback for pointer and touch. Keyboard presses change state instantly. */
+.control:active:not(:focus-visible) {
+  transform: scale(var(--sc-scale-press));
+}
+
+.control:focus-visible,
+.control:focus-visible::before {
+  transition: none;
 }
 
 .icon-box {
@@ -82,6 +107,9 @@
 }
 
 @media (forced-colors: active) {
+  .control::before {
+    display: none;
+  }
   .control {
     border-color: ButtonText;
     background: ButtonFace;

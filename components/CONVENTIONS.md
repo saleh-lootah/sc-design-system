@@ -33,6 +33,19 @@ ARIA references can't cross a shadow boundary, so each field component owns its 
 - Use logical properties only (`padding-inline-start`, `inset-inline-end`, `text-align: start`). Never `left` or `right`.
 - Directional icons flip with `:host(:dir(rtl)) .icon-directional { transform: scaleX(-1); }`. Icons for time, media, real objects and logos never flip.
 
+## Motion
+
+Every motion decision follows Emil Kowalski's skills ([github.com/emilkowalski/skills](https://github.com/emilkowalski/skills): `emil-design-eng`, `animate`, `review-animations`, `animation-performance`). The values live in `tokens/motion.json`; each token's description cites its rule. The full audit is in [`docs/motion-audit.md`](../docs/motion-audit.md).
+
+- **Should it animate?** Only with a purpose: feedback, state, spatial continuity, or preventing a jarring change. Nothing seen 100+ times a day, and nothing started from the keyboard: on `:focus-visible` set `transition: none`, so Space and Enter change state instantly.
+- **Easing.** Entering and exiting: `--sc-easing-enter` / `--sc-easing-exit` (strong ease-out, `cubic-bezier(0.23, 1, 0.32, 1)`). Moving or morphing on screen: `--sc-easing-standard` (strong ease-in-out, `cubic-bezier(0.77, 0, 0.175, 1)`). Hover and colour: `--sc-easing-hover` (`ease`). Drawers and sheets: `--sc-easing-drawer`. Constant motion (spinners): `linear`. Never ease-in.
+- **Duration.** Hover, colour and exits `--sc-duration-fast` (120ms); press `--sc-duration-press` (160ms); popovers and dropdowns `--sc-duration-base` (200ms); modals and drawers only `--sc-duration-slow` (320ms). Small UI stays under 300ms. Exits are faster than entrances.
+- **Properties.** Name exact properties, never `transition: all`. Anything that moves uses `transform` and `opacity`. To animate a shadow, crossfade the `opacity` of a pseudo-element that carries it (see `sc-service-card`).
+- **Press.** Pressable elements (buttons, cards, chips, day cells) scale on pointer press: `:active:not(:focus-visible) { transform: scale(var(--sc-scale-press)); }` with `transform var(--sc-duration-press) var(--sc-easing-enter)`. Text links don't scale.
+- **Entrances.** Never from `scale(0)`: start from `scale(var(--sc-scale-enter))` and `opacity: 0`, scale from the trigger (`transform-origin` on the trigger side; modals stay centred), and use `@starting-style` or transitions so the motion can be interrupted. Keyframes only for constant motion such as the spinner.
+- **Hover.** Every `:hover` rule sits in `@media (hover: hover) and (pointer: fine)`, so taps don't leave sticky hovers.
+- **Reduced motion.** Fewer and gentler, not zero. Opacity and colour transitions keep their timing; movement stops. `--sc-scale-press`, `--sc-scale-enter` (1) and `--sc-duration-spin` (0ms) change in `tokens.css` automatically; any other transform needs its own `@media (prefers-reduced-motion: reduce)` guard.
+
 ## Type
 
 Shadow DOM can't see the global `.sc-type-*` classes. Components set type through the token custom properties instead:

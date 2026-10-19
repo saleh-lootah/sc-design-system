@@ -50,10 +50,12 @@
   text-underline-offset: 0.2em;
 }
 
-.link:hover,
-::slotted(a:hover) {
-  text-decoration: underline;
-  text-decoration-thickness: var(--sc-size-border-control);
+@media (hover: hover) and (pointer: fine) {
+  .link:hover,
+  ::slotted(a:hover) {
+    text-decoration: underline;
+    text-decoration-thickness: var(--sc-size-border-control);
+  }
 }
 
 ::slotted(a:focus-visible) {

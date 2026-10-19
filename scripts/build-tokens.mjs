@@ -32,6 +32,7 @@ const size = group(light, 'size');
 const elevation = group(light, 'elevation');
 const duration = group(light, 'duration');
 const easing = group(light, 'easing');
+const scale = group(light, 'scale');
 const breakpoint = group(light, 'breakpoint');
 const grid = group(light, 'grid');
 const container = group(light, 'container');
@@ -130,8 +131,9 @@ function buildCss() {
   section('Elevation');
   for (const t of elevation) decl(cssVar(t.path), shadow(t.value), t.description);
   section('Motion');
-  for (const t of duration) decl(cssVar(t.path), dim(t.value));
-  for (const t of easing) decl(cssVar(t.path), cubic(t.value));
+  for (const t of duration) decl(cssVar(t.path), dim(t.value), t.description);
+  for (const t of easing) decl(cssVar(t.path), cubic(t.value), t.description);
+  for (const t of scale) decl(cssVar(t.path), t.value, t.description);
   section('Layout (breakpoints cannot be used inside @media; they are here for reference and scripts)');
   for (const t of breakpoint) decl(cssVar(t.path), dim(t.value), t.description);
   for (const t of grid) decl(cssVar(t.path), typeof t.value === 'number' ? t.value : dim(t.value));
@@ -157,9 +159,15 @@ function buildCss() {
   L.push('@media (prefers-color-scheme: dark) {', '  :root:not([data-theme="light"]) {', ...darkBody('    '), '  }', '}', '');
   L.push('/* Dark mode: forced */', ':root[data-theme="dark"] {', ...darkBody('  '), '}', '');
 
-  L.push('/* Reduced motion: every duration resolves to instant */');
+  // Reduced motion: movement stops, opacity and colour keep their timing. Only tokens with
+  // $extensions.reducedMotion change (spin, scale); see tokens/motion.json.
+  L.push('/* Reduced motion: movement stops (spin, scale); opacity and colour transitions keep their durations */');
   L.push('@media (prefers-reduced-motion: reduce) {', '  :root {');
-  for (const t of duration) L.push(`    ${cssVar(t.path)}: 0ms;`);
+  for (const t of [...duration, ...scale]) {
+    const rm = t.extensions?.reducedMotion;
+    if (rm === undefined) continue;
+    L.push(`    ${cssVar(t.path)}: ${typeof rm === 'object' ? dim(rm) : rm};`);
+  }
   L.push('  }', '}', '');
 
   // Typography classes. Line height uses the authored px value ($extensions.lineHeightPx).
@@ -232,7 +240,7 @@ function buildTailwind() {
   for (const t of easing) decl(`--ease-${t.path[1]}`, `var(${cssVar(t.path)})`);
   for (const t of duration) decl(`--duration-${t.path[1]}`, `var(${cssVar(t.path)})`);
   decl('--default-transition-duration', 'var(--sc-duration-base)');
-  decl('--default-transition-timing-function', 'var(--sc-easing-standard)');
+  decl('--default-transition-timing-function', 'var(--sc-easing-enter)');
   L.push('', '  /* Containers */');
   for (const t of container) decl(`--container-${t.path[1]}`, `var(${cssVar(t.path)})`);
   L.push('}', '');

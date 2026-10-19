@@ -23,8 +23,29 @@
   border-radius: var(--sc-radius-card);
   background: var(--sc-color-surface);
   color: var(--sc-color-ink);
+  -webkit-tap-highlight-color: transparent;
+  transition: transform var(--sc-duration-press) var(--sc-easing-enter);
+}
+
+/* Resting and hover shadows sit on two layers that crossfade, so hover animates opacity (composited)
+   instead of repainting box-shadow every frame. The layers are shadow only, with no fill. */
+.card::before,
+.card::after {
+  content: '';
+  position: absolute;
+  inset: calc(var(--sc-size-border-hairline) * -1);
+  border-radius: inherit;
+  pointer-events: none;
+  transition: opacity var(--sc-duration-fast) var(--sc-easing-hover);
+}
+
+.card::before {
   box-shadow: var(--sc-elevation-1);
-  transition: box-shadow var(--sc-duration-fast) var(--sc-easing-standard);
+}
+
+.card::after {
+  box-shadow: var(--sc-elevation-3);
+  opacity: 0;
 }
 
 .body {
@@ -94,13 +115,16 @@
   background: var(--sc-color-fill-quiet);
   color: var(--sc-color-ink-strong);
   transition:
-    background-color var(--sc-duration-fast) var(--sc-easing-standard),
-    color var(--sc-duration-fast) var(--sc-easing-standard);
+    background-color var(--sc-duration-fast) var(--sc-easing-hover),
+    color var(--sc-duration-fast) var(--sc-easing-hover);
 }
 
-@media (hover: hover) {
-  .card:hover {
-    box-shadow: var(--sc-elevation-3);
+@media (hover: hover) and (pointer: fine) {
+  .card:hover::before {
+    opacity: 0;
+  }
+  .card:hover::after {
+    opacity: 1;
   }
   .card:hover .link {
     text-decoration: underline;
@@ -116,6 +140,18 @@
 .card:active .chevron {
   background: var(--sc-channel-action-pressed);
   color: var(--sc-color-on-action);
+}
+
+/* Press feedback for pointer and touch. Activating the link from the keyboard is instant. */
+.card:active:not(:has(.link:focus-visible)) {
+  transform: scale(var(--sc-scale-press));
+}
+
+.card:has(.link:focus-visible),
+.card:has(.link:focus-visible)::before,
+.card:has(.link:focus-visible)::after,
+.card:has(.link:focus-visible) .chevron {
+  transition: none;
 }
 
 @media (forced-colors: active) {
