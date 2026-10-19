@@ -1,0 +1,46 @@
+/*
+ * Margins follow tokens/layout.json (grid.<breakpoint>.margin). Media queries can't read
+ * custom properties, so the breakpoint widths are repeated here from the same file:
+ * medium 600px, expanded 1024px, wide 1440px (--sc-breakpoint-*).
+ */
+:host {
+  --_margin: var(--sc-grid-compact-margin);
+  display: block;
+  box-sizing: border-box;
+  inline-size: 100%;
+  max-inline-size: calc(var(--sc-container-max) + 2 * var(--_margin));
+  margin-inline: auto;
+  padding-inline: var(--_margin);
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+@media (min-width: 600px) {
+  :host {
+    --_margin: var(--sc-grid-medium-margin);
+  }
+}
+
+@media (min-width: 1024px) {
+  :host {
+    --_margin: var(--sc-grid-expanded-margin);
+  }
+}
+
+@media (min-width: 1440px) {
+  :host {
+    --_margin: var(--sc-grid-wide-margin);
+  }
+}
+
+.inner {
+  inline-size: 100%;
+}
+
+/* Reading width: the column stays aligned with the page's start edge, so it lines up with
+   headers and back links, and never runs wider than 680px. */
+:host([width='reading']) .inner {
+  max-inline-size: var(--sc-container-reading);
+}

@@ -1,0 +1,28 @@
+@import '../sc-text-input/field.css';
+
+/* Day, Month, Year in a row. In RTL the row runs right to left (Day on the right). */
+.parts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sc-space-16);
+}
+
+.part {
+  display: grid;
+  gap: var(--sc-space-6);
+  justify-items: start;
+}
+
+.part-label {
+  color: var(--sc-color-ink);
+  font-family: var(--type-hint-family);
+  font-weight: var(--type-hint-weight);
+  font-size: var(--type-hint-size);
+  line-height: var(--type-hint-leading);
+  letter-spacing: var(--type-hint-tracking);
+}
+
+.part .control {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}

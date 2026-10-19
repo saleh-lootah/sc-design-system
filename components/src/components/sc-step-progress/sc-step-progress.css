@@ -1,0 +1,79 @@
+@import '../../styles/shared.css';
+@import '../../styles/type/title-s.css';
+@import '../../styles/type/label-m.css';
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-12);
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sc-space-4) var(--sc-space-16);
+}
+
+.label {
+  min-inline-size: 0;
+  color: var(--sc-color-ink-strong);
+  font-family: var(--sc-font-family-bold);
+  font-weight: var(--sc-font-weight-bold);
+  overflow-wrap: anywhere;
+}
+
+/* "Step 2 of 4" stays at the end of the row even without a label. */
+.count {
+  margin-inline-start: auto;
+  color: var(--sc-color-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Track -------------------------------------------------------------------------------- */
+
+.track {
+  display: flex;
+  gap: var(--sc-space-4);
+  block-size: var(--sc-size-progress);
+}
+
+.segment {
+  position: relative;
+  flex: 1 1 0;
+  min-inline-size: 0;
+  overflow: hidden;
+  border-radius: var(--sc-radius-pill);
+  background: var(--sc-color-control);
+}
+
+.segment--done {
+  background: var(--sc-channel-action);
+}
+
+/* The current segment is half filled from the inline start (the right in Arabic). */
+.segment--current::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  inline-size: 50%;
+  background: var(--sc-channel-action);
+}
+
+@media (forced-colors: active) {
+  .segment {
+    forced-color-adjust: none;
+    background: GrayText;
+  }
+  .segment--done,
+  .segment--current::before {
+    background: Highlight;
+  }
+}

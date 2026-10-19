@@ -1,0 +1,39 @@
+@import '../../styles/shared.css';
+
+:host {
+  display: block;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.surface {
+  box-sizing: border-box;
+  block-size: 100%;
+  padding: var(--sc-space-24);
+  /* Transparent until forced colours repaint it, so the card keeps an edge in High Contrast. */
+  border: var(--sc-size-border-hairline) solid transparent;
+  border-radius: var(--sc-radius-card);
+  background: var(--sc-color-surface);
+  color: var(--sc-color-ink);
+  box-shadow: var(--sc-elevation-1);
+}
+
+.surface--m {
+  padding: var(--sc-space-16);
+}
+
+/* Headings and paragraphs inside a card shouldn't add space at its edges. */
+::slotted(:first-child) {
+  margin-block-start: 0;
+}
+::slotted(:last-child) {
+  margin-block-end: 0;
+}
+
+@media (forced-colors: active) {
+  .surface {
+    border-color: CanvasText;
+  }
+}

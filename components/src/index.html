@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Shared Channels components</title>
+    <link rel="stylesheet" href="/build/sc-components.css" />
+    <link rel="stylesheet" href="/playground/playground.css" />
+    <script type="module" src="/build/sc-components.esm.js"></script>
+    <script nomodule src="/build/sc-components.js"></script>
+    <script src="/playground/registry.js"></script>
+    <script type="module" src="/playground/playground.js"></script>
+  </head>
+  <body>
+    <header class="pg-bar">
+      <a class="pg-brand" href="?">
+        <span class="pg-brand__mark" aria-hidden="true"></span>
+        <span>Shared Channels <span class="pg-brand__sub">Components</span></span>
+      </a>
+      <div class="pg-tools" role="toolbar" aria-label="Preview settings">
+        <div class="pg-seg" role="group" aria-label="Language">
+          <button type="button" data-set="lang" data-value="en" lang="en">English</button>
+          <button type="button" data-set="lang" data-value="ar" lang="ar">العربية</button>
+        </div>
+        <div class="pg-seg" role="group" aria-label="Theme">
+          <button type="button" data-set="theme" data-value="light">Light</button>
+          <button type="button" data-set="theme" data-value="dark">Dark</button>
+        </div>
+        <label class="pg-select">
+          <span class="pg-select__label">Channel</span>
+          <select id="pg-channel">
+            <option value="now">Dubai Now</option>
+            <option value="transport">Dubai Transport</option>
+            <option value="visit">Visit Dubai</option>
+            <option value="justice">Dubai Justice</option>
+            <option value="build">Build in Dubai</option>
+            <option value="invest">Invest in Dubai</option>
+            <option value="trade">Dubai Trade</option>
+          </select>
+        </label>
+      </div>
+    </header>
+    <div class="pg-layout">
+      <nav class="pg-nav" aria-label="Pages" id="pg-nav"></nav>
+      <main class="pg-main" id="preview" lang="en" dir="ltr" data-channel="now" tabindex="-1">
+        <p class="pg-note">Loading…</p>
+      </main>
+    </div>
+  </body>
+</html>

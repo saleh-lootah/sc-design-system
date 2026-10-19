@@ -1,0 +1,950 @@
+{
+  "color": {
+    "$description": "Semantic colour, light mode. All values OKLAB.",
+    "canvas": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.976,
+          0.0004,
+          -0.001
+        ],
+        "alpha": 1.0
+      },
+      "$description": "App/page background behind cards"
+    },
+    "grouped": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.953,
+          0.0007,
+          -0.003
+        ],
+        "alpha": 1.0
+      },
+      "$description": "Grouped-list background"
+    },
+    "surface": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          1,
+          0,
+          0
+        ],
+        "alpha": 1.0
+      },
+      "$description": "Cards, sheets, fields"
+    },
+    "rule": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.92,
+          0.001,
+          -0.004
+        ],
+        "alpha": 1.0
+      },
+      "$description": "Decorative dividers (not a control boundary)"
+    },
+    "control": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.558,
+          0.003,
+          -0.01
+        ],
+        "alpha": 1.0
+      },
+      "$description": "Control boundaries and inactive progress, >=3:1"
+    },
+    "muted": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.498,
+          0.002,
+          -0.008
+        ],
+        "alpha": 1.0
+      },
+      "$description": "Secondary text, >=4.5:1 on surface and canvas"
+    },
+    "ink": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.245,
+          0.002,
+          -0.005
+        ],
+        "alpha": 1.0
+      },
+      "$description": "Primary text"
+    },
+    "ink-strong": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.178,
+          0.001,
+          -0.004
+        ],
+        "alpha": 1.0
+      },
+      "$description": "Headings and display"
+    },
+    "on-action": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          1,
+          0,
+          0
+        ],
+        "alpha": 1.0
+      },
+      "$description": "Text and icons on channel action colour"
+    },
+    "glass": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          1,
+          0,
+          0
+        ],
+        "alpha": 0.72
+      },
+      "$description": "Translucent bar fill (Liquid Glass approximation)"
+    },
+    "glass-edge": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          1,
+          0,
+          0
+        ],
+        "alpha": 0.9
+      },
+      "$description": "Hairline edge on glass"
+    },
+    "fill-quiet": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.575,
+          0.003,
+          -0.012
+        ],
+        "alpha": 0.14
+      },
+      "$description": "Quiet control fill"
+    },
+    "fill-selected": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.575,
+          0.003,
+          -0.012
+        ],
+        "alpha": 0.16
+      },
+      "$description": "Selected nav item fill"
+    },
+    "error": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.501,
+          0.144,
+          0.076
+        ],
+        "alpha": 1.0
+      }
+    },
+    "error-hover": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.47,
+          0.138,
+          0.073
+        ],
+        "alpha": 1.0
+      }
+    },
+    "error-pressed": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.44,
+          0.132,
+          0.07
+        ],
+        "alpha": 1.0
+      }
+    },
+    "on-error": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          1,
+          0,
+          0
+        ],
+        "alpha": 1.0
+      },
+      "$description": "Text and icons on error fill"
+    },
+    "error-surface": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.967,
+          0.015,
+          0.006
+        ],
+        "alpha": 1.0
+      }
+    },
+    "success": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.448,
+          -0.081,
+          0.043
+        ],
+        "alpha": 1.0
+      }
+    },
+    "success-surface": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.965,
+          -0.015,
+          0.008
+        ],
+        "alpha": 1.0
+      }
+    },
+    "warning": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.47,
+          0.026,
+          0.096
+        ],
+        "alpha": 1.0
+      }
+    },
+    "warning-surface": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.97,
+          0.003,
+          0.032
+        ],
+        "alpha": 1.0
+      }
+    },
+    "shadow": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0,
+          0,
+          0
+        ],
+        "alpha": 0.05
+      },
+      "$description": "Base shadow colour; elevation tokens set their own alpha"
+    }
+  },
+  "channel": {
+    "$description": "Seven channel signatures, light mode. A page sets one channel; components read channel.current.*",
+    "now": {
+      "$description": "Dubai Now",
+      "action": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.537,
+            -0.011,
+            -0.22
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Buttons, links, selected states; white text"
+      },
+      "action-hover": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.507,
+            -0.0107,
+            -0.2134
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Hover on pointer devices"
+      },
+      "action-pressed": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.477,
+            -0.0103,
+            -0.2068
+          ],
+          "alpha": 1.0
+        }
+      },
+      "wash-start": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.947,
+            -0.004,
+            -0.025
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Hero and card wash, gradient start"
+      },
+      "wash-end": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.896,
+            -0.003,
+            -0.044
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Hero and card wash, gradient end"
+      },
+      "ink": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.307,
+            0.0004,
+            -0.094
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Text on the channel wash"
+      },
+      "subtle": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.947,
+            -0.004,
+            -0.025
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Chips and quiet tinted fills"
+      }
+    },
+    "transport": {
+      "$description": "Dubai Transport",
+      "action": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.501,
+            0.111,
+            0.1
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Buttons, links, selected states; white text"
+      },
+      "action-hover": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.471,
+            0.1047,
+            0.0943
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Hover on pointer devices"
+      },
+      "action-pressed": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.441,
+            0.0984,
+            0.0886
+          ],
+          "alpha": 1.0
+        }
+      },
+      "wash-start": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.948,
+            0.017,
+            0.027
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Hero and card wash, gradient start"
+      },
+      "wash-end": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.888,
+            0.043,
+            0.049
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Hero and card wash, gradient end"
+      },
+      "ink": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.379,
+            0.068,
+            0.068
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Text on the channel wash"
+      },
+      "subtle": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.948,
+            0.017,
+            0.027
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Chips and quiet tinted fills"
+      }
+    },
+    "visit": {
+      "$description": "Visit Dubai",
+      "action": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.501,
+            0.176,
+            0.026
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Buttons, links, selected states; white text"
+      },
+      "action-hover": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.471,
+            0.1707,
+            0.0252
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Hover on pointer devices"
+      },
+      "action-pressed": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.441,
+            0.1654,
+            0.0244
+          ],
+          "alpha": 1.0
+        }
+      },
+      "wash-start": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.941,
+            0.021,
+            0.009
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Hero and card wash, gradient start"
+      },
+      "wash-end": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.876,
+            0.042,
+            0.021
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Hero and card wash, gradient end"
+      },
+      "ink": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.339,
+            0.089,
+            0.024
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Text on the channel wash"
+      },
+      "subtle": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.941,
+            0.021,
+            0.009
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Chips and quiet tinted fills"
+      }
+    },
+    "justice": {
+      "$description": "Dubai Justice",
+      "action": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.495,
+            0.068,
+            -0.187
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Buttons, links, selected states; white text"
+      },
+      "action-hover": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.465,
+            0.066,
+            -0.1814
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Hover on pointer devices"
+      },
+      "action-pressed": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.435,
+            0.0639,
+            -0.1758
+          ],
+          "alpha": 1.0
+        }
+      },
+      "wash-start": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.94,
+            0.015,
+            -0.022
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Hero and card wash, gradient start"
+      },
+      "wash-end": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.876,
+            0.027,
+            -0.043
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Hero and card wash, gradient end"
+      },
+      "ink": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.339,
+            0.041,
+            -0.092
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Text on the channel wash"
+      },
+      "subtle": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.94,
+            0.015,
+            -0.022
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Chips and quiet tinted fills"
+      }
+    },
+    "build": {
+      "$description": "Build in Dubai",
+      "action": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.494,
+            0.043,
+            0.1
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Buttons, links, selected states; white text"
+      },
+      "action-hover": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.464,
+            0.0401,
+            0.0933
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Hover on pointer devices"
+      },
+      "action-pressed": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.434,
+            0.0373,
+            0.0867
+          ],
+          "alpha": 1.0
+        }
+      },
+      "wash-start": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.962,
+            0.008,
+            0.03
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Hero and card wash, gradient start"
+      },
+      "wash-end": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.913,
+            0.017,
+            0.056
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Hero and card wash, gradient end"
+      },
+      "ink": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.378,
+            0.026,
+            0.065
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Text on the channel wash"
+      },
+      "subtle": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.962,
+            0.008,
+            0.03
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Chips and quiet tinted fills"
+      }
+    },
+    "invest": {
+      "$description": "Invest in Dubai",
+      "action": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.513,
+            -0.101,
+            0.054
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Buttons, links, selected states; white text"
+      },
+      "action-hover": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.483,
+            -0.098,
+            0.0524
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Hover on pointer devices"
+      },
+      "action-pressed": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.453,
+            -0.0949,
+            0.0508
+          ],
+          "alpha": 1.0
+        }
+      },
+      "wash-start": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.952,
+            -0.023,
+            0.012
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Hero and card wash, gradient start"
+      },
+      "wash-end": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.897,
+            -0.04,
+            0.021
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Hero and card wash, gradient end"
+      },
+      "ink": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.368,
+            -0.058,
+            0.031
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Text on the channel wash"
+      },
+      "subtle": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.952,
+            -0.023,
+            0.012
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Chips and quiet tinted fills"
+      }
+    },
+    "trade": {
+      "$description": "Dubai Trade",
+      "action": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.44,
+            -0.018,
+            -0.046
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Buttons, links, selected states; white text"
+      },
+      "action-hover": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.41,
+            -0.0175,
+            -0.0446
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Hover on pointer devices"
+      },
+      "action-pressed": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.38,
+            -0.0169,
+            -0.0432
+          ],
+          "alpha": 1.0
+        }
+      },
+      "wash-start": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.955,
+            -0.005,
+            -0.011
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Hero and card wash, gradient start"
+      },
+      "wash-end": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.905,
+            -0.007,
+            -0.021
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Hero and card wash, gradient end"
+      },
+      "ink": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.321,
+            -0.012,
+            -0.044
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Text on the channel wash"
+      },
+      "subtle": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.955,
+            -0.005,
+            -0.011
+          ],
+          "alpha": 1.0
+        },
+        "$description": "Chips and quiet tinted fills"
+      }
+    }
+  }
+}

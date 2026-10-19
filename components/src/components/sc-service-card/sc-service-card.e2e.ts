@@ -1,0 +1,116 @@
+import { expectNoAxeViolations } from '../../test/axe';
+import { contexts, newScPage, setPageContext } from '../../test/page';
+
+/** E2EPage is a Puppeteer page; this is the slice used to emulate forced colours. */
+type CdpPage = { createCDPSession(): Promise<{ send(method: string, params: object): Promise<unknown> }> };
+
+const GRID = `
+  <main>
+    <h1>Dubai Now</h1>
+    <h2>Most used services</h2>
+    <div style="display: grid; grid-template-columns: repeat(3, 300px); gap: 24px">
+      <sc-service-card id="renew" href="#renew" entity="Roads and Transport Authority">Renew vehicle registration
+        <span slot="chip" style="background: var(--sc-channel-subtle); color: var(--sc-channel-ink)" data-channel="transport">Also on Dubai Transport</span></sc-service-card>
+      <sc-service-card id="bills" href="#bills" entity="Dubai Electricity and Water Authority">Pay water and electricity bills</sc-service-card>
+      <sc-service-card id="tenancy" href="#tenancy" entity="Dubai Land Department">Register a tenancy contract
+        <a slot="chip" id="chip-link" href="#build" style="color: var(--sc-channel-ink)">Also on Build in Dubai</a></sc-service-card>
+    </div>
+  </main>`;
+
+describe('sc-service-card (e2e)', () => {
+  it('has no axe violations in English and Arabic, light and dark', async () => {
+    const page = await newScPage(GRID);
+    for (const ctx of contexts) {
+      await setPageContext(page, ctx);
+      await expectNoAxeViolations(page);
+    }
+  });
+
+  it('is one tab stop per card; Enter follows the link', async () => {
+    const page = await newScPage(GRID);
+    await page.keyboard.press('Tab');
+    expect(await page.evaluate(() => document.activeElement!.id)).toBe('renew');
+    expect(await page.evaluate(() => document.activeElement!.shadowRoot!.activeElement!.tagName)).toBe('A');
+    await page.keyboard.press('Tab');
+    expect(await page.evaluate(() => document.activeElement!.id)).toBe('bills');
+    await page.keyboard.press('Enter');
+    await page.waitForChanges();
+    expect(await page.evaluate(() => location.hash)).toBe('#bills');
+  });
+
+  it('shows a focus ring around the whole card', async () => {
+    const page = await newScPage(GRID);
+    await page.keyboard.press('Tab');
+    const outline = await page.evaluate(() => {
+      const a = document.querySelector('#renew')!.shadowRoot!.querySelector('a')!;
+      return getComputedStyle(a, '::after').outlineWidth;
+    });
+    expect(outline).toBe('3px');
+  });
+
+  it('makes the whole card clickable, but a chip link keeps its own target', async () => {
+    const page = await newScPage(GRID);
+    // Bottom-end corner of the card, away from the title.
+    const corner = await page.evaluate(() => {
+      const r = document.querySelector('#bills')!.getBoundingClientRect();
+      return [r.right - 12, r.bottom - 12];
+    });
+    await page.mouse.click(corner[0], corner[1]);
+    await page.waitForChanges();
+    expect(await page.evaluate(() => location.hash)).toBe('#bills');
+
+    // A plain chip lets the click through to the card.
+    const chip = await page.evaluate(() => {
+      const r = document.querySelector('#renew [slot="chip"]')!.getBoundingClientRect();
+      return [r.x + r.width / 2, r.y + r.height / 2];
+    });
+    await page.mouse.click(chip[0], chip[1]);
+    await page.waitForChanges();
+    expect(await page.evaluate(() => location.hash)).toBe('#renew');
+
+    const link = await page.evaluate(() => {
+      const r = document.querySelector('#chip-link')!.getBoundingClientRect();
+      return [r.x + r.width / 2, r.y + r.height / 2];
+    });
+    await page.mouse.click(link[0], link[1]);
+    await page.waitForChanges();
+    expect(await page.evaluate(() => location.hash)).toBe('#build');
+  });
+
+  it('names the link by the title and describes it by the entity', async () => {
+    const page = await newScPage(GRID);
+    const snapshot = await page.accessibility.snapshot({ interestingOnly: true });
+    const links: { name?: string; description?: string }[] = [];
+    const walk = (n: { role?: string; name?: string; description?: string; children?: unknown[] } | null) => {
+      if (!n) return;
+      if (n.role === 'link') links.push({ name: n.name, description: n.description });
+      (n.children as (typeof n)[] | undefined)?.forEach(walk);
+    };
+    walk(snapshot as never);
+    expect(links[0].name).toBe('Renew vehicle registration');
+    expect(links[0].description).toBe('Roads and Transport Authority');
+  });
+
+  it('mirrors the chevron in Arabic and puts it at the left', async () => {
+    const page = await newScPage(GRID, { lang: 'ar' });
+    const result = await page.evaluate(() => {
+      const root = document.querySelector('#renew')!.shadowRoot!;
+      const svg = root.querySelector('.chevron svg')!;
+      return {
+        transform: getComputedStyle(svg).transform,
+        chevronX: root.querySelector('.chevron')!.getBoundingClientRect().x,
+        titleX: root.querySelector('.title')!.getBoundingClientRect().x,
+      };
+    });
+    expect(result.transform).toBe('matrix(-1, 0, 0, 1, 0, 0)');
+    expect(result.chevronX).toBeLessThan(result.titleX);
+  });
+
+  it('keeps the card edge and link colour in forced colours', async () => {
+    const page = await newScPage(GRID);
+    // Puppeteer's emulateMediaFeatures doesn't list forced-colors; Chromium's CDP does.
+    await (await (page as unknown as CdpPage).createCDPSession()).send('Emulation.setEmulatedMedia', { features: [{ name: 'forced-colors', value: 'active' }] });
+    const border = await page.evaluate(() => getComputedStyle(document.querySelector('#renew')!.shadowRoot!.querySelector('.card')!).borderTopColor);
+    expect(border).not.toBe('rgba(0, 0, 0, 0)');
+  });
+});

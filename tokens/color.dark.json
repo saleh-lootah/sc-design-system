@@ -1,0 +1,888 @@
+{
+  "$extensions": {
+    "mode": "dark"
+  },
+  "color": {
+    "$description": "Semantic colour, dark mode overrides.",
+    "canvas": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.178,
+          0.001,
+          -0.004
+        ],
+        "alpha": 1.0
+      }
+    },
+    "grouped": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.178,
+          0.001,
+          -0.004
+        ],
+        "alpha": 1.0
+      }
+    },
+    "surface": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.245,
+          0.002,
+          -0.005
+        ],
+        "alpha": 1.0
+      }
+    },
+    "rule": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.323,
+          0.002,
+          -0.008
+        ],
+        "alpha": 1.0
+      }
+    },
+    "control": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.669,
+          0.003,
+          -0.01
+        ],
+        "alpha": 1.0
+      }
+    },
+    "muted": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.8,
+          0.002,
+          -0.007
+        ],
+        "alpha": 1.0
+      }
+    },
+    "ink": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          1,
+          0,
+          0
+        ],
+        "alpha": 1.0
+      }
+    },
+    "ink-strong": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          1,
+          0,
+          0
+        ],
+        "alpha": 1.0
+      }
+    },
+    "on-action": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.178,
+          0.001,
+          -0.004
+        ],
+        "alpha": 1.0
+      }
+    },
+    "glass": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.279,
+          0.002,
+          -0.007
+        ],
+        "alpha": 0.72
+      }
+    },
+    "glass-edge": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          1,
+          0,
+          0
+        ],
+        "alpha": 0.14
+      }
+    },
+    "fill-quiet": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          1,
+          0,
+          0
+        ],
+        "alpha": 0.1
+      }
+    },
+    "fill-selected": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          1,
+          0,
+          0
+        ],
+        "alpha": 0.14
+      }
+    },
+    "error": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.834,
+          0.082,
+          0.041
+        ],
+        "alpha": 1.0
+      }
+    },
+    "error-hover": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.8,
+          0.082,
+          0.041
+        ],
+        "alpha": 1.0
+      }
+    },
+    "error-pressed": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.77,
+          0.082,
+          0.041
+        ],
+        "alpha": 1.0
+      }
+    },
+    "on-error": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.178,
+          0.001,
+          -0.004
+        ],
+        "alpha": 1.0
+      }
+    },
+    "error-surface": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.3,
+          0.05,
+          0.025
+        ],
+        "alpha": 1.0
+      }
+    },
+    "success": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.82,
+          -0.09,
+          0.05
+        ],
+        "alpha": 1.0
+      }
+    },
+    "success-surface": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.29,
+          -0.045,
+          0.025
+        ],
+        "alpha": 1.0
+      }
+    },
+    "warning": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.84,
+          0.03,
+          0.12
+        ],
+        "alpha": 1.0
+      }
+    },
+    "warning-surface": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0.3,
+          0.02,
+          0.05
+        ],
+        "alpha": 1.0
+      }
+    },
+    "shadow": {
+      "$type": "color",
+      "$value": {
+        "colorSpace": "oklab",
+        "components": [
+          0,
+          0,
+          0
+        ],
+        "alpha": 0.35
+      }
+    }
+  },
+  "channel": {
+    "now": {
+      "action": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.811,
+            0.004,
+            -0.094
+          ],
+          "alpha": 1.0
+        }
+      },
+      "action-hover": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.78,
+            -0.0047,
+            -0.094
+          ],
+          "alpha": 1.0
+        }
+      },
+      "action-pressed": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.75,
+            -0.0047,
+            -0.094
+          ],
+          "alpha": 1.0
+        }
+      },
+      "wash-start": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.3,
+            -0.0017,
+            -0.035
+          ],
+          "alpha": 1.0
+        }
+      },
+      "wash-end": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.355,
+            -0.0022,
+            -0.0449
+          ],
+          "alpha": 1.0
+        }
+      },
+      "ink": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.93,
+            -0.0015,
+            -0.03
+          ],
+          "alpha": 1.0
+        }
+      },
+      "subtle": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.3,
+            -0.0017,
+            -0.035
+          ],
+          "alpha": 1.0
+        }
+      }
+    },
+    "transport": {
+      "action": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.83,
+            0.068,
+            0.079
+          ],
+          "alpha": 1.0
+        }
+      },
+      "action-hover": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.78,
+            0.0774,
+            0.0698
+          ],
+          "alpha": 1.0
+        }
+      },
+      "action-pressed": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.75,
+            0.0774,
+            0.0698
+          ],
+          "alpha": 1.0
+        }
+      },
+      "wash-start": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.3,
+            0.026,
+            0.0234
+          ],
+          "alpha": 1.0
+        }
+      },
+      "wash-end": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.355,
+            0.0334,
+            0.0301
+          ],
+          "alpha": 1.0
+        }
+      },
+      "ink": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.93,
+            0.0223,
+            0.0201
+          ],
+          "alpha": 1.0
+        }
+      },
+      "subtle": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.3,
+            0.026,
+            0.0234
+          ],
+          "alpha": 1.0
+        }
+      }
+    },
+    "visit": {
+      "action": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.81,
+            0.088,
+            0.013
+          ],
+          "alpha": 1.0
+        }
+      },
+      "action-hover": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.78,
+            0.088,
+            0.013
+          ],
+          "alpha": 1.0
+        }
+      },
+      "action-pressed": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.75,
+            0.088,
+            0.013
+          ],
+          "alpha": 1.0
+        }
+      },
+      "wash-start": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.3,
+            0.0346,
+            0.0051
+          ],
+          "alpha": 1.0
+        }
+      },
+      "wash-end": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.355,
+            0.0445,
+            0.0066
+          ],
+          "alpha": 1.0
+        }
+      },
+      "ink": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.93,
+            0.0297,
+            0.0044
+          ],
+          "alpha": 1.0
+        }
+      },
+      "subtle": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.3,
+            0.0346,
+            0.0051
+          ],
+          "alpha": 1.0
+        }
+      }
+    },
+    "justice": {
+      "action": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.81,
+            0.034,
+            -0.0935
+          ],
+          "alpha": 1.0
+        }
+      },
+      "action-hover": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.78,
+            0.034,
+            -0.0935
+          ],
+          "alpha": 1.0
+        }
+      },
+      "action-pressed": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.75,
+            0.034,
+            -0.0935
+          ],
+          "alpha": 1.0
+        }
+      },
+      "wash-start": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.3,
+            0.012,
+            -0.0329
+          ],
+          "alpha": 1.0
+        }
+      },
+      "wash-end": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.355,
+            0.0154,
+            -0.0423
+          ],
+          "alpha": 1.0
+        }
+      },
+      "ink": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.93,
+            0.0103,
+            -0.0282
+          ],
+          "alpha": 1.0
+        }
+      },
+      "subtle": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.3,
+            0.012,
+            -0.0329
+          ],
+          "alpha": 1.0
+        }
+      }
+    },
+    "build": {
+      "action": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.81,
+            0.0215,
+            0.05
+          ],
+          "alpha": 1.0
+        }
+      },
+      "action-hover": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.78,
+            0.0215,
+            0.05
+          ],
+          "alpha": 1.0
+        }
+      },
+      "action-pressed": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.75,
+            0.0215,
+            0.05
+          ],
+          "alpha": 1.0
+        }
+      },
+      "wash-start": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.3,
+            0.0138,
+            0.0322
+          ],
+          "alpha": 1.0
+        }
+      },
+      "wash-end": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.355,
+            0.0178,
+            0.0413
+          ],
+          "alpha": 1.0
+        }
+      },
+      "ink": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.93,
+            0.0119,
+            0.0276
+          ],
+          "alpha": 1.0
+        }
+      },
+      "subtle": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.3,
+            0.0138,
+            0.0322
+          ],
+          "alpha": 1.0
+        }
+      }
+    },
+    "invest": {
+      "action": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.81,
+            -0.0505,
+            0.027
+          ],
+          "alpha": 1.0
+        }
+      },
+      "action-hover": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.78,
+            -0.0505,
+            0.027
+          ],
+          "alpha": 1.0
+        }
+      },
+      "action-pressed": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.75,
+            -0.0505,
+            0.027
+          ],
+          "alpha": 1.0
+        }
+      },
+      "wash-start": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.3,
+            -0.0309,
+            0.0165
+          ],
+          "alpha": 1.0
+        }
+      },
+      "wash-end": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.355,
+            -0.0397,
+            0.0212
+          ],
+          "alpha": 1.0
+        }
+      },
+      "ink": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.93,
+            -0.0265,
+            0.0141
+          ],
+          "alpha": 1.0
+        }
+      },
+      "subtle": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.3,
+            -0.0309,
+            0.0165
+          ],
+          "alpha": 1.0
+        }
+      }
+    },
+    "trade": {
+      "action": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.779,
+            -0.015,
+            -0.043
+          ],
+          "alpha": 1.0
+        }
+      },
+      "action-hover": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.78,
+            -0.0166,
+            -0.0424
+          ],
+          "alpha": 1.0
+        }
+      },
+      "action-pressed": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.75,
+            -0.0166,
+            -0.0424
+          ],
+          "alpha": 1.0
+        }
+      },
+      "wash-start": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.3,
+            -0.0128,
+            -0.0326
+          ],
+          "alpha": 1.0
+        }
+      },
+      "wash-end": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.355,
+            -0.0164,
+            -0.0419
+          ],
+          "alpha": 1.0
+        }
+      },
+      "ink": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.93,
+            -0.0109,
+            -0.0279
+          ],
+          "alpha": 1.0
+        }
+      },
+      "subtle": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "oklab",
+          "components": [
+            0.3,
+            -0.0128,
+            -0.0326
+          ],
+          "alpha": 1.0
+        }
+      }
+    }
+  }
+}

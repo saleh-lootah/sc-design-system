@@ -1,0 +1,35 @@
+@import './field.css';
+
+/* Prefix and suffix ("AED", "km"): quiet boxes inside the frame, on the start and end. */
+.affix {
+  display: flex;
+  flex: none;
+  align-items: center;
+  padding-inline: var(--sc-space-12);
+  background: var(--sc-color-fill-quiet);
+  color: var(--sc-color-muted);
+  font-family: var(--type-label-m-family);
+  font-weight: var(--type-label-m-weight);
+  font-size: var(--type-label-m-size);
+  line-height: var(--type-label-m-leading);
+  white-space: nowrap;
+}
+
+.affix--prefix {
+  border-inline-end: var(--sc-size-border-control) solid var(--sc-color-control);
+}
+
+.affix--suffix {
+  border-inline-end: 0;
+  border-inline-start: var(--sc-size-border-control) solid var(--sc-color-control);
+}
+
+.affix--empty {
+  display: none;
+}
+
+@media (forced-colors: active) {
+  .affix {
+    border-color: ButtonText;
+  }
+}

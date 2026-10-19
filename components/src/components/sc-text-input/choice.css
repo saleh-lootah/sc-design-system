@@ -1,0 +1,200 @@
+/*
+ * Shared styles for one radio or checkbox option (sc-radio-group renders radios, sc-checkbox
+ * renders a checkbox). Import after field.css:
+ *
+ *   @import '../sc-text-input/choice.css';
+ *
+ * .option            a 44px-tall grid row: [44px target column][label] / [ ][hint]
+ *   .box             the native <input>, drawn as a 24px circle (.box--radio) or rounded square
+ *   .mark            the dot or tick, painted over the input when it is checked
+ *   .option-label    the <label>; it also covers the target column, so the whole row is clickable
+ *   .option-hint     hint for this option
+ */
+@import '../../styles/type/body-m.css';
+
+.options {
+  display: grid;
+  gap: var(--sc-space-4);
+  justify-items: start;
+}
+
+.options--inline {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: var(--sc-space-24);
+}
+
+.option {
+  --_target: var(--sc-size-target-min);
+  --_box: var(--sc-size-icon-l);
+  --_inset: calc((var(--_target) - var(--_box)) / 2);
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--_target) minmax(0, 1fr);
+  column-gap: var(--sc-space-8);
+  align-items: start;
+  /* Shift the 44px target back so the 24px box lines up with the label above. A relative
+     offset, not a negative margin, so the row's intrinsic width isn't reduced. */
+  inset-inline-start: calc(-1 * var(--_inset));
+}
+
+.box {
+  position: relative;
+  z-index: 1;
+  grid-row: 1;
+  grid-column: 1;
+  justify-self: center;
+  box-sizing: border-box;
+  inline-size: var(--_box);
+  block-size: var(--_box);
+  margin: 0;
+  margin-block-start: var(--_inset);
+  border: var(--sc-size-border-strong) solid var(--sc-color-control);
+  border-radius: var(--sc-radius-xs);
+  background: var(--sc-color-surface);
+  appearance: none;
+  cursor: pointer;
+  transition:
+    background-color var(--sc-duration-fast) var(--sc-easing-standard),
+    border-color var(--sc-duration-fast) var(--sc-easing-standard);
+}
+
+.box--radio {
+  border-radius: var(--sc-radius-pill);
+}
+
+@media (hover: hover) {
+  .option:hover .box:not(:disabled) {
+    border-color: var(--sc-color-ink);
+  }
+}
+
+.box:checked {
+  border-color: var(--sc-channel-action);
+}
+
+.box--check:checked {
+  background: var(--sc-channel-action);
+}
+
+.box--invalid,
+.option:hover .box--invalid:not(:disabled) {
+  border-color: var(--sc-color-error);
+}
+
+.box:disabled {
+  cursor: not-allowed;
+  background: var(--sc-color-fill-quiet);
+  border-color: var(--sc-color-control);
+}
+
+.box--check:checked:disabled {
+  background: var(--sc-color-control);
+}
+
+/* The dot (radio) and tick (checkbox), drawn over the input when checked. */
+.mark {
+  position: relative;
+  z-index: 2;
+  grid-row: 1;
+  grid-column: 1;
+  justify-self: center;
+  box-sizing: border-box;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--sc-duration-fast) var(--sc-easing-standard);
+}
+
+.box:checked + .mark {
+  opacity: 1;
+}
+
+.mark--radio {
+  inline-size: var(--sc-space-12);
+  block-size: var(--sc-space-12);
+  margin-block-start: calc(var(--_inset) + (var(--_box) - var(--sc-space-12)) / 2);
+  border-radius: var(--sc-radius-pill);
+  background: var(--sc-channel-action);
+}
+
+.box:disabled + .mark--radio {
+  background: var(--sc-color-muted);
+}
+
+/* A tick is a symbol, not an arrow: it never mirrors, so it is drawn in LTR. */
+.mark--check {
+  direction: ltr;
+  inline-size: var(--sc-space-8);
+  block-size: var(--sc-space-12);
+  margin-block-start: calc(var(--_inset) + var(--sc-space-4) + var(--sc-space-2) / 2);
+  border-block-end: var(--sc-size-border-strong) solid var(--sc-color-on-action);
+  border-inline-end: var(--sc-size-border-strong) solid var(--sc-color-on-action);
+  transform: rotate(45deg);
+}
+
+.option-label {
+  position: relative;
+  grid-row: 1;
+  grid-column: 2;
+  box-sizing: border-box;
+  min-block-size: var(--_target);
+  /* The label reaches back over the target column, so clicks around the box select it.
+     (Padding and negative margin cancel out, so the label's intrinsic width is its text.) */
+  margin-inline-start: calc(-1 * (var(--_target) + var(--sc-space-8)));
+  padding-inline-start: calc(var(--_target) + var(--sc-space-8));
+  padding-block: calc((var(--_target) - var(--type-body-m-leading)) / 2);
+  padding-inline-end: var(--sc-space-8);
+  color: var(--sc-color-ink);
+  font-family: var(--type-body-m-family);
+  font-weight: var(--type-body-m-weight);
+  font-size: var(--type-body-m-size);
+  line-height: var(--type-body-m-leading);
+  letter-spacing: var(--type-body-m-tracking);
+  cursor: pointer;
+  overflow-wrap: break-word;
+}
+
+.box:disabled ~ .option-label {
+  color: var(--sc-color-muted);
+  cursor: not-allowed;
+}
+
+.option-hint {
+  grid-row: 2;
+  grid-column: 2;
+  margin: 0;
+  margin-block-start: calc(-1 * var(--sc-space-8));
+  padding-block-end: var(--sc-space-8);
+  color: var(--sc-color-muted);
+  font-family: var(--type-hint-family);
+  font-weight: var(--type-hint-weight);
+  font-size: var(--type-hint-size);
+  line-height: var(--type-hint-leading);
+  letter-spacing: var(--type-hint-tracking);
+}
+
+@media (forced-colors: active) {
+  .box,
+  .mark {
+    forced-color-adjust: none;
+  }
+  .box {
+    border-color: ButtonText;
+    background: Canvas;
+  }
+  .box:checked {
+    border-color: Highlight;
+  }
+  .box--check:checked {
+    background: Highlight;
+  }
+  .box:disabled {
+    border-color: GrayText;
+  }
+  .mark--radio {
+    background: Highlight;
+  }
+  .mark--check {
+    border-color: HighlightText;
+  }
+}

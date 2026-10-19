@@ -1,0 +1,98 @@
+@import '../../styles/shared.css';
+@import '../../styles/type/label-m.css';
+
+:host {
+  display: inline-block;
+  vertical-align: middle;
+  max-inline-size: 100%;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.control {
+  --_bg: var(--sc-color-glass);
+  --_tint: transparent;
+
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-space-4);
+  min-block-size: var(--sc-size-control-m);
+  min-inline-size: var(--sc-size-target-min);
+  margin: 0;
+  padding-block: 0;
+  padding-inline: var(--sc-space-12) var(--sc-space-16);
+  border: var(--sc-size-border-hairline) solid var(--sc-color-glass-edge);
+  border-radius: var(--sc-radius-control);
+  /* The tint layer gives hover and pressed states without losing the glass underneath. */
+  background: linear-gradient(var(--_tint), var(--_tint)), var(--_bg);
+  box-shadow: var(--sc-elevation-2);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(24px) saturate(180%);
+  color: var(--sc-color-ink);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: background-color var(--sc-duration-fast) var(--sc-easing-standard);
+}
+
+.control--plain {
+  --_bg: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  padding-inline: var(--sc-space-8) var(--sc-space-12);
+}
+
+@media (hover: hover) {
+  .control:hover {
+    --_tint: var(--sc-color-fill-quiet);
+  }
+  .control--plain:hover .label {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+}
+
+.control:active {
+  --_tint: var(--sc-color-fill-selected);
+}
+
+.icon-box {
+  display: inline-flex;
+  flex: none;
+}
+
+/* Solid fallback when the user asks for less transparency. */
+@media (prefers-reduced-transparency: reduce) {
+  .control {
+    --_bg: var(--sc-color-surface);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .control--plain {
+    --_bg: transparent;
+  }
+}
+
+@media (forced-colors: active) {
+  .control {
+    border-color: ButtonText;
+    background: ButtonFace;
+    color: ButtonText;
+    box-shadow: none;
+  }
+  a.control {
+    border-color: LinkText;
+    color: LinkText;
+  }
+  .control--plain {
+    border-color: transparent;
+  }
+}

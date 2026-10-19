@@ -1,0 +1,242 @@
+/*
+ * Shared field styles for the form-field family. Each field's CSS starts with:
+ *
+ *   @import '../sc-text-input/field.css';
+ *
+ * Structure (inside each shadow root):
+ *   .field[.field--error]      the field group; the error state adds the 3px start bar
+ *     .label[.label--heading]  label-m (Latin Medium, Arabic Bold) or heading-l as a page heading
+ *     .hint                    hint role, muted
+ *     .error                   error role, icon + visually hidden "Error:" + message
+ *     .frame                   the bordered box around a text control (+ prefix/suffix)
+ *       .control               the native <input>/<textarea>/<select>
+ */
+@import '../../styles/shared.css';
+@import '../../styles/type/label-m.css';
+@import '../../styles/type/hint.css';
+@import '../../styles/type/error.css';
+@import '../../styles/type/body-m.css';
+@import '../../styles/type/heading-l.css';
+
+:host {
+  display: block;
+  color: var(--sc-color-ink);
+  font-family: var(--type-body-m-family);
+  /* Private roles, overridden per state below. */
+  --_border: var(--sc-color-control);
+  --_border-extra: 0px;
+  --_fill: var(--sc-color-surface);
+}
+
+:host([hidden]),
+[hidden] {
+  display: none !important;
+}
+
+/* Field group ------------------------------------------------------------------------- */
+
+.field {
+  position: relative;
+  display: grid;
+  justify-items: start;
+  gap: var(--sc-space-8);
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+/* The error bar: 3px on the start side of the whole group (it mirrors in RTL). */
+.field--error {
+  padding-inline-start: var(--sc-space-16);
+  border-inline-start: var(--sc-size-border-accent) solid var(--sc-color-error);
+}
+
+.field > * {
+  max-inline-size: 100%;
+}
+
+/* Label ------------------------------------------------------------------------------- */
+
+.label {
+  display: block;
+  margin: 0;
+  padding: 0;
+  color: var(--sc-color-ink);
+  font-family: var(--type-label-m-family);
+  font-weight: var(--type-label-m-weight);
+  font-size: var(--type-label-m-size);
+  line-height: var(--type-label-m-leading);
+  letter-spacing: var(--type-label-m-tracking);
+  overflow-wrap: break-word;
+}
+
+/* <legend> needs to be a grid item, not floated into the fieldset border. */
+legend.label {
+  float: inline-start;
+  inline-size: 100%;
+}
+
+legend.label + * {
+  clear: both;
+}
+
+.heading {
+  margin: 0;
+  font: inherit;
+}
+
+.label--heading {
+  color: var(--sc-color-ink-strong);
+  font-family: var(--type-heading-l-family);
+  font-weight: var(--type-heading-l-weight);
+  font-size: var(--type-heading-l-size);
+  line-height: var(--type-heading-l-leading);
+  letter-spacing: var(--type-heading-l-tracking);
+  margin-block-end: var(--sc-space-4);
+}
+
+.optional {
+  font-family: var(--type-hint-family);
+  font-weight: var(--type-hint-weight);
+  color: var(--sc-color-muted);
+}
+
+/* Hint -------------------------------------------------------------------------------- */
+
+.hint {
+  margin: 0;
+  color: var(--sc-color-muted);
+  font-family: var(--type-hint-family);
+  font-weight: var(--type-hint-weight);
+  font-size: var(--type-hint-size);
+  line-height: var(--type-hint-leading);
+  letter-spacing: var(--type-hint-tracking);
+  overflow-wrap: break-word;
+}
+
+/* Error message ----------------------------------------------------------------------- */
+
+.error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sc-space-8);
+  margin: 0;
+  color: var(--sc-color-error);
+  font-family: var(--type-error-family);
+  font-weight: var(--type-error-weight);
+  font-size: var(--type-error-size);
+  line-height: var(--type-error-leading);
+  letter-spacing: var(--type-error-tracking);
+  overflow-wrap: break-word;
+}
+
+.error-icon {
+  --icon-size: var(--sc-size-icon-m);
+  /* Centres the 20px icon on the first line of text. */
+  margin-block-start: calc((var(--type-error-leading) - var(--sc-size-icon-m)) / 2);
+}
+
+/* Text control frame ------------------------------------------------------------------ */
+
+.frame {
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  inline-size: 100%;
+  min-block-size: var(--sc-size-control-l);
+  border: var(--sc-size-border-control) solid var(--_border);
+  border-radius: var(--sc-radius-field);
+  background: var(--_fill);
+  /* Thickens the border in the error state without moving the text. */
+  box-shadow: inset 0 0 0 var(--_border-extra) var(--_border);
+  overflow: hidden;
+  transition: border-color var(--sc-duration-fast) var(--sc-easing-standard);
+}
+
+@media (hover: hover) {
+  .frame:hover {
+    --_border: var(--sc-color-ink);
+  }
+}
+
+/* The ring sits on the frame, so prefix and suffix are inside it. */
+.frame:has(.control:focus-visible) {
+  box-shadow:
+    inset 0 0 0 var(--_border-extra) var(--_border),
+    0 0 0 var(--sc-size-focus-offset) var(--sc-color-surface);
+  outline: var(--sc-size-focus-ring) solid var(--sc-channel-action);
+  outline-offset: var(--sc-size-focus-offset);
+}
+
+.frame--error,
+.frame--error:hover {
+  --_border: var(--sc-color-error);
+  --_border-extra: calc(var(--sc-size-border-strong) - var(--sc-size-border-control));
+}
+
+.frame--disabled,
+.frame--disabled:hover {
+  --_border: var(--sc-color-control);
+  --_fill: var(--sc-color-fill-quiet);
+  color: var(--sc-color-muted);
+}
+
+.control {
+  box-sizing: border-box;
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  inline-size: 100%;
+  margin: 0;
+  padding-block: var(--sc-space-12);
+  padding-inline: var(--sc-space-16);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font-family: var(--type-body-m-family);
+  font-weight: var(--type-body-m-weight);
+  font-size: var(--type-body-m-size);
+  line-height: var(--type-body-m-leading);
+  letter-spacing: var(--type-body-m-tracking);
+  outline: none;
+  appearance: none;
+}
+
+.control:disabled {
+  cursor: not-allowed;
+  color: var(--sc-color-muted);
+}
+
+/* Values that must stay left-to-right (plates, phone numbers, emails): the <input> is
+   dir="ltr", and in an RTL field its text still sits at the start of the field (the right). */
+:host(:dir(rtl)) .control--ltr {
+  text-align: end;
+}
+
+/* Character widths: the frame fits N characters of the value plus padding. */
+.frame--chars {
+  inline-size: calc(var(--_chars) * 1ch + 2 * var(--sc-space-16) + 2 * var(--sc-size-border-control));
+  font-family: var(--type-body-m-family);
+  font-size: var(--type-body-m-size);
+}
+
+/* Forced colours ---------------------------------------------------------------------- */
+
+@media (forced-colors: active) {
+  .frame {
+    border-color: ButtonText;
+    box-shadow: none;
+  }
+  .frame--error {
+    border-width: var(--sc-size-border-strong);
+  }
+  .frame:has(.control:focus-visible) {
+    outline-color: Highlight;
+  }
+  .frame--disabled {
+    border-color: GrayText;
+    color: GrayText;
+  }
+}

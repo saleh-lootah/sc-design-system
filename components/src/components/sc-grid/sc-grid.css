@@ -1,0 +1,51 @@
+/*
+ * Columns and gutters follow tokens/layout.json (grid.<breakpoint>). Media queries can't
+ * read custom properties, so the breakpoint widths are repeated here from the same file:
+ * medium 600px, expanded 1024px (--sc-breakpoint-*). Wide (1440px) keeps 12 columns and
+ * the 24px gutter.
+ */
+:host {
+  --_columns: var(--sc-grid-compact-columns);
+  --_gutter: var(--sc-grid-compact-gutter);
+  --_span: var(--_span-compact, 12);
+  display: block;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+@media (min-width: 600px) {
+  :host {
+    --_columns: var(--sc-grid-medium-columns);
+    --_gutter: var(--sc-grid-medium-gutter);
+    --_span: var(--_span-medium, 12);
+  }
+}
+
+@media (min-width: 1024px) {
+  :host {
+    --_columns: var(--sc-grid-expanded-columns);
+    --_gutter: var(--sc-grid-expanded-gutter);
+    --_span: var(--_span-expanded, 12);
+  }
+}
+
+@media (min-width: 1440px) {
+  :host {
+    --_columns: var(--sc-grid-wide-columns);
+    --_gutter: var(--sc-grid-wide-gutter);
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--_columns), minmax(0, 1fr));
+  gap: var(--_gutter);
+}
+
+/* Slotted children are the grid items (the slot itself is display: contents). */
+::slotted(*) {
+  grid-column: span min(var(--sc-grid-span, var(--_span)), var(--_columns));
+  min-inline-size: 0;
+}

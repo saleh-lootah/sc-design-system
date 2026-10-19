@@ -1,0 +1,14 @@
+@import '../sc-text-input/field.css';
+@import '../sc-text-input/choice.css';
+
+.options {
+  margin-block-start: calc(-1 * var(--sc-space-4));
+}
+
+::slotted(sc-checkbox) {
+  display: block;
+}
+
+.options--inline ::slotted(sc-checkbox) {
+  display: inline-block;
+}

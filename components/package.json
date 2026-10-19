@@ -1,0 +1,43 @@
+{
+  "name": "@sc/components",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Shared Channels web components (StencilJS). One build for plain HTML and every framework.",
+  "license": "UNLICENSED",
+  "type": "commonjs",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.js",
+  "types": "dist/types/index.d.ts",
+  "collection": "dist/collection/collection-manifest.json",
+  "collection:main": "dist/collection/index.js",
+  "unpkg": "dist/sc-components/sc-components.esm.js",
+  "files": [
+    "dist/",
+    "loader/"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "gen:type": "node scripts/gen-type-css.mjs",
+    "prebuild": "npm run gen:type",
+    "build": "stencil build --docs",
+    "prestart": "npm run gen:type",
+    "start": "stencil build --dev --watch --serve",
+    "pretest": "npm run gen:type",
+    "test": "stencil test --spec --e2e -- --max-workers=3",
+    "test:spec": "stencil test --spec",
+    "test:e2e": "stencil test --e2e -- --max-workers=3",
+    "check:literals": "node scripts/check-literals.mjs",
+    "check": "npm run check:literals && npm run build && npm test"
+  },
+  "devDependencies": {
+    "@stencil/core": "4.45.2",
+    "@types/jest": "29.5.14",
+    "@types/node": "24.19.0",
+    "axe-core": "4.13.0",
+    "jest": "29.7.0",
+    "jest-cli": "29.7.0",
+    "puppeteer": "24.43.1"
+  }
+}

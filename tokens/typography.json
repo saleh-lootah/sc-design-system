@@ -1,0 +1,846 @@
+{
+  "font": {
+    "family": {
+      "light": {
+        "$type": "fontFamily",
+        "$value": [
+          "Dubai W23 Light",
+          "Dubai",
+          "system-ui",
+          "sans-serif"
+        ]
+      },
+      "regular": {
+        "$type": "fontFamily",
+        "$value": [
+          "Dubai W23 Regular",
+          "Dubai",
+          "system-ui",
+          "sans-serif"
+        ]
+      },
+      "medium": {
+        "$type": "fontFamily",
+        "$value": [
+          "Dubai W23 Medium",
+          "Dubai",
+          "system-ui",
+          "sans-serif"
+        ]
+      },
+      "bold": {
+        "$type": "fontFamily",
+        "$value": [
+          "Dubai W23 Bold",
+          "Dubai",
+          "system-ui",
+          "sans-serif"
+        ]
+      }
+    },
+    "weight": {
+      "light": {
+        "$type": "fontWeight",
+        "$value": 300
+      },
+      "regular": {
+        "$type": "fontWeight",
+        "$value": 400
+      },
+      "medium": {
+        "$type": "fontWeight",
+        "$value": 500
+      },
+      "bold": {
+        "$type": "fontWeight",
+        "$value": 700
+      }
+    }
+  },
+  "type": {
+    "$description": "Dubai Font, tight leading. Latin and Arabic have separate scales; Arabic is larger with taller leading and is never tracked.",
+    "latin": {
+      "display-xl": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.bold}",
+          "fontWeight": "{font.weight.bold}",
+          "fontSize": {
+            "value": 80,
+            "unit": "px"
+          },
+          "lineHeight": 1.025,
+          "letterSpacing": {
+            "value": -0.02,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 82
+        },
+        "$description": "Home hero"
+      },
+      "display-l": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.bold}",
+          "fontWeight": "{font.weight.bold}",
+          "fontSize": {
+            "value": 48,
+            "unit": "px"
+          },
+          "lineHeight": 1.0417,
+          "letterSpacing": {
+            "value": -0.015,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 50
+        }
+      },
+      "heading-xl": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.bold}",
+          "fontWeight": "{font.weight.bold}",
+          "fontSize": {
+            "value": 34,
+            "unit": "px"
+          },
+          "lineHeight": 1.1176,
+          "letterSpacing": {
+            "value": -0.01,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 38
+        }
+      },
+      "heading-l": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.bold}",
+          "fontWeight": "{font.weight.bold}",
+          "fontSize": {
+            "value": 30,
+            "unit": "px"
+          },
+          "lineHeight": 1.1333,
+          "letterSpacing": {
+            "value": -0.01,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 34
+        }
+      },
+      "heading-m": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.bold}",
+          "fontWeight": "{font.weight.bold}",
+          "fontSize": {
+            "value": 24,
+            "unit": "px"
+          },
+          "lineHeight": 1.1667,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 28
+        }
+      },
+      "title-l": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.bold}",
+          "fontWeight": "{font.weight.bold}",
+          "fontSize": {
+            "value": 22,
+            "unit": "px"
+          },
+          "lineHeight": 1.2273,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 27
+        }
+      },
+      "title-m": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.bold}",
+          "fontWeight": "{font.weight.bold}",
+          "fontSize": {
+            "value": 20,
+            "unit": "px"
+          },
+          "lineHeight": 1.2,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 24
+        }
+      },
+      "title-s": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.medium}",
+          "fontWeight": "{font.weight.medium}",
+          "fontSize": {
+            "value": 17,
+            "unit": "px"
+          },
+          "lineHeight": 1.2353,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 21
+        },
+        "$description": "Buttons, links, row titles"
+      },
+      "body-l": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.regular}",
+          "fontWeight": "{font.weight.regular}",
+          "fontSize": {
+            "value": 19,
+            "unit": "px"
+          },
+          "lineHeight": 1.4211,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 27
+        }
+      },
+      "body-m": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.regular}",
+          "fontWeight": "{font.weight.regular}",
+          "fontSize": {
+            "value": 17,
+            "unit": "px"
+          },
+          "lineHeight": 1.4118,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 24
+        }
+      },
+      "body-s": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.regular}",
+          "fontWeight": "{font.weight.regular}",
+          "fontSize": {
+            "value": 15,
+            "unit": "px"
+          },
+          "lineHeight": 1.4,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 21
+        }
+      },
+      "label-m": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.medium}",
+          "fontWeight": "{font.weight.medium}",
+          "fontSize": {
+            "value": 15,
+            "unit": "px"
+          },
+          "lineHeight": 1.2667,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 19
+        }
+      },
+      "label-s": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.medium}",
+          "fontWeight": "{font.weight.medium}",
+          "fontSize": {
+            "value": 14,
+            "unit": "px"
+          },
+          "lineHeight": 1.2143,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 17
+        },
+        "$description": "Tags and chips"
+      },
+      "eyebrow": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.medium}",
+          "fontWeight": "{font.weight.medium}",
+          "fontSize": {
+            "value": 14,
+            "unit": "px"
+          },
+          "lineHeight": 1.2143,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 17
+        },
+        "$description": "+1px from D+ (13/16)"
+      },
+      "caption": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.regular}",
+          "fontWeight": "{font.weight.regular}",
+          "fontSize": {
+            "value": 14,
+            "unit": "px"
+          },
+          "lineHeight": 1.3571,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 19
+        },
+        "$description": "+1px from D+ (13/18)"
+      },
+      "caption-s": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.regular}",
+          "fontWeight": "{font.weight.regular}",
+          "fontSize": {
+            "value": 13,
+            "unit": "px"
+          },
+          "lineHeight": 1.2308,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 16
+        },
+        "$description": "+1px from D+ (12/15); smallest allowed"
+      },
+      "value": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.medium}",
+          "fontWeight": "{font.weight.medium}",
+          "fontSize": {
+            "value": 17,
+            "unit": "px"
+          },
+          "lineHeight": 1.2941,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 22
+        },
+        "$description": "Answers in summary lists"
+      },
+      "hint": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.regular}",
+          "fontWeight": "{font.weight.regular}",
+          "fontSize": {
+            "value": 15,
+            "unit": "px"
+          },
+          "lineHeight": 1.4,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 21
+        },
+        "$description": "Field hints"
+      },
+      "error": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.medium}",
+          "fontWeight": "{font.weight.medium}",
+          "fontSize": {
+            "value": 15,
+            "unit": "px"
+          },
+          "lineHeight": 1.4,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 21
+        },
+        "$description": "Field error messages"
+      },
+      "numeral-l": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.bold}",
+          "fontWeight": "{font.weight.bold}",
+          "fontSize": {
+            "value": 34,
+            "unit": "px"
+          },
+          "lineHeight": 1.1176,
+          "letterSpacing": {
+            "value": -0.01,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 38
+        },
+        "$description": "Amounts"
+      }
+    },
+    "arabic": {
+      "display-l": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.bold}",
+          "fontWeight": "{font.weight.bold}",
+          "fontSize": {
+            "value": 50,
+            "unit": "px"
+          },
+          "lineHeight": 1.24,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 62
+        }
+      },
+      "heading-l": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.bold}",
+          "fontWeight": "{font.weight.bold}",
+          "fontSize": {
+            "value": 30,
+            "unit": "px"
+          },
+          "lineHeight": 1.2667,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 38
+        }
+      },
+      "heading-m": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.bold}",
+          "fontWeight": "{font.weight.bold}",
+          "fontSize": {
+            "value": 26,
+            "unit": "px"
+          },
+          "lineHeight": 1.3077,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 34
+        }
+      },
+      "title-s": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.bold}",
+          "fontWeight": "{font.weight.bold}",
+          "fontSize": {
+            "value": 19,
+            "unit": "px"
+          },
+          "lineHeight": 1.3158,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 25
+        },
+        "$description": "Buttons; +1px from D+ (18/24)"
+      },
+      "body-l": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.regular}",
+          "fontWeight": "{font.weight.regular}",
+          "fontSize": {
+            "value": 20,
+            "unit": "px"
+          },
+          "lineHeight": 1.55,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 31
+        }
+      },
+      "body-m": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.regular}",
+          "fontWeight": "{font.weight.regular}",
+          "fontSize": {
+            "value": 19,
+            "unit": "px"
+          },
+          "lineHeight": 1.5263,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 29
+        }
+      },
+      "body-s": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.regular}",
+          "fontWeight": "{font.weight.regular}",
+          "fontSize": {
+            "value": 18,
+            "unit": "px"
+          },
+          "lineHeight": 1.5556,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 28
+        }
+      },
+      "label-m": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.bold}",
+          "fontWeight": "{font.weight.bold}",
+          "fontSize": {
+            "value": 18,
+            "unit": "px"
+          },
+          "lineHeight": 1.2778,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 23
+        },
+        "$description": "Field labels; +1px from D+ (17/22)"
+      },
+      "hint": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.regular}",
+          "fontWeight": "{font.weight.regular}",
+          "fontSize": {
+            "value": 17,
+            "unit": "px"
+          },
+          "lineHeight": 1.5294,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 26
+        },
+        "$description": "+1px from D+ (16/24-25)"
+      },
+      "error": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.bold}",
+          "fontWeight": "{font.weight.bold}",
+          "fontSize": {
+            "value": 18,
+            "unit": "px"
+          },
+          "lineHeight": 1.5,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 27
+        },
+        "$description": "+1px from D+ (17/26)"
+      },
+      "caption": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.regular}",
+          "fontWeight": "{font.weight.regular}",
+          "fontSize": {
+            "value": 16,
+            "unit": "px"
+          },
+          "lineHeight": 1.5,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 24
+        },
+        "$description": "Smallest Arabic size"
+      },
+      "display-xl": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.bold}",
+          "fontWeight": "{font.weight.bold}",
+          "fontSize": {
+            "value": 84,
+            "unit": "px"
+          },
+          "lineHeight": 1.1905,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 100
+        }
+      },
+      "heading-xl": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.bold}",
+          "fontWeight": "{font.weight.bold}",
+          "fontSize": {
+            "value": 36,
+            "unit": "px"
+          },
+          "lineHeight": 1.2778,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 46
+        }
+      },
+      "title-l": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.bold}",
+          "fontWeight": "{font.weight.bold}",
+          "fontSize": {
+            "value": 24,
+            "unit": "px"
+          },
+          "lineHeight": 1.3333,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 32
+        }
+      },
+      "title-m": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.bold}",
+          "fontWeight": "{font.weight.bold}",
+          "fontSize": {
+            "value": 22,
+            "unit": "px"
+          },
+          "lineHeight": 1.3182,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 29
+        }
+      },
+      "label-s": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.bold}",
+          "fontWeight": "{font.weight.bold}",
+          "fontSize": {
+            "value": 16,
+            "unit": "px"
+          },
+          "lineHeight": 1.3125,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 21
+        },
+        "$description": "Tags and chips"
+      },
+      "eyebrow": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.bold}",
+          "fontWeight": "{font.weight.bold}",
+          "fontSize": {
+            "value": 16,
+            "unit": "px"
+          },
+          "lineHeight": 1.3125,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 21
+        }
+      },
+      "caption-s": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.regular}",
+          "fontWeight": "{font.weight.regular}",
+          "fontSize": {
+            "value": 16,
+            "unit": "px"
+          },
+          "lineHeight": 1.5,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 24
+        },
+        "$description": "Same as caption: Arabic never goes below 16px"
+      },
+      "value": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.bold}",
+          "fontWeight": "{font.weight.bold}",
+          "fontSize": {
+            "value": 19,
+            "unit": "px"
+          },
+          "lineHeight": 1.3684,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 26
+        },
+        "$description": "Answers in summary lists"
+      },
+      "numeral-l": {
+        "$type": "typography",
+        "$value": {
+          "fontFamily": "{font.family.bold}",
+          "fontWeight": "{font.weight.bold}",
+          "fontSize": {
+            "value": 34,
+            "unit": "px"
+          },
+          "lineHeight": 1.1765,
+          "letterSpacing": {
+            "value": 0,
+            "unit": "em"
+          }
+        },
+        "$extensions": {
+          "lineHeightPx": 40
+        },
+        "$description": "Amounts; digits stay Latin"
+      }
+    }
+  }
+}

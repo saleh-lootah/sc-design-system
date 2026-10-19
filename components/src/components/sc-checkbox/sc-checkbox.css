@@ -1,0 +1,7 @@
+@import '../sc-text-input/field.css';
+@import '../sc-text-input/choice.css';
+
+/* Inside a group the options sit closer together; the group's .options gap spaces them. */
+.field {
+  gap: var(--sc-space-8);
+}

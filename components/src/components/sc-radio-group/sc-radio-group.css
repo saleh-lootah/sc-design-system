@@ -1,0 +1,13 @@
+@import '../sc-text-input/field.css';
+@import '../sc-text-input/choice.css';
+
+/* The legend is followed by the hint and error with the same rhythm as single fields. */
+.options {
+  margin-block-start: calc(-1 * var(--sc-space-4));
+}
+
+/* The slotted sc-radio is the label text; it inherits the label's type. */
+::slotted(sc-radio) {
+  font: inherit;
+  color: inherit;
+}

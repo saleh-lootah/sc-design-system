@@ -1,0 +1,50 @@
+@import '../sc-text-input/field.css';
+
+:host {
+  /* A select is as wide as its longest option needs, up to the container. */
+  --_select-max: 100%;
+}
+
+.frame--select {
+  inline-size: auto;
+  min-inline-size: min(100%, calc(var(--sc-size-control-l) * 5));
+  max-inline-size: var(--_select-max);
+}
+
+select.control {
+  padding-inline-end: calc(var(--sc-space-16) + var(--sc-size-icon-m) + var(--sc-space-8));
+  cursor: pointer;
+  text-overflow: ellipsis;
+}
+
+select.control:disabled {
+  cursor: not-allowed;
+}
+
+/* The chevron points down in both directions (the directional flip is cancelled). */
+.chevron {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: var(--sc-space-16);
+  display: flex;
+  align-items: center;
+  color: var(--sc-color-muted);
+  pointer-events: none;
+}
+
+.chevron .icon,
+:host(:dir(rtl)) .chevron .icon-directional {
+  transform: rotate(90deg);
+}
+
+select.control option,
+select.control optgroup {
+  color: var(--sc-color-ink);
+  background: var(--sc-color-surface);
+}
+
+@media (forced-colors: active) {
+  .chevron {
+    color: ButtonText;
+  }
+}

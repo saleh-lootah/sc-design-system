@@ -1,0 +1,29 @@
+@import '../sc-text-input/field.css';
+
+.frame--area {
+  min-block-size: auto;
+}
+
+textarea.control {
+  display: block;
+  min-block-size: var(--sc-size-control-l);
+  resize: block;
+}
+
+/* The count: hint type, muted; error colour and weight once the limit is passed
+   (the words "too many" carry the meaning, not the colour). */
+.count {
+  margin: 0;
+  color: var(--sc-color-muted);
+  font-family: var(--type-hint-family);
+  font-weight: var(--type-hint-weight);
+  font-size: var(--type-hint-size);
+  line-height: var(--type-hint-leading);
+  letter-spacing: var(--type-hint-tracking);
+}
+
+.count--over {
+  color: var(--sc-color-error);
+  font-family: var(--type-error-family);
+  font-weight: var(--type-error-weight);
+}

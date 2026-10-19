@@ -1,0 +1,14 @@
+/* The row sits inside the value <dd> of its sc-summary-list, which sets the type. */
+:host {
+  display: block;
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+::slotted(p) {
+  margin-block: 0;
+}

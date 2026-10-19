@@ -1,0 +1,103 @@
+@import '../../styles/shared.css';
+
+:host {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.control {
+  --_bg: var(--sc-color-glass);
+  --_tint: transparent;
+
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: var(--sc-size-control-m);
+  min-inline-size: var(--sc-size-target-min);
+  margin: 0;
+  padding-block: 0;
+  padding-inline: var(--sc-space-16);
+  border: var(--sc-size-border-hairline) solid var(--sc-color-glass-edge);
+  border-radius: var(--sc-radius-control);
+  background: linear-gradient(var(--_tint), var(--_tint)), var(--_bg);
+  box-shadow: var(--sc-elevation-2);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(24px) saturate(180%);
+  color: var(--sc-color-ink);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: background-color var(--sc-duration-fast) var(--sc-easing-standard);
+}
+
+.control--plain {
+  --_bg: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+@media (hover: hover) {
+  .control:hover {
+    --_tint: var(--sc-color-fill-quiet);
+  }
+}
+
+.control:active {
+  --_tint: var(--sc-color-fill-selected);
+}
+
+/*
+ * The label is in the OTHER language, so it can't use the host's type role (which follows
+ * the page language). It takes label-m in its own script from the tokens directly.
+ */
+.label:lang(en) {
+  font-family: var(--sc-font-family-medium);
+  font-weight: var(--sc-font-weight-medium);
+  font-size: var(--sc-text-latin-label-m);
+  line-height: var(--sc-leading-latin-label-m);
+  letter-spacing: var(--sc-tracking-latin-label-m);
+}
+
+.label:lang(ar) {
+  font-family: var(--sc-font-family-bold);
+  font-weight: var(--sc-font-weight-bold);
+  font-size: var(--sc-text-arabic-label-m);
+  line-height: var(--sc-leading-arabic-label-m);
+  letter-spacing: 0;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .control {
+    --_bg: var(--sc-color-surface);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .control--plain {
+    --_bg: transparent;
+  }
+}
+
+@media (forced-colors: active) {
+  .control {
+    border-color: ButtonText;
+    background: ButtonFace;
+    color: ButtonText;
+    box-shadow: none;
+  }
+  a.control {
+    border-color: LinkText;
+    color: LinkText;
+  }
+  .control--plain {
+    border-color: transparent;
+  }
+}

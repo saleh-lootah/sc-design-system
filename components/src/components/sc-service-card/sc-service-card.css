@@ -1,0 +1,135 @@
+@import '../../styles/shared.css';
+@import '../../styles/type/title-s.css';
+@import '../../styles/type/body-s.css';
+
+:host {
+  display: block;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.card {
+  box-sizing: border-box;
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: var(--sc-space-16);
+  block-size: 100%;
+  min-block-size: var(--sc-space-96);
+  padding: var(--sc-space-20);
+  border: var(--sc-size-border-hairline) solid transparent;
+  border-radius: var(--sc-radius-card);
+  background: var(--sc-color-surface);
+  color: var(--sc-color-ink);
+  box-shadow: var(--sc-elevation-1);
+  transition: box-shadow var(--sc-duration-fast) var(--sc-easing-standard);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-4);
+  min-inline-size: 0;
+}
+
+.title {
+  margin: 0;
+  color: var(--sc-color-ink-strong);
+  overflow-wrap: anywhere;
+}
+
+.link {
+  color: inherit;
+  text-decoration: none;
+  outline: none;
+}
+
+/* The link's hit area covers the whole card. */
+.link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--sc-radius-card);
+}
+
+.link:focus-visible::after {
+  outline: var(--sc-size-focus-ring) solid var(--sc-channel-action);
+  outline-offset: var(--sc-size-focus-offset);
+  box-shadow: 0 0 0 var(--sc-size-focus-offset) var(--sc-color-surface);
+}
+
+.entity {
+  margin: 0;
+  color: var(--sc-color-muted);
+}
+
+.chip {
+  /* Pinned to the bottom so chips line up across a row of cards. */
+  margin-block-start: auto;
+  padding-block-start: var(--sc-space-16);
+  /* A plain chip lets clicks through to the card link; a chip that is a link stays clickable. */
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+}
+
+::slotted([slot='chip'][href]) {
+  pointer-events: auto;
+}
+
+.is-empty {
+  display: none;
+}
+
+.chevron {
+  --icon-size: var(--sc-size-icon-m);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--sc-space-32);
+  block-size: var(--sc-space-32);
+  border-radius: var(--sc-radius-pill);
+  background: var(--sc-color-fill-quiet);
+  color: var(--sc-color-ink-strong);
+  transition:
+    background-color var(--sc-duration-fast) var(--sc-easing-standard),
+    color var(--sc-duration-fast) var(--sc-easing-standard);
+}
+
+@media (hover: hover) {
+  .card:hover {
+    box-shadow: var(--sc-elevation-3);
+  }
+  .card:hover .link {
+    text-decoration: underline;
+    text-decoration-thickness: var(--sc-size-border-control);
+    text-underline-offset: 0.2em;
+  }
+  .card:hover .chevron {
+    background: var(--sc-channel-action);
+    color: var(--sc-color-on-action);
+  }
+}
+
+.card:active .chevron {
+  background: var(--sc-channel-action-pressed);
+  color: var(--sc-color-on-action);
+}
+
+@media (forced-colors: active) {
+  .card {
+    border-color: LinkText;
+  }
+  .link {
+    color: LinkText;
+  }
+  .link:focus-visible::after {
+    outline-color: Highlight;
+    box-shadow: none;
+  }
+  .chevron {
+    color: LinkText;
+  }
+}

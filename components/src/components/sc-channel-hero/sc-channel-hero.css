@@ -1,0 +1,87 @@
+@import '../../styles/shared.css';
+@import '../../styles/type/eyebrow.css';
+@import '../../styles/type/heading-xl.css';
+@import '../../styles/type/display-l.css';
+@import '../../styles/type/body-l.css';
+
+:host {
+  display: block;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.wash {
+  padding-block: var(--sc-space-40) var(--sc-space-48);
+  background: linear-gradient(in oklab, var(--sc-channel-wash-start), var(--sc-channel-wash-end));
+  color: var(--sc-color-ink);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  /* Eight of twelve columns at 1280px: wide enough for the heading and search, short enough to read. */
+  max-inline-size: calc((var(--sc-container-max) - 11 * var(--sc-grid-wide-gutter)) / 12 * 8 + 7 * var(--sc-grid-wide-gutter));
+}
+
+.is-empty {
+  display: none;
+}
+
+.eyebrow {
+  margin-block-end: var(--sc-space-12);
+  color: var(--sc-color-muted);
+}
+
+/* Phones: heading-xl. From 1024px (--sc-breakpoint-expanded, repeated because media
+   queries can't read custom properties): display-l. */
+.heading {
+  color: var(--sc-color-ink-strong);
+  font-family: var(--type-heading-xl-family);
+  font-weight: var(--type-heading-xl-weight);
+  font-size: var(--type-heading-xl-size);
+  line-height: var(--type-heading-xl-leading);
+  letter-spacing: var(--type-heading-xl-tracking);
+  text-wrap: balance;
+}
+
+@media (min-width: 1024px) {
+  .wash {
+    padding-block: var(--sc-space-80) var(--sc-space-64);
+  }
+  .heading {
+    font-family: var(--type-display-l-family);
+    font-weight: var(--type-display-l-weight);
+    font-size: var(--type-display-l-size);
+    line-height: var(--type-display-l-leading);
+    letter-spacing: var(--type-display-l-tracking);
+  }
+}
+
+.lede {
+  margin-block-start: var(--sc-space-12);
+  max-inline-size: var(--sc-size-measure);
+  color: var(--sc-color-ink);
+}
+
+.search {
+  margin-block-start: var(--sc-space-32);
+}
+
+/* Slotted headings and paragraphs take the hero's type, not the browser's defaults. */
+.eyebrow ::slotted(*),
+.heading ::slotted(*),
+.lede ::slotted(*) {
+  margin: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+}
+
+@media (forced-colors: active) {
+  .wash {
+    background: Canvas;
+    border-block-end: var(--sc-size-border-hairline) solid CanvasText;
+  }
+}

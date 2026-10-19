@@ -1,0 +1,8 @@
+/* The label content of one option. Its box is laid out inside the group's <label>. */
+:host {
+  display: inline;
+}
+
+:host([hidden]) {
+  display: none;
+}

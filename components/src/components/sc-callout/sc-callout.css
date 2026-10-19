@@ -1,0 +1,97 @@
+@import '../../styles/shared.css';
+@import '../../styles/type/title-s.css';
+@import '../../styles/type/body-m.css';
+
+:host {
+  display: block;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.callout {
+  /* Tone roles (set per tone below). Info is the default. */
+  --_fill: var(--sc-color-fill-quiet);
+  --_accent: var(--sc-color-ink);
+  --icon-size: var(--sc-size-icon-l);
+
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sc-space-12);
+  padding: var(--sc-space-16);
+  border: var(--sc-size-border-hairline) solid color-mix(in oklab, var(--_accent) 18%, transparent);
+  border-radius: var(--sc-radius-card);
+  background: var(--_fill);
+  color: var(--sc-color-ink);
+}
+
+.callout--success {
+  --_fill: var(--sc-color-success-surface);
+  --_accent: var(--sc-color-success);
+}
+
+.callout--warning {
+  --_fill: var(--sc-color-warning-surface);
+  --_accent: var(--sc-color-warning);
+}
+
+.callout--error {
+  --_fill: var(--sc-color-error-surface);
+  --_accent: var(--sc-color-error);
+}
+
+.icon-box {
+  display: inline-flex;
+  flex: none;
+  color: var(--_accent);
+  /* Centre the 24px icon on the first line of text. */
+  padding-block: var(--sc-space-2);
+}
+
+.body {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: var(--sc-space-4);
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
+.heading {
+  margin: 0;
+  color: var(--sc-color-ink-strong);
+  font-family: var(--sc-font-family-bold);
+  font-weight: var(--sc-font-weight-bold);
+}
+
+.heading--empty {
+  display: none;
+}
+
+.content {
+  color: var(--sc-color-ink);
+}
+
+::slotted(p) {
+  margin: 0;
+}
+
+::slotted(p + p) {
+  margin-block-start: var(--sc-space-8);
+}
+
+::slotted(a) {
+  color: inherit;
+  text-decoration: underline;
+}
+
+@media (forced-colors: active) {
+  .callout {
+    border-color: CanvasText;
+  }
+  .icon-box {
+    color: CanvasText;
+  }
+}

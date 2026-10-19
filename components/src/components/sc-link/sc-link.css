@@ -1,0 +1,95 @@
+@import '../../styles/shared.css';
+@import '../../styles/type/label-m.css';
+
+/* Inline by default: the link flows with the sentence and takes its type. */
+:host {
+  display: inline;
+}
+
+:host([standalone]) {
+  display: inline-block;
+  vertical-align: middle;
+  max-inline-size: 100%;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.link {
+  --_fg: var(--sc-channel-action);
+  color: var(--_fg);
+  text-decoration: none;
+  border-radius: var(--sc-radius-xs);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  -webkit-tap-highlight-color: transparent;
+  transition: color var(--sc-duration-fast) var(--sc-easing-standard);
+}
+
+/* The underline sits on the label so the icon and its gap aren't underlined. */
+.label {
+  text-decoration-line: underline;
+  text-decoration-thickness: var(--sc-size-border-hairline);
+  text-underline-offset: 0.2em;
+  text-decoration-skip-ink: auto;
+}
+
+.link:visited {
+  /* No visited-link token yet: channel ink is darker (light) or lighter (dark) than action and passes 4.5:1. */
+  color: var(--sc-channel-ink);
+}
+
+@media (hover: hover) {
+  .link:hover {
+    color: var(--sc-channel-action-hover);
+  }
+  .link:hover .label {
+    text-decoration-thickness: var(--sc-size-border-strong);
+  }
+}
+
+.link:active {
+  color: var(--sc-channel-action-pressed);
+}
+
+/* Inline icon follows the text size. */
+.icon-box {
+  --icon-size: 1em;
+  display: inline-block;
+  margin-inline-start: 0.2em;
+  vertical-align: -0.125em;
+}
+
+.icon-box .icon {
+  display: inline-block;
+}
+
+/* Standalone -------------------------------------------------------------------------- */
+
+.link--standalone {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-space-4);
+  min-block-size: var(--sc-size-target-min);
+}
+
+.link--standalone .icon-box {
+  --icon-size: var(--sc-size-icon-m);
+  display: inline-flex;
+  margin: 0;
+  vertical-align: baseline;
+}
+
+/* Forced colours ---------------------------------------------------------------------- */
+
+@media (forced-colors: active) {
+  .link,
+  .link:hover,
+  .link:active {
+    color: LinkText;
+  }
+  .link:visited {
+    color: VisitedText;
+  }
+}

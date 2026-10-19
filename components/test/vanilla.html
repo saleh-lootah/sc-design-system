@@ -1,0 +1,41 @@
+<!doctype html>
+<!--
+  Vanilla smoke test: no playground, no bundler. One <link> and one <script> from the
+  built package, exactly what a plain HTML page needs. Serve the components folder over
+  HTTP (ES modules don't load from file://), e.g.  npx http-server . -p 8080  or
+  python3 -m http.server 8080, then open http://localhost:8080/test/vanilla.html
+-->
+<html lang="en" dir="ltr" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>sc-button in plain HTML</title>
+    <link rel="stylesheet" href="../dist/sc-components/sc-components.css" />
+    <script type="module" src="../dist/sc-components/sc-components.esm.js"></script>
+  </head>
+  <body style="padding: var(--sc-space-48)">
+    <h1 class="sc-type-heading-l">Renew your vehicle registration</h1>
+    <p class="sc-type-body-m">Plate number <sc-ltr>Dubai A 12345</sc-ltr>. Amount due <sc-ltr>AED 450.00</sc-ltr>.</p>
+    <form id="renew" style="display: flex; gap: var(--sc-space-16); flex-wrap: wrap">
+      <sc-button type="submit" icon="arrow-forward">Continue</sc-button>
+      <sc-button variant="secondary">Save and finish later</sc-button>
+    </form>
+    <p id="out" class="sc-type-body-s" role="status"></p>
+
+    <section lang="ar" dir="rtl" data-channel="transport" style="margin-block-start: var(--sc-space-32)">
+      <h2 class="sc-type-heading-m">تجديد تسجيل المركبة</h2>
+      <p class="sc-type-body-m">رقم اللوحة <sc-ltr>Dubai A 12345</sc-ltr> مسجل باسمك.</p>
+      <div style="display: flex; gap: var(--sc-space-16); flex-wrap: wrap">
+        <sc-button icon="arrow-forward">متابعة</sc-button>
+        <sc-button variant="tertiary">إلغاء</sc-button>
+        <sc-button loading>الدفع عبر دبي باي</sc-button>
+      </div>
+    </section>
+    <script>
+      document.getElementById('renew').addEventListener('submit', (ev) => {
+        ev.preventDefault();
+        document.getElementById('out').textContent = 'Submitted';
+      });
+    </script>
+  </body>
+</html>
