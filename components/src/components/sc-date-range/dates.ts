@@ -4,6 +4,8 @@
  * and daylight saving never shift a day. The calendar is Gregorian; weeks start on Monday.
  */
 
+import { toLatinDigits } from '../../i18n/digits';
+
 export interface YearMonth {
   year: number;
   /** 0–11 */
@@ -128,9 +130,7 @@ export function clampIso(iso: string, min?: string, max?: string): string {
  * Returns the ISO date, '' for empty text, or null when it isn't a real date.
  */
 export function parseTyped(text: string, monthNames: string[][]): string | null {
-  const clean = text
-    .replace(/[٠-٩]/g, (d) => String(d.charCodeAt(0) - 0x0660))
-    .replace(/[۰-۹]/g, (d) => String(d.charCodeAt(0) - 0x06f0))
+  const clean = toLatinDigits(text)
     .replace(/[‎‏؜]/g, '')
     .trim();
   if (!clean) return '';

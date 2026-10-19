@@ -118,7 +118,7 @@ describe('sc-radio-group (e2e)', () => {
   });
 
   it('moves with the arrow keys in Arabic too, and mirrors the layout', async () => {
-    const page = await newScPage(`<sc-radio-group id="g" label="من أصدر اللوحة؟" error="اختر جهة إصدار اللوحة"><sc-radio value="dubai">دبي</sc-radio><sc-radio value="other">إمارة أخرى</sc-radio></sc-radio-group>`, { lang: 'ar' });
+    const page = await newScPage(`<sc-radio-group id="g" label="من أصدر اللوحة؟" error="يُرجى اختيار جهة إصدار اللوحة"><sc-radio value="dubai">دبي</sc-radio><sc-radio value="other">إمارة أخرى</sc-radio></sc-radio-group>`, { lang: 'ar' });
     expect(await inner(page, '#g', 'getComputedStyle(root.querySelector("fieldset")).borderRightWidth')).toBe('3px');
     expect(await radio(page, '#g', 0, 'r.getBoundingClientRect().left > root.querySelector("label.option-label slot").assignedElements()[0].getBoundingClientRect().right')).toBe(true);
     expect(await inner(page, '#g', 'root.querySelector(".error .visually-hidden").textContent')).toBe('خطأ: ');

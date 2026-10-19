@@ -25,7 +25,7 @@ export default defineStrings({
     channelTrade: 'Dubai Trade',
   },
   ar: {
-    problem: 'يوجد خطأ',
+    problem: 'توجد مشكلة',
     errorPrefix: 'خطأ:',
     optional: '(اختياري)',
     change: 'تغيير',

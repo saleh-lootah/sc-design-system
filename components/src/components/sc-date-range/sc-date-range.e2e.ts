@@ -279,7 +279,7 @@ describe('sc-date-range (e2e)', () => {
     await setPageContext(page, { lang: 'ar' });
     await page.waitForChanges();
     expect(await inner(page, `[...root.querySelectorAll('.segment-label')].map((l) => l.textContent)`)).toEqual(['من', 'إلى']);
-    expect(await inner(page, `root.querySelector('.calendar-button').getAttribute('aria-label')`)).toBe('اختر التاريخين، من 21 سبتمبر إلى 9 أكتوبر 2026');
+    expect(await inner(page, `root.querySelector('.calendar-button').getAttribute('aria-label')`)).toBe('اختيار التاريخين، من 21 سبتمبر إلى 9 أكتوبر 2026');
   });
 
   for (const ctx of contexts) {

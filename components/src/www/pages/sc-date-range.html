@@ -1,5 +1,5 @@
 <h1 class="pg-title sc-type-heading-xl" data-ar="نطاق التاريخ">Date range</h1>
-<p class="pg-lede sc-type-body-m" data-ar="لاختيار تاريخ بداية وتاريخ نهاية مرتبطين بالتقويم: تصفية المدفوعات بين تاريخين، أو ليالي الإقامة في فندق، أو مدة التصريح. لتاريخ واحد يعرفه الشخص استخدم حقل التاريخ.">
+<p class="pg-lede sc-type-body-m" data-ar="لاختيار تاريخ بداية وتاريخ نهاية مرتبطين بالتقويم: تصفية المدفوعات بين تاريخين، أو ليالي الإقامة في فندق، أو مدة التصريح. ولتاريخ واحد يعرفه الشخص يُستخدم حقل التاريخ.">
   For a start and an end date that relate to a calendar: filtering payments between two dates, the nights of a hotel stay, how long a permit lasts. For one date people already know, use a date input.
 </p>
 
@@ -36,7 +36,7 @@
     <div class="pg-grid" style="grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr))">
       <div class="pg-cell">
         <span class="pg-label">empty · one month · no presets</span>
-        <sc-date-range label="When do you need the permit?" data-ar-label="متى تحتاج إلى التصريح؟" hint="For example, 1 11 2026" data-ar-hint="مثلًا، 1 11 2026" min="2026-10-19" today="2026-10-19" months="1" min-days="7" max-days="90"></sc-date-range>
+        <sc-date-range label="When do you need the permit?" data-ar-label="متى يلزمك التصريح؟" hint="For example, 1 11 2026" data-ar-hint="مثلًا، 1 11 2026" min="2026-10-19" today="2026-10-19" months="1" min-days="7" max-days="90"></sc-date-range>
       </div>
       <div class="pg-cell">
         <span class="pg-label">error · end before start</span>
@@ -44,7 +44,7 @@
       </div>
       <div class="pg-cell">
         <span class="pg-label">error · both · too long</span>
-        <sc-date-range label="Show fines between" data-ar-label="عرض المخالفات بين" start="2026-01-01" end="2026-10-19" today="2026-10-19" max-days="90" error="Choose a range of 90 days or fewer" data-ar-error="اختر مدة لا تزيد على 90 يومًا"></sc-date-range>
+        <sc-date-range label="Show fines between" data-ar-label="عرض المخالفات بين" start="2026-01-01" end="2026-10-19" today="2026-10-19" max-days="90" error="Choose a range of 90 days or fewer" data-ar-error="يُرجى اختيار مدة لا تزيد على 90 يومًا"></sc-date-range>
       </div>
       <div class="pg-cell">
         <span class="pg-label">optional · year boundary</span>

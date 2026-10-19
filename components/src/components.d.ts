@@ -527,7 +527,7 @@ export namespace Components {
          */
         "errors"?: ErrorSummaryItem[];
         /**
-          * Overrides the heading text (default "There is a problem" / "يوجد خطأ" from strings).
+          * Overrides the heading text (default "There is a problem" / "توجد مشكلة" from strings).
          */
         "heading"?: string;
         /**
@@ -871,13 +871,12 @@ export namespace Components {
     /**
      * A link to a service: its title, the entity that owns it, an optional channel chip and an
      * end chevron.
-     * Only the title is the link, so screen readers hear a short link name ("Renew vehicle
-     * registration"), not the whole card's text. The card is not wrapped in an `<a>`: the
-     * title link's hit area is stretched over the card with a pseudo-element (`::after`,
-     * `inset: 0`), so the whole card is still clickable and the focus ring wraps the card.
-     * The title is a heading containing the link, so heading navigation finds every service.
-     * The owning entity is the link's description. A chip that is itself a link stays
-     * clickable on its own.
+     * Only the title is the link (CMP-06), so screen readers hear a short link name ("Renew
+     * vehicle registration"), not the whole card's text. The card is not wrapped in an `<a>`
+     * and the link's hit area is not stretched over the card: it is the title, grown to at
+     * least 44 x 44. The title is a heading containing the link, so heading navigation finds
+     * every service. The owning entity is the link's description. A chip that is a link is a
+     * separate link.
      */
     interface ScServiceCard {
         /**
@@ -903,8 +902,8 @@ export namespace Components {
      */
     interface ScSkipLink {
         /**
-          * The fragment of the element to skip to, usually `<main id="main">`.
-          * @default '#main'
+          * The fragment of the element to skip to, `<main id="main-content">` by default, the id `sc-page` renders.
+          * @default '#main-content'
          */
         "href": string;
     }
@@ -934,7 +933,7 @@ export namespace Components {
      */
     interface ScStatusTag {
         /**
-          * - `neutral`: no action needed yet, or a plain state ("Draft", "In review"). - `success`: done ("Paid", "Renewed"). - `warning`: needs attention soon ("Expires in 15 days"). - `error`: blocked or failed ("Action needed", "Payment failed"). - `channel`: highlights something in the current channel's colours ("New").
+          * - `neutral`: no action needed yet, or a plain state ("Draft", "In review"). - `success`: done ("Paid", "Approved", "Completed"). - `warning`: needs attention soon ("Expires in 15 days"). - `error`: blocked or failed ("Action needed", "Payment failed"). - `channel`: highlights something in the current channel's colours ("New").
           * @default 'neutral'
          */
         "tone": StatusTagTone;
@@ -1012,7 +1011,7 @@ export namespace Components {
          */
         "label": string;
         /**
-          * A plain-text value, used when the default slot is empty.
+          * A plain-text value, used when the default slot is empty. With neither, the row shows "Not provided".
          */
         "value"?: string;
     }
@@ -1715,13 +1714,12 @@ declare global {
     /**
      * A link to a service: its title, the entity that owns it, an optional channel chip and an
      * end chevron.
-     * Only the title is the link, so screen readers hear a short link name ("Renew vehicle
-     * registration"), not the whole card's text. The card is not wrapped in an `<a>`: the
-     * title link's hit area is stretched over the card with a pseudo-element (`::after`,
-     * `inset: 0`), so the whole card is still clickable and the focus ring wraps the card.
-     * The title is a heading containing the link, so heading navigation finds every service.
-     * The owning entity is the link's description. A chip that is itself a link stays
-     * clickable on its own.
+     * Only the title is the link (CMP-06), so screen readers hear a short link name ("Renew
+     * vehicle registration"), not the whole card's text. The card is not wrapped in an `<a>`
+     * and the link's hit area is not stretched over the card: it is the title, grown to at
+     * least 44 x 44. The title is a heading containing the link, so heading navigation finds
+     * every service. The owning entity is the link's description. A chip that is a link is a
+     * separate link.
      */
     interface HTMLScServiceCardElement extends Components.ScServiceCard, HTMLStencilElement {
     }
@@ -2464,7 +2462,7 @@ declare namespace LocalJSX {
          */
         "errors"?: ErrorSummaryItem[];
         /**
-          * Overrides the heading text (default "There is a problem" / "يوجد خطأ" from strings).
+          * Overrides the heading text (default "There is a problem" / "توجد مشكلة" from strings).
          */
         "heading"?: string;
         /**
@@ -2824,13 +2822,12 @@ declare namespace LocalJSX {
     /**
      * A link to a service: its title, the entity that owns it, an optional channel chip and an
      * end chevron.
-     * Only the title is the link, so screen readers hear a short link name ("Renew vehicle
-     * registration"), not the whole card's text. The card is not wrapped in an `<a>`: the
-     * title link's hit area is stretched over the card with a pseudo-element (`::after`,
-     * `inset: 0`), so the whole card is still clickable and the focus ring wraps the card.
-     * The title is a heading containing the link, so heading navigation finds every service.
-     * The owning entity is the link's description. A chip that is itself a link stays
-     * clickable on its own.
+     * Only the title is the link (CMP-06), so screen readers hear a short link name ("Renew
+     * vehicle registration"), not the whole card's text. The card is not wrapped in an `<a>`
+     * and the link's hit area is not stretched over the card: it is the title, grown to at
+     * least 44 x 44. The title is a heading containing the link, so heading navigation finds
+     * every service. The owning entity is the link's description. A chip that is a link is a
+     * separate link.
      */
     interface ScServiceCard {
         /**
@@ -2856,8 +2853,8 @@ declare namespace LocalJSX {
      */
     interface ScSkipLink {
         /**
-          * The fragment of the element to skip to, usually `<main id="main">`.
-          * @default '#main'
+          * The fragment of the element to skip to, `<main id="main-content">` by default, the id `sc-page` renders.
+          * @default '#main-content'
          */
         "href"?: string;
     }
@@ -2887,7 +2884,7 @@ declare namespace LocalJSX {
      */
     interface ScStatusTag {
         /**
-          * - `neutral`: no action needed yet, or a plain state ("Draft", "In review"). - `success`: done ("Paid", "Renewed"). - `warning`: needs attention soon ("Expires in 15 days"). - `error`: blocked or failed ("Action needed", "Payment failed"). - `channel`: highlights something in the current channel's colours ("New").
+          * - `neutral`: no action needed yet, or a plain state ("Draft", "In review"). - `success`: done ("Paid", "Approved", "Completed"). - `warning`: needs attention soon ("Expires in 15 days"). - `error`: blocked or failed ("Action needed", "Payment failed"). - `channel`: highlights something in the current channel's colours ("New").
           * @default 'neutral'
          */
         "tone"?: StatusTagTone;
@@ -2965,7 +2962,7 @@ declare namespace LocalJSX {
          */
         "label": string;
         /**
-          * A plain-text value, used when the default slot is empty.
+          * A plain-text value, used when the default slot is empty. With neither, the row shows "Not provided".
          */
         "value"?: string;
     }
@@ -3738,13 +3735,12 @@ declare module "@stencil/core" {
             /**
              * A link to a service: its title, the entity that owns it, an optional channel chip and an
              * end chevron.
-             * Only the title is the link, so screen readers hear a short link name ("Renew vehicle
-             * registration"), not the whole card's text. The card is not wrapped in an `<a>`: the
-             * title link's hit area is stretched over the card with a pseudo-element (`::after`,
-             * `inset: 0`), so the whole card is still clickable and the focus ring wraps the card.
-             * The title is a heading containing the link, so heading navigation finds every service.
-             * The owning entity is the link's description. A chip that is itself a link stays
-             * clickable on its own.
+             * Only the title is the link (CMP-06), so screen readers hear a short link name ("Renew
+             * vehicle registration"), not the whole card's text. The card is not wrapped in an `<a>`
+             * and the link's hit area is not stretched over the card: it is the title, grown to at
+             * least 44 x 44. The title is a heading containing the link, so heading navigation finds
+             * every service. The owning entity is the link's description. A chip that is a link is a
+             * separate link.
              */
             "sc-service-card": LocalJSX.IntrinsicElements["sc-service-card"] & JSXBase.HTMLAttributes<HTMLScServiceCardElement>;
             /**

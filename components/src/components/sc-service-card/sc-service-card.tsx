@@ -7,13 +7,12 @@ export type ServiceCardHeadingLevel = 2 | 3 | 4 | 5 | 6;
  * A link to a service: its title, the entity that owns it, an optional channel chip and an
  * end chevron.
  *
- * Only the title is the link, so screen readers hear a short link name ("Renew vehicle
- * registration"), not the whole card's text. The card is not wrapped in an `<a>`: the
- * title link's hit area is stretched over the card with a pseudo-element (`::after`,
- * `inset: 0`), so the whole card is still clickable and the focus ring wraps the card.
- * The title is a heading containing the link, so heading navigation finds every service.
- * The owning entity is the link's description. A chip that is itself a link stays
- * clickable on its own.
+ * Only the title is the link (CMP-06), so screen readers hear a short link name ("Renew
+ * vehicle registration"), not the whole card's text. The card is not wrapped in an `<a>`
+ * and the link's hit area is not stretched over the card: it is the title, grown to at
+ * least 44 x 44. The title is a heading containing the link, so heading navigation finds
+ * every service. The owning entity is the link's description. A chip that is a link is a
+ * separate link.
  *
  * @slot - The service title, e.g. "Renew vehicle registration". Text only.
  * @slot entity - The owning entity, when it needs markup. Otherwise use the `entity` prop.
@@ -68,7 +67,7 @@ export class ScServiceCard {
         <div class="card" part="card">
           <div class="body">
             <Heading class="title type-title-s" part="title">
-              <a class="link" part="link" href={this.href} aria-describedby={hasEntity ? 'entity' : undefined}>
+              <a class="link focus-ring" part="link" href={this.href} aria-describedby={hasEntity ? 'entity' : undefined}>
                 <slot />
               </a>
             </Heading>

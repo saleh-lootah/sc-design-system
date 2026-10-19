@@ -35,8 +35,8 @@ summary.errors = [{ href: '#plate-number', text: 'Enter the plate number using n
 
 - Each item is the same message as the one shown next to the field, in the same order as the fields on the page.
 - Link to the field's `id`, not to the label. For a date, link to the first part with a problem.
-- The heading is "There is a problem" / "يوجد خطأ". Change it (`heading`) only when a more specific heading helps, e.g. "Check your vehicle details". Use the `description` slot for one short sentence when the errors need context.
-- In Arabic, keep plates and numbers left-to-right inside the message: `أدخل رقم اللوحة بالأرقام فقط، مثل <bdi dir="ltr">12345</bdi>`.
+- The heading is "There is a problem" / "توجد مشكلة". Change it (`heading`) only when a more specific heading helps, e.g. "Check your vehicle details". Use the `description` slot for one short sentence when the errors need context.
+- In Arabic, keep plates and numbers left-to-right inside the message: `يُرجى إدخال رقم اللوحة بالأرقام فقط، مثل <bdi dir="ltr">12345</bdi>`.
 
 ### Styling hooks
 
@@ -62,7 +62,7 @@ practice). The focused box is a `role="group"` named by its heading.
 | Property       | Attribute       | Description                                                                                                                                                                  | Type                              | Default     |
 | -------------- | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | ----------- |
 | `errors`       | --              | Errors to list, as `{ href, text }` objects. Set it as a property from JavaScript. When set (and not empty), it is used instead of the slotted links.                        | `ErrorSummaryItem[] \| undefined` | `undefined` |
-| `heading`      | `heading`       | Overrides the heading text (default "There is a problem" / "يوجد خطأ" from strings).                                                                                         | `string \| undefined`             | `undefined` |
+| `heading`      | `heading`       | Overrides the heading text (default "There is a problem" / "توجد مشكلة" from strings).                                                                                       | `string \| undefined`             | `undefined` |
 | `headingLevel` | `heading-level` | The heading level. Use 2 when the summary sits under the page's `<h1>` (the usual case).                                                                                     | `2 \| 3 \| 4`                     | `2`         |
 | `noAutofocus`  | `no-autofocus`  | Stops the summary from moving focus to itself when it first has errors. Only use it when you move focus yourself (call `setFocus()`); otherwise users won't hear the errors. | `boolean`                         | `false`     |
 

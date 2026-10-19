@@ -1,4 +1,5 @@
 import { AttachInternals, Component, Element, Event, EventEmitter, Host, Method, Prop, State, Watch, h } from '@stencil/core';
+import { normaliseDigits } from '../../i18n/digits';
 import { LocaleController } from '../../i18n/locale';
 import { StringKey } from '../../i18n/strings';
 import { AlertCircle, ArrowForward, ChevronBack, ChevronForward, Close } from '../../icons/index'; // explicit /index: enables SVG rendering (see CONTRIBUTING)
@@ -326,17 +327,19 @@ export class ScDateRange {
     return this.t(PLURAL_KEYS[category] ?? 'dateRangeDaysOther', { count });
   }
 
-  /** "21 Sep – 9 Oct 2026 · 19 days", "1 – 31 Oct 2026", "28 Dec 2026 – 3 Jan 2027". */
+  /**
+   * "21 Sep – 9 Oct 2026 · 19 days", "1 – 31 Oct 2026", "28 Dec 2026 – 3 Jan 2027". In Arabic
+   * the range is written with words ("من 1 إلى 31 أكتوبر 2026"), never a dash (LANG-22A).
+   */
   private summary(start: string, end: string): string {
     const s = fromIso(start)!;
     const e = fromIso(end)!;
-    const sep = this.t('dateRangeRangeSep');
     const sameYear = s.getUTCFullYear() === e.getUTCFullYear();
     const sameMonth = sameYear && s.getUTCMonth() === e.getUTCMonth();
     const days = this.days(lengthInDays(start, end));
     if (start === end) return `${this.format(start)} · ${days}`;
     const from = sameMonth ? String(s.getUTCDate()) : this.format(start, { year: !sameYear });
-    return `${from}${sep}${this.format(end)} · ${days}`;
+    return `${this.t('dateRangeSummary', { start: from, end: this.format(end) })} · ${days}`;
   }
 
   /** "21 September to 9 October 2026". */
@@ -407,7 +410,7 @@ export class ScDateRange {
   // Typing -----------------------------------------------------------------------------------
 
   private onInput = (end: End) => (ev: Event) => {
-    this.texts = { ...this.texts, [end]: (ev.target as HTMLInputElement).value };
+    this.texts = { ...this.texts, [end]: normaliseDigits(ev.target as HTMLInputElement) };
   };
 
   /** On blur: commit the typed date, format it, and show what's wrong with the range (never swap the dates). */
@@ -807,10 +810,16 @@ export class ScDateRange {
     return { parts: new Set(), show: false };
   }
 
+  private onSegmentClick = (end: End) => (ev: MouseEvent) => {
+    const input = this.inputs[end];
+    if (input && ev.target !== input) input.focus();
+  };
+
   private renderSegment(end: End, invalid: boolean, disabled: boolean, described?: string) {
     const t = this.t;
     return (
-      <div class={{ 'segment': true, [`segment--${end}`]: true, 'segment--error': invalid }}>
+      // The whole 54px segment, label included, is the input's target (A11Y-04), not only the text line.
+      <div class={{ 'segment': true, [`segment--${end}`]: true, 'segment--error': invalid }} onClick={this.onSegmentClick(end)}>
         <span class="segment-label" aria-hidden="true">
           {t(end === 'start' ? 'dateRangeFrom' : 'dateRangeTo')}
         </span>

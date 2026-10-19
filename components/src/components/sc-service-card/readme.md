@@ -20,11 +20,11 @@ A link to a service, as in "Most used services" on a channel home page. For a gr
 - The title starts with a verb and names the task, not the department: "Renew vehicle registration", not "Vehicle licensing".
 - `entity` is the owning government entity, written in full ("Roads and Transport Authority", not "RTA"). It is the link's accessible description.
 - Set `heading-level` to fit the page outline: 3 under a "Most used services" `h2` (default).
-- Put a `sc-channel-chip` in the `chip` slot when the service also lives on another channel. A chip that is a link stays clickable on its own; a plain chip passes clicks to the card.
+- Put a `sc-channel-chip` in the `chip` slot when the service also lives on another channel. A chip that is a link is a separate link with its own target.
 
 ### Behaviour
 
-Only the title is the link: the card is not wrapped in an `<a>`. Screen readers hear a short link name ("Renew vehicle registration"), with the entity as its description, instead of the card's whole text. The heading contains the link, so heading navigation lists every service. The link's hit area is stretched over the card with `::after { inset: 0 }`, so a click anywhere (except a chip link) follows it, and keyboard users meet one tab stop per card. The focus ring wraps the card. With a mouse or trackpad (`(hover: hover) and (pointer: fine)`) hovering deepens the shadow, underlines the title and fills the chevron with the channel colour; touch screens get no hover state.
+Only the title is the link (CMP-06 in the standard): the card is not wrapped in an `<a>`, and the link's hit area is not stretched over the card. Screen readers hear a short link name ("Renew vehicle registration"), with the entity as its description, instead of the card's whole text. The heading contains the link, so heading navigation lists every service, and keyboard users meet one tab stop per card (plus a chip, if it is a link). The title's hit area is at least 44 × 44 px; the focus ring goes round the title. With a mouse or trackpad (`(hover: hover) and (pointer: fine)`) hovering the title underlines it and fills the chevron with the channel colour; touch screens get no hover state. The chevron is decorative.
 
 ### Arabic
 
@@ -38,13 +38,12 @@ The chevron mirrors and sits on the left. Entity names have official Arabic form
 A link to a service: its title, the entity that owns it, an optional channel chip and an
 end chevron.
 
-Only the title is the link, so screen readers hear a short link name ("Renew vehicle
-registration"), not the whole card's text. The card is not wrapped in an `<a>`: the
-title link's hit area is stretched over the card with a pseudo-element (`::after`,
-`inset: 0`), so the whole card is still clickable and the focus ring wraps the card.
-The title is a heading containing the link, so heading navigation finds every service.
-The owning entity is the link's description. A chip that is itself a link stays
-clickable on its own.
+Only the title is the link (CMP-06), so screen readers hear a short link name ("Renew
+vehicle registration"), not the whole card's text. The card is not wrapped in an `<a>`
+and the link's hit area is not stretched over the card: it is the title, grown to at
+least 44 x 44. The title is a heading containing the link, so heading navigation finds
+every service. The owning entity is the link's description. A chip that is a link is a
+separate link.
 
 ## Properties
 

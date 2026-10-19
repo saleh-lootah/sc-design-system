@@ -6,6 +6,6 @@ export default defineStrings({
     skipLinkLabel: 'Skip to main content',
   },
   ar: {
-    skipLinkLabel: 'انتقل إلى المحتوى الرئيسي',
+    skipLinkLabel: 'الانتقال إلى المحتوى الرئيسي',
   },
 });

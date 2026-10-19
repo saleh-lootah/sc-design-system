@@ -9,7 +9,7 @@ import { LocaleController } from '../../i18n/locale';
  *
  * Put it first inside `<body>`, before `sc-app-bar`.
  *
- * @slot - Overrides the label. Defaults to "Skip to main content" / "انتقل إلى المحتوى الرئيسي".
+ * @slot - Overrides the label. Defaults to "Skip to main content" / "الانتقال إلى المحتوى الرئيسي".
  *
  * @part control - The inner `<a>`.
  */
@@ -21,8 +21,8 @@ import { LocaleController } from '../../i18n/locale';
 export class ScSkipLink {
   @Element() el!: HTMLElement;
 
-  /** The fragment of the element to skip to, usually `<main id="main">`. */
-  @Prop({ reflect: true }) href = '#main';
+  /** The fragment of the element to skip to, `<main id="main-content">` by default, the id `sc-page` renders. */
+  @Prop({ reflect: true }) href = '#main-content';
 
   private locale = new LocaleController(this);
 

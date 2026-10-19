@@ -1,4 +1,5 @@
 import { Component, Element, Event, EventEmitter, Host, Method, Prop, Watch, h } from '@stencil/core';
+import { normaliseDigits } from '../../i18n/digits';
 import { LocaleController } from '../../i18n/locale';
 import { Search } from '../../icons/index'; // explicit /index: Stencil only scans file imports for <svg>
 
@@ -79,7 +80,7 @@ export class ScSearch {
   }
 
   private onInput = (ev: Event) => {
-    this.value = (ev.target as HTMLInputElement).value;
+    this.value = normaliseDigits(ev.target as HTMLInputElement);
   };
 
   private onSubmit = (ev: Event) => {

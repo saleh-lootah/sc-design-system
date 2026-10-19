@@ -41,7 +41,7 @@ describe('sc-text-input (spec)', () => {
   it('uses Arabic strings from the closest lang', async () => {
     const page = await newSpecPage({
       components: [ScTextInput],
-      html: `<div lang="ar" dir="rtl"><sc-text-input label="رقم اللوحة" optional error="أدخل رقم اللوحة بالأرقام فقط، مثل 12345"></sc-text-input></div>`,
+      html: `<div lang="ar" dir="rtl"><sc-text-input label="رقم اللوحة" optional error="يُرجى إدخال رقم اللوحة بالأرقام فقط، مثل 12345"></sc-text-input></div>`,
     });
     const r = page.body.querySelector('sc-text-input')!.shadowRoot!;
     expect(r.querySelector('.optional')!.textContent).toBe(' (اختياري)');

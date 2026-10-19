@@ -80,14 +80,18 @@
 .list {
   display: flex;
   flex-direction: column;
-  gap: var(--sc-space-4);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
+/* Each link is a standalone target, so it is at least 44 x 44 (A11Y-04); the rows touch. */
 .link {
-  display: inline-block;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--sc-size-target-min);
+  min-inline-size: var(--sc-size-target-min);
   padding-block: var(--sc-space-2);
   border-radius: var(--sc-radius-xs);
   color: var(--sc-color-error);

@@ -23,7 +23,7 @@ A date people know: a date of birth, the start date on an insurance policy, the 
 
 - `value` is an ISO date (`2026-03-27`). It's empty while the boxes don't make a real date (31 April, a 2-digit year). Setting `value` fills the boxes.
 - The form gets the ISO date under `name`, plus the raw parts as `name-day`, `name-month` and `name-year`, so the server can validate and re-display exactly what was typed.
-- Validity: `valueMissing` when `required` and every box is empty; `badInput` ("Enter a real date") when something is typed but it isn't a real date. Reset restores the initial `value`.
+- Validity: `valueMissing` when `required` and every box is empty; `badInput` ("The date must be a real date") when something is typed but it isn't a real date. Reset restores the initial `value`.
 - `scInput` and `scChange` carry `{ value, day, month, year }`. The host delegates focus to the Day box, so an error summary can focus the field by its `id`.
 
 <!-- Auto Generated Below -->

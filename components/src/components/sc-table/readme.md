@@ -23,7 +23,7 @@ A table compares rows of the same kind of thing across a few attributes: a perso
         <th scope="row"><a href="/fines/F-2026-118204"><sc-ltr>F-2026-118204</sc-ltr></a></th>
         <td>14 Mar 2026</td>
         <td>Speeding: 21 to 30 km/h over the limit</td>
-        <td><sc-status-tag tone="warning">Unpaid</sc-status-tag></td>
+        <td><sc-status-tag tone="warning">Not paid</sc-status-tag></td>
         <td data-value="600">AED 600.00</td>
       </tr>
     </tbody>

@@ -1,5 +1,5 @@
 <h1 class="pg-title sc-type-heading-xl" data-ar="جدول">Table</h1>
-<p class="pg-lede sc-type-body-m" data-ar="يقارن الجدول صفوفًا من النوع نفسه عبر بعض الخصائص: المخالفات والمدفوعات وحالة طلبات التصاريح. لتفاصيل عنصر واحد استخدم قائمة الملخص.">
+<p class="pg-lede sc-type-body-m" data-ar="يقارن الجدول صفوفًا من النوع نفسه عبر بعض الخصائص: المخالفات والمدفوعات وحالة طلبات التصاريح. ولتفاصيل عنصر واحد تُستخدم قائمة الملخص.">
   A table compares rows of the same kind of thing across a few attributes: fines, payments, the status of permit applications. For the details of one thing, use a summary list.
 </p>
 
@@ -23,7 +23,7 @@
             <th scope="row"><a href="#F-2026-118204"><sc-ltr>F-2026-118204</sc-ltr></a></th>
             <td data-ar="14 مارس 2026">14 Mar 2026</td>
             <td data-ar="تجاوز السرعة المحددة بـ 21 إلى 30 كم/س">Speeding: 21 to 30 km/h over the limit</td>
-            <td><sc-status-tag tone="warning"><span data-ar="غير مدفوعة">Unpaid</span></sc-status-tag></td>
+            <td><sc-status-tag tone="warning"><span data-ar="بانتظار الدفع">Not paid</span></sc-status-tag></td>
             <td data-value="600" data-ar="600.00 درهم">AED 600.00</td>
             <td><a href="#F-2026-118204"><span data-ar="عرض">View</span><span class="sc-visually-hidden"> fine F-2026-118204</span></a></td>
           </tr>
@@ -31,7 +31,7 @@
             <th scope="row"><a href="#F-2026-107455"><sc-ltr>F-2026-107455</sc-ltr></a></th>
             <td data-ar="2 مارس 2026">2 Mar 2026</td>
             <td data-ar="إغلاق مسار أثناء الوقوف، ديرة">Blocking a lane while parking, Deira</td>
-            <td><sc-status-tag tone="warning"><span data-ar="غير مدفوعة">Unpaid</span></sc-status-tag></td>
+            <td><sc-status-tag tone="warning"><span data-ar="بانتظار الدفع">Not paid</span></sc-status-tag></td>
             <td data-value="1100" data-ar="1,100.00 درهم">AED 1,100.00</td>
             <td><a href="#F-2026-107455"><span data-ar="عرض">View</span><span class="sc-visually-hidden"> fine F-2026-107455</span></a></td>
           </tr>
@@ -39,7 +39,7 @@
             <th scope="row"><a href="#F-2026-081930"><sc-ltr>F-2026-081930</sc-ltr></a></th>
             <td data-ar="19 فبراير 2026">19 Feb 2026</td>
             <td data-ar="سالك: عبور بوابة دون رصيد كافٍ">Salik toll: passed a gate with no balance</td>
-            <td><sc-status-tag tone="success"><span data-ar="مدفوعة">Paid</span></sc-status-tag></td>
+            <td><sc-status-tag tone="success"><span data-ar="تم الدفع">Paid</span></sc-status-tag></td>
             <td data-value="100" data-ar="100.00 درهم">AED 100.00</td>
             <td><a href="#F-2026-081930"><span data-ar="عرض">View</span><span class="sc-visually-hidden"> fine F-2026-081930</span></a></td>
           </tr>
@@ -63,7 +63,7 @@
       <div slot="footer">
         <span data-ar="عرض 1 إلى 4 من 4 مخالفات">Showing 1–4 of 4 fines</span>
       </div>
-      <sc-button slot="actions" id="tb-pay"><span data-ar="ادفع المخالفات">Pay fines</span></sc-button>
+      <sc-button slot="actions" id="tb-pay"><span data-ar="دفع المخالفات">Pay fines</span></sc-button>
     </sc-table>
     <p class="pg-output" id="tb-output" role="status"></p>
   </div>
@@ -116,8 +116,8 @@
             <tbody></tbody>
           </table>
           <sc-callout slot="error" tone="error">
-            <p style="margin: 0 0 var(--sc-space-12)" data-ar="تعذّر تحميل مخالفاتك. حاول مرة أخرى بعد بضع دقائق.">We could not load your fines. Try again in a few minutes.</p>
-            <sc-button variant="secondary" size="m"><span data-ar="حاول مرة أخرى">Try again</span></sc-button>
+            <p style="margin: 0 0 var(--sc-space-12)" data-ar="تعذّر تحميل مخالفاتك. يُرجى المحاولة مرة أخرى بعد بضع دقائق.">We could not load your fines. Try again in a few minutes.</p>
+            <sc-button variant="secondary" size="m"><span data-ar="إعادة المحاولة">Try again</span></sc-button>
           </sc-callout>
         </sc-table>
       </div>
@@ -138,7 +138,7 @@
             <thead><tr><th data-type="reference" data-ar="اللوحة">Plate</th><th data-type="status" data-ar="الحالة">Status</th><th data-type="amount" data-ar="الغرامات">Fines</th></tr></thead>
             <tbody>
               <tr><th scope="row"><sc-ltr>Dubai A 12345</sc-ltr></th><td><sc-status-tag tone="success"><span data-ar="سليمة">Clear</span></sc-status-tag></td><td data-ar="0.00 درهم">AED 0.00</td></tr>
-              <tr><th scope="row"><sc-ltr>Dubai K 4821</sc-ltr></th><td><sc-status-tag tone="warning"><span data-ar="غير مدفوعة">Unpaid</span></sc-status-tag></td><td data-ar="600.00 درهم">AED 600.00</td></tr>
+              <tr><th scope="row"><sc-ltr>Dubai K 4821</sc-ltr></th><td><sc-status-tag tone="warning"><span data-ar="بانتظار الدفع">Not paid</span></sc-status-tag></td><td data-ar="600.00 درهم">AED 600.00</td></tr>
               <tr><th scope="row"><sc-ltr>Dubai P 907</sc-ltr></th><td><sc-status-tag tone="error"><span data-ar="محجوزة">Impounded</span></sc-status-tag></td><td data-ar="3,000.00 درهم">AED 3,000.00</td></tr>
             </tbody>
           </table>
@@ -158,8 +158,8 @@
           <table>
             <thead><tr><th data-type="reference" data-ar="الرقم المرجعي">Reference</th><th data-type="date" data-ar="التاريخ">Date</th><th data-ar="المخالفة">Offence</th><th data-type="status" data-ar="الحالة">Status</th><th data-type="amount" data-ar="المبلغ">Amount</th><th data-type="action"><span class="sc-visually-hidden">Action</span></th></tr></thead>
             <tbody>
-              <tr><th scope="row"><sc-ltr>F-2026-118204</sc-ltr></th><td data-ar="14 مارس 2026">14 Mar 2026</td><td data-ar="تجاوز السرعة المحددة بـ 21 إلى 30 كم/س">Speeding: 21 to 30 km/h over the limit</td><td><sc-status-tag tone="warning"><span data-ar="غير مدفوعة">Unpaid</span></sc-status-tag></td><td data-ar="600.00 درهم">AED 600.00</td><td><a href="#F-2026-118204"><span data-ar="عرض المخالفة">View fine</span><span class="sc-visually-hidden"> F-2026-118204</span></a></td></tr>
-              <tr><th scope="row"><sc-ltr>F-2026-081930</sc-ltr></th><td data-ar="19 فبراير 2026">19 Feb 2026</td><td data-ar="سالك: عبور بوابة دون رصيد كافٍ">Salik toll: passed a gate with no balance</td><td><sc-status-tag tone="success"><span data-ar="مدفوعة">Paid</span></sc-status-tag></td><td data-ar="100.00 درهم">AED 100.00</td><td><a href="#F-2026-081930"><span data-ar="عرض المخالفة">View fine</span><span class="sc-visually-hidden"> F-2026-081930</span></a></td></tr>
+              <tr><th scope="row"><sc-ltr>F-2026-118204</sc-ltr></th><td data-ar="14 مارس 2026">14 Mar 2026</td><td data-ar="تجاوز السرعة المحددة بـ 21 إلى 30 كم/س">Speeding: 21 to 30 km/h over the limit</td><td><sc-status-tag tone="warning"><span data-ar="بانتظار الدفع">Not paid</span></sc-status-tag></td><td data-ar="600.00 درهم">AED 600.00</td><td><a href="#F-2026-118204"><span data-ar="عرض المخالفة">View fine</span><span class="sc-visually-hidden"> F-2026-118204</span></a></td></tr>
+              <tr><th scope="row"><sc-ltr>F-2026-081930</sc-ltr></th><td data-ar="19 فبراير 2026">19 Feb 2026</td><td data-ar="سالك: عبور بوابة دون رصيد كافٍ">Salik toll: passed a gate with no balance</td><td><sc-status-tag tone="success"><span data-ar="تم الدفع">Paid</span></sc-status-tag></td><td data-ar="100.00 درهم">AED 100.00</td><td><a href="#F-2026-081930"><span data-ar="عرض المخالفة">View fine</span><span class="sc-visually-hidden"> F-2026-081930</span></a></td></tr>
             </tbody>
           </table>
         </sc-table>
@@ -188,8 +188,8 @@
         <thead><tr><th data-type="reference" data-ar="الرقم المرجعي">Reference</th><th data-ar="المخالفة">Offence</th><th data-type="status" data-ar="الحالة">Status</th><th data-type="amount" data-ar="المبلغ">Amount</th></tr></thead>
         <tbody>
           <tr><th scope="row"><sc-ltr>F-2026-118204</sc-ltr></th><td data-ar="تجاوز الحد الأقصى للسرعة بأكثر من 60 كم/س على شارع الشيخ محمد بن زايد">Exceeding the maximum speed limit by more than 60 km/h on Sheikh Mohammed bin Zayed Road</td><td><sc-status-tag tone="neutral"><span data-ar="بانتظار قرار المحكمة">Waiting for court decision</span></sc-status-tag></td><td data-ar="1,234,567.50 درهم">AED 1,234,567.50</td></tr>
-          <tr><th scope="row"><sc-ltr>F-1</sc-ltr></th><td></td><td><sc-status-tag tone="success"><span data-ar="مدفوعة">Paid</span></sc-status-tag></td><td data-ar="0.50 درهم">AED 0.50</td></tr>
-          <tr><th scope="row"><sc-ltr>F-2026-090017</sc-ltr></th><td data-ar="وقوف المركبة دبي A 12345 في موقف مخصص لأصحاب الهمم">Vehicle <sc-ltr>Dubai A 12345</sc-ltr> parked in a space for people of determination</td><td><sc-status-tag tone="warning"><span data-ar="غير مدفوعة">Unpaid</span></sc-status-tag></td><td data-ar="1,000.00 درهم">AED 1,000.00</td></tr>
+          <tr><th scope="row"><sc-ltr>F-1</sc-ltr></th><td></td><td><sc-status-tag tone="success"><span data-ar="تم الدفع">Paid</span></sc-status-tag></td><td data-ar="0.50 درهم">AED 0.50</td></tr>
+          <tr><th scope="row"><sc-ltr>F-2026-090017</sc-ltr></th><td data-ar="وقوف المركبة دبي A 12345 في موقف مخصص لأصحاب الهمم">Vehicle <sc-ltr>Dubai A 12345</sc-ltr> parked in a space for people of determination</td><td><sc-status-tag tone="warning"><span data-ar="بانتظار الدفع">Not paid</span></sc-status-tag></td><td data-ar="1,000.00 درهم">AED 1,000.00</td></tr>
         </tbody>
       </table>
       <div slot="footer">
@@ -218,12 +218,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr data-id="F-2026-118204"><th scope="row"><sc-ltr>F-2026-118204</sc-ltr></th><td>14 مارس 2026</td><td>تجاوز السرعة المحددة بـ 21 إلى 30 كم/س</td><td><sc-status-tag tone="warning">غير مدفوعة</sc-status-tag></td><td data-value="600">600.00 درهم</td></tr>
-          <tr data-id="F-2026-107455" data-selected><th scope="row"><sc-ltr>F-2026-107455</sc-ltr></th><td>2 مارس 2026</td><td>إغلاق مسار أثناء الوقوف، ديرة</td><td><sc-status-tag tone="warning">غير مدفوعة</sc-status-tag></td><td data-value="1100">1,100.00 درهم</td></tr>
+          <tr data-id="F-2026-118204"><th scope="row"><sc-ltr>F-2026-118204</sc-ltr></th><td>14 مارس 2026</td><td>تجاوز السرعة المحددة بـ 21 إلى 30 كم/س</td><td><sc-status-tag tone="warning">بانتظار الدفع</sc-status-tag></td><td data-value="600">600.00 درهم</td></tr>
+          <tr data-id="F-2026-107455" data-selected><th scope="row"><sc-ltr>F-2026-107455</sc-ltr></th><td>2 مارس 2026</td><td>إغلاق مسار أثناء الوقوف، ديرة</td><td><sc-status-tag tone="warning">بانتظار الدفع</sc-status-tag></td><td data-value="1100">1,100.00 درهم</td></tr>
           <tr data-id="F-2026-081930"><th scope="row"><sc-ltr>F-2026-081930</sc-ltr></th><td>19 فبراير 2026</td><td>سالك: عبور بوابة دون رصيد كافٍ</td><td><sc-status-tag tone="success">مدفوعة</sc-status-tag></td><td data-value="100">100.00 درهم</td></tr>
         </tbody>
       </table>
-      <sc-button slot="actions">ادفع المخالفات</sc-button>
+      <sc-button slot="actions">دفع المخالفات</sc-button>
     </sc-table>
     <p class="pg-note" lang="en" dir="ltr">This card is always lang="ar" dir="rtl": the first column and the checkboxes are on the right, amounts align left, and the sort glyph sits after the label.</p>
   </div>
@@ -269,7 +269,7 @@
     table.addEventListener('scSelectionChange', (ev) => {
       const n = ev.detail.ids.length;
       const ar = preview.lang === 'ar';
-      pay.textContent = ar ? (n === 1 ? 'ادفع مخالفة واحدة' : n === 2 ? 'ادفع مخالفتين' : `ادفع ${n} مخالفات`) : `Pay ${n} ${n === 1 ? 'fine' : 'fines'}`;
+      pay.textContent = ar ? (n === 1 ? 'دفع مخالفة واحدة' : n === 2 ? 'دفع مخالفتين' : `دفع ${n} مخالفات`) : `Pay ${n} ${n === 1 ? 'fine' : 'fines'}`;
       out.textContent = `scSelectionChange: ${ev.detail.ids.join(', ') || 'none'}`;
     });
   }

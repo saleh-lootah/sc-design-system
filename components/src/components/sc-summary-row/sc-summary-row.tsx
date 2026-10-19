@@ -1,4 +1,5 @@
 import { Component, Element, Host, Prop, Watch, h } from '@stencil/core';
+import { LocaleController } from '../../i18n/locale';
 import { SUMMARY_ROW_UPDATE } from './summary-row-update';
 
 /**
@@ -11,7 +12,8 @@ import { SUMMARY_ROW_UPDATE } from './summary-row-update';
  * child of `sc-summary-list`; the list sets its `slot` attribute.
  *
  * @slot - The value. Text or inline markup; wrap plates, amounts and references in `<sc-ltr>`.
- *   Use `<br>` or separate block elements for an address. Falls back to the `value` prop.
+ *   Use `<br>` or separate block elements for an address. Falls back to the `value` prop,
+ *   then to "Not provided" / "لم يتم تقديمه" (an optional question the user skipped).
  */
 @Component({
   tag: 'sc-summary-row',
@@ -24,7 +26,7 @@ export class ScSummaryRow {
   /** The key: what the answer is about, e.g. "Plate number". Rendered as the `<dt>`. Required. */
   @Prop({ reflect: true }) label!: string;
 
-  /** A plain-text value, used when the default slot is empty. */
+  /** A plain-text value, used when the default slot is empty. With neither, the row shows "Not provided". */
   @Prop() value?: string;
 
   /**
@@ -43,6 +45,16 @@ export class ScSummaryRow {
    */
   @Prop() actionHiddenText?: string;
 
+  private locale = new LocaleController(this);
+
+  connectedCallback() {
+    this.locale.connect();
+  }
+
+  disconnectedCallback() {
+    this.locale.disconnect();
+  }
+
   @Watch('label')
   @Watch('value')
   @Watch('actionHref')
@@ -55,7 +67,7 @@ export class ScSummaryRow {
   render() {
     return (
       <Host>
-        <slot>{this.value}</slot>
+        <slot>{this.value || this.locale.t('summaryRowNotProvided')}</slot>
       </Host>
     );
   }

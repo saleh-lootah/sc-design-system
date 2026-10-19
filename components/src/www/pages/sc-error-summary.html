@@ -7,8 +7,8 @@
   <h2 id="es-default" class="sc-type-heading-m" data-ar="مع روابط داخل المكوّن">With slotted links</h2>
   <div class="pg-card">
     <sc-error-summary no-autofocus>
-      <a href="#es-plate" data-ar="أدخل رقم اللوحة بالأرقام فقط، مثل 12345">Enter the plate number using numbers only, like 12345</a>
-      <a href="#es-code" data-ar="أدخل رمز اللوحة">Enter the plate code</a>
+      <a href="#es-plate" data-ar="يُرجى إدخال رقم اللوحة بالأرقام فقط، مثل 12345">Enter the plate number using numbers only, like 12345</a>
+      <a href="#es-code" data-ar="يُرجى إدخال رمز اللوحة">Enter the plate code</a>
     </sc-error-summary>
     <p class="pg-note" data-ar="الروابط تُقرأ من محتوى العنصر وتُعرض كقائمة. على الصفحات الحقيقية ينتقل التركيز إلى الملخص عند تحميله؛ أوقفناه هنا (no-autofocus) كي لا يسرق التركيز من صفحة العرض.">
       Links are read from the light DOM and rendered as a list. On real pages focus moves to the summary when it loads; it is turned off here (no-autofocus) so the demo page keeps its focus.
@@ -20,7 +20,7 @@
   <h2 id="es-focus" class="sc-type-heading-m" data-ar="التركيز">Focus</h2>
   <div class="pg-card">
     <sc-error-summary id="es-focused">
-      <a href="#es-plate" data-ar="أدخل رقم اللوحة">Enter the plate number</a>
+      <a href="#es-plate" data-ar="يُرجى إدخال رقم اللوحة">Enter the plate number</a>
     </sc-error-summary>
     <p class="pg-note" data-ar="عند التحميل ينتقل التركيز إلى الملخص (tabindex=-1، role=alert) فيُعلن عنه فورًا.">
       On load, focus moves to the summary (tabindex -1, role alert) so it is announced straight away.
@@ -46,7 +46,7 @@
         <sc-button type="reset" variant="tertiary" data-ar="مسح">Clear</sc-button>
       </div>
     </form>
-    <p class="pg-note" data-ar="أرسل النموذج فارغًا: يظهر الملخص ويأخذ التركيز (setFocus). اتبع رابطًا لنقل التركيز إلى الحقل، سواء كان حقلًا عاديًا أو مكوّنًا يفوّض التركيز.">
+    <p class="pg-note" data-ar="عند إرسال النموذج فارغًا يظهر الملخص ويأخذ التركيز (setFocus). ويؤدي اتباع أي رابط إلى نقل التركيز إلى الحقل، سواء كان حقلًا عاديًا أو مكوّنًا يفوّض التركيز.">
       Submit it empty: the summary appears and takes focus (setFocus). Follow a link to move focus to the field, whether it's a plain input or a host that delegates focus.
     </p>
   </div>
@@ -55,9 +55,9 @@
 <section class="pg-section" aria-labelledby="es-desc">
   <h2 id="es-desc" class="sc-type-heading-m" data-ar="مع وصف وعنوان مخصص">With a description and a custom heading</h2>
   <div class="pg-card">
-    <sc-error-summary no-autofocus heading="Check your vehicle details" data-heading-ar="تحقق من بيانات مركبتك">
+    <sc-error-summary no-autofocus heading="Check your vehicle details" data-heading-ar="مراجعة بيانات المركبة">
       <p slot="description" data-ar="لم نتمكن من العثور على مركبة بهذه البيانات.">We couldn't find a vehicle with these details.</p>
-      <a href="#es-plate" data-ar="تحقق من رقم اللوحة">Check the plate number</a>
+      <a href="#es-plate" data-ar="يُرجى التحقق من رقم اللوحة">Check the plate number</a>
     </sc-error-summary>
   </div>
 </section>
@@ -66,8 +66,8 @@
   <h2 id="es-arabic" class="sc-type-heading-m" data-ar="بالعربية">In Arabic</h2>
   <div class="pg-card" lang="ar" dir="rtl">
     <sc-error-summary no-autofocus>
-      <a href="#es-plate">أدخل رقم اللوحة بالأرقام فقط، مثل <bdi dir="ltr">12345</bdi></a>
-      <a href="#es-code">أدخل رمز اللوحة</a>
+      <a href="#es-plate">يُرجى إدخال رقم اللوحة بالأرقام فقط، مثل <bdi dir="ltr">12345</bdi></a>
+      <a href="#es-code">يُرجى إدخال رمز اللوحة</a>
     </sc-error-summary>
     <p class="pg-note" lang="en" dir="ltr">This card is always lang="ar" dir="rtl", whatever the toolbar says.</p>
   </div>
@@ -116,9 +116,9 @@
     form.addEventListener('submit', (ev) => {
       ev.preventDefault();
       const errors = [];
-      if (!code.value.trim()) errors.push({ href: '#es-code', text: ar() ? 'أدخل رمز اللوحة' : 'Enter the plate code' });
+      if (!code.value.trim()) errors.push({ href: '#es-code', text: ar() ? 'يُرجى إدخال رمز اللوحة' : 'Enter the plate code' });
       if (!/^\d{1,5}$/.test(plate.value.trim()))
-        errors.push({ href: '#es-plate', text: ar() ? 'أدخل رقم اللوحة بالأرقام فقط، مثل 12345' : 'Enter the plate number using numbers only, like 12345' });
+        errors.push({ href: '#es-plate', text: ar() ? 'يُرجى إدخال رقم اللوحة بالأرقام فقط، مثل 12345' : 'Enter the plate number using numbers only, like 12345' });
       plate.toggleAttribute('invalid', errors.some((e) => e.href === '#es-plate'));
       summary.errors = errors;
       if (errors.length) requestAnimationFrame(() => summary.setFocus());

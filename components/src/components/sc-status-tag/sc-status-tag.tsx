@@ -24,7 +24,7 @@ const TONES: readonly StatusTagTone[] = ['neutral', 'success', 'warning', 'error
 export class ScStatusTag {
   /**
    * - `neutral`: no action needed yet, or a plain state ("Draft", "In review").
-   * - `success`: done ("Paid", "Renewed").
+   * - `success`: done ("Paid", "Approved", "Completed").
    * - `warning`: needs attention soon ("Expires in 15 days").
    * - `error`: blocked or failed ("Action needed", "Payment failed").
    * - `channel`: highlights something in the current channel's colours ("New").

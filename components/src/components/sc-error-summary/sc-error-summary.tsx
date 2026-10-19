@@ -44,7 +44,7 @@ export class ScErrorSummary {
    */
   @Prop() errors?: ErrorSummaryItem[];
 
-  /** Overrides the heading text (default "There is a problem" / "يوجد خطأ" from strings). */
+  /** Overrides the heading text (default "There is a problem" / "توجد مشكلة" from strings). */
   @Prop() heading?: string;
 
   /** The heading level. Use 2 when the summary sits under the page's `<h1>` (the usual case). */
