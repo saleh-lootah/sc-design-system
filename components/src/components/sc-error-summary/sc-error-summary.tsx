@@ -17,8 +17,10 @@ export type ErrorSummaryHeadingLevel = 2 | 3 | 4;
  *
  * Give it items either as links in the default slot (`<a href="#plate-number">…</a>`,
  * optionally inside a `<ul>`) or through the `errors` property. When it first has items
- * it moves focus to itself (`tabindex="-1"`, `role="alert"`), so keyboard and screen
- * reader users hear the problem straight away.
+ * it moves focus to itself (`tabindex="-1"`), so keyboard and screen reader users hear
+ * the heading and errors straight away. It has no `role="alert"`: moving focus already
+ * announces it, and a live region on top can make screen readers read it twice (GOV.UK
+ * practice). The focused box is a `role="group"` named by its heading.
  *
  * @slot - Error links: `<a href="#field-id">Message</a>`, one per error. They are read
  *   from the light DOM and rendered as a list inside the component.
@@ -169,7 +171,7 @@ export class ScErrorSummary {
           class="summary focus-ring"
           part="container"
           tabindex="-1"
-          role="alert"
+          role="group"
           aria-labelledby="heading"
           ref={(el) => (this.container = el)}
         >

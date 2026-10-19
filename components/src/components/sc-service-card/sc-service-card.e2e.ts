@@ -89,6 +89,57 @@ describe('sc-service-card (e2e)', () => {
     walk(snapshot as never);
     expect(links[0].name).toBe('Renew vehicle registration');
     expect(links[0].description).toBe('Roads and Transport Authority');
+    // Short names only: the entity and chip text never leak into the card links' names.
+    expect(links.map((l) => l.name)).toEqual(['Renew vehicle registration', 'Pay water and electricity bills', 'Register a tenancy contract', 'Also on Build in Dubai']);
+  });
+
+  it('stretches the title link over the card with ::after', async () => {
+    const page = await newScPage(GRID);
+    const result = await page.evaluate(() => {
+      const root = document.querySelector('#bills')!.shadowRoot!;
+      const after = getComputedStyle(root.querySelector('.link')!, '::after');
+      return { position: after.position, inset: after.inset, cardPosition: getComputedStyle(root.querySelector('.card')!).position };
+    });
+    expect(result.position).toBe('absolute');
+    expect(result.inset).toBe('0px');
+    expect(result.cardPosition).toBe('relative');
+  });
+
+  it('shows the hover state only with a fine pointer', async () => {
+    const underlinesOnHover = async (touch: boolean) => {
+      const page = await newScPage(GRID);
+      // Touch emulation switches Chromium to (hover: none) and (pointer: coarse); its media
+      // emulation can't set `pointer` on its own.
+      await (await (page as unknown as CdpPage).createCDPSession()).send('Emulation.setTouchEmulationEnabled', { enabled: touch, maxTouchPoints: 5 });
+      const box = await page.evaluate(() => {
+        const r = document.querySelector('#bills')!.getBoundingClientRect();
+        return [r.x + r.width / 2, r.y + r.height / 2];
+      });
+      await page.mouse.move(box[0], box[1]);
+      // The underline has no transition, so it can be read straight away.
+      return page.evaluate(() => getComputedStyle(document.querySelector('#bills')!.shadowRoot!.querySelector('.link')!).textDecorationLine === 'underline');
+    };
+    expect(await underlinesOnHover(false)).toBe(true);
+    expect(await underlinesOnHover(true)).toBe(false);
+
+    // Every :hover rule sits under (hover: hover) and (pointer: fine), so a device that
+    // reports hover with a coarse pointer gets no sticky hover either.
+    const page = await newScPage(GRID);
+    const hoverRules = await page.evaluate(() => {
+      const root = document.querySelector('#bills')!.shadowRoot!;
+      const sheets = [...root.adoptedStyleSheets, ...Array.from(root.querySelectorAll('style')).map((s) => s.sheet!)];
+      const found: { selector: string; media: string | null }[] = [];
+      const walk = (rules: CSSRuleList, media: string | null) => {
+        for (const rule of Array.from(rules)) {
+          if (rule instanceof CSSMediaRule) walk(rule.cssRules, rule.conditionText);
+          else if (rule instanceof CSSStyleRule && rule.selectorText.includes(':hover')) found.push({ selector: rule.selectorText, media });
+        }
+      };
+      sheets.forEach((sheet) => walk(sheet.cssRules, null));
+      return found;
+    });
+    expect(hoverRules.length).toBeGreaterThan(0);
+    for (const rule of hoverRules) expect(rule.media?.replace(/\s+/g, ' ')).toBe('(hover: hover) and (pointer: fine)');
   });
 
   it('mirrors the chevron in Arabic and puts it at the left', async () => {
