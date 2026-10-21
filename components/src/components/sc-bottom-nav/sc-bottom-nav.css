@@ -1,0 +1,113 @@
+/*
+ * sc-bottom-nav (v2, shadow DOM). Rules: docs/v2/component-language.md B9, read through
+ * the role table in docs/v2/decisions.md (component-language's "channel-container-high"
+ * for the indicator is the token channel-container). Flat and docked: no glass, no shadow.
+ */
+:host {
+  position: fixed;
+  z-index: 900;
+  inset-inline: 0;
+  inset-block-end: 0;
+  display: block;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+/* From 1024px the header navigation takes over. */
+@media (width >= 1024px) {
+  :host {
+    display: none;
+  }
+}
+
+.bar {
+  border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+  background: var(--sc-color-surface);
+  padding-block-end: env(safe-area-inset-bottom, 0px);
+}
+
+.list {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cell {
+  display: flex;
+  flex: 1 1 0;
+  min-inline-size: var(--sc-size-control-secondary);
+}
+
+.item {
+  --icon-size: var(--sc-size-icon-l);
+
+  box-sizing: border-box;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sc-space-4);
+  min-block-size: var(--sc-space-64);
+  padding-block: var(--sc-space-4);
+  padding-inline: var(--sc-space-4);
+  border-radius: var(--sc-radius-control);
+  color: var(--sc-color-on-surface-variant);
+  font: var(--sc-type-label-small);
+  letter-spacing: var(--sc-type-label-small-tracking);
+  text-align: center;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* The focus ring sits inside the bar, so the screen edge never clips it. */
+.item.focus-ring:focus-visible {
+  outline-offset: calc(var(--sc-size-focus-ring) * -1);
+}
+
+.indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--sc-space-56);
+  block-size: var(--sc-space-32);
+  border-radius: var(--sc-radius-full);
+  /* The indicator crossfades its colour; it never slides. */
+  transition: background-color var(--sc-duration-fast) var(--sc-easing-hover);
+}
+
+.label {
+  max-inline-size: 100%;
+  overflow-wrap: anywhere;
+}
+
+.item--current {
+  color: var(--sc-color-channel-action);
+  font-weight: var(--sc-font-weight-bold);
+}
+
+.item--current .indicator {
+  background-color: var(--sc-color-channel-container);
+}
+
+.item:active .indicator {
+  background-color: color-mix(in oklab, var(--sc-color-on-surface) var(--sc-opacity-pressed), transparent);
+}
+
+@media (forced-colors: active) {
+  .bar {
+    border-block-start-color: CanvasText;
+  }
+  .item {
+    color: LinkText;
+  }
+  .item--current .indicator {
+    forced-color-adjust: none;
+    background-color: Highlight;
+    color: HighlightText;
+  }
+}

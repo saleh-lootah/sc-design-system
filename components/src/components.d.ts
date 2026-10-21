@@ -9,13 +9,16 @@ import { ButtonIconPosition, ButtonSize, ButtonType, ButtonVariant } from "./com
 import { IconName } from "./icons/index";
 import { CalloutHeadingLevel, CalloutTone } from "./components/sc-callout/sc-callout";
 import { CardLandmark, CardPadding } from "./components/sc-card/sc-card";
-import { Channel } from "./i18n/strings";
+import { Channel } from "./i18n/core";
+import { ChannelChipVariant } from "./components/sc-channel-chip/sc-channel-chip";
 import { HeadingLevel } from "./components/sc-text-input/field";
 import { ContainerWidth } from "./components/sc-container/sc-container";
 import { Parts } from "./components/sc-date-input/date";
 import { StringsInput } from "./components/sc-table/overrides";
 import { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
-import { LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
+import { LanguageSwitchAppearance, LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
+import { Channel as Channel1 } from "./i18n/strings";
+import { PaginationChangeDetail } from "./components/sc-pagination/sc-pagination";
 import { ScSearchDetail } from "./components/sc-search/sc-search";
 import { ServiceCardHeadingLevel } from "./components/sc-service-card/sc-service-card";
 import { StatusTagTone } from "./components/sc-status-tag/sc-status-tag";
@@ -26,13 +29,16 @@ export { ButtonIconPosition, ButtonSize, ButtonType, ButtonVariant } from "./com
 export { IconName } from "./icons/index";
 export { CalloutHeadingLevel, CalloutTone } from "./components/sc-callout/sc-callout";
 export { CardLandmark, CardPadding } from "./components/sc-card/sc-card";
-export { Channel } from "./i18n/strings";
+export { Channel } from "./i18n/core";
+export { ChannelChipVariant } from "./components/sc-channel-chip/sc-channel-chip";
 export { HeadingLevel } from "./components/sc-text-input/field";
 export { ContainerWidth } from "./components/sc-container/sc-container";
 export { Parts } from "./components/sc-date-input/date";
 export { StringsInput } from "./components/sc-table/overrides";
 export { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
-export { LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
+export { LanguageSwitchAppearance, LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
+export { Channel as Channel1 } from "./i18n/strings";
+export { PaginationChangeDetail } from "./components/sc-pagination/sc-pagination";
 export { ScSearchDetail } from "./components/sc-search/sc-search";
 export { ServiceCardHeadingLevel } from "./components/sc-service-card/sc-service-card";
 export { StatusTagTone } from "./components/sc-status-tag/sc-status-tag";
@@ -40,6 +46,33 @@ export { SummaryListAppearance } from "./components/sc-summary-list/sc-summary-l
 export { SortDirection } from "./components/sc-table/sc-table";
 export { TextInputType, TextInputWidth } from "./components/sc-text-input/sc-text-input";
 export namespace Components {
+    /**
+     * The side navigation of the signed-in account area: Applications, Payments,
+     * Notifications, Profile and settings, then a divider and Sign out. It takes 3 of 12
+     * columns on wide screens and becomes a horizontal row of 44px items below 600px.
+     * Write the items as plain links (they are what shows before upgrade and without
+     * JavaScript):
+     *   <sc-account-nav>
+     *     <a href="/en/account/applications" data-icon="description">Applications</a>
+     *     <a href="/en/account/payments" data-icon="credit-card" aria-current="page">Payments</a>
+     *     <a href="/en/account/notifications" data-icon="notifications" data-count="3" data-count-label="3 unread">Notifications</a>
+     *     <a href="/en/account/profile" data-icon="person">Profile and settings</a>
+     *     <a href="/en/sign-out" data-icon="logout" data-sign-out>Sign out</a>
+     *   </sc-account-nav>
+     * - `aria-current="page"` marks the current item: a channel-subtle fill, a 3px channel bar
+     *   at inline-start, a channel icon and a Bold label (never colour alone).
+     * - `data-icon`: `description`, `credit-card`, `notifications`, `person`, `history`,
+     *   `home`, `apps` or `logout` (24px; `logout` mirrors in right-to-left).
+     * - `data-count`: a count badge, read with the visually hidden `data-count-label`
+     *   (default "{count} new" / "{count} جديدة").
+     * - `data-sign-out`: puts the item after the divider.
+     */
+    interface ScAccountNav {
+        /**
+          * Overrides the landmark name ("Account" / "الحساب").
+         */
+        "label"?: string;
+    }
     /**
      * The top bar of every mobile screen and desktop page: a translucent glass bar with a
      * start control (usually `sc-back-link`), the channel name, and an end control (usually
@@ -74,22 +107,64 @@ export namespace Components {
         "sticky": boolean;
     }
     /**
-     * The "Back" control at the start of an app bar or above a question. A 44px glass pill with
-     * a back chevron that mirrors in right-to-left.
+     * The "Back" control at the start of an app bar or above a question: plain text with a
+     * 24px back arrow that mirrors in right-to-left, on a 44px target (v2 drops v1's glass pill).
      * Renders a native `<a>` when `href` is set (the previous page has a URL, which also works
      * without JavaScript), or a `<button type="button">` otherwise: listen for `click` and go
      * back in your router. It delegates focus to the inner control.
      */
     interface ScBackLink {
         /**
-          * Surface. - `glass` (default): translucent pill with an edge and shadow, for app bars and washes. - `plain`: no fill, for use inside a page body under a solid surface.
-          * @default 'glass'
+          * Deprecated in v2 and ignored: the back link has one plain appearance on every surface. Kept so v1 markup (`appearance="glass"` or `"plain"`) still renders.
          */
-        "appearance": 'glass' | 'plain';
+        "appearance"?: string;
         /**
           * The previous page. Without it the control is a `<button>`; handle its `click`.
          */
         "href"?: string;
+    }
+    /**
+     * The primary navigation of signed-in channel pages on phones and tablets: a flat bar
+     * docked to the bottom edge with three to five destinations, each an icon above a label.
+     * It shows below 1024px only (from 1024px the header navigation takes over), and `sc.css`
+     * reserves its height at the end of the page, so it never covers content or the focused
+     * element. When it is present, the utility bar folds into the footer.
+     * Write the destinations as plain links:
+     *   <sc-bottom-nav>
+     *     <a href="/en" data-icon="home" aria-current="page">Home</a>
+     *     <a href="/en/services" data-icon="apps">Services</a>
+     *     <a href="/en/account/activity" data-icon="history">Activity</a>
+     *   </sc-bottom-nav>
+     * The current destination (`aria-current="page"`) gets a 56 × 32 channel-container
+     * indicator behind its icon and a Bold label in the channel action colour. Items share the
+     * width equally, each at least 48px wide and 64px tall.
+     */
+    interface ScBottomNav {
+        /**
+          * Overrides the landmark name ("Main" / "رئيسية").
+         */
+        "label"?: string;
+    }
+    /**
+     * Where this page sits in the channel's hierarchy, on pages outside a transaction (in the
+     * hero of inner pages, CHR-07). Never inside a journey: use `sc-back-link` there.
+     * Write the trail as plain children: a link for each ancestor, then the current page as
+     * plain text (a `<span>`). The last child is always the current page; it is not a link and
+     * carries `aria-current="page"`.
+     *   <sc-breadcrumbs>
+     *     <a href="/en">Home</a>
+     *     <a href="/en/vehicles">Vehicles</a>
+     *     <span>Renew your vehicle registration</span>
+     *   </sc-breadcrumbs>
+     * Renders `<nav aria-label="Breadcrumb">` with an ordered list in its shadow root. The
+     * chevrons between items mirror in right-to-left. Below 600px the trail collapses to one
+     * "Back to {parent}" link.
+     */
+    interface ScBreadcrumbs {
+        /**
+          * Overrides the landmark name ("Breadcrumb" / "مسار التنقل").
+         */
+        "label"?: string;
     }
     /**
      * Starts an action. Use a verb: "Continue", "Pay with Dubai Pay", "Save and finish later".
@@ -210,9 +285,11 @@ export namespace Components {
     }
     /**
      * Points to another channel that also offers this service: "Also on Dubai Transport".
-     * The chip sets `data-channel` on itself, so it shows that channel's subtle and ink
-     * colours whatever channel the page is in. This is the one component allowed to name
-     * a channel. With `href` it is a link to the service on that channel.
+     * The chip sets `data-channel` on itself, so it shows that channel's colours whatever
+     * channel the page is in. This is the one component allowed to name a channel; other
+     * channels' colours appear only as attribution like this. With `href` it is a link to the
+     * service on that channel, with a 44px hit area that does not change the layout.
+     * Channel chips are never dismissable.
      */
     interface ScChannelChip {
         /**
@@ -227,6 +304,11 @@ export namespace Components {
           * Overrides the text (default "Also on {channel}" / "متوفر أيضًا في {channel}" from strings).
          */
         "label"?: string;
+        /**
+          * - `subtle` (default): the channel's subtle tint, for white cards. - `outlined`: a white chip with a 1px channel outline and a Bold label, for chips that   sit on a channel tint (life-event rows, "On Dubai Transport").
+          * @default 'subtle'
+         */
+        "variant": ChannelChipVariant;
     }
     /**
      * The top wash of a channel page: a gradient from the channel's wash-start to wash-end
@@ -611,19 +693,23 @@ export namespace Components {
     /**
      * Switches to the same page in the other language. The label is always the other
      * language's own name, "العربية" on an English page and "English" on an Arabic page,
-     * marked with its own `lang` and direction so screen readers pronounce it correctly.
+     * marked with its own `lang` and direction so screen readers pronounce it correctly, and
+     * set in its own script's type role (an Arabic name at the Arabic size on an English page).
      * Renders an `<a href hreflang lang>` to the same page in the other language (LANG-05: the
      * switch is a link). It fires `scSwitch` on every activation; a single-page app calls
      * `preventDefault()` on it and switches in place, and the link still works without script.
+     * The language name is kept as one light-DOM `<span lang>` child that the component writes
+     * itself and shows through its slot: the type roles switch by `lang` in the document, which
+     * a span inside the shadow root could not reach. Don't add or remove children yourself.
      * Without `href` it falls back to a `<button lang>`. That mode is deprecated and will be
-     * removed in the next major version: always set `href`.
+     * removed: always set `href`.
      */
     interface ScLanguageSwitch {
         /**
-          * Surface. - `glass` (default): a 44px translucent pill, for mobile app bars. - `plain`: no fill, for desktop headers.
-          * @default 'glass'
+          * Where the switch sits. - `inline` (default): the app bar of a transaction. An underlined text link in the   channel action colour, label-medium. - `header`: the channel-site header. A globe icon and the name in `on-surface`,   label-large Medium, underlined on hover.  The v1 values still work: `glass` is `inline` and `plain` is `header`.
+          * @default 'inline'
          */
-        "appearance": 'glass' | 'plain';
+        "appearance": LanguageSwitchAppearance | 'glass' | 'plain';
         /**
           * The same page in the other language. Sets `hreflang` to that language. Always set it: without it the switch renders a button, which is deprecated.
          */
@@ -631,13 +717,17 @@ export namespace Components {
     }
     /**
      * Goes somewhere. Use it for navigation; use `sc-button` for actions.
-     * Renders a native `<a>` inside its shadow root and delegates focus to it.
-     * - Inline (default): sits inside running text, takes the surrounding type, underlined in
-     *   the channel action colour, with a visited colour.
-     * - `standalone`: a link on its own line ("View all services") with an end chevron that
-     *   mirrors in right-to-left, and a 44px target.
+     * v2 keeps a shadow root (architecture §3.1) with a native `<a>` inside and delegates focus
+     * to it. For links inside running text prefer the CSS-only `.sc-link` class on a native
+     * `<a>` (decision A4), which keeps text selection and find-in-page working across the link.
+     * - Inline (default): takes the surrounding type, underlined 1px at 4px (5px in Arabic) in
+     *   the channel action colour; 2px on hover. Visited links are not styled differently (D8).
+     * - `standalone`: a link on its own line ("All 412 services"): label-large Bold, an end
+     *   arrow that mirrors in right-to-left, and a 44px target.
      * - `external`: opens in a new tab, adds an icon and the visually hidden
      *   "(opens in new tab)" in the page language.
+     * The colour is `--sc-color-channel-action` unless `--sc-link-color` is set on an ancestor
+     * (the footer and the error summary set it to `on-surface` and `error`).
      */
     interface ScLink {
         /**
@@ -662,7 +752,7 @@ export namespace Components {
          */
         "hreflang"?: string;
         /**
-          * A link on its own (not inside a sentence): adds an end chevron and a 44px target.
+          * A link on its own (not inside a sentence): label-large Bold, an end arrow and a 44px target.
           * @default false
          */
         "standalone": boolean;
@@ -696,7 +786,7 @@ export namespace Components {
         /**
           * The channel this page belongs to. Sets `data-channel` on the page root.
          */
-        "channel"?: Channel;
+        "channel"?: Channel1;
         /**
           * The id of `<main>`, the skip link's target.
           * @default 'main-content'
@@ -707,6 +797,50 @@ export namespace Components {
           * @default false
          */
         "syncDocument": boolean;
+    }
+    /**
+     * Moves between the pages of a long list: search results, payments, fines. Inside
+     * `sc-table`, put it in the table's `footer` slot.
+     * Renders, in its shadow root, an optional results count ("Showing 1–20 of 1,284 fines";
+     * in Arabic "عرض 1 إلى 20 من 1,284 مخالفة", with a word for the range, never a dash), then
+     * `<nav aria-label="Pagination">` with Previous, the page numbers and Next. Previous is
+     * left out on the first page and Next on the last (not disabled). The current page carries
+     * `aria-current="page"`. Below 600px the numbers give way to "Page 2 of 13".
+     * Pages are links when `href-template` is set ("?page={page}"), so the list works without
+     * JavaScript; otherwise they are buttons. Every activation fires `scPageChange`; call
+     * `preventDefault()` on it to stay on the page and load the new page yourself.
+     */
+    interface ScPagination {
+        /**
+          * The URL of a page, with `{page}` where its number goes: `"?page={page}"`. Without it the pages are buttons and you handle `scPageChange`.
+         */
+        "hrefTemplate"?: string;
+        /**
+          * What is being counted, as a plural template in the page language: `"fine|fines"` in English, the six Arabic forms `"zero|one|two|few|many|other"` in Arabic (`"مخالفة|مخالفة|مخالفتين|مخالفات|مخالفة|مخالفة"`). Defaults to results / نتيجة.
+         */
+        "itemLabel"?: string;
+        /**
+          * Overrides the landmark name ("Pagination" / "ترقيم الصفحات").
+         */
+        "label"?: string;
+        /**
+          * The current page, from 1.
+          * @default 1
+         */
+        "page": number;
+        /**
+          * Items per page, for the results count and `total-pages`.
+          * @default 20
+         */
+        "pageSize": number;
+        /**
+          * The number of items across every page. Shows the results count when set.
+         */
+        "totalItems"?: number;
+        /**
+          * The number of pages. Leave it out to work it out from `total-items` and `page-size`.
+         */
+        "totalPages"?: number;
     }
     /**
      * One option in an `sc-radio-group`. Its content is the option's label.
@@ -919,7 +1053,8 @@ export namespace Components {
      * keyboard focus, then shown at the top start corner. Activating it moves focus to the
      * target (adding `tabindex="-1"` for the moment it's needed), so the next Tab continues
      * from the main content in every browser.
-     * Put it first inside `<body>`, before `sc-app-bar`.
+     * Put it first inside `<body>`, before `sc-app-bar` or `sc-site-header`. v2 shows it as a
+     * 48px `inverse-surface` block, so it stands out over any hero or announcement colour.
      */
     interface ScSkipLink {
         /**
@@ -1282,6 +1417,10 @@ export interface ScLanguageSwitchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLScLanguageSwitchElement;
 }
+export interface ScPaginationCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLScPaginationElement;
+}
 export interface ScRadioGroupCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLScRadioGroupElement;
@@ -1308,6 +1447,33 @@ export interface ScTextareaCustomEvent<T> extends CustomEvent<T> {
 }
 declare global {
     /**
+     * The side navigation of the signed-in account area: Applications, Payments,
+     * Notifications, Profile and settings, then a divider and Sign out. It takes 3 of 12
+     * columns on wide screens and becomes a horizontal row of 44px items below 600px.
+     * Write the items as plain links (they are what shows before upgrade and without
+     * JavaScript):
+     *   <sc-account-nav>
+     *     <a href="/en/account/applications" data-icon="description">Applications</a>
+     *     <a href="/en/account/payments" data-icon="credit-card" aria-current="page">Payments</a>
+     *     <a href="/en/account/notifications" data-icon="notifications" data-count="3" data-count-label="3 unread">Notifications</a>
+     *     <a href="/en/account/profile" data-icon="person">Profile and settings</a>
+     *     <a href="/en/sign-out" data-icon="logout" data-sign-out>Sign out</a>
+     *   </sc-account-nav>
+     * - `aria-current="page"` marks the current item: a channel-subtle fill, a 3px channel bar
+     *   at inline-start, a channel icon and a Bold label (never colour alone).
+     * - `data-icon`: `description`, `credit-card`, `notifications`, `person`, `history`,
+     *   `home`, `apps` or `logout` (24px; `logout` mirrors in right-to-left).
+     * - `data-count`: a count badge, read with the visually hidden `data-count-label`
+     *   (default "{count} new" / "{count} جديدة").
+     * - `data-sign-out`: puts the item after the divider.
+     */
+    interface HTMLScAccountNavElement extends Components.ScAccountNav, HTMLStencilElement {
+    }
+    var HTMLScAccountNavElement: {
+        prototype: HTMLScAccountNavElement;
+        new (): HTMLScAccountNavElement;
+    };
+    /**
      * The top bar of every mobile screen and desktop page: a translucent glass bar with a
      * start control (usually `sc-back-link`), the channel name, and an end control (usually
      * `sc-language-switch`).
@@ -1325,8 +1491,8 @@ declare global {
         new (): HTMLScAppBarElement;
     };
     /**
-     * The "Back" control at the start of an app bar or above a question. A 44px glass pill with
-     * a back chevron that mirrors in right-to-left.
+     * The "Back" control at the start of an app bar or above a question: plain text with a
+     * 24px back arrow that mirrors in right-to-left, on a 44px target (v2 drops v1's glass pill).
      * Renders a native `<a>` when `href` is set (the previous page has a URL, which also works
      * without JavaScript), or a `<button type="button">` otherwise: listen for `click` and go
      * back in your router. It delegates focus to the inner control.
@@ -1336,6 +1502,49 @@ declare global {
     var HTMLScBackLinkElement: {
         prototype: HTMLScBackLinkElement;
         new (): HTMLScBackLinkElement;
+    };
+    /**
+     * The primary navigation of signed-in channel pages on phones and tablets: a flat bar
+     * docked to the bottom edge with three to five destinations, each an icon above a label.
+     * It shows below 1024px only (from 1024px the header navigation takes over), and `sc.css`
+     * reserves its height at the end of the page, so it never covers content or the focused
+     * element. When it is present, the utility bar folds into the footer.
+     * Write the destinations as plain links:
+     *   <sc-bottom-nav>
+     *     <a href="/en" data-icon="home" aria-current="page">Home</a>
+     *     <a href="/en/services" data-icon="apps">Services</a>
+     *     <a href="/en/account/activity" data-icon="history">Activity</a>
+     *   </sc-bottom-nav>
+     * The current destination (`aria-current="page"`) gets a 56 × 32 channel-container
+     * indicator behind its icon and a Bold label in the channel action colour. Items share the
+     * width equally, each at least 48px wide and 64px tall.
+     */
+    interface HTMLScBottomNavElement extends Components.ScBottomNav, HTMLStencilElement {
+    }
+    var HTMLScBottomNavElement: {
+        prototype: HTMLScBottomNavElement;
+        new (): HTMLScBottomNavElement;
+    };
+    /**
+     * Where this page sits in the channel's hierarchy, on pages outside a transaction (in the
+     * hero of inner pages, CHR-07). Never inside a journey: use `sc-back-link` there.
+     * Write the trail as plain children: a link for each ancestor, then the current page as
+     * plain text (a `<span>`). The last child is always the current page; it is not a link and
+     * carries `aria-current="page"`.
+     *   <sc-breadcrumbs>
+     *     <a href="/en">Home</a>
+     *     <a href="/en/vehicles">Vehicles</a>
+     *     <span>Renew your vehicle registration</span>
+     *   </sc-breadcrumbs>
+     * Renders `<nav aria-label="Breadcrumb">` with an ordered list in its shadow root. The
+     * chevrons between items mirror in right-to-left. Below 600px the trail collapses to one
+     * "Back to {parent}" link.
+     */
+    interface HTMLScBreadcrumbsElement extends Components.ScBreadcrumbs, HTMLStencilElement {
+    }
+    var HTMLScBreadcrumbsElement: {
+        prototype: HTMLScBreadcrumbsElement;
+        new (): HTMLScBreadcrumbsElement;
     };
     /**
      * Starts an action. Use a verb: "Continue", "Pay with Dubai Pay", "Save and finish later".
@@ -1380,9 +1589,11 @@ declare global {
     };
     /**
      * Points to another channel that also offers this service: "Also on Dubai Transport".
-     * The chip sets `data-channel` on itself, so it shows that channel's subtle and ink
-     * colours whatever channel the page is in. This is the one component allowed to name
-     * a channel. With `href` it is a link to the service on that channel.
+     * The chip sets `data-channel` on itself, so it shows that channel's colours whatever
+     * channel the page is in. This is the one component allowed to name a channel; other
+     * channels' colours appear only as attribution like this. With `href` it is a link to the
+     * service on that channel, with a 44px hit area that does not change the layout.
+     * Channel chips are never dismissable.
      */
     interface HTMLScChannelChipElement extends Components.ScChannelChip, HTMLStencilElement {
     }
@@ -1580,12 +1791,16 @@ declare global {
     /**
      * Switches to the same page in the other language. The label is always the other
      * language's own name, "العربية" on an English page and "English" on an Arabic page,
-     * marked with its own `lang` and direction so screen readers pronounce it correctly.
+     * marked with its own `lang` and direction so screen readers pronounce it correctly, and
+     * set in its own script's type role (an Arabic name at the Arabic size on an English page).
      * Renders an `<a href hreflang lang>` to the same page in the other language (LANG-05: the
      * switch is a link). It fires `scSwitch` on every activation; a single-page app calls
      * `preventDefault()` on it and switches in place, and the link still works without script.
+     * The language name is kept as one light-DOM `<span lang>` child that the component writes
+     * itself and shows through its slot: the type roles switch by `lang` in the document, which
+     * a span inside the shadow root could not reach. Don't add or remove children yourself.
      * Without `href` it falls back to a `<button lang>`. That mode is deprecated and will be
-     * removed in the next major version: always set `href`.
+     * removed: always set `href`.
      */
     interface HTMLScLanguageSwitchElement extends Components.ScLanguageSwitch, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScLanguageSwitchElementEventMap>(type: K, listener: (this: HTMLScLanguageSwitchElement, ev: ScLanguageSwitchCustomEvent<HTMLScLanguageSwitchElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1603,13 +1818,17 @@ declare global {
     };
     /**
      * Goes somewhere. Use it for navigation; use `sc-button` for actions.
-     * Renders a native `<a>` inside its shadow root and delegates focus to it.
-     * - Inline (default): sits inside running text, takes the surrounding type, underlined in
-     *   the channel action colour, with a visited colour.
-     * - `standalone`: a link on its own line ("View all services") with an end chevron that
-     *   mirrors in right-to-left, and a 44px target.
+     * v2 keeps a shadow root (architecture §3.1) with a native `<a>` inside and delegates focus
+     * to it. For links inside running text prefer the CSS-only `.sc-link` class on a native
+     * `<a>` (decision A4), which keeps text selection and find-in-page working across the link.
+     * - Inline (default): takes the surrounding type, underlined 1px at 4px (5px in Arabic) in
+     *   the channel action colour; 2px on hover. Visited links are not styled differently (D8).
+     * - `standalone`: a link on its own line ("All 412 services"): label-large Bold, an end
+     *   arrow that mirrors in right-to-left, and a 44px target.
      * - `external`: opens in a new tab, adds an icon and the visually hidden
      *   "(opens in new tab)" in the page language.
+     * The colour is `--sc-color-channel-action` unless `--sc-link-color` is set on an ancestor
+     * (the footer and the error summary set it to `on-surface` and `error`).
      */
     interface HTMLScLinkElement extends Components.ScLink, HTMLStencilElement {
     }
@@ -1651,6 +1870,35 @@ declare global {
     var HTMLScPageElement: {
         prototype: HTMLScPageElement;
         new (): HTMLScPageElement;
+    };
+    interface HTMLScPaginationElementEventMap {
+        "scPageChange": PaginationChangeDetail;
+    }
+    /**
+     * Moves between the pages of a long list: search results, payments, fines. Inside
+     * `sc-table`, put it in the table's `footer` slot.
+     * Renders, in its shadow root, an optional results count ("Showing 1–20 of 1,284 fines";
+     * in Arabic "عرض 1 إلى 20 من 1,284 مخالفة", with a word for the range, never a dash), then
+     * `<nav aria-label="Pagination">` with Previous, the page numbers and Next. Previous is
+     * left out on the first page and Next on the last (not disabled). The current page carries
+     * `aria-current="page"`. Below 600px the numbers give way to "Page 2 of 13".
+     * Pages are links when `href-template` is set ("?page={page}"), so the list works without
+     * JavaScript; otherwise they are buttons. Every activation fires `scPageChange`; call
+     * `preventDefault()` on it to stay on the page and load the new page yourself.
+     */
+    interface HTMLScPaginationElement extends Components.ScPagination, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLScPaginationElementEventMap>(type: K, listener: (this: HTMLScPaginationElement, ev: ScPaginationCustomEvent<HTMLScPaginationElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLScPaginationElementEventMap>(type: K, listener: (this: HTMLScPaginationElement, ev: ScPaginationCustomEvent<HTMLScPaginationElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLScPaginationElement: {
+        prototype: HTMLScPaginationElement;
+        new (): HTMLScPaginationElement;
     };
     /**
      * One option in an `sc-radio-group`. Its content is the option's label.
@@ -1763,7 +2011,8 @@ declare global {
      * keyboard focus, then shown at the top start corner. Activating it moves focus to the
      * target (adding `tabindex="-1"` for the moment it's needed), so the next Tab continues
      * from the main content in every browser.
-     * Put it first inside `<body>`, before `sc-app-bar`.
+     * Put it first inside `<body>`, before `sc-app-bar` or `sc-site-header`. v2 shows it as a
+     * 48px `inverse-surface` block, so it stands out over any hero or announcement colour.
      */
     interface HTMLScSkipLinkElement extends Components.ScSkipLink, HTMLStencilElement {
     }
@@ -1928,8 +2177,11 @@ declare global {
         new (): HTMLScTextareaElement;
     };
     interface HTMLElementTagNameMap {
+        "sc-account-nav": HTMLScAccountNavElement;
         "sc-app-bar": HTMLScAppBarElement;
         "sc-back-link": HTMLScBackLinkElement;
+        "sc-bottom-nav": HTMLScBottomNavElement;
+        "sc-breadcrumbs": HTMLScBreadcrumbsElement;
         "sc-button": HTMLScButtonElement;
         "sc-callout": HTMLScCalloutElement;
         "sc-card": HTMLScCardElement;
@@ -1947,6 +2199,7 @@ declare global {
         "sc-link": HTMLScLinkElement;
         "sc-ltr": HTMLScLtrElement;
         "sc-page": HTMLScPageElement;
+        "sc-pagination": HTMLScPaginationElement;
         "sc-radio": HTMLScRadioElement;
         "sc-radio-group": HTMLScRadioGroupElement;
         "sc-search": HTMLScSearchElement;
@@ -1966,6 +2219,33 @@ declare global {
 declare namespace LocalJSX {
     type OneOf<K extends string, PropT, AttrT = PropT> = { [P in K]: PropT } & { [P in `attr:${K}`]?: never } | { [P in `attr:${K}`]: AttrT } & { [P in K]?: never };
 
+    /**
+     * The side navigation of the signed-in account area: Applications, Payments,
+     * Notifications, Profile and settings, then a divider and Sign out. It takes 3 of 12
+     * columns on wide screens and becomes a horizontal row of 44px items below 600px.
+     * Write the items as plain links (they are what shows before upgrade and without
+     * JavaScript):
+     *   <sc-account-nav>
+     *     <a href="/en/account/applications" data-icon="description">Applications</a>
+     *     <a href="/en/account/payments" data-icon="credit-card" aria-current="page">Payments</a>
+     *     <a href="/en/account/notifications" data-icon="notifications" data-count="3" data-count-label="3 unread">Notifications</a>
+     *     <a href="/en/account/profile" data-icon="person">Profile and settings</a>
+     *     <a href="/en/sign-out" data-icon="logout" data-sign-out>Sign out</a>
+     *   </sc-account-nav>
+     * - `aria-current="page"` marks the current item: a channel-subtle fill, a 3px channel bar
+     *   at inline-start, a channel icon and a Bold label (never colour alone).
+     * - `data-icon`: `description`, `credit-card`, `notifications`, `person`, `history`,
+     *   `home`, `apps` or `logout` (24px; `logout` mirrors in right-to-left).
+     * - `data-count`: a count badge, read with the visually hidden `data-count-label`
+     *   (default "{count} new" / "{count} جديدة").
+     * - `data-sign-out`: puts the item after the divider.
+     */
+    interface ScAccountNav {
+        /**
+          * Overrides the landmark name ("Account" / "الحساب").
+         */
+        "label"?: string;
+    }
     /**
      * The top bar of every mobile screen and desktop page: a translucent glass bar with a
      * start control (usually `sc-back-link`), the channel name, and an end control (usually
@@ -2000,22 +2280,64 @@ declare namespace LocalJSX {
         "sticky"?: boolean;
     }
     /**
-     * The "Back" control at the start of an app bar or above a question. A 44px glass pill with
-     * a back chevron that mirrors in right-to-left.
+     * The "Back" control at the start of an app bar or above a question: plain text with a
+     * 24px back arrow that mirrors in right-to-left, on a 44px target (v2 drops v1's glass pill).
      * Renders a native `<a>` when `href` is set (the previous page has a URL, which also works
      * without JavaScript), or a `<button type="button">` otherwise: listen for `click` and go
      * back in your router. It delegates focus to the inner control.
      */
     interface ScBackLink {
         /**
-          * Surface. - `glass` (default): translucent pill with an edge and shadow, for app bars and washes. - `plain`: no fill, for use inside a page body under a solid surface.
-          * @default 'glass'
+          * Deprecated in v2 and ignored: the back link has one plain appearance on every surface. Kept so v1 markup (`appearance="glass"` or `"plain"`) still renders.
          */
-        "appearance"?: 'glass' | 'plain';
+        "appearance"?: string;
         /**
           * The previous page. Without it the control is a `<button>`; handle its `click`.
          */
         "href"?: string;
+    }
+    /**
+     * The primary navigation of signed-in channel pages on phones and tablets: a flat bar
+     * docked to the bottom edge with three to five destinations, each an icon above a label.
+     * It shows below 1024px only (from 1024px the header navigation takes over), and `sc.css`
+     * reserves its height at the end of the page, so it never covers content or the focused
+     * element. When it is present, the utility bar folds into the footer.
+     * Write the destinations as plain links:
+     *   <sc-bottom-nav>
+     *     <a href="/en" data-icon="home" aria-current="page">Home</a>
+     *     <a href="/en/services" data-icon="apps">Services</a>
+     *     <a href="/en/account/activity" data-icon="history">Activity</a>
+     *   </sc-bottom-nav>
+     * The current destination (`aria-current="page"`) gets a 56 × 32 channel-container
+     * indicator behind its icon and a Bold label in the channel action colour. Items share the
+     * width equally, each at least 48px wide and 64px tall.
+     */
+    interface ScBottomNav {
+        /**
+          * Overrides the landmark name ("Main" / "رئيسية").
+         */
+        "label"?: string;
+    }
+    /**
+     * Where this page sits in the channel's hierarchy, on pages outside a transaction (in the
+     * hero of inner pages, CHR-07). Never inside a journey: use `sc-back-link` there.
+     * Write the trail as plain children: a link for each ancestor, then the current page as
+     * plain text (a `<span>`). The last child is always the current page; it is not a link and
+     * carries `aria-current="page"`.
+     *   <sc-breadcrumbs>
+     *     <a href="/en">Home</a>
+     *     <a href="/en/vehicles">Vehicles</a>
+     *     <span>Renew your vehicle registration</span>
+     *   </sc-breadcrumbs>
+     * Renders `<nav aria-label="Breadcrumb">` with an ordered list in its shadow root. The
+     * chevrons between items mirror in right-to-left. Below 600px the trail collapses to one
+     * "Back to {parent}" link.
+     */
+    interface ScBreadcrumbs {
+        /**
+          * Overrides the landmark name ("Breadcrumb" / "مسار التنقل").
+         */
+        "label"?: string;
     }
     /**
      * Starts an action. Use a verb: "Continue", "Pay with Dubai Pay", "Save and finish later".
@@ -2136,9 +2458,11 @@ declare namespace LocalJSX {
     }
     /**
      * Points to another channel that also offers this service: "Also on Dubai Transport".
-     * The chip sets `data-channel` on itself, so it shows that channel's subtle and ink
-     * colours whatever channel the page is in. This is the one component allowed to name
-     * a channel. With `href` it is a link to the service on that channel.
+     * The chip sets `data-channel` on itself, so it shows that channel's colours whatever
+     * channel the page is in. This is the one component allowed to name a channel; other
+     * channels' colours appear only as attribution like this. With `href` it is a link to the
+     * service on that channel, with a 44px hit area that does not change the layout.
+     * Channel chips are never dismissable.
      */
     interface ScChannelChip {
         /**
@@ -2153,6 +2477,11 @@ declare namespace LocalJSX {
           * Overrides the text (default "Also on {channel}" / "متوفر أيضًا في {channel}" from strings).
          */
         "label"?: string;
+        /**
+          * - `subtle` (default): the channel's subtle tint, for white cards. - `outlined`: a white chip with a 1px channel outline and a Bold label, for chips that   sit on a channel tint (life-event rows, "On Dubai Transport").
+          * @default 'subtle'
+         */
+        "variant"?: ChannelChipVariant;
     }
     /**
      * The top wash of a channel page: a gradient from the channel's wash-start to wash-end
@@ -2565,19 +2894,23 @@ declare namespace LocalJSX {
     /**
      * Switches to the same page in the other language. The label is always the other
      * language's own name, "العربية" on an English page and "English" on an Arabic page,
-     * marked with its own `lang` and direction so screen readers pronounce it correctly.
+     * marked with its own `lang` and direction so screen readers pronounce it correctly, and
+     * set in its own script's type role (an Arabic name at the Arabic size on an English page).
      * Renders an `<a href hreflang lang>` to the same page in the other language (LANG-05: the
      * switch is a link). It fires `scSwitch` on every activation; a single-page app calls
      * `preventDefault()` on it and switches in place, and the link still works without script.
+     * The language name is kept as one light-DOM `<span lang>` child that the component writes
+     * itself and shows through its slot: the type roles switch by `lang` in the document, which
+     * a span inside the shadow root could not reach. Don't add or remove children yourself.
      * Without `href` it falls back to a `<button lang>`. That mode is deprecated and will be
-     * removed in the next major version: always set `href`.
+     * removed: always set `href`.
      */
     interface ScLanguageSwitch {
         /**
-          * Surface. - `glass` (default): a 44px translucent pill, for mobile app bars. - `plain`: no fill, for desktop headers.
-          * @default 'glass'
+          * Where the switch sits. - `inline` (default): the app bar of a transaction. An underlined text link in the   channel action colour, label-medium. - `header`: the channel-site header. A globe icon and the name in `on-surface`,   label-large Medium, underlined on hover.  The v1 values still work: `glass` is `inline` and `plain` is `header`.
+          * @default 'inline'
          */
-        "appearance"?: 'glass' | 'plain';
+        "appearance"?: LanguageSwitchAppearance | 'glass' | 'plain';
         /**
           * The same page in the other language. Sets `hreflang` to that language. Always set it: without it the switch renders a button, which is deprecated.
          */
@@ -2589,13 +2922,17 @@ declare namespace LocalJSX {
     }
     /**
      * Goes somewhere. Use it for navigation; use `sc-button` for actions.
-     * Renders a native `<a>` inside its shadow root and delegates focus to it.
-     * - Inline (default): sits inside running text, takes the surrounding type, underlined in
-     *   the channel action colour, with a visited colour.
-     * - `standalone`: a link on its own line ("View all services") with an end chevron that
-     *   mirrors in right-to-left, and a 44px target.
+     * v2 keeps a shadow root (architecture §3.1) with a native `<a>` inside and delegates focus
+     * to it. For links inside running text prefer the CSS-only `.sc-link` class on a native
+     * `<a>` (decision A4), which keeps text selection and find-in-page working across the link.
+     * - Inline (default): takes the surrounding type, underlined 1px at 4px (5px in Arabic) in
+     *   the channel action colour; 2px on hover. Visited links are not styled differently (D8).
+     * - `standalone`: a link on its own line ("All 412 services"): label-large Bold, an end
+     *   arrow that mirrors in right-to-left, and a 44px target.
      * - `external`: opens in a new tab, adds an icon and the visually hidden
      *   "(opens in new tab)" in the page language.
+     * The colour is `--sc-color-channel-action` unless `--sc-link-color` is set on an ancestor
+     * (the footer and the error summary set it to `on-surface` and `error`).
      */
     interface ScLink {
         /**
@@ -2620,7 +2957,7 @@ declare namespace LocalJSX {
          */
         "hreflang"?: string;
         /**
-          * A link on its own (not inside a sentence): adds an end chevron and a 44px target.
+          * A link on its own (not inside a sentence): label-large Bold, an end arrow and a 44px target.
           * @default false
          */
         "standalone"?: boolean;
@@ -2654,7 +2991,7 @@ declare namespace LocalJSX {
         /**
           * The channel this page belongs to. Sets `data-channel` on the page root.
          */
-        "channel"?: Channel;
+        "channel"?: Channel1;
         /**
           * The id of `<main>`, the skip link's target.
           * @default 'main-content'
@@ -2665,6 +3002,54 @@ declare namespace LocalJSX {
           * @default false
          */
         "syncDocument"?: boolean;
+    }
+    /**
+     * Moves between the pages of a long list: search results, payments, fines. Inside
+     * `sc-table`, put it in the table's `footer` slot.
+     * Renders, in its shadow root, an optional results count ("Showing 1–20 of 1,284 fines";
+     * in Arabic "عرض 1 إلى 20 من 1,284 مخالفة", with a word for the range, never a dash), then
+     * `<nav aria-label="Pagination">` with Previous, the page numbers and Next. Previous is
+     * left out on the first page and Next on the last (not disabled). The current page carries
+     * `aria-current="page"`. Below 600px the numbers give way to "Page 2 of 13".
+     * Pages are links when `href-template` is set ("?page={page}"), so the list works without
+     * JavaScript; otherwise they are buttons. Every activation fires `scPageChange`; call
+     * `preventDefault()` on it to stay on the page and load the new page yourself.
+     */
+    interface ScPagination {
+        /**
+          * The URL of a page, with `{page}` where its number goes: `"?page={page}"`. Without it the pages are buttons and you handle `scPageChange`.
+         */
+        "hrefTemplate"?: string;
+        /**
+          * What is being counted, as a plural template in the page language: `"fine|fines"` in English, the six Arabic forms `"zero|one|two|few|many|other"` in Arabic (`"مخالفة|مخالفة|مخالفتين|مخالفات|مخالفة|مخالفة"`). Defaults to results / نتيجة.
+         */
+        "itemLabel"?: string;
+        /**
+          * Overrides the landmark name ("Pagination" / "ترقيم الصفحات").
+         */
+        "label"?: string;
+        /**
+          * Fires when a page is chosen. Cancelable: `preventDefault()` stops a link from navigating.
+         */
+        "onScPageChange"?: (event: ScPaginationCustomEvent<PaginationChangeDetail>) => void;
+        /**
+          * The current page, from 1.
+          * @default 1
+         */
+        "page"?: number;
+        /**
+          * Items per page, for the results count and `total-pages`.
+          * @default 20
+         */
+        "pageSize"?: number;
+        /**
+          * The number of items across every page. Shows the results count when set.
+         */
+        "totalItems"?: number;
+        /**
+          * The number of pages. Leave it out to work it out from `total-items` and `page-size`.
+         */
+        "totalPages"?: number;
     }
     /**
      * One option in an `sc-radio-group`. Its content is the option's label.
@@ -2893,7 +3278,8 @@ declare namespace LocalJSX {
      * keyboard focus, then shown at the top start corner. Activating it moves focus to the
      * target (adding `tabindex="-1"` for the moment it's needed), so the next Tab continues
      * from the main content in every browser.
-     * Put it first inside `<body>`, before `sc-app-bar`.
+     * Put it first inside `<body>`, before `sc-app-bar` or `sc-site-header`. v2 shows it as a
+     * 48px `inverse-surface` block, so it stands out over any hero or announcement colour.
      */
     interface ScSkipLink {
         /**
@@ -3268,6 +3654,9 @@ declare namespace LocalJSX {
         "value"?: string;
     }
 
+    interface ScAccountNavAttributes {
+        "label": string;
+    }
     interface ScAppBarAttributes {
         "sticky": boolean;
         "align": 'center' | 'start';
@@ -3276,7 +3665,13 @@ declare namespace LocalJSX {
     }
     interface ScBackLinkAttributes {
         "href": string;
-        "appearance": 'glass' | 'plain';
+        "appearance": string;
+    }
+    interface ScBottomNavAttributes {
+        "label": string;
+    }
+    interface ScBreadcrumbsAttributes {
+        "label": string;
     }
     interface ScButtonAttributes {
         "variant": ButtonVariant;
@@ -3308,6 +3703,7 @@ declare namespace LocalJSX {
         "channel": Channel;
         "href": string;
         "label": string;
+        "variant": ChannelChipVariant;
     }
     interface ScCheckboxAttributes {
         "name": string;
@@ -3386,7 +3782,7 @@ declare namespace LocalJSX {
     }
     interface ScLanguageSwitchAttributes {
         "href": string;
-        "appearance": 'glass' | 'plain';
+        "appearance": LanguageSwitchAppearance | 'glass' | 'plain';
     }
     interface ScLinkAttributes {
         "href": string;
@@ -3400,6 +3796,15 @@ declare namespace LocalJSX {
         "channel": Channel;
         "mainId": string;
         "syncDocument": boolean;
+    }
+    interface ScPaginationAttributes {
+        "page": number;
+        "totalPages": number;
+        "totalItems": number;
+        "pageSize": number;
+        "hrefTemplate": string;
+        "itemLabel": string;
+        "label": string;
     }
     interface ScRadioAttributes {
         "value": string;
@@ -3521,8 +3926,11 @@ declare namespace LocalJSX {
     }
 
     interface IntrinsicElements {
+        "sc-account-nav": Omit<ScAccountNav, keyof ScAccountNavAttributes> & { [K in keyof ScAccountNav & keyof ScAccountNavAttributes]?: ScAccountNav[K] } & { [K in keyof ScAccountNav & keyof ScAccountNavAttributes as `attr:${K}`]?: ScAccountNavAttributes[K] } & { [K in keyof ScAccountNav & keyof ScAccountNavAttributes as `prop:${K}`]?: ScAccountNav[K] };
         "sc-app-bar": Omit<ScAppBar, keyof ScAppBarAttributes> & { [K in keyof ScAppBar & keyof ScAppBarAttributes]?: ScAppBar[K] } & { [K in keyof ScAppBar & keyof ScAppBarAttributes as `attr:${K}`]?: ScAppBarAttributes[K] } & { [K in keyof ScAppBar & keyof ScAppBarAttributes as `prop:${K}`]?: ScAppBar[K] };
         "sc-back-link": Omit<ScBackLink, keyof ScBackLinkAttributes> & { [K in keyof ScBackLink & keyof ScBackLinkAttributes]?: ScBackLink[K] } & { [K in keyof ScBackLink & keyof ScBackLinkAttributes as `attr:${K}`]?: ScBackLinkAttributes[K] } & { [K in keyof ScBackLink & keyof ScBackLinkAttributes as `prop:${K}`]?: ScBackLink[K] };
+        "sc-bottom-nav": Omit<ScBottomNav, keyof ScBottomNavAttributes> & { [K in keyof ScBottomNav & keyof ScBottomNavAttributes]?: ScBottomNav[K] } & { [K in keyof ScBottomNav & keyof ScBottomNavAttributes as `attr:${K}`]?: ScBottomNavAttributes[K] } & { [K in keyof ScBottomNav & keyof ScBottomNavAttributes as `prop:${K}`]?: ScBottomNav[K] };
+        "sc-breadcrumbs": Omit<ScBreadcrumbs, keyof ScBreadcrumbsAttributes> & { [K in keyof ScBreadcrumbs & keyof ScBreadcrumbsAttributes]?: ScBreadcrumbs[K] } & { [K in keyof ScBreadcrumbs & keyof ScBreadcrumbsAttributes as `attr:${K}`]?: ScBreadcrumbsAttributes[K] } & { [K in keyof ScBreadcrumbs & keyof ScBreadcrumbsAttributes as `prop:${K}`]?: ScBreadcrumbs[K] };
         "sc-button": Omit<ScButton, keyof ScButtonAttributes> & { [K in keyof ScButton & keyof ScButtonAttributes]?: ScButton[K] } & { [K in keyof ScButton & keyof ScButtonAttributes as `attr:${K}`]?: ScButtonAttributes[K] } & { [K in keyof ScButton & keyof ScButtonAttributes as `prop:${K}`]?: ScButton[K] };
         "sc-callout": Omit<ScCallout, keyof ScCalloutAttributes> & { [K in keyof ScCallout & keyof ScCalloutAttributes]?: ScCallout[K] } & { [K in keyof ScCallout & keyof ScCalloutAttributes as `attr:${K}`]?: ScCalloutAttributes[K] } & { [K in keyof ScCallout & keyof ScCalloutAttributes as `prop:${K}`]?: ScCallout[K] };
         "sc-card": Omit<ScCard, keyof ScCardAttributes> & { [K in keyof ScCard & keyof ScCardAttributes]?: ScCard[K] } & { [K in keyof ScCard & keyof ScCardAttributes as `attr:${K}`]?: ScCardAttributes[K] } & { [K in keyof ScCard & keyof ScCardAttributes as `prop:${K}`]?: ScCard[K] };
@@ -3540,6 +3948,7 @@ declare namespace LocalJSX {
         "sc-link": Omit<ScLink, keyof ScLinkAttributes> & { [K in keyof ScLink & keyof ScLinkAttributes]?: ScLink[K] } & { [K in keyof ScLink & keyof ScLinkAttributes as `attr:${K}`]?: ScLinkAttributes[K] } & { [K in keyof ScLink & keyof ScLinkAttributes as `prop:${K}`]?: ScLink[K] };
         "sc-ltr": ScLtr;
         "sc-page": Omit<ScPage, keyof ScPageAttributes> & { [K in keyof ScPage & keyof ScPageAttributes]?: ScPage[K] } & { [K in keyof ScPage & keyof ScPageAttributes as `attr:${K}`]?: ScPageAttributes[K] } & { [K in keyof ScPage & keyof ScPageAttributes as `prop:${K}`]?: ScPage[K] };
+        "sc-pagination": Omit<ScPagination, keyof ScPaginationAttributes> & { [K in keyof ScPagination & keyof ScPaginationAttributes]?: ScPagination[K] } & { [K in keyof ScPagination & keyof ScPaginationAttributes as `attr:${K}`]?: ScPaginationAttributes[K] } & { [K in keyof ScPagination & keyof ScPaginationAttributes as `prop:${K}`]?: ScPagination[K] };
         "sc-radio": Omit<ScRadio, keyof ScRadioAttributes> & { [K in keyof ScRadio & keyof ScRadioAttributes]?: ScRadio[K] } & { [K in keyof ScRadio & keyof ScRadioAttributes as `attr:${K}`]?: ScRadioAttributes[K] } & { [K in keyof ScRadio & keyof ScRadioAttributes as `prop:${K}`]?: ScRadio[K] } & OneOf<"value", ScRadio["value"], ScRadioAttributes["value"]>;
         "sc-radio-group": Omit<ScRadioGroup, keyof ScRadioGroupAttributes> & { [K in keyof ScRadioGroup & keyof ScRadioGroupAttributes]?: ScRadioGroup[K] } & { [K in keyof ScRadioGroup & keyof ScRadioGroupAttributes as `attr:${K}`]?: ScRadioGroupAttributes[K] } & { [K in keyof ScRadioGroup & keyof ScRadioGroupAttributes as `prop:${K}`]?: ScRadioGroup[K] };
         "sc-search": Omit<ScSearch, keyof ScSearchAttributes> & { [K in keyof ScSearch & keyof ScSearchAttributes]?: ScSearch[K] } & { [K in keyof ScSearch & keyof ScSearchAttributes as `attr:${K}`]?: ScSearchAttributes[K] } & { [K in keyof ScSearch & keyof ScSearchAttributes as `prop:${K}`]?: ScSearch[K] };
@@ -3561,6 +3970,28 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             /**
+             * The side navigation of the signed-in account area: Applications, Payments,
+             * Notifications, Profile and settings, then a divider and Sign out. It takes 3 of 12
+             * columns on wide screens and becomes a horizontal row of 44px items below 600px.
+             * Write the items as plain links (they are what shows before upgrade and without
+             * JavaScript):
+             *   <sc-account-nav>
+             *     <a href="/en/account/applications" data-icon="description">Applications</a>
+             *     <a href="/en/account/payments" data-icon="credit-card" aria-current="page">Payments</a>
+             *     <a href="/en/account/notifications" data-icon="notifications" data-count="3" data-count-label="3 unread">Notifications</a>
+             *     <a href="/en/account/profile" data-icon="person">Profile and settings</a>
+             *     <a href="/en/sign-out" data-icon="logout" data-sign-out>Sign out</a>
+             *   </sc-account-nav>
+             * - `aria-current="page"` marks the current item: a channel-subtle fill, a 3px channel bar
+             *   at inline-start, a channel icon and a Bold label (never colour alone).
+             * - `data-icon`: `description`, `credit-card`, `notifications`, `person`, `history`,
+             *   `home`, `apps` or `logout` (24px; `logout` mirrors in right-to-left).
+             * - `data-count`: a count badge, read with the visually hidden `data-count-label`
+             *   (default "{count} new" / "{count} جديدة").
+             * - `data-sign-out`: puts the item after the divider.
+             */
+            "sc-account-nav": LocalJSX.IntrinsicElements["sc-account-nav"] & JSXBase.HTMLAttributes<HTMLScAccountNavElement>;
+            /**
              * The top bar of every mobile screen and desktop page: a translucent glass bar with a
              * start control (usually `sc-back-link`), the channel name, and an end control (usually
              * `sc-language-switch`).
@@ -3573,13 +4004,46 @@ declare module "@stencil/core" {
              */
             "sc-app-bar": LocalJSX.IntrinsicElements["sc-app-bar"] & JSXBase.HTMLAttributes<HTMLScAppBarElement>;
             /**
-             * The "Back" control at the start of an app bar or above a question. A 44px glass pill with
-             * a back chevron that mirrors in right-to-left.
+             * The "Back" control at the start of an app bar or above a question: plain text with a
+             * 24px back arrow that mirrors in right-to-left, on a 44px target (v2 drops v1's glass pill).
              * Renders a native `<a>` when `href` is set (the previous page has a URL, which also works
              * without JavaScript), or a `<button type="button">` otherwise: listen for `click` and go
              * back in your router. It delegates focus to the inner control.
              */
             "sc-back-link": LocalJSX.IntrinsicElements["sc-back-link"] & JSXBase.HTMLAttributes<HTMLScBackLinkElement>;
+            /**
+             * The primary navigation of signed-in channel pages on phones and tablets: a flat bar
+             * docked to the bottom edge with three to five destinations, each an icon above a label.
+             * It shows below 1024px only (from 1024px the header navigation takes over), and `sc.css`
+             * reserves its height at the end of the page, so it never covers content or the focused
+             * element. When it is present, the utility bar folds into the footer.
+             * Write the destinations as plain links:
+             *   <sc-bottom-nav>
+             *     <a href="/en" data-icon="home" aria-current="page">Home</a>
+             *     <a href="/en/services" data-icon="apps">Services</a>
+             *     <a href="/en/account/activity" data-icon="history">Activity</a>
+             *   </sc-bottom-nav>
+             * The current destination (`aria-current="page"`) gets a 56 × 32 channel-container
+             * indicator behind its icon and a Bold label in the channel action colour. Items share the
+             * width equally, each at least 48px wide and 64px tall.
+             */
+            "sc-bottom-nav": LocalJSX.IntrinsicElements["sc-bottom-nav"] & JSXBase.HTMLAttributes<HTMLScBottomNavElement>;
+            /**
+             * Where this page sits in the channel's hierarchy, on pages outside a transaction (in the
+             * hero of inner pages, CHR-07). Never inside a journey: use `sc-back-link` there.
+             * Write the trail as plain children: a link for each ancestor, then the current page as
+             * plain text (a `<span>`). The last child is always the current page; it is not a link and
+             * carries `aria-current="page"`.
+             *   <sc-breadcrumbs>
+             *     <a href="/en">Home</a>
+             *     <a href="/en/vehicles">Vehicles</a>
+             *     <span>Renew your vehicle registration</span>
+             *   </sc-breadcrumbs>
+             * Renders `<nav aria-label="Breadcrumb">` with an ordered list in its shadow root. The
+             * chevrons between items mirror in right-to-left. Below 600px the trail collapses to one
+             * "Back to {parent}" link.
+             */
+            "sc-breadcrumbs": LocalJSX.IntrinsicElements["sc-breadcrumbs"] & JSXBase.HTMLAttributes<HTMLScBreadcrumbsElement>;
             /**
              * Starts an action. Use a verb: "Continue", "Pay with Dubai Pay", "Save and finish later".
              * v2 renders a native `<button>` (or an `<a>` when `href` is set) in light DOM (Stencil
@@ -3608,9 +4072,11 @@ declare module "@stencil/core" {
             "sc-card": LocalJSX.IntrinsicElements["sc-card"] & JSXBase.HTMLAttributes<HTMLScCardElement>;
             /**
              * Points to another channel that also offers this service: "Also on Dubai Transport".
-             * The chip sets `data-channel` on itself, so it shows that channel's subtle and ink
-             * colours whatever channel the page is in. This is the one component allowed to name
-             * a channel. With `href` it is a link to the service on that channel.
+             * The chip sets `data-channel` on itself, so it shows that channel's colours whatever
+             * channel the page is in. This is the one component allowed to name a channel; other
+             * channels' colours appear only as attribution like this. With `href` it is a link to the
+             * service on that channel, with a 44px hit area that does not change the layout.
+             * Channel chips are never dismissable.
              */
             "sc-channel-chip": LocalJSX.IntrinsicElements["sc-channel-chip"] & JSXBase.HTMLAttributes<HTMLScChannelChipElement>;
             /**
@@ -3708,23 +4174,31 @@ declare module "@stencil/core" {
             /**
              * Switches to the same page in the other language. The label is always the other
              * language's own name, "العربية" on an English page and "English" on an Arabic page,
-             * marked with its own `lang` and direction so screen readers pronounce it correctly.
+             * marked with its own `lang` and direction so screen readers pronounce it correctly, and
+             * set in its own script's type role (an Arabic name at the Arabic size on an English page).
              * Renders an `<a href hreflang lang>` to the same page in the other language (LANG-05: the
              * switch is a link). It fires `scSwitch` on every activation; a single-page app calls
              * `preventDefault()` on it and switches in place, and the link still works without script.
+             * The language name is kept as one light-DOM `<span lang>` child that the component writes
+             * itself and shows through its slot: the type roles switch by `lang` in the document, which
+             * a span inside the shadow root could not reach. Don't add or remove children yourself.
              * Without `href` it falls back to a `<button lang>`. That mode is deprecated and will be
-             * removed in the next major version: always set `href`.
+             * removed: always set `href`.
              */
             "sc-language-switch": LocalJSX.IntrinsicElements["sc-language-switch"] & JSXBase.HTMLAttributes<HTMLScLanguageSwitchElement>;
             /**
              * Goes somewhere. Use it for navigation; use `sc-button` for actions.
-             * Renders a native `<a>` inside its shadow root and delegates focus to it.
-             * - Inline (default): sits inside running text, takes the surrounding type, underlined in
-             *   the channel action colour, with a visited colour.
-             * - `standalone`: a link on its own line ("View all services") with an end chevron that
-             *   mirrors in right-to-left, and a 44px target.
+             * v2 keeps a shadow root (architecture §3.1) with a native `<a>` inside and delegates focus
+             * to it. For links inside running text prefer the CSS-only `.sc-link` class on a native
+             * `<a>` (decision A4), which keeps text selection and find-in-page working across the link.
+             * - Inline (default): takes the surrounding type, underlined 1px at 4px (5px in Arabic) in
+             *   the channel action colour; 2px on hover. Visited links are not styled differently (D8).
+             * - `standalone`: a link on its own line ("All 412 services"): label-large Bold, an end
+             *   arrow that mirrors in right-to-left, and a 44px target.
              * - `external`: opens in a new tab, adds an icon and the visually hidden
              *   "(opens in new tab)" in the page language.
+             * The colour is `--sc-color-channel-action` unless `--sc-link-color` is set on an ancestor
+             * (the footer and the error summary set it to `on-surface` and `error`).
              */
             "sc-link": LocalJSX.IntrinsicElements["sc-link"] & JSXBase.HTMLAttributes<HTMLScLinkElement>;
             /**
@@ -3752,6 +4226,19 @@ declare module "@stencil/core" {
              *   (WCAG 2.4.11). It follows the bar's size and removes the padding when no longer needed.
              */
             "sc-page": LocalJSX.IntrinsicElements["sc-page"] & JSXBase.HTMLAttributes<HTMLScPageElement>;
+            /**
+             * Moves between the pages of a long list: search results, payments, fines. Inside
+             * `sc-table`, put it in the table's `footer` slot.
+             * Renders, in its shadow root, an optional results count ("Showing 1–20 of 1,284 fines";
+             * in Arabic "عرض 1 إلى 20 من 1,284 مخالفة", with a word for the range, never a dash), then
+             * `<nav aria-label="Pagination">` with Previous, the page numbers and Next. Previous is
+             * left out on the first page and Next on the last (not disabled). The current page carries
+             * `aria-current="page"`. Below 600px the numbers give way to "Page 2 of 13".
+             * Pages are links when `href-template` is set ("?page={page}"), so the list works without
+             * JavaScript; otherwise they are buttons. Every activation fires `scPageChange`; call
+             * `preventDefault()` on it to stay on the page and load the new page yourself.
+             */
+            "sc-pagination": LocalJSX.IntrinsicElements["sc-pagination"] & JSXBase.HTMLAttributes<HTMLScPaginationElement>;
             /**
              * One option in an `sc-radio-group`. Its content is the option's label.
              * `sc-radio` holds data and label content only. The parent `sc-radio-group` renders the
@@ -3805,7 +4292,8 @@ declare module "@stencil/core" {
              * keyboard focus, then shown at the top start corner. Activating it moves focus to the
              * target (adding `tabindex="-1"` for the moment it's needed), so the next Tab continues
              * from the main content in every browser.
-             * Put it first inside `<body>`, before `sc-app-bar`.
+             * Put it first inside `<body>`, before `sc-app-bar` or `sc-site-header`. v2 shows it as a
+             * 48px `inverse-surface` block, so it stands out over any hero or announcement colour.
              */
             "sc-skip-link": LocalJSX.IntrinsicElements["sc-skip-link"] & JSXBase.HTMLAttributes<HTMLScSkipLinkElement>;
             /**

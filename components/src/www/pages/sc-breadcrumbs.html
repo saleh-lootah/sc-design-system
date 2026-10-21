@@ -1,0 +1,39 @@
+<h1 class="pg-title sc-type-headline-large" data-ar="مسار التنقل">Breadcrumbs</h1>
+<p class="pg-lede sc-type-body-large" data-ar="موقع الصفحة في هيكل القناة، في صفحات القناة خارج المعاملات. الصفحة الحالية نص وليست رابطًا.">
+  Where the page sits in the channel's hierarchy, on channel pages outside a transaction. The current page is text, not a link.
+</p>
+
+<section class="pg-section" aria-labelledby="bc-demo">
+  <h2 id="bc-demo" class="sc-type-headline-small" data-ar="في البطل">In a hero</h2>
+  <div class="pg-card" style="background: var(--sc-color-channel-subtle)">
+    <sc-breadcrumbs>
+      <a href="#home" data-ar="الرئيسية">Home</a>
+      <a href="#vehicles" data-ar="المركبات">Vehicles</a>
+      <span data-ar="تجديد ترخيص المركبة">Renew your vehicle registration</span>
+    </sc-breadcrumbs>
+    <p class="pg-note" data-ar="أقل من 600 بكسل: رابط واحد «رجوع إلى المركبات».">Below 600px it collapses to one "Back to Vehicles" link.</p>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="bc-arabic">
+  <h2 id="bc-arabic" class="sc-type-headline-small" data-ar="بالعربية">In Arabic</h2>
+  <div class="pg-card" lang="ar" dir="rtl">
+    <sc-breadcrumbs>
+      <a href="#home">الرئيسية</a>
+      <a href="#fines">المخالفات المرورية</a>
+      <span>دفع مخالفة</span>
+    </sc-breadcrumbs>
+    <p class="pg-note" lang="en" dir="ltr">Always lang="ar" dir="rtl": the trail runs from the right and the chevrons point left.</p>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="bc-use">
+  <h2 id="bc-use" class="sc-type-headline-small" data-ar="الاستخدام">Usage</h2>
+  <div class="pg-card">
+    <code class="pg-code" dir="ltr" style="display: block; text-align: start; white-space: pre">&lt;sc-breadcrumbs&gt;
+  &lt;a href="/en"&gt;Home&lt;/a&gt;
+  &lt;a href="/en/vehicles"&gt;Vehicles&lt;/a&gt;
+  &lt;span&gt;Renew your vehicle registration&lt;/span&gt;
+&lt;/sc-breadcrumbs&gt;</code>
+  </div>
+</section>

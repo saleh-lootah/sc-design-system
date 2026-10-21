@@ -141,3 +141,17 @@ The first 24 components, in four families, plus the components added after Phase
 - States: `loading` (5 skeleton rows), `empty` slot (header hidden), `filtered` (no results, header kept), `error` slot (an `sc-callout tone="error"`), `density="compact"` (44px rows).
 - Below 600px: `responsive="stack"` (rows become cards) or `"scroll"` (a named scroll region with a sticky row header and an edge shadow).
 - Mirrors fully in Arabic through logical properties; digits stay Latin.
+
+---
+
+## v2 · Actions and navigation (C2, Wave 2b)
+
+The entries above describe v1. For `sc-link`, `sc-back-link`, `sc-skip-link`, `sc-language-switch` and `sc-channel-chip`, the v2 specs in `specs/<tag>.md` replace them. New in this family:
+
+**Breadcrumbs** (`sc-breadcrumbs`): where the page sits in the channel's hierarchy, outside transactions. Plain child links, then the current page as text (never a link, `aria-current="page"`). Chevrons mirror in RTL; below 600px one "Back to {parent}" link. Spec: `specs/sc-breadcrumbs.md`.
+
+**Pagination** (`sc-pagination`): pages of a long list. `page`, `total-pages` or `total-items` with `page-size`, `href-template`, `item-label` (plural template); event `scPageChange`. "Showing 1–20 of 1,284 fines" / "عرض 1 إلى 20 من 1,284 مخالفة". Previous and Next mirror. Spec: `specs/sc-pagination.md`.
+
+**AccountNav** (`sc-account-nav`): the signed-in side navigation, with icons, count badges, the current item and Sign out after a divider. Spec: `specs/sc-account-nav.md`.
+
+**BottomNav** (`sc-bottom-nav`): the signed-in primary navigation below 1024px, docked flat to the bottom edge, 44px+ targets, current indicator in `channel-container`. Spec: `specs/sc-bottom-nav.md`.

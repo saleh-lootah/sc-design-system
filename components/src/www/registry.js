@@ -39,3 +39,7 @@ page('Form fields', 'sc-checkbox-group', 'Checkbox group');
 page('Form fields', 'sc-date-input', 'Date input');
 page('Content and layout', 'sc-table', 'Table');
 page('Form fields', 'sc-date-range', 'Date range');
+page('Actions and navigation', 'sc-breadcrumbs', 'Breadcrumbs');
+page('Actions and navigation', 'sc-pagination', 'Pagination');
+page('Actions and navigation', 'sc-account-nav', 'Account navigation');
+page('Actions and navigation', 'sc-bottom-nav', 'Bottom navigation');

@@ -18,3 +18,49 @@ sc-button:not(:defined):is([variant='secondary'], [variant='tertiary'], [size='m
 sc-button:not(:defined)[full-width] {
   display: block;
 }
+
+/* C2 navigation. Shadow components whose items are plain child links: before upgrade the
+   links show as a simple list at about their final size. */
+sc-breadcrumbs:not(:defined) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 var(--sc-space-32);
+  min-block-size: var(--sc-size-target-min);
+  font: var(--sc-type-label-medium);
+  letter-spacing: var(--sc-type-label-medium-tracking);
+}
+sc-pagination:not(:defined) {
+  display: block;
+  min-block-size: var(--sc-size-target-min);
+}
+sc-pagination:not(:defined)[total-items] {
+  min-block-size: calc(var(--sc-size-target-min) + var(--sc-space-40));
+}
+sc-account-nav:not(:defined) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-4);
+}
+sc-account-nav:not(:defined) > * {
+  display: flex;
+  align-items: center;
+  min-block-size: var(--sc-size-control-secondary);
+  padding-inline: calc(var(--sc-space-12) + var(--sc-size-icon-l) + var(--sc-space-12));
+  font: var(--sc-type-label-large);
+  letter-spacing: var(--sc-type-label-large-tracking);
+}
+/* The bottom bar is fixed, so it takes no space: hide it until it can draw itself. */
+sc-bottom-nav:not(:defined) {
+  display: none;
+}
+/* The page reserves the bottom bar's height below 1024px, so it never covers content or the
+   focused element (WCAG 2.4.11). A long Arabic label that wraps grows the bar by about 8px. */
+@media (width < 1024px) {
+  html:has(sc-bottom-nav:not([hidden])) {
+    scroll-padding-block-end: calc(var(--sc-space-64) + var(--sc-space-8) + env(safe-area-inset-bottom, 0px));
+  }
+  body:has(sc-bottom-nav:not([hidden])) {
+    padding-block-end: calc(var(--sc-space-64) + var(--sc-space-8) + env(safe-area-inset-bottom, 0px));
+  }
+}

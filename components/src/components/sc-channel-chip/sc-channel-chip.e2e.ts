@@ -1,6 +1,6 @@
 import { E2EPage } from '@stencil/core/testing';
-import { expectNoAxeViolations } from '../../test/axe';
-import { contexts, newScPage, setPageContext } from '../../test/page';
+import { describeAxe } from '../../test/axe';
+import { newScPage, setPageContext } from '../../test/page';
 
 const CHANNELS = ['now', 'transport', 'visit', 'justice', 'build', 'invest', 'trade'] as const;
 
@@ -17,9 +17,28 @@ function chip(page: E2EPage, selector: string, read: string) {
   );
 }
 
-const ALL = `<main><h1>Renew vehicle registration</h1>
+/** A colour token as the browser resolves it inside `sel` (so data-channel applies). */
+const token = (page: E2EPage, sel: string, name: string, prop = 'color') =>
+  page.evaluate(
+    (s: string, n: string, p: string) => {
+      const probe = document.createElement('i');
+      probe.style.setProperty(p === 'color' ? 'color' : 'background-color', `var(${n})`);
+      document.querySelector(s)!.append(probe);
+      const v = getComputedStyle(probe)[p === 'color' ? 'color' : 'backgroundColor'];
+      probe.remove();
+      return v;
+    },
+    sel,
+    name,
+    prop,
+  );
+
+export const ALL = `<main><h1>Renew vehicle registration</h1>
   ${CHANNELS.map((c) => `<sc-channel-chip id="s-${c}" channel="${c}"></sc-channel-chip>`).join('')}
   ${CHANNELS.map((c) => `<sc-channel-chip id="l-${c}" channel="${c}" href="#${c}"></sc-channel-chip>`).join('')}
+  <div style="background: var(--sc-color-channel-subtle); padding: 8px" data-channel="visit">
+    ${CHANNELS.map((c) => `<sc-channel-chip id="o-${c}" channel="${c}" variant="outlined" href="#${c}"></sc-channel-chip>`).join('')}
+  </div>
 </main>`;
 
 describe('sc-channel-chip (e2e)', () => {
@@ -31,6 +50,27 @@ describe('sc-channel-chip (e2e)', () => {
     await setPageContext(page, { channel: 'trade' });
     for (const c of CHANNELS) expect(await chip(page, `#s-${c}`, 'getComputedStyle(chip).backgroundColor')).toBe(fills.get(c));
     expect(await page.$eval('#s-visit', (el) => el.getAttribute('data-channel'))).toBe('visit');
+  });
+
+  it('is 32px tall with 6px corners, label-small, and reads the named channel roles', async () => {
+    const page = await newScPage(ALL);
+    expect(await chip(page, '#s-transport', 'Math.round(chip.getBoundingClientRect().height)')).toBe(32);
+    expect(await chip(page, '#s-transport', 'getComputedStyle(chip).borderTopLeftRadius')).toBe('6px');
+    expect(await chip(page, '#s-transport', 'getComputedStyle(chip).fontSize')).toBe('14px');
+    expect(await chip(page, '#s-transport', 'getComputedStyle(chip).fontWeight')).toBe('500');
+    expect(await chip(page, '#s-transport', 'getComputedStyle(chip).backgroundColor')).toBe(await token(page, '#s-transport', '--sc-color-channel-subtle', 'bg'));
+    expect(await chip(page, '#s-transport', 'getComputedStyle(chip).color')).toBe(await token(page, '#s-transport', '--sc-color-channel-action'));
+    expect(await chip(page, '#s-transport', 'getComputedStyle(chip.querySelector(".dot")).backgroundColor')).toBe(await token(page, '#s-transport', '--sc-color-channel-action', 'bg'));
+    await setPageContext(page, { lang: 'ar' });
+    expect(await chip(page, '#s-transport', 'getComputedStyle(chip).fontSize')).toBe('16px');
+  });
+
+  it('outlined: surface fill, a 1px channel outline and a Bold label', async () => {
+    const page = await newScPage(ALL);
+    expect(await chip(page, '#o-transport', 'getComputedStyle(chip).backgroundColor')).toBe(await token(page, '#o-transport', '--sc-color-surface', 'bg'));
+    expect(await chip(page, '#o-transport', 'getComputedStyle(chip).borderTopColor')).toBe(await token(page, '#o-transport', '--sc-color-channel-outline'));
+    expect(await chip(page, '#o-transport', 'getComputedStyle(chip).borderTopWidth')).toBe('1px');
+    expect(await chip(page, '#o-transport', 'getComputedStyle(chip).fontWeight')).toBe('700');
   });
 
   it('follows the theme', async () => {
@@ -68,11 +108,5 @@ describe('sc-channel-chip (e2e)', () => {
     expect(await chip(page, 'sc-channel-chip', 'getComputedStyle(chip.querySelector("svg")).transform')).toBe('matrix(-1, 0, 0, 1, 0, 0)');
   });
 
-  for (const ctx of contexts) {
-    it(`has no axe violations (${ctx.lang}, ${ctx.theme})`, async () => {
-      const page = await newScPage(ALL, ctx);
-      await page.keyboard.press('Tab');
-      await expectNoAxeViolations(page);
-    });
-  }
+  describeAxe('sc-channel-chip', ALL);
 });
