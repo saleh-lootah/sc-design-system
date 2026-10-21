@@ -1,6 +1,6 @@
 # sc-module-card
 
-A titled module on a signed-in home page ("At a glance"): an optional tinted icon, the title, a link at the end of the header, then the content. Specification: `specs/sc-module-card.md`.
+A titled module on a signed-in home page ("At a glance"): an optional tinted icon, the title, a link at the end of the header, then the content and an optional footer action. Specification: `specs/sc-module-card.md`; Paper board 09.09.
 
 ## Usage
 
@@ -9,6 +9,7 @@ A titled module on a signed-in home page ("At a glance"): an optional tinted ico
   <svg slot="icon" …></svg>
   <div><p>To pay</p><p class="sc-type-headline-medium"><sc-ltr>AED 600.00</sc-ltr></p></div>
   <p><sc-ltr>F-2026-118204</sc-ltr> · Speeding, 14 Oct 2026</p>
+  <sc-button slot="footer" variant="secondary" size="m" full-width href="/fines/pay">Pay all fines</sc-button>
 </sc-module-card>
 ```
 
@@ -39,11 +40,12 @@ of context.
 
 ## Slots
 
-| Slot       | Description                                                                                                                     |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------- |
-|            | The module content: rows, figures, a status tag, one action. With `divided`, the top-level children are separated by 1px rules. |
-| `"action"` | A custom header link, used instead of `action-href` and `action-text`.                                                          |
-| `"icon"`   | A decorative icon: an inline 24px `<svg>` in `currentColor`, in a 40px tile.                                                    |
+| Slot       | Description                                                                                                                                                 |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|            | The module content: rows, figures, a status tag, one action. With `divided`, the top-level children are separated by 1px rules.                             |
+| `"action"` | A custom header link, used instead of `action-href` and `action-text`.                                                                                      |
+| `"footer"` | One optional footer action, e.g. `<sc-button variant="secondary" size="m" full-width>` "Pay all fines". Pushed to the bottom of the card, below a 1px rule. |
+| `"icon"`   | A decorative icon: an inline 24px `<svg>` in `currentColor`, in a 40px tile.                                                                                |
 
 
 ## Shadow Parts
@@ -52,6 +54,7 @@ of context.
 | ---------- | ------------------------------------- |
 | `"body"`   | The content.                          |
 | `"card"`   | The surface.                          |
+| `"footer"` | The footer action area.               |
 | `"header"` | The header row.                       |
 | `"icon"`   | The 40px icon tile.                   |
 | `"link"`   | The header link (from `action-href`). |

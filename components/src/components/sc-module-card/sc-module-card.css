@@ -27,6 +27,8 @@
 
 .header {
   display: flex;
+  /* In a narrow card the link wraps below rather than breaking the title mid-word. */
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--sc-space-12);
 }
@@ -57,12 +59,13 @@
 .icon-tile--green { --_tile: var(--sc-color-tint-green); --_ink: var(--sc-color-on-tint-green); }
 
 .title {
-  flex: 1;
-  min-inline-size: 0;
+  /* Grows into the free space; its minimum is its longest word, so words never split. */
+  flex: 1 1 0;
+  max-inline-size: 100%;
   margin: 0;
   font: var(--sc-type-title-large);
   letter-spacing: var(--sc-type-title-large-tracking);
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 
 .action {
@@ -118,6 +121,14 @@
 :host([divided]) .body ::slotted(:nth-child(1 of :not([slot]))) {
   padding-block-start: 0;
   border-block-start: 0;
+}
+
+/* The optional footer action (board 09.09): pushed to the bottom so footers in a row line
+   up, below a 1px rule, 20 either side. */
+.footer {
+  margin-block-start: auto;
+  padding-block-start: var(--sc-space-20);
+  border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
 }
 
 .is-empty {
