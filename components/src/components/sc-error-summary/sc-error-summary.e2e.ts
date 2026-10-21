@@ -166,7 +166,7 @@ describe('sc-error-summary (e2e)', () => {
       const s = getComputedStyle(r.querySelector('[part=container]')!);
       const a = r.querySelector('ul a')!;
       const as = getComputedStyle(a);
-      return { bg: s.backgroundColor, border: s.borderTopColor, width: s.borderTopWidth, radius: s.borderTopLeftRadius, link: as.color, weight: as.fontWeight, h: a.getBoundingClientRect().height, role: r.querySelector('[part=container]')!.getAttribute('role') };
+      return { bg: s.backgroundColor, border: s.borderTopColor, width: s.borderTopWidth, radius: s.borderTopLeftRadius, pad: [s.paddingTop, s.paddingInlineStart], link: as.color, weight: as.fontWeight, size: as.fontSize, h: a.getBoundingClientRect().height, role: r.querySelector('[part=container]')!.getAttribute('role') };
     });
     expect(box.bg).toBe(await token('--sc-color-error-container'));
     expect(box.border).toBe(await token('--sc-color-error'));
@@ -174,6 +174,9 @@ describe('sc-error-summary (e2e)', () => {
     expect(box.radius).toBe('8px');
     expect(box.link).toBe(await token('--sc-color-error'));
     expect(box.weight).toBe('700');
+    // body-medium Bold (A16 and the board), padding 18 block and 16 inline.
+    expect(box.size).toBe('16px');
+    expect(box.pad).toEqual(['18px', '16px']);
     expect(box.h).toBeGreaterThanOrEqual(44);
     expect(box.role).toBe('group');
   });

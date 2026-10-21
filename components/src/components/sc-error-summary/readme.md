@@ -16,7 +16,7 @@ or from JavaScript: `summary.errors = [{ href: '#plate-code', text: 'Enter the p
 - CMP-05: when it first has errors it moves focus to itself (`tabindex="-1"`); it is a `role="group"` named by its heading, and it has **no `role="alert"`**, so screen readers don't read it twice. Use `no-autofocus` only if you move focus yourself (`setFocus()`).
 - The default heading is "There is a problem" / "توجد مشكلة" (W1). Start the page `<title>` with "Error: " / "خطأ: " while errors are shown.
 - Link each item to the field's `id`. v2 fields are light DOM, so the `id` can be the native control or the field host (its `focus()` reaches the control).
-- v2 look: `error-container` fill, a 2px `error` border, 8px corners; links in `error`, Bold, underlined, each at least 44 × 44.
+- v2 look: `error-container` fill, a 2px `error` border, 8px corners, padding 18 block and 16 inline; the heading `title-medium`; links `body-medium` Bold in `error`, underlined, each at least 44 × 44.
 
 Parts: `container`, `heading`, `list`.
 

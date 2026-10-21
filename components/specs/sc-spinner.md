@@ -13,8 +13,8 @@ A short inline wait. Inside a button use `sc-button loading`.
 | # | Part | Notes |
 | --- | --- | --- |
 | 1 | Region | `role="status"` (polite), holding the icon and the label. |
-| 2 | Icon (`icon`) | The shared `Spinner` icon (a faint track and an arc, 2px stroke) in `currentColor`. 20px (`size="m"`, default) or 24px (`size="l"`). Decorative. |
-| 3 | Label (`label`) | "Loading" / "جارٍ التحميل" or `label`. `body-medium`. Visually hidden unless `show-label`, or motion is reduced. |
+| 2 | Icon (`icon`) | The shared `Spinner` icon (a faint track and an arc, 2px stroke) in `currentColor`. 24px (`size="l"`, default, per the Paper board) or 20px (`size="m"`, inline). Decorative. |
+| 3 | Label (`label`) | "Loading" / "جارٍ التحميل" or `label`. `body-medium` in `on-surface`, 12px from the arc. Visually hidden unless `show-label`, or motion is reduced. |
 
 ## Motion
 
@@ -22,7 +22,7 @@ A short inline wait. Inside a button use `sc-button loading`.
 
 ## Changes from v1
 
-- New `size` prop (`m` 20px, `l` 24px).
+- New `size` prop (`l` 24px, the default; `m` 20px).
 - Visible label uses `body-medium` (v1: label-medium).
 - Strings moved to `src/i18n/components/sc-spinner.ts` (`spinnerLoading`).
 

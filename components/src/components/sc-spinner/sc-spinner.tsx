@@ -8,9 +8,10 @@ export type SpinnerSize = 'm' | 'l';
 /**
  * Shows that something is loading: a short inline wait, with a label saying what.
  *
- * v2: 20px (`size="m"`, inline) or 24px (`size="l"`), in `currentColor`, turning once per
- * `--sc-duration-spin` (600ms, linear: a faster spinner makes loading feel faster). The label
- * ("Loading" by default) sits in a polite `role="status"` region and is visually hidden.
+ * v2: 24px (`size="l"`, the default) or 20px (`size="m"`, inline with body text), in
+ * `currentColor`, turning once per `--sc-duration-spin` (600ms, linear: a faster spinner
+ * makes loading feel faster). The label ("Loading" by default) sits in a polite
+ * `role="status"` region, 12px from the arc in `on-surface`, and is visually hidden.
  * Under `prefers-reduced-motion` the arc stops and the label shows, so the state never
  * depends on motion (MOT-15). It never mirrors.
  *
@@ -31,8 +32,8 @@ export class ScSpinner {
   /** Shows the label next to the spinner at all times, not only under reduced motion. */
   @Prop({ reflect: true }) showLabel = false;
 
-  /** `m` 20px, inline with body text (default); `l` 24px, standalone. */
-  @Prop({ reflect: true }) size: SpinnerSize = 'm';
+  /** `l` 24px, standalone (default); `m` 20px, inline with body text. */
+  @Prop({ reflect: true }) size: SpinnerSize = 'l';
 
   private locale = new LocaleController(this, strings);
 
@@ -48,7 +49,7 @@ export class ScSpinner {
     const label = this.label || this.locale.t('spinnerLoading');
     return (
       <Host>
-        <span class={{ spinner: true, 'spinner--l': this.size === 'l' }} role="status">
+        <span class={{ spinner: true, 'spinner--l': this.size !== 'm' }} role="status">
           <span class="icon-box" part="icon">
             <Spinner class="spin" />
           </span>

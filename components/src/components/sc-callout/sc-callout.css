@@ -71,8 +71,10 @@
   display: none;
 }
 
+/* body-medium at Medium weight (A17 and the board: "body-m Medium"), both scripts. */
 .content {
   font: var(--sc-type-body-medium);
+  font-weight: var(--sc-font-weight-medium);
   letter-spacing: var(--sc-type-body-medium-tracking);
 }
 
@@ -90,7 +92,7 @@
   color: var(--sc-color-channel-action);
   text-decoration-line: underline;
   text-decoration-thickness: 1px;
-  text-underline-offset: 4px;
+  text-underline-offset: 3px;
 }
 
 @media (forced-colors: active) {

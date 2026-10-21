@@ -14,7 +14,7 @@ The stepper: where the user is in a short linear journey of 2 to about 7 questio
 <sc-step-progress current="2" total="4" label="Plate number"></sc-step-progress>
 ```
 
-- Completed and current steps take the channel action colour; completed ones carry a check, the current one an inner dot and a halo. Green is never used (U2, CMP-09).
+- Completed and current steps take the channel action colour; completed ones carry a check, the current one an inner dot and a halo (the channel tint in light mode, the divider in dark mode). Green is never used (U2, CMP-09).
 - `layout`: `auto` (default; full when step names are given and the component is at least 600px wide), `compact` or `full`.
 - Step names come from the host's child elements (read as text, never shown themselves) or the `steps` property. `current` is 1-based and clamped.
 - Full layout: an `<ol>` with `aria-current="step"` on the current step and every state in words ("Step 1 · Done", a hidden "Not started"). Compact: the meta row ("Step 2 of 4") carries the meaning; the markers are hidden.

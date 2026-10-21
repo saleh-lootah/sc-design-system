@@ -1202,9 +1202,10 @@ export namespace Components {
     }
     /**
      * Shows that something is loading: a short inline wait, with a label saying what.
-     * v2: 20px (`size="m"`, inline) or 24px (`size="l"`), in `currentColor`, turning once per
-     * `--sc-duration-spin` (600ms, linear: a faster spinner makes loading feel faster). The label
-     * ("Loading" by default) sits in a polite `role="status"` region and is visually hidden.
+     * v2: 24px (`size="l"`, the default) or 20px (`size="m"`, inline with body text), in
+     * `currentColor`, turning once per `--sc-duration-spin` (600ms, linear: a faster spinner
+     * makes loading feel faster). The label ("Loading" by default) sits in a polite
+     * `role="status"` region, 12px from the arc in `on-surface`, and is visually hidden.
      * Under `prefers-reduced-motion` the arc stops and the label shows, so the state never
      * depends on motion (MOT-15). It never mirrors.
      * Inside a button, use `sc-button loading` instead.
@@ -1220,8 +1221,8 @@ export namespace Components {
          */
         "showLabel": boolean;
         /**
-          * `m` 20px, inline with body text (default); `l` 24px, standalone.
-          * @default 'm'
+          * `l` 24px, standalone (default); `m` 20px, inline with body text.
+          * @default 'l'
          */
         "size": SpinnerSize;
     }
@@ -1230,12 +1231,12 @@ export namespace Components {
      * (Standard 9.6): "Paid", "Action needed", "In review", "Expires in 15 days".
      * v2: a 32px chip with a 6px radius, a tone icon and the words, tone-40 text on a tone-95
      * container (A11Y-06: never colour alone). It isn't interactive and isn't announced on
-     * change (use `sc-callout` or a live region for that). There is no channel tone: status is
-     * never in a channel's colour.
+     * change (use `sc-callout` or a live region for that). The `channel` tone (decision W4) is
+     * `channel-action` on `channel-subtle` and follows the nearest `data-channel`.
      */
     interface ScStatusTag {
         /**
-          * - `neutral`: a plain state ("Draft", "Received", "In review", "Not started"). - `info`: an informational state, where a service needs one (hourglass icon). - `success`: done ("Paid", "Approved", "Completed"). - `warning`: needs attention soon ("Expires in 15 days"). - `error`: blocked or waiting on the user ("Action needed", "Payment failed").  An unknown tone, including v1's removed `channel`, renders as `neutral`.
+          * - `neutral`: a plain state ("Draft", "Received", "In review", "Not started"). - `info`: an informational state, where a service needs one (hourglass icon). - `success`: done ("Paid", "Approved", "Completed"). - `warning`: needs attention soon ("Expires in 15 days"). - `error`: blocked or waiting on the user ("Action needed", "Payment failed"). - `channel`: a highlight in the channel's colour ("Life event"), not a status of its own   (decision W4: `channel-action` text on `channel-subtle`). Use the semantic tones for status.  An unknown tone renders as `neutral`.
           * @default 'neutral'
          */
         "tone": StatusTagTone;
@@ -2340,9 +2341,10 @@ declare global {
     };
     /**
      * Shows that something is loading: a short inline wait, with a label saying what.
-     * v2: 20px (`size="m"`, inline) or 24px (`size="l"`), in `currentColor`, turning once per
-     * `--sc-duration-spin` (600ms, linear: a faster spinner makes loading feel faster). The label
-     * ("Loading" by default) sits in a polite `role="status"` region and is visually hidden.
+     * v2: 24px (`size="l"`, the default) or 20px (`size="m"`, inline with body text), in
+     * `currentColor`, turning once per `--sc-duration-spin` (600ms, linear: a faster spinner
+     * makes loading feel faster). The label ("Loading" by default) sits in a polite
+     * `role="status"` region, 12px from the arc in `on-surface`, and is visually hidden.
      * Under `prefers-reduced-motion` the arc stops and the label shows, so the state never
      * depends on motion (MOT-15). It never mirrors.
      * Inside a button, use `sc-button loading` instead.
@@ -2358,8 +2360,8 @@ declare global {
      * (Standard 9.6): "Paid", "Action needed", "In review", "Expires in 15 days".
      * v2: a 32px chip with a 6px radius, a tone icon and the words, tone-40 text on a tone-95
      * container (A11Y-06: never colour alone). It isn't interactive and isn't announced on
-     * change (use `sc-callout` or a live region for that). There is no channel tone: status is
-     * never in a channel's colour.
+     * change (use `sc-callout` or a live region for that). The `channel` tone (decision W4) is
+     * `channel-action` on `channel-subtle` and follows the nearest `data-channel`.
      */
     interface HTMLScStatusTagElement extends Components.ScStatusTag, HTMLStencilElement {
     }
@@ -3810,9 +3812,10 @@ declare namespace LocalJSX {
     }
     /**
      * Shows that something is loading: a short inline wait, with a label saying what.
-     * v2: 20px (`size="m"`, inline) or 24px (`size="l"`), in `currentColor`, turning once per
-     * `--sc-duration-spin` (600ms, linear: a faster spinner makes loading feel faster). The label
-     * ("Loading" by default) sits in a polite `role="status"` region and is visually hidden.
+     * v2: 24px (`size="l"`, the default) or 20px (`size="m"`, inline with body text), in
+     * `currentColor`, turning once per `--sc-duration-spin` (600ms, linear: a faster spinner
+     * makes loading feel faster). The label ("Loading" by default) sits in a polite
+     * `role="status"` region, 12px from the arc in `on-surface`, and is visually hidden.
      * Under `prefers-reduced-motion` the arc stops and the label shows, so the state never
      * depends on motion (MOT-15). It never mirrors.
      * Inside a button, use `sc-button loading` instead.
@@ -3828,8 +3831,8 @@ declare namespace LocalJSX {
          */
         "showLabel"?: boolean;
         /**
-          * `m` 20px, inline with body text (default); `l` 24px, standalone.
-          * @default 'm'
+          * `l` 24px, standalone (default); `m` 20px, inline with body text.
+          * @default 'l'
          */
         "size"?: SpinnerSize;
     }
@@ -3838,12 +3841,12 @@ declare namespace LocalJSX {
      * (Standard 9.6): "Paid", "Action needed", "In review", "Expires in 15 days".
      * v2: a 32px chip with a 6px radius, a tone icon and the words, tone-40 text on a tone-95
      * container (A11Y-06: never colour alone). It isn't interactive and isn't announced on
-     * change (use `sc-callout` or a live region for that). There is no channel tone: status is
-     * never in a channel's colour.
+     * change (use `sc-callout` or a live region for that). The `channel` tone (decision W4) is
+     * `channel-action` on `channel-subtle` and follows the nearest `data-channel`.
      */
     interface ScStatusTag {
         /**
-          * - `neutral`: a plain state ("Draft", "Received", "In review", "Not started"). - `info`: an informational state, where a service needs one (hourglass icon). - `success`: done ("Paid", "Approved", "Completed"). - `warning`: needs attention soon ("Expires in 15 days"). - `error`: blocked or waiting on the user ("Action needed", "Payment failed").  An unknown tone, including v1's removed `channel`, renders as `neutral`.
+          * - `neutral`: a plain state ("Draft", "Received", "In review", "Not started"). - `info`: an informational state, where a service needs one (hourglass icon). - `success`: done ("Paid", "Approved", "Completed"). - `warning`: needs attention soon ("Expires in 15 days"). - `error`: blocked or waiting on the user ("Action needed", "Payment failed"). - `channel`: a highlight in the channel's colour ("Life event"), not a status of its own   (decision W4: `channel-action` text on `channel-subtle`). Use the semantic tones for status.  An unknown tone renders as `neutral`.
           * @default 'neutral'
          */
         "tone"?: StatusTagTone;
@@ -4993,9 +4996,10 @@ declare module "@stencil/core" {
             "sc-skip-link": LocalJSX.IntrinsicElements["sc-skip-link"] & JSXBase.HTMLAttributes<HTMLScSkipLinkElement>;
             /**
              * Shows that something is loading: a short inline wait, with a label saying what.
-             * v2: 20px (`size="m"`, inline) or 24px (`size="l"`), in `currentColor`, turning once per
-             * `--sc-duration-spin` (600ms, linear: a faster spinner makes loading feel faster). The label
-             * ("Loading" by default) sits in a polite `role="status"` region and is visually hidden.
+             * v2: 24px (`size="l"`, the default) or 20px (`size="m"`, inline with body text), in
+             * `currentColor`, turning once per `--sc-duration-spin` (600ms, linear: a faster spinner
+             * makes loading feel faster). The label ("Loading" by default) sits in a polite
+             * `role="status"` region, 12px from the arc in `on-surface`, and is visually hidden.
              * Under `prefers-reduced-motion` the arc stops and the label shows, so the state never
              * depends on motion (MOT-15). It never mirrors.
              * Inside a button, use `sc-button loading` instead.
@@ -5006,8 +5010,8 @@ declare module "@stencil/core" {
              * (Standard 9.6): "Paid", "Action needed", "In review", "Expires in 15 days".
              * v2: a 32px chip with a 6px radius, a tone icon and the words, tone-40 text on a tone-95
              * container (A11Y-06: never colour alone). It isn't interactive and isn't announced on
-             * change (use `sc-callout` or a live region for that). There is no channel tone: status is
-             * never in a channel's colour.
+             * change (use `sc-callout` or a live region for that). The `channel` tone (decision W4) is
+             * `channel-action` on `channel-subtle` and follows the nearest `data-channel`.
              */
             "sc-status-tag": LocalJSX.IntrinsicElements["sc-status-tag"] & JSXBase.HTMLAttributes<HTMLScStatusTagElement>;
             /**

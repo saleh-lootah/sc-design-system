@@ -32,6 +32,7 @@ const ALL = `
     <sc-status-tag id="s" tone="success">Paid</sc-status-tag>
     <sc-status-tag id="w" tone="warning">Expires in 15 days</sc-status-tag>
     <sc-status-tag id="e" tone="error">Action needed</sc-status-tag>
+    <sc-status-tag id="c" tone="channel">Life event</sc-status-tag>
   </main>`;
 
 async function forceColors(page: E2EPage) {
@@ -57,11 +58,16 @@ describe('sc-status-tag (e2e)', () => {
     expect(await tag(page, '#n', 'getComputedStyle(tag).backgroundColor')).toBe(await token(page, '--sc-color-surface-container'));
   });
 
-  it('does not change with the channel', async () => {
+  it('keeps the semantic tones on every channel; the channel tone follows it (W4)', async () => {
     const page = await newScPage(ALL, { channel: 'now' });
     const before = await tag(page, '#n', 'getComputedStyle(tag).backgroundColor');
+    const channelBefore = await tag(page, '#c', 'getComputedStyle(tag).color');
+    expect(channelBefore).toBe(await token(page, '--sc-color-channel-action'));
+    expect(await tag(page, '#c', 'getComputedStyle(tag).backgroundColor')).toBe(await token(page, '--sc-color-channel-subtle'));
     await page.evaluate(() => (document.documentElement.dataset.channel = 'visit'));
     expect(await tag(page, '#n', 'getComputedStyle(tag).backgroundColor')).toBe(before);
+    expect(await tag(page, '#c', 'getComputedStyle(tag).color')).toBe(await token(page, '--sc-color-channel-action'));
+    expect(await tag(page, '#c', 'getComputedStyle(tag).color')).not.toBe(channelBefore);
   });
 
   it('reads as its words only', async () => {

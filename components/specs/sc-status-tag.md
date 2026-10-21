@@ -27,8 +27,9 @@ Tone-40 text and icon on a tone-95 container (E: "Text 40 on 95 container, all a
 | `success` | `success-container` | `success` | check circle |
 | `warning` | `warning-container` | `warning` | clock (`schedule`) |
 | `error` | `error-container` | `error` | error |
+| `channel` | `channel-subtle` (channel-95) | `channel-action` | info |
 
-Dark: tone 80 on tone 20. **No channel tone** (library-conformance 9.6; status is never in a channel's colour). Decision W4 describes channel-coloured tags (`channel-subtle` fill, `channel-action` text); that is for non-status tags and is not a tone of this component (see the report).
+Dark: tone 80 on tone 20. The `channel` tone follows decision W4 and the Paper board (sc-status-tag): `channel-action` on `channel-subtle`, rebinding with `data-channel`. It is a highlight ("Life event"), not a status; the semantic tones never change with the channel. decisions.md wins over library-conformance 9.6, which had deprecated it.
 
 ## RTL
 
@@ -37,7 +38,7 @@ The icon sits at inline-start. Icons never mirror.
 ## Changes from v1
 
 - Shape: 6px chip with an icon replaces v1's pill with a dot (A11Y-06: a dot is only for channel attribution).
-- New tone `info`. **`tone="channel"` is removed**: it now renders as `neutral` (it was deprecated in v1).
+- New tone `info`. `tone="channel"` stays (W4), now `channel-action` on `channel-subtle` with an info icon.
 - Part `dot` is replaced by part `icon`.
 
 ## Budget
@@ -46,4 +47,4 @@ Leaf, 4 KiB. Measured **2.2 KiB** gzip; CSS 0.4 KiB.
 
 ## Tests
 
-Spec (tones, icons, fallbacks including `channel`), e2e (32px / 6px / 16px icon, every tone's colours against the tokens, channel-independence, accessible text, label-small in EN and AR, icon at the start in Arabic, forced colours), `describeAxe`, visual (all tones EN/AR × light/dark).
+Spec (tones including `channel`, icons, fallbacks), e2e (32px / 6px / 16px icon, every tone's colours against the tokens, semantic tones independent of the channel and the channel tone following it, accessible text, label-small in EN and AR, icon at the start in Arabic, forced colours), `describeAxe`, visual (all tones EN/AR × light/dark).

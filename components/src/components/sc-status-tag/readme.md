@@ -9,6 +9,7 @@ The status of an application, task or payment, in the words of the status vocabu
 <sc-status-tag tone="error">Action needed</sc-status-tag>
 <sc-status-tag tone="warning">Expires in 15 days</sc-status-tag>
 <sc-status-tag>In review</sc-status-tag>
+<sc-status-tag tone="channel">Life event</sc-status-tag>
 ```
 
 | Tone | Icon | Use it for |
@@ -18,9 +19,10 @@ The status of an application, task or payment, in the words of the status vocabu
 | `success` | check circle | Approved, Completed, Paid |
 | `warning` | clock | Expires in {n} days |
 | `error` | error | Action needed, Payment failed |
+| `channel` | info | A highlight in the channel's colour, such as "Life event" (decision W4). Not a status: use the tones above for status |
 
 - v2 is a 32px chip with 6px corners: tone-40 words and icon on a tone-95 container, so status is never colour alone (A11Y-06). Neutral is neutral-40 on neutral-96.
-- There is **no channel tone**: status never takes a channel's colour. v1's `tone="channel"` renders as `neutral`.
+- The `channel` tone (decision W4) is `channel-action` words and icon on `channel-subtle`, and follows the nearest `data-channel`. The semantic tones are the same on every channel.
 - Two or three words. Use the vocabulary, in both languages ("تم الدفع", "إجراء مطلوب").
 
 Part: `tag`, `icon`.
@@ -35,14 +37,14 @@ The status of an application, task or payment, in the words of the status vocabu
 
 v2: a 32px chip with a 6px radius, a tone icon and the words, tone-40 text on a tone-95
 container (A11Y-06: never colour alone). It isn't interactive and isn't announced on
-change (use `sc-callout` or a live region for that). There is no channel tone: status is
-never in a channel's colour.
+change (use `sc-callout` or a live region for that). The `channel` tone (decision W4) is
+`channel-action` on `channel-subtle` and follows the nearest `data-channel`.
 
 ## Properties
 
-| Property | Attribute | Description                                                                                                                                                                                                                                                                                                                                                                                                                         | Type                                                       | Default     |
-| -------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | ----------- |
-| `tone`   | `tone`    | - `neutral`: a plain state ("Draft", "Received", "In review", "Not started"). - `info`: an informational state, where a service needs one (hourglass icon). - `success`: done ("Paid", "Approved", "Completed"). - `warning`: needs attention soon ("Expires in 15 days"). - `error`: blocked or waiting on the user ("Action needed", "Payment failed").  An unknown tone, including v1's removed `channel`, renders as `neutral`. | `"error" \| "info" \| "neutral" \| "success" \| "warning"` | `'neutral'` |
+| Property | Attribute | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | Type                                                                    | Default     |
+| -------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- | ----------- |
+| `tone`   | `tone`    | - `neutral`: a plain state ("Draft", "Received", "In review", "Not started"). - `info`: an informational state, where a service needs one (hourglass icon). - `success`: done ("Paid", "Approved", "Completed"). - `warning`: needs attention soon ("Expires in 15 days"). - `error`: blocked or waiting on the user ("Action needed", "Payment failed"). - `channel`: a highlight in the channel's colour ("Life event"), not a status of its own   (decision W4: `channel-action` text on `channel-subtle`). Use the semantic tones for status.  An unknown tone renders as `neutral`. | `"channel" \| "error" \| "info" \| "neutral" \| "success" \| "warning"` | `'neutral'` |
 
 
 ## Slots
