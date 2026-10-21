@@ -127,3 +127,69 @@ None is asserted. Items 1–16 are OQ-1 to OQ-16. New open questions found while
 
 - Motion rules rewritten from Emil Kowalski's skills (8.7), with the token conflicts (`easing.exit` is ease-in; spinner speed; reduced-motion durations; missing ease-in-out token) listed as OQ-22 to OQ-25.
 - Known component gaps recorded: imperative Arabic default strings in `sc-skip-link` and `sc-date-range`, the `sc-skip-link` default target versus `sc-page`'s `main-content`, and the missing visited-link token (10.3, OQ-20).
+
+## v2: design system v2 (21 October 2026)
+
+The "Native" visual direction is retired and the design system is rebuilt as v2, "Dubai Design System, evolved" (`docs/v2/plan.md`). This revision of Standard 2.0 brings the standard in line with v2. It follows `docs/v2/decisions.md`, `docs/v2/foundations.md`, `docs/v2/component-language.md` and `docs/v2/architecture.md`; where they disagree, `decisions.md` wins. The behaviour rules of 2.0 are unchanged. Colours are named only by token.
+
+In the standard, a changed requirement is marked "(changed in v2)" and a new one "(new in v2)". No requirement ID was removed or renamed. Requirements whose meaning is unchanged keep their ID and carry no mark, even where a token name in them was updated.
+
+### By chapter
+
+| Chapter | Change |
+| --- | --- |
+| Header, 0.1, 0.4 | Date updated. 0.1 says the foundations follow v2. 0.4 adds `docs/v2/foundations.md` as the source of every value; the token example is now `--sc-color-on-surface` |
+| 3.2 | SVC-01 and SVC-03 name every component that may show another channel's colour (chip, channel switcher, footer Channels group, network strip), each through `data-channel` on itself |
+| 5.6, 5.7 | The icon rows of the mirroring table point to the icon mirroring table in 8.6. LANG-25 uses the v2 type properties, which follow `lang`. LANG-27 names the v2 roles |
+| 6.2, 6.4 | A11Y-04: 56px primary and 48px secondary controls, and the 44px target extension for smaller controls. A11Y-05: the neutral focus ring (U1). A11Y-06: status is an icon and words, a dot only for channel attribution. A11Y-07: the reduced-transparency rule is gone, because nothing is translucent. 6.4 states the library's browser floor (A1) |
+| 7.1 | Web uses the library stylesheet `sc.css` |
+| 8 | Rewritten to v2: tonal colour system (city indigo primary, seven channel signatures, neutral and semantic ramps, the role tokens by their real names, state layers, decorative tints); Dubai W23 in three weights on the 15-role Material-style scale, Arabic one step larger, body 18/26 and 20/32; sizes 56, 48 and 44; radii 4, 6, 8 and 12; flat, outline-first elevation in three levels; Material Symbols Outlined with its mirroring table; a new 8.8 for how the focus ring is built. Motion keeps MOT-01 to MOT-15 and the duration rule of thumb; the stale token notes are removed |
+| 10 | CMP-02 (one `sc.css`), CMP-04 (light DOM fields and button) and the new CMP-07 (Enter submits). 10.2 updates `sc-button`, `sc-link`, `sc-app-bar`, `sc-step-progress`, `sc-channel-hero` and `sc-footer`. 10.3 adds links (CMP-08, with `.sc-link`), the stepper (CMP-09) and shared hand-offs (CMP-10), and drops the visited-link gap. 10.4 replaces `sc-header-navigation` with `sc-site-header`, renames `sc-dialog` to `sc-modal`, and adds `sc-account-menu`, `sc-utility-bar` and `sc-channel-network` |
+| 11 | TPL-01 allows `sc-site-header` on channel pages. New 11.9 "Channel-site chrome" (CHR-01 to CHR-08), with checks |
+| 13 | ID-02 and the sign-in and payment component lists use the city indigo hand-off (U3) |
+| 15 | New design system budgets (PERF-08 to PERF-11) from `architecture.md`, as SHOULD requirements, with checks |
+| 19 | Seven answered questions removed; OQ-3 and OQ-4 narrowed; OQ-30 added |
+
+### Decisions applied
+
+| Decision | Where |
+| --- | --- |
+| U1 neutral focus ring | A11Y-05, 8.8, system roles table |
+| U2 stepper in channel colour, check on completed steps | CMP-09 |
+| U3 UAE PASS and Dubai Pay in city indigo | FND-25, CMP-10, CHR-01, ID-02, 13.12 |
+| U4 docked, flat utility bar | CHR-05 |
+| Q-header header structure | CHR-01, CHR-02, CHR-03 |
+| Q-footer Channels group allowed | CHR-06 |
+| Q-hero flat channel-subtle hero | CHR-07 |
+| Q-chips 32px chips with a 44px target | A11Y-04, FND-15 |
+| Q-standard stale motion notes | 8.7 |
+| A1 browser floor | 6.4, FND-08 |
+| A2 light DOM fields and `sc-button` | CMP-04, CMP-07 |
+| A3 no Light weight | 8.2, FND-12 |
+| A4 `.sc-link` | CMP-08 |
+| D1, D3, D4, D5, D8, D11, D12, D13 | 8.1, 8.2, 8.6, CMP-08 |
+
+### Requirement IDs
+
+| | IDs |
+| --- | --- |
+| Added | FND-24, FND-25, FND-26, FND-27, FND-28, FND-29; CMP-07, CMP-08, CMP-09, CMP-10; CHR-01 to CHR-08 (new prefix); PERF-08, PERF-09, PERF-10, PERF-11 |
+| Changed in meaning | SVC-01, SVC-03, LANG-25, A11Y-04, A11Y-05, A11Y-06, A11Y-07, FND-07, FND-08, FND-11, FND-12, FND-13, FND-15, FND-16, FND-19, FND-20, FND-21, MOT-05, CMP-02, CMP-04, TPL-01, ID-02 |
+| Text updated, meaning unchanged | FND-05 (example pair), FND-22 (cross-reference), LANG-27 (role names), MOT-06 to MOT-09 and MOT-15 (token names and values; caveats removed) |
+| Removed or renamed | None |
+
+### Open questions
+
+| Question | Outcome |
+| --- | --- |
+| OQ-20 visited-link token | Answered and removed: visited links are not styled differently (D8, CMP-08) |
+| OQ-22 `easing.exit` was ease-in | Answered and removed: `--sc-easing-exit` is now the strong ease-out curve (MOT-05) |
+| OQ-23 easing tokens | Answered and removed: `--sc-easing-enter` is the reference ease-out and `--sc-easing-standard` the reference ease-in-out (MOT-04) |
+| OQ-24 reduced motion zeroed every duration | Answered and removed: only the spin and scale tokens change under reduced motion (MOT-15) |
+| OQ-25 spinner speed | Answered and removed: `--sc-duration-spin` is 600ms |
+| OQ-26 focus ring in `check:contrast` | Answered and removed: the ring is neutral and `check:contrast` measures it against every surface, container and channel band (A11Y-05) |
+| OQ-29 duration tokens | Answered and removed: `--sc-duration-slow` is 280ms and `--sc-duration-exit` 160ms (MOT-06, MOT-07) |
+| OQ-3, OQ-4 | Narrowed: the hand-off colour is decided (U3); whether the providers require their own button assets stays open |
+| OQ-30 | New: the approved Government of Dubai lockup (CHR-02) |
+
+Numbers of removed questions are not reused.
