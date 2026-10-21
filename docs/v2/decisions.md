@@ -107,3 +107,10 @@ Where this file disagrees with `foundations.md` or `component-language.md`, this
 | --- | --- |
 | U3a | **UAE PASS has its own standard button specification, and we follow it exactly.** "Sign in with UAE PASS" (and any "confirm with UAE PASS") uses the official UAE PASS button: its colours, fingerprint mark, label in English and Arabic, sizes, variants and dark-mode treatment. It is a brand exception: we don't restyle it, recolour it to the channel or to city indigo, or swap in our own icon. The user is supplying the official component set (DubaiNow Next has an adapted version, exception X-07, which is not the source). Until the specification arrives, components and boards use a clearly labelled placeholder: black fill, white label "Sign in with UAE PASS", a fingerprint glyph, 56px tall. It is a separate `sc-uaepass-button` (or a `uaepass` variant of `sc-button` that can't be themed), with the exact geometry to be set from the kit. |
 | U3b | **Dubai Pay and other shared hand-offs** keep U3: `sc-button` variant `handoff` in city indigo, unless Dubai Pay also has a mandated button. Ask before building one. |
+
+## Wave 2b clarifications, continued
+
+| # | Decision |
+| --- | --- |
+| W5 | Where `component-language.md` quotes a type size or leading that differs from the type role tokens (for example title-large 22/28, display-large 80/84, body-large 18/26), **the tokens win**. Components use type roles only. `component-language.md` sizes are indicative. |
+| W6 | The life-event, category and favourite tile is **`sc-tile`**, not `sc-service-tile`. Paper board 09.07 is renamed in Wave 4 (Q4). |
