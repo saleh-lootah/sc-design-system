@@ -17,7 +17,7 @@ Status: rebuilt for v2 by C2 (Wave 2b). Visual rules: `docs/v2/component-languag
 
 ## Type and colour
 
-`label-large` (18/22 Bold EN, 20/28 Bold AR). Fill `inverse-surface`, text `inverse-on-surface`, underlined 1px at 4px (5px Arabic), so it stands out over any hero or announcement colour. The U1 ring shows whenever it is focused, including by script or pointer, because it is only ever visible while focused. Forced colours: `Canvas`, `LinkText`, `Highlight` ring.
+`label-large` (18/22 Bold EN, 20/28 Bold AR). Fill `inverse-surface`, text `inverse-on-surface`, not underlined (it is a solid block, not running text; Paper board sc-skip-link), so it stands out over any hero or announcement colour. The U1 ring shows whenever it is focused, including by script or pointer, because it is only ever visible while focused. Forced colours: `Canvas`, `LinkText`, `Highlight` ring.
 
 ## Motion
 

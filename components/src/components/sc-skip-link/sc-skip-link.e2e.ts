@@ -40,6 +40,8 @@ describe('sc-skip-link (e2e)', () => {
     expect(await inner(page, 'getComputedStyle(control).color')).toBe(await token(page, '--sc-color-inverse-on-surface'));
     expect(await inner(page, 'getComputedStyle(control).fontSize')).toBe('18px');
     expect(await inner(page, 'getComputedStyle(control).fontWeight')).toBe('700');
+    expect(await inner(page, 'getComputedStyle(control).textDecorationLine')).toBe('none');
+    expect(await inner(page, 'getComputedStyle(control).paddingInlineStart')).toBe('20px');
     expect(await inner(page, 'getComputedStyle(control).outlineWidth')).toBe('3px');
     expect(await inner(page, 'getComputedStyle(control).outlineColor')).toBe(await token(page, '--sc-color-focus-ring'));
   });

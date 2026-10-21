@@ -45,6 +45,8 @@ describe('sc-back-link (e2e)', () => {
     expect(await inner(page, 'sc-back-link', 'getComputedStyle(control).fontSize')).toBe('16px');
     expect(await inner(page, 'sc-back-link', 'getComputedStyle(control).fontWeight')).toBe('500');
     expect(await inner(page, 'sc-back-link', 'getComputedStyle(label).textDecorationLine')).toBe('none');
+    expect(await inner(page, 'sc-back-link', 'getComputedStyle(control).paddingInlineStart')).toBe('4px');
+    expect(await inner(page, 'sc-back-link', 'getComputedStyle(control).paddingInlineEnd')).toBe('6px');
     await setPageContext(page, { lang: 'ar' });
     expect(await inner(page, 'sc-back-link', 'getComputedStyle(control).fontSize')).toBe('18px');
     expect(await inner(page, 'sc-back-link', 'getComputedStyle(control).fontWeight')).toBe('700');
