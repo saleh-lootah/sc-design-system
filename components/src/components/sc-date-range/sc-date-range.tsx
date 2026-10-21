@@ -1,10 +1,9 @@
-import { AttachInternals, Component, Element, Event, EventEmitter, Host, Method, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, Method, Prop, State, Watch, h } from '@stencil/core';
 import { normaliseDigits } from '../../i18n/digits';
-import { LocaleController } from '../../i18n/locale';
-import { StringKey } from '../../i18n/strings';
-import { AlertCircle, ArrowForward, ChevronBack, ChevronForward, Close } from '../../icons/index'; // explicit /index: enables SVG rendering (see CONTRIBUTING)
-import { FieldError, FieldHint, FieldLabel, HeadingLevel, describedBy, emitNativeChange, formSupported, hasSlotted, headingLevel } from '../sc-text-input/field-v1';
-import { StringsInput, translator } from '../sc-table/overrides';
+import { LocaleController } from '../../i18n/controller';
+import { ArrowForward, ChevronBack, ChevronForward, Close } from '../../icons/index'; // explicit /index: enables SVG rendering (see CONTRIBUTING)
+import { CheckMark, FieldError, FieldHint, FieldLabel, HeadingLevel, Slotted, describedBy, forwardFocus, headingLevel, nextId, onFormReset, takeSlotted, withField } from '../sc-text-input/field';
+import { DateRangeKey, StringsInput, translator } from './overrides';
 import { CalendarIcon } from './calendar-icon';
 import {
   YearMonth,
@@ -24,7 +23,7 @@ import {
   ymOf,
 } from './dates';
 
-void AlertCircle;
+const fieldStrings = withField();
 
 type End = 'start' | 'end';
 type Mode = 'popover' | 'sheet';
@@ -38,11 +37,10 @@ export interface DateRangePreset {
 interface Problem {
   message: string;
   part: End | 'both';
-  flag: keyof ValidityStateFlags;
   missing?: boolean;
 }
 
-const PLURAL_KEYS: Record<string, StringKey> = {
+const PLURAL_KEYS: Record<string, DateRangeKey> = {
   zero: 'dateRangeDaysZero',
   one: 'dateRangeDaysOne',
   two: 'dateRangeDaysTwo',
@@ -60,39 +58,28 @@ const SHEET_MONTHS_AFTER = 6;
  * the nights of a hotel stay, how long a permit lasts. For one date people already know
  * (a date of birth), use `sc-date-input`.
  *
- * Two typed segments (From / To, من / إلى) in one 54px frame, and a calendar button that
+ * Two typed segments (From / To, من / إلى) in one 56px frame, and a calendar button that
  * opens a picker: a popover with one or two months and optional presets on medium and
  * wider screens, a modal bottom sheet below 600px. People can always type instead
  * ("21/9/2026", "21 9 2026", "21-09-2026").
  *
- * Form-associated: submits `name-start` and `name-end` as ISO dates (empty until each is a
- * real date). Reports `valueMissing` (with `required`), `badInput`, `rangeUnderflow` and
- * `rangeOverflow`, and shows its own messages for impossible ranges on blur. Delegates focus
- * to the start segment.
+ * v2 renders everything in light DOM (Stencil `scoped`, decision A2), with classes prefixed
+ * `.sc-date-range__`. It submits `name-start` and `name-end` as ISO dates through hidden
+ * inputs (empty until each is a real date). The first problem with the range (missing with
+ * `required`, not a real date, end before start, outside `min`/`max`, too long or short) is a
+ * native validity error on the segment concerned; the component shows its own message on
+ * blur or after a failed submit. `focus()` on the host goes to the start segment. One native
+ * `change` is dispatched from the host per committed range.
  *
- * @slot label - Rich legend content, instead of the `label` prop.
- * @slot hint - Rich hint content, instead of the `hint` prop.
- * @slot error - Rich error content, instead of the `error` prop.
- *
- * @part field - The `<fieldset>` (gets the error bar).
- * @part label - The `<legend>`.
- * @part hint - The hint.
- * @part error - The error message.
- * @part frame - The 54px frame around both segments and the calendar button.
- * @part control - Each native `<input>`.
- * @part calendar-button - The button that opens the picker.
- * @part picker - The popover or bottom sheet.
+ * Rich content: a child with `slot="label"`, `slot="hint"` or `slot="error"` is moved into place once.
  */
 @Component({
   tag: 'sc-date-range',
-  styleUrl: 'sc-date-range.css',
-  shadow: { delegatesFocus: true },
-  formAssociated: true,
+  styleUrls: ['../sc-text-input/field.css', 'sc-date-range.css'],
+  scoped: true,
 })
 export class ScDateRange {
   @Element() el!: HTMLElement;
-
-  @AttachInternals() internals!: ElementInternals;
 
   /** The question, shown as the legend: "Show payments between". */
   @Prop() label?: string;
@@ -164,8 +151,7 @@ export class ScDateRange {
   /** Fires when the picker closes. */
   @Event({ bubbles: true, composed: true }) scClose!: EventEmitter<void>;
 
-  @State() formDisabled = false;
-  @State() slots = { label: false, hint: false, error: false };
+  @State() slotted: Slotted = {};
   @State() texts: Record<End, string> = { start: '', end: '' };
   @State() isOpen = false;
   @State() mode: Mode = 'popover';
@@ -190,15 +176,25 @@ export class ScDateRange {
   private pendingShow = false;
   /** True while the component sets start/end itself, so the watcher keeps the typed text. */
   private internal = false;
-  private locale = new LocaleController(this);
+  private locale = new LocaleController(this, fieldStrings);
+  private uid = nextId('sc-date-range');
+  private stopReset?: () => void;
   private drag?: { id: number; y: number; t: number; dy: number };
   /** A pointer month change waiting for its render, so the new months can slide in. */
   private pendingSlide: 0 | 1 | -1 = 0;
 
   connectedCallback() {
     this.locale.connect();
-    this.readSlots();
-    this.el.addEventListener('invalid', this.onInvalid);
+    this.slotted = takeSlotted(this.el, ['label', 'hint', 'error'], this.slotted);
+    forwardFocus(this.el, () => this.inputs.start);
+    // `invalid` doesn't bubble: listen in the capture phase for the segments' own.
+    this.el.addEventListener('invalid', this.onInvalid, true);
+    this.stopReset = onFormReset(this.el, () => {
+      this.start = this.defaults.start;
+      this.end = this.defaults.end;
+      this.texts = { start: this.format(this.start), end: this.format(this.end) };
+      this.shown = undefined;
+    });
   }
 
   componentWillLoad() {
@@ -208,13 +204,10 @@ export class ScDateRange {
     this.texts = { start: this.format(this.start), end: this.format(this.end) };
   }
 
-  componentDidLoad() {
-    this.el.shadowRoot?.addEventListener('slotchange', this.readSlots);
-  }
-
   disconnectedCallback() {
     this.locale.disconnect();
-    this.el.removeEventListener('invalid', this.onInvalid);
+    this.el.removeEventListener('invalid', this.onInvalid, true);
+    this.stopReset?.();
     this.removeOutsideListeners();
   }
 
@@ -248,24 +241,6 @@ export class ScDateRange {
     }
   }
 
-  formDisabledCallback(disabled: boolean) {
-    this.formDisabled = disabled;
-  }
-
-  formResetCallback() {
-    this.start = this.defaults.start;
-    this.end = this.defaults.end;
-    this.texts = { start: this.format(this.start), end: this.format(this.end) };
-    this.shown = undefined;
-  }
-
-  formStateRestoreCallback(state: unknown) {
-    if (state instanceof FormData && this.name) {
-      this.start = String(state.get(`${this.name}-start`) ?? '');
-      this.end = String(state.get(`${this.name}-end`) ?? '');
-    }
-  }
-
   /** Opens the picker. */
   @Method()
   async open() {
@@ -290,7 +265,7 @@ export class ScDateRange {
     return translator(this.locale.lang, this.strings);
   }
 
-  private list(key: StringKey): string[] {
+  private list(key: DateRangeKey): string[] {
     return this.t(key).split(',');
   }
 
@@ -361,50 +336,33 @@ export class ScDateRange {
     const t = this.t;
     const s = parseTyped(this.texts.start, this.monthNames);
     const e = parseTyped(this.texts.end, this.monthNames);
-    if (s === null) return { message: t('dateRangeStartInvalid'), part: 'start', flag: 'badInput' };
-    if (e === null) return { message: t('dateRangeEndInvalid'), part: 'end', flag: 'badInput' };
-    if (!s && (this.required || e)) return { message: t('dateRangeStartMissing'), part: 'start', flag: 'valueMissing', missing: true };
-    if (!e && (this.required || s)) return { message: t('dateRangeEndMissing'), part: 'end', flag: 'valueMissing', missing: true };
+    if (s === null) return { message: t('dateRangeStartInvalid'), part: 'start' };
+    if (e === null) return { message: t('dateRangeEndInvalid'), part: 'end' };
+    if (!s && (this.required || e)) return { message: t('dateRangeStartMissing'), part: 'start', missing: true };
+    if (!e && (this.required || s)) return { message: t('dateRangeEndMissing'), part: 'end', missing: true };
     if (!s || !e) return undefined;
-    if (e < s) return { message: t('dateRangeEndBeforeStart'), part: 'end', flag: 'rangeUnderflow' };
-    if (isIso(this.min) && s < this.min!) return { message: t('dateRangeBeforeMin', { date: this.format(this.min!) }), part: 'start', flag: 'rangeUnderflow' };
+    if (e < s) return { message: t('dateRangeEndBeforeStart'), part: 'end' };
+    if (isIso(this.min) && s < this.min!) return { message: t('dateRangeBeforeMin', { date: this.format(this.min!) }), part: 'start' };
     if (isIso(this.max) && e > this.max!) {
       const message = this.max === this.todayValue ? t('dateRangeBeyondMaxToday') : t('dateRangeBeyondMax', { date: this.format(this.max!) });
-      return { message, part: 'end', flag: 'rangeOverflow' };
+      return { message, part: 'end' };
     }
     const length = lengthInDays(s, e);
-    if (this.maxDays && length > Number(this.maxDays)) return { message: t('dateRangeTooLong', { days: this.days(Number(this.maxDays)) }), part: 'both', flag: 'rangeOverflow' };
-    if (this.minDays && length < Number(this.minDays)) return { message: t('dateRangeTooShort', { days: this.days(Number(this.minDays)) }), part: 'both', flag: 'rangeUnderflow' };
+    if (this.maxDays && length > Number(this.maxDays)) return { message: t('dateRangeTooLong', { days: this.days(Number(this.maxDays)) }), part: 'both' };
+    if (this.minDays && length < Number(this.minDays)) return { message: t('dateRangeTooShort', { days: this.days(Number(this.minDays)) }), part: 'both' };
     return undefined;
   }
 
+  /** The first problem is a native validity error on the segment it concerns. */
   private sync() {
-    if (!formSupported()) return;
-    if (this.internals?.setFormValue) {
-      if (this.name && typeof FormData !== 'undefined') {
-        const data = new FormData();
-        data.append(`${this.name}-start`, this.start);
-        data.append(`${this.name}-end`, this.end);
-        this.internals.setFormValue(data);
-      } else {
-        this.internals.setFormValue(null);
-      }
-    }
-    if (!this.internals?.setValidity) return;
     const problem = this.problem();
-    const anchor = problem && this.inputs[problem.part === 'both' ? 'start' : problem.part];
-    if (problem && anchor) this.internals.setValidity({ [problem.flag]: true }, problem.message, anchor);
-    else this.internals.setValidity({});
+    const anchor: End | undefined = problem ? (problem.part === 'both' ? 'start' : problem.part) : undefined;
+    for (const end of ['start', 'end'] as End[]) this.inputs[end]?.setCustomValidity?.(end === anchor ? problem!.message : '');
   }
 
   /** A failed submit (or reportValidity) shows the component's own message, including "Enter a start date". */
   private onInvalid = () => {
     this.shown = this.problem();
-  };
-
-  private readSlots = () => {
-    const next = { label: hasSlotted(this.el, 'label'), hint: hasSlotted(this.el, 'hint'), error: hasSlotted(this.el, 'error') };
-    if (JSON.stringify(next) !== JSON.stringify(this.slots)) this.slots = next;
   };
 
   // Typing -----------------------------------------------------------------------------------
@@ -414,7 +372,9 @@ export class ScDateRange {
   };
 
   /** On blur: commit the typed date, format it, and show what's wrong with the range (never swap the dates). */
-  private onCommit = (end: End) => () => {
+  private onCommit = (end: End) => (ev: Event) => {
+    // The host dispatches its own `change` once the range changes; the segment's is internal.
+    ev.stopPropagation();
     const parsed = parseTyped(this.texts[end], this.monthNames);
     const before = { start: this.start, end: this.end };
     this.setValue(end, parsed ?? '');
@@ -433,7 +393,9 @@ export class ScDateRange {
 
   private emitChange() {
     this.scChange.emit({ start: this.start, end: this.end });
-    emitNativeChange(this.el);
+    // The segments' own `change` is not this component's change (the value is committed on
+    // blur and by Apply), so a native `change` is dispatched from the host.
+    this.el.dispatchEvent(new globalThis.Event('change', { bubbles: true }));
   }
 
   // The picker -----------------------------------------------------------------------------
@@ -443,7 +405,7 @@ export class ScDateRange {
   }
 
   private openPicker() {
-    if (this.isOpen || this.disabled || this.formDisabled) return;
+    if (this.isOpen || this.calendarButton?.matches(':disabled')) return;
     const compact = typeof matchMedia !== 'undefined' && matchMedia('(max-width: 599.98px)').matches;
     this.mode = compact ? 'sheet' : 'popover';
     const months = Number(this.months);
@@ -511,7 +473,7 @@ export class ScDateRange {
 
   /** 8px below the field, aligned to its inline-start edge; above it when there's no room below. */
   private position = () => {
-    const frame = this.el.shadowRoot?.querySelector('.range-frame');
+    const frame = this.el.querySelector('.sc-date-range__frame');
     const pop = this.popover;
     if (!frame || !pop || !this.isOpen || this.mode !== 'popover') return;
     const rect = frame.getBoundingClientRect();
@@ -575,7 +537,7 @@ export class ScDateRange {
    * --_shift is 0px, so the months only crossfade. Keyboard month changes never call this.
    */
   private slideMonths(by: 1 | -1) {
-    const months = this.pickerEl?.querySelector<HTMLElement>('.months');
+    const months = this.pickerEl?.querySelector<HTMLElement>('.sc-date-range__months');
     if (!months?.animate) return;
     const styles = getComputedStyle(months);
     const duration = parseFloat(styles.getPropertyValue('--sc-duration-base')) || 0;
@@ -771,7 +733,7 @@ export class ScDateRange {
     this.drag = { id: ev.pointerId, y: ev.clientY, t: ev.timeStamp, dy: 0 };
     // The grab area holds no buttons, so capturing the pointer can't swallow a tap.
     (ev.currentTarget as HTMLElement).setPointerCapture?.(ev.pointerId);
-    this.sheet?.classList.add('picker--dragging');
+    this.sheet?.classList.add('sc-date-range__picker--dragging');
   };
 
   private onDragMove = (ev: PointerEvent) => {
@@ -790,7 +752,7 @@ export class ScDateRange {
     const { dy, t } = this.drag;
     const velocity = dy / Math.max(1, ev.timeStamp - t);
     this.drag = undefined;
-    this.sheet.classList.remove('picker--dragging');
+    this.sheet.classList.remove('sc-date-range__picker--dragging');
     this.sheet.style.removeProperty('transform');
     if (velocity > 0.11 || dy > this.sheet.offsetHeight / 3) this.closePicker(true);
   };
@@ -798,7 +760,7 @@ export class ScDateRange {
   // Rendering --------------------------------------------------------------------------------
 
   private errorState(): { text?: string; parts: Set<End>; show: boolean } {
-    const hasOwn = !!this.error || this.slots.error;
+    const hasOwn = !!this.error || !!this.slotted.error;
     if (hasOwn) {
       const parts = new Set<End>(this.errorParts === 'start' ? ['start'] : this.errorParts === 'end' ? ['end'] : ['start', 'end']);
       return { text: this.error, parts, show: true };
@@ -819,15 +781,14 @@ export class ScDateRange {
     const t = this.t;
     return (
       // The whole 54px segment, label included, is the input's target (A11Y-04), not only the text line.
-      <div class={{ 'segment': true, [`segment--${end}`]: true, 'segment--error': invalid }} onClick={this.onSegmentClick(end)}>
-        <span class="segment-label" aria-hidden="true">
+      <div class={{ 'sc-date-range__segment': true, [`sc-date-range__segment--${end}`]: true, 'sc-date-range__segment--error': invalid }} onClick={this.onSegmentClick(end)}>
+        <span class="sc-date-range__segment-label" aria-hidden="true">
           {t(end === 'start' ? 'dateRangeFrom' : 'dateRangeTo')}
         </span>
         <input
           ref={(el) => (this.inputs[end] = el)}
-          id={end}
-          class="control segment-input"
-          part="control"
+          id={`${this.uid}-${end}`}
+          class="sc-date-range__segment-input"
           type="text"
           inputMode="numeric"
           autoComplete="off"
@@ -848,7 +809,7 @@ export class ScDateRange {
 
   private renderMonth(m: YearMonth, index: number, count: number) {
     const t = this.t;
-    const id = `month-${m.year}-${m.month}`;
+    const id = `${this.uid}-month-${m.year}-${m.month}`;
     const sheet = this.mode === 'sheet';
     const short = this.list('dateRangeWeekdaysShort');
     const long = this.list('dateRangeWeekdays');
@@ -862,27 +823,27 @@ export class ScDateRange {
     const rows = [0, 1, 2, 3, 4, 5].map((r) => cells.slice(r * 7, r * 7 + 7));
 
     return (
-      <div class="month" key={id}>
-        <div class="month-head">
+      <div class="sc-date-range__month" key={id}>
+        <div class="sc-date-range__month-head">
           {!sheet && index === 0 && (
-            <button type="button" class="nav nav--prev focus-ring" aria-label={t('dateRangePrevMonth')} disabled={!this.canGo(-1)} onClick={() => this.go(-1)}>
+            <button type="button" class="sc-date-range__nav sc-date-range__nav--prev" aria-label={t('dateRangePrevMonth')} disabled={!this.canGo(-1)} onClick={() => this.go(-1)}>
               <ChevronBack />
             </button>
           )}
-          <h2 id={id} class="month-title">
+          <h2 id={id} class="sc-date-range__month-title">
             {this.monthTitle(m)}
           </h2>
           {!sheet && index === count - 1 && (
-            <button type="button" class="nav nav--next focus-ring" aria-label={t('dateRangeNextMonth')} disabled={!this.canGo(1)} onClick={() => this.go(1)}>
+            <button type="button" class="sc-date-range__nav sc-date-range__nav--next" aria-label={t('dateRangeNextMonth')} disabled={!this.canGo(1)} onClick={() => this.go(1)}>
               <ChevronForward />
             </button>
           )}
         </div>
-        <table class="grid" role="grid" aria-labelledby={id} onKeyDown={this.onGridKey} onMouseLeave={() => (this.hover = '')}>
+        <table class="sc-date-range__grid" role="grid" aria-labelledby={id} onKeyDown={this.onGridKey} onMouseLeave={() => (this.hover = '')}>
           <thead class={{ 'visually-hidden': sheet }}>
             <tr>
               {short.map((d, i) => (
-                <th scope="col" abbr={long[i]} class="weekday">
+                <th scope="col" abbr={long[i]} class="sc-date-range__weekday">
                   <span aria-hidden="true">{d}</span>
                   <span class="visually-hidden">{long[i]}</span>
                 </th>
@@ -893,31 +854,31 @@ export class ScDateRange {
             {rows.map((row) => (
               <tr>
                 {row.map((iso, col) => {
-                  if (!iso) return <td class="day day--blank" role="gridcell" />;
+                  if (!iso) return <td class="sc-date-range__day sc-date-range__day--blank" role="gridcell" />;
                   const disabled = this.isDisabled(iso);
                   const isStart = iso === start;
                   const isEnd = iso === end;
                   const inBand = !!(start && bandEnd && iso >= start && iso <= bandEnd && start !== bandEnd);
                   const selected = !!(start && ((end && iso >= start && iso <= end) || isStart));
                   const cls = {
-                    'day': true,
-                    'day--band': inBand,
-                    'day--preview': inBand && !end,
-                    'day--band-start': inBand && iso === start,
-                    'day--band-end': inBand && iso === bandEnd,
+                    'sc-date-range__day': true,
+                    'sc-date-range__day--band': inBand,
+                    'sc-date-range__day--preview': inBand && !end,
+                    'sc-date-range__day--band-start': inBand && iso === start,
+                    'sc-date-range__day--band-end': inBand && iso === bandEnd,
                     // The band is rounded where it meets a row edge or a month boundary.
-                    'day--edge-start': inBand && (col === 0 || iso === monthFirst),
-                    'day--edge-end': inBand && (col === 6 || iso === monthLast),
+                    'sc-date-range__day--edge-start': inBand && (col === 0 || iso === monthFirst),
+                    'sc-date-range__day--edge-end': inBand && (col === 6 || iso === monthLast),
                   };
                   return (
                     <td class={cls} role="gridcell" aria-selected={selected ? 'true' : 'false'}>
                       <button
                         type="button"
                         class={{
-                          'day-button': true,
-                          'day-button--end': isStart || isEnd,
-                          'day-button--today': iso === this.todayValue,
-                          'day-button--disabled': disabled,
+                          'sc-date-range__day-button': true,
+                          'sc-date-range__day-button--end': isStart || isEnd,
+                          'sc-date-range__day-button--today': iso === this.todayValue,
+                          'sc-date-range__day-button--disabled': disabled,
                         }}
                         data-date={iso}
                         tabindex={iso === this.focusDate ? 0 : -1}
@@ -952,11 +913,12 @@ export class ScDateRange {
     const target = this.target ?? (start && !end ? 'end' : 'start');
 
     const presetButtons = presets.length > 0 && (
-      <div class="presets" role="group" aria-label={t('dateRangePresets')}>
+      <div class="sc-date-range__presets" role="group" aria-label={t('dateRangePresets')}>
         {presets.map((p) => {
           const on = p.start === start && p.end === end;
           return (
-            <button type="button" class={{ 'preset': true, 'preset--on': on, 'focus-ring': true }} aria-pressed={on ? 'true' : 'false'} onClick={() => this.applyPreset(p)}>
+            <button type="button" class={{ 'sc-date-range__preset': true, 'sc-date-range__preset--on': on }} aria-pressed={on ? 'true' : 'false'} onClick={() => this.applyPreset(p)}>
+              {on && <CheckMark />}
               {p.label}
             </button>
           );
@@ -966,43 +928,43 @@ export class ScDateRange {
 
     return [
       sheet && (
-        <div class="sheet-head">
-          <div class="sheet-grab" onPointerDown={this.onDragStart} onPointerMove={this.onDragMove} onPointerUp={this.onDragEnd} onPointerCancel={this.onDragEnd}>
-            <span class="grabber" aria-hidden="true" />
+        <div class="sc-date-range__sheet-head">
+          <div class="sc-date-range__sheet-grab" onPointerDown={this.onDragStart} onPointerMove={this.onDragMove} onPointerUp={this.onDragEnd} onPointerCancel={this.onDragEnd}>
+            <span class="sc-date-range__grabber" aria-hidden="true" />
           </div>
-          <div class="sheet-title-row">
-            <h2 class="sheet-title" id="picker-title">
+          <div class="sc-date-range__sheet-title-row">
+            <h2 class="sc-date-range__sheet-title" id={`${this.uid}-title`}>
               {t('dateRangeChoose')}
             </h2>
-            <button type="button" class="nav close focus-ring" aria-label={t('dateRangeClose')} onClick={() => this.closePicker(true)}>
+            <button type="button" class="sc-date-range__nav sc-date-range__close" aria-label={t('dateRangeClose')} onClick={() => this.closePicker(true)}>
               <Close />
             </button>
           </div>
-          <div class="chips">
+          <div class="sc-date-range__chips">
             {(['start', 'end'] as End[]).map((e) => (
-              <button type="button" class={{ 'chip': true, 'chip--on': target === e, 'focus-ring': true }} aria-pressed={target === e ? 'true' : 'false'} onClick={() => (this.target = e)}>
-                <span class="chip-label">{t(e === 'start' ? 'dateRangeFrom' : 'dateRangeTo')}</span>
-                <span class="chip-value">{this.pending[e] ? this.format(this.pending[e], { year: false }) : t('dateRangeChipEmpty')}</span>
+              <button type="button" class={{ 'sc-date-range__chip': true, 'sc-date-range__chip--on': target === e }} aria-pressed={target === e ? 'true' : 'false'} onClick={() => (this.target = e)}>
+                <span class="sc-date-range__chip-label">{t(e === 'start' ? 'dateRangeFrom' : 'dateRangeTo')}</span>
+                <span class="sc-date-range__chip-value">{this.pending[e] ? this.format(this.pending[e], { year: false }) : t('dateRangeChipEmpty')}</span>
               </button>
             ))}
           </div>
           {presetButtons}
-          <div class="weekdays" aria-hidden="true">
+          <div class="sc-date-range__weekdays" aria-hidden="true">
             {this.list('dateRangeWeekdaysShort').map((d) => (
-              <span class="weekday">{d}</span>
+              <span class="sc-date-range__weekday">{d}</span>
             ))}
           </div>
         </div>
       ),
-      <div class="picker-body">
+      <div class="sc-date-range__picker-body">
         {!sheet && presetButtons}
-        <div class="months">
+        <div class="sc-date-range__months">
           {months.map((m, i) => this.renderMonth(m, i, months.length))}
         </div>
       </div>,
-      <div class="picker-foot">
-        <p class="summary">{note}</p>
-        <div class="foot-actions">
+      <div class="sc-date-range__picker-foot">
+        <p class="sc-date-range__summary">{note}</p>
+        <div class="sc-date-range__foot-actions">
           <sc-button variant="tertiary" size="m" onClick={this.clear}>
             {t('dateRangeClear')}
           </sc-button>
@@ -1016,10 +978,11 @@ export class ScDateRange {
 
   render() {
     const { t } = this.locale;
-    const hasHint = !!this.hint || this.slots.hint;
-    const disabled = this.disabled || this.formDisabled;
+    const id = this.uid;
+    const { slotted } = this;
+    const hasHint = !!this.hint || !!slotted.hint;
     const err = this.errorState();
-    const described = describedBy(hasHint && 'hint', err.show && 'error');
+    const described = describedBy(hasHint && `${id}-hint`, err.show && `${id}-error`);
     const range = isIso(this.start) && isIso(this.end) ? this.spoken(this.start, this.end) : '';
     const buttonLabel = range ? this.t('dateRangeChooseSet', { range }) : this.t('dateRangeChoose');
     const sheet = this.mode === 'sheet';
@@ -1027,36 +990,31 @@ export class ScDateRange {
 
     return (
       <Host>
-        <fieldset class={{ 'field': true, 'field--error': err.show }} part="field" role="group" aria-describedby={described} disabled={disabled}>
-          <FieldLabel text={this.label} optional={this.optional} optionalText={t('optional')} level={headingLevel(this.headingLevel)} as="legend" />
-          <FieldHint text={this.hint} show={hasHint} />
-          <FieldError text={err.text} show={err.show} prefix={t('errorPrefix')} />
-          <div
-            class={{ 'frame': true, 'range-frame': true, 'frame--error': err.parts.size === 2, 'frame--disabled': disabled, 'frame--open': this.isOpen }}
-            part="frame"
-          >
-            {this.renderSegment('start', err.parts.has('start'), disabled, described)}
-            <ArrowForward class="range-arrow" />
-            {this.renderSegment('end', err.parts.has('end'), disabled, described)}
+        <fieldset class={{ 'sc-field': true, 'sc-field--error': err.show }} role="group" aria-describedby={described} disabled={this.disabled}>
+          <FieldLabel id={`${id}-label`} text={this.label} rich={slotted.label} optional={this.optional} optionalText={t('fieldOptional')} level={headingLevel(this.headingLevel)} as="legend" />
+          <FieldHint id={`${id}-hint`} text={this.hint} rich={slotted.hint} show={hasHint} />
+          <FieldError id={`${id}-error`} text={err.text} rich={this.error ? undefined : slotted.error} show={err.show} prefix={t('fieldErrorPrefix')} />
+          <div class={{ 'sc-field__frame': true, 'sc-date-range__frame': true, 'sc-field__frame--error': err.parts.size === 2, 'sc-date-range__frame--open': this.isOpen }}>
+            {this.renderSegment('start', err.parts.has('start'), this.disabled, described)}
+            <ArrowForward class="sc-date-range__range-arrow" />
+            {this.renderSegment('end', err.parts.has('end'), this.disabled, described)}
             <button
               ref={(el) => (this.calendarButton = el)}
               type="button"
-              class="calendar-button focus-ring"
-              part="calendar-button"
+              class="sc-date-range__calendar-button"
               aria-label={buttonLabel}
               aria-haspopup="dialog"
               aria-expanded={this.isOpen ? 'true' : 'false'}
-              disabled={disabled}
               onClick={() => (this.isOpen ? this.closePicker(true) : this.openPicker())}
             >
               <CalendarIcon />
             </button>
           </div>
+          {this.name && [<input type="hidden" name={`${this.name}-start`} value={this.start} />, <input type="hidden" name={`${this.name}-end`} value={this.end} />]}
         </fieldset>
         <div
           ref={(el) => (this.popover = el)}
-          class={{ 'picker': true, 'picker--popover': true, 'picker--two': this.twoMonths, 'picker--presets': this.presetList().length > 0, 'picker--flipped': this.flipped }}
-          part="picker"
+          class={{ 'sc-date-range__picker': true, 'sc-date-range__picker--popover': true, 'sc-date-range__picker--two': this.twoMonths, 'sc-date-range__picker--presets': this.presetList().length > 0, 'sc-date-range__picker--flipped': this.flipped }}
           {...{ popover: 'manual' }}
           role="dialog"
           aria-label={this.t('dateRangeChoose')}
@@ -1066,9 +1024,8 @@ export class ScDateRange {
         </div>
         <dialog
           ref={(el) => (this.sheet = el)}
-          class={{ 'picker': true, 'picker--sheet': true }}
-          part="picker"
-          aria-labelledby="picker-title"
+          class={{ 'sc-date-range__picker': true, 'sc-date-range__picker--sheet': true }}
+          aria-labelledby={`${this.uid}-title`}
           onCancel={(ev: Event) => {
             ev.preventDefault();
             this.closePicker(true);

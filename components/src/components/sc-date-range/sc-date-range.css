@@ -1,758 +1,752 @@
-@import '../sc-text-input/field-v1.css';
-
-:host {
-  /* Month change shift: 12px in the direction of travel, mirrored in right-to-left. */
-  --_shift: 12px;
-  /* Day circles are 40px; each column and row is 44px, and so is each day's target (A11Y-04). */
-  --_cell: 40px;
-  --_col: var(--sc-size-target-min);
-  --_row: var(--sc-size-target-min);
-}
-
-:host(:dir(rtl)) {
-  --_shift: -12px;
-}
-
-@media (prefers-reduced-motion: reduce) {
+/*
+ * sc-date-range (v2, light DOM). field.css (first in styleUrls) gives the fieldset, legend,
+ * hint, error, bar and the 56px frame. Rules: component-language.md A15 and the v1 spec
+ * (specs/sc-date-range.md) for behaviour. Every class is prefixed .sc-date-range__ because
+ * the picker lives in the page's DOM.
+ */
+@layer sc.components {
   :host {
-    --_shift: 0px;
+    /* Month change shift: 12px in the direction of travel, mirrored in right-to-left. */
+    --_shift: 12px;
+    /* Day circles and their targets are 44 × 44 (A11Y-04). */
+    --_cell: var(--sc-size-target-min);
+    --_col: var(--sc-size-target-min);
+    --_row: var(--sc-size-target-min);
   }
-}
 
-/* Field frame: [From segment] → [To segment] [calendar button] ---------------------------- */
-
-.range-frame {
-  align-items: center;
-  max-inline-size: calc(var(--sc-size-measure) * 0.9);
-}
-
-.segment {
-  position: relative;
-  flex: 1 1 0;
-  min-inline-size: 0;
-  display: grid;
-  align-content: center;
-  align-self: stretch;
-  padding-block: var(--sc-space-4);
-  padding-inline: var(--sc-space-16) var(--sc-space-8);
-  border-radius: calc(var(--sc-radius-field) - var(--sc-size-border-control));
-  text-align: start;
-  cursor: text;
-}
-
-.segment-label {
-  color: var(--sc-color-muted);
-  font-family: var(--type-caption-s-family);
-  font-weight: var(--type-caption-s-weight);
-  font-size: var(--type-caption-s-size);
-  line-height: var(--type-caption-s-leading);
-  letter-spacing: var(--type-caption-s-tracking);
-}
-
-.segment-input {
-  padding: 0;
-  /* Typed text is direction-isolated (dir="auto"), but still sits at the start of the segment. */
-  text-align: match-parent;
-  font-variant-numeric: tabular-nums;
-  text-overflow: ellipsis;
-}
-
-.segment-input::placeholder {
-  color: var(--sc-color-muted);
-  opacity: 1;
-}
-
-/* The ring sits on the segment, not the whole frame: two inputs share one frame. */
-.range-frame:has(.control:focus-visible) {
-  outline: none;
-  box-shadow: inset 0 0 0 var(--_border-extra) var(--_border);
-}
-
-.segment:has(.control:focus-visible) {
-  outline: var(--sc-size-focus-ring) solid var(--sc-channel-action);
-  outline-offset: calc(-1 * var(--sc-size-focus-ring));
-}
-
-/* An error on one segment marks that segment only. */
-.segment--error {
-  box-shadow: inset 0 0 0 var(--sc-size-border-strong) var(--sc-color-error);
-}
-
-.frame--error .segment--error {
-  box-shadow: none;
-}
-
-.range-arrow {
-  --icon-size: var(--sc-size-icon-m);
-  color: var(--sc-color-muted);
-}
-
-.calendar-button {
-  flex: none;
-  display: grid;
-  place-items: center;
-  inline-size: var(--sc-size-target-min);
-  block-size: var(--sc-size-target-min);
-  margin-inline: var(--sc-space-8) var(--sc-space-4);
-  padding: 0;
-  border: var(--sc-size-border-hairline) solid transparent;
-  border-radius: var(--sc-radius-pill);
-  background: transparent;
-  color: var(--sc-color-ink);
-  cursor: pointer;
-  transition: background-color var(--sc-duration-fast) var(--sc-easing-hover);
-}
-
-.frame--open .calendar-button {
-  background: var(--sc-color-fill-quiet);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .calendar-button:hover:not(:disabled) {
-    background: var(--sc-color-fill-quiet);
+  :host(:dir(rtl)) {
+    --_shift: -12px;
   }
-}
 
-.calendar-button:disabled {
-  color: var(--sc-color-muted);
-  cursor: not-allowed;
-}
-
-/* Picker: shared ---------------------------------------------------------------------------- */
-
-.picker {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  border: var(--sc-size-border-hairline) solid transparent;
-  background: var(--sc-color-surface);
-  color: var(--sc-color-ink);
-  font-family: var(--type-body-s-family);
-}
-
-.picker h2 {
-  margin: 0;
-}
-
-.picker-body {
-  display: flex;
-  align-items: flex-start;
-}
-
-.months {
-  display: flex;
-  gap: var(--sc-space-40);
-}
-
-.month {
-  inline-size: calc(7 * var(--_col));
-}
-
-.month-head {
-  display: grid;
-  grid-template-columns: var(--sc-size-target-min) minmax(0, 1fr) var(--sc-size-target-min);
-  align-items: center;
-  margin-block-end: var(--sc-space-8);
-  margin-inline: calc(-1 * var(--sc-space-4));
-}
-
-.month-title {
-  grid-column: 2;
-  text-align: center;
-  white-space: nowrap;
-  color: var(--sc-color-ink-strong);
-  font-family: var(--type-title-s-family);
-  font-weight: var(--type-title-s-weight);
-  font-size: var(--type-title-s-size);
-  line-height: var(--type-title-s-leading);
-  letter-spacing: var(--type-title-s-tracking);
-}
-
-/* Previous at inline-start, next at inline-end: a 44px target around a 36px fill-quiet circle. */
-.nav {
-  position: relative;
-  display: grid;
-  place-items: center;
-  inline-size: var(--sc-size-target-min);
-  block-size: var(--sc-size-target-min);
-  padding: 0;
-  border: 0;
-  border-radius: var(--sc-radius-pill);
-  background: transparent;
-  color: var(--sc-color-ink);
-  cursor: pointer;
-}
-
-.nav::before {
-  content: '';
-  position: absolute;
-  inset: var(--sc-space-4);
-  border: var(--sc-size-border-hairline) solid transparent;
-  border-radius: var(--sc-radius-pill);
-  background: var(--sc-color-fill-quiet);
-}
-
-.nav .icon {
-  position: relative;
-}
-
-.nav--prev {
-  grid-column: 1;
-}
-
-.nav--next {
-  grid-column: 3;
-}
-
-.nav:disabled {
-  opacity: 0.45;
-  cursor: default;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .nav:hover:not(:disabled)::before {
-    background: var(--sc-color-fill-selected);
+  @media (prefers-reduced-motion: reduce) {
+    :host {
+      --_shift: 0px;
+    }
   }
-}
 
-/* Day grid ------------------------------------------------------------------------------------ */
-
-.grid {
-  inline-size: 100%;
-  border-collapse: collapse;
-  border-spacing: 0;
-  table-layout: fixed;
-}
-
-.weekday {
-  block-size: var(--sc-space-32);
-  padding: 0;
-  text-align: center;
-  color: var(--sc-color-muted);
-  font-family: var(--type-caption-family);
-  font-weight: var(--type-caption-weight);
-  font-size: var(--type-caption-size);
-  line-height: var(--type-caption-leading);
-  letter-spacing: var(--type-caption-tracking);
-}
-
-.day {
-  position: relative;
-  inline-size: var(--_col);
-  block-size: var(--_row);
-  padding: 0;
-  text-align: center;
-}
-
-/* The range band: 40 high, joining the end circles, rounded at row edges and month boundaries. */
-.day--band::before {
-  content: '';
-  position: absolute;
-  inset-block: calc((var(--_row) - var(--_cell)) / 2);
-  inset-inline: 0;
-  background: var(--sc-channel-subtle);
-}
-
-.day--preview::before {
-  background: var(--sc-color-fill-quiet);
-}
-
-.day--band-start::before {
-  inset-inline-start: 50%;
-}
-
-.day--band-end::before {
-  inset-inline-end: 50%;
-}
-
-.day--edge-start:not(.day--band-start)::before {
-  border-start-start-radius: var(--sc-radius-pill);
-  border-end-start-radius: var(--sc-radius-pill);
-}
-
-.day--edge-end:not(.day--band-end)::before {
-  border-start-end-radius: var(--sc-radius-pill);
-  border-end-end-radius: var(--sc-radius-pill);
-}
-
-.day-button {
-  position: relative;
-  box-sizing: border-box;
-  display: inline-grid;
-  place-items: center;
-  inline-size: var(--_cell);
-  block-size: var(--_cell);
-  padding: 0;
-  border: 0;
-  border-radius: var(--sc-radius-pill);
-  background: transparent;
-  color: var(--sc-color-ink);
-  font-family: var(--sc-font-family-medium);
-  font-weight: var(--sc-font-weight-medium);
-  font-size: var(--type-body-s-size);
-  line-height: var(--type-body-s-leading);
-  font-variant-numeric: tabular-nums;
-  cursor: pointer;
-  outline: none;
-  transition: transform var(--sc-duration-press) var(--sc-easing-enter);
-}
-
-/* The 40px circle's target grows to 44 x 44 without moving it. */
-.day-button::after {
-  content: '';
-  position: absolute;
-  inset: min(0px, calc((var(--_cell) - var(--sc-size-target-min)) / 2));
-}
-
-.day-button--today {
-  box-shadow: inset 0 0 0 var(--sc-size-border-control) var(--sc-color-control);
-}
-
-/* The shared focus ring (A11Y-05), drawn above the neighbouring days. */
-.day-button:focus-visible {
-  z-index: 1;
-  outline: var(--sc-size-focus-ring) solid var(--sc-channel-action);
-  outline-offset: var(--sc-size-focus-offset);
-  box-shadow: 0 0 0 var(--sc-size-focus-offset) var(--sc-color-surface);
-}
-
-.day-button--today:focus-visible {
-  box-shadow:
-    inset 0 0 0 var(--sc-size-border-control) var(--sc-color-control),
-    0 0 0 var(--sc-size-focus-offset) var(--sc-color-surface);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .day-button:not(.day-button--disabled):not(.day-button--end):hover {
-    background: var(--sc-color-fill-quiet);
+  /* Field: [From] → [To] [calendar button] in one 56px frame ------------------------------ */
+  .sc-date-range__frame {
+    align-items: center;
+    max-inline-size: calc(var(--sc-size-measure) * 0.9);
   }
-}
 
-/* Pointer press only: after keyboard navigation the button is :focus-visible and doesn't scale. */
-.day-button:not(.day-button--disabled):active:not(:focus-visible) {
-  transform: scale(var(--sc-scale-press));
-}
-
-.day-button--end,
-.day-button--end:hover {
-  background: var(--sc-channel-action);
-  color: var(--sc-color-on-action);
-}
-
-.day-button--disabled {
-  color: var(--sc-color-muted);
-  opacity: 0.45;
-  cursor: default;
-}
-
-/* Month change by pointer: a WAAPI crossfade with a --_shift slide (see slideMonths()). */
-
-/* Presets and footer -------------------------------------------------------------------------- */
-
-.presets {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sc-space-4);
-}
-
-.preset {
-  box-sizing: border-box;
-  min-block-size: var(--sc-size-target-min);
-  padding-block: var(--sc-space-8);
-  padding-inline: var(--sc-space-12);
-  border: var(--sc-size-border-hairline) solid transparent;
-  border-radius: var(--sc-radius-pill);
-  background: transparent;
-  color: var(--sc-color-ink);
-  text-align: start;
-  font-family: var(--type-label-m-family);
-  font-weight: var(--type-label-m-weight);
-  font-size: var(--type-label-m-size);
-  line-height: var(--type-label-m-leading);
-  letter-spacing: var(--type-label-m-tracking);
-  white-space: nowrap;
-  cursor: pointer;
-}
-
-.preset--on {
-  background: var(--sc-color-fill-selected);
-  color: var(--sc-color-ink-strong);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .preset:not(.preset--on):hover {
-    background: var(--sc-color-fill-quiet);
+  .sc-date-range__segment {
+    position: relative;
+    flex: 1 1 0;
+    min-inline-size: 0;
+    display: grid;
+    align-content: center;
+    align-self: stretch;
+    padding-block: var(--sc-space-2);
+    padding-inline: var(--sc-space-16) var(--sc-space-8);
+    border-radius: calc(var(--sc-radius-field) - var(--sc-size-border-control));
+    text-align: start;
+    cursor: text;
   }
-}
 
-.picker-foot {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: var(--sc-space-12) var(--sc-space-16);
-  margin-block-start: var(--sc-space-16);
-  padding-block-start: var(--sc-space-16);
-  border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-rule);
-}
-
-.summary {
-  margin: 0;
-  color: var(--sc-color-muted);
-  font-family: var(--type-body-s-family);
-  font-weight: var(--type-body-s-weight);
-  font-size: var(--type-body-s-size);
-  line-height: var(--type-body-s-leading);
-  letter-spacing: var(--type-body-s-tracking);
-  font-variant-numeric: tabular-nums;
-}
-
-.foot-actions {
-  display: flex;
-  align-items: center;
-  gap: var(--sc-space-8);
-  margin-inline-start: auto;
-}
-
-/* Popover (medium and wider) ------------------------------------------------------------------- */
-
-.picker--popover {
-  position: fixed;
-  inset: auto;
-  inset-block-start: var(--_top, 0);
-  inset-inline-start: var(--_start, 0);
-  inline-size: max-content;
-  max-inline-size: calc(100vw - 2 * var(--sc-space-8));
-  max-block-size: calc(100dvh - 2 * var(--sc-space-8));
-  overflow: auto;
-  padding: var(--sc-space-20);
-  border-radius: var(--sc-radius-panel);
-  box-shadow: var(--sc-elevation-3);
-  /* From the trigger corner: the field's top inline-start (bottom when flipped above it). */
-  transform-origin: 0 0;
-  opacity: 0;
-  /* Exit: opacity only, about 20% faster than the entrance. */
-  transition:
-    opacity var(--sc-duration-exit) var(--sc-easing-exit),
-    display var(--sc-duration-exit) allow-discrete,
-    overlay var(--sc-duration-exit) allow-discrete;
-}
-
-:host(:dir(rtl)) .picker--popover {
-  transform-origin: 100% 0;
-}
-
-.picker--popover.picker--flipped {
-  transform-origin: 0 100%;
-}
-
-:host(:dir(rtl)) .picker--popover.picker--flipped {
-  transform-origin: 100% 100%;
-}
-
-.picker--popover:popover-open {
-  opacity: 1;
-  transform: scale(1);
-  transition:
-    opacity var(--sc-duration-base) var(--sc-easing-enter),
-    transform var(--sc-duration-base) var(--sc-easing-enter),
-    display var(--sc-duration-base) allow-discrete,
-    overlay var(--sc-duration-base) allow-discrete;
-}
-
-@starting-style {
-  .picker--popover:popover-open {
-    opacity: 0;
-    transform: scale(var(--sc-scale-enter));
+  .sc-date-range__segment-label {
+    color: var(--sc-color-on-surface-variant);
+    font: var(--sc-type-label-small);
+    letter-spacing: var(--sc-type-label-small-tracking);
   }
-}
 
-.picker--popover .presets {
-  flex: none;
-  inline-size: 168px;
-  margin-inline-end: var(--sc-space-20);
-  padding-inline-end: var(--sc-space-16);
-  border-inline-end: var(--sc-size-border-hairline) solid var(--sc-color-rule);
-  align-self: stretch;
-}
-
-.picker--popover .picker-foot .summary {
-  margin-inline-end: var(--sc-space-16);
-}
-
-/* Bottom sheet (below 600px) -------------------------------------------------------------------- */
-
-.picker--sheet {
-  position: fixed;
-  inset: auto 0 0 0;
-  inline-size: 100%;
-  max-inline-size: 100%;
-  block-size: 92dvh;
-  max-block-size: 92dvh;
-  flex-direction: column;
-  border-start-start-radius: var(--sc-radius-sheet);
-  border-start-end-radius: var(--sc-radius-sheet);
-  box-shadow: var(--sc-elevation-3);
-  overflow: hidden;
-  --_cell: var(--sc-size-target-min);
-  transform: translateY(100%);
-  /* Exit: back the way it came, on the same curve, about 20% faster than the entrance. */
-  --_sheet-exit: calc(var(--sc-duration-slow) * 0.8);
-  transition:
-    transform var(--_sheet-exit) var(--sc-easing-drawer),
-    display var(--_sheet-exit) allow-discrete,
-    overlay var(--_sheet-exit) allow-discrete;
-}
-
-.picker--sheet[open] {
-  display: flex;
-  transform: translateY(0);
-  transition:
-    transform var(--sc-duration-slow) var(--sc-easing-drawer),
-    display var(--sc-duration-slow) allow-discrete,
-    overlay var(--sc-duration-slow) allow-discrete;
-}
-
-@starting-style {
-  .picker--sheet[open] {
-    transform: translateY(100%);
+  .sc-date-range__segment-input {
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: var(--sc-color-on-surface);
+    font: var(--sc-type-body-medium);
+    letter-spacing: var(--sc-type-body-medium-tracking);
+    /* Typed text is direction-isolated (dir="auto"), but still sits at the start of the segment. */
+    text-align: match-parent;
+    font-variant-numeric: tabular-nums;
+    text-overflow: ellipsis;
   }
-}
 
-.picker--sheet.picker--dragging {
-  transition: none;
-}
-
-.picker--sheet::backdrop {
-  background: oklab(from var(--sc-color-shadow) l a b / 28%);
-  opacity: 0;
-  transition:
-    opacity calc(var(--sc-duration-slow) * 0.8) var(--sc-easing-exit),
-    display calc(var(--sc-duration-slow) * 0.8) allow-discrete,
-    overlay calc(var(--sc-duration-slow) * 0.8) allow-discrete;
-}
-
-/* The scrim fades in step with the sheet. */
-.picker--sheet[open]::backdrop {
-  opacity: 1;
-  transition:
-    opacity var(--sc-duration-slow) var(--sc-easing-enter),
-    display var(--sc-duration-slow) allow-discrete,
-    overlay var(--sc-duration-slow) allow-discrete;
-}
-
-@starting-style {
-  .picker--sheet[open]::backdrop {
-    opacity: 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .picker--popover:popover-open,
-  .picker--sheet,
-  .picker--sheet[open] {
-    transform: none;
-  }
-}
-
-.sheet-head {
-  flex: none;
-  display: grid;
-  gap: var(--sc-space-12);
-  padding-inline: var(--sc-space-20);
-}
-
-.sheet-grab {
-  display: grid;
-  place-items: center;
-  block-size: var(--sc-space-24);
-  margin-inline: calc(-1 * var(--sc-space-20));
-  touch-action: none;
-  cursor: grab;
-}
-
-.grabber {
-  inline-size: var(--sc-space-40);
-  block-size: var(--sc-space-4);
-  border-radius: var(--sc-radius-pill);
-  background: var(--sc-color-control);
-}
-
-.sheet-title-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--sc-space-12);
-}
-
-.sheet-title {
-  color: var(--sc-color-ink-strong);
-  font-family: var(--type-title-m-family);
-  font-weight: var(--type-title-m-weight);
-  font-size: var(--type-title-m-size);
-  line-height: var(--type-title-m-leading);
-  letter-spacing: var(--type-title-m-tracking);
-}
-
-.chips {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--sc-space-12);
-}
-
-.chip {
-  display: grid;
-  min-block-size: var(--sc-size-control-l);
-  padding-block: var(--sc-space-6);
-  padding-inline: var(--sc-space-16);
-  border: var(--sc-size-border-control) solid var(--sc-color-control);
-  border-radius: var(--sc-radius-field);
-  background: var(--sc-color-surface);
-  color: var(--sc-color-ink);
-  text-align: start;
-  cursor: pointer;
-}
-
-/* The outlined chip is the end the next tap sets. */
-.chip--on {
-  border-color: var(--sc-channel-action);
-  box-shadow: inset 0 0 0 calc(var(--sc-size-border-strong) - var(--sc-size-border-control)) var(--sc-channel-action);
-}
-
-.chip-label {
-  color: var(--sc-color-muted);
-  font-family: var(--type-caption-s-family);
-  font-size: var(--type-caption-s-size);
-  line-height: var(--type-caption-s-leading);
-}
-
-.chip-value {
-  font-family: var(--type-body-m-family);
-  font-size: var(--type-body-m-size);
-  line-height: var(--type-body-m-leading);
-  font-variant-numeric: tabular-nums;
-}
-
-/* Preset chips: one row that scrolls sideways (from the right in Arabic). */
-.picker--sheet .presets {
-  flex-direction: row;
-  gap: var(--sc-space-8);
-  margin-inline: calc(-1 * var(--sc-space-20));
-  padding-inline: var(--sc-space-20);
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scrollbar-width: none;
-}
-
-.picker--sheet .preset {
-  flex: none;
-  background: var(--sc-color-fill-quiet);
-}
-
-.picker--sheet .preset--on {
-  background: var(--sc-color-fill-selected);
-  box-shadow: inset 0 0 0 var(--sc-size-border-strong) var(--sc-channel-action);
-}
-
-.weekdays {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  margin-inline: calc(-1 * var(--sc-space-20));
-  padding-inline: var(--sc-space-20);
-  border-block-end: var(--sc-size-border-hairline) solid var(--sc-color-rule);
-}
-
-.weekdays .weekday {
-  display: grid;
-  place-items: center;
-}
-
-.picker--sheet .picker-body {
-  flex: 1 1 auto;
-  min-block-size: 0;
-  display: block;
-  padding-inline: var(--sc-space-20);
-  overflow-y: auto;
-  overscroll-behavior: contain;
-}
-
-.picker--sheet .months {
-  flex-direction: column;
-  gap: var(--sc-space-24);
-  padding-block: var(--sc-space-16);
-}
-
-.picker--sheet .month {
-  inline-size: 100%;
-}
-
-.picker--sheet .month-head {
-  display: block;
-  margin: 0 0 var(--sc-space-8);
-}
-
-.picker--sheet .month-title {
-  text-align: start;
-}
-
-.picker--sheet .day {
-  inline-size: auto;
-}
-
-.picker--sheet .picker-foot {
-  flex: none;
-  flex-direction: column;
-  align-items: stretch;
-  gap: var(--sc-space-8);
-  margin: 0;
-  padding-block: var(--sc-space-12) calc(var(--sc-space-16) + env(safe-area-inset-bottom, 0px));
-  padding-inline: var(--sc-space-20);
-}
-
-.picker--sheet .summary {
-  text-align: center;
-}
-
-.picker--sheet .foot-actions {
-  flex-direction: column;
-  align-items: center;
-  margin: 0;
-}
-
-/* Forced colours -------------------------------------------------------------------------------- */
-
-@media (forced-colors: active) {
-  .picker,
-  .chip,
-  .nav::before {
-    border-color: CanvasText;
-  }
-  .day-button--end,
-  .day-button--end:hover {
-    forced-color-adjust: none;
-    background: Highlight;
-    color: HighlightText;
-  }
-  .day--band::before {
-    forced-color-adjust: none;
-    background: Canvas;
-    outline: var(--sc-size-border-hairline) solid CanvasText;
-    outline-offset: calc(-1 * var(--sc-size-border-hairline));
-  }
-  .preset--on,
-  .chip--on {
-    outline: var(--sc-size-border-strong) solid Highlight;
-  }
-  .day-button--disabled {
-    color: GrayText;
+  .sc-date-range__segment-input::placeholder {
+    color: var(--sc-color-on-surface-variant);
     opacity: 1;
   }
-  .segment:has(.control:focus-visible),
-  .day-button:focus-visible {
-    outline-color: Highlight;
+
+  .sc-date-range__segment-input:disabled {
+    color: var(--sc-color-on-disabled);
+  }
+
+  /* Two inputs share one frame, so the U1 ring sits just inside the segment that has focus. */
+  .sc-date-range__frame:has(.sc-date-range__segment-input:focus) {
+    outline: none;
+  }
+
+  .sc-date-range__segment:has(.sc-date-range__segment-input:focus) {
+    outline: var(--sc-size-focus-ring) solid var(--sc-color-focus-ring);
+    outline-offset: calc(-1 * var(--sc-size-focus-ring));
+  }
+
+  /* An error on one segment marks that segment only. */
+  .sc-date-range__segment--error {
+    box-shadow: inset 0 0 0 var(--sc-size-border-strong) var(--sc-color-error);
+  }
+
+  .sc-field__frame--error .sc-date-range__segment--error {
     box-shadow: none;
   }
-  .segment--error {
-    outline: var(--sc-size-border-strong) solid CanvasText;
+
+  .sc-date-range__range-arrow {
+    --icon-size: var(--sc-size-icon-m);
+    color: var(--sc-color-on-surface-variant);
+  }
+
+  .sc-date-range__calendar-button {
+    --icon-size: var(--sc-size-icon-l);
+    flex: none;
+    display: grid;
+    place-items: center;
+    inline-size: var(--sc-size-target-min);
+    block-size: var(--sc-size-target-min);
+    margin-inline: var(--sc-space-8) var(--sc-space-4);
+    padding: 0;
+    border: var(--sc-size-border-hairline) solid transparent;
+    border-radius: var(--sc-radius-full);
+    background: transparent;
+    color: var(--sc-color-on-surface);
+    cursor: pointer;
+    transition: background-color var(--sc-duration-fast) var(--sc-easing-hover);
+  }
+
+  .sc-date-range__frame--open .sc-date-range__calendar-button {
+    background: var(--sc-color-surface-container);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .sc-date-range__calendar-button:hover:enabled {
+      background: color-mix(in oklab, var(--sc-color-on-surface) var(--sc-opacity-hover), transparent);
+    }
+  }
+
+  .sc-date-range__calendar-button:disabled {
+    color: var(--sc-color-on-disabled);
+    cursor: not-allowed;
+  }
+
+  /* Picker: shared ------------------------------------------------------------------------- */
+  .sc-date-range__picker {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+    background: var(--sc-color-surface);
+    color: var(--sc-color-on-surface);
+    box-shadow: var(--sc-elevation-2);
+    font: var(--sc-type-body-medium);
+  }
+
+  .sc-date-range__picker h2 {
+    margin: 0;
+  }
+
+  .sc-date-range__picker-body {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .sc-date-range__months {
+    display: flex;
+    gap: var(--sc-space-40);
+  }
+
+  .sc-date-range__month {
+    inline-size: calc(7 * var(--_col));
+  }
+
+  .sc-date-range__month-head {
+    display: grid;
+    grid-template-columns: var(--sc-size-target-min) minmax(0, 1fr) var(--sc-size-target-min);
+    align-items: center;
+    margin-block-end: var(--sc-space-8);
+  }
+
+  .sc-date-range__month-title {
+    grid-column: 2;
+    text-align: center;
+    white-space: nowrap;
+    color: var(--sc-color-on-surface);
+    font: var(--sc-type-title-medium);
+    letter-spacing: var(--sc-type-title-medium-tracking);
+  }
+
+  /* Previous at inline-start, next at inline-end: a 44px target around a 36px circle. */
+  .sc-date-range__nav {
+    position: relative;
+    display: grid;
+    place-items: center;
+    inline-size: var(--sc-size-target-min);
+    block-size: var(--sc-size-target-min);
+    padding: 0;
+    border: 0;
+    border-radius: var(--sc-radius-full);
+    background: transparent;
+    color: var(--sc-color-on-surface);
+    cursor: pointer;
+  }
+
+  .sc-date-range__nav::before {
+    content: '';
+    position: absolute;
+    inset: var(--sc-space-4);
+    border: var(--sc-size-border-hairline) solid transparent;
+    border-radius: var(--sc-radius-full);
+    background: var(--sc-color-surface-container);
+    transition: background-color var(--sc-duration-fast) var(--sc-easing-hover);
+  }
+
+  .sc-date-range__nav .icon {
+    position: relative;
+  }
+
+  .sc-date-range__nav--prev {
+    grid-column: 1;
+  }
+
+  .sc-date-range__nav--next {
+    grid-column: 3;
+  }
+
+  .sc-date-range__nav:disabled {
+    color: var(--sc-color-on-disabled);
+    cursor: default;
+  }
+
+  .sc-date-range__nav:disabled::before {
+    background: transparent;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .sc-date-range__nav:hover:enabled::before {
+      background: var(--sc-color-surface-container-high);
+    }
+  }
+
+  /* Day grid ----------------------------------------------------------------------------- */
+  .sc-date-range__grid {
+    inline-size: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    table-layout: fixed;
+  }
+
+  .sc-date-range__weekday {
+    block-size: var(--sc-space-32);
+    padding: 0;
+    text-align: center;
+    color: var(--sc-color-on-surface-variant);
+    font: var(--sc-type-label-small);
+    letter-spacing: var(--sc-type-label-small-tracking);
+  }
+
+  .sc-date-range__day {
+    position: relative;
+    inline-size: var(--_col);
+    block-size: var(--_row);
+    padding: 0;
+    text-align: center;
+  }
+
+  /* The range band: 44 high, joining the end circles, rounded at row edges and month ends. */
+  .sc-date-range__day--band::before {
+    content: '';
+    position: absolute;
+    inset-block: calc((var(--_row) - var(--_cell)) / 2);
+    inset-inline: 0;
+    background: var(--sc-color-channel-subtle);
+  }
+
+  .sc-date-range__day--preview::before {
+    background: var(--sc-color-surface-container);
+  }
+
+  .sc-date-range__day--band-start::before {
+    inset-inline-start: 50%;
+  }
+
+  .sc-date-range__day--band-end::before {
+    inset-inline-end: 50%;
+  }
+
+  .sc-date-range__day--edge-start:not(.sc-date-range__day--band-start)::before {
+    border-start-start-radius: var(--sc-radius-full);
+    border-end-start-radius: var(--sc-radius-full);
+  }
+
+  .sc-date-range__day--edge-end:not(.sc-date-range__day--band-end)::before {
+    border-start-end-radius: var(--sc-radius-full);
+    border-end-end-radius: var(--sc-radius-full);
+  }
+
+  .sc-date-range__day-button {
+    position: relative;
+    box-sizing: border-box;
+    display: inline-grid;
+    place-items: center;
+    inline-size: var(--_cell);
+    block-size: var(--_cell);
+    padding: 0;
+    border: 0;
+    border-radius: var(--sc-radius-full);
+    background: transparent;
+    color: var(--sc-color-on-surface);
+    font: var(--sc-type-label-medium);
+    letter-spacing: var(--sc-type-label-medium-tracking);
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+    transition:
+      background-color var(--sc-duration-fast) var(--sc-easing-hover),
+      transform var(--sc-duration-press) var(--sc-easing-enter);
+  }
+
+  .sc-date-range__day-button--today {
+    box-shadow: inset 0 0 0 var(--sc-size-border-control) var(--sc-color-outline);
+  }
+
+  /* The U1 ring, drawn above the neighbouring days; keyboard moves are never animated. */
+  .sc-date-range__day-button:focus-visible {
+    z-index: 1;
+    transition: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .sc-date-range__day-button:not(.sc-date-range__day-button--disabled, .sc-date-range__day-button--end):hover {
+      background: color-mix(in oklab, var(--sc-color-on-surface) var(--sc-opacity-hover), transparent);
+    }
+  }
+
+  /* Pointer press only: after keyboard navigation the button is :focus-visible and doesn't scale. */
+  .sc-date-range__day-button:not(.sc-date-range__day-button--disabled):active:not(:focus-visible) {
+    transform: scale(var(--sc-scale-press));
+  }
+
+  .sc-date-range__day-button--end,
+  .sc-date-range__day-button--end:hover {
+    background: var(--sc-color-channel-action);
+    color: var(--sc-color-channel-on-action);
+  }
+
+  .sc-date-range__day-button--disabled {
+    color: var(--sc-color-on-disabled);
+    cursor: default;
+  }
+
+  /* Presets: filter-chip toggles (B18), 40 tall with a 44 target ------------------------- */
+  .sc-date-range__presets {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--sc-space-4);
+  }
+
+  .sc-date-range__preset {
+    position: relative;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sc-space-6);
+    min-block-size: var(--sc-space-40);
+    margin-block: var(--sc-space-2);
+    padding-inline: var(--sc-space-16);
+    border: var(--sc-size-border-control) solid var(--sc-color-outline);
+    border-radius: var(--sc-radius-full);
+    background: var(--sc-color-surface);
+    color: var(--sc-color-on-surface);
+    font: var(--sc-type-label-medium);
+    letter-spacing: var(--sc-type-label-medium-tracking);
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      background-color var(--sc-duration-fast) var(--sc-easing-hover),
+      transform var(--sc-duration-press) var(--sc-easing-enter);
+  }
+
+  /* The target reaches 44px without changing the 40px chip (Q-chips). */
+  .sc-date-range__preset::after {
+    content: '';
+    position: absolute;
+    inset: calc(-1 * var(--sc-space-2)) calc(-1 * var(--sc-size-border-control));
+  }
+
+  .sc-date-range__preset .icon {
+    --icon-size: calc(var(--sc-size-icon-s) + var(--sc-space-2));
+  }
+
+  .sc-date-range__preset--on {
+    border-color: transparent;
+    background: var(--sc-color-channel-action);
+    color: var(--sc-color-channel-on-action);
+    --sc-color-focus-ring: var(--sc-color-on-surface);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .sc-date-range__preset:not(.sc-date-range__preset--on):hover {
+      background: color-mix(in oklab, var(--sc-color-on-surface) var(--sc-opacity-hover), var(--sc-color-surface));
+    }
+    .sc-date-range__preset--on:hover {
+      background: var(--sc-color-channel-action-hover);
+    }
+  }
+
+  .sc-date-range__preset:active:not(:focus-visible) {
+    transform: scale(var(--sc-scale-press));
+  }
+
+  /* Footer ---------------------------------------------------------------------------------- */
+  .sc-date-range__picker-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--sc-space-12) var(--sc-space-16);
+    margin-block-start: var(--sc-space-16);
+    padding-block-start: var(--sc-space-16);
+    border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+  }
+
+  .sc-date-range__summary {
+    margin: 0;
+    color: var(--sc-color-on-surface-variant);
+    font: var(--sc-type-body-small);
+    letter-spacing: var(--sc-type-body-small-tracking);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .sc-date-range__foot-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--sc-space-8);
+    margin-inline-start: auto;
+  }
+
+  /* Popover (medium and wider) ------------------------------------------------------------ */
+  .sc-date-range__picker--popover {
+    position: fixed;
+    inset: auto;
+    inset-block-start: var(--_top, 0);
+    inset-inline-start: var(--_start, 0);
+    inline-size: max-content;
+    max-inline-size: calc(100vw - 2 * var(--sc-space-8));
+    max-block-size: calc(100dvh - 2 * var(--sc-space-8));
+    overflow: auto;
+    padding: var(--sc-space-20);
+    border-radius: var(--sc-radius-card);
+    /* From the trigger corner: the field's top inline-start (bottom when flipped above it). */
+    transform-origin: 0 0;
+    opacity: 0;
+    /* Exit: opacity only, about 20% faster than the entrance. */
+    transition:
+      opacity var(--sc-duration-exit) var(--sc-easing-exit),
+      display var(--sc-duration-exit) allow-discrete,
+      overlay var(--sc-duration-exit) allow-discrete;
+  }
+
+  :host(:dir(rtl)) .sc-date-range__picker--popover {
+    transform-origin: 100% 0;
+  }
+
+  .sc-date-range__picker--popover.sc-date-range__picker--flipped {
+    transform-origin: 0 100%;
+  }
+
+  :host(:dir(rtl)) .sc-date-range__picker--popover.sc-date-range__picker--flipped {
+    transform-origin: 100% 100%;
+  }
+
+  .sc-date-range__picker--popover:popover-open {
+    opacity: 1;
+    transform: scale(1);
+    transition:
+      opacity var(--sc-duration-base) var(--sc-easing-enter),
+      transform var(--sc-duration-base) var(--sc-easing-enter),
+      display var(--sc-duration-base) allow-discrete,
+      overlay var(--sc-duration-base) allow-discrete;
+  }
+
+  @starting-style {
+    .sc-date-range__picker--popover:popover-open {
+      opacity: 0;
+      transform: scale(var(--sc-scale-enter));
+    }
+  }
+
+  .sc-date-range__picker--popover .sc-date-range__presets {
+    flex: none;
+    margin-inline-end: var(--sc-space-20);
+    padding-inline-end: var(--sc-space-16);
+    border-inline-end: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+    align-self: stretch;
+  }
+
+  .sc-date-range__picker--popover .sc-date-range__summary {
+    margin-inline-end: var(--sc-space-16);
+  }
+
+  /* Bottom sheet (below 600px) ---------------------------------------------------------- */
+  .sc-date-range__picker--sheet {
+    --_sheet-exit: calc(var(--sc-duration-slow) * 0.8);
+    position: fixed;
+    inset: auto 0 0 0;
+    inline-size: 100%;
+    max-inline-size: 100%;
+    block-size: 92dvh;
+    max-block-size: 92dvh;
+    flex-direction: column;
+    border-block-end: 0;
+    border-start-start-radius: var(--sc-radius-card);
+    border-start-end-radius: var(--sc-radius-card);
+    overflow: hidden;
+    transform: translateY(100%);
+    /* Exit: back the way it came, on the same curve, about 20% faster than the entrance. */
+    transition:
+      transform var(--_sheet-exit) var(--sc-easing-drawer),
+      display var(--_sheet-exit) allow-discrete,
+      overlay var(--_sheet-exit) allow-discrete;
+  }
+
+  .sc-date-range__picker--sheet[open] {
+    display: flex;
+    transform: translateY(0);
+    transition:
+      transform var(--sc-duration-slow) var(--sc-easing-drawer),
+      display var(--sc-duration-slow) allow-discrete,
+      overlay var(--sc-duration-slow) allow-discrete;
+  }
+
+  @starting-style {
+    .sc-date-range__picker--sheet[open] {
+      transform: translateY(100%);
+    }
+  }
+
+  .sc-date-range__picker--sheet.sc-date-range__picker--dragging {
+    transition: none;
+  }
+
+  .sc-date-range__picker--sheet::backdrop {
+    background: var(--sc-color-scrim);
+    opacity: 0;
+    transition:
+      opacity calc(var(--sc-duration-slow) * 0.8) var(--sc-easing-exit),
+      display calc(var(--sc-duration-slow) * 0.8) allow-discrete,
+      overlay calc(var(--sc-duration-slow) * 0.8) allow-discrete;
+  }
+
+  /* The scrim fades in step with the sheet. */
+  .sc-date-range__picker--sheet[open]::backdrop {
+    opacity: 1;
+    transition:
+      opacity var(--sc-duration-slow) var(--sc-easing-enter),
+      display var(--sc-duration-slow) allow-discrete,
+      overlay var(--sc-duration-slow) allow-discrete;
+  }
+
+  @starting-style {
+    .sc-date-range__picker--sheet[open]::backdrop {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sc-date-range__picker--popover:popover-open,
+    .sc-date-range__picker--sheet,
+    .sc-date-range__picker--sheet[open] {
+      transform: none;
+    }
+  }
+
+  .sc-date-range__sheet-head {
+    flex: none;
+    display: grid;
+    gap: var(--sc-space-12);
+    padding-inline: var(--sc-space-20);
+  }
+
+  .sc-date-range__sheet-grab {
+    display: grid;
+    place-items: center;
+    block-size: var(--sc-space-24);
+    margin-inline: calc(-1 * var(--sc-space-20));
+    touch-action: none;
+    cursor: grab;
+  }
+
+  .sc-date-range__grabber {
+    inline-size: var(--sc-space-40);
+    block-size: var(--sc-space-4);
+    border-radius: var(--sc-radius-full);
+    background: var(--sc-color-outline);
+  }
+
+  .sc-date-range__sheet-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sc-space-12);
+  }
+
+  .sc-date-range__sheet-title {
+    color: var(--sc-color-on-surface);
+    font: var(--sc-type-title-large);
+    letter-spacing: var(--sc-type-title-large-tracking);
+  }
+
+  .sc-date-range__chips {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sc-space-12);
+  }
+
+  /* From / To: which end the next tap sets. Field-like, 56 tall. */
+  .sc-date-range__chip {
+    display: grid;
+    align-content: center;
+    min-block-size: var(--sc-size-control-primary);
+    padding-inline: var(--sc-space-16);
+    border: var(--sc-size-border-control) solid var(--sc-color-outline);
+    border-radius: var(--sc-radius-field);
+    background: var(--sc-color-surface);
+    color: var(--sc-color-on-surface);
+    text-align: start;
+    cursor: pointer;
+  }
+
+  .sc-date-range__chip--on {
+    border-color: var(--sc-color-channel-action);
+    box-shadow: inset 0 0 0 calc(var(--sc-size-border-strong) - var(--sc-size-border-control)) var(--sc-color-channel-action);
+  }
+
+  .sc-date-range__chip-label {
+    color: var(--sc-color-on-surface-variant);
+    font: var(--sc-type-label-small);
+    letter-spacing: var(--sc-type-label-small-tracking);
+  }
+
+  .sc-date-range__chip-value {
+    font: var(--sc-type-body-medium);
+    letter-spacing: var(--sc-type-body-medium-tracking);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Preset chips: one row that scrolls sideways (from the right in Arabic). */
+  .sc-date-range__picker--sheet .sc-date-range__presets {
+    flex-direction: row;
+    gap: var(--sc-space-8);
+    margin-inline: calc(-1 * var(--sc-space-20));
+    padding-inline: var(--sc-space-20);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+
+  .sc-date-range__picker--sheet .sc-date-range__preset {
+    flex: none;
+  }
+
+  .sc-date-range__weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    margin-inline: calc(-1 * var(--sc-space-20));
+    padding-inline: var(--sc-space-20);
+    border-block-end: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+  }
+
+  .sc-date-range__weekdays .sc-date-range__weekday {
+    display: grid;
+    place-items: center;
+  }
+
+  .sc-date-range__picker--sheet .sc-date-range__picker-body {
+    flex: 1 1 auto;
+    min-block-size: 0;
+    display: block;
+    padding-inline: var(--sc-space-20);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .sc-date-range__picker--sheet .sc-date-range__months {
+    flex-direction: column;
+    gap: var(--sc-space-24);
+    padding-block: var(--sc-space-16);
+  }
+
+  .sc-date-range__picker--sheet .sc-date-range__month {
+    inline-size: 100%;
+  }
+
+  .sc-date-range__picker--sheet .sc-date-range__month-head {
+    display: block;
+    margin: 0 0 var(--sc-space-8);
+  }
+
+  .sc-date-range__picker--sheet .sc-date-range__month-title {
+    text-align: start;
+  }
+
+  .sc-date-range__picker--sheet .sc-date-range__day {
+    inline-size: auto;
+  }
+
+  .sc-date-range__picker--sheet .sc-date-range__picker-foot {
+    flex: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--sc-space-8);
+    margin: 0;
+    padding-block: var(--sc-space-12) calc(var(--sc-space-16) + env(safe-area-inset-bottom, 0px));
+    padding-inline: var(--sc-space-20);
+  }
+
+  .sc-date-range__picker--sheet .sc-date-range__summary {
+    text-align: center;
+  }
+
+  .sc-date-range__picker--sheet .sc-date-range__foot-actions {
+    flex-direction: column;
+    align-items: stretch;
+    margin: 0;
+  }
+
+  /* Forced colours (COL-09) ---------------------------------------------------------------- */
+  @media (forced-colors: active) {
+    .sc-date-range__picker,
+    .sc-date-range__chip,
+    .sc-date-range__preset,
+    .sc-date-range__nav::before {
+      border-color: CanvasText;
+    }
+    .sc-date-range__day-button--end,
+    .sc-date-range__day-button--end:hover,
+    .sc-date-range__preset--on {
+      forced-color-adjust: none;
+      background: Highlight;
+      color: HighlightText;
+    }
+    .sc-date-range__day--band::before {
+      forced-color-adjust: none;
+      background: Canvas;
+      outline: var(--sc-size-border-hairline) solid CanvasText;
+      outline-offset: calc(-1 * var(--sc-size-border-hairline));
+    }
+    .sc-date-range__chip--on {
+      outline: var(--sc-size-border-strong) solid Highlight;
+    }
+    .sc-date-range__day-button--disabled {
+      color: GrayText;
+    }
+    .sc-date-range__segment:has(.sc-date-range__segment-input:focus) {
+      outline-color: Highlight;
+    }
+    .sc-date-range__segment--error {
+      outline: var(--sc-size-border-strong) solid CanvasText;
+    }
   }
 }

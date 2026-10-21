@@ -10,7 +10,8 @@
     "sc-radio",
     "sc-radio-group",
     "sc-date-input",
-    "sc-search"
+    "sc-search",
+    "sc-date-range"
   ],
   "coreGzip": 14336,
   "globalCssGzip": 7168,
@@ -29,7 +30,7 @@
     "sc-radio-group": 7168,
     "sc-error-summary": 6144,
     "sc-table": 12288,
-    "sc-date-range": 16384
+    "sc-date-range": 21504
   },
   "pageJsGzip": 30720,
   "pageComponentCssGzip": 3072,

@@ -13,14 +13,14 @@ import { Channel } from "./i18n/strings";
 import { HeadingLevel } from "./components/sc-text-input/field";
 import { ContainerWidth } from "./components/sc-container/sc-container";
 import { Parts } from "./components/sc-date-input/date";
-import { HeadingLevel as HeadingLevel1 } from "./components/sc-text-input/field-v1";
-import { StringsInput } from "./components/sc-table/overrides";
+import { StringsInput } from "./components/sc-date-range/overrides";
 import { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
 import { LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
 import { ScSearchDetail, SearchSize } from "./components/sc-search/sc-search";
 import { ServiceCardHeadingLevel } from "./components/sc-service-card/sc-service-card";
 import { StatusTagTone } from "./components/sc-status-tag/sc-status-tag";
 import { SummaryListAppearance } from "./components/sc-summary-list/sc-summary-list";
+import { StringsInput as StringsInput1 } from "./components/sc-table/overrides";
 import { SortDirection } from "./components/sc-table/sc-table";
 import { TextInputType, TextInputWidth } from "./components/sc-text-input/sc-text-input";
 export { ButtonIconPosition, ButtonSize, ButtonType, ButtonVariant } from "./components/sc-button/sc-button";
@@ -31,14 +31,14 @@ export { Channel } from "./i18n/strings";
 export { HeadingLevel } from "./components/sc-text-input/field";
 export { ContainerWidth } from "./components/sc-container/sc-container";
 export { Parts } from "./components/sc-date-input/date";
-export { HeadingLevel as HeadingLevel1 } from "./components/sc-text-input/field-v1";
-export { StringsInput } from "./components/sc-table/overrides";
+export { StringsInput } from "./components/sc-date-range/overrides";
 export { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
 export { LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
 export { ScSearchDetail, SearchSize } from "./components/sc-search/sc-search";
 export { ServiceCardHeadingLevel } from "./components/sc-service-card/sc-service-card";
 export { StatusTagTone } from "./components/sc-status-tag/sc-status-tag";
 export { SummaryListAppearance } from "./components/sc-summary-list/sc-summary-list";
+export { StringsInput as StringsInput1 } from "./components/sc-table/overrides";
 export { SortDirection } from "./components/sc-table/sc-table";
 export { TextInputType, TextInputWidth } from "./components/sc-text-input/sc-text-input";
 export namespace Components {
@@ -415,14 +415,18 @@ export namespace Components {
      * A start and an end date that relate to a calendar: filtering payments between two dates,
      * the nights of a hotel stay, how long a permit lasts. For one date people already know
      * (a date of birth), use `sc-date-input`.
-     * Two typed segments (From / To, من / إلى) in one 54px frame, and a calendar button that
+     * Two typed segments (From / To, من / إلى) in one 56px frame, and a calendar button that
      * opens a picker: a popover with one or two months and optional presets on medium and
      * wider screens, a modal bottom sheet below 600px. People can always type instead
      * ("21/9/2026", "21 9 2026", "21-09-2026").
-     * Form-associated: submits `name-start` and `name-end` as ISO dates (empty until each is a
-     * real date). Reports `valueMissing` (with `required`), `badInput`, `rangeUnderflow` and
-     * `rangeOverflow`, and shows its own messages for impossible ranges on blur. Delegates focus
-     * to the start segment.
+     * v2 renders everything in light DOM (Stencil `scoped`, decision A2), with classes prefixed
+     * `.sc-date-range__`. It submits `name-start` and `name-end` as ISO dates through hidden
+     * inputs (empty until each is a real date). The first problem with the range (missing with
+     * `required`, not a real date, end before start, outside `min`/`max`, too long or short) is a
+     * native validity error on the segment concerned; the component shows its own message on
+     * blur or after a failed submit. `focus()` on the host goes to the start segment. One native
+     * `change` is dispatched from the host per committed range.
+     * Rich content: a child with `slot="label"`, `slot="hint"` or `slot="error"` is moved into place once.
      */
     interface ScDateRange {
         /**
@@ -451,7 +455,7 @@ export namespace Components {
         /**
           * When set (1–6), the legend is also the page heading at this level.
          */
-        "headingLevel"?: HeadingLevel1;
+        "headingLevel"?: HeadingLevel;
         /**
           * An example in the typed order: "For example, 21 9 2026".
          */
@@ -1114,7 +1118,7 @@ export namespace Components {
         /**
           * Overrides the built-in English and Arabic strings, as JSON: `{"tableSelectRow": "Select fine {row}", "tableSelectAll": "Select all fines on this page"}`, or per language: `{"ar": {…}}`.
          */
-        "strings"?: StringsInput;
+        "strings"?: StringsInput1;
     }
     /**
      * A single-line answer, such as a plate number, an email address or a phone number.
@@ -1529,14 +1533,18 @@ declare global {
      * A start and an end date that relate to a calendar: filtering payments between two dates,
      * the nights of a hotel stay, how long a permit lasts. For one date people already know
      * (a date of birth), use `sc-date-input`.
-     * Two typed segments (From / To, من / إلى) in one 54px frame, and a calendar button that
+     * Two typed segments (From / To, من / إلى) in one 56px frame, and a calendar button that
      * opens a picker: a popover with one or two months and optional presets on medium and
      * wider screens, a modal bottom sheet below 600px. People can always type instead
      * ("21/9/2026", "21 9 2026", "21-09-2026").
-     * Form-associated: submits `name-start` and `name-end` as ISO dates (empty until each is a
-     * real date). Reports `valueMissing` (with `required`), `badInput`, `rangeUnderflow` and
-     * `rangeOverflow`, and shows its own messages for impossible ranges on blur. Delegates focus
-     * to the start segment.
+     * v2 renders everything in light DOM (Stencil `scoped`, decision A2), with classes prefixed
+     * `.sc-date-range__`. It submits `name-start` and `name-end` as ISO dates through hidden
+     * inputs (empty until each is a real date). The first problem with the range (missing with
+     * `required`, not a real date, end before start, outside `min`/`max`, too long or short) is a
+     * native validity error on the segment concerned; the component shows its own message on
+     * blur or after a failed submit. `focus()` on the host goes to the start segment. One native
+     * `change` is dispatched from the host per committed range.
+     * Rich content: a child with `slot="label"`, `slot="hint"` or `slot="error"` is moved into place once.
      */
     interface HTMLScDateRangeElement extends Components.ScDateRange, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScDateRangeElementEventMap>(type: K, listener: (this: HTMLScDateRangeElement, ev: ScDateRangeCustomEvent<HTMLScDateRangeElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2388,14 +2396,18 @@ declare namespace LocalJSX {
      * A start and an end date that relate to a calendar: filtering payments between two dates,
      * the nights of a hotel stay, how long a permit lasts. For one date people already know
      * (a date of birth), use `sc-date-input`.
-     * Two typed segments (From / To, من / إلى) in one 54px frame, and a calendar button that
+     * Two typed segments (From / To, من / إلى) in one 56px frame, and a calendar button that
      * opens a picker: a popover with one or two months and optional presets on medium and
      * wider screens, a modal bottom sheet below 600px. People can always type instead
      * ("21/9/2026", "21 9 2026", "21-09-2026").
-     * Form-associated: submits `name-start` and `name-end` as ISO dates (empty until each is a
-     * real date). Reports `valueMissing` (with `required`), `badInput`, `rangeUnderflow` and
-     * `rangeOverflow`, and shows its own messages for impossible ranges on blur. Delegates focus
-     * to the start segment.
+     * v2 renders everything in light DOM (Stencil `scoped`, decision A2), with classes prefixed
+     * `.sc-date-range__`. It submits `name-start` and `name-end` as ISO dates through hidden
+     * inputs (empty until each is a real date). The first problem with the range (missing with
+     * `required`, not a real date, end before start, outside `min`/`max`, too long or short) is a
+     * native validity error on the segment concerned; the component shows its own message on
+     * blur or after a failed submit. `focus()` on the host goes to the start segment. One native
+     * `change` is dispatched from the host per committed range.
+     * Rich content: a child with `slot="label"`, `slot="hint"` or `slot="error"` is moved into place once.
      */
     interface ScDateRange {
         /**
@@ -2418,13 +2430,9 @@ declare namespace LocalJSX {
          */
         "errorParts"?: 'start' | 'end' | 'both';
         /**
-          * The `id` of a `<form>` element to associate this element with.
-         */
-        "form"?: string;
-        /**
           * When set (1–6), the legend is also the page heading at this level.
          */
-        "headingLevel"?: HeadingLevel1;
+        "headingLevel"?: HeadingLevel;
         /**
           * An example in the typed order: "For example, 21 9 2026".
          */
@@ -3107,7 +3115,7 @@ declare namespace LocalJSX {
         /**
           * Overrides the built-in English and Arabic strings, as JSON: `{"tableSelectRow": "Select fine {row}", "tableSelectAll": "Select all fines on this page"}`, or per language: `{"ar": {…}}`.
          */
-        "strings"?: StringsInput;
+        "strings"?: StringsInput1;
     }
     /**
      * A single-line answer, such as a plate number, an email address or a phone number.
@@ -3696,14 +3704,18 @@ declare module "@stencil/core" {
              * A start and an end date that relate to a calendar: filtering payments between two dates,
              * the nights of a hotel stay, how long a permit lasts. For one date people already know
              * (a date of birth), use `sc-date-input`.
-             * Two typed segments (From / To, من / إلى) in one 54px frame, and a calendar button that
+             * Two typed segments (From / To, من / إلى) in one 56px frame, and a calendar button that
              * opens a picker: a popover with one or two months and optional presets on medium and
              * wider screens, a modal bottom sheet below 600px. People can always type instead
              * ("21/9/2026", "21 9 2026", "21-09-2026").
-             * Form-associated: submits `name-start` and `name-end` as ISO dates (empty until each is a
-             * real date). Reports `valueMissing` (with `required`), `badInput`, `rangeUnderflow` and
-             * `rangeOverflow`, and shows its own messages for impossible ranges on blur. Delegates focus
-             * to the start segment.
+             * v2 renders everything in light DOM (Stencil `scoped`, decision A2), with classes prefixed
+             * `.sc-date-range__`. It submits `name-start` and `name-end` as ISO dates through hidden
+             * inputs (empty until each is a real date). The first problem with the range (missing with
+             * `required`, not a real date, end before start, outside `min`/`max`, too long or short) is a
+             * native validity error on the segment concerned; the component shows its own message on
+             * blur or after a failed submit. `focus()` on the host goes to the start segment. One native
+             * `change` is dispatched from the host per committed range.
+             * Rich content: a child with `slot="label"`, `slot="hint"` or `slot="error"` is moved into place once.
              */
             "sc-date-range": LocalJSX.IntrinsicElements["sc-date-range"] & JSXBase.HTMLAttributes<HTMLScDateRangeElement>;
             /**
