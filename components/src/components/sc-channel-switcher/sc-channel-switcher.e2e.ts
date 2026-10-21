@@ -111,6 +111,17 @@ describe('sc-channel-switcher (e2e)', () => {
       await expectNoAxeViolations(page);
     }
   });
+
+  it('without a logo shows the 10px swatch (radius 3), with padding 16 at the start and 12 at the end', async () => {
+    const page = await newScPage(SWITCHER);
+    await page.setViewport({ width: 1280, height: 800 });
+    const look = await page.evaluate(() => {
+      const mark = getComputedStyle(document.querySelector('.sc-channel-switcher__logo.is-mark')!);
+      const t = getComputedStyle(document.querySelector('.sc-channel-switcher__trigger')!);
+      return [mark.width, mark.height, mark.borderRadius, t.paddingInlineStart, t.paddingInlineEnd];
+    });
+    expect(look).toEqual(['10px', '10px', '3px', '16px', '12px']);
+  });
 });
 
 describeAxe('sc-channel-switcher', SWITCHER);

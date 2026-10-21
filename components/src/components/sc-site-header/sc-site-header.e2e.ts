@@ -239,6 +239,19 @@ describe('sc-site-header (e2e)', () => {
       await expectNoAxeViolations(page);
     }
   });
+
+  it('spaces the row as the board at 1440: 56 from the lockup to the navigation, 36 between items, 24 between end controls', async () => {
+    const page = await newScPage(siteHeader('en'));
+    await desktop(page);
+    const gaps = await page.evaluate(() => {
+      const h = document.querySelector('sc-site-header')!;
+      const lockup = h.shadowRoot!.querySelector('.lockup')!.getBoundingClientRect();
+      const nav = Array.from(h.querySelectorAll('a[slot="nav"]')).map((a) => a.getBoundingClientRect());
+      const end = Array.from(h.shadowRoot!.querySelector('.end')!.children).map((e) => e.getBoundingClientRect());
+      return [Math.round(nav[0].left - lockup.right), Math.round(nav[1].left - nav[0].right), Math.round(end[1].left - end[0].right)];
+    });
+    expect(gaps).toEqual([56, 36, 24]);
+  });
 });
 
 describeAxe('sc-site-header', `${siteHeader('en')}${siteHeader('en', { signedIn: true })}`);

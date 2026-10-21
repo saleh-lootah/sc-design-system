@@ -185,12 +185,12 @@ export class ScAccountMenu {
               </ul>
               <div class="divider" />
               {this.signOutHref ? (
-                <a class="item focus-ring state-layer" href={this.signOutHref}>
+                <a class="item sign-out focus-ring state-layer" href={this.signOutHref}>
                   <Logout />
                   <span>{t('accountSignOut')}</span>
                 </a>
               ) : (
-                <button type="button" class="item focus-ring state-layer" onClick={this.onSignOut}>
+                <button type="button" class="item sign-out focus-ring state-layer" onClick={this.onSignOut}>
                   <Logout />
                   <span>{t('accountSignOut')}</span>
                 </button>

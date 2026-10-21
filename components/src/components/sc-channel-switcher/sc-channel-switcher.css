@@ -20,7 +20,8 @@
     position: relative;
   }
 
-  /* Trigger: 48px, 4px corners, a 1.5px outline edge (it is a control). */
+  /* Trigger: 48px, padding 16 at the start and 12 at the end, 4px corners, a 1.5px outline
+     edge (it is a control). */
   .sc-channel-switcher__trigger {
     box-sizing: border-box;
     display: inline-flex;
@@ -30,7 +31,7 @@
     min-inline-size: var(--sc-size-target-min);
     margin: 0;
     padding-block: var(--sc-space-4);
-    padding-inline: var(--sc-space-12) var(--sc-space-12);
+    padding-inline: var(--sc-space-16) var(--sc-space-12);
     border: var(--sc-size-border-control) solid var(--sc-color-outline);
     border-radius: var(--sc-radius-control);
     background-color: transparent;
@@ -54,7 +55,8 @@
     border-color: var(--sc-color-outline-strong);
   }
 
-  /* The channel's logo: 24px. Without a slotted logo, a ring mark in the channel colour. */
+  /* The channel's logo: 24px. Without a slotted logo, the current channel's swatch (B2a: 10px,
+     radius 3, its channel-action). */
   .sc-channel-switcher__logo {
     position: relative;
     display: inline-flex;
@@ -71,16 +73,9 @@
   }
 
   .sc-channel-switcher__logo.is-mark {
-    box-sizing: border-box;
-    border: var(--sc-size-border-accent) solid var(--sc-color-channel-action);
-    border-radius: var(--sc-radius-full);
-  }
-
-  .sc-channel-switcher__logo.is-mark::after {
-    content: '';
-    inline-size: var(--sc-space-6);
-    block-size: var(--sc-space-6);
-    border-radius: var(--sc-radius-full);
+    inline-size: calc(var(--sc-space-8) + var(--sc-space-2));
+    block-size: calc(var(--sc-space-8) + var(--sc-space-2));
+    border-radius: 3px;
     background-color: var(--sc-color-channel-action);
   }
 
@@ -124,7 +119,7 @@
 
   .sc-channel-switcher__caption {
     margin: 0;
-    padding-block: var(--sc-space-8) var(--sc-space-4);
+    padding-block: var(--sc-space-8);
     padding-inline: var(--sc-space-12);
     color: var(--sc-color-on-surface-variant);
     font: var(--sc-type-label-small);
@@ -137,7 +132,7 @@
     list-style: none;
   }
 
-  /* Items: at least 56 tall, 8px corners, swatch | name and descriptor | check. */
+  /* Items: at least 56 tall, padded 10 by 12, 8px corners, swatch | name and descriptor | check. */
   .sc-channel-switcher__item {
     box-sizing: border-box;
     display: grid;
@@ -145,7 +140,7 @@
     align-items: center;
     gap: var(--sc-space-12);
     min-block-size: var(--sc-size-control-primary);
-    padding-block: var(--sc-space-8);
+    padding-block: calc(var(--sc-space-8) + var(--sc-space-2));
     padding-inline: var(--sc-space-12);
     border-radius: var(--sc-radius-field);
     color: var(--sc-color-on-surface);
@@ -166,14 +161,13 @@
   .sc-channel-switcher__swatch {
     inline-size: var(--sc-space-12);
     block-size: var(--sc-space-12);
-    border-radius: var(--sc-radius-full);
+    border-radius: 3px;
     background-color: var(--sc-color-channel-action);
   }
 
   .sc-channel-switcher__text {
     display: flex;
     flex-direction: column;
-    gap: var(--sc-space-2);
     min-inline-size: 0;
   }
 
@@ -232,11 +226,8 @@
       outline-offset: calc(-1 * var(--sc-size-border-strong));
     }
     .sc-channel-switcher__swatch,
-    .sc-channel-switcher__logo.is-mark::after {
-      background-color: CanvasText;
-    }
     .sc-channel-switcher__logo.is-mark {
-      border-color: CanvasText;
+      background-color: CanvasText;
     }
   }
 }

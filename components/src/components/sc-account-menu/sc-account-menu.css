@@ -56,7 +56,8 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Trigger: the sign-in control's frame, 48 tall, a 1.5px outline edge. */
+/* Trigger: the sign-in control's frame, 48 tall, padding 6 at the start and 12 at the end, a
+   1.5px outline edge. */
 .trigger {
   --sc-state-color: var(--sc-color-on-surface);
   box-sizing: border-box;
@@ -67,7 +68,7 @@
   min-inline-size: var(--sc-size-target-min);
   margin: 0;
   padding-block: var(--sc-space-4);
-  padding-inline: var(--sc-space-6) var(--sc-space-8);
+  padding-inline: var(--sc-space-6) var(--sc-space-12);
   border: var(--sc-size-border-control) solid var(--sc-color-outline);
   border-radius: var(--sc-radius-control);
   background-color: transparent;
@@ -91,7 +92,8 @@
   border-color: var(--sc-color-outline-strong);
 }
 
-/* Avatar: a 32px circle, initials in label-small Bold. Initials come from the name as written. */
+/* Avatar: a 32px circle, channel-container (90) with channel-action initials in label-small
+   Bold. Initials come from the name as written. */
 .avatar {
   display: inline-flex;
   flex: none;
@@ -101,7 +103,7 @@
   block-size: var(--sc-space-32);
   border-radius: var(--sc-radius-full);
   background-color: var(--sc-color-channel-container);
-  color: var(--sc-color-channel-on-container);
+  color: var(--sc-color-channel-action);
   font: var(--sc-type-label-small);
   font-weight: var(--sc-font-weight-bold);
   letter-spacing: 0;
@@ -173,12 +175,12 @@
 }
 
 .who-name {
-  font: var(--sc-type-title-small);
-  letter-spacing: var(--sc-type-title-small-tracking);
+  font: var(--sc-type-label-medium);
+  font-weight: var(--sc-font-weight-bold);
+  letter-spacing: var(--sc-type-label-medium-tracking);
 }
 
 .who-acting {
-  margin-block-start: var(--sc-space-2);
   color: var(--sc-color-on-surface-variant);
   font: var(--sc-type-body-small);
   letter-spacing: var(--sc-type-body-small-tracking);
@@ -190,7 +192,8 @@
   list-style: none;
 }
 
-/* Items: 48 tall, a 24px icon, gap 12, 8px corners. */
+/* Items: 48 tall, a 24px icon in on-surface-variant (Sign out's in on-surface), gap 12, 8px
+   corners. */
 .item {
   --icon-size: var(--sc-size-icon-l);
   --sc-state-color: var(--sc-color-on-surface);
@@ -216,6 +219,14 @@
   transition: --sc-layer var(--sc-duration-fast) var(--sc-easing-hover);
 }
 
+.item > svg {
+  color: var(--sc-color-on-surface-variant);
+}
+
+.item.sign-out > svg {
+  color: var(--sc-color-on-surface);
+}
+
 .item:lang(ar) {
   font-weight: var(--sc-font-weight-bold);
 }
@@ -226,7 +237,7 @@
 
 .divider {
   block-size: var(--sc-size-border-hairline);
-  margin-block: var(--sc-space-8);
+  margin: var(--sc-space-4);
   background-color: var(--sc-color-outline-variant);
 }
 

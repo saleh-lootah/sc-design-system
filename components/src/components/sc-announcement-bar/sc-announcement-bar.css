@@ -54,31 +54,32 @@
   max-inline-size: var(--sc-container-max);
   min-block-size: var(--sc-size-control-secondary);
   margin-inline: auto;
-  padding-block: var(--sc-space-2);
   padding-inline: var(--_margin);
 }
 
 .tone-icon {
   --icon-size: var(--sc-size-icon-m);
   align-self: flex-start;
-  margin-block-start: calc((var(--sc-size-target-min) - var(--sc-size-icon-m)) / 2);
+  /* Centred on a one-line 48px bar, and on the first line when the message wraps. */
+  margin-block-start: calc((var(--sc-size-control-secondary) - var(--sc-size-icon-m)) / 2);
   color: var(--_icon);
 }
 
-/* The message and the link; the link wraps to its own line on narrow screens. */
+/* The message and the link, 12 apart; the link wraps to its own line, 4 below, on narrow
+   screens. Padding 12 block makes a one-line bar 48 tall. */
 .body {
   display: flex;
   flex: 1;
   flex-wrap: wrap;
-  align-items: center;
-  column-gap: var(--sc-space-24);
-  row-gap: 0;
+  align-items: baseline;
+  column-gap: var(--sc-space-12);
+  row-gap: var(--sc-space-4);
   min-inline-size: 0;
   padding-block: var(--sc-space-12);
 }
 
 .message {
-  flex: 1 1 24rem;
+  flex: 0 1 auto;
   margin: 0;
   font: var(--sc-type-body-medium);
   font-weight: var(--sc-font-weight-medium);
@@ -89,7 +90,7 @@
   flex: none;
   color: var(--sc-color-on-surface);
   font: var(--sc-type-body-medium);
-  font-weight: var(--sc-font-weight-bold);
+  font-weight: var(--sc-font-weight-medium);
   letter-spacing: var(--sc-type-body-medium-tracking);
   text-decoration-line: underline;
   text-decoration-thickness: 1px;
@@ -118,6 +119,7 @@
   inline-size: var(--sc-size-target-min);
   block-size: var(--sc-size-target-min);
   margin: 0;
+  margin-block: calc((var(--sc-size-control-secondary) - var(--sc-size-target-min)) / 2);
   margin-inline-end: calc(-1 * var(--sc-space-12));
   padding: 0;
   border: 0;
