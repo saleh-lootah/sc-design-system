@@ -234,6 +234,22 @@ describe('sc-text-input (e2e)', () => {
       await expectNoAxeViolations(page);
     }
   });
+
+  it('sizes boxes on the E2 scale (4 characters 120px, 10 characters 200px), 10px from the label without a hint, and the bar 14px from the Arabic content', async () => {
+    const page = await newScPage(`<sc-text-input id="a" label="Code" width="4"></sc-text-input><sc-text-input id="b" label="Number" width="10" hint="Digits"></sc-text-input><div lang="ar" dir="rtl"><sc-text-input id="c" label="رقم" error="خطأ"></sc-text-input></div>`);
+    expect(Math.round(await inner<number>(page, '#a', 'q(".sc-field__frame").getBoundingClientRect().width'))).toBe(120);
+    expect(Math.round(await inner<number>(page, '#b', 'q(".sc-field__frame").getBoundingClientRect().width'))).toBe(200);
+    expect(await inner(page, '#a', 'getComputedStyle(q(".sc-field")).rowGap')).toBe('10px');
+    expect(await inner(page, '#b', 'getComputedStyle(q(".sc-field")).rowGap')).toBe('8px');
+    expect(await inner(page, '#c', 'getComputedStyle(q(".sc-field")).paddingRight')).toBe('14px');
+  });
+
+  it('reserves its height before it upgrades (CLS 0)', async () => {
+    const page = await newScPage(`<p>Text</p>`);
+    const text = await page.evaluate(() => [...document.styleSheets].map((s) => { try { return [...s.cssRules].map((r) => r.cssText).join(''); } catch { return ''; } }).join(''));
+    expect(text).toMatch(/sc-text-input[^{]*:not\(:defined\)/);
+  });
+
 });
 
 describeAxe('sc-text-input', ALL_STATES);

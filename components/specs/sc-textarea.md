@@ -60,3 +60,7 @@ Form field, 7 KiB gzip. Measured: see the report table in `docs/v2/migration.md`
 ## Tests
 
 `sc-textarea.spec.tsx`, `sc-textarea.e2e.ts` (light DOM, description, count and polite announcement, over-limit validity, submit/reset/fieldset, Enter never submits, LANG-21, Arabic plurals, type, axe on every channel, `describeAxe`), `sc-textarea.visual.e2e.ts`.
+
+## Paper board alignment
+
+Board 3SS-0 matches (radius 8, padding 12 × 16, at least 3 rows, count 8 below). Kept as built: the board's count reads "28 of 300 characters"; the code keeps v1's tested wording, "You have 272 characters remaining", with Arabic plurals.

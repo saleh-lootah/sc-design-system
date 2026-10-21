@@ -81,7 +81,8 @@
     border-color: var(--sc-color-channel-action);
   }
 
-  .sc-choice__box--check:checked {
+  .sc-choice__box--check:is(:checked, :indeterminate) {
+    border-color: var(--sc-color-channel-action);
     background: var(--sc-color-channel-action);
   }
 
@@ -134,6 +135,23 @@
 
   .sc-choice__box:disabled + .sc-choice__mark--check {
     color: var(--sc-color-disabled-container);
+  }
+
+  /* The indeterminate bar: 12 × 2 in channel-on-action (A13). It replaces the check. */
+  .sc-choice__mark--mixed {
+    inline-size: var(--sc-space-12);
+    block-size: var(--sc-space-2);
+    margin-block-start: calc((var(--_row) - var(--sc-space-2)) / 2);
+    border-radius: var(--sc-space-2);
+    background: var(--sc-color-channel-on-action);
+  }
+
+  .sc-choice__box:indeterminate ~ .sc-choice__mark--mixed {
+    opacity: 1;
+  }
+
+  .sc-choice__box:indeterminate + .sc-choice__mark--check {
+    opacity: 0;
   }
 
   .sc-choice__mark--radio {
@@ -216,8 +234,11 @@
     .sc-choice__box:checked {
       border-color: Highlight;
     }
-    .sc-choice__box--check:checked {
+    .sc-choice__box--check:is(:checked, :indeterminate) {
       background: Highlight;
+    }
+    .sc-choice__mark--mixed {
+      background: HighlightText;
     }
     .sc-choice__box:disabled {
       border-color: GrayText;

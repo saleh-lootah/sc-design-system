@@ -59,3 +59,7 @@ Form field, 7 KiB gzip; measured in the C3 report.
 ## Tests
 
 `sc-date-input.spec.tsx`, `sc-date-input.e2e.ts` (group and part names, ISO and parts submitted, LANG-21, native validity, reset, RTL order and labels, host focus and error-parts, axe on every channel, `describeAxe`), `sc-date-input.visual.e2e.ts`.
+
+## Paper board alignment
+
+Board AQR-0: Day and Month boxes are now 72px and Year 100px (they were sized in characters).

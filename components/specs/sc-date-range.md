@@ -260,3 +260,7 @@ Applies the emil-design-eng and mobile-native rules.
 Methods: `open()`, `close()`, `setFocus()`.
 
 Tokens used: `easing.drawer`, `easing.exit` (strong ease-out since the motion audit, `docs/motion-audit.md`), `duration.exit`, `scale.enter`, `scale.press`.
+
+## Paper board alignment (v2)
+
+Board AQS-0 changes: the arrow is 24px; the segment value is body-large (18/26 EN, 20/32 AR) with no block padding so two lines fit 56; presets are a wrapping row of 40px chips, 12 apart, above the months in the popover; months are 32 apart; the footer summary is body-medium. Kept as built, for the coordinator: the board's footer has Cancel (tertiary) and Apply; the code keeps v1's Clear and Apply (Escape and a click outside already cancel), as the board also says behaviour is unchanged from v1.

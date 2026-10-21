@@ -275,6 +275,11 @@ export namespace Components {
          */
         "hint"?: string;
         /**
+          * Shows the mixed state (a 12 × 2 bar), for a box that controls a set of others ("All channels") when only some are checked. Set by script; cleared when the user toggles it. Exposed natively as `aria-checked="mixed"`.
+          * @default false
+         */
+        "indeterminate": boolean;
+        /**
           * The name submitted with the form. Inside `sc-checkbox-group`, defaults to the group's `name`.
          */
         "name"?: string;
@@ -2303,6 +2308,11 @@ declare namespace LocalJSX {
          */
         "hint"?: string;
         /**
+          * Shows the mixed state (a 12 × 2 bar), for a box that controls a set of others ("All channels") when only some are checked. Set by script; cleared when the user toggles it. Exposed natively as `aria-checked="mixed"`.
+          * @default false
+         */
+        "indeterminate"?: boolean;
+        /**
           * The name submitted with the form. Inside `sc-checkbox-group`, defaults to the group's `name`.
          */
         "name"?: string;
@@ -3452,6 +3462,7 @@ declare namespace LocalJSX {
         "name": string;
         "value": string;
         "checked": boolean;
+        "indeterminate": boolean;
         "hint": string;
         "error": string;
         "required": boolean;

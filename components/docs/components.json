@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-21T15:15:06",
+  "timestamp": "2026-10-21T15:17:21",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.45.2",
@@ -1591,6 +1591,35 @@
             }
           ],
           "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "indeterminate",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "indeterminate",
+          "reflectToAttr": false,
+          "docs": "Shows the mixed state (a 12 × 2 bar), for a box that controls a set of others (\"All\nchannels\") when only some are checked. Set by script; cleared when the user toggles it.\nExposed natively as `aria-checked=\"mixed\"`.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
           "required": false,
           "getter": false,
           "setter": false

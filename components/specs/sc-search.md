@@ -90,3 +90,7 @@ On a page with any `sc-button`, the search's own cost is 2.8 KiB. v1 was 10.3 Ki
 ## Tests
 
 `sc-search.spec.tsx`, `sc-search.e2e.ts` (landmark and searchbox names, keyboard and native Enter-to-submit, click, host focus and the U1 ring, sizes and E1 geometry, `action` and cancel, LANG-21, RTL, channel colour, forced colours, `describeAxe`), `sc-search.visual.e2e.ts`.
+
+## Paper board alignment
+
+Board AQP-0 matches; the 64px hero button is now padded 36.

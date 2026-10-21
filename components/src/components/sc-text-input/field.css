@@ -51,6 +51,16 @@
     border-inline-start: var(--sc-size-strip) solid var(--sc-color-error);
   }
 
+  /* E2 and the field-anatomy board: 14px in Arabic. */
+  .sc-field--error:lang(ar) {
+    padding-inline-start: calc(var(--sc-space-12) + var(--sc-space-2));
+  }
+
+  /* 10 between the label and the box when there is no hint (E2). */
+  .sc-field:not(:has(> .sc-field__hint:not([hidden]))) {
+    gap: calc(var(--sc-space-8) + var(--sc-space-2));
+  }
+
   .sc-field [hidden] {
     display: none;
   }
@@ -205,10 +215,10 @@
     text-align: end;
   }
 
-  /* Character widths: the box fits N characters of the value plus its padding. */
+  /* Character widths, on the E2 scale: 4 characters are 120px (plate code), 10 are 200px
+     (plate number), so 2 → 93, 5 → 133, 20 → 333. Pixels follow zoom. */
   .sc-field__frame--chars {
-    inline-size: calc((var(--_chars) + 1) * 1ch + 2 * var(--sc-space-16) + 2 * var(--sc-size-border-control));
-    font: var(--sc-type-body-large);
+    inline-size: calc(var(--_chars) * 40px / 3 + 200px / 3);
   }
 
   /* Prefix and suffix ("AED", "km"): quiet segments inside the box. */

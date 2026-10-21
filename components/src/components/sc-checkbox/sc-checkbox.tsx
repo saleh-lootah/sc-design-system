@@ -33,6 +33,13 @@ export class ScCheckbox {
   /** Whether the box is checked. Updated when the user toggles it. */
   @Prop({ mutable: true, reflect: true }) checked = false;
 
+  /**
+   * Shows the mixed state (a 12 × 2 bar), for a box that controls a set of others ("All
+   * channels") when only some are checked. Set by script; cleared when the user toggles it.
+   * Exposed natively as `aria-checked="mixed"`.
+   */
+  @Prop({ mutable: true }) indeterminate = false;
+
   /** Help text under the label. */
   @Prop() hint?: string;
 
@@ -86,7 +93,12 @@ export class ScCheckbox {
     this.input = el;
   };
 
+  componentDidRender() {
+    if (this.input) this.input.indeterminate = this.indeterminate;
+  }
+
   private onChange = (ev: Event) => {
+    this.indeterminate = false;
     this.checked = (ev.target as HTMLInputElement).checked;
     this.scChange.emit({ checked: this.checked, value: this.value });
   };
@@ -120,6 +132,7 @@ export class ScCheckbox {
               onChange={this.onChange}
             />
             <CheckMark class="sc-choice__mark sc-choice__mark--check" />
+            <span class="sc-choice__mark sc-choice__mark--mixed" aria-hidden="true" />
             <label class="sc-choice__label" htmlFor={`${id}-control`}>
               <slot />
             </label>

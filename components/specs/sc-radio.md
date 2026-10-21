@@ -78,3 +78,7 @@ Form field, 7 KiB gzip (group); `sc-radio` 4 KiB leaf. Measured in the C3 report
 ## Tests
 
 `sc-radio-group.spec.tsx`, `sc-radio.spec.tsx`, `sc-radio-group.e2e.ts` (radiogroup semantics, keyboard, Space and click, Arabic, submit/reset/required, later options, fieldset, host focus, dot motion, forced colours, axe on every channel, `describeAxe`), `sc-radio.e2e.ts` (name, hint, 24px circle and 44px target, focus, `describeAxe`), and the visual suites for both tags.
+
+## Paper board alignment
+
+Board F3T-0 matches the radio (24px circle, 2px edge, 12px dot, rows 48, gap 12). Kept as built: the board gives the legend title-medium while the checkbox and date-input boards give label-large; the code keeps label-large (see `sc-text-input.md`).

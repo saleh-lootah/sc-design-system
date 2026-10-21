@@ -22,6 +22,15 @@
     letter-spacing: var(--sc-type-label-medium-tracking);
   }
 
+  /* Day and Month 72px, Year 100px (board AQR-0, component-language A14). */
+  .sc-date-input__part .sc-field__frame {
+    inline-size: calc(var(--sc-size-control-primary) + var(--sc-space-16));
+  }
+
+  .sc-date-input__part--year .sc-field__frame {
+    inline-size: calc(var(--sc-space-96) + var(--sc-space-4));
+  }
+
   .sc-date-input__control {
     text-align: center;
     font-variant-numeric: tabular-nums;

@@ -1,5 +1,5 @@
 import { describeAxe } from '../../test/axe';
-import { newScPage, setPageContext } from '../../test/page';
+import { newScPage, setPageContext, settleTransitions } from '../../test/page';
 import { axNode, inner, token } from '../sc-text-input/field-test';
 
 const ALONE = `
@@ -57,6 +57,19 @@ describe('sc-checkbox on its own (e2e)', () => {
     await setPageContext(page, { lang: 'ar' });
     expect(await inner(page, '#e', 'q(".sc-field__error .visually-hidden").textContent')).toBe('خطأ: ');
   });
+
+  it('shows the indeterminate state as a filled box with a bar, exposed as mixed, until toggled', async () => {
+    const page = await newScPage(`<main style="padding:24px"><sc-checkbox id="all">All channels</sc-checkbox></main>`);
+    await page.$eval('#all', (el) => ((el as HTMLElement & { indeterminate: boolean }).indeterminate = true));
+    await page.waitForChanges();
+    await settleTransitions(page);
+    expect((await axNode(page, '#all'))!.checked).toBe('mixed');
+    expect(await inner(page, '#all', 'getComputedStyle(q(".sc-choice__mark--mixed")).opacity')).toBe('1');
+    expect(await inner(page, '#all', 'getComputedStyle(input).backgroundColor')).toBe(await token(page, 'body', '--sc-color-channel-action'));
+    await page.click('#all label');
+    expect(await inner(page, '#all', '[input.indeterminate, input.checked, host.indeterminate]')).toEqual([false, true, false]);
+  });
+
 });
 
 describeAxe('sc-checkbox', ALONE);

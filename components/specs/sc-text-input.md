@@ -108,3 +108,12 @@ Form field budget 7 KiB gzip (custom-elements closure, excluding the runtime): *
 - `sc-text-input.spec.tsx`: light DOM, IDs, hint and error wiring, Arabic strings, `ltr`, attributes, widths and affixes, heading, rich slots.
 - `sc-text-input.e2e.ts`: per-instance IDs, accessible name and description, 56px box and 4px bar, type roles EN/AR, RTL, native submission and reset, Enter-to-submit, LANG-21, native validation, focus forwarding and the U1 ring, disabled fieldset, rich slots, re-render on `lang`, forced colours, axe on every channel; `describeAxe` EN/AR × light/dark.
 - `sc-text-input.visual.e2e.ts`: every state in EN/AR × light/dark.
+
+## Paper board alignment (v2 file, page 07)
+
+Changes made to match the boards (Field anatomy FQJ-0, Text input 1R9-0):
+- The error bar sits 14px from the content in Arabic (16 in English), as E2.
+- 10 between the label and the box when there is no hint (8 with one).
+- Character widths follow E2: 4 characters 120px (plate code), 10 characters 200px (plate number); 2 → 93, 3 → 107, 5 → 133, 20 → 333.
+
+Kept as built, for the coordinator: FQJ-0 says a legend uses title-medium, but the Checkbox (827-0) and Date input (AQR-0) boards use label-large for the legend; the code keeps label-large for every legend until the boards agree.

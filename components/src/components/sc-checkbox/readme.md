@@ -31,15 +31,16 @@ native `required`; inside a group the group shows the error and marks every box 
 
 ## Properties
 
-| Property   | Attribute  | Description                                                                                                | Type                  | Default     |
-| ---------- | ---------- | ---------------------------------------------------------------------------------------------------------- | --------------------- | ----------- |
-| `checked`  | `checked`  | Whether the box is checked. Updated when the user toggles it.                                              | `boolean`             | `false`     |
-| `disabled` | `disabled` | Disables the checkbox. Avoid it.                                                                           | `boolean`             | `false`     |
-| `error`    | `error`    | The error message, for a checkbox on its own. Inside a group, set `error` on the group.                    | `string \| undefined` | `undefined` |
-| `hint`     | `hint`     | Help text under the label.                                                                                 | `string \| undefined` | `undefined` |
-| `name`     | `name`     | The name submitted with the form. Inside `sc-checkbox-group`, defaults to the group's `name`.              | `string \| undefined` | `undefined` |
-| `required` | `required` | On its own: must be checked to submit (native `valueMissing`). Inside a group, use the group's `required`. | `boolean`             | `false`     |
-| `value`    | `value`    | The value submitted when checked.                                                                          | `string`              | `'on'`      |
+| Property        | Attribute       | Description                                                                                                                                                                                                             | Type                  | Default     |
+| --------------- | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ----------- |
+| `checked`       | `checked`       | Whether the box is checked. Updated when the user toggles it.                                                                                                                                                           | `boolean`             | `false`     |
+| `disabled`      | `disabled`      | Disables the checkbox. Avoid it.                                                                                                                                                                                        | `boolean`             | `false`     |
+| `error`         | `error`         | The error message, for a checkbox on its own. Inside a group, set `error` on the group.                                                                                                                                 | `string \| undefined` | `undefined` |
+| `hint`          | `hint`          | Help text under the label.                                                                                                                                                                                              | `string \| undefined` | `undefined` |
+| `indeterminate` | `indeterminate` | Shows the mixed state (a 12 × 2 bar), for a box that controls a set of others ("All channels") when only some are checked. Set by script; cleared when the user toggles it. Exposed natively as `aria-checked="mixed"`. | `boolean`             | `false`     |
+| `name`          | `name`          | The name submitted with the form. Inside `sc-checkbox-group`, defaults to the group's `name`.                                                                                                                           | `string \| undefined` | `undefined` |
+| `required`      | `required`      | On its own: must be checked to submit (native `valueMissing`). Inside a group, use the group's `required`.                                                                                                              | `boolean`             | `false`     |
+| `value`         | `value`         | The value submitted when checked.                                                                                                                                                                                       | `string`              | `'on'`      |
 
 
 ## Events

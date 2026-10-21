@@ -104,6 +104,11 @@
     flex: none;
   }
 
+  /* The 64px hero button is padded 36 (board AQP-0). */
+  .sc-search--l .sc-search__button .sc-button {
+    padding-inline: calc(var(--sc-space-32) + var(--sc-space-4));
+  }
+
   @media (forced-colors: active) {
     .sc-search__field {
       border-color: ButtonText;

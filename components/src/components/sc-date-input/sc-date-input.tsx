@@ -6,8 +6,6 @@ import { FieldError, FieldHint, FieldLabel, HeadingLevel, Slotted, describedBy, 
 import { DatePart, PARTS, Parts, isoFromParts, partsFromIso } from './date';
 
 const LABEL_KEYS = { day: 'dateInputDay', month: 'dateInputMonth', year: 'dateInputYear' } as const;
-/** Character widths of each box (a little more than the digits, so they never feel cramped). */
-const CHARS: Record<DatePart, number> = { day: 3, month: 3, year: 5 };
 const strings = withField(dateStrings);
 
 /**
@@ -172,7 +170,7 @@ export class ScDateInput {
                 <label class="sc-date-input__part-label" htmlFor={`${id}-${p}`}>
                   {t(LABEL_KEYS[p])}
                 </label>
-                <div class={{ 'sc-field__frame': true, 'sc-field__frame--chars': true, 'sc-field__frame--error': invalid.has(p) }} style={{ '--_chars': String(CHARS[p]) }}>
+                <div class={{ 'sc-field__frame': true, 'sc-field__frame--error': invalid.has(p) }}>
                   <input
                     ref={this.setInput(p)}
                     id={`${id}-${p}`}

@@ -60,3 +60,7 @@ Form field, 7 KiB gzip; measured in the C3 report.
 ## Tests
 
 `sc-select.spec.tsx`, `sc-select.e2e.ts` (real options in light DOM, name and description, submit/keyboard/reset, initial choice, later options moved in, `valueMissing`, 56px box and chevron geometry in EN and AR, disabled fieldset, axe on every channel, `describeAxe`), `sc-select.visual.e2e.ts`.
+
+## Paper board alignment
+
+Board 6B2-0 matches (56 high, padding 16 / 52, 26px chevron 16 from the inline end, body-large value). No change.

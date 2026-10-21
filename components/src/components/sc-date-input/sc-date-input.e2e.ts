@@ -125,6 +125,13 @@ describe('sc-date-input (e2e)', () => {
       await expectNoAxeViolations(page);
     }
   });
+
+  it('draws Day and Month 72px wide and Year 100px', async () => {
+    const page = await newScPage(`<sc-date-input id="d" label="Date of birth"></sc-date-input>`);
+    const w = (p: string) => part(page, '#d', p, 'Math.round(i.parentElement.getBoundingClientRect().width)');
+    expect([await w('day'), await w('month'), await w('year')]).toEqual([72, 72, 100]);
+  });
+
 });
 
 describeAxe('sc-date-input', ALL_STATES);

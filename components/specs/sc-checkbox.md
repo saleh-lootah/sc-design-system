@@ -80,3 +80,7 @@ Form field, 7 KiB gzip each; measured in the C3 report.
 ## Tests
 
 `sc-checkbox-group.spec.tsx`, `sc-checkbox.spec.tsx`, `sc-checkbox-group.e2e.ts` (group semantics, keyboard, native submission, reset, required, group error, geometry in AR/EN, disabled, boxes added later, forced colours, axe on every channel, `describeAxe`), `sc-checkbox.e2e.ts` (on its own: name, hint, error, 44px target, MOT-02, `describeAxe`), and the visual suites for both tags.
+
+## Paper board alignment
+
+Board 827-0: added the **indeterminate** state it draws (new `indeterminate` property on `sc-checkbox`: `channel-action` fill with a 12 × 2 `channel-on-action` bar, `aria-checked="mixed"`, cleared when toggled). Rows, box, halo and gaps already matched.
