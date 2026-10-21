@@ -12,7 +12,7 @@ The side navigation of the signed-in account area.
 | --- | --- |
 | `href` | Required; non-links are ignored |
 | `aria-current="page"` | The current item |
-| `data-icon` | `description`, `credit-card`, `notifications`, `person`, `history`, `home`, `apps`, `logout` (`src/icons/destinations.tsx`) |
+| `data-icon` | `description`, `credit-card`, `notifications`, `person`, `history`, `home`, `apps`, `logout` (Material Symbols, `NavIcon` in `src/icons/icons.json`; the current item's icon is Filled) |
 | `data-count` | A positive whole number: the count badge |
 | `data-count-label` | The visually hidden text read after the label; default "{count} new" / "{count} جديدة" |
 | `data-sign-out` | Puts the item after the divider |

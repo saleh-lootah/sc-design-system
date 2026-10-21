@@ -2,6 +2,7 @@ import { Component, Element, Event, EventEmitter, Host, Method, Prop, Watch, h }
 import { normaliseDigits } from '../../i18n/digits';
 import { LocaleController } from '../../i18n/controller';
 import strings from '../../i18n/components/sc-search';
+import { Search } from '../../icons/for/sc-search';
 
 export interface ScSearchDetail {
   /** The query as typed, trimmed. */
@@ -106,10 +107,7 @@ export class ScSearch {
           </label>
           <div class={{ 'sc-search__row': true, 'sc-search--l': large }}>
             <div class="sc-search__field">
-              <svg class="icon sc-search__icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
-                <circle cx="11" cy="11" r="7" />
-                <path d="M20 20l-4-4" />
-              </svg>
+              <Search class="sc-search__icon" />
               <input
                 id={`${id}-input`}
                 ref={(el) => (this.input = el)}

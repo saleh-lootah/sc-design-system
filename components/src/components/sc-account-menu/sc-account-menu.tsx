@@ -1,7 +1,7 @@
 import { Component, Element, Event, EventEmitter, Host, Method, Prop, State, h } from '@stencil/core';
 import { LocaleController } from '../../i18n/controller';
 import strings from '../../i18n/components/sc-account-menu';
-import { Bell, ExpandMore, Group, Logout, Person, Settings } from '../../icons/chrome';
+import { ExpandMore, Group, Logout, Notifications as Bell, Person, Settings } from '../../icons/for/sc-account-menu';
 import { Disclosure } from '../../utils/disclosure';
 
 /** Initials from a name as written: the first letter of the first and last words. */

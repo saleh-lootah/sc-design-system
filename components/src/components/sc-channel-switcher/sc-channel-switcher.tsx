@@ -2,7 +2,7 @@ import { Component, Element, Host, Method, Prop, State, h } from '@stencil/core'
 import { LocaleController } from '../../i18n/controller';
 import own from '../../i18n/components/sc-channel-switcher';
 import { channelStrings, descKey, nameKey } from '../../i18n/components/channels';
-import { Check, ExpandMore } from '../../icons/chrome';
+import { Check, ExpandMore } from '../../icons/for/sc-channel-switcher';
 import { Disclosure } from '../../utils/disclosure';
 import { Channel, ChannelLinks, channelHref, channels, parseLinks, resolveChannel } from '../../utils/channels';
 

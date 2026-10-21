@@ -1,18 +1,8 @@
 import { Component, Element, Host, Prop, h } from '@stencil/core';
 import { LocaleController } from '../../i18n/controller';
 import strings from '../../i18n/components/sc-utility-bar';
-import { AccessibilityIcon, Chat, Mood, Phone } from '../../icons/chrome';
+import { Accessibility as AccessibilityIcon, Chat, GridView, Mood, Phone } from '../../icons/for/sc-utility-bar';
 
-/**
- * Services (four squares), the chrome icon grammar (24px grid, 2px strokes). Inline here
- * until the icon pass (D13) adds it to src/icons: importing the destinations module for one
- * icon put the bar over its budget.
- */
-const ServicesIcon = () => (
-  <svg class="icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true" focusable="false">
-    <path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z" />
-  </svg>
-);
 
 /** The custom property the page reads to keep clear of the docked bar. */
 const RESERVE = '--sc-utility-bar-block-size';
@@ -117,7 +107,7 @@ export class ScUtilityBar {
           ],
         ],
       ],
-      [this.servicesHref, <ServicesIcon />, t('utilityServices'), 'docked-only'],
+      [this.servicesHref, <GridView />, t('utilityServices'), 'docked-only'],
       [this.chatHref, <Chat />, t('utilityChat')],
       [this.accessibilityHref, <AccessibilityIcon />, t('utilityAccessibility')],
     ];

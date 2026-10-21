@@ -90,7 +90,7 @@
     letter-spacing: var(--sc-type-body-medium-tracking);
   }
 
-  /* The chevron (expand_more), drawn with a mask in currentColor. It sits at inline-end, so
+  /* The chevron (Material Symbols expand_more, Outlined, as in src/icons/icons.json), drawn with a mask in currentColor. It sits at inline-end, so
      it moves to the left in Arabic; it turns over vertically, so it never mirrors. */
   ::slotted(details) > summary::after {
     content: '';
@@ -99,8 +99,8 @@
     inline-size: var(--sc-size-icon-l);
     block-size: var(--sc-size-icon-l);
     background: currentColor;
-    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") center / contain no-repeat;
-    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") center / contain no-repeat;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -960 960 960' fill='black'%3E%3Cpath d='M480-345 240-585l56-56 184 184 184-184 56 56-240 240Z'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -960 960 960' fill='black'%3E%3Cpath d='M480-345 240-585l56-56 184 184 184-184 56 56-240 240Z'/%3E%3C/svg%3E") center / contain no-repeat;
     /* Pointer toggles turn the chevron over 120ms with the in-out curve (MOT-06). */
     transition: transform var(--sc-duration-fast) var(--sc-easing-standard);
   }

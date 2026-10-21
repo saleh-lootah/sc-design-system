@@ -19,7 +19,7 @@ Read with: `docs/v2/foundations.md` (token values), `docs/v2/component-language.
 
 ## Stack and outputs
 
-- StencilJS 4, TypeScript (strict). No runtime dependencies beyond Stencil. Icons are inline SVG in `src/icons/` on a 24px grid in `currentColor`.
+- StencilJS 4, TypeScript (strict). No runtime dependencies beyond Stencil. Icons are Material Symbols as inline SVG in `currentColor`, generated per component from `src/icons/icons.json` (`npm run icons`; CONTRIBUTING §4).
 - **`dist-custom-elements` is the primary build** (`import '@sc/components/dist/components/sc-button.js'` defines the tag). The lazy loader (`dist/sc-components/sc-components.esm.js`) is kept for plain HTML, CMS pages and the playground; its tags are grouped into a few bundles (`bundles` in `stencil.config.ts`) and nothing is hidden before hydration (`invisiblePrehydration: false`).
 - No framework wrappers in v2.0 (React 19, Angular and Vue use custom elements directly).
 

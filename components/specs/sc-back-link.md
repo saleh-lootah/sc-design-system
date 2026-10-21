@@ -51,7 +51,7 @@ The arrow mirrors (it points right in Arabic) and stays at the start (the right)
 
 ## Budget
 
-Custom-elements closure 2,683 B gzip (4 KiB budget), its own CSS 517 B. The arrow comes from `src/icons/nav.tsx`, not the shared icon set.
+Custom-elements closure 2,683 B gzip (4 KiB budget), its own CSS 517 B. The arrow is Material Symbols `arrow_back`, inlined from its generated icon module (`src/icons/for/sc-back-link.tsx`).
 
 ## Tests
 

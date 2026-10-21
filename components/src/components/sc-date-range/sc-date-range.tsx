@@ -1,10 +1,9 @@
 import { Component, Element, Event, EventEmitter, Host, Method, Prop, State, Watch, h } from '@stencil/core';
 import { normaliseDigits } from '../../i18n/digits';
 import { LocaleController } from '../../i18n/controller';
-import { ArrowForward, ChevronBack, ChevronForward, Close } from '../../icons/index'; // explicit /index: enables SVG rendering (see CONTRIBUTING)
+import { ArrowForward, Calendar as CalendarIcon, ChevronBack, ChevronForward, Close } from '../../icons/for/sc-date-range';
 import { CheckMark, FieldError, FieldHint, FieldLabel, HeadingLevel, Slotted, describedBy, forwardFocus, headingLevel, nextId, onFormReset, takeSlotted, withField } from '../sc-text-input/field';
 import { DateRangeKey, StringsInput, translator } from './overrides';
-import { CalendarIcon } from './calendar-icon';
 import {
   YearMonth,
   addDays,

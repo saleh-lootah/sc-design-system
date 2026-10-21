@@ -1,7 +1,7 @@
 import { Component, Element, Event, EventEmitter, Host, Method, Prop, State, h } from '@stencil/core';
 import { LocaleController } from '../../i18n/controller';
 import strings from '../../i18n/components/sc-announcement-bar';
-import { CloseIcon, ErrorIcon, InfoIcon, WarningIcon } from '../../icons/chrome';
+import { AlertCircle as ErrorIcon, Close as CloseIcon, Info as InfoIcon, Warning as WarningIcon } from '../../icons/for/sc-announcement-bar';
 import { nextFocusable } from '../../utils/focus';
 import { exit, fromPointer } from '../../utils/motion';
 

@@ -350,6 +350,34 @@
       "mirror": true,
       "note": "Filled: the current navigation item (ICN-02).",
       "d": "M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z"
+    },
+    "GridView": {
+      "material": "grid_view",
+      "fill": 0,
+      "mirror": false,
+      "note": "All services (a grid).",
+      "d": "M120-520v-320h320v320H120Zm0 400v-320h320v320H120Zm400-400v-320h320v320H520Zm0 400v-320h320v320H520ZM200-600h160v-160H200v160Zm400 0h160v-160H600v160Zm0 400h160v-160H600v160Zm-400 0h160v-160H200v160Zm400-400Zm0 240Zm-240 0Zm0-240Z"
+    },
+    "UnfoldMore": {
+      "material": "unfold_more",
+      "fill": 0,
+      "mirror": false,
+      "note": "Sortable, not sorted (table header).",
+      "d": "M480-120 300-300l58-58 122 122 122-122 58 58-180 180ZM358-598l-58-58 180-180 180 180-58 58-122-122-122 122Z"
+    },
+    "ArrowUpward": {
+      "material": "arrow_upward",
+      "fill": 0,
+      "mirror": false,
+      "note": "Sorted ascending (vertical: never mirrors).",
+      "d": "M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"
+    },
+    "ArrowDownward": {
+      "material": "arrow_downward",
+      "fill": 0,
+      "mirror": false,
+      "note": "Sorted descending (vertical: never mirrors).",
+      "d": "M440-800v487L216-537l-56 57 320 320 320-320-56-57-224 224v-487h-80Z"
     }
   },
   "sets": {

@@ -42,7 +42,7 @@ Child components of a family (for example `sc-radio` inside `sc-radio-group`) ge
 ```tsx
 import { AttachInternals, Component, Element, Host, Prop, h } from '@stencil/core';
 import { LocaleController } from '../../i18n/locale';
-import { ChevronForward } from '../../icons/index';
+import { ChevronForward } from '../../icons/for/sc-thing'; // generated: npm run icons
 
 /**
  * One sentence on what it's for.
@@ -75,7 +75,7 @@ export class ScThing {
 ```
 
 Rules that bite:
-- **Import icons from `'../../icons/index'`, never `'../../icons'`.** Stencil only turns on SVG rendering for a component when it can follow the import to a file that contains `<svg>`; it doesn't resolve folder imports, and without it SVGs render as unknown HTML elements (invisible).
+- **Import icons from your own generated module, `'../../icons/for/<tag>'`**, then run `npm run icons` (see §4). Stencil only turns on SVG rendering for a component when it can follow the import to a file that contains `<svg>`; it doesn't resolve folder imports, and without it SVGs render as unknown HTML elements (invisible).
 - Don't use `:scope` in `querySelector` inside component code: the spec-test DOM doesn't support it. Iterate `this.el.children` instead.
 - Logical properties only (`inline-size`, `padding-inline-start`, `inset-inline-end`), never left/right.
 - Events: `@Event({ bubbles: true, composed: true }) scChange` etc., `sc` prefix. Keep native events working.
@@ -99,7 +99,13 @@ Light-DOM (`scoped`) components wrap their whole stylesheet in `@layer sc.compon
 
 ## 4. Icons
 
-`src/icons/index.tsx` has functional components on a 24px grid using `currentColor`: `ArrowForward`, `ChevronForward`, `ChevronBack`, `External` (these four are **directional** and mirror in RTL), `AlertCircle`, `CheckCircle`, `Info`, `Warning`, `Spinner`, `Search`, `Close`. Use them by component (`<ChevronForward />`) or by name (`<Icon name={this.icon} />`, with `IconName` as the prop type). They are always `aria-hidden`; the words carry the meaning. If you need a new icon, ask: the file is shared.
+Icons are **Material Symbols** (D13), Outlined, weight 400, optical size 24, as inline SVG in `currentColor`; Filled only for status icons and the current navigation item (ICN-02). Their paths live in `src/icons/icons.json`, which records for each icon its Material name, fill and whether it mirrors in RTL (foundations §10). Import the ones you need by name from your component's own module and generate it:
+
+```tsx
+import { ArrowForward, Close } from '../../icons/for/sc-modal';
+```
+
+`npm run icons` writes `src/icons/for/<tag>.tsx` with exactly those icons, inlined into your component, so no shared icon chunk grows (W9); `npm run check:icons` (part of `npm run check`) fails when it is stale. Each key is imported by one file only. Also available: `<Name>Path` (the raw path, for SVG built in the DOM), `Spinner`, and the by-name sets `ButtonIcon`, `EmptyStateIcon` and `NavIcon` with their name types. A new icon: add its Material path to `icons.json` (from github.com/google/material-design-icons, `symbols/web/<name>/materialsymbolsoutlined/<name>[_fill1]_24px.svg`). Icons are always `aria-hidden`; the words carry the meaning.
 
 ## 5. Strings and locale
 

@@ -56,7 +56,7 @@ The accent and icon sit at inline-start, so on the right in Arabic. Icons do not
 
 ## Budget
 
-Leaf, 4 KiB. Measured: **4.0 KiB** gzip (custom-elements closure, including the shared icon set and locale controller); component CSS 0.6 KiB.
+Leaf, 4 KiB. Measured: **3.3 KiB** gzip (custom-elements closure, including its inlined Material Symbols status icons and the locale controller); component CSS 0.6 KiB.
 
 ## Tests
 

@@ -82,12 +82,11 @@ Layout mirrors through logical properties. Directional icons (`arrow-forward`, c
 | Part | gzip |
 | --- | --- |
 | `sc-button.js` entry | 0.2 KiB |
-| Component module, including its CSS (1.2 KiB) | 2.7 KiB |
+| Component module, including its CSS (1.2 KiB) and its inlined icons (the `icon` set and the spinner, Material Symbols, `src/icons/for/sc-button.tsx`) | 3.5 KiB |
 | Locale controller and helpers (shared by every component with strings) | 1.0 KiB |
-| Icon set by name (shared by every component with an `icon` prop) | 0.8 KiB |
-| **Closure, excluding the runtime** | **4.6 KiB** (4,724 B) |
+| **Closure, excluding the runtime** | **4.8 KiB** (4,864 B) |
 
-The two shared chunks are paid once per page, not once per component; the button's own cost is 2.9 KiB. v1 was 7.9 KiB.
+The locale controller is paid once per page, not once per component. The `icon` prop accepts the names of the button's own set (`ButtonIconName`: `arrow-forward`, `arrow-back`, `chevron-forward`, `chevron-back`, `external`, `search`, `check`, `close`, `add`, `download`); anything else goes in `slot="icon"`. v1 was 7.9 KiB.
 
 ## Tests
 
