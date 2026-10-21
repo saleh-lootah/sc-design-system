@@ -1,0 +1,42 @@
+<h1 class="pg-title sc-type-headline-large" data-ar="ترقيم الصفحات">Pagination</h1>
+<p class="pg-lede sc-type-body-large" data-ar="التنقل بين صفحات قائمة طويلة، مع عدد النتائج اختياريًا.">
+  Moves between the pages of a long list, with an optional results count.
+</p>
+
+<section class="pg-section" aria-labelledby="pg-demo">
+  <h2 id="pg-demo" class="sc-type-headline-small" data-ar="مع عدد النتائج">With a results count</h2>
+  <div class="pg-card">
+    <sc-pagination id="pg-fines" page="7" total-items="1284" item-label="fine|fines" href-template="#page-{page}"></sc-pagination>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="pg-states">
+  <h2 id="pg-states" class="sc-type-headline-small" data-ar="الحالات">States</h2>
+  <div class="pg-card">
+    <div class="pg-cell"><span class="pg-label">first page (no Previous)</span><sc-pagination page="1" total-pages="13" href-template="#p{page}"></sc-pagination></div>
+    <div class="pg-cell"><span class="pg-label">last page (no Next)</span><sc-pagination page="13" total-pages="13" href-template="#p{page}"></sc-pagination></div>
+    <div class="pg-cell"><span class="pg-label">buttons (scPageChange)</span><sc-pagination id="pg-buttons" page="2" total-pages="4"></sc-pagination></div>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="pg-arabic">
+  <h2 id="pg-arabic" class="sc-type-headline-small" data-ar="بالعربية">In Arabic</h2>
+  <div class="pg-card" lang="ar" dir="rtl">
+    <sc-pagination page="1" total-items="1284" item-label="مخالفة|مخالفة|مخالفتين|مخالفات|مخالفة|مخالفة" href-template="#p{page}"></sc-pagination>
+    <p class="pg-note" lang="en" dir="ltr">Always lang="ar" dir="rtl": the range uses a word, never a dash (LANG-22A); Previous is on the right.</p>
+  </div>
+</section>
+
+<script>
+  {
+    const pager = document.getElementById('pg-buttons');
+    pager.addEventListener('scPageChange', (ev) => {
+      pager.page = ev.detail.page;
+    });
+    const fines = document.getElementById('pg-fines');
+    fines.addEventListener('scPageChange', (ev) => {
+      ev.preventDefault();
+      fines.page = ev.detail.page;
+    });
+  }
+</script>

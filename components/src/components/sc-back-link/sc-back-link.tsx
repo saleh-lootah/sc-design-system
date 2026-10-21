@@ -1,10 +1,11 @@
-import { Component, Element, Host, Prop, h } from '@stencil/core';
-import { LocaleController } from '../../i18n/locale';
-import { ChevronBack } from '../../icons/index'; // explicit /index: Stencil only scans file imports for <svg>
+import { Component, Host, Prop, h } from '@stencil/core';
+import { LocaleController } from '../../i18n/controller';
+import strings from '../../i18n/components/sc-back-link';
+import { ArrowBack } from '../../icons/nav'; // a file import: Stencil only scans file imports for <svg>
 
 /**
- * The "Back" control at the start of an app bar or above a question. A 44px glass pill with
- * a back chevron that mirrors in right-to-left.
+ * The "Back" control at the start of an app bar or above a question: plain text with a
+ * 24px back arrow that mirrors in right-to-left, on a 44px target (v2 drops v1's glass pill).
  *
  * Renders a native `<a>` when `href` is set (the previous page has a URL, which also works
  * without JavaScript), or a `<button type="button">` otherwise: listen for `click` and go
@@ -14,7 +15,7 @@ import { ChevronBack } from '../../icons/index'; // explicit /index: Stencil onl
  *
  * @part control - The inner `<a>` or `<button>`.
  * @part label - The label wrapper.
- * @part icon - The chevron wrapper.
+ * @part icon - The arrow wrapper.
  */
 @Component({
   tag: 'sc-back-link',
@@ -22,19 +23,16 @@ import { ChevronBack } from '../../icons/index'; // explicit /index: Stencil onl
   shadow: { delegatesFocus: true },
 })
 export class ScBackLink {
-  @Element() el!: HTMLElement;
-
   /** The previous page. Without it the control is a `<button>`; handle its `click`. */
   @Prop({ reflect: true }) href?: string;
 
   /**
-   * Surface.
-   * - `glass` (default): translucent pill with an edge and shadow, for app bars and washes.
-   * - `plain`: no fill, for use inside a page body under a solid surface.
+   * Deprecated in v2 and ignored: the back link has one plain appearance on every surface.
+   * Kept so v1 markup (`appearance="glass"` or `"plain"`) still renders.
    */
-  @Prop({ reflect: true }) appearance: 'glass' | 'plain' = 'glass';
+  @Prop({ reflect: true }) appearance?: string;
 
-  private locale = new LocaleController(this);
+  private locale = new LocaleController(this, strings);
 
   connectedCallback() {
     this.locale.connect();
@@ -45,29 +43,22 @@ export class ScBackLink {
   }
 
   render() {
-    const { t } = this.locale;
-    const classes = {
-      'control': true,
-      'focus-ring': true,
-      'type-label-m': true,
-      'control--plain': this.appearance === 'plain',
-    };
     const content = [
       <span class="icon-box" part="icon">
-        <ChevronBack />
+        <ArrowBack />
       </span>,
       <span class="label" part="label">
-        <slot>{t('back')}</slot>
+        <slot>{this.locale.t('backLinkLabel')}</slot>
       </span>,
     ];
     return (
       <Host>
         {this.href ? (
-          <a class={classes} part="control" href={this.href}>
+          <a class="control focus-ring" part="control" href={this.href}>
             {content}
           </a>
         ) : (
-          <button class={classes} part="control" type="button">
+          <button class="control focus-ring" part="control" type="button">
             {content}
           </button>
         )}

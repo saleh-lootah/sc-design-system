@@ -40,6 +40,7 @@ const bundles = [
   { components: ['sc-summary-list', 'sc-summary-row'] },
   { components: ['sc-table'] },
   { components: ['sc-date-range'] },
+  { components: ['sc-breadcrumbs', 'sc-pagination', 'sc-account-nav', 'sc-bottom-nav'] },
 ];
 
 export const config: Config = {

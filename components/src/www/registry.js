@@ -45,3 +45,7 @@ page('Actions and navigation', 'sc-account-menu', 'Account menu');
 page('Feedback and status', 'sc-announcement-bar', 'Announcement bar');
 page('Actions and navigation', 'sc-utility-bar', 'Utility bar');
 page('Actions and navigation', 'sc-channel-network', 'Channel network');
+page('Actions and navigation', 'sc-breadcrumbs', 'Breadcrumbs');
+page('Actions and navigation', 'sc-pagination', 'Pagination');
+page('Actions and navigation', 'sc-account-nav', 'Account navigation');
+page('Actions and navigation', 'sc-bottom-nav', 'Bottom navigation');

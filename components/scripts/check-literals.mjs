@@ -28,10 +28,10 @@ const globalDir = join(root, 'src', 'global');
 
 /** v1 components not yet rebuilt: allowed the legacy i18n imports and the field.css/choice.css @imports. */
 const V1_PENDING = new Set([
-  'sc-back-link', 'sc-callout', 'sc-card', 'sc-channel-chip', 'sc-channel-hero', 'sc-checkbox',
+  'sc-callout', 'sc-card', 'sc-channel-hero', 'sc-checkbox',
   'sc-checkbox-group', 'sc-container', 'sc-date-input', 'sc-date-range', 'sc-error-summary', 'sc-grid',
-  'sc-language-switch', 'sc-link', 'sc-ltr', 'sc-radio', 'sc-radio-group', 'sc-search', 'sc-select',
-  'sc-service-card', 'sc-skip-link', 'sc-spinner', 'sc-status-tag', 'sc-step-progress', 'sc-summary-list',
+  'sc-ltr', 'sc-radio', 'sc-radio-group', 'sc-search', 'sc-select',
+  'sc-service-card', 'sc-spinner', 'sc-status-tag', 'sc-step-progress', 'sc-summary-list',
   'sc-summary-row', 'sc-table', 'sc-text-input', 'sc-textarea',
 ]);
 const STRUCTURE = [

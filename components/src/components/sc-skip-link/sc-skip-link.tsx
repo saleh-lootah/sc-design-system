@@ -1,5 +1,6 @@
 import { Component, Element, Host, Prop, h } from '@stencil/core';
-import { LocaleController } from '../../i18n/locale';
+import { LocaleController } from '../../i18n/controller';
+import strings from '../../i18n/components/sc-skip-link';
 
 /**
  * "Skip to main content": the first focusable element on every page. Hidden until it gets
@@ -7,7 +8,8 @@ import { LocaleController } from '../../i18n/locale';
  * target (adding `tabindex="-1"` for the moment it's needed), so the next Tab continues
  * from the main content in every browser.
  *
- * Put it first inside `<body>`, before `sc-app-bar`.
+ * Put it first inside `<body>`, before `sc-app-bar` or `sc-site-header`. v2 shows it as a
+ * 48px `inverse-surface` block, so it stands out over any hero or announcement colour.
  *
  * @slot - Overrides the label. Defaults to "Skip to main content" / "الانتقال إلى المحتوى الرئيسي".
  *
@@ -24,7 +26,7 @@ export class ScSkipLink {
   /** The fragment of the element to skip to, `<main id="main-content">` by default, the id `sc-page` renders. */
   @Prop({ reflect: true }) href = '#main-content';
 
-  private locale = new LocaleController(this);
+  private locale = new LocaleController(this, strings);
 
   connectedCallback() {
     this.locale.connect();
@@ -53,11 +55,10 @@ export class ScSkipLink {
   };
 
   render() {
-    const { t } = this.locale;
-    return (
+        return (
       <Host>
-        <a class="control focus-ring type-label-m" part="control" href={this.href} onClick={this.onClick}>
-          <slot>{t('skipLinkLabel')}</slot>
+        <a class="control" part="control" href={this.href} onClick={this.onClick}>
+          <slot>{this.locale.t('skipLinkLabel')}</slot>
         </a>
       </Host>
     );

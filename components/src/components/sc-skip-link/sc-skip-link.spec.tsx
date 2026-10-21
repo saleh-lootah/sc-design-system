@@ -9,7 +9,7 @@ describe('sc-skip-link (spec)', () => {
     const a = control(page.root!);
     expect(a.getAttribute('href')).toBe('#main-content');
     expect(a.querySelector('slot')!.textContent).toBe('Skip to main content');
-    expect(a).toHaveClasses(['control', 'focus-ring', 'type-label-m']);
+    expect(a).toHaveClass('control');
   });
 
   it('uses the Arabic label and a custom href', async () => {

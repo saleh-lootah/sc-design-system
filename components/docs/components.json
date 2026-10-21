@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-21T14:55:59",
+  "timestamp": "2026-10-21T15:17:38",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.45.2",
@@ -346,6 +346,79 @@
         {
           "name": "trigger",
           "docs": "The account button."
+        }
+      ],
+      "states": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/sc-account-nav/sc-account-nav.tsx",
+      "encapsulation": "shadow",
+      "tag": "sc-account-nav",
+      "readme": "# sc-account-nav\n\nThe side navigation of the signed-in account area. Spec: `specs/sc-account-nav.md`.\n\n## Usage\n\n```html\n<sc-account-nav>\n  <a href=\"/en/account/applications\" data-icon=\"description\">Applications</a>\n  <a href=\"/en/account/payments\" data-icon=\"credit-card\" aria-current=\"page\">Payments</a>\n  <a href=\"/en/account/notifications\" data-icon=\"notifications\" data-count=\"3\" data-count-label=\"3 unread\">Notifications</a>\n  <a href=\"/en/account/profile\" data-icon=\"person\">Profile and settings</a>\n  <a href=\"/en/sign-out\" data-icon=\"logout\" data-sign-out>Sign out</a>\n</sc-account-nav>\n```\n\n- Write the items as plain links. `aria-current=\"page\"` marks the current one (channel-subtle fill, 3px bar, channel icon, Bold); `data-icon` picks a 24px icon (`description`, `credit-card`, `notifications`, `person`, `history`, `home`, `apps`, `logout`); `data-count` adds a badge read as `data-count-label` (default \"{count} new\" / \"{count} جديدة\"); `data-sign-out` puts the item after the divider.\n- 3 of 12 columns on wide screens. Below 600px it becomes one row of 44px items that scrolls sideways.\n- The links are what shows before upgrade and without JavaScript. Changing them re-renders the nav.\n\n### Styling hooks\n\nParts: `nav`, `item`, `badge`.\n",
+      "docs": "The side navigation of the signed-in account area: Applications, Payments,\nNotifications, Profile and settings, then a divider and Sign out. It takes 3 of 12\ncolumns on wide screens and becomes a horizontal row of 44px items below 600px.\n\nWrite the items as plain links (they are what shows before upgrade and without\nJavaScript):\n\n  <sc-account-nav>\n    <a href=\"/en/account/applications\" data-icon=\"description\">Applications</a>\n    <a href=\"/en/account/payments\" data-icon=\"credit-card\" aria-current=\"page\">Payments</a>\n    <a href=\"/en/account/notifications\" data-icon=\"notifications\" data-count=\"3\" data-count-label=\"3 unread\">Notifications</a>\n    <a href=\"/en/account/profile\" data-icon=\"person\">Profile and settings</a>\n    <a href=\"/en/sign-out\" data-icon=\"logout\" data-sign-out>Sign out</a>\n  </sc-account-nav>\n\n- `aria-current=\"page\"` marks the current item: a channel-subtle fill, a 3px channel bar\n  at inline-start, a channel icon and a Bold label (never colour alone).\n- `data-icon`: `description`, `credit-card`, `notifications`, `person`, `history`,\n  `home`, `apps` or `logout` (24px; `logout` mirrors in right-to-left).\n- `data-count`: a count badge, read with the visually hidden `data-count-label`\n  (default \"{count} new\" / \"{count} جديدة\").\n- `data-sign-out`: puts the item after the divider.",
+      "docsTags": [
+        {
+          "name": "part",
+          "text": "nav - The `<nav>` landmark."
+        },
+        {
+          "name": "part",
+          "text": "item - Each link."
+        },
+        {
+          "name": "part",
+          "text": "badge - A count badge."
+        }
+      ],
+      "usage": {},
+      "props": [
+        {
+          "name": "label",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "label",
+          "reflectToAttr": false,
+          "docs": "Overrides the landmark name (\"Account\" / \"الحساب\").",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [
+        {
+          "name": "badge",
+          "docs": "A count badge."
+        },
+        {
+          "name": "item",
+          "docs": "Each link."
+        },
+        {
+          "name": "nav",
+          "docs": "The `<nav>` landmark."
         }
       ],
       "states": [],
@@ -824,8 +897,8 @@
       "filePath": "src/components/sc-back-link/sc-back-link.tsx",
       "encapsulation": "shadow",
       "tag": "sc-back-link",
-      "readme": "# sc-back-link\n\nThe \"Back\" control: a 44px glass pill with a back chevron, at the start of `sc-app-bar` or above the question on a form page.\n\n## Usage\n\n```html\n<!-- Preferred: the previous page has a URL, so it works without JavaScript. -->\n<sc-back-link href=\"/renew/vehicle\"></sc-back-link>\n\n<!-- In a single-page app: a <button>; handle click in your router. -->\n<sc-back-link id=\"back\"></sc-back-link>\n<script>document.getElementById('back').addEventListener('click', () => history.back());</script>\n```\n\n- Use it on every step of a journey except the first. It goes to the previous step, not the start of the service.\n- With `href` it renders an `<a>`; without it, a `<button type=\"button\">`. Prefer `href`: it keeps the browser's own behaviour (open in new tab, status bar URL).\n- The label defaults to \"Back\" / \"رجوع\" in the page language. Override it with the default slot only when \"Back\" would be unclear: `<sc-back-link href=\"/vehicles\">Back to my vehicles</sc-back-link>`.\n- `appearance=\"glass\"` (default) is for the app bar and channel washes. Use `appearance=\"plain\"` inside a page body on a solid surface.\n\n### Arabic\n\nThe chevron mirrors, so it points right, toward the start of the line, and sits on the right of the label.\n\n### Accessibility\n\nThe accessible name is the label (\"Back\"). Keyboard: Tab to it, Enter follows the link; Space also activates the button form. It delegates focus, so `el.focus()` focuses the inner control. Under `prefers-reduced-transparency` the glass becomes a solid surface; in forced colours it gets a system-coloured border.\n\n### Styling hooks\n\nParts: `control`, `label`, `icon`.\n",
-      "docs": "The \"Back\" control at the start of an app bar or above a question. A 44px glass pill with\na back chevron that mirrors in right-to-left.\n\nRenders a native `<a>` when `href` is set (the previous page has a URL, which also works\nwithout JavaScript), or a `<button type=\"button\">` otherwise: listen for `click` and go\nback in your router. It delegates focus to the inner control.",
+      "readme": "# sc-back-link\n\n\"Back\" to the previous step, on every step of a journey except the first. Spec: `specs/sc-back-link.md`.\n\n## Usage\n\n```html\n<sc-back-link href=\"/en/renew/vehicle\"></sc-back-link>\n<sc-back-link></sc-back-link> <!-- a button: handle click in your router -->\n```\n\n- Plain text and a 24px back arrow in `on-surface`, on a 44px target. The arrow mirrors in Arabic and stays at the start.\n- Use `href` whenever the previous step has a URL, so it works without JavaScript.\n- The label defaults to \"Back\" / \"رجوع\". Change it only to say where it goes: \"Back to my vehicles\".\n- In `sc-app-bar` it sits in the start slot. Never use it to go to the start of the service.\n- `appearance` is deprecated in v2 and ignored.\n\n### Styling hooks\n\nParts: `control`, `label`, `icon`.\n",
+      "docs": "The \"Back\" control at the start of an app bar or above a question: plain text with a\n24px back arrow that mirrors in right-to-left, on a 44px target (v2 drops v1's glass pill).\n\nRenders a native `<a>` when `href` is set (the previous page has a URL, which also works\nwithout JavaScript), or a `<button type=\"button\">` otherwise: listen for `click` and go\nback in your router. It delegates focus to the inner control.",
       "docsTags": [
         {
           "name": "slot",
@@ -841,41 +914,33 @@
         },
         {
           "name": "part",
-          "text": "icon - The chevron wrapper."
+          "text": "icon - The arrow wrapper."
         }
       ],
       "usage": {},
       "props": [
         {
           "name": "appearance",
-          "type": "\"glass\" | \"plain\"",
+          "type": "string | undefined",
           "complexType": {
-            "original": "'glass' | 'plain'",
-            "resolved": "\"glass\" | \"plain\"",
+            "original": "string",
+            "resolved": "string | undefined",
             "references": {}
           },
           "mutable": false,
           "attr": "appearance",
           "reflectToAttr": true,
-          "docs": "Surface.\n- `glass` (default): translucent pill with an edge and shadow, for app bars and washes.\n- `plain`: no fill, for use inside a page body under a solid surface.",
-          "docsTags": [
-            {
-              "name": "default",
-              "text": "'glass'"
-            }
-          ],
-          "default": "'glass'",
+          "docs": "Deprecated in v2 and ignored: the back link has one plain appearance on every surface.\nKept so v1 markup (`appearance=\"glass\"` or `\"plain\"`) still renders.",
+          "docsTags": [],
           "values": [
             {
-              "value": "glass",
               "type": "string"
             },
             {
-              "value": "plain",
-              "type": "string"
+              "type": "undefined"
             }
           ],
-          "optional": false,
+          "optional": true,
           "required": false,
           "getter": false,
           "setter": false
@@ -924,11 +989,165 @@
         },
         {
           "name": "icon",
-          "docs": "The chevron wrapper."
+          "docs": "The arrow wrapper."
         },
         {
           "name": "label",
           "docs": "The label wrapper."
+        }
+      ],
+      "states": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/sc-bottom-nav/sc-bottom-nav.tsx",
+      "encapsulation": "shadow",
+      "tag": "sc-bottom-nav",
+      "readme": "# sc-bottom-nav\n\nThe primary navigation of signed-in channel pages on phones and tablets. Spec: `specs/sc-bottom-nav.md`.\n\n## Usage\n\n```html\n<body>\n  …\n  <sc-bottom-nav>\n    <a href=\"/en\" data-icon=\"home\" aria-current=\"page\">Home</a>\n    <a href=\"/en/services\" data-icon=\"apps\">Services</a>\n    <a href=\"/en/account/activity\" data-icon=\"history\">Activity</a>\n  </sc-bottom-nav>\n</body>\n```\n\n- Three to five destinations, each an icon above a label. Docked flat to the bottom edge below 1024px and hidden from 1024px, where the header navigation takes over.\n- `sc.css` reserves its height at the end of the page (`padding-block-end` on `body` and `scroll-padding-block-end`), so nothing is covered.\n- The current destination (`aria-current=\"page\"`) gets a 56 × 32 `channel-container` indicator and a Bold label in the channel action colour.\n- When it is present, the utility bar folds into the footer.\n\n### Styling hooks\n\nParts: `nav`, `item`, `indicator`.\n",
+      "docs": "The primary navigation of signed-in channel pages on phones and tablets: a flat bar\ndocked to the bottom edge with three to five destinations, each an icon above a label.\nIt shows below 1024px only (from 1024px the header navigation takes over), and `sc.css`\nreserves its height at the end of the page, so it never covers content or the focused\nelement. When it is present, the utility bar folds into the footer.\n\nWrite the destinations as plain links:\n\n  <sc-bottom-nav>\n    <a href=\"/en\" data-icon=\"home\" aria-current=\"page\">Home</a>\n    <a href=\"/en/services\" data-icon=\"apps\">Services</a>\n    <a href=\"/en/account/activity\" data-icon=\"history\">Activity</a>\n  </sc-bottom-nav>\n\nThe current destination (`aria-current=\"page\"`) gets a 56 × 32 channel-container\nindicator behind its icon and a Bold label in the channel action colour. Items share the\nwidth equally, each at least 48px wide and 64px tall.",
+      "docsTags": [
+        {
+          "name": "part",
+          "text": "nav - The `<nav>` landmark (the bar)."
+        },
+        {
+          "name": "part",
+          "text": "item - Each link."
+        },
+        {
+          "name": "part",
+          "text": "indicator - The pill behind each icon."
+        }
+      ],
+      "usage": {},
+      "props": [
+        {
+          "name": "label",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "label",
+          "reflectToAttr": false,
+          "docs": "Overrides the landmark name (\"Main\" / \"رئيسية\").",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [
+        {
+          "name": "indicator",
+          "docs": "The pill behind each icon."
+        },
+        {
+          "name": "item",
+          "docs": "Each link."
+        },
+        {
+          "name": "nav",
+          "docs": "The `<nav>` landmark (the bar)."
+        }
+      ],
+      "states": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/sc-breadcrumbs/sc-breadcrumbs.tsx",
+      "encapsulation": "shadow",
+      "tag": "sc-breadcrumbs",
+      "readme": "# sc-breadcrumbs\n\nWhere the page sits in the channel's hierarchy, on channel pages outside a transaction (the hero of inner pages, CHR-07). Never inside a journey. Spec: `specs/sc-breadcrumbs.md`.\n\n## Usage\n\n```html\n<sc-breadcrumbs>\n  <a href=\"/en\">Home</a>\n  <a href=\"/en/vehicles\">Vehicles</a>\n  <span>Renew your vehicle registration</span>\n</sc-breadcrumbs>\n```\n\n- Write the trail as plain children, a link per ancestor and the current page last as text. The component renders `<nav aria-label=\"Breadcrumb\">` with an ordered list; the last item is never a link and carries `aria-current=\"page\"`.\n- The children are what shows before upgrade and without JavaScript. Changing them re-renders the trail.\n- Chevrons mirror in Arabic. Below 600px the trail collapses to one \"Back to {parent}\" / \"رجوع إلى {parent}\" link.\n\n### Styling hooks\n\nParts: `nav`, `list`, `link`, `current`.\n",
+      "docs": "Where this page sits in the channel's hierarchy, on pages outside a transaction (in the\nhero of inner pages, CHR-07). Never inside a journey: use `sc-back-link` there.\n\nWrite the trail as plain children: a link for each ancestor, then the current page as\nplain text (a `<span>`). The last child is always the current page; it is not a link and\ncarries `aria-current=\"page\"`.\n\n  <sc-breadcrumbs>\n    <a href=\"/en\">Home</a>\n    <a href=\"/en/vehicles\">Vehicles</a>\n    <span>Renew your vehicle registration</span>\n  </sc-breadcrumbs>\n\nRenders `<nav aria-label=\"Breadcrumb\">` with an ordered list in its shadow root. The\nchevrons between items mirror in right-to-left. Below 600px the trail collapses to one\n\"Back to {parent}\" link.",
+      "docsTags": [
+        {
+          "name": "part",
+          "text": "nav - The `<nav>` landmark."
+        },
+        {
+          "name": "part",
+          "text": "list - The `<ol>`."
+        },
+        {
+          "name": "part",
+          "text": "link - Each ancestor link."
+        },
+        {
+          "name": "part",
+          "text": "current - The current page."
+        }
+      ],
+      "usage": {},
+      "props": [
+        {
+          "name": "label",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "label",
+          "reflectToAttr": false,
+          "docs": "Overrides the landmark name (\"Breadcrumb\" / \"مسار التنقل\").",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [
+        {
+          "name": "current",
+          "docs": "The current page."
+        },
+        {
+          "name": "link",
+          "docs": "Each ancestor link."
+        },
+        {
+          "name": "list",
+          "docs": "The `<ol>`."
+        },
+        {
+          "name": "nav",
+          "docs": "The `<nav>` landmark."
         }
       ],
       "states": [],
@@ -1827,8 +2046,8 @@
       "filePath": "src/components/sc-channel-chip/sc-channel-chip.tsx",
       "encapsulation": "shadow",
       "tag": "sc-channel-chip",
-      "readme": "# sc-channel-chip\n\nPoints to another channel that also offers this service: \"Also on Dubai Transport\". It is the one component that names a channel: it sets `data-channel` on itself, so it always shows that channel's subtle and ink colours, whatever channel the page is in.\n\n## Usage\n\n```html\n<!-- A label -->\n<sc-channel-chip channel=\"transport\"></sc-channel-chip>\n\n<!-- A link to the service on that channel -->\n<sc-channel-chip channel=\"transport\" href=\"https://transport.dubai.gov.ae/renew\"></sc-channel-chip>\n```\n\n`channel` is one of `now`, `transport`, `visit`, `justice`, `build`, `invest`, `trade`.\n\n### Content\n\n- The text comes from strings: \"Also on {channel}\" / \"متوفر أيضًا في {channel}\", with the channel's own name. Override it with `label` or the default slot only when the chip says something more specific (\"Pay fines on Dubai Justice\"), and always name the channel.\n- Use it on service cards and service start pages, never as the main way forward.\n\n### Link\n\nWith `href` it renders an `<a>` with an end chevron (mirrored in Arabic). The pill stays compact (about 30px) but its hit area grows to 44px without moving the layout; leave a little space above and below it. Without `href` it isn't focusable.\n\n### Styling hooks\n\nParts: `chip`, `dot`, `icon` (links only).\n",
-      "docs": "Points to another channel that also offers this service: \"Also on Dubai Transport\".\n\nThe chip sets `data-channel` on itself, so it shows that channel's subtle and ink\ncolours whatever channel the page is in. This is the one component allowed to name\na channel. With `href` it is a link to the service on that channel.",
+      "readme": "# sc-channel-chip\n\nPoints to another channel that also offers this service: \"Also on Dubai Transport\". Spec: `specs/sc-channel-chip.md`.\n\n## Usage\n\n```html\n<sc-channel-chip channel=\"transport\"></sc-channel-chip>\n<sc-channel-chip channel=\"transport\" href=\"/en/transport/renew\"></sc-channel-chip>\n<sc-channel-chip channel=\"visit\" variant=\"outlined\" label=\"On Visit Dubai\"></sc-channel-chip>\n```\n\n- The chip sets `data-channel` on itself and shows that channel's colours: an 8px dot and the label in its action colour.\n- `variant=\"subtle\"` (default) on white cards; `variant=\"outlined\"` (surface fill, 1px channel outline, Bold) on a channel tint.\n- 32px tall with a 44px hit area when it is a link. Never dismissable, never the main way forward.\n\n### Styling hooks\n\nParts: `chip`, `dot`, `icon`.\n",
+      "docs": "Points to another channel that also offers this service: \"Also on Dubai Transport\".\n\nThe chip sets `data-channel` on itself, so it shows that channel's colours whatever\nchannel the page is in. This is the one component allowed to name a channel; other\nchannels' colours appear only as attribution like this. With `href` it is a link to the\nservice on that channel, with a 44px hit area that does not change the layout.\nChannel chips are never dismissable.",
       "docsTags": [
         {
           "name": "slot",
@@ -1836,11 +2055,11 @@
         },
         {
           "name": "part",
-          "text": "chip - The pill (`<a>` with `href`, otherwise `<span>`)."
+          "text": "chip - The chip (`<a>` with `href`, otherwise `<span>`)."
         },
         {
           "name": "part",
-          "text": "dot - The channel dot."
+          "text": "dot - The 8px channel dot."
         },
         {
           "name": "part",
@@ -1858,8 +2077,8 @@
             "references": {
               "Channel": {
                 "location": "import",
-                "path": "../../i18n/strings",
-                "id": "src/i18n/strings.ts::Channel",
+                "path": "../../i18n/core",
+                "id": "src/i18n/core.ts::Channel",
                 "referenceLocation": "Channel"
               }
             }
@@ -1955,6 +2174,46 @@
           "required": false,
           "getter": false,
           "setter": false
+        },
+        {
+          "name": "variant",
+          "type": "\"outlined\" | \"subtle\"",
+          "complexType": {
+            "original": "ChannelChipVariant",
+            "resolved": "\"outlined\" | \"subtle\"",
+            "references": {
+              "ChannelChipVariant": {
+                "location": "local",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-chrome/components/src/components/sc-channel-chip/sc-channel-chip.tsx",
+                "id": "src/components/sc-channel-chip/sc-channel-chip.tsx::ChannelChipVariant"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "variant",
+          "reflectToAttr": true,
+          "docs": "- `subtle` (default): the channel's subtle tint, for white cards.\n- `outlined`: a white chip with a 1px channel outline and a Bold label, for chips that\n  sit on a channel tint (life-event rows, \"On Dubai Transport\").",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'subtle'"
+            }
+          ],
+          "default": "'subtle'",
+          "values": [
+            {
+              "value": "outlined",
+              "type": "string"
+            },
+            {
+              "value": "subtle",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
         }
       ],
       "methods": [],
@@ -1970,11 +2229,11 @@
       "parts": [
         {
           "name": "chip",
-          "docs": "The pill (`<a>` with `href`, otherwise `<span>`)."
+          "docs": "The chip (`<a>` with `href`, otherwise `<span>`)."
         },
         {
           "name": "dot",
-          "docs": "The channel dot."
+          "docs": "The 8px channel dot."
         },
         {
           "name": "icon",
@@ -5255,8 +5514,8 @@
       "filePath": "src/components/sc-language-switch/sc-language-switch.tsx",
       "encapsulation": "shadow",
       "tag": "sc-language-switch",
-      "readme": "# sc-language-switch\n\nSwitches to the same page in the other language. The label is always the other language's own name: \"العربية\" on an English page, \"English\" on an Arabic page.\n\n## Usage\n\n```html\n<!-- On /en/renew -->\n<sc-language-switch href=\"/ar/renew\"></sc-language-switch>\n<!-- renders <a href=\"/ar/renew\" hreflang=\"ar\" lang=\"ar\">العربية</a> -->\n\n<!-- Switching in a single-page app: still a link, so it works without script -->\n<sc-language-switch id=\"lang\" href=\"/ar/renew\"></sc-language-switch>\n<script>\n  document.getElementById('lang').addEventListener('scSwitch', (e) => {\n    e.preventDefault();\n    setLanguage(e.detail.lang); // then move focus to the page <h1> (LANG-08)\n  });\n</script>\n```\n\n- The component reads the page language from the closest `lang` and offers the other one. Don't pass a label: the name never changes with the page language, by design.\n- Always set `href` to the same page in the other language (not the home page), so the user keeps their place. Without `href` the switch renders a `<button>`; that mode is deprecated (LANG-05 says the switch is a link), logs a console warning and will be removed in the next major version. The link gets `hreflang` and `lang` set to the target language, so screen readers pronounce \"العربية\" with an Arabic voice.\n- `scSwitch` fires on every activation with `{ lang }`. Call `preventDefault()` on it to switch in place in a single-page app, then move focus to the page `<h1>` (LANG-08).\n- Keep the user's answers when switching mid-journey.\n- `appearance=\"glass\"` (default) is the 44px pill for mobile app bars; `appearance=\"plain\"` is for desktop headers.\n\n### Placement\n\nAt the end of `sc-app-bar` (`slot=\"end\"`). In Arabic the end is on the left.\n\n### Accessibility\n\nThe label's own type: Arabic names use the Arabic label-m role (Bold), English names the Latin one (Medium), whatever the page language. 44px target, focus ring, solid fallback under reduced transparency, system colours in forced colours.\n\n### Styling hooks\n\nParts: `control`, `label`.\n",
-      "docs": "Switches to the same page in the other language. The label is always the other\nlanguage's own name, \"العربية\" on an English page and \"English\" on an Arabic page,\nmarked with its own `lang` and direction so screen readers pronounce it correctly.\n\nRenders an `<a href hreflang lang>` to the same page in the other language (LANG-05: the\nswitch is a link). It fires `scSwitch` on every activation; a single-page app calls\n`preventDefault()` on it and switches in place, and the link still works without script.\n\nWithout `href` it falls back to a `<button lang>`. That mode is deprecated and will be\nremoved in the next major version: always set `href`.",
+      "readme": "# sc-language-switch\n\nA link to the same page in the other language (LANG-04 to LANG-08). Spec: `specs/sc-language-switch.md`.\n\n## Usage\n\n```html\n<sc-language-switch href=\"/ar/renew-vehicle-registration/plate\"></sc-language-switch>\n<sc-language-switch appearance=\"header\" href=\"/ar\"></sc-language-switch>\n```\n\n- The label is always the other language's own name, \"العربية\" or \"English\", with its own `lang`, `dir` and `hreflang`, set in that script's type role.\n- `appearance=\"inline\"` (default) is an underlined link in the channel action colour, for the app bar. `appearance=\"header\"` adds a globe and uses `on-surface`, for `sc-site-header`. The v1 values `glass` and `plain` still work.\n- Always set `href`. A single-page app listens for `scSwitch`, calls `preventDefault()` and switches in place, then moves focus to the `<h1>` (LANG-08).\n- The component keeps one light-DOM `<span lang>` child for the name; don't add or remove children.\n- No flags, never a menu.\n\n### Styling hooks\n\nParts: `control`, `label`, `icon` (header only).\n",
+      "docs": "Switches to the same page in the other language. The label is always the other\nlanguage's own name, \"العربية\" on an English page and \"English\" on an Arabic page,\nmarked with its own `lang` and direction so screen readers pronounce it correctly, and\nset in its own script's type role (an Arabic name at the Arabic size on an English page).\n\nRenders an `<a href hreflang lang>` to the same page in the other language (LANG-05: the\nswitch is a link). It fires `scSwitch` on every activation; a single-page app calls\n`preventDefault()` on it and switches in place, and the link still works without script.\n\nThe language name is kept as one light-DOM `<span lang>` child that the component writes\nitself and shows through its slot: the type roles switch by `lang` in the document, which\na span inside the shadow root could not reach. Don't add or remove children yourself.\n\nWithout `href` it falls back to a `<button lang>`. That mode is deprecated and will be\nremoved: always set `href`.",
       "docsTags": [
         {
           "name": "part",
@@ -5264,33 +5523,51 @@
         },
         {
           "name": "part",
-          "text": "label - The language name."
+          "text": "label - The wrapper around the language name."
+        },
+        {
+          "name": "part",
+          "text": "icon - The globe (`appearance=\"header\"` only)."
         }
       ],
       "usage": {},
       "props": [
         {
           "name": "appearance",
-          "type": "\"glass\" | \"plain\"",
+          "type": "\"glass\" | \"header\" | \"inline\" | \"plain\"",
           "complexType": {
-            "original": "'glass' | 'plain'",
-            "resolved": "\"glass\" | \"plain\"",
-            "references": {}
+            "original": "LanguageSwitchAppearance | 'glass' | 'plain'",
+            "resolved": "\"glass\" | \"header\" | \"inline\" | \"plain\"",
+            "references": {
+              "LanguageSwitchAppearance": {
+                "location": "local",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-chrome/components/src/components/sc-language-switch/sc-language-switch.tsx",
+                "id": "src/components/sc-language-switch/sc-language-switch.tsx::LanguageSwitchAppearance"
+              }
+            }
           },
           "mutable": false,
           "attr": "appearance",
           "reflectToAttr": true,
-          "docs": "Surface.\n- `glass` (default): a 44px translucent pill, for mobile app bars.\n- `plain`: no fill, for desktop headers.",
+          "docs": "Where the switch sits.\n- `inline` (default): the app bar of a transaction. An underlined text link in the\n  channel action colour, label-medium.\n- `header`: the channel-site header. A globe icon and the name in `on-surface`,\n  label-large Medium, underlined on hover.\n\nThe v1 values still work: `glass` is `inline` and `plain` is `header`.",
           "docsTags": [
             {
               "name": "default",
-              "text": "'glass'"
+              "text": "'inline'"
             }
           ],
-          "default": "'glass'",
+          "default": "'inline'",
           "values": [
             {
               "value": "glass",
+              "type": "string"
+            },
+            {
+              "value": "header",
+              "type": "string"
+            },
+            {
+              "value": "inline",
               "type": "string"
             },
             {
@@ -5355,15 +5632,24 @@
       ],
       "listeners": [],
       "styles": [],
-      "slots": [],
+      "slots": [
+        {
+          "name": "",
+          "docs": "The default slot"
+        }
+      ],
       "parts": [
         {
           "name": "control",
           "docs": "The inner `<a>` (or, deprecated, `<button>` when `href` is missing)."
         },
         {
+          "name": "icon",
+          "docs": "The globe (`appearance=\"header\"` only)."
+        },
+        {
           "name": "label",
-          "docs": "The language name."
+          "docs": "The wrapper around the language name."
         }
       ],
       "states": [],
@@ -5375,8 +5661,8 @@
       "filePath": "src/components/sc-link/sc-link.tsx",
       "encapsulation": "shadow",
       "tag": "sc-link",
-      "readme": "# sc-link\n\nGoes somewhere. If it does something instead (submits, saves, deletes), use `sc-button`.\n\n## Usage\n\n```html\n<p>You need a valid <sc-link href=\"/insurance\">insurance certificate</sc-link>.</p>\n<sc-link href=\"/services\" standalone>View all services</sc-link>\n<sc-link href=\"https://www.rta.ae/fees\" external>RTA fees guide</sc-link>\n```\n\n### Which kind\n\n| Kind | Use it for | Example |\n|---|---|---|\n| inline (default) | A link inside a sentence. It takes the sentence's type and wraps with it. | \"You need a valid insurance certificate.\" |\n| `standalone` | A link on its own line, below a list or a card. Adds an end chevron (mirrored in Arabic) and a 44px target. | \"View all services\", \"Payment history\" |\n| `external` | A link that must open in a new tab because leaving would lose the user's progress, for example guidance linked from a form. | \"RTA fees guide\" |\n\n- Don't open links in a new tab by default. When you do, use `external`: it adds the icon and the visually hidden \"(opens in new tab)\" / \"(يفتح في علامة تبويب جديدة)\", and sets `rel=\"noopener noreferrer\"`. Override the hidden text with `external-text`, e.g. \"(PDF, 2 MB, opens in new tab)\".\n- Use `hreflang` when the linked page is in the other language, and `download` for files.\n\n### Content\n\n- Say where the link goes, and make it make sense out of context: \"Check your traffic fines\", not \"Click here\" or \"More\".\n- Sentence case. Link the words that describe the destination, not the whole sentence.\n- Plates, references and amounts inside link text stay left-to-right: `<sc-link href=\"…\">Vehicle <sc-ltr>A 12345</sc-ltr></sc-link>`.\n\n### States\n\nUnderlined in the channel action colour; the underline thickens on hover. Visited links use `--sc-channel-link-visited`, which has the same value as channel ink until a visited-link colour is chosen. Keyboard focus shows the 3px channel ring around the link, and wraps with it across lines.\n\n### Arabic\n\nThe external icon and the standalone chevron mirror in right-to-left. The hidden text and the type follow the closest `lang`.\n\n### Styling hooks\n\nParts: `control` (the `<a>`), `label` (carries the underline), `icon`.\n",
-      "docs": "Goes somewhere. Use it for navigation; use `sc-button` for actions.\n\nRenders a native `<a>` inside its shadow root and delegates focus to it.\n- Inline (default): sits inside running text, takes the surrounding type, underlined in\n  the channel action colour, with a visited colour.\n- `standalone`: a link on its own line (\"View all services\") with an end chevron that\n  mirrors in right-to-left, and a 44px target.\n- `external`: opens in a new tab, adds an icon and the visually hidden\n  \"(opens in new tab)\" in the page language.",
+      "readme": "# sc-link\n\nGoes somewhere. If it does something instead (submits, saves, deletes), use `sc-button`. Spec: `specs/sc-link.md`.\n\n## Usage\n\n```html\n<p>You need a valid <a class=\"sc-link\" href=\"/insurance\">insurance certificate</a>.</p>\n<sc-link href=\"/services\" standalone>All 412 services</sc-link>\n<sc-link href=\"https://www.rta.ae/fees\" external>RTA fees guide</sc-link>\n```\n\n### Which kind\n\n| Kind | Use it for | Example |\n|---|---|---|\n| `.sc-link` class on a native `<a>` | A link inside running text (decision A4). Text selection and find-in-page work across it. | \"You need a valid insurance certificate.\" |\n| inline `sc-link` (default) | A link inside a sentence when you need `external` or `download`. It takes the sentence's type. | \"Read the RTA fees guide\" |\n| `standalone` | A link on its own line, below a list or a card. label-large Bold, an end arrow (mirrored in Arabic) and a 44px target. | \"All 412 services\", \"Payment history\" |\n| `external` | A link that must open in a new tab because leaving would lose the user's progress. | \"RTA fees guide\" |\n\n- Links are always underlined (1px at 4px, 5px in Arabic), in the channel action colour; the underline thickens to 2px on hover. Visited links look the same (D8).\n- Don't open links in a new tab by default. When you do, use `external`: it adds the icon and the visually hidden \"(opens in new tab)\" / \"(يفتح في علامة تبويب جديدة)\", and sets `rel=\"noopener noreferrer\"`. Override the hidden text with `external-text`, e.g. \"(PDF, 2 MB, opens in new tab)\".\n- Use `hreflang` when the linked page is in the other language, and `download` for files.\n- Components that need another link colour set `--sc-link-color` on an ancestor: the footer uses `on-surface`, the error summary `error`. Services don't.\n\n### Content\n\n- Say where the link goes, and make it make sense out of context: \"Check your traffic fines\", not \"Click here\" or \"More\".\n- Plates, references and amounts inside link text stay left-to-right: `<sc-link href=\"…\">Vehicle <sc-ltr>A 12345</sc-ltr></sc-link>`.\n\n### Styling hooks\n\nParts: `control` (the `<a>`), `label` (carries the underline), `icon`.\n",
+      "docs": "Goes somewhere. Use it for navigation; use `sc-button` for actions.\n\nv2 keeps a shadow root (architecture §3.1) with a native `<a>` inside and delegates focus\nto it. For links inside running text prefer the CSS-only `.sc-link` class on a native\n`<a>` (decision A4), which keeps text selection and find-in-page working across the link.\n- Inline (default): takes the surrounding type, underlined 1px at 4px (5px in Arabic) in\n  the channel action colour; 2px on hover. Visited links are not styled differently (D8).\n- `standalone`: a link on its own line (\"All 412 services\"): label-large Bold, an end\n  arrow that mirrors in right-to-left, and a 44px target.\n- `external`: opens in a new tab, adds an icon and the visually hidden\n  \"(opens in new tab)\" in the page language.\n\nThe colour is `--sc-color-channel-action` unless `--sc-link-color` is set on an ancestor\n(the footer and the error summary set it to `on-surface` and `error`).",
       "docsTags": [
         {
           "name": "slot",
@@ -5392,7 +5678,7 @@
         },
         {
           "name": "part",
-          "text": "icon - The external or chevron icon, when shown."
+          "text": "icon - The external or arrow icon, when shown."
         }
       ],
       "usage": {},
@@ -5541,7 +5827,7 @@
           "mutable": false,
           "attr": "standalone",
           "reflectToAttr": true,
-          "docs": "A link on its own (not inside a sentence): adds an end chevron and a 44px target.",
+          "docs": "A link on its own (not inside a sentence): label-large Bold, an end arrow and a 44px target.",
           "docsTags": [
             {
               "name": "default",
@@ -5577,7 +5863,7 @@
         },
         {
           "name": "icon",
-          "docs": "The external or chevron icon, when shown."
+          "docs": "The external or arrow icon, when shown."
         },
         {
           "name": "label",
@@ -5777,6 +6063,262 @@
         }
       ],
       "parts": [],
+      "states": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/sc-pagination/sc-pagination.tsx",
+      "encapsulation": "shadow",
+      "tag": "sc-pagination",
+      "readme": "# sc-pagination\n\nMoves between the pages of a long list: search results, payments, fines. Spec: `specs/sc-pagination.md`.\n\n## Usage\n\n```html\n<sc-pagination page=\"7\" total-items=\"1284\" item-label=\"fine|fines\" href-template=\"/en/fines?page={page}\"></sc-pagination>\n```\n\n```html\n<!-- Arabic page: six plural forms (zero|one|two|few|many|other) -->\n<sc-pagination page=\"1\" total-items=\"1284\" item-label=\"مخالفة|مخالفة|مخالفتين|مخالفات|مخالفة|مخالفة\" href-template=\"/ar/fines?page={page}\"></sc-pagination>\n```\n\n- `total-items` shows the count: \"Showing 121–140 of 1,284 fines\" / \"عرض 121 إلى 140 من 1,284 مخالفة\". Arabic ranges always use a word, never a dash (LANG-22A). Digits are Latin, with a comma for thousands.\n- Set `total-pages` directly, or let it follow from `total-items` and `page-size` (20).\n- With `href-template` the pages are links and work without JavaScript. Without it they are buttons. Either way `scPageChange` fires with `{ page }`; `preventDefault()` stays on the page.\n- Previous is left out on the first page and Next on the last. Below 600px: Previous, \"Page 7 of 65\", Next.\n- Inside `sc-table`, put it in the `footer` slot.\n\n### Styling hooks\n\nParts: `count`, `nav`, `list`.\n",
+      "docs": "Moves between the pages of a long list: search results, payments, fines. Inside\n`sc-table`, put it in the table's `footer` slot.\n\nRenders, in its shadow root, an optional results count (\"Showing 1–20 of 1,284 fines\";\nin Arabic \"عرض 1 إلى 20 من 1,284 مخالفة\", with a word for the range, never a dash), then\n`<nav aria-label=\"Pagination\">` with Previous, the page numbers and Next. Previous is\nleft out on the first page and Next on the last (not disabled). The current page carries\n`aria-current=\"page\"`. Below 600px the numbers give way to \"Page 2 of 13\".\n\nPages are links when `href-template` is set (\"?page={page}\"), so the list works without\nJavaScript; otherwise they are buttons. Every activation fires `scPageChange`; call\n`preventDefault()` on it to stay on the page and load the new page yourself.",
+      "docsTags": [
+        {
+          "name": "part",
+          "text": "count - The results count line."
+        },
+        {
+          "name": "part",
+          "text": "nav - The `<nav>` landmark."
+        },
+        {
+          "name": "part",
+          "text": "list - The `<ul>` of controls."
+        }
+      ],
+      "usage": {},
+      "props": [
+        {
+          "name": "hrefTemplate",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "href-template",
+          "reflectToAttr": false,
+          "docs": "The URL of a page, with `{page}` where its number goes: `\"?page={page}\"`. Without it the\npages are buttons and you handle `scPageChange`.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "itemLabel",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "item-label",
+          "reflectToAttr": false,
+          "docs": "What is being counted, as a plural template in the page language: `\"fine|fines\"` in\nEnglish, the six Arabic forms `\"zero|one|two|few|many|other\"` in Arabic\n(`\"مخالفة|مخالفة|مخالفتين|مخالفات|مخالفة|مخالفة\"`). Defaults to results / نتيجة.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "label",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "label",
+          "reflectToAttr": false,
+          "docs": "Overrides the landmark name (\"Pagination\" / \"ترقيم الصفحات\").",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "page",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "page",
+          "reflectToAttr": true,
+          "docs": "The current page, from 1.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "1"
+            }
+          ],
+          "default": "1",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "pageSize",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "page-size",
+          "reflectToAttr": false,
+          "docs": "Items per page, for the results count and `total-pages`.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "20"
+            }
+          ],
+          "default": "20",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "totalItems",
+          "type": "number | undefined",
+          "complexType": {
+            "original": "number",
+            "resolved": "number | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "total-items",
+          "reflectToAttr": false,
+          "docs": "The number of items across every page. Shows the results count when set.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "totalPages",
+          "type": "number | undefined",
+          "complexType": {
+            "original": "number",
+            "resolved": "number | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "total-pages",
+          "reflectToAttr": false,
+          "docs": "The number of pages. Leave it out to work it out from `total-items` and `page-size`.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [
+        {
+          "event": "scPageChange",
+          "detail": "PaginationChangeDetail",
+          "bubbles": true,
+          "complexType": {
+            "original": "PaginationChangeDetail",
+            "resolved": "PaginationChangeDetail",
+            "references": {
+              "PaginationChangeDetail": {
+                "location": "local",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-chrome/components/src/components/sc-pagination/sc-pagination.tsx",
+                "id": "src/components/sc-pagination/sc-pagination.tsx::PaginationChangeDetail"
+              }
+            }
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Fires when a page is chosen. Cancelable: `preventDefault()` stops a link from navigating.",
+          "docsTags": []
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [
+        {
+          "name": "count",
+          "docs": "The results count line."
+        },
+        {
+          "name": "list",
+          "docs": "The `<ul>` of controls."
+        },
+        {
+          "name": "nav",
+          "docs": "The `<nav>` landmark."
+        }
+      ],
       "states": [],
       "dependents": [],
       "dependencies": [],
@@ -7506,8 +8048,8 @@
       "filePath": "src/components/sc-skip-link/sc-skip-link.tsx",
       "encapsulation": "shadow",
       "tag": "sc-skip-link",
-      "readme": "# sc-skip-link\n\n\"Skip to main content\" / \"الانتقال إلى المحتوى الرئيسي\". Lets keyboard and switch users jump past the app bar and navigation.\n\n## Usage\n\n```html\n<body>\n  <sc-skip-link></sc-skip-link>\n  <sc-app-bar>…</sc-app-bar>\n  <main id=\"main-content\">…</main>\n</body>\n```\n\n- Put it first in `<body>`, on every page. It's hidden until it receives keyboard focus, then shown as a pill at the top start corner (top left in English, top right in Arabic).\n- `href` defaults to `#main-content`, the id `sc-page` gives its `<main>`. Point it at your `<main>` element's id if it differs.\n- Activating it moves focus to the target. If the target isn't focusable, the component adds `tabindex=\"-1\"` and removes it when focus leaves, so the next Tab continues from the main content in every browser.\n- The label comes from strings in the page language. Override it with the default slot only if the target isn't the main content.\n\n### Accessibility\n\nIt's a real link (`<a href=\"#main-content\">`), so it works before JavaScript loads its focus handling. It's positioned absolutely: give it a positioned ancestor only if you want it somewhere other than the top of the page.\n\n### Styling hooks\n\nPart: `control`.\n",
-      "docs": "\"Skip to main content\": the first focusable element on every page. Hidden until it gets\nkeyboard focus, then shown at the top start corner. Activating it moves focus to the\ntarget (adding `tabindex=\"-1\"` for the moment it's needed), so the next Tab continues\nfrom the main content in every browser.\n\nPut it first inside `<body>`, before `sc-app-bar`.",
+      "readme": "# sc-skip-link\n\n\"Skip to main content\" / \"الانتقال إلى المحتوى الرئيسي\": the first focusable element on every page. Spec: `specs/sc-skip-link.md`.\n\n## Usage\n\n```html\n<body>\n  <sc-skip-link></sc-skip-link>\n  <sc-app-bar>…</sc-app-bar>\n  <main id=\"main-content\">…</main>\n</body>\n```\n\n- Hidden until it has keyboard focus, then a 48px `inverse-surface` block 8px from the top and inline-start corner (top right in Arabic). It appears instantly.\n- `href` defaults to `#main-content`, the id `sc-page` renders. Activating it moves focus to the target, so the next Tab continues from the main content.\n- Override the label through the default slot only if the page has no `<main>` content to skip to by that name.\n\n### Styling hooks\n\nPart: `control`.\n",
+      "docs": "\"Skip to main content\": the first focusable element on every page. Hidden until it gets\nkeyboard focus, then shown at the top start corner. Activating it moves focus to the\ntarget (adding `tabindex=\"-1\"` for the moment it's needed), so the next Tab continues\nfrom the main content in every browser.\n\nPut it first inside `<body>`, before `sc-app-bar` or `sc-site-header`. v2 shows it as a\n48px `inverse-surface` block, so it stands out over any hero or announcement colour.",
       "docsTags": [
         {
           "name": "slot",
@@ -10136,6 +10678,16 @@
       "docstring": "",
       "path": "src/components/sc-card/sc-card.tsx"
     },
+    "src/i18n/core.ts::Channel": {
+      "declaration": "\"build\" | \"now\" | \"transport\" | \"visit\" | \"justice\" | \"invest\" | \"trade\"",
+      "docstring": "",
+      "path": "src/i18n/core.ts"
+    },
+    "src/components/sc-channel-chip/sc-channel-chip.tsx::ChannelChipVariant": {
+      "declaration": "export type ChannelChipVariant = 'subtle' | 'outlined';",
+      "docstring": "",
+      "path": "src/components/sc-channel-chip/sc-channel-chip.tsx"
+    },
     "src/components/sc-container/sc-container.tsx::ContainerWidth": {
       "declaration": "export type ContainerWidth = 'page' | 'reading';",
       "docstring": "",
@@ -10166,10 +10718,20 @@
       "docstring": "",
       "path": "src/utils/channels.ts"
     },
+    "src/components/sc-language-switch/sc-language-switch.tsx::LanguageSwitchAppearance": {
+      "declaration": "export type LanguageSwitchAppearance = 'inline' | 'header';",
+      "docstring": "",
+      "path": "src/components/sc-language-switch/sc-language-switch.tsx"
+    },
     "src/components/sc-language-switch/sc-language-switch.tsx::LanguageSwitchDetail": {
       "declaration": "export interface LanguageSwitchDetail {\n  /** The language the user asked for. */\n  lang: Lang;\n}",
       "docstring": "",
       "path": "src/components/sc-language-switch/sc-language-switch.tsx"
+    },
+    "src/components/sc-pagination/sc-pagination.tsx::PaginationChangeDetail": {
+      "declaration": "export interface PaginationChangeDetail {\n  /** The page asked for (1-based). */\n  page: number;\n}",
+      "docstring": "",
+      "path": "src/components/sc-pagination/sc-pagination.tsx"
     },
     "src/components/sc-search/sc-search.tsx::ScSearchDetail": {
       "declaration": "export interface ScSearchDetail {\n  /** The query as typed, trimmed. */\n  value: string;\n}",
@@ -10215,11 +10777,6 @@
       "declaration": "export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;",
       "docstring": "",
       "path": "src/components/sc-text-input/field.tsx"
-    },
-    "src/i18n/strings.ts::Channel": {
-      "declaration": "\"build\" | \"now\" | \"transport\" | \"visit\" | \"justice\" | \"invest\" | \"trade\"",
-      "docstring": "",
-      "path": "src/i18n/strings.ts"
     },
     "src/components/sc-date-input/date.ts::Parts": {
       "declaration": "{\n    [P in K]: T;\n}",

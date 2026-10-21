@@ -1,0 +1,50 @@
+<h1 class="pg-title sc-type-headline-large" data-ar="شريط التنقل السفلي">Bottom navigation</h1>
+<p class="pg-lede sc-type-body-large" data-ar="التنقل الرئيسي على الهاتف بعد تسجيل الدخول: شريط مسطح مثبت في أسفل الشاشة، أقل من 1024 بكسل فقط.">
+  The primary navigation on phones once signed in: a flat bar docked to the bottom edge, below 1024px only.
+</p>
+
+<section class="pg-section" aria-labelledby="bn-demo">
+  <h2 id="bn-demo" class="sc-type-headline-small" data-ar="معاينة">Preview</h2>
+  <div class="pg-card">
+    <div class="bn-frame">
+      <sc-bottom-nav>
+        <a href="#home" data-icon="home" aria-current="page" data-ar="الرئيسية">Home</a>
+        <a href="#services" data-icon="apps" data-ar="الخدمات">Services</a>
+        <a href="#activity" data-icon="history" data-ar="النشاط">Activity</a>
+      </sc-bottom-nav>
+    </div>
+    <p class="pg-note" data-ar="في هذه المعاينة يوضع الشريط داخل الإطار. في الصفحة الحقيقية يُثبّت في أسفل الشاشة وتحجز الصفحة ارتفاعه.">In this preview the bar sits inside the frame. On a real page it is fixed to the bottom edge and the page reserves its height.</p>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="bn-arabic">
+  <h2 id="bn-arabic" class="sc-type-headline-small" data-ar="بالعربية">In Arabic</h2>
+  <div class="pg-card" lang="ar" dir="rtl">
+    <div class="bn-frame">
+      <sc-bottom-nav>
+        <a href="#h" data-icon="home">الرئيسية</a>
+        <a href="#s" data-icon="apps" aria-current="page">الخدمات</a>
+        <a href="#a" data-icon="history">النشاط</a>
+        <a href="#n" data-icon="notifications">الإشعارات</a>
+      </sc-bottom-nav>
+    </div>
+    <p class="pg-note" lang="en" dir="ltr">Always lang="ar" dir="rtl": the order runs from the right.</p>
+  </div>
+</section>
+
+<style>
+  /* Playground only: show the docked bar inside a phone-width frame at every viewport. */
+  .bn-frame {
+    position: relative;
+    max-inline-size: 375px;
+    block-size: 96px;
+    border: 1px solid var(--sc-color-outline-variant);
+    border-radius: var(--sc-radius-card);
+    overflow: hidden;
+    transform: translateZ(0);
+  }
+  .bn-frame sc-bottom-nav {
+    position: absolute;
+    display: block;
+  }
+</style>

@@ -1,41 +1,75 @@
 import { E2EPage } from '@stencil/core/testing';
-import { expectNoAxeViolations } from '../../test/axe';
-import { contexts, newScPage, setPageContext } from '../../test/page';
+import { describeAxe, expectNoAxeViolations } from '../../test/axe';
+import { newScPage, setPageContext } from '../../test/page';
 
-function inner(page: E2EPage, selector: string, read: string) {
+function inner<T = unknown>(page: E2EPage, selector: string, read: string): Promise<T> {
   return page.evaluate(
     (sel: string, expr: string) => {
       const host = document.querySelector(sel)!;
       const control = host.shadowRoot!.querySelector('[part="control"]') as HTMLElement;
+      const name = host.querySelector('[data-sc-language-name]') as HTMLElement;
       // eslint-disable-next-line no-new-func
-      return new Function('host', 'control', `return (${expr});`)(host, control);
+      return new Function('host', 'control', 'name', `return (${expr});`)(host, control, name);
     },
     selector,
     read,
-  );
+  ) as Promise<T>;
 }
 
-const ALL_STATES = `
+const token = (page: E2EPage, name: string) =>
+  page.evaluate((n: string) => {
+    const probe = document.createElement('i');
+    probe.style.color = `var(${n})`;
+    document.body.append(probe);
+    const v = getComputedStyle(probe).color;
+    probe.remove();
+    return v;
+  }, name);
+
+const accessibleName = async (page: E2EPage, sel = 'sc-language-switch') =>
+  (await page.accessibility.snapshot({ root: (await page.$(`${sel} >>> [part="control"]`))! }))!.name;
+
+export const ALL_STATES = `
   <main style="padding: 16px">
     <h1>Renew your vehicle registration</h1>
     <sc-language-switch href="#other"></sc-language-switch>
     <sc-language-switch id="btn"></sc-language-switch>
-    <sc-language-switch appearance="plain" href="#other"></sc-language-switch>
+    <sc-language-switch appearance="header" href="#other"></sc-language-switch>
   </main>`;
 
 describe('sc-language-switch (e2e)', () => {
-  it('names the other language in its own language, with lang and hreflang', async () => {
+  it('names the other language in its own language and script, with lang and hreflang', async () => {
     const page = await newScPage(`<sc-language-switch href="/ar/renew"></sc-language-switch>`, { lang: 'en' });
-    expect(await inner(page, 'sc-language-switch', 'control.textContent')).toBe('العربية');
+    expect(await accessibleName(page)).toBe('العربية');
     expect(await inner(page, 'sc-language-switch', 'control.lang')).toBe('ar');
     expect(await inner(page, 'sc-language-switch', 'control.hreflang')).toBe('ar');
-    expect(await inner(page, 'sc-language-switch', 'getComputedStyle(control.querySelector(".label")).fontFamily')).toContain('Dubai W23 Bold');
+    // The Arabic name takes the Arabic label-medium values on an English page (18/24 Bold).
+    expect(await inner(page, 'sc-language-switch', 'getComputedStyle(name).fontSize')).toBe('18px');
+    expect(await inner(page, 'sc-language-switch', 'getComputedStyle(name).fontWeight')).toBe('700');
+    expect(await inner(page, 'sc-language-switch', 'getComputedStyle(name).fontFamily')).toMatch(/^"Dubai W23 Arabic"/);
 
     await setPageContext(page, { lang: 'ar' });
-    expect(await inner(page, 'sc-language-switch', 'control.textContent')).toBe('English');
+    expect(await accessibleName(page)).toBe('English');
     expect(await inner(page, 'sc-language-switch', 'control.lang')).toBe('en');
     expect(await inner(page, 'sc-language-switch', 'control.hreflang')).toBe('en');
-    expect(await inner(page, 'sc-language-switch', 'getComputedStyle(control.querySelector(".label")).fontFamily')).toContain('Dubai W23 Medium');
+    expect(await inner(page, 'sc-language-switch', 'getComputedStyle(name).fontSize')).toBe('16px');
+    expect(await inner(page, 'sc-language-switch', 'getComputedStyle(name).fontWeight')).toBe('500');
+    expect(await inner(page, 'sc-language-switch', 'host.children.length')).toBe(1);
+  });
+
+  it('inline: an underlined link in the channel action colour; header: globe and on-surface, label-large', async () => {
+    const page = await newScPage(`<sc-language-switch id="i" href="#ar"></sc-language-switch><sc-language-switch id="h" appearance="header" href="#ar"></sc-language-switch>`);
+    expect(await inner(page, '#i', 'getComputedStyle(control).color')).toBe(await token(page, '--sc-color-channel-action'));
+    expect(await inner(page, '#i', 'getComputedStyle(control).textDecorationLine')).toBe('underline');
+    expect(await inner(page, '#h', 'getComputedStyle(control).color')).toBe(await token(page, '--sc-color-on-surface'));
+    expect(await inner(page, '#h', 'getComputedStyle(control).textDecorationLine')).toBe('none');
+    expect(await inner(page, '#h', 'control.querySelector("svg").getBoundingClientRect().width')).toBe(20);
+    expect(await inner(page, '#h', 'getComputedStyle(name).fontSize')).toBe('20px');
+  });
+
+  it('does not mirror the globe in Arabic', async () => {
+    const page = await newScPage(`<sc-language-switch appearance="header" href="#en"></sc-language-switch>`, { lang: 'ar' });
+    expect(await inner(page, 'sc-language-switch', 'getComputedStyle(control.querySelector("svg")).transform')).toBe('none');
   });
 
   it('is a 44px target and follows its link with Enter', async () => {
@@ -43,6 +77,7 @@ describe('sc-language-switch (e2e)', () => {
     expect(Math.round(await inner(page, 'sc-language-switch', 'control.getBoundingClientRect().height'))).toBe(44);
     await page.keyboard.press('Tab');
     expect(await inner(page, 'sc-language-switch', 'host.shadowRoot.activeElement === control')).toBe(true);
+    expect(await inner(page, 'sc-language-switch', 'getComputedStyle(control).outlineWidth')).toBe('3px');
     await page.keyboard.press('Enter');
     await page.waitForChanges();
     expect(await page.evaluate(() => location.hash)).toBe('#ar');
@@ -59,7 +94,7 @@ describe('sc-language-switch (e2e)', () => {
     expect(await page.evaluate(() => location.hash)).toBe('');
   });
 
-  it('works as a button with Space', async () => {
+  it('works as a button with Space (deprecated mode)', async () => {
     const page = await newScPage(`<sc-language-switch></sc-language-switch>`, { lang: 'ar' });
     const spy = await page.spyOnEvent('scSwitch');
     await page.keyboard.press('Tab');
@@ -68,12 +103,7 @@ describe('sc-language-switch (e2e)', () => {
     expect(spy).toHaveReceivedEventDetail({ lang: 'en' });
   });
 
-  for (const ctx of contexts) {
-    it(`has no axe violations (${ctx.lang}, ${ctx.theme})`, async () => {
-      const page = await newScPage(ALL_STATES, ctx);
-      await expectNoAxeViolations(page);
-    });
-  }
+  describeAxe('sc-language-switch', ALL_STATES);
 
   it('has no axe violations with focus on every channel', async () => {
     const page = await newScPage(ALL_STATES);

@@ -32,3 +32,11 @@ Links: label-medium, `on-surface`, underlined 1px at 4px (5px Arabic), 2px on ho
 ## Tests
 
 Spec: simple links and meta, hrefs only, privacy/cookies split, slotted extras, grouped groups and order, current channel, lower line, Arabic. e2e: contentinfo, link roles and 44px, Tab order including slotted, grouped columns and mirroring, current Bold, one column on phones; `describeAxe`. Visual: grouped and simple EN/AR × light/dark.
+
+## Before upgrade
+
+The shadow root is empty until the component upgrades, so `sc.css` reserves the measured height (`sc-footer:not(:defined)`): simple 241 / 137 / 109px and grouped 964 / 754 / 388px at compact / medium (600) / expanded (1024), measured with the standard links in English (Arabic is equal or taller). CLS stays 0 on the typical page.
+
+## Container
+
+The footer does not nest `sc-container` (CSS-only in v2 and unusable in a shadow root): it applies the grid margins (`--sc-grid-*-margin` per breakpoint) and the `--sc-container-max` cap in its own CSS. The same holds for `sc-site-header`, `sc-announcement-bar` and `sc-utility-bar`.

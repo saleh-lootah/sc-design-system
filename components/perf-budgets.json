@@ -10,7 +10,16 @@
     "sc-utility-bar",
     "sc-footer",
     "sc-channel-network",
-    "sc-page"
+    "sc-page",
+    "sc-link",
+    "sc-back-link",
+    "sc-skip-link",
+    "sc-language-switch",
+    "sc-channel-chip",
+    "sc-breadcrumbs",
+    "sc-pagination",
+    "sc-account-nav",
+    "sc-bottom-nav"
   ],
   "coreGzip": 14336,
   "globalCssGzip": 7168,

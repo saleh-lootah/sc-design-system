@@ -1,30 +1,19 @@
 # sc-back-link
 
-The "Back" control: a 44px glass pill with a back chevron, at the start of `sc-app-bar` or above the question on a form page.
+"Back" to the previous step, on every step of a journey except the first. Spec: `specs/sc-back-link.md`.
 
 ## Usage
 
 ```html
-<!-- Preferred: the previous page has a URL, so it works without JavaScript. -->
-<sc-back-link href="/renew/vehicle"></sc-back-link>
-
-<!-- In a single-page app: a <button>; handle click in your router. -->
-<sc-back-link id="back"></sc-back-link>
-<script>document.getElementById('back').addEventListener('click', () => history.back());</script>
+<sc-back-link href="/en/renew/vehicle"></sc-back-link>
+<sc-back-link></sc-back-link> <!-- a button: handle click in your router -->
 ```
 
-- Use it on every step of a journey except the first. It goes to the previous step, not the start of the service.
-- With `href` it renders an `<a>`; without it, a `<button type="button">`. Prefer `href`: it keeps the browser's own behaviour (open in new tab, status bar URL).
-- The label defaults to "Back" / "رجوع" in the page language. Override it with the default slot only when "Back" would be unclear: `<sc-back-link href="/vehicles">Back to my vehicles</sc-back-link>`.
-- `appearance="glass"` (default) is for the app bar and channel washes. Use `appearance="plain"` inside a page body on a solid surface.
-
-### Arabic
-
-The chevron mirrors, so it points right, toward the start of the line, and sits on the right of the label.
-
-### Accessibility
-
-The accessible name is the label ("Back"). Keyboard: Tab to it, Enter follows the link; Space also activates the button form. It delegates focus, so `el.focus()` focuses the inner control. Under `prefers-reduced-transparency` the glass becomes a solid surface; in forced colours it gets a system-coloured border.
+- Plain text and a 24px back arrow in `on-surface`, on a 44px target. The arrow mirrors in Arabic and stays at the start.
+- Use `href` whenever the previous step has a URL, so it works without JavaScript.
+- The label defaults to "Back" / "رجوع". Change it only to say where it goes: "Back to my vehicles".
+- In `sc-app-bar` it sits in the start slot. Never use it to go to the start of the service.
+- `appearance` is deprecated in v2 and ignored.
 
 ### Styling hooks
 
@@ -35,8 +24,8 @@ Parts: `control`, `label`, `icon`.
 
 ## Overview
 
-The "Back" control at the start of an app bar or above a question. A 44px glass pill with
-a back chevron that mirrors in right-to-left.
+The "Back" control at the start of an app bar or above a question: plain text with a
+24px back arrow that mirrors in right-to-left, on a 44px target (v2 drops v1's glass pill).
 
 Renders a native `<a>` when `href` is set (the previous page has a URL, which also works
 without JavaScript), or a `<button type="button">` otherwise: listen for `click` and go
@@ -44,10 +33,10 @@ back in your router. It delegates focus to the inner control.
 
 ## Properties
 
-| Property     | Attribute    | Description                                                                                                                                                            | Type                  | Default     |
-| ------------ | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ----------- |
-| `appearance` | `appearance` | Surface. - `glass` (default): translucent pill with an edge and shadow, for app bars and washes. - `plain`: no fill, for use inside a page body under a solid surface. | `"glass" \| "plain"`  | `'glass'`   |
-| `href`       | `href`       | The previous page. Without it the control is a `<button>`; handle its `click`.                                                                                         | `string \| undefined` | `undefined` |
+| Property     | Attribute    | Description                                                                                                                                                 | Type                  | Default     |
+| ------------ | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ----------- |
+| `appearance` | `appearance` | Deprecated in v2 and ignored: the back link has one plain appearance on every surface. Kept so v1 markup (`appearance="glass"` or `"plain"`) still renders. | `string \| undefined` | `undefined` |
+| `href`       | `href`       | The previous page. Without it the control is a `<button>`; handle its `click`.                                                                              | `string \| undefined` | `undefined` |
 
 
 ## Slots
@@ -62,7 +51,7 @@ back in your router. It delegates focus to the inner control.
 | Part        | Description                    |
 | ----------- | ------------------------------ |
 | `"control"` | The inner `<a>` or `<button>`. |
-| `"icon"`    | The chevron wrapper.           |
+| `"icon"`    | The arrow wrapper.             |
 | `"label"`   | The label wrapper.             |
 
 

@@ -1,0 +1,146 @@
+/*
+ * sc-account-nav (v2, shadow DOM). Rules: docs/v2/component-language.md B8, read through
+ * the role table in docs/v2/decisions.md (component-language's "channel-container" for the
+ * current item is the token channel-subtle).
+ */
+:host {
+  display: block;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The divider before Sign out. */
+.list--out {
+  margin-block-start: var(--sc-space-12);
+  padding-block-start: var(--sc-space-12);
+  border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+}
+
+.item {
+  --icon-size: var(--sc-size-icon-l);
+  --sc-state-color: var(--sc-color-on-surface);
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-12);
+  min-block-size: var(--sc-size-control-secondary);
+  padding-block: var(--sc-space-8);
+  padding-inline: var(--sc-space-12);
+  /* Transparent until forced colours repaint it around the current item. */
+  border: var(--sc-size-border-hairline) solid transparent;
+  border-radius: var(--sc-radius-control);
+  color: var(--sc-color-on-surface);
+  /* label-large in Medium, Bold in Arabic (D12); Bold when current. */
+  font: var(--sc-type-label-large);
+  font-weight: var(--sc-type-label-medium-weight);
+  letter-spacing: var(--sc-type-label-large-tracking);
+  text-decoration: none;
+  transition: --sc-layer var(--sc-duration-fast) var(--sc-easing-hover), background-color var(--sc-duration-fast) var(--sc-easing-hover);
+}
+
+.item > .icon {
+  color: var(--sc-color-on-surface-variant);
+}
+
+.label {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.item--current {
+  background-color: var(--sc-color-channel-subtle);
+  font-weight: var(--sc-font-weight-bold);
+}
+
+.item--current > .icon {
+  color: var(--sc-color-channel-action);
+}
+
+/* The 3px current bar at inline-start. */
+.item--current::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  inline-size: var(--sc-size-border-accent);
+  border-start-start-radius: inherit;
+  border-end-start-radius: inherit;
+  background: var(--sc-color-channel-action);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  min-inline-size: var(--sc-space-24);
+  min-block-size: var(--sc-space-24);
+  padding-inline: var(--sc-space-8);
+  border-radius: var(--sc-radius-full);
+  background: var(--sc-color-channel-action);
+  color: var(--sc-color-channel-on-action);
+  font: var(--sc-type-label-small);
+  font-weight: var(--sc-font-weight-bold);
+  letter-spacing: var(--sc-type-label-small-tracking);
+}
+
+/* Compact screens: one row of 44px items that scrolls sideways (from the right in Arabic).
+   The padding keeps the focus ring inside the scroll box, so it is never clipped. */
+@media (width < 600px) {
+  nav {
+    display: flex;
+    gap: var(--sc-space-4);
+    overflow-x: auto;
+    padding: var(--sc-space-6);
+    margin: calc(var(--sc-space-6) * -1);
+  }
+  .list {
+    flex-direction: row;
+    flex: none;
+  }
+  .list--out {
+    margin: 0;
+    padding: 0;
+    padding-inline-start: var(--sc-space-4);
+    border: 0;
+    border-inline-start: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+  }
+  .item {
+    min-block-size: var(--sc-size-target-min);
+    white-space: nowrap;
+  }
+  .item--current::before {
+    inset-block: auto 0;
+    inset-inline: 0;
+    inline-size: auto;
+    block-size: var(--sc-size-border-accent);
+    border-radius: 0;
+  }
+}
+
+@media (forced-colors: active) {
+  .item {
+    color: LinkText;
+  }
+  .item--current {
+    border-color: LinkText;
+  }
+  .item--current::before {
+    background: LinkText;
+  }
+  .badge {
+    border: var(--sc-size-border-hairline) solid CanvasText;
+  }
+}

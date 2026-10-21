@@ -37,3 +37,7 @@ None: present at load (CHR-05).
 ## Tests
 
 Spec: labelled nav, four labelled links, icons hidden, isolated number, items only with hrefs, Arabic. e2e: docked geometry and roles (fixed, full width, bottom, elevation-1, top edge, no radius), labels visible and 44px targets in Arabic at 1024px, published height and compact fold into a 2 × 2 grid, cleanup on removal; `sc-page.e2e.ts` checks the reserved padding and that focus lands above the bar; `describeAxe`. Visual: compact group EN/AR × light/dark.
+
+## Before upgrade
+
+`sc.css` reserves 210px below 1024px (the folded group, measured in English; Arabic is taller), and nothing from 1024px, where the bar is fixed and takes no space.

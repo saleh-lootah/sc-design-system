@@ -67,3 +67,7 @@ Menu from a pointer: opacity and an 8px rise over `duration-base` with `easing-e
 
 - The official UAE PASS button (U3a): geometry, Arabic label, dark-mode treatment. Swap through `slot="signin"`; delete the placeholder then.
 - The lockup's link target, clear space and dark version (L4).
+
+## Before upgrade
+
+`sc.css` reserves 81px (65px below 1024px) with `sc-site-header:not(:defined)`, so CLS stays 0. It sets its own container margins and cap; it never nests `sc-container`.
