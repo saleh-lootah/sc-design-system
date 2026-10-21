@@ -1,4 +1,4 @@
-@import '../sc-text-input/field.css';
+@import '../sc-text-input/field-v1.css';
 
 /* Day, Month, Year in a row. In RTL the row runs right to left (Day on the right). */
 .parts {

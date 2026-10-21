@@ -32,7 +32,7 @@ const V1_PENDING = new Set([
   'sc-checkbox-group', 'sc-container', 'sc-date-input', 'sc-date-range', 'sc-error-summary', 'sc-footer', 'sc-grid',
   'sc-language-switch', 'sc-link', 'sc-ltr', 'sc-page', 'sc-radio', 'sc-radio-group', 'sc-search', 'sc-select',
   'sc-service-card', 'sc-skip-link', 'sc-spinner', 'sc-status-tag', 'sc-step-progress', 'sc-summary-list',
-  'sc-summary-row', 'sc-table', 'sc-text-input', 'sc-textarea',
+  'sc-summary-row', 'sc-table', 'sc-textarea',
 ]);
 const STRUCTURE = [
   { name: '@import in component CSS (use the shared sheet, sc.css or your own rules)', re: /@import\b/g, ext: '.css', legacyOk: true },

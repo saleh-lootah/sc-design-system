@@ -1,5 +1,5 @@
-@import '../sc-text-input/field.css';
-@import '../sc-text-input/choice.css';
+@import '../sc-text-input/field-v1.css';
+@import '../sc-text-input/choice-v1.css';
 
 .options {
   margin-block-start: calc(-1 * var(--sc-space-4));

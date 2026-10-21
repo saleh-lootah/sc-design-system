@@ -1,5 +1,5 @@
-@import '../sc-text-input/field.css';
-@import '../sc-text-input/choice.css';
+@import '../sc-text-input/field-v1.css';
+@import '../sc-text-input/choice-v1.css';
 
 /* The legend is followed by the hint and error with the same rhythm as single fields. */
 .options {

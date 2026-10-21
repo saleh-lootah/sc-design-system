@@ -10,7 +10,7 @@ import { IconName } from "./icons/index";
 import { CalloutHeadingLevel, CalloutTone } from "./components/sc-callout/sc-callout";
 import { CardLandmark, CardPadding } from "./components/sc-card/sc-card";
 import { Channel } from "./i18n/strings";
-import { HeadingLevel } from "./components/sc-text-input/field";
+import { HeadingLevel } from "./components/sc-text-input/field-v1";
 import { ContainerWidth } from "./components/sc-container/sc-container";
 import { Parts } from "./components/sc-date-input/date";
 import { StringsInput } from "./components/sc-table/overrides";
@@ -22,12 +22,13 @@ import { StatusTagTone } from "./components/sc-status-tag/sc-status-tag";
 import { SummaryListAppearance } from "./components/sc-summary-list/sc-summary-list";
 import { SortDirection } from "./components/sc-table/sc-table";
 import { TextInputType, TextInputWidth } from "./components/sc-text-input/sc-text-input";
+import { HeadingLevel as HeadingLevel1 } from "./components/sc-text-input/field";
 export { ButtonIconPosition, ButtonSize, ButtonType, ButtonVariant } from "./components/sc-button/sc-button";
 export { IconName } from "./icons/index";
 export { CalloutHeadingLevel, CalloutTone } from "./components/sc-callout/sc-callout";
 export { CardLandmark, CardPadding } from "./components/sc-card/sc-card";
 export { Channel } from "./i18n/strings";
-export { HeadingLevel } from "./components/sc-text-input/field";
+export { HeadingLevel } from "./components/sc-text-input/field-v1";
 export { ContainerWidth } from "./components/sc-container/sc-container";
 export { Parts } from "./components/sc-date-input/date";
 export { StringsInput } from "./components/sc-table/overrides";
@@ -39,6 +40,7 @@ export { StatusTagTone } from "./components/sc-status-tag/sc-status-tag";
 export { SummaryListAppearance } from "./components/sc-summary-list/sc-summary-list";
 export { SortDirection } from "./components/sc-table/sc-table";
 export { TextInputType, TextInputWidth } from "./components/sc-text-input/sc-text-input";
+export { HeadingLevel as HeadingLevel1 } from "./components/sc-text-input/field";
 export namespace Components {
     /**
      * The top bar of every mobile screen and desktop page: a translucent glass bar with a
@@ -1100,10 +1102,14 @@ export namespace Components {
     }
     /**
      * A single-line answer, such as a plate number, an email address or a phone number.
-     * Renders its own label, hint, error and native `<input>` in one shadow root, so the
-     * label and `aria-describedby` work. The host is form-associated (it submits `value`
-     * under `name`, resets, and reports validity from the inner input) and delegates focus,
-     * so an error-summary link to the host's `id` focuses the input.
+     * v2 renders its label, hint, error and a native `<input>` in light DOM (Stencil `scoped`,
+     * decision A2). The input is a real form control: it submits under `name`, Enter submits the
+     * form through its default button, and validation, reset, autofill and `<fieldset disabled>`
+     * are native. `focus()` on the host reaches the input, so an error-summary link to the host's
+     * `id` works. Styles: the classes `.sc-field`, `.sc-field__label`, `.sc-field__frame`,
+     * `.sc-field__control` (no `::part()`).
+     * Rich content: a child element with `slot="label"`, `slot="hint"`, `slot="error"`,
+     * `slot="prefix"` or `slot="suffix"` is moved into place once, when the component loads.
      */
     interface ScTextInput {
         /**
@@ -1116,13 +1122,13 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * The error message. Setting it shows the error state: a 3px error bar on the start side, an error border on the input, the message with an icon and a visually hidden "Error:", and `aria-invalid`. Say what to do: "Enter numbers only, like 12345".
+          * The error message. Setting it shows the error state: a 4px error bar at inline-start, a 2px error edge on the box, the message with an icon and a visually hidden "Error:", and `aria-invalid`. Say what to do: "Enter numbers only, like 12345".
          */
         "error"?: string;
         /**
           * When set (1–6), the label is also the page heading at this level (`<h1><label>…</label></h1>`).
          */
-        "headingLevel"?: HeadingLevel;
+        "headingLevel"?: HeadingLevel1;
         /**
           * Help text below the label: "Up to 5 digits, for example 12345".
          */
@@ -1136,7 +1142,7 @@ export namespace Components {
          */
         "label"?: string;
         /**
-          * Keeps the value left-to-right (plates, phone numbers, emails, references). In Arabic the value still sits at the start (right) of the box. Use this, not `dir` on the host, which would flip the label and hint too.
+          * Keeps the value left-to-right (plates, phone numbers, emails, references). In Arabic the value still sits at the start (right) of the box. Use this, not `dir` on the host.
           * @default false
          */
         "ltr": boolean;
@@ -1162,7 +1168,7 @@ export namespace Components {
          */
         "pattern"?: string;
         /**
-          * Text before the value inside the box, such as "AED". (Named `prefixText` because `prefix` is a reserved DOM property.)
+          * Text before the value inside the box, such as "AED".
          */
         "prefixText"?: string;
         /**
@@ -1884,10 +1890,14 @@ declare global {
     }
     /**
      * A single-line answer, such as a plate number, an email address or a phone number.
-     * Renders its own label, hint, error and native `<input>` in one shadow root, so the
-     * label and `aria-describedby` work. The host is form-associated (it submits `value`
-     * under `name`, resets, and reports validity from the inner input) and delegates focus,
-     * so an error-summary link to the host's `id` focuses the input.
+     * v2 renders its label, hint, error and a native `<input>` in light DOM (Stencil `scoped`,
+     * decision A2). The input is a real form control: it submits under `name`, Enter submits the
+     * form through its default button, and validation, reset, autofill and `<fieldset disabled>`
+     * are native. `focus()` on the host reaches the input, so an error-summary link to the host's
+     * `id` works. Styles: the classes `.sc-field`, `.sc-field__label`, `.sc-field__frame`,
+     * `.sc-field__control` (no `::part()`).
+     * Rich content: a child element with `slot="label"`, `slot="hint"`, `slot="error"`,
+     * `slot="prefix"` or `slot="suffix"` is moved into place once, when the component loads.
      */
     interface HTMLScTextInputElement extends Components.ScTextInput, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScTextInputElementEventMap>(type: K, listener: (this: HTMLScTextInputElement, ev: ScTextInputCustomEvent<HTMLScTextInputElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3082,10 +3092,14 @@ declare namespace LocalJSX {
     }
     /**
      * A single-line answer, such as a plate number, an email address or a phone number.
-     * Renders its own label, hint, error and native `<input>` in one shadow root, so the
-     * label and `aria-describedby` work. The host is form-associated (it submits `value`
-     * under `name`, resets, and reports validity from the inner input) and delegates focus,
-     * so an error-summary link to the host's `id` focuses the input.
+     * v2 renders its label, hint, error and a native `<input>` in light DOM (Stencil `scoped`,
+     * decision A2). The input is a real form control: it submits under `name`, Enter submits the
+     * form through its default button, and validation, reset, autofill and `<fieldset disabled>`
+     * are native. `focus()` on the host reaches the input, so an error-summary link to the host's
+     * `id` works. Styles: the classes `.sc-field`, `.sc-field__label`, `.sc-field__frame`,
+     * `.sc-field__control` (no `::part()`).
+     * Rich content: a child element with `slot="label"`, `slot="hint"`, `slot="error"`,
+     * `slot="prefix"` or `slot="suffix"` is moved into place once, when the component loads.
      */
     interface ScTextInput {
         /**
@@ -3098,17 +3112,13 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * The error message. Setting it shows the error state: a 3px error bar on the start side, an error border on the input, the message with an icon and a visually hidden "Error:", and `aria-invalid`. Say what to do: "Enter numbers only, like 12345".
+          * The error message. Setting it shows the error state: a 4px error bar at inline-start, a 2px error edge on the box, the message with an icon and a visually hidden "Error:", and `aria-invalid`. Say what to do: "Enter numbers only, like 12345".
          */
         "error"?: string;
         /**
-          * The `id` of a `<form>` element to associate this element with.
-         */
-        "form"?: string;
-        /**
           * When set (1–6), the label is also the page heading at this level (`<h1><label>…</label></h1>`).
          */
-        "headingLevel"?: HeadingLevel;
+        "headingLevel"?: HeadingLevel1;
         /**
           * Help text below the label: "Up to 5 digits, for example 12345".
          */
@@ -3122,7 +3132,7 @@ declare namespace LocalJSX {
          */
         "label"?: string;
         /**
-          * Keeps the value left-to-right (plates, phone numbers, emails, references). In Arabic the value still sits at the start (right) of the box. Use this, not `dir` on the host, which would flip the label and hint too.
+          * Keeps the value left-to-right (plates, phone numbers, emails, references). In Arabic the value still sits at the start (right) of the box. Use this, not `dir` on the host.
           * @default false
          */
         "ltr"?: boolean;
@@ -3139,11 +3149,11 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Fires when the value is committed (blur after a change) with `{ value }`. A native `change` event is also dispatched on the host.
+          * Fires when the value is committed (blur after a change) with `{ value }`. The native `change` event also bubbles from the input.
          */
         "onScChange"?: (event: ScTextInputCustomEvent<{ value: string }>) => void;
         /**
-          * Fires on every keystroke with `{ value }`. The native `input` event also reaches the host.
+          * Fires on every keystroke with `{ value }`. The native `input` event also bubbles from the input.
          */
         "onScInput"?: (event: ScTextInputCustomEvent<{ value: string }>) => void;
         /**
@@ -3156,7 +3166,7 @@ declare namespace LocalJSX {
          */
         "pattern"?: string;
         /**
-          * Text before the value inside the box, such as "AED". (Named `prefixText` because `prefix` is a reserved DOM property.)
+          * Text before the value inside the box, such as "AED".
          */
         "prefixText"?: string;
         /**
@@ -3875,10 +3885,14 @@ declare module "@stencil/core" {
             "sc-table": LocalJSX.IntrinsicElements["sc-table"] & JSXBase.HTMLAttributes<HTMLScTableElement>;
             /**
              * A single-line answer, such as a plate number, an email address or a phone number.
-             * Renders its own label, hint, error and native `<input>` in one shadow root, so the
-             * label and `aria-describedby` work. The host is form-associated (it submits `value`
-             * under `name`, resets, and reports validity from the inner input) and delegates focus,
-             * so an error-summary link to the host's `id` focuses the input.
+             * v2 renders its label, hint, error and a native `<input>` in light DOM (Stencil `scoped`,
+             * decision A2). The input is a real form control: it submits under `name`, Enter submits the
+             * form through its default button, and validation, reset, autofill and `<fieldset disabled>`
+             * are native. `focus()` on the host reaches the input, so an error-summary link to the host's
+             * `id` works. Styles: the classes `.sc-field`, `.sc-field__label`, `.sc-field__frame`,
+             * `.sc-field__control` (no `::part()`).
+             * Rich content: a child element with `slot="label"`, `slot="hint"`, `slot="error"`,
+             * `slot="prefix"` or `slot="suffix"` is moved into place once, when the component loads.
              */
             "sc-text-input": LocalJSX.IntrinsicElements["sc-text-input"] & JSXBase.HTMLAttributes<HTMLScTextInputElement>;
             /**

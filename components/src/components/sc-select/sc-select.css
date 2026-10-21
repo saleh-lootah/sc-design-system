@@ -1,4 +1,4 @@
-@import '../sc-text-input/field.css';
+@import '../sc-text-input/field-v1.css';
 
 :host {
   /* A select is as wide as its longest option needs, up to the container. */

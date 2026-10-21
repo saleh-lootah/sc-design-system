@@ -1,4 +1,4 @@
-@import '../sc-text-input/field.css';
+@import '../sc-text-input/field-v1.css';
 
 :host {
   /* Month change shift: 12px in the direction of travel, mirrored in right-to-left. */

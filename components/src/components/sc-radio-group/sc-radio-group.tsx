@@ -1,7 +1,7 @@
 import { AttachInternals, Component, Element, Event, EventEmitter, Host, Prop, State, forceUpdate, h } from '@stencil/core';
 import { LocaleController } from '../../i18n/locale';
 import { AlertCircle } from '../../icons/index'; // explicit /index: enables SVG rendering for this component (see CONTRIBUTING)
-import { FieldError, FieldHint, FieldLabel, HeadingLevel, IDS, describedBy, emitNativeChange, hasSlotted, headingLevel, formSupported } from '../sc-text-input/field';
+import { FieldError, FieldHint, FieldLabel, HeadingLevel, IDS, describedBy, emitNativeChange, hasSlotted, headingLevel, formSupported } from '../sc-text-input/field-v1';
 
 void AlertCircle;
 

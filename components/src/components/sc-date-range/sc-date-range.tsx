@@ -3,7 +3,7 @@ import { normaliseDigits } from '../../i18n/digits';
 import { LocaleController } from '../../i18n/locale';
 import { StringKey } from '../../i18n/strings';
 import { AlertCircle, ArrowForward, ChevronBack, ChevronForward, Close } from '../../icons/index'; // explicit /index: enables SVG rendering (see CONTRIBUTING)
-import { FieldError, FieldHint, FieldLabel, HeadingLevel, describedBy, emitNativeChange, formSupported, hasSlotted, headingLevel } from '../sc-text-input/field';
+import { FieldError, FieldHint, FieldLabel, HeadingLevel, describedBy, emitNativeChange, formSupported, hasSlotted, headingLevel } from '../sc-text-input/field-v1';
 import { StringsInput, translator } from '../sc-table/overrides';
 import { CalendarIcon } from './calendar-icon';
 import {
