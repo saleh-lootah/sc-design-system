@@ -2,7 +2,7 @@ import { Component, Element, Host, Prop, State, h } from '@stencil/core';
 import { Icon, IconName } from '../../icons/index'; // explicit /index: see CONTRIBUTING
 
 export type EmptyStateVariant = 'default' | 'success';
-export type EmptyStateHeadingLevel = 2 | 3 | 4;
+export type EmptyStateHeadingLevel = 2 | 3 | 4 | 5 | 6;
 
 /**
  * What a list, table or page shows when there is nothing in it: "You have no fines".
@@ -17,6 +17,7 @@ export type EmptyStateHeadingLevel = 2 | 3 | 4;
  * still say it, so the meaning never rests on colour.
  *
  * @slot - One or two sentences: what this means and what the user can do.
+ * @slot icon - Optional, your own 48px decorative icon (an inline `<svg>`), shown in the 80px circle. Overrides `icon`.
  * @slot action - Optional, a single action: `<sc-button slot="action" variant="secondary">`.
  *
  * @part container - The block.
@@ -36,7 +37,7 @@ export class ScEmptyState {
   /** The heading, as a sentence: "You have no notifications". */
   @Prop() heading!: string;
 
-  /** Renders the heading as `<h2>`–`<h4>`. Leave it unset to render a paragraph at the title role, for an empty state inside a card or table. */
+  /** Renders the heading as `<h2>`–`<h6>`. Leave it unset to render a paragraph at the title role, for an empty state inside a card or table. */
   @Prop() headingLevel?: EmptyStateHeadingLevel;
 
   /** An icon from the library (`inbox`, `search`, `check-circle` …). Leave unset for no icon; `success` defaults to `check-circle`. */
@@ -48,28 +49,36 @@ export class ScEmptyState {
   /** True when an element carries `slot="action"`. */
   @State() hasAction = false;
 
+  /** True when an element carries `slot="icon"`. */
+  @State() hasIcon = false;
+
   connectedCallback() {
     this.hasAction = Array.from(this.el.children).some((child) => child.getAttribute('slot') === 'action');
+    this.hasIcon = Array.from(this.el.children).some((child) => child.getAttribute('slot') === 'icon');
   }
 
   private onActionSlotChange = (ev: Event) => {
     this.hasAction = (ev.target as HTMLSlotElement).assignedElements().length > 0;
   };
 
+  private onIconSlotChange = (ev: Event) => {
+    this.hasIcon = (ev.target as HTMLSlotElement).assignedElements().length > 0;
+  };
+
   render() {
     const success = this.variant === 'success';
     const icon: IconName | undefined = this.icon || (success ? 'check-circle' : undefined);
     const level = Number(this.headingLevel);
-    const Heading = (level >= 2 && level <= 4 ? `h${level}` : 'p') as 'p';
+    const Heading = (level >= 2 && level <= 6 ? `h${level}` : 'p') as 'p';
 
     return (
       <Host>
         <div class={{ empty: true, 'empty--success': success }} part="container">
-          {icon && (
-            <span class="icon-box" part="icon">
-              <Icon name={icon} />
-            </span>
-          )}
+          {/* The box is always rendered so the icon slot can report its content. */}
+          <span class={{ 'icon-box': true, 'icon-box--empty': !this.hasIcon && !icon }} part="icon">
+            <slot name="icon" onSlotchange={this.onIconSlotChange} />
+            {!this.hasIcon && icon && <Icon name={icon} />}
+          </span>
           <Heading class="heading" part="heading">
             {this.heading}
           </Heading>

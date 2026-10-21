@@ -34,6 +34,23 @@
   color: var(--sc-color-on-surface-variant);
 }
 
+/* Board 9DG-0 dark note: the circle steps up to surface-container-high in dark mode.
+   Behind @supports so browsers without light-dark() (A1 fallback) keep surface-container. */
+@supports (color: light-dark(white, black)) {
+  .icon-box {
+    background: light-dark(var(--sc-color-surface-container), var(--sc-color-surface-container-high));
+  }
+}
+
+.icon-box--empty {
+  display: none;
+}
+
+::slotted([slot='icon']) {
+  inline-size: var(--icon-size);
+  block-size: var(--icon-size);
+}
+
 .empty--success .icon-box {
   background: var(--sc-color-success-container);
   color: var(--sc-color-success);
@@ -51,7 +68,8 @@
 }
 
 .body {
-  max-inline-size: var(--sc-size-measure);
+  /* 520 at most (board 9ED-0). */
+  max-inline-size: calc(var(--sc-space-40) * 13);
   margin-block-start: var(--sc-space-8);
   color: var(--sc-color-on-surface-variant);
   font: var(--sc-type-body-large);

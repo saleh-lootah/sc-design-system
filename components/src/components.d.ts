@@ -635,7 +635,7 @@ export namespace Components {
          */
         "heading": string;
         /**
-          * Renders the heading as `<h2>`–`<h4>`. Leave it unset to render a paragraph at the title role, for an empty state inside a card or table.
+          * Renders the heading as `<h2>`–`<h6>`. Leave it unset to render a paragraph at the title role, for an empty state inside a card or table.
          */
         "headingLevel"?: EmptyStateHeadingLevel;
         /**
@@ -3223,7 +3223,7 @@ declare namespace LocalJSX {
          */
         "heading": string;
         /**
-          * Renders the heading as `<h2>`–`<h4>`. Leave it unset to render a paragraph at the title role, for an empty state inside a card or table.
+          * Renders the heading as `<h2>`–`<h6>`. Leave it unset to render a paragraph at the title role, for an empty state inside a card or table.
          */
         "headingLevel"?: EmptyStateHeadingLevel;
         /**
