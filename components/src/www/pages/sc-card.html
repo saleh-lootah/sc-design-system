@@ -1,44 +1,68 @@
-<h1 class="pg-title sc-type-heading-xl" data-ar="البطاقة">Card</h1>
-<p class="pg-lede sc-type-body-m" data-ar="حاوية سطحية: تعبئة السطح، وزوايا البطاقة، وارتفاع المستوى 1.">
-  A surface container: surface fill, card radius and elevation 1.
+<h1 class="pg-title sc-type-headline-large" data-ar="البطاقة">Card</h1>
+<p class="pg-lede sc-type-body-large" data-ar="سطح يجمع محتوى مترابطًا: مسطّح، بزوايا 12 بكسل وحافة رفيعة بدل الظل. البطاقة ليست رابطًا أبدًا.">
+  A surface that groups related content: flat, with 12px corners and a 1px edge instead of a shadow. A card is never a link.
 </p>
 
 <section class="pg-section" aria-labelledby="cd-padding">
-  <h2 id="cd-padding" class="sc-type-heading-m" data-ar="الحشو">Padding</h2>
+  <h2 id="cd-padding" class="sc-type-headline-small" data-ar="الحشو">Padding</h2>
   <div class="pg-grid cd-grid">
     <div class="pg-cell">
       <span class="pg-label">padding="l" · 24px (default)</span>
       <sc-card>
-        <h3 class="sc-type-title-m" data-ar="الانتقال إلى منزل جديد؟">Moving to a new home?</h3>
-        <p class="sc-type-body-m" data-ar="سبع خدمات من خمس جهات حكومية، بالترتيب الذي يحتاجه معظم الناس.">Seven services from five government entities, in the order most people need them.</p>
+        <h3 class="sc-type-title-medium" data-ar="الانتقال إلى منزل جديد؟">Moving to a new home?</h3>
+        <p class="sc-type-body-large" data-ar="سبع خدمات من خمس جهات حكومية، بالترتيب الذي يحتاجه معظم الناس.">Seven services from five government entities, in the order most people need them.</p>
       </sc-card>
     </div>
     <div class="pg-cell">
       <span class="pg-label">padding="m" · 16px</span>
       <sc-card padding="m">
-        <h3 class="sc-type-title-m" data-ar="الانتقال إلى منزل جديد؟">Moving to a new home?</h3>
-        <p class="sc-type-body-m" data-ar="سبع خدمات من خمس جهات حكومية، بالترتيب الذي يحتاجه معظم الناس.">Seven services from five government entities, in the order most people need them.</p>
+        <h3 class="sc-type-title-medium" data-ar="الانتقال إلى منزل جديد؟">Moving to a new home?</h3>
+        <p class="sc-type-body-large" data-ar="سبع خدمات من خمس جهات حكومية، بالترتيب الذي يحتاجه معظم الناس.">Seven services from five government entities, in the order most people need them.</p>
       </sc-card>
     </div>
   </div>
 </section>
 
+<section class="pg-section" aria-labelledby="cd-variant">
+  <h2 id="cd-variant" class="sc-type-headline-small" data-ar="الأنواع">Variants</h2>
+  <div class="pg-grid cd-grid">
+    <div class="pg-cell">
+      <span class="pg-label">variant="outlined" (default)</span>
+      <sc-card>
+        <h3 class="sc-type-title-medium" data-ar="مركبتك">Your vehicle</h3>
+        <p class="sc-type-body-large" data-ar="نيسان باترول 2021، أبيض">Nissan Patrol 2021, white</p>
+      </sc-card>
+    </div>
+    <div class="pg-cell">
+      <span class="pg-label">variant="filled" · totals card</span>
+      <sc-card variant="filled">
+        <sc-summary-list layout="pairs" appearance="plain">
+          <sc-summary-row label="Registration renewal" data-ar-label="تجديد الترخيص"><sc-ltr>AED 400.00</sc-ltr></sc-summary-row>
+          <sc-summary-row label="Knowledge and innovation fees" data-ar-label="رسوم المعرفة والابتكار"><sc-ltr>AED 20.00</sc-ltr></sc-summary-row>
+          <sc-summary-row label="Total" data-ar-label="المجموع" variant="total"><sc-ltr>AED 420.00</sc-ltr></sc-summary-row>
+        </sc-summary-list>
+      </sc-card>
+    </div>
+  </div>
+  <p class="pg-note" data-ar="المعبأة: تعبئة هادئة بلا حافة، لبطاقة المجموع أو لمجموعة داخل منطقة محددة.">Filled: a quiet fill with no edge, for a totals card or a group inside an outlined area.</p>
+</section>
+
 <section class="pg-section" aria-labelledby="cd-landmark">
-  <h2 id="cd-landmark" class="sc-type-heading-m" data-ar="كمَعلَم">As a landmark</h2>
+  <h2 id="cd-landmark" class="sc-type-headline-small" data-ar="كمَعلَم">As a landmark</h2>
   <div class="pg-grid cd-grid">
     <div class="pg-cell">
       <span class="pg-label">landmark="section" → region</span>
       <sc-card landmark="section">
-        <h3 class="sc-type-title-m" data-ar="مهامي">My tasks</h3>
-        <p class="sc-type-body-m" data-ar="ينتهي تسجيل مركبتك خلال 15 يومًا.">Your vehicle registration expires in 15 days.</p>
-        <sc-button size="m" variant="secondary" href="#renew" data-ar="تجديد التسجيل">Renew registration</sc-button>
+        <h3 class="sc-type-title-medium" data-ar="مهامي">My tasks</h3>
+        <p class="sc-type-body-large" data-ar="ينتهي تسجيل مركبتك خلال 15 يومًا.">Your vehicle registration expires in 15 days.</p>
+        <sc-button size="m" variant="secondary" href="#renew"><span data-ar="تجديد التسجيل">Renew registration</span></sc-button>
       </sc-card>
     </div>
     <div class="pg-cell">
       <span class="pg-label">landmark="article"</span>
       <sc-card landmark="article">
-        <h3 class="sc-type-title-m" data-ar="تغييرات على رسوم المواقف">Changes to parking fees</h3>
-        <p class="sc-type-body-m" data-ar="تبدأ الرسوم الجديدة في 1 يناير 2027.">New fees start on 1 January 2027.</p>
+        <h3 class="sc-type-title-medium" data-ar="تغييرات على رسوم المواقف">Changes to parking fees</h3>
+        <p class="sc-type-body-large" data-ar="تبدأ الرسوم الجديدة في 1 يناير 2027.">New fees start on 1 January 2027.</p>
       </sc-card>
     </div>
   </div>
@@ -46,11 +70,11 @@
 </section>
 
 <section class="pg-section" aria-labelledby="cd-arabic">
-  <h2 id="cd-arabic" class="sc-type-heading-m" data-ar="بالعربية">In Arabic</h2>
+  <h2 id="cd-arabic" class="sc-type-headline-small" data-ar="بالعربية">In Arabic</h2>
   <div lang="ar" dir="rtl" class="cd-grid">
     <sc-card landmark="section">
-      <h3 class="sc-type-title-m">الانتقال إلى منزل جديد؟</h3>
-      <p class="sc-type-body-m">سبع خدمات من خمس جهات حكومية، بالترتيب الذي يحتاجه معظم الناس.</p>
+      <h3 class="sc-type-title-medium">الانتقال إلى منزل جديد؟</h3>
+      <p class="sc-type-body-large">سبع خدمات من خمس جهات حكومية، بالترتيب الذي يحتاجه معظم الناس.</p>
     </sc-card>
   </div>
 </section>
@@ -69,3 +93,23 @@
     margin-block-start: var(--sc-space-16);
   }
 </style>
+
+<script>
+  {
+    // data-ar-<attr>="…" swaps an attribute (label, heading, caption…) when the preview is Arabic.
+    const preview = document.getElementById('preview');
+    const apply = () => {
+      const ar = preview.lang === 'ar';
+      for (const el of preview.querySelectorAll('*')) {
+        for (const { name, value } of [...el.attributes]) {
+          if (!name.startsWith('data-ar-')) continue;
+          const attr = name.slice(8);
+          if (!el.hasAttribute(`data-en-${attr}`)) el.setAttribute(`data-en-${attr}`, el.getAttribute(attr) ?? '');
+          el.setAttribute(attr, ar ? value : el.getAttribute(`data-en-${attr}`));
+        }
+      }
+    };
+    new MutationObserver(apply).observe(preview, { attributes: true, attributeFilter: ['lang'] });
+    apply();
+  }
+</script>

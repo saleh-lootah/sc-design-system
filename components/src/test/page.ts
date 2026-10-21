@@ -97,7 +97,10 @@ export async function newScPage(html: string, context: PageContext = {}): Promis
 /** Waits until every sc- element on the page has hydrated (Stencil adds the `hydrated` class). */
 export async function waitForHydration(page: E2EPage): Promise<void> {
   await page.waitForFunction(() =>
-    [...document.querySelectorAll('*')].filter((el) => el.localName.startsWith('sc-')).every((el) => el.classList.contains('hydrated')),
+    // CSS-only tags (sc-container, sc-grid, sc-ltr) are never registered, so never hydrate.
+    [...document.querySelectorAll('*')]
+      .filter((el) => el.localName.startsWith('sc-') && customElements.get(el.localName))
+      .every((el) => el.classList.contains('hydrated')),
   );
   await page.waitForChanges();
 }

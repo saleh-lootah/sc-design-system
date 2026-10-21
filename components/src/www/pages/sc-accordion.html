@@ -1,0 +1,36 @@
+<h1 class="pg-title sc-type-headline-large" data-ar="الأكورديون">Accordion</h1>
+<p class="pg-lede sc-type-body-large" data-ar="أقسام تُفتح وتُغلق، للأسئلة الشائعة والإرشادات الطويلة. مبني على &lt;details&gt; الأصلي، فيعمل قبل JavaScript ومن لوحة المفاتيح.">
+  Sections that open and close, for frequently asked questions and long guidance. Built on native &lt;details&gt;, so it works before JavaScript and from the keyboard.
+</p>
+
+<section class="pg-section" aria-labelledby="ac-faq">
+  <h2 id="ac-faq" class="sc-type-headline-small" data-ar="الأسئلة الشائعة">Frequently asked questions</h2>
+  <div class="ac-col">
+    <sc-accordion show-all>
+      <details>
+        <summary><span data-ar="كم يستغرق تجديد الترخيص؟">How long does renewal take?</span><small data-ar="عبر الإنترنت في معظم الحالات">Online, in most cases</small></summary>
+        <p data-ar="عادة نحو 10 دقائق، بعد اجتياز مركبتك الفحص الفني.">Usually about 10 minutes, once your vehicle has passed its technical test.</p>
+      </details>
+      <details>
+        <summary><span data-ar="ماذا أحتاج؟">What do I need?</span></summary>
+        <p data-ar="وثيقة تأمين سارية وفحص فني ناجح.">A valid insurance policy and a passed technical test.</p>
+        <p data-ar="ادفع أي مخالفات مرورية أولًا.">Pay any traffic fines first.</p>
+      </details>
+      <details>
+        <summary><span data-ar="هل يمكنني التجديد لمدة سنتين؟">Can I renew for 2 years?</span></summary>
+        <p data-ar="نعم، للمركبات التي يقل عمرها عن 3 سنوات.">Yes, for vehicles under 3 years old.</p>
+      </details>
+      <details>
+        <summary><span data-ar="كيف أحصل على بطاقة التسجيل؟">How do I get my registration card?</span></summary>
+        <p data-ar="تظهر بطاقة رقمية في دبي الآن فور الدفع.">A digital card appears in Dubai Now as soon as you have paid.</p>
+      </details>
+    </sc-accordion>
+  </div>
+  <p class="pg-note" data-ar="يفتح Enter أو Space القسم فورًا. بالمؤشر يدور السهم خلال 120 مللي ثانية ويظهر المحتوى تدريجيًا. السهم في نهاية السطر (يسارًا في العربية) ولا ينعكس.">Enter or Space opens a section instantly. With a pointer the chevron turns over 120ms and the answer fades in. The chevron sits at the end of the line (left in Arabic) and never mirrors.</p>
+</section>
+
+<style>
+  .ac-col {
+    max-inline-size: var(--sc-container-reading);
+  }
+</style>

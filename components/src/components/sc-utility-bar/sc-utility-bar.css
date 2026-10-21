@@ -1,0 +1,119 @@
+/*
+ * sc-utility-bar (v2, shadow DOM). Rules: decision U4 and Standard CHR-05 (a flat bar docked
+ * to the bottom, elevation 1, a 1px outline-variant top edge; folds into the footer below
+ * 1024px), component-language.md B4 for items, read through the decisions role table.
+ */
+:host {
+  display: block;
+  --_margin: var(--sc-grid-compact-margin);
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+@media (min-width: 600px) {
+  :host {
+    --_margin: var(--sc-grid-medium-margin);
+  }
+}
+
+/* Compact and medium: in the flow, after the footer, as its "Help and feedback" group. ---- */
+.bar {
+  box-sizing: content-box;
+  max-inline-size: var(--sc-container-max);
+  margin-inline: auto;
+  padding-block: var(--sc-space-24) var(--sc-space-40);
+  padding-inline: var(--_margin);
+  background-color: var(--sc-color-surface);
+  color: var(--sc-color-on-surface);
+}
+
+.title {
+  margin: 0 0 var(--sc-space-16);
+  font: var(--sc-type-title-small);
+  font-weight: var(--sc-font-weight-bold);
+  letter-spacing: var(--sc-type-title-small-tracking);
+}
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sc-space-12);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Outlined buttons, size m (48), as the secondary button. */
+.item {
+  --icon-size: var(--sc-size-icon-m);
+  --sc-state-color: var(--sc-color-channel-action);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sc-space-8);
+  block-size: 100%;
+  min-block-size: var(--sc-size-control-secondary);
+  padding-block: var(--sc-space-4);
+  padding-inline: var(--sc-space-12);
+  border: var(--sc-size-border-control) solid var(--sc-color-channel-action);
+  border-radius: var(--sc-radius-control);
+  color: var(--sc-color-channel-action);
+  font: var(--sc-type-label-medium);
+  letter-spacing: var(--sc-type-label-medium-tracking);
+  text-align: center;
+  text-decoration: none;
+  transition: --sc-layer var(--sc-duration-fast) var(--sc-easing-hover);
+}
+
+/* Expanded and wider: docked to the bottom edge, full width, flat (U4). ------------------ */
+@media (min-width: 1024px) {
+  .bar {
+    position: fixed;
+    inset-inline: 0;
+    inset-block-end: 0;
+    z-index: 30;
+    box-sizing: border-box;
+    max-inline-size: none;
+    padding-block: var(--sc-space-2) max(var(--sc-space-2), env(safe-area-inset-bottom));
+    padding-inline: var(--sc-grid-expanded-margin);
+    border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+    box-shadow: var(--sc-elevation-1);
+  }
+
+  .title {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0 var(--sc-space-8);
+  }
+
+  .item {
+    --sc-state-color: var(--sc-color-on-surface);
+    min-block-size: var(--sc-size-target-min);
+    padding-inline: var(--sc-space-16);
+    border-color: transparent;
+    color: var(--sc-color-on-surface);
+  }
+}
+
+@media (forced-colors: active) {
+  .bar {
+    border-color: CanvasText;
+  }
+  .item {
+    border-color: LinkText;
+  }
+}

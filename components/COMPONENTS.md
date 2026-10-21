@@ -142,6 +142,27 @@ The first 24 components, in four families, plus the components added after Phase
 - Below 600px: `responsive="stack"` (rows become cards) or `"scroll"` (a named scroll region with a sticky row header and an edge shadow).
 - Mirrors fully in Arabic through logical properties; digits stay Latin.
 
+## Form fields in v2 (C3)
+
+Every form field is **light DOM** (decision A2): `sc-text-input`, `sc-textarea`, `sc-select`, `sc-checkbox`, `sc-checkbox-group`, `sc-radio`, `sc-radio-group`, `sc-date-input`, `sc-date-range`, `sc-search` and the new `sc-filter-chips` render native controls with per-instance IDs, so Enter submits the form through its default button and validation, reset, autofill and `<fieldset disabled>` are native. The "inside its shadow root" notes above are v1. Rich `slot="label|hint|error"` children are moved into place once. See `docs/v2/migration.md` §6 and each `specs/<tag>.md`.
+
+**FilterChips** (`sc-filter-chips`, new): the filters applied to a list of results, as removable 32px chips (44px targets) beside the result count, with "Clear all filters". Removal is instant, focus moves to the next chip or the results heading, and count changes are announced politely. Spec: `specs/sc-filter-chips.md`.
+---
+
+## v2 · Site chrome (C1, Wave 2b)
+
+The v2 specs in `specs/` supersede the Phase 3 entries above for these tags.
+
+- **AppBar** (`sc-app-bar`): the transaction app bar (A4). See `specs/sc-app-bar.md`.
+- **SiteHeader** (`sc-site-header`, new): the channel-site header (CHR-01 to CHR-04), with the lockup slot, main navigation, search, language, UAE PASS sign in (U3a) or the account menu, the channel switcher, and the compact row with a modal menu. See `specs/sc-site-header.md`.
+- **ChannelSwitcher** (`sc-channel-switcher`, new, light DOM): the channel's logo and a disclosure listing the seven channels (CHR-03). See `specs/sc-channel-switcher.md`.
+- **AccountMenu** (`sc-account-menu`, new): notifications with the unread count and the account disclosure. See `specs/sc-account-menu.md`.
+- **AnnouncementBar** (`sc-announcement-bar`, new): a site-wide labelled region above the header, `info`, `warning` or `error`, dismissible. See `specs/sc-announcement-bar.md`.
+- **UtilityBar** (`sc-utility-bar`, new): help and feedback, docked flat at the bottom from 1024px, folded into the footer below (U4, CHR-05). See `specs/sc-utility-bar.md`.
+- **Footer** (`sc-footer`): `simple` and `grouped` with the Channels group (CHR-06). See `specs/sc-footer.md`.
+- **ChannelNetwork** (`sc-channel-network`, new, light DOM): "One network · seven channels" (CHR-08). See `specs/sc-channel-network.md`.
+- **PageShell** (`sc-page`): `main-content`, landmarks, `sync-document`, sticky-header and utility-bar reservations. See `specs/sc-page.md`.
+
 ---
 
 ## v2 · Actions and navigation (C2, Wave 2b)
@@ -178,3 +199,26 @@ Rebuilt to direction E (`docs/v2/component-language.md`); full specs in `specs/<
 **EmptyState** (`sc-empty-state`, shadow, new): icon, sentence heading, body, one action; `variant="success"` for the all-clear.
 
 **Modal** (`sc-modal`, shadow, new): native `<dialog>`; focus to the heading, Escape, scrim, focus return; `alert` for the session timeout with a sensibly announced `countdown`; a bottom sheet under 600px on the drawer curve.
+### v2 · content and layout (C5, Wave 2b)
+
+These entries replace the v1 descriptions of the same tags above. Specs: `specs/<tag>.md`.
+
+**Container, Grid, LTR** (`sc-container`, `sc-grid`, `sc-ltr`): CSS only in v2. Not registered; `sc.css` styles the tags (`@layer sc.components`). Markup unchanged; `::part()` and the properties are gone.
+
+**Card** (`sc-card`): light DOM. Flat: 12px corners, 1px `outline-variant` edge, no shadow. `variant` `outlined` (default) or `filled` (`surface-container`, totals cards). `landmark`, `padding`, `label` as v1.
+
+**ServiceCard** (`sc-service-card`): shadow. Flat 12px card, 24 padding, at least 184 tall; the title (`title-large`) is the only link; a decorative forward arrow at the top end; optional `slot="icon"` in a 40px tile with an optional decorative `tint`; chip pinned to the bottom.
+
+**ChannelHero** (`sc-channel-hero`): shadow. A flat `channel-subtle` band (Q-hero, no gradient); eyebrow, display heading (`size` `large` or `medium`), lede, search, and `slot="popular"` suggestion chips (40px capsules on 44px targets) after a "Popular now" label; optional breadcrumbs.
+
+**SummaryList** (`sc-summary-list` with `sc-summary-row`): light DOM; one valid `<dl>` with each row inside its value `<dd>`. `layout` `auto`, `stacked` (E3), `columns` or `pairs` (E4, values end-aligned); `variant="total"` on a row.
+
+**Table** (`sc-table`): v1 behaviour and API; v2 look (flat 12px container, `surface-container` header, `channel-subtle` selection, underlined links, U1 ring) in `@layer sc.components`.
+
+**Tile** (`sc-tile`, new): shadow. One link: a tinted 40px icon tile, a `title-small` title and an optional plural-aware count ("14 services", "خدمتان"). Life events, categories, favourite services.
+
+**AttentionCard** (`sc-attention-card`, new): shadow. A due item: a thin topic-tint top strip, icon tile, `slot="status"` tag, heading, fact, meta (amounts isolated) and one `slot="action"` button. Not a link.
+
+**ModuleCard** (`sc-module-card`, new): shadow. A titled module: tinted icon, `heading`, a header link (`action-href`, `action-text`, named with the title), content slot, optional `divided` rules.
+
+**Accordion** (`sc-accordion`, new): light DOM over native `<details>`/`<summary>`. Ruled sections, 56px `title-medium` summaries, a 24px chevron at inline-end that turns over (pointer only), optional `show-all` toggle.

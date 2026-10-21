@@ -1,7 +1,9 @@
 import { Component, Element, Event, EventEmitter, Host, Prop, State, h } from '@stencil/core';
-import { LocaleController } from '../../i18n/locale';
-import { StringKey } from '../../i18n/strings';
-import { StringsInput, plural, translator } from './overrides';
+import { LocaleController } from '../../i18n/controller';
+import strings from '../../i18n/components/sc-table';
+import { StringsInput, overrideTranslator, plural } from './strings-override';
+
+type StringKey = keyof (typeof strings)['en'];
 
 export type TableColumnType = 'text' | 'reference' | 'date' | 'amount' | 'status' | 'action';
 export type SortDirection = 'ascending' | 'descending';
@@ -121,7 +123,7 @@ export class ScTable {
   @State() hasFooter = false;
   @State() scrollEdges = { start: false, end: false };
 
-  private locale = new LocaleController(this);
+  private locale = new LocaleController(this, strings);
   private observer?: MutationObserver;
   private resizeObserver?: ResizeObserver;
   private scroller?: HTMLElement;
@@ -161,7 +163,7 @@ export class ScTable {
   }
 
   private get t() {
-    return translator(this.locale.lang, this.strings);
+    return overrideTranslator<StringKey>(this.locale.lang, this.strings, this.locale.t);
   }
 
   private get table(): HTMLTableElement | null {

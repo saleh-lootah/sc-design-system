@@ -1,15 +1,17 @@
-import { Component, Element, Host, Prop, Watch, h } from '@stencil/core';
-import { LocaleController } from '../../i18n/locale';
-import { SUMMARY_ROW_UPDATE } from './summary-row-update';
+import { Component, Element, Host, Prop, h } from '@stencil/core';
+import { LocaleController } from '../../i18n/controller';
+import strings from '../../i18n/components/sc-summary-row';
+
+export type SummaryRowVariant = 'default' | 'total';
 
 /**
  * One answer in a `sc-summary-list`: a key (`label`), a value (the default slot) and an
  * optional "Change" action.
  *
- * The row only carries data and its value. The parent `sc-summary-list` renders the
- * `<dt>`, `<dd>` and action inside its own `<dl>`, and slots this element into the value
- * `<dd>`, so the description list stays valid across shadow roots. Use it only as a direct
- * child of `sc-summary-list`; the list sets its `slot` attribute.
+ * v2 renders in light DOM (Stencil `scoped`). The row carries the data and its value; the
+ * parent `sc-summary-list` renders the `<dt>`, the value `<dd>` and the action inside its own
+ * `<dl>`, and moves this element into the value `<dd>`. Use it only as a direct child of
+ * `sc-summary-list`; the list sets its `slot` attribute.
  *
  * @slot - The value. Text or inline markup; wrap plates, amounts and references in `<sc-ltr>`.
  *   Use `<br>` or separate block elements for an address. Falls back to the `value` prop,
@@ -18,7 +20,7 @@ import { SUMMARY_ROW_UPDATE } from './summary-row-update';
 @Component({
   tag: 'sc-summary-row',
   styleUrl: 'sc-summary-row.css',
-  shadow: true,
+  scoped: true,
 })
 export class ScSummaryRow {
   @Element() el!: HTMLElement;
@@ -26,26 +28,31 @@ export class ScSummaryRow {
   /** The key: what the answer is about, e.g. "Plate number". Rendered as the `<dt>`. Required. */
   @Prop({ reflect: true }) label!: string;
 
-  /** A plain-text value, used when the default slot is empty. With neither, the row shows "Not provided". */
+  /** A plain-text value, used when the row has no content. With neither, the row shows "Not provided". */
   @Prop() value?: string;
 
   /**
    * Where the action goes, e.g. back to the question with `#plate-number` or a page URL.
    * Without it the row has no action (the action column stays, so values still align).
+   * Ignored in the `pairs` layout.
    */
   @Prop({ reflect: true }) actionHref?: string;
 
   /** The visible action text. Defaults to "Change" ("تغيير") in the page language. */
-  @Prop() actionText?: string;
+  @Prop({ reflect: true }) actionText?: string;
 
   /**
    * Visually hidden text after the action text, so screen reader users hear which answer
    * they're changing ("Change Plate number"). Defaults to `label`. Set it when the label alone
    * doesn't read well after the action text, e.g. `action-hidden-text="your plate number"`.
    */
-  @Prop() actionHiddenText?: string;
+  @Prop({ reflect: true }) actionHiddenText?: string;
 
-  private locale = new LocaleController(this);
+  /** `total` marks the amount row of a payment summary (E4): a quiet fill and Bold key and value. */
+  @Prop({ reflect: true }) variant: SummaryRowVariant = 'default';
+
+  private locale = new LocaleController(this, strings);
+  private hasContent = false;
 
   connectedCallback() {
     this.locale.connect();
@@ -55,20 +62,12 @@ export class ScSummaryRow {
     this.locale.disconnect();
   }
 
-  @Watch('label')
-  @Watch('value')
-  @Watch('actionHref')
-  @Watch('actionText')
-  @Watch('actionHiddenText')
-  notifyList() {
-    this.el.dispatchEvent(new CustomEvent(SUMMARY_ROW_UPDATE, { bubbles: true }));
+  componentWillLoad() {
+    // Before the first render the host holds only the author's content.
+    this.hasContent = Array.from(this.el.childNodes).some((n) => n.nodeType === 1 || (n.nodeType === 3 && !!n.textContent?.trim()));
   }
 
   render() {
-    return (
-      <Host>
-        <slot>{this.value || this.locale.t('summaryRowNotProvided')}</slot>
-      </Host>
-    );
+    return <Host class="sc-summary-row">{this.hasContent ? <slot /> : this.value || this.locale.t('summaryRowNotProvided')}</Host>;
   }
 }

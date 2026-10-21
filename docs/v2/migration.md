@@ -135,6 +135,62 @@ private locale = new LocaleController(this, strings);
 
 `i18n/locale.ts`, `i18n/strings.ts` and `i18n/components/index.ts` remain only for v1 components and are deleted when the last one migrates (end of Wave 2b).
 
+## Site chrome (C1, Wave 2b)
+
+### `sc-app-bar` and the new `sc-site-header`
+
+v1's `sc-app-bar` did two jobs. v2 keeps the tag name for the **transaction app bar** (component-language A4: back, channel name, language; a 4px channel rule; flat) and adds **`sc-site-header`** for channel pages (Standard CHR-01 to CHR-04), as component-language B2 and decision Q-names propose.
+
+| v1 | v2 |
+| --- | --- |
+| `<sc-app-bar>` with back, title, language | unchanged markup; flat bar, 4px channel rule, title defaults to the channel name |
+| `<sc-app-bar align="start" shape="floating">` with nav and sign in (desktop header) | **deprecated**: still renders (flat), but move to `<sc-site-header>` with `slot="lockup"`, `slot="nav"` links, `slot="language"`, `sign-in-href` or `slot="signin"`, `slot="account"`, `slot="switcher"` |
+| `shape="floating"`, the glass and its reduced-transparency fallback | ignored / gone |
+| sign in as `<sc-button slot="end">` | the UAE PASS button in `slot="signin"` (decision U3a); until the kit arrives `sign-in-href` renders a marked black placeholder. Not `sc-button`, not city indigo |
+
+### `sc-footer`
+
+| v1 | v2 |
+| --- | --- |
+| one row of links | `variant="simple"` (default, the same row) or `variant="grouped"` (brand, Channels, Helpful information, Legal; CHR-06) |
+| `help-href`, `accessibility-href`, `privacy-href`, `terms-href`, default slot, `slot="meta"`, parts | unchanged |
+| — | new: `variant`, `channel`, `links`, `about-href`, `cookies-href`, `sitemap-href`, `updated`, `slot="brand"` |
+| labels "Accessibility", "Privacy", "Terms" | "Accessibility statement", "Privacy and cookies" (or "Privacy" + "Cookies" with `cookies-href`), "Terms of use". Replace an extra `<a>Cookies</a>` with `cookies-href` |
+| `sc-container` inside | gone; the footer sets its own margins |
+
+### `sc-page`
+
+Props and slots unchanged. New: the sticky-header scroll padding also follows `sc-site-header[sticky]`, and the page pads its end by a docked `sc-utility-bar` (`--sc-utility-bar-block-size`). The background is `surface`.
+
+### New tags
+
+`sc-site-header`, `sc-channel-switcher` (light DOM; component-language B2a), `sc-account-menu`, `sc-announcement-bar`, `sc-utility-bar` (U4), `sc-channel-network`. Channel links for the switcher, the grouped footer and the network strip are one `links` JSON (`{"now":"https://…/{lang}/", …}`); `{lang}` becomes `en` or `ar`.
+
+### Strings
+
+Channel names in the switcher, footer, network strip and app bar come from `src/i18n/components/common.ts` (Standard 3.1) through `channelStrings()` in `src/i18n/components/channels.ts`, which also holds the one-line descriptors.
+
+## 6. Form fields (C3, Wave 2b)
+
+Every field is light DOM (decision A2): the native `<label>`/`<legend>`, controls, hint and error are children of the host. What changes for a service:
+
+| | v1 | v2 |
+| --- | --- | --- |
+| DOM | a shadow root per field (and per checkbox) | native elements under the host, classes `.sc-field*`, `.sc-choice*`, `.sc-date-range__*`, `.sc-search__*`, `.sc-filter-chips__*` |
+| `::part(field\|label\|hint\|error\|frame\|control\|…)` | supported | **gone**: use the classes, or better, no override |
+| Rich `slot="label\|hint\|error\|prefix\|suffix"` | slotted | **moved once** into place when the component loads; React must render it once and not re-render it |
+| `form.elements`, `FormData` | the host (form-associated) | the native controls. `sc-date-input` adds a hidden input (`name` = ISO) beside `name-day/-month/-year`; `sc-date-range` submits `name-start` and `name-end` through hidden inputs |
+| Validity | `host.matches(':invalid')`, `internals.validity` | on the native control: `input.matches(':invalid')`, `form.checkValidity()`. Group `required` (checkboxes), impossible dates and ranges use `setCustomValidity` on the control concerned; the checkbox group's message is a custom error, not `valueMissing` |
+| `change` event | re-dispatched on the host | the native `change` bubbles from the control (once). `sc-date-range` stops its segments' own and dispatches one per committed range |
+| Enter in a field | never submitted | submits through the form's default button |
+| IDs | fixed (`control`, `hint`, `error`) in each shadow root | per instance: `sc-text-input-<n>-control`, `-label`, `-hint`, `-error` … |
+| `focus()` on the host | `delegatesFocus` | forwarded to the control (the chosen radio, the Day box, the start segment) |
+| `sc-radio-group` without `name` | not submitted | radios share a generated name (`sc-radio-group-<n>`), which a form would submit: give the group a `name` inside a form |
+| `sc-select` options | copied into a shadow select | **moved into** the native select (the real options); options appended to the host later are moved in |
+
+API additions: `sc-search` `size="l"` (64px hero), `sc-checkbox` `indeterminate`, and the new `sc-filter-chips` (`filters`, `label`, `focus-target`, `no-clear`; `scRemove`, `scClear`). `sc-date-range` no longer imports `sc-table/overrides`; its `strings` overrides live in `sc-date-range/overrides.ts`. `sc-textarea` over the limit reports a custom validity error instead of `tooLong`.
+
+Visual: 56px boxes, 8px radius, 1.5px `outline` edge (2px `error`), a 4px error bar (14px gap in Arabic, 16 in English), label-large labels, body-medium hints and errors, body-large values, 24px checkboxes and radios with a 2px edge in 48px rows.
 ## C2 · Actions and navigation (Wave 2b)
 
 All shadow DOM, as architecture §3.1 says for links and chrome. Full detail in each `components/specs/<tag>.md`.
@@ -170,3 +226,23 @@ Strings moved to per-component files: `sc-error-summary.ts` (`errorSummaryHeadin
 Icons added to the shared set: `check`, `schedule`, `hourglass`, `pending`, `inbox`.
 
 **Paper board alignment (feedback and status).** These corrections supersede the rows above. `sc-status-tag` keeps `tone="channel"` (decision W4): `channel-action` words and an info icon on `channel-subtle`, following `data-channel`; it no longer renders as `neutral`. `sc-spinner` now defaults to `size="l"` (24px); set `size="m"` for 20px inline with body text.
+
+## 6. Content and layout (C5, Wave 2b)
+
+| Tag | Encapsulation | API changes from v1 |
+| --- | --- | --- |
+| `sc-container` | CSS only (not registered) | Markup unchanged. `::part(inner)`, the `width` property (use the attribute) and `componentOnReady()` are gone. Works in page markup only: it cannot be used inside another component's shadow root. |
+| `sc-grid` | CSS only (not registered) | Markup unchanged. `::part(grid)` and the `span`, `spanMedium`, `spanExpanded` properties are gone: set the attributes. |
+| `sc-ltr` | CSS only (not registered) | Markup unchanged; no shadow root. |
+| `sc-card` | Light DOM (`scoped`) | `::part(surface)` is gone: the host is the surface (`.sc-card`). New `variant` (`outlined`, `filled`). Flat (no elevation), radius 12. |
+| `sc-service-card` | Shadow | No breaking change. New `tint`, `slot="icon"`, parts `icon` and `arrow`. Decorative arrow at the top end; no press scale. |
+| `sc-channel-hero` | Shadow | `::part(wash)` is now `::part(band)`; no gradient. The internal `sc-container` is gone. New `size`, `popular-label`, and the `breadcrumbs` and `popular` slots. |
+| `sc-summary-list` | Light DOM (`scoped`) | Parts `list`, `row`, `key`, `value`, `action` are gone: classes `.sc-summary-list__list`, `__row`, `__key`, `__value`, `__action`, `__link`. Rows get a generated `slot` attribute and are moved into their value `<dd>`. New `layout` (`auto`, `stacked`, `columns`, `pairs`). |
+| `sc-summary-row` | Light DOM (`scoped`) | The internal `sc-summary-row-update` event is gone. `action-text` and `action-hidden-text` now reflect. New `variant="total"`. |
+| `sc-table` | Light DOM (`scoped`), as v1 | No API changes. Styles now in `@layer sc.components`. Strings through the v2 controller; `overrides.ts` stays only for `sc-date-range`. |
+| `sc-tile` | Shadow | New. |
+| `sc-attention-card` | Shadow | New. |
+| `sc-module-card` | Shadow | New. |
+| `sc-accordion` | Light DOM (`scoped`) | New. |
+
+For test authors: `newScPage` now ignores unregistered `sc-` tags when it waits for hydration, so pages using the CSS-only primitives load.

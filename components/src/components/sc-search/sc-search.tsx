@@ -1,31 +1,31 @@
 import { Component, Element, Event, EventEmitter, Host, Method, Prop, Watch, h } from '@stencil/core';
 import { normaliseDigits } from '../../i18n/digits';
-import { LocaleController } from '../../i18n/locale';
-import { Search } from '../../icons/index'; // explicit /index: Stencil only scans file imports for <svg>
+import { LocaleController } from '../../i18n/controller';
+import strings from '../../i18n/components/sc-search';
 
 export interface ScSearchDetail {
   /** The query as typed, trimmed. */
   value: string;
 }
 
+export type SearchSize = 'm' | 'l';
+
+let counter = 0;
+
 /**
- * A pill search box: search icon, a labelled field and a primary "Search" button, inside a
- * `<form role="search">` (a search landmark named by the label).
+ * A search field and its button, inside a `<form role="search">` named by the label (E1: the
+ * field and the primary button are siblings with a 12px gap, not one pill).
  *
- * Submitting (the button, or Enter in the field) emits `scSearch`. With `action`, the form
- * then goes to that URL with the query as `?<name>=…`, unless a listener calls
- * `preventDefault()`; without `action`, the page handles `scSearch` itself.
- *
- * The form is self-contained: don't nest `sc-search` inside another `<form>`.
- *
- * @part field - The pill around the icon, input and button.
- * @part input - The native `<input type="search">`.
- * @part label - The `<label>`.
+ * v2 renders the form, a native `<input type="search">` and an `sc-button type="submit"` in
+ * light DOM (Stencil `scoped`, decision A2), so Enter in the field submits through the button
+ * natively. Submitting emits `scSearch`. With `action`, the form then goes to that URL with the
+ * query as `?<name>=…`, unless a listener calls `preventDefault()`; without `action`, the page
+ * handles `scSearch` itself. Don't nest `sc-search` inside another `<form>`.
  */
 @Component({
   tag: 'sc-search',
   styleUrl: 'sc-search.css',
-  shadow: { delegatesFocus: true },
+  scoped: true,
 })
 export class ScSearch {
   @Element() el!: HTMLElement;
@@ -54,14 +54,20 @@ export class ScSearch {
   /** The results page. When set, the form submits there with GET after `scSearch`, unless the event is cancelled. */
   @Prop() action?: string;
 
+  /** `m` (default): a 56px field and button. `l`: the 64px hero search (E1). */
+  @Prop({ reflect: true }) size: SearchSize = 'm';
+
   /** Emitted on submit with the trimmed query. Cancelable: `preventDefault()` stops navigation to `action`. */
   @Event({ eventName: 'scSearch', bubbles: true, composed: true, cancelable: true }) scSearch!: EventEmitter<ScSearchDetail>;
 
-  private locale = new LocaleController(this);
+  private uid = `sc-search-${++counter}`;
+  private locale = new LocaleController(this, strings);
   private input?: HTMLInputElement;
 
   connectedCallback() {
     this.locale.connect();
+    // Light DOM has no delegatesFocus: focus() on the host goes to the input.
+    this.el.focus = (options?: FocusOptions) => this.input?.focus(options);
   }
 
   disconnectedCallback() {
@@ -90,30 +96,35 @@ export class ScSearch {
 
   render() {
     const { t } = this.locale;
-    const label = this.label || t('searchLabel');
+    const id = this.uid;
+    const large = this.size === 'l';
     return (
       <Host>
-        <form class="form" role="search" aria-labelledby="label" action={this.action} method="get" onSubmit={this.onSubmit}>
-          <label id="label" class={{ 'label': true, 'type-label-m': true, 'visually-hidden': this.labelHidden }} htmlFor="input" part="label">
-            {label}
+        <form class="sc-search" role="search" aria-labelledby={`${id}-label`} action={this.action} method="get" onSubmit={this.onSubmit}>
+          <label id={`${id}-label`} class={{ 'sc-search__label': true, 'visually-hidden': this.labelHidden }} htmlFor={`${id}-input`}>
+            {this.label || t('searchLabel')}
           </label>
-          <div class="field" part="field">
-            <Search class="search-icon" />
-            <input
-              id="input"
-              ref={(el) => (this.input = el)}
-              class="input type-body-m"
-              part="input"
-              type="search"
-              name={this.name}
-              value={this.value}
-              placeholder={this.placeholder}
-              enterKeyHint="search"
-              autoComplete="off"
-              spellcheck={false}
-              onInput={this.onInput}
-            />
-            <sc-button class="submit" type="submit">
+          <div class={{ 'sc-search__row': true, 'sc-search--l': large }}>
+            <div class="sc-search__field">
+              <svg class="icon sc-search__icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+                <circle cx="11" cy="11" r="7" />
+                <path d="M20 20l-4-4" />
+              </svg>
+              <input
+                id={`${id}-input`}
+                ref={(el) => (this.input = el)}
+                class="sc-search__input"
+                type="search"
+                name={this.name}
+                value={this.value}
+                placeholder={this.placeholder}
+                enterKeyHint="search"
+                autoComplete="off"
+                spellcheck={false}
+                onInput={this.onInput}
+              />
+            </div>
+            <sc-button class="sc-search__button" type="submit" size={large ? 'xl' : 'l'}>
               {this.buttonText || t('searchButton')}
             </sc-button>
           </div>

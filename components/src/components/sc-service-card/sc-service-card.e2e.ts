@@ -1,31 +1,23 @@
-import { expectNoAxeViolations } from '../../test/axe';
-import { contexts, newScPage, setPageContext } from '../../test/page';
+import { describeAxe } from '../../test/axe';
+import { newScPage, setPageContext } from '../../test/page';
 
 /** E2EPage is a Puppeteer page; this is the slice used to emulate forced colours. */
 type CdpPage = { createCDPSession(): Promise<{ send(method: string, params: object): Promise<unknown> }> };
 
-const GRID = `
+export const GRID = `
   <main>
     <h1>Dubai Now</h1>
     <h2>Most used services</h2>
     <div style="display: grid; grid-template-columns: repeat(3, 300px); gap: 24px">
       <sc-service-card id="renew" href="#renew" entity="Roads and Transport Authority">Renew vehicle registration
-        <span slot="chip" style="background: var(--sc-channel-subtle); color: var(--sc-channel-ink)" data-channel="transport">Also on Dubai Transport</span></sc-service-card>
-      <sc-service-card id="bills" href="#bills" entity="Dubai Electricity and Water Authority">Pay water and electricity bills</sc-service-card>
+        <span slot="chip" style="background: var(--sc-color-channel-subtle); color: var(--sc-color-channel-on-container)" data-channel="transport">Also on Dubai Transport</span></sc-service-card>
+      <sc-service-card id="bills" href="#bills" entity="Dubai Electricity and Water Authority" tint="amber"><svg slot="icon" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>Pay water and electricity bills</sc-service-card>
       <sc-service-card id="tenancy" href="#tenancy" entity="Dubai Land Department">Register a tenancy contract
-        <a slot="chip" id="chip-link" href="#build" style="color: var(--sc-channel-ink)">Also on Build in Dubai</a></sc-service-card>
+        <a slot="chip" id="chip-link" href="#build" style="color: var(--sc-color-channel-action)">Also on Build in Dubai</a></sc-service-card>
     </div>
   </main>`;
 
 describe('sc-service-card (e2e)', () => {
-  it('has no axe violations in English and Arabic, light and dark', async () => {
-    const page = await newScPage(GRID);
-    for (const ctx of contexts) {
-      await setPageContext(page, ctx);
-      await expectNoAxeViolations(page);
-    }
-  });
-
   it('is one tab stop per card; Enter follows the link', async () => {
     const page = await newScPage(GRID);
     await page.keyboard.press('Tab');
@@ -116,6 +108,59 @@ describe('sc-service-card (e2e)', () => {
     expect(links.map((l) => l.name)).toEqual(['Renew vehicle registration', 'Pay water and electricity bills', 'Register a tenancy contract', 'Also on Build in Dubai']);
   });
 
+  it('is a flat 12px card with a 1px edge, 24px padding and at least 184px tall', async () => {
+    const page = await newScPage(GRID);
+    const r = await page.evaluate(() => {
+      const card = document.querySelector('#bills')!.shadowRoot!.querySelector('.card')!;
+      const cs = getComputedStyle(card);
+      return [cs.borderTopLeftRadius, cs.borderTopWidth, cs.paddingTop, cs.boxShadow, card.getBoundingClientRect().height >= 184];
+    });
+    expect(r).toEqual(['12px', '1px', '24px', 'none', true]);
+  });
+
+  it('draws a decorative arrow at the top end in the channel colour, mirrored in Arabic', async () => {
+    const page = await newScPage(GRID);
+    const read = () =>
+      page.evaluate(() => {
+        const root = document.querySelector('#bills')!.shadowRoot!;
+        const arrow = root.querySelector('.arrow')!;
+        const a = arrow.getBoundingClientRect();
+        const card = root.querySelector('.card')!.getBoundingClientRect();
+        const title = root.querySelector('.title')!.getBoundingClientRect();
+        return {
+          endGap: getComputedStyle(document.documentElement).direction === 'rtl' ? a.left - card.left : card.right - a.right,
+          top: Math.abs(a.top + a.height / 2 - (title.top + 14)) < 3,
+          size: a.width,
+          transform: getComputedStyle(arrow.querySelector('svg')!).transform,
+          colour: getComputedStyle(arrow).color,
+        };
+      });
+    const en = await read();
+    expect(Math.round(en.endGap)).toBe(25);
+    expect(en.size).toBe(24);
+    expect(en.transform).toBe('none');
+    await setPageContext(page, { lang: 'ar' });
+    const ar = await read();
+    expect(Math.round(ar.endGap)).toBe(25);
+    expect(ar.transform).toBe('matrix(-1, 0, 0, 1, 0, 0)');
+  });
+
+  it('colours the icon tile with the tint roles', async () => {
+    const page = await newScPage(GRID);
+    const r = await page.evaluate(() => {
+      const tile = document.querySelector('#bills')!.shadowRoot!.querySelector('.icon-tile')!;
+      const probe = document.createElement('i');
+      probe.style.backgroundColor = 'var(--sc-color-tint-amber)';
+      probe.style.color = 'var(--sc-color-on-tint-amber)';
+      document.body.append(probe);
+      const want = [getComputedStyle(probe).backgroundColor, getComputedStyle(probe).color];
+      probe.remove();
+      const cs = getComputedStyle(tile);
+      return [cs.backgroundColor === want[0], cs.color === want[1], tile.getBoundingClientRect().width];
+    });
+    expect(r).toEqual([true, true, 40]);
+  });
+
   it('shows the hover state only with a fine pointer', async () => {
     const underlinesOnHover = async (touch: boolean) => {
       const page = await newScPage(GRID);
@@ -161,3 +206,5 @@ describe('sc-service-card (e2e)', () => {
     expect(border).not.toBe('rgba(0, 0, 0, 0)');
   });
 });
+
+describeAxe('sc-service-card', GRID);

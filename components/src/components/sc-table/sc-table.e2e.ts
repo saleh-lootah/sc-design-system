@@ -1,5 +1,5 @@
 import { E2EPage } from '@stencil/core/testing';
-import { expectNoAxeViolations } from '../../test/axe';
+import { describeAxe, expectNoAxeViolations } from '../../test/axe';
 import { contexts, newScPage, setPageContext } from '../../test/page';
 
 const STRINGS = `strings='{"en": {"tableSelectAll": "Select all fines on this page", "tableSelectRow": "Select fine {row}"}, "ar": {"tableSelectAll": "تحديد كل المخالفات في هذه الصفحة", "tableSelectRow": "تحديد المخالفة {row}"}}'`;
@@ -42,7 +42,7 @@ const fines = (lang: 'en' | 'ar', attrs = '') => {
             .join('')}
         </tbody>
       </table>
-      <div slot="footer"><span>${en ? 'Showing 1–3 of 3 fines' : 'عرض 1–3 من 3 مخالفات'}</span></div>
+      <div slot="footer"><span>${en ? 'Showing 1–3 of 3 fines' : 'عرض 1 إلى 3 من 3 مخالفات'}</span></div>
       <sc-button slot="actions">${en ? 'Pay fines' : 'دفع المخالفات'}</sc-button>
     </sc-table>
   </main>`;
@@ -320,3 +320,66 @@ describe('sc-table (e2e)', () => {
     await expectNoAxeViolations(page);
   });
 });
+
+describe('sc-table (e2e, v2 look)', () => {
+  const token = (page: E2EPage, name: string, prop = 'backgroundColor') =>
+    page.evaluate(
+      (n: string, p: string) => {
+        const probe = document.createElement('i');
+        probe.style.backgroundColor = `var(${n})`;
+        probe.style.outlineColor = `var(${n})`;
+        document.querySelector('main')!.append(probe);
+        const v = getComputedStyle(probe)[p as 'backgroundColor'];
+        probe.remove();
+        return v;
+      },
+      name,
+      prop,
+    );
+
+  it('is a flat 12px container with a 1px outline-variant edge, a surface-container header and no shadow', async () => {
+    const page = await newScPage(fines('en'));
+    const r = await page.evaluate(() => {
+      const c = getComputedStyle(document.querySelector('#t .container')!);
+      const th = getComputedStyle(document.querySelector('#t thead th:not(.sc-table__select)')!);
+      return { radius: c.borderTopLeftRadius, width: c.borderTopWidth, edge: c.borderTopColor, shadow: c.boxShadow, head: th.backgroundColor, headWeight: th.fontWeight };
+    });
+    expect([r.radius, r.width, r.shadow]).toEqual(['12px', '1px', 'none']);
+    expect(r.edge).toBe(await token(page, '--sc-color-outline-variant'));
+    expect(r.head).toBe(await token(page, '--sc-color-surface-container'));
+  });
+
+  it('marks selected rows with channel-subtle and a checked box, and keeps the U1 neutral ring on checkboxes', async () => {
+    const page = await newScPage(fines('en'));
+    await page.evaluate(() => (document.querySelector('#t tbody .sc-table__box') as HTMLInputElement).click());
+    await page.waitForChanges();
+    await page.evaluate(() => document.getAnimations().forEach((a) => a.finish()));
+    const fill = await page.evaluate(() => getComputedStyle(document.querySelector('#t tbody tr[data-selected]')!).backgroundColor);
+    expect(fill).toBe(await token(page, '--sc-color-channel-subtle'));
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Tab');
+    const ring = await page.evaluate(() => {
+      const el = document.activeElement as HTMLElement;
+      const cs = getComputedStyle(el);
+      return [cs.outlineWidth, cs.outlineColor];
+    });
+    expect(ring[0]).toBe('3px');
+    expect(ring[1]).toBe(await token(page, '--sc-color-focus-ring', 'outlineColor'));
+  });
+
+  it('underlines links (COL-08) and sets cells in body-medium, the Arabic scale in Arabic', async () => {
+    const page = await newScPage(fines('en'));
+    const read = () =>
+      page.evaluate(() => [getComputedStyle(document.querySelector('#t td a')!).textDecorationLine, getComputedStyle(document.querySelector('#t tbody td')!).fontSize]);
+    expect(await read()).toEqual(['underline', '16px']);
+    await setPageContext(page, { lang: 'ar' });
+    expect((await read())[1]).toBe('18px');
+  });
+
+  it('styles from @layer sc.components, so unlayered service CSS wins without !important', async () => {
+    const page = await newScPage(`<style>#t .container { border-radius: 0; }</style>${fines('en')}`);
+    expect(await page.evaluate(() => getComputedStyle(document.querySelector('#t .container')!).borderTopLeftRadius)).toBe('0px');
+  });
+});
+
+describeAxe('sc-table states', STATES);

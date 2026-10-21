@@ -1,50 +1,54 @@
-@import '../sc-text-input/field.css';
-
-:host {
+/*
+ * sc-select (v2, light DOM). field.css gives the label, hint, error and box; this adds the
+ * native select and its chevron (component-language.md A9, E2).
+ */
+@layer sc.components {
   /* A select is as wide as its longest option needs, up to the container. */
-  --_select-max: 100%;
-}
+  .sc-select__frame {
+    inline-size: auto;
+    min-inline-size: min(100%, calc(var(--sc-size-control-primary) * 5));
+    max-inline-size: 100%;
+  }
 
-.frame--select {
-  inline-size: auto;
-  min-inline-size: min(100%, calc(var(--sc-size-control-l) * 5));
-  max-inline-size: var(--_select-max);
-}
+  /* 16 at the start; 52 at the end: the 26px chevron, 16 from the edge, 10 before the text. */
+  .sc-select__control {
+    padding-inline-end: calc(var(--sc-space-16) + var(--_chevron) + var(--sc-space-12) - var(--sc-space-2));
+    cursor: pointer;
+    text-overflow: ellipsis;
+  }
 
-select.control {
-  padding-inline-end: calc(var(--sc-space-16) + var(--sc-size-icon-m) + var(--sc-space-8));
-  cursor: pointer;
-  text-overflow: ellipsis;
-}
+  .sc-select__frame {
+    --_chevron: calc(var(--sc-size-icon-l) + var(--sc-space-2));
+  }
 
-select.control:disabled {
-  cursor: not-allowed;
-}
+  .sc-select__control:disabled {
+    cursor: not-allowed;
+  }
 
-/* The chevron points down in both directions (the directional flip is cancelled). */
-.chevron {
-  position: absolute;
-  inset-block: 0;
-  inset-inline-end: var(--sc-space-16);
-  display: flex;
-  align-items: center;
-  color: var(--sc-color-muted);
-  pointer-events: none;
-}
+  /* The chevron points down in both directions and never mirrors. */
+  .sc-select__chevron {
+    --icon-size: var(--_chevron);
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: var(--sc-space-16);
+    margin-block: auto;
+    color: var(--sc-color-on-surface);
+    pointer-events: none;
+  }
 
-.chevron .icon,
-:host(:dir(rtl)) .chevron .icon-directional {
-  transform: rotate(90deg);
-}
+  .sc-select__frame:has(.sc-select__control:disabled) .sc-select__chevron {
+    color: var(--sc-color-on-disabled);
+  }
 
-select.control option,
-select.control optgroup {
-  color: var(--sc-color-ink);
-  background: var(--sc-color-surface);
-}
+  .sc-select__control option,
+  .sc-select__control optgroup {
+    color: var(--sc-color-on-surface);
+    background: var(--sc-color-surface);
+  }
 
-@media (forced-colors: active) {
-  .chevron {
-    color: ButtonText;
+  @media (forced-colors: active) {
+    .sc-select__chevron {
+      color: ButtonText;
+    }
   }
 }

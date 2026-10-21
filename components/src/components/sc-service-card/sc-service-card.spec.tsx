@@ -4,7 +4,7 @@ import { ScServiceCard } from './sc-service-card';
 const shadow = (root: HTMLElement) => root.shadowRoot!;
 
 describe('sc-service-card (spec)', () => {
-  it('renders an h3 containing the link, the entity as its description, and no chevron', async () => {
+  it('renders an h3 containing the link, the entity as its description, and a decorative arrow', async () => {
     const page = await newSpecPage({
       components: [ScServiceCard],
       html: `<sc-service-card href="/renew" entity="Roads and Transport Authority">Renew vehicle registration</sc-service-card>`,
@@ -16,7 +16,10 @@ describe('sc-service-card (spec)', () => {
     expect(link.getAttribute('aria-describedby')).toBe('entity');
     expect(root.querySelector('#entity')!.textContent).toBe('Roads and Transport Authority');
     expect(root.querySelector('#entity')).not.toHaveClass('is-empty');
-    expect(root.querySelector('.chevron, svg')).toBeNull();
+    const arrow = root.querySelector('[part="arrow"] svg')!;
+    expect(arrow.getAttribute('aria-hidden')).toBe('true');
+    expect(arrow).toHaveClass('icon-directional');
+    expect(root.querySelector('a')!.contains(arrow)).toBe(false);
   });
 
   it('makes only the title the link, not the whole card', async () => {
@@ -55,5 +58,20 @@ describe('sc-service-card (spec)', () => {
     const chip = await newSpecPage({ components: [ScServiceCard], html: `<sc-service-card href="#">Pay fines<span slot="chip">Also on Dubai Transport</span><span slot="entity">Dubai Police</span></sc-service-card>` });
     expect(shadow(chip.root!).querySelector('.chip')).not.toHaveClass('is-empty');
     expect(shadow(chip.root!).querySelector('#entity')).not.toHaveClass('is-empty');
+  });
+
+  it('shows the icon tile only with an icon, in the channel colour or a tint', async () => {
+    const none = await newSpecPage({ components: [ScServiceCard], html: `<sc-service-card href="#">Pay fines</sc-service-card>` });
+    expect(shadow(none.root!).querySelector('[part="icon"]')).toHaveClass('is-empty');
+    const icon = await newSpecPage({ components: [ScServiceCard], html: `<sc-service-card href="#" tint="amber">Pay a DEWA bill<svg slot="icon"></svg></sc-service-card>` });
+    const tile = shadow(icon.root!).querySelector('[part="icon"]')!;
+    expect(tile).not.toHaveClass('is-empty');
+    expect(tile).toHaveClass('icon-tile--amber');
+    expect(tile.getAttribute('aria-hidden')).toBe('true');
+  });
+
+  it('ignores an unknown tint', async () => {
+    const page = await newSpecPage({ components: [ScServiceCard], html: `<sc-service-card href="#" tint="teal">Pay fines<svg slot="icon"></svg></sc-service-card>` });
+    expect(shadow(page.root!).querySelector('[part="icon"]')!.className).not.toContain('icon-tile--');
   });
 });

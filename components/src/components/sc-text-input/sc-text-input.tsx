@@ -1,48 +1,34 @@
-import { AttachInternals, Component, Element, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
 import { normaliseDigits } from '../../i18n/digits';
-import { LocaleController } from '../../i18n/locale';
-import { AlertCircle } from '../../icons/index'; // explicit /index: enables SVG rendering for this component (see CONTRIBUTING)
-import { FieldError, FieldHint, FieldLabel, HeadingLevel, IDS, describedBy, emitNativeChange, hasSlotted, headingLevel, mirrorValidity, formSupported } from './field';
+import { LocaleController } from '../../i18n/controller';
+import { FieldError, FieldHint, FieldLabel, HeadingLevel, Moved, Slotted, describedBy, forwardFocus, headingLevel, nextId, onFormReset, takeSlotted, withField } from './field';
 
 export type TextInputType = 'text' | 'email' | 'tel' | 'url' | 'search' | 'password';
 export type TextInputWidth = 'full' | '2' | '3' | '4' | '5' | '10' | '20';
 
 const WIDTHS: readonly string[] = ['2', '3', '4', '5', '10', '20'];
-void AlertCircle;
+const strings = withField();
 
 /**
  * A single-line answer, such as a plate number, an email address or a phone number.
  *
- * Renders its own label, hint, error and native `<input>` in one shadow root, so the
- * label and `aria-describedby` work. The host is form-associated (it submits `value`
- * under `name`, resets, and reports validity from the inner input) and delegates focus,
- * so an error-summary link to the host's `id` focuses the input.
+ * v2 renders its label, hint, error and a native `<input>` in light DOM (Stencil `scoped`,
+ * decision A2). The input is a real form control: it submits under `name`, Enter submits the
+ * form through its default button, and validation, reset, autofill and `<fieldset disabled>`
+ * are native. `focus()` on the host reaches the input, so an error-summary link to the host's
+ * `id` works. Styles: the classes `.sc-field`, `.sc-field__label`, `.sc-field__frame`,
+ * `.sc-field__control` (no `::part()`).
  *
- * @slot label - Rich label content, instead of the `label` prop.
- * @slot hint - Rich hint content (for example with a link), instead of the `hint` prop.
- * @slot error - Rich error content, instead of the `error` prop.
- * @slot prefix - Content before the value inside the box, instead of `prefix-text`.
- * @slot suffix - Content after the value inside the box, instead of `suffix-text`.
- *
- * @part field - The field group (gets the error bar).
- * @part label - The `<label>`.
- * @part hint - The hint.
- * @part error - The error message.
- * @part frame - The bordered box around the input, prefix and suffix.
- * @part control - The native `<input>`.
- * @part prefix - The prefix box.
- * @part suffix - The suffix box.
+ * Rich content: a child element with `slot="label"`, `slot="hint"`, `slot="error"`,
+ * `slot="prefix"` or `slot="suffix"` is moved into place once, when the component loads.
  */
 @Component({
   tag: 'sc-text-input',
-  styleUrl: 'sc-text-input.css',
-  shadow: { delegatesFocus: true },
-  formAssociated: true,
+  styleUrls: ['field.css', 'sc-text-input.css'],
+  scoped: true,
 })
 export class ScTextInput {
   @Element() el!: HTMLElement;
-
-  @AttachInternals() internals!: ElementInternals;
 
   /** The visible label. Write it as the question or the thing to enter: "Plate number". */
   @Prop() label?: string;
@@ -51,9 +37,9 @@ export class ScTextInput {
   @Prop() hint?: string;
 
   /**
-   * The error message. Setting it shows the error state: a 3px error bar on the start side,
-   * an error border on the input, the message with an icon and a visually hidden "Error:",
-   * and `aria-invalid`. Say what to do: "Enter numbers only, like 12345".
+   * The error message. Setting it shows the error state: a 4px error bar at inline-start, a
+   * 2px error edge on the box, the message with an icon and a visually hidden "Error:", and
+   * `aria-invalid`. Say what to do: "Enter numbers only, like 12345".
    */
   @Prop({ reflect: true }) error?: string;
 
@@ -86,12 +72,11 @@ export class ScTextInput {
 
   /**
    * Keeps the value left-to-right (plates, phone numbers, emails, references). In Arabic the
-   * value still sits at the start (right) of the box. Use this, not `dir` on the host, which
-   * would flip the label and hint too.
+   * value still sits at the start (right) of the box. Use this, not `dir` on the host.
    */
   @Prop({ reflect: true }) ltr = false;
 
-  /** Text before the value inside the box, such as "AED". (Named `prefixText` because `prefix` is a reserved DOM property.) */
+  /** Text before the value inside the box, such as "AED". */
   @Prop() prefixText?: string;
 
   /** Text after the value inside the box, such as "km". */
@@ -115,40 +100,33 @@ export class ScTextInput {
   /** When set (1–6), the label is also the page heading at this level (`<h1><label>…</label></h1>`). */
   @Prop() headingLevel?: HeadingLevel;
 
-  /** Fires on every keystroke with `{ value }`. The native `input` event also reaches the host. */
+  /** Fires on every keystroke with `{ value }`. The native `input` event also bubbles from the input. */
   @Event({ bubbles: true, composed: true }) scInput!: EventEmitter<{ value: string }>;
 
-  /** Fires when the value is committed (blur after a change) with `{ value }`. A native `change` event is also dispatched on the host. */
+  /** Fires when the value is committed (blur after a change) with `{ value }`. The native `change` event also bubbles from the input. */
   @Event({ bubbles: true, composed: true }) scChange!: EventEmitter<{ value: string }>;
 
-  @State() formDisabled = false;
-  @State() slots = { label: false, hint: false, error: false, prefix: false, suffix: false };
+  @State() slotted: Slotted = {};
 
+  private uid = nextId('sc-text-input');
   private input?: HTMLInputElement;
-  private defaultValue = '';
-  private locale = new LocaleController(this);
+  private locale = new LocaleController(this, strings);
+  private stopReset?: () => void;
 
   connectedCallback() {
     this.locale.connect();
-    this.readSlots();
-  }
-
-  componentDidLoad() {
-    // slotchange bubbles to the shadow root but not past it.
-    this.el.shadowRoot?.addEventListener('slotchange', this.readSlots);
+    this.slotted = takeSlotted(this.el, ['label', 'hint', 'error', 'prefix', 'suffix'], this.slotted);
+    forwardFocus(this.el, () => this.input);
+    this.stopReset = onFormReset(this.el, () => (this.value = this.input?.value ?? ''));
   }
 
   disconnectedCallback() {
     this.locale.disconnect();
+    this.stopReset?.();
   }
 
   componentWillLoad() {
     this.value = this.value ?? '';
-    this.defaultValue = this.value;
-  }
-
-  componentDidRender() {
-    this.sync();
   }
 
   @Watch('value')
@@ -156,37 +134,10 @@ export class ScTextInput {
     if (this.input && this.input.value !== (this.value ?? '')) this.input.value = this.value ?? '';
   }
 
-  /** Form-associated lifecycle: a `<fieldset disabled>` ancestor or `disabled` changed. */
-  formDisabledCallback(disabled: boolean) {
-    this.formDisabled = disabled;
-  }
-
-  /** Form-associated lifecycle: the form was reset. */
-  formResetCallback() {
-    this.value = this.defaultValue;
-  }
-
-  /** Form-associated lifecycle: the browser restored the value (back/forward cache, autofill). */
-  formStateRestoreCallback(state: string | null) {
-    if (typeof state === 'string') this.value = state;
-  }
-
-  private sync() {
-    if (!formSupported()) return;
-    this.internals?.setFormValue?.(this.value ?? '');
-    mirrorValidity(this.internals, this.input);
-  }
-
-  private readSlots = () => {
-    const el = this.el;
-    const next = {
-      label: hasSlotted(el, 'label'),
-      hint: hasSlotted(el, 'hint'),
-      error: hasSlotted(el, 'error'),
-      prefix: hasSlotted(el, 'prefix'),
-      suffix: hasSlotted(el, 'suffix'),
-    };
-    if (JSON.stringify(next) !== JSON.stringify(this.slots)) this.slots = next;
+  private setInput = (el?: HTMLInputElement) => {
+    // The value the page loaded with is what a form reset restores.
+    if (el && !this.input) el.defaultValue = this.value ?? '';
+    this.input = el;
   };
 
   private onInput = (ev: Event) => {
@@ -196,58 +147,61 @@ export class ScTextInput {
 
   private onChange = () => {
     this.scChange.emit({ value: this.value });
-    emitNativeChange(this.el);
   };
 
   render() {
     const { t } = this.locale;
-    const hasHint = !!this.hint || this.slots.hint;
-    const hasError = !!this.error || this.slots.error;
-    const hasPrefix = !!this.prefixText || this.slots.prefix;
-    const hasSuffix = !!this.suffixText || this.slots.suffix;
+    const id = this.uid;
+    const { slotted } = this;
+    const hasHint = !!this.hint || !!slotted.hint;
+    const hasError = !!this.error || !!slotted.error;
+    const hasPrefix = !!this.prefixText || !!slotted.prefix;
+    const hasSuffix = !!this.suffixText || !!slotted.suffix;
     const chars = WIDTHS.includes(String(this.width)) ? Number(this.width) : 0;
-    const disabled = this.disabled || this.formDisabled;
 
     return (
       <Host>
-        <div class={{ 'field': true, 'field--error': hasError }} part="field">
-          <FieldLabel text={this.label} optional={this.optional} optionalText={t('optional')} level={headingLevel(this.headingLevel)} as="label" htmlFor={IDS.control} />
-          <FieldHint text={this.hint} show={hasHint} />
-          <FieldError text={this.error} show={hasError} prefix={t('errorPrefix')} />
+        <div class={{ 'sc-field': true, 'sc-field--error': hasError }}>
+          <FieldLabel id={`${id}-label`} htmlFor={`${id}-control`} text={this.label} rich={slotted.label} optional={this.optional} optionalText={t('fieldOptional')} level={headingLevel(this.headingLevel)} as="label" />
+          <FieldHint id={`${id}-hint`} text={this.hint} rich={slotted.hint} show={hasHint} />
+          <FieldError id={`${id}-error`} text={this.error} rich={slotted.error} show={hasError} prefix={t('fieldErrorPrefix')} />
           <div
-            class={{ 'frame': true, 'frame--error': hasError, 'frame--disabled': disabled, 'frame--chars': chars > 0 }}
+            class={{ 'sc-field__frame': true, 'sc-field__frame--error': hasError, 'sc-field__frame--chars': chars > 0 }}
             style={chars ? { '--_chars': String(chars + (hasPrefix || hasSuffix ? 4 : 0)) } : undefined}
-            part="frame"
           >
-            <span class={{ 'affix': true, 'affix--prefix': true, 'affix--empty': !hasPrefix }} id="prefix" part="prefix">
-              <slot name="prefix">{this.prefixText}</slot>
-            </span>
+            {hasPrefix && (
+              <span class="sc-field__affix sc-field__affix--prefix" id={`${id}-prefix`}>
+                {slotted.prefix ? <Moved node={slotted.prefix} /> : this.prefixText}
+              </span>
+            )}
             <input
-              ref={(el) => (this.input = el)}
-              id={IDS.control}
-              class={{ 'control': true, 'control--ltr': this.ltr }}
-              part="control"
+              ref={this.setInput}
+              id={`${id}-control`}
+              class={{ 'sc-field__control': true, 'sc-field__control--ltr': this.ltr }}
               type={this.type}
+              name={this.name}
               value={this.value ?? ''}
               dir={this.ltr ? 'ltr' : undefined}
               spellcheck={this.ltr ? false : undefined}
               autocapitalize={this.ltr ? 'off' : undefined}
               required={this.required}
-              disabled={disabled}
+              disabled={this.disabled}
               readOnly={this.readonly}
               inputMode={this.inputmode}
               autoComplete={this.autocomplete}
               maxLength={this.maxlength}
               minLength={this.minlength}
               pattern={this.pattern}
-              aria-describedby={describedBy(hasHint && IDS.hint, hasError && IDS.error, hasPrefix && 'prefix', hasSuffix && 'suffix')}
+              aria-describedby={describedBy(hasHint && `${id}-hint`, hasError && `${id}-error`, hasPrefix && `${id}-prefix`, hasSuffix && `${id}-suffix`)}
               aria-invalid={hasError ? 'true' : undefined}
               onInput={this.onInput}
               onChange={this.onChange}
             />
-            <span class={{ 'affix': true, 'affix--suffix': true, 'affix--empty': !hasSuffix }} id="suffix" part="suffix">
-              <slot name="suffix">{this.suffixText}</slot>
-            </span>
+            {hasSuffix && (
+              <span class="sc-field__affix sc-field__affix--suffix" id={`${id}-suffix`}>
+                {slotted.suffix ? <Moved node={slotted.suffix} /> : this.suffixText}
+              </span>
+            )}
           </div>
         </div>
       </Host>

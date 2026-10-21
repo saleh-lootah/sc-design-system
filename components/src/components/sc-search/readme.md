@@ -22,7 +22,7 @@ document.querySelector('sc-search').addEventListener('scSearch', (ev) => {
 
 ### Behaviour
 
-The component renders `<form role="search">` named by the label, a native `<input type="search">` and a primary `sc-button type="submit"`. Enter in the field and the button both submit; `scSearch` carries the trimmed query. Focus on the host goes to the input (`delegatesFocus`), and the focus ring wraps the whole pill. The form is self-contained: don't put `sc-search` inside another `<form>`.
+v2 renders `<form role="search">` named by the label, a field box (radius 8, 1.5px `outline` edge, search icon at inline-start) holding a native `<input type="search">`, and a separate primary `sc-button type="submit"` 12px away (E1), all in light DOM (decision A2). Enter in the field submits through the button natively; `scSearch` carries the trimmed query. `focus()` on the host goes to the input, and the U1 focus ring wraps the field box. `size="l"` is the 64px hero search; the default `m` is 56px. Arabic-Indic digits typed into the query become Latin digits. The form is self-contained: don't put `sc-search` inside another `<form>`.
 
 ### Arabic
 
@@ -33,14 +33,14 @@ The field mirrors: icon on the right, button on the left. The default label and 
 
 ## Overview
 
-A pill search box: search icon, a labelled field and a primary "Search" button, inside a
-`<form role="search">` (a search landmark named by the label).
+A search field and its button, inside a `<form role="search">` named by the label (E1: the
+field and the primary button are siblings with a 12px gap, not one pill).
 
-Submitting (the button, or Enter in the field) emits `scSearch`. With `action`, the form
-then goes to that URL with the query as `?<name>=…`, unless a listener calls
-`preventDefault()`; without `action`, the page handles `scSearch` itself.
-
-The form is self-contained: don't nest `sc-search` inside another `<form>`.
+v2 renders the form, a native `<input type="search">` and an `sc-button type="submit"` in
+light DOM (Stencil `scoped`, decision A2), so Enter in the field submits through the button
+natively. Submitting emits `scSearch`. With `action`, the form then goes to that URL with the
+query as `?<name>=…`, unless a listener calls `preventDefault()`; without `action`, the page
+handles `scSearch` itself. Don't nest `sc-search` inside another `<form>`.
 
 ## Properties
 
@@ -52,6 +52,7 @@ The form is self-contained: don't nest `sc-search` inside another `<form>`.
 | `labelHidden` | `label-hidden` | Hides the label visually; screen readers still read it. Only do this when the context makes the purpose obvious, such as a hero whose heading asks "What do you need to do?". | `boolean`             | `false`     |
 | `name`        | `name`         | The query parameter name sent with `action`.                                                                                                                                  | `string`              | `'q'`       |
 | `placeholder` | `placeholder`  | Example queries, e.g. `Try "renew car registration"`. A hint, never a replacement for the label.                                                                              | `string \| undefined` | `undefined` |
+| `size`        | `size`         | `m` (default): a 56px field and button. `l`: the 64px hero search (E1).                                                                                                       | `"l" \| "m"`          | `'m'`       |
 | `value`       | `value`        | The query. Updated as the user types.                                                                                                                                         | `string`              | `''`        |
 
 
@@ -73,15 +74,6 @@ Focuses the input.
 Type: `Promise<void>`
 
 
-
-
-## Shadow Parts
-
-| Part      | Description                                 |
-| --------- | ------------------------------------------- |
-| `"field"` | The pill around the icon, input and button. |
-| `"input"` | The native `<input type="search">`.         |
-| `"label"` | The `<label>`.                              |
 
 
 ## Dependencies

@@ -35,6 +35,7 @@ Media queries can't read custom properties, so the breakpoint widths (600, 1024,
 
 The reading column starts at the right.
 
+## v2: CSS only
 <!-- Auto Generated Below -->
 
 
@@ -71,16 +72,18 @@ for question pages and running text.
 ### Used by
 
  - [sc-channel-hero](../sc-channel-hero)
- - [sc-footer](../sc-footer)
 
 ### Graph
 ```mermaid
 graph TD;
   sc-channel-hero --> sc-container
-  sc-footer --> sc-container
   style sc-container fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
 ----------------------------------------------
 
+`sc-container` is not a registered custom element in v2 (architecture §3.1). `sc.css` styles the tag directly (`@layer sc.components`), so it needs no JS, has no shadow root and never waits for hydration. The markup is unchanged; `::part(inner)` and `componentOnReady()` are gone. It works in page markup only: an element selector in the document does not reach into another component's shadow root.
 
+| Attribute | Values | Default |
+| --- | --- | --- |
+| `width` | `page` (1280px cap), `reading` (680px cap, kept at the start edge) | `page` |

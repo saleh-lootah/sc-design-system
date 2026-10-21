@@ -12,11 +12,11 @@ One choice from a list that's too long for radios, such as the issuing authority
 </sc-select>
 ```
 
-- A native `<select>` inside the shadow root, styled like `sc-text-input` (54px, field radius, 1.5px control border) with a chevron at the end that points down in both directions.
-- **Options are light-DOM `<option>` and `<optgroup>` children.** A native select can't render slotted options, so the component copies them into its inner select and keeps them in sync (a `MutationObserver` watches additions, removals, text and `value`/`label`/`disabled`/`selected`). Changing an option's text, for example when the page switches language, updates the list.
-- **Value:** `value` picks the option; otherwise `<option selected>`, else the first option.
-- **Required:** add a first option with `value=""` ("Select an inspection centre") and `required`; the field reports `valueMissing` until a real option is chosen. Don't add an empty first option to a select that already has a sensible default.
-- Label, hint, `optional`, `error`, form association and focus delegation work as in `sc-text-input`. `change` is re-dispatched on the host and `scChange` carries `{ value }`.
+- v2 renders a native `<select>` in light DOM (decision A2), styled like `sc-text-input` (56px, 8px radius, 1.5px `outline` edge) with a 26px `expand_more` chevron 16px from the inline end that points down in both directions.
+- **Options are `<option>` and `<optgroup>` children, moved into the native select** on load: they are the real options, not copies. Options appended to the host later are moved in too; changing an option's text or attributes works directly on it.
+- **Value:** `value` picks the option (and becomes what a form reset restores); otherwise `<option selected>`, else the first enabled option.
+- **Required:** add a first option with `value=""` ("Select an inspection centre") and `required`; the select reports `valueMissing` natively until a real option is chosen.
+- Label, hint, `optional`, `error`, rich slots and focus forwarding work as in `sc-text-input`. Native `change` and `input` bubble from the select; `scChange` carries `{ value }`.
 
 <!-- Auto Generated Below -->
 
@@ -25,9 +25,11 @@ One choice from a list that's too long for radios, such as the issuing authority
 
 One choice from a list too long for radios, such as the emirate that issued a plate.
 
-A native `<select>` inside the shadow root, styled like `sc-text-input`, with a chevron.
-Write the options as light-DOM `<option>` (and `<optgroup>`) children: they are copied
-into the inner select and kept in sync when they change. Form-associated and delegates focus.
+v2 renders a native `<select>` in light DOM (Stencil `scoped`, decision A2), styled like
+`sc-text-input` with an `expand_more` chevron. Write the options as `<option>` (and
+`<optgroup>`) children: they are moved INTO the native select, so they are the real options
+(no copies), and options added later are moved in too. The select submits, resets, validates
+and follows `<fieldset disabled>` natively; `focus()` on the host reaches it.
 
 ## Properties
 
@@ -38,7 +40,7 @@ into the inner select and kept in sync when they change. Form-associated and del
 | `error`        | `error`         | The error message. Setting it shows the error state.                                          | `string \| undefined`                     | `undefined` |
 | `headingLevel` | `heading-level` | When set (1–6), the label is also the page heading at this level.                             | `1 \| 2 \| 3 \| 4 \| 5 \| 6 \| undefined` | `undefined` |
 | `hint`         | `hint`          | Help text below the label.                                                                    | `string \| undefined`                     | `undefined` |
-| `label`        | `label`         | The visible label: "Issuing emirate".                                                         | `string \| undefined`                     | `undefined` |
+| `label`        | `label`         | The visible label: "Issuing authority".                                                       | `string \| undefined`                     | `undefined` |
 | `name`         | `name`          | The name submitted with the form.                                                             | `string \| undefined`                     | `undefined` |
 | `optional`     | `optional`      | Appends "(optional)" to the label.                                                            | `boolean`                                 | `false`     |
 | `required`     | `required`      | Requires a choice. Make the first option a placeholder with `value=""` ("Select an emirate"). | `boolean`                                 | `false`     |
@@ -47,30 +49,16 @@ into the inner select and kept in sync when they change. Form-associated and del
 
 ## Events
 
-| Event      | Description                                                                                             | Type                              |
-| ---------- | ------------------------------------------------------------------------------------------------------- | --------------------------------- |
-| `scChange` | Fires when the selection changes with `{ value }`. A native `change` (and `input`) also reach the host. | `CustomEvent<{ value: string; }>` |
+| Event      | Description                                                                                            | Type                              |
+| ---------- | ------------------------------------------------------------------------------------------------------ | --------------------------------- |
+| `scChange` | Fires when the selection changes with `{ value }`. The native `change` and `input` events also bubble. | `CustomEvent<{ value: string; }>` |
 
 
 ## Slots
 
-| Slot      | Description                                      |
-| --------- | ------------------------------------------------ |
-| `"error"` | Rich error content, instead of the `error` prop. |
-| `"hint"`  | Rich hint content, instead of the `hint` prop.   |
-| `"label"` | Rich label content, instead of the `label` prop. |
-
-
-## Shadow Parts
-
-| Part        | Description                           |
-| ----------- | ------------------------------------- |
-| `"control"` | The native `<select>`.                |
-| `"error"`   | The error message.                    |
-| `"field"`   | The field group (gets the error bar). |
-| `"frame"`   | The bordered box around the select.   |
-| `"hint"`    | The hint.                             |
-| `"label"`   | The `<label>`.                        |
+| Slot | Description                           |
+| ---- | ------------------------------------- |
+|      | `<option>` and `<optgroup>` elements. |
 
 
 ----------------------------------------------

@@ -15,7 +15,7 @@ One option of an `sc-radio-group`. Use it only inside a group.
 - `hint` adds a line under the label, linked to the radio with `aria-describedby`.
 - `checked` makes it the initial choice (the group's `value` wins if both are set). `disabled` is supported but avoid it.
 
-`sc-radio` doesn't render a radio itself: the group renders a native radio for each option in its own shadow root and slots this element into that radio's `<label>`, so all the radios form one native group. See `sc-radio-group` for why.
+v2 renders a native `<input type="radio">`, `<label>` and hint in light DOM (decision A2). The group passes down the shared `name`, the choice, the error state and `required`, so all the radios form one native group. Use it only inside `sc-radio-group`. The dot scales in from 0.5 over 120ms when chosen with a pointer, and appears at once from the keyboard.
 
 <!-- Auto Generated Below -->
 
@@ -24,11 +24,11 @@ One option of an `sc-radio-group`. Use it only inside a group.
 
 One option in an `sc-radio-group`. Its content is the option's label.
 
-`sc-radio` holds data and label content only. The parent `sc-radio-group` renders the
-native `<input type="radio">` for every option inside its own shadow root and slots
-this element into that option's `<label>`, so all the radios share one tree: they form a
-real native radio group (one Tab stop, arrow keys move and select, "2 of 3" announced).
-Use it only inside `sc-radio-group`.
+v2 renders a native `<input type="radio">`, its `<label>` and hint in light DOM (Stencil
+`scoped`, decision A2). Every radio in a group shares the group's `name` in one document
+tree, so they form a real native radio group: one Tab stop, arrow keys move and select,
+"2 of 3" is announced, and the form submits the chosen value. Use it only inside
+`sc-radio-group`, which passes down the name, the chosen value and the error state.
 
 ## Properties
 

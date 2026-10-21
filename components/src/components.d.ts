@@ -5,57 +5,152 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { AnnouncementTone } from "./components/sc-announcement-bar/sc-announcement-bar";
+import { AttentionCardHeadingLevel, AttentionCardTint } from "./components/sc-attention-card/sc-attention-card";
 import { ButtonIconPosition, ButtonSize, ButtonType, ButtonVariant } from "./components/sc-button/sc-button";
 import { IconName } from "./icons/index";
 import { CalloutHeadingLevel, CalloutTone } from "./components/sc-callout/sc-callout";
-import { CardLandmark, CardPadding } from "./components/sc-card/sc-card";
+import { CardLandmark, CardPadding, CardVariant } from "./components/sc-card/sc-card";
 import { Channel } from "./i18n/core";
 import { ChannelChipVariant } from "./components/sc-channel-chip/sc-channel-chip";
+import { ChannelHeroSize } from "./components/sc-channel-hero/sc-channel-hero";
+import { Channel as Channel1, ChannelLinks } from "./utils/channels";
 import { HeadingLevel } from "./components/sc-text-input/field";
-import { ContainerWidth } from "./components/sc-container/sc-container";
 import { Parts } from "./components/sc-date-input/date";
-import { StringsInput } from "./components/sc-table/overrides";
+import { StringsInput } from "./components/sc-date-range/overrides";
 import { EmptyStateHeadingLevel, EmptyStateVariant } from "./components/sc-empty-state/sc-empty-state";
 import { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
+import { FilterChip } from "./components/sc-filter-chips/sc-filter-chips";
+import { FooterVariant } from "./components/sc-footer/sc-footer";
 import { LanguageSwitchAppearance, LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
 import { ModalCloseReason, ModalHeadingLevel, ModalInitialFocus } from "./components/sc-modal/sc-modal";
-import { Channel as Channel1 } from "./i18n/strings";
+import { ModuleCardHeadingLevel, ModuleCardTint } from "./components/sc-module-card/sc-module-card";
 import { PaginationChangeDetail } from "./components/sc-pagination/sc-pagination";
-import { ScSearchDetail } from "./components/sc-search/sc-search";
-import { ServiceCardHeadingLevel } from "./components/sc-service-card/sc-service-card";
+import { ScSearchDetail, SearchSize } from "./components/sc-search/sc-search";
+import { ServiceCardHeadingLevel, ServiceCardTint } from "./components/sc-service-card/sc-service-card";
 import { SpinnerSize } from "./components/sc-spinner/sc-spinner";
 import { StatusTagTone } from "./components/sc-status-tag/sc-status-tag";
 import { StepProgressLayout } from "./components/sc-step-progress/sc-step-progress";
-import { SummaryListAppearance } from "./components/sc-summary-list/sc-summary-list";
+import { SummaryListAppearance, SummaryListLayout } from "./components/sc-summary-list/sc-summary-list";
+import { SummaryRowVariant } from "./components/sc-summary-row/sc-summary-row";
+import { StringsInput as StringsInput1 } from "./components/sc-table/strings-override";
 import { SortDirection } from "./components/sc-table/sc-table";
 import { TextInputType, TextInputWidth } from "./components/sc-text-input/sc-text-input";
+import { TileTint } from "./components/sc-tile/sc-tile";
 import { TimelineOrder } from "./components/sc-timeline/sc-timeline";
+export { AnnouncementTone } from "./components/sc-announcement-bar/sc-announcement-bar";
+export { AttentionCardHeadingLevel, AttentionCardTint } from "./components/sc-attention-card/sc-attention-card";
 export { ButtonIconPosition, ButtonSize, ButtonType, ButtonVariant } from "./components/sc-button/sc-button";
 export { IconName } from "./icons/index";
 export { CalloutHeadingLevel, CalloutTone } from "./components/sc-callout/sc-callout";
-export { CardLandmark, CardPadding } from "./components/sc-card/sc-card";
+export { CardLandmark, CardPadding, CardVariant } from "./components/sc-card/sc-card";
 export { Channel } from "./i18n/core";
 export { ChannelChipVariant } from "./components/sc-channel-chip/sc-channel-chip";
+export { ChannelHeroSize } from "./components/sc-channel-hero/sc-channel-hero";
+export { Channel as Channel1, ChannelLinks } from "./utils/channels";
 export { HeadingLevel } from "./components/sc-text-input/field";
-export { ContainerWidth } from "./components/sc-container/sc-container";
 export { Parts } from "./components/sc-date-input/date";
-export { StringsInput } from "./components/sc-table/overrides";
+export { StringsInput } from "./components/sc-date-range/overrides";
 export { EmptyStateHeadingLevel, EmptyStateVariant } from "./components/sc-empty-state/sc-empty-state";
 export { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
+export { FilterChip } from "./components/sc-filter-chips/sc-filter-chips";
+export { FooterVariant } from "./components/sc-footer/sc-footer";
 export { LanguageSwitchAppearance, LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
 export { ModalCloseReason, ModalHeadingLevel, ModalInitialFocus } from "./components/sc-modal/sc-modal";
-export { Channel as Channel1 } from "./i18n/strings";
+export { ModuleCardHeadingLevel, ModuleCardTint } from "./components/sc-module-card/sc-module-card";
 export { PaginationChangeDetail } from "./components/sc-pagination/sc-pagination";
-export { ScSearchDetail } from "./components/sc-search/sc-search";
-export { ServiceCardHeadingLevel } from "./components/sc-service-card/sc-service-card";
+export { ScSearchDetail, SearchSize } from "./components/sc-search/sc-search";
+export { ServiceCardHeadingLevel, ServiceCardTint } from "./components/sc-service-card/sc-service-card";
 export { SpinnerSize } from "./components/sc-spinner/sc-spinner";
 export { StatusTagTone } from "./components/sc-status-tag/sc-status-tag";
 export { StepProgressLayout } from "./components/sc-step-progress/sc-step-progress";
-export { SummaryListAppearance } from "./components/sc-summary-list/sc-summary-list";
+export { SummaryListAppearance, SummaryListLayout } from "./components/sc-summary-list/sc-summary-list";
+export { SummaryRowVariant } from "./components/sc-summary-row/sc-summary-row";
+export { StringsInput as StringsInput1 } from "./components/sc-table/strings-override";
 export { SortDirection } from "./components/sc-table/sc-table";
 export { TextInputType, TextInputWidth } from "./components/sc-text-input/sc-text-input";
+export { TileTint } from "./components/sc-tile/sc-tile";
 export { TimelineOrder } from "./components/sc-timeline/sc-timeline";
 export namespace Components {
+    /**
+     * Sections that open and close, for frequently asked questions and long guidance. Built on
+     * native `<details>` and `<summary>`: they open with Enter or Space, expose their expanded
+     * state to assistive technology and work before (and without) JavaScript. The component adds
+     * the v2 look (ruled sections, a title-medium summary, a chevron at the end that turns over
+     * when open) and an optional "Show all sections" toggle.
+     * v2 renders in light DOM (Stencil `scoped`, architecture §3.1): the `<details>` stay your
+     * own markup, so in-page links and `id`s inside them work as usual.
+     * Put the question in `<summary>` as plain text, optionally followed by a `<small>` summary
+     * line; put the answer after it. Keep headings out of `<summary>`: it is a button, so a
+     * heading inside it is not announced as one.
+     */
+    interface ScAccordion {
+        /**
+          * Adds a "Show all sections" / "Hide all sections" toggle above the sections. Use it from about four sections.
+          * @default false
+         */
+        "showAll": boolean;
+    }
+    /**
+     * The signed-in account control in `sc-site-header` (`slot="account"`; component-language
+     * B3, Standard CHR-01). It replaces "Sign in with UAE PASS" once the user is signed in.
+     * - A notifications button (a link to the notifications page) with the unread count, named
+     *   "Notifications, 3 unread".
+     * - A `<button aria-expanded>` with the user's initials (and name from 1280px) that opens a
+     *   non-modal panel: the name and who they are acting for, links to Profile, Settings and
+     *   representation ("Change who you act for"), and Sign out.
+     * The panel is a disclosure, not an ARIA menu: Tab moves through its links, Escape closes it
+     * and returns focus to the button, a press outside or focus leaving closes it. From a
+     * pointer it grows from the button's corner; from the keyboard it appears instantly.
+     */
+    interface ScAccountMenu {
+        /**
+          * The person or organisation the user is acting for, when it is not themselves.
+         */
+        "actingFor"?: string;
+        /**
+          * Closes the panel.
+         */
+        "close": () => Promise<void>;
+        /**
+          * Overrides the initials taken from `name` ("SM").
+         */
+        "initials"?: string;
+        /**
+          * The signed-in user's name as written ("Sara Al Mansoori").
+          * @default ''
+         */
+        "name": string;
+        /**
+          * The notifications page. Adds the notifications button.
+         */
+        "notificationsHref"?: string;
+        /**
+          * Opens the panel (as from the keyboard: no animation).
+         */
+        "open": () => Promise<void>;
+        /**
+          * The profile page.
+         */
+        "profileHref"?: string;
+        /**
+          * Where the user changes who they act for (representation).
+         */
+        "representationHref"?: string;
+        /**
+          * The account settings page.
+         */
+        "settingsHref"?: string;
+        /**
+          * The sign-out URL. Without it, Sign out is a button that fires `scSignOut`, so the service can post its own sign-out form.
+         */
+        "signOutHref"?: string;
+        /**
+          * Unread notifications. Shown as a badge on the notifications button when above 0.
+          * @default 0
+         */
+        "unread": number;
+    }
     /**
      * The side navigation of the signed-in account area: Applications, Payments,
      * Notifications, Profile and settings, then a divider and Sign out. It takes 3 of 12
@@ -84,29 +179,70 @@ export namespace Components {
         "label"?: string;
     }
     /**
-     * The top bar of every mobile screen and desktop page: a translucent glass bar with a
-     * start control (usually `sc-back-link`), the channel name, and an end control (usually
-     * `sc-language-switch`).
-     * - `align="center"` (default) is the mobile bar: start, title in the middle, end.
-     * - `align="start"` is the desktop header: title (with a mark) at the start, then the
-     *   default slot (primary navigation), and the end slot pushed to the end.
-     * - `shape="floating"` turns the bar into the inset glass capsule used on desktop.
-     * The glass becomes a solid surface under `prefers-reduced-transparency: reduce` and in
-     * forced colours. The host is a `banner` landmark unless `landmark` is false.
+     * A site-wide announcement above the header: planned maintenance, a service outage, a change
+     * people need to know about (component-language B1). One message, one optional link, and an
+     * optional dismiss button.
+     * A labelled region ("Announcement" / "إعلان"), present when the page loads. It is not a
+     * live region and not an alert. The text carries the severity in words ("Planned
+     * maintenance…"); the tone's icon and container repeat it.
+     * Dismissing it fires `scDismiss` (cancelable) and hides it. With `announcement-id`, the
+     * dismissal is remembered in this browser, so the same announcement does not come back.
+     * Focus moves to the next focusable element after it. From a pointer it fades out over
+     * `duration-exit`; from the keyboard it goes at once. Its height is never animated (MOT-11).
+     */
+    interface ScAnnouncementBar {
+        /**
+          * Remembers a dismissal in this browser (localStorage) under this id, so the announcement stays hidden on later pages. Change the id when the message changes.
+         */
+        "announcementId"?: string;
+        /**
+          * Dismisses the announcement, as the dismiss button does from the keyboard.
+         */
+        "dismiss": () => Promise<void>;
+        /**
+          * Shows the dismiss button.
+          * @default false
+         */
+        "dismissible": boolean;
+        /**
+          * A link with more detail ("See affected services"). Shown with `link-text`.
+         */
+        "linkHref"?: string;
+        /**
+          * The link's text.
+         */
+        "linkText"?: string;
+        /**
+          * `warning` (maintenance; default), `info`, or `error` (a service is down).
+          * @default 'warning'
+         */
+        "tone": AnnouncementTone;
+    }
+    /**
+     * The transaction app bar (component-language A4; Standard TPL-01, LANG-04): the bar at the
+     * top of every step of a journey (E2–E4). Channel pages outside a transaction use
+     * `sc-site-header` instead.
+     * A 4px rule in `channel-action` along the top; a start slot (the back link), the title (a
+     * 10px channel swatch and the channel name, centred) and an end slot (the language switch),
+     * with fixed 96px side slots so the title stays centred; a 1px `outline-variant` rule
+     * beneath. 60px tall on `surface`. Flat: no glass, no shadow.
+     * The host is a `banner` landmark unless `landmark` is false. It is not fixed by default;
+     * with `sticky`, `sc-page sync-document` sets `scroll-padding-top` so focus never slides
+     * under it (WCAG 2.4.11).
      */
     interface ScAppBar {
         /**
-          * `center`: mobile layout with the title in the middle. `start`: desktop layout with the title at the start.
+          * `center` (default): the journey bar, title in the middle. `start`: deprecated (v1's desktop header): the title at the start and the default slot after it. Use `sc-site-header` for channel pages.
           * @default 'center'
          */
         "align": 'center' | 'start';
         /**
-          * Makes the host a `banner` landmark. Set it to false when the page already has a banner (for example a site header around the bar), or when the bar sits inside a dialog.
+          * Makes the host a `banner` landmark. Set it to false when the page already has a banner, or when the bar sits inside a dialog.
           * @default true
          */
         "landmark": boolean;
         /**
-          * `bar`: edge to edge with a hairline at the bottom. `floating`: an inset glass capsule (desktop).
+          * Deprecated and ignored: v2 has no floating glass capsule (ELV-04).
           * @default 'bar'
          */
         "shape": 'bar' | 'floating';
@@ -115,6 +251,27 @@ export namespace Components {
           * @default false
          */
         "sticky": boolean;
+    }
+    /**
+     * One thing that is due ("Needs your attention"): a bill to pay, a document to upload, a
+     * registration about to expire. A thin topic-tint strip on top, an icon tile, a status tag,
+     * the title, the key fact, a meta line (amount and reference) and one action.
+     * The card is neutral and is not a link: the action is the only thing to press, and its
+     * label names the action and the item ("Pay AED 412.60"). Status is never shown by colour:
+     * the strip and the icon tile are decorative topic tints, and the urgency is in the status
+     * tag's words. Put the cards in a list (`<ul>`), most urgent first, under a heading that
+     * gives the count ("4 things, most urgent first").
+     */
+    interface ScAttentionCard {
+        /**
+          * The heading level of the title: 3 under a "Needs your attention" `h2` (default).
+          * @default 3
+         */
+        "headingLevel": AttentionCardHeadingLevel;
+        /**
+          * The decorative topic tint of the top strip and the icon tile (foundations §2.7): `amber` bills, `violet` documents and residency, `blue` vehicles, `rose` family, `orange` housing, `green` health. Without it there is no strip and the icon tile takes the channel's container colour. Never use a tint to mean urgency: that is the status tag.
+         */
+        "tint"?: AttentionCardTint;
     }
     /**
      * The "Back" control at the start of an app bar or above a question: plain text with a
@@ -278,11 +435,15 @@ export namespace Components {
         "toneLabel"?: string;
     }
     /**
-     * A surface container: surface fill, card radius, elevation 1. Groups related content,
-     * such as a life event and its steps, or the answers in one section of "Check your answers".
+     * A surface that groups related content: a life event and its steps, the answers in one
+     * section of "Check your answers", a totals card. Flat and outline-first (ELV-01): 12px
+     * corners, a 1px `outline-variant` edge, no shadow. Cards are never links (CMP-06): put the
+     * link on a heading or a button inside.
+     * v2 renders in light DOM (Stencil `scoped`, architecture §3.1): the host is the surface and
+     * your content stays its direct children, so `aria-labelledby` points at your own heading
+     * with an ordinary id. There is no `::part(surface)`; style the host (`.sc-card`) if you must.
      * With `landmark`, the card becomes a named region (`section`) or an `article`, labelled by
-     * the first heading inside it. The role and `aria-labelledby` go on the host, in light DOM,
-     * so the reference to the slotted heading resolves.
+     * the first heading inside it, or by `label`.
      */
     interface ScCard {
         /**
@@ -290,14 +451,19 @@ export namespace Components {
          */
         "label"?: string;
         /**
-          * Makes the card a landmark. `section` exposes a region (use it for a part of a page a user would want to jump to); `article` is for self-contained content. Both are named by the first heading (`h1`–`h6`) inside the card, or by `label`. Leave unset for a plain box.
+          * Makes the card a landmark. `section` exposes a region (a part of a page a user would want to jump to); `article` is for self-contained content. Both are named by the first heading (`h1`–`h6`) inside the card, or by `label`. Leave unset for a plain box.
          */
         "landmark"?: CardLandmark;
         /**
-          * Inner padding: `m` is 16px, `l` is 24px (default).
+          * Inner padding: `l` is 24px (default), `m` is 16px.
           * @default 'l'
          */
         "padding": CardPadding;
+        /**
+          * `outlined` (default): white surface with a 1px `outline-variant` edge, for groups on a page or a neutral band. `filled`: a quiet `surface-container` fill with no edge, for a totals card or a group inside an outlined area.
+          * @default 'outlined'
+         */
+        "variant": CardVariant;
     }
     /**
      * Points to another channel that also offers this service: "Also on Dubai Transport".
@@ -327,21 +493,89 @@ export namespace Components {
         "variant": ChannelChipVariant;
     }
     /**
-     * The top wash of a channel page: a gradient from the channel's wash-start to wash-end
-     * colour (interpolated in OKLAB), holding an eyebrow, the page's `<h1>`, a lede and a
-     * search field. It follows `data-channel` and the theme like every component.
-     * The hero is full-bleed; its content sits in an `sc-container`, so it lines up with the
-     * page below.
+     * The top band of a channel's home or section page (E1): a flat `channel-subtle` band
+     * (decision Q-hero: no gradient), holding optional breadcrumbs, an eyebrow, the page's
+     * `<h1>` at display size, an optional lede, search and a "Popular now" row of suggestion
+     * chips. It follows `data-channel` and the theme like every component.
+     * The band is full-bleed; its content follows the page grid's margins (20, 32, 48, 80px)
+     * and the 1280px cap, so it lines up with `sc-container` content below. The hero never
+     * carries a carousel or autoplaying media.
      */
     interface ScChannelHero {
+        /**
+          * Overrides the label before the suggestion chips (default "Popular now" / "الأكثر طلبًا الآن").
+         */
+        "popularLabel"?: string;
+        /**
+          * The heading size from 1024px: `large` (display-large, 80px) for a channel's home page, `medium` (display-medium, 57px) for a section page. Below 1024px both step down (display-small from 600px, headline-large on phones).
+          * @default 'large'
+         */
+        "size": ChannelHeroSize;
+    }
+    /**
+     * The channel network strip (component-language B21, Standard CHR-08): "One network · seven
+     * channels" and a tile for each of the seven channels, in the Standard 3.1 order, at the end
+     * of every channel home page, before the footer.
+     * City indigo marks it as shared (the eyebrow and its rule). Each tile carries its own
+     * channel's colour only as attribution: a 4px top rule in that channel's `channel-action`.
+     * Each tile sets its own `data-channel` (FND-26), which is why the strip renders into light
+     * DOM (Stencil `scoped`). The current channel's tile is filled with its `channel-subtle`,
+     * says "You are here", carries `aria-current="true"` and is not a link (it would lead to
+     * this site).
+     * A `<nav>` labelled "Government of Dubai channels" with a list of links. Seven tiles in a
+     * row from 1024px (by the strip's own width), four from 600px, two below.
+     */
+    interface ScChannelNetwork {
+        /**
+          * The current channel. Defaults to the closest `data-channel`.
+         */
+        "channel"?: Channel1;
+        /**
+          * Each channel's home page (as `sc-channel-switcher` `links`; `{lang}` becomes `en` or `ar`).
+         */
+        "links"?: ChannelLinks | string;
+    }
+    /**
+     * The channel's logo and the channel switcher, at the inline-end of `sc-site-header`
+     * (Standard CHR-01, CHR-03; component-language B2a).
+     * A disclosure, not an ARIA menu: a `<button aria-expanded>` named "Choose a channel: Dubai
+     * Now" opens a non-modal panel listing all seven channels as links, in the Standard 3.1
+     * order, each with its name, a one-line descriptor in the page language and a swatch in
+     * that channel's own colour. Every item carries its own `data-channel` (FND-26), so the
+     * swatch is that channel's `channel-action`; that is why the component renders into light
+     * DOM (Stencil `scoped`): the document's channel rules must reach the items. The current
+     * channel carries a check and `aria-current="true"`.
+     * Escape and a press outside close the panel; Escape returns focus to the button; the panel
+     * closes when focus leaves it. From a pointer it grows from the trigger's corner over
+     * `duration-base`; from the keyboard it appears instantly (MOT-02). Below 1024px the trigger
+     * shrinks to the logo and chevron and keeps its accessible name (CHR-04).
+     */
+    interface ScChannelSwitcher {
+        /**
+          * The current channel. Defaults to the closest `data-channel` (as set by `sc-page`).
+         */
+        "channel"?: Channel1;
+        /**
+          * Closes the panel.
+         */
+        "close": () => Promise<void>;
+        /**
+          * Each channel's home page, as an object or a JSON attribute: `links='{"now":"https://…/{lang}/","transport":"https://…/{lang}/"}'`. `{lang}` becomes `en` or `ar`, so each link leads to that channel's home in the current language. Give all seven; a channel without a link is listed as text.
+         */
+        "links"?: ChannelLinks | string;
+        /**
+          * Opens the panel (as from the keyboard: no animation).
+         */
+        "open": () => Promise<void>;
     }
     /**
      * A checkbox: one of several choices in an `sc-checkbox-group`, or on its own for a single
-     * yes/no statement ("I confirm the vehicle details are correct").
-     * Renders a native `<input type="checkbox">`, its `<label>` (the default slot) and hint in
-     * its own shadow root. Space toggles it. Form-associated: when checked it submits `value`
-     * under its `name`, or under the group's `name` inside `sc-checkbox-group`. On its own it can
-     * show an error; inside a group the group shows the error and marks every box invalid.
+     * statement ("I confirm the vehicle details are correct").
+     * v2 renders a native `<input type="checkbox">`, its `<label>` (the default slot) and hint in
+     * light DOM (Stencil `scoped`, decision A2). Space toggles it; clicking the label or the 44px
+     * target around the box toggles it. When checked it submits `value` under its `name`, or under
+     * the group's `name` inside `sc-checkbox-group`. On its own it can show an error and use
+     * native `required`; inside a group the group shows the error and marks every box invalid.
      */
     interface ScCheckbox {
         /**
@@ -361,21 +595,23 @@ export namespace Components {
         /**
           * @default false
          */
-        "groupDisabled": boolean;
-        /**
-          * @default false
-         */
         "groupInvalid": boolean;
+        "groupName"?: string;
         /**
           * Help text under the label.
          */
         "hint"?: string;
         /**
+          * Shows the mixed state (a 12 × 2 bar), for a box that controls a set of others ("All channels") when only some are checked. Set by script; cleared when the user toggles it. Exposed natively as `aria-checked="mixed"`.
+          * @default false
+         */
+        "indeterminate": boolean;
+        /**
           * The name submitted with the form. Inside `sc-checkbox-group`, defaults to the group's `name`.
          */
         "name"?: string;
         /**
-          * On its own: must be checked to submit (`valueMissing`). Inside a group, use the group's `required`.
+          * On its own: must be checked to submit (native `valueMissing`). Inside a group, use the group's `required`.
           * @default false
          */
         "required": boolean;
@@ -387,18 +623,15 @@ export namespace Components {
     }
     /**
      * Several choices from a short list: "Which documents do you have?".
-     * A `<fieldset>` with a `<legend>`, hint and error in this element's shadow root, with the
-     * `sc-checkbox` children slotted inside it. Each checkbox keeps its own native input, label
-     * and hint in its own shadow root (so `sc-checkbox` also works on its own); the fieldset
-     * groups them in the accessibility tree, which follows the flattened tree. The group's
-     * hint and error describe the fieldset, and in the error state every box gets
-     * `aria-invalid` and an error border.
-     * Each checked box submits its own value under the group's `name` (or its own). The group is
-     * form-associated only to report `valueMissing` when `required` and nothing is checked.
+     * v2 renders a native `<fieldset>` with its `<legend>`, hint and error in light DOM (Stencil
+     * `scoped`, decision A2), and moves the `sc-checkbox` children into it, so they are grouped
+     * and named by the legend natively. Each checked box submits its own value under the group's
+     * `name`. `disabled` disables the fieldset (and so every box). With `required`, the first box
+     * carries a native validity error until one is checked.
      */
     interface ScCheckboxGroup {
         /**
-          * Disables every checkbox. Avoid it.
+          * Disables every checkbox (through the fieldset). Avoid it.
           * @default false
          */
         "disabled": boolean;
@@ -433,34 +666,21 @@ export namespace Components {
          */
         "optional": boolean;
         /**
-          * Requires at least one box to be checked (`valueMissing`). Not shown visually.
+          * Requires at least one box to be checked. Not shown visually.
           * @default false
          */
         "required": boolean;
     }
     /**
-     * Centres content and sets the page's outer margins from the layout tokens: 20px on
-     * phones, 32px from 600px, 48px from 1024px and 80px from 1440px, with content capped at
-     * `--sc-container-max` (1280px). `width="reading"` caps it at the 680px reading width instead,
-     * for question pages and running text.
-     */
-    interface ScContainer {
-        /**
-          * `page` (default) caps content at 1280px; `reading` caps it at 680px and keeps it at the start, aligned with page content.
-          * @default 'page'
-         */
-        "width": ContainerWidth;
-    }
-    /**
      * A date people know, such as a date of birth or the date on a document: Day, Month and
      * Year boxes (يوم / شهر / سنة) with the numeric keyboard.
-     * A `<fieldset>` and `<legend>` with the hint and error, and three labelled native inputs,
-     * in one shadow root. In Arabic the boxes run right to left (Day on the right). An error can
-     * highlight one part with `error-parts="year"`.
-     * Form-associated: submits the date as an ISO string (`2026-03-07`, or empty while it isn't
-     * a real date) under `name`, plus the raw parts as `name-day`, `name-month` and `name-year`
-     * so a server can re-display what was typed. Reports `valueMissing` and `badInput`.
-     * Delegates focus to the first box.
+     * v2 renders a native `<fieldset>` and `<legend>` with the hint and error, three labelled
+     * native inputs and a hidden input in light DOM (Stencil `scoped`, decision A2). It submits
+     * the date as an ISO string (`2026-03-07`, or empty while it isn't a real date) under `name`,
+     * and the raw parts as `name-day`, `name-month` and `name-year`, so a server can re-display
+     * what was typed. An empty required date and an impossible date are native validity errors
+     * on the first box concerned. In Arabic the boxes run right to left (Day on the right). An
+     * error can mark one box with `error-parts="year"`.
      */
     interface ScDateInput {
         /**
@@ -477,7 +697,7 @@ export namespace Components {
          */
         "error"?: string;
         /**
-          * Which boxes the error is about, space-separated: `"day"`, `"month year"`. Only those get the error border and `aria-invalid`. When empty, an error highlights all three.
+          * Which boxes the error is about, space-separated: `"day"`, `"month year"`. Only those get the error edge and `aria-invalid`. When empty, an error marks all three.
          */
         "errorParts"?: string;
         /**
@@ -502,7 +722,7 @@ export namespace Components {
          */
         "optional": boolean;
         /**
-          * Requires a date (`valueMissing` while every box is empty).
+          * Requires a date (a validity error while every box is empty).
           * @default false
          */
         "required": boolean;
@@ -516,14 +736,18 @@ export namespace Components {
      * A start and an end date that relate to a calendar: filtering payments between two dates,
      * the nights of a hotel stay, how long a permit lasts. For one date people already know
      * (a date of birth), use `sc-date-input`.
-     * Two typed segments (From / To, من / إلى) in one 54px frame, and a calendar button that
+     * Two typed segments (From / To, من / إلى) in one 56px frame, and a calendar button that
      * opens a picker: a popover with one or two months and optional presets on medium and
      * wider screens, a modal bottom sheet below 600px. People can always type instead
      * ("21/9/2026", "21 9 2026", "21-09-2026").
-     * Form-associated: submits `name-start` and `name-end` as ISO dates (empty until each is a
-     * real date). Reports `valueMissing` (with `required`), `badInput`, `rangeUnderflow` and
-     * `rangeOverflow`, and shows its own messages for impossible ranges on blur. Delegates focus
-     * to the start segment.
+     * v2 renders everything in light DOM (Stencil `scoped`, decision A2), with classes prefixed
+     * `.sc-date-range__`. It submits `name-start` and `name-end` as ISO dates through hidden
+     * inputs (empty until each is a real date). The first problem with the range (missing with
+     * `required`, not a real date, end before start, outside `min`/`max`, too long or short) is a
+     * native validity error on the segment concerned; the component shows its own message on
+     * blur or after a failed submit. `focus()` on the host goes to the start segment. One native
+     * `change` is dispatched from the host per committed range.
+     * Rich content: a child with `slot="label"`, `slot="hint"` or `slot="error"` is moved into place once.
      */
     interface ScDateRange {
         /**
@@ -691,53 +915,97 @@ export namespace Components {
         "setFocus": () => Promise<void>;
     }
     /**
-     * The page footer: help and contact, accessibility, privacy and terms links, and
-     * "Government of Dubai". Renders a `<footer>` (the page's `contentinfo` landmark) with a
-     * list of links under a visually hidden "Support links" heading.
-     * The four standard links appear when their `*-href` is set, with text from strings in the
-     * page language. Extra links go in the default slot as plain `<a>` elements; each gets its
-     * own list item (the footer sets their `slot` attribute).
+     * The filters applied to a list of results, as removable chips beside the result count, with
+     * "Clear all filters" when there are two or more (component-language B18, applied filter).
+     * Each chip is a native `<button>` named "Remove filter: Transport and vehicles". Removing one
+     * takes it away at once (no animation), emits `scRemove`, and moves focus to the next chip,
+     * else the previous one, else the element named by `focus-target` (the results heading).
+     * Every change in the number of filters is announced politely: "2 filters applied".
+     * The page updates its results on `scRemove` / `scClear`; set `filters` to change the chips.
+     * Chips are 32px tall (decision Q-chips) with a 44px target. Light DOM (Stencil `scoped`).
+     */
+    interface ScFilterChips {
+        /**
+          * The applied filters, in order: an array of `{ value, label }`, or the same as JSON in the attribute (`filters='[{"value":"transport","label":"Transport and vehicles"}]'`).
+          * @default []
+         */
+        "filters": FilterChip[] | string;
+        /**
+          * The id of the element that gets focus when the last chip goes, usually the results heading. It is made focusable (`tabindex="-1"`) if it isn't.
+         */
+        "focusTarget"?: string;
+        /**
+          * The group's accessible name. Defaults to "Applied filters" ("عوامل التصفية المطبّقة").
+         */
+        "label"?: string;
+        /**
+          * Hides "Clear all filters".
+          * @default false
+         */
+        "noClear": boolean;
+    }
+    /**
+     * The page footer, a `<footer>` (the page's `contentinfo` landmark). Two variants:
+     * - `simple` (default; transaction pages, component-language A29): one row of underlined
+     *   links and "Government of Dubai", under a 1px rule.
+     * - `grouped` (channel sites, Standard CHR-06, decision Q-footer; B5): the channel's brand
+     *   group (`slot="brand"`: a one-sentence description and app badges); a **Channels** group
+     *   listing all seven channels in the Standard 3.1 order, the current one Bold with
+     *   `aria-current="true"` and no swatch; **Helpful information** (about, help and contact,
+     *   accessibility statement, sitemap); and **Legal** (privacy and cookies, terms). Each group
+     *   has an `<h2>`. Then "Government of Dubai · Last updated …" and "… is run by the
+     *   Government of Dubai".
+     * The standard links appear when their `*-href` is set, with text from strings in the page
+     * language. Every channel sets all of them (TPL-01, LEG-01). Extra links go in the default
+     * slot as plain `<a href>` elements; each gets its own list item (the footer sets their
+     * `slot` attribute). The footer is on `surface`, never a dark band.
      */
     interface ScFooter {
+        /**
+          * About the channel ("About Dubai Now").
+         */
+        "aboutHref"?: string;
         /**
           * The accessibility statement.
          */
         "accessibilityHref"?: string;
         /**
+          * The current channel. Defaults to the closest `data-channel`.
+         */
+        "channel"?: Channel1;
+        /**
+          * A separate cookies page. Splits "Privacy and cookies" into "Privacy" and "Cookies".
+         */
+        "cookiesHref"?: string;
+        /**
           * The help and contact page.
          */
         "helpHref"?: string;
         /**
-          * The privacy notice.
+          * Each channel's home page, for the Channels group (as `sc-channel-switcher` `links`; `{lang}` becomes `en` or `ar`).
+         */
+        "links"?: ChannelLinks | string;
+        /**
+          * The privacy notice. Labelled "Privacy and cookies" unless `cookies-href` is set too.
          */
         "privacyHref"?: string;
         /**
-          * The terms and conditions.
+          * The sitemap.
+         */
+        "sitemapHref"?: string;
+        /**
+          * The terms of use.
          */
         "termsHref"?: string;
-    }
-    /**
-     * The layout grid: 4 columns on phones, 8 from 600px and 12 from 1024px, with gutters from
-     * the layout tokens (16, 20, 24px). Each child is a grid item.
-     * Item widths are set once for all children with `span`, `span-medium` and `span-expanded`
-     * (each falls back to the smaller one, and is capped at the number of columns), or per
-     * child with the `--sc-grid-span` custom property, e.g. `style="--sc-grid-span: 8"`.
-     * Service cards three to a row on desktop, two on tablets and one on phones:
-     * `<sc-grid span-medium="4" span-expanded="4">`.
-     */
-    interface ScGrid {
         /**
-          * Columns each item spans on phones (4 columns). Defaults to the full width.
+          * Grouped: when the site was last updated, as it should read ("12 October 2026").
          */
-        "span"?: number;
+        "updated"?: string;
         /**
-          * Columns each item spans from 1024px (12 columns). Defaults to `span-medium`.
+          * `simple` (one row) or `grouped` (channel sites, with the Channels group).
+          * @default 'simple'
          */
-        "spanExpanded"?: number;
-        /**
-          * Columns each item spans from 600px (8 columns). Defaults to `span`.
-         */
-        "spanMedium"?: number;
+        "variant": FooterVariant;
     }
     /**
      * Switches to the same page in the other language. The label is always the other
@@ -807,17 +1075,6 @@ export namespace Components {
         "standalone": boolean;
     }
     /**
-     * Keeps a value left-to-right inside any text, e.g. a plate number, amount, reference or
-     * phone number in an Arabic sentence. Renders `<bdi dir="ltr">` around its content.
-     * Shadow DOM is used on purpose: the author's text stays in the light DOM (searchable,
-     * copyable, untouched), and layout follows the flat tree, so the `<bdi>` isolates the
-     * slotted text from the surrounding paragraph exactly as a `<bdi>` written in place would.
-     * The host is also `unicode-bidi: isolate; direction: ltr` (here and in sc.css), so the
-     * value is isolated even before the component upgrades.
-     */
-    interface ScLtr {
-    }
-    /**
      * A modal dialog for a short secondary task or a decision that can't wait, such as the
      * session-timeout warning (TIME-02). On phones (under 600px) the same component is a bottom
      * sheet.
@@ -878,6 +1135,42 @@ export namespace Components {
         "show": () => Promise<void>;
     }
     /**
+     * A titled module on a signed-in home page ("At a glance"): Vehicles, Applications, Traffic
+     * fines. A header row with an optional tinted icon, the title (a heading) and a standalone
+     * link at the end ("Manage", "View all"), then the module's own content.
+     * The card is not a link (CMP-06). The header link's accessible name includes the title
+     * ("View all, Applications"), so a page with several "View all" links still makes sense out
+     * of context.
+     */
+    interface ScModuleCard {
+        /**
+          * Where the header link goes ("Manage", "View all"). Without it (and without `slot="action"`) there is no header link.
+         */
+        "actionHref"?: string;
+        /**
+          * The header link's visible text, e.g. "Manage" or "View all". Its accessible name adds the title.
+         */
+        "actionText"?: string;
+        /**
+          * Separates the top-level content blocks with 1px `outline-variant` rules, 20px apart.
+          * @default false
+         */
+        "divided": boolean;
+        /**
+          * The module's title, e.g. "Vehicles". Required.
+         */
+        "heading": string;
+        /**
+          * The heading level of the title: 3 under an "At a glance" `h2` (default).
+          * @default 3
+         */
+        "headingLevel": ModuleCardHeadingLevel;
+        /**
+          * The icon tile's decorative topic tint (foundations §2.7). Without it the tile takes the channel's container colour.
+         */
+        "tint"?: ModuleCardTint;
+    }
+    /**
      * A person's notifications, grouped by day ("Today", "Earlier"). Light DOM (architecture
      * §3.1): you write the headings and native lists, so each group is a real list under a real
      * heading and the links are ordinary links.
@@ -910,18 +1203,22 @@ export namespace Components {
         "markAllRead": () => Promise<number>;
     }
     /**
-     * The page frame: header, `<main>` and footer, with the page's language, direction and
-     * channel on its root.
+     * The page shell (Standard TPL-01, 11.1 and 11.9): the header, one `<main>` and the footer,
+     * with the page's language, direction and channel on its root.
      * - Set `lang` on `sc-page` as on any element; the page sets `dir` to match (`rtl` for
      *   Arabic) and re-applies it when `lang` changes.
      * - `channel` sets `data-channel`, which themes every component inside.
      * - `<main>` is rendered in light DOM (the component is scoped, not shadowed) with
-     *   `id="main-content"` and `tabindex="-1"`, so a skip link (`<a href="#main-content">`)
-     *   anywhere on the page can reach it and move focus into it.
-     * - With `sync-document` and a sticky `sc-app-bar` in the header, it sets
-     *   `scroll-padding-block-start` on `<html>` to the bar's height plus `--sc-space-8`, so
-     *   focused elements and `#fragment` targets scroll into view below the bar, not under it
-     *   (WCAG 2.4.11). It follows the bar's size and removes the padding when no longer needed.
+     *   `id="main-content"` and `tabindex="-1"`, so the skip link (`sc-skip-link`, whose default
+     *   `href` is `#main-content`) can reach it and move focus into it. The header slot gives
+     *   the banner landmark, the footer slot the contentinfo landmark.
+     * - With `sync-document` it also sets `lang`, `dir` and `data-channel` on `<html>`, and,
+     *   with a sticky `sc-app-bar` or `sc-site-header` in the header, `scroll-padding-block-start`
+     *   on `<html>` to the bar's height plus `--sc-space-8`, so focused elements are never
+     *   hidden under it (WCAG 2.4.11).
+     * - It reserves the height of a docked `sc-utility-bar` (`padding-block-end` from
+     *   `--sc-utility-bar-block-size`, which the bar publishes), so the bar never covers the end
+     *   of the page; `sc.css` sets the matching `scroll-padding-block-end` (CHR-05).
      */
     interface ScPage {
         /**
@@ -934,7 +1231,7 @@ export namespace Components {
          */
         "mainId": string;
         /**
-          * Also sets `lang`, `dir` and `data-channel` on `<html>`. Use it when `sc-page` is the whole page, so browsers and screen readers get the page language from the document root. With a sticky `sc-app-bar` in the header, it also sets `scroll-padding-block-start` on `<html>` so focus is never hidden under the bar.
+          * Also sets `lang`, `dir` and `data-channel` on `<html>`. Use it when `sc-page` is the whole page, so browsers and screen readers get the page language from the document root. With a sticky header, it also keeps `scroll-padding-block-start` on `<html>` clear of it.
           * @default false
          */
         "syncDocument": boolean;
@@ -985,11 +1282,11 @@ export namespace Components {
     }
     /**
      * One option in an `sc-radio-group`. Its content is the option's label.
-     * `sc-radio` holds data and label content only. The parent `sc-radio-group` renders the
-     * native `<input type="radio">` for every option inside its own shadow root and slots
-     * this element into that option's `<label>`, so all the radios share one tree: they form a
-     * real native radio group (one Tab stop, arrow keys move and select, "2 of 3" announced).
-     * Use it only inside `sc-radio-group`.
+     * v2 renders a native `<input type="radio">`, its `<label>` and hint in light DOM (Stencil
+     * `scoped`, decision A2). Every radio in a group shares the group's `name` in one document
+     * tree, so they form a real native radio group: one Tab stop, arrow keys move and select,
+     * "2 of 3" is announced, and the form submits the chosen value. Use it only inside
+     * `sc-radio-group`, which passes down the name, the chosen value and the error state.
      */
     interface ScRadio {
         /**
@@ -1003,9 +1300,22 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
+          * @default false
+         */
+        "groupInvalid": boolean;
+        "groupName"?: string;
+        /**
+          * @default false
+         */
+        "groupRequired": boolean;
+        /**
           * Help text under this option's label.
          */
         "hint"?: string;
+        /**
+          * @default false
+         */
+        "selected": boolean;
         /**
           * The value submitted when this option is chosen.
          */
@@ -1013,18 +1323,18 @@ export namespace Components {
     }
     /**
      * One choice from a short list: "Who issued the plate?".
-     * A `<fieldset>` with a `<legend>` (exposed as `role="radiogroup"`, labelled by the legend
-     * and described by the hint and error), and one native `<input type="radio">` per
-     * `sc-radio` child, all inside this element's shadow root. Each `sc-radio` is slotted into
-     * its option's `<label>` (manual slot assignment), so its content names the radio while the
-     * radios themselves stay in one tree: native arrow keys, one Tab stop, position in set.
-     * Form-associated: submits the chosen value under `name`, resets, and reports
-     * `valueMissing` when `required`. Delegates focus, so an error-summary link to the host's
-     * `id` focuses the first radio.
+     * v2 renders a native `<fieldset>` (role `radiogroup`) with its `<legend>`, hint and error in
+     * light DOM (Stencil `scoped`, decision A2), and moves the `sc-radio` children into it. Each
+     * `sc-radio` renders a native radio with the group's `name`, so they form a real native radio
+     * group: one Tab stop, arrow keys move and select, position in set, native submission,
+     * reset and `required`. `disabled` disables the fieldset. `focus()` on the host reaches the
+     * chosen radio, or the first.
+     * Without a `name`, the radios share a generated one (`sc-radio-group-3`), which a form
+     * would submit: give the group a `name` inside a form.
      */
     interface ScRadioGroup {
         /**
-          * Disables every option. Avoid it.
+          * Disables every option (through the fieldset). Avoid it.
           * @default false
          */
         "disabled": boolean;
@@ -1033,7 +1343,7 @@ export namespace Components {
          */
         "error"?: string;
         /**
-          * When set (1–6), the legend is also the page heading at this level (`<legend><h1>…</h1></legend>`). Use it when the question is the only one on the page.
+          * When set (1–6), the legend is also the page heading at this level (`<legend><h1>…</h1></legend>`).
          */
         "headingLevel"?: HeadingLevel;
         /**
@@ -1059,7 +1369,7 @@ export namespace Components {
          */
         "optional": boolean;
         /**
-          * Requires a choice (`valueMissing` until one is made). Not shown visually.
+          * Requires a choice (native `valueMissing` until one is made). Not shown visually.
           * @default false
          */
         "required": boolean;
@@ -1069,12 +1379,13 @@ export namespace Components {
         "value"?: string;
     }
     /**
-     * A pill search box: search icon, a labelled field and a primary "Search" button, inside a
-     * `<form role="search">` (a search landmark named by the label).
-     * Submitting (the button, or Enter in the field) emits `scSearch`. With `action`, the form
-     * then goes to that URL with the query as `?<name>=…`, unless a listener calls
-     * `preventDefault()`; without `action`, the page handles `scSearch` itself.
-     * The form is self-contained: don't nest `sc-search` inside another `<form>`.
+     * A search field and its button, inside a `<form role="search">` named by the label (E1: the
+     * field and the primary button are siblings with a 12px gap, not one pill).
+     * v2 renders the form, a native `<input type="search">` and an `sc-button type="submit"` in
+     * light DOM (Stencil `scoped`, decision A2), so Enter in the field submits through the button
+     * natively. Submitting emits `scSearch`. With `action`, the form then goes to that URL with the
+     * query as `?<name>=…`, unless a listener calls `preventDefault()`; without `action`, the page
+     * handles `scSearch` itself. Don't nest `sc-search` inside another `<form>`.
      */
     interface ScSearch {
         /**
@@ -1108,6 +1419,11 @@ export namespace Components {
          */
         "setFocus": () => Promise<void>;
         /**
+          * `m` (default): a 56px field and button. `l`: the 64px hero search (E1).
+          * @default 'm'
+         */
+        "size": SearchSize;
+        /**
           * The query. Updated as the user types.
           * @default ''
          */
@@ -1115,9 +1431,11 @@ export namespace Components {
     }
     /**
      * One choice from a list too long for radios, such as the emirate that issued a plate.
-     * A native `<select>` inside the shadow root, styled like `sc-text-input`, with a chevron.
-     * Write the options as light-DOM `<option>` (and `<optgroup>`) children: they are copied
-     * into the inner select and kept in sync when they change. Form-associated and delegates focus.
+     * v2 renders a native `<select>` in light DOM (Stencil `scoped`, decision A2), styled like
+     * `sc-text-input` with an `expand_more` chevron. Write the options as `<option>` (and
+     * `<optgroup>`) children: they are moved INTO the native select, so they are the real options
+     * (no copies), and options added later are moved in too. The select submits, resets, validates
+     * and follows `<fieldset disabled>` natively; `focus()` on the host reaches it.
      */
     interface ScSelect {
         /**
@@ -1142,7 +1460,7 @@ export namespace Components {
          */
         "hint"?: string;
         /**
-          * The visible label: "Issuing emirate".
+          * The visible label: "Issuing authority".
          */
         "label"?: string;
         /**
@@ -1165,14 +1483,14 @@ export namespace Components {
         "value"?: string;
     }
     /**
-     * A link to a service: its title, the entity that owns it and an optional channel chip.
-     * There is no end chevron: the card is not itself a link, so nothing on it may look like one.
+     * A link to a service: its title, the entity that owns it, an optional icon and an optional
+     * channel chip, on a flat 12px card with a 1px edge (direction E, "Most used services").
      * Only the title is the link (CMP-06), so screen readers hear a short link name ("Renew
-     * vehicle registration"), not the whole card's text. The card is not wrapped in an `<a>`
-     * and the link's hit area is not stretched over the card: it is the title, grown to at
-     * least 44 x 44. The title is a heading containing the link, so heading navigation finds
-     * every service. The owning entity is the link's description. A chip that is a link is a
-     * separate link.
+     * vehicle registration"), with the entity as its description. The card is not wrapped in an
+     * `<a>` and the link's hit area is not stretched over the card: it is the title, grown to at
+     * least 44 × 44. The forward arrow at the top end is decorative: it is not a second link and
+     * is hidden from assistive technology. The title is a heading containing the link, so heading
+     * navigation finds every service. A chip that is a link is a separate link.
      */
     interface ScServiceCard {
         /**
@@ -1188,6 +1506,56 @@ export namespace Components {
           * Where the service starts. Required.
          */
         "href": string;
+        /**
+          * Colours the icon tile with a decorative topic tint (foundations §2.7) instead of the channel container: `blue` transport, `violet` residency, `rose` family, `orange` housing, `amber` bills, `green` health. Decorative only. Ignored without an icon.
+         */
+        "tint"?: ServiceCardTint;
+    }
+    /**
+     * The header of channel pages outside a transaction (Standard CHR-01 to CHR-04;
+     * component-language B2). Transaction pages use `sc-app-bar`.
+     * From the inline-start edge: the Government of Dubai lockup (`slot="lockup"`), the main
+     * navigation (`slot="nav"`), search, the language switch (`slot="language"`), sign in with UAE PASS
+     * (`slot="signin"`) or the account menu once signed in (`slot="account"`), and the
+     * channel's logo and switcher (`slot="switcher"`, an `sc-channel-switcher`). Sign in is the
+     * official UAE PASS button (decision U3a), never a themed `sc-button`: until the official kit
+     * arrives the header renders a marked placeholder (black, white label, fingerprint glyph,
+     * 56px) that `slot="signin"` replaces. The order
+     * mirrors in Arabic. A flat `surface` bar, 80px tall, with a 1px `outline-variant` rule.
+     * Below 1024px the row keeps the menu button, the lockup, the language switch and the
+     * channel switcher (64px). Navigation, search and sign in (or the account menu) move into
+     * the mobile menu: a modal `<dialog>` labelled "Menu", with focus on its close button when
+     * it opens, Escape closing it and returning focus to the menu button, and the page behind
+     * it inert. The same slotted elements move; nothing is duplicated.
+     * The host is a `<header>` banner landmark. It is not fixed by default; with `sticky`,
+     * `sc-page` keeps `scroll-padding-top` clear of it (A11Y-05, F-009).
+     */
+    interface ScSiteHeader {
+        /**
+          * Closes the mobile menu and returns focus to the menu button.
+         */
+        "closeMenu": (pointer?: boolean) => Promise<void>;
+        /**
+          * Opens the mobile menu (compact layout only).
+         */
+        "openMenu": () => Promise<void>;
+        /**
+          * The search page. Adds a search button (an icon link named "Search").
+         */
+        "searchHref"?: string;
+        /**
+          * Where the UAE PASS placeholder button leads. The placeholder shows when this is set and there is neither a `slot="signin"` nor a `slot="account"` child.
+         */
+        "signInHref"?: string;
+        /**
+          * Overrides the placeholder's "Sign in with UAE PASS" (in the page language).
+         */
+        "signInText"?: string;
+        /**
+          * Keeps the header at the top while the page scrolls. `sc-page` then sets `scroll-padding-top`.
+          * @default false
+         */
+        "sticky": boolean;
     }
     /**
      * "Skip to main content": the first focusable element on every page. Hidden until it gets
@@ -1318,31 +1686,37 @@ export namespace Components {
         "total": number;
     }
     /**
-     * The "Check your answers" pattern: rows of a key, a value and an optional "Change" action,
-     * as one `<dl>`.
-     * Description lists can't span shadow roots (a `<dl>` must directly contain `<dt>`/`<dd>`
-     * or `<div>` groups), so this component renders the whole `<dl>` in its own shadow root:
-     * one `<div>` per row holding the `<dt>` (from the row's `label`), the value `<dd>` and the
-     * action `<dd>`. Each `sc-summary-row` child is assigned to a named slot inside its value
-     * `<dd>`, so rich values (addresses, `<sc-ltr>` plates) stay in light DOM.
-     * Wide containers show three columns (key, value, a fixed-width action column, so rows
-     * align). Below 600px of container width the key sits above the value, with the action at
-     * the end.
+     * The "Check your answers" pattern (E3) and the payment summary (E4): rows of a key, a value
+     * and an optional "Change" action, as one `<dl>`.
+     * v2 renders in light DOM (Stencil `scoped`, architecture §3.1). The list renders the
+     * `<dl>` itself: one `<div>` per row holding the `<dt>` (the row's `label`), the value `<dd>`
+     * and the action `<dd>`. Each `sc-summary-row` child is moved into its value `<dd>`, so the
+     * description list is valid HTML (a `<dl>` may only contain `<div>`, `<dt>` and `<dd>`) and
+     * rich values (addresses, `<sc-ltr>` plates) stay the service's own markup.
+     * Layouts: `stacked` puts the key above the value with the action in a fixed 64px end column
+     * (E3); `columns` shows key, value and a fixed 96px action column; `pairs` puts the key in a
+     * fixed column and end-aligns the value, with no actions (E4); `auto` (default) is `stacked`
+     * below 600px of the list's own width and `columns` from there.
      */
     interface ScSummaryList {
         /**
-          * `card` (default) sits the rows on a surface card, as in D+; `plain` draws only the row dividers, for use inside another card.
+          * `card` (default) draws the rows on a 12px card with a 1px edge; `plain` draws only the row dividers, for use inside another card.
           * @default 'card'
          */
         "appearance": SummaryListAppearance;
+        /**
+          * `auto` (default), `stacked`, `columns` or `pairs`. See the component description.
+          * @default 'auto'
+         */
+        "layout": SummaryListLayout;
     }
     /**
      * One answer in a `sc-summary-list`: a key (`label`), a value (the default slot) and an
      * optional "Change" action.
-     * The row only carries data and its value. The parent `sc-summary-list` renders the
-     * `<dt>`, `<dd>` and action inside its own `<dl>`, and slots this element into the value
-     * `<dd>`, so the description list stays valid across shadow roots. Use it only as a direct
-     * child of `sc-summary-list`; the list sets its `slot` attribute.
+     * v2 renders in light DOM (Stencil `scoped`). The row carries the data and its value; the
+     * parent `sc-summary-list` renders the `<dt>`, the value `<dd>` and the action inside its own
+     * `<dl>`, and moves this element into the value `<dd>`. Use it only as a direct child of
+     * `sc-summary-list`; the list sets its `slot` attribute.
      */
     interface ScSummaryRow {
         /**
@@ -1350,7 +1724,7 @@ export namespace Components {
          */
         "actionHiddenText"?: string;
         /**
-          * Where the action goes, e.g. back to the question with `#plate-number` or a page URL. Without it the row has no action (the action column stays, so values still align).
+          * Where the action goes, e.g. back to the question with `#plate-number` or a page URL. Without it the row has no action (the action column stays, so values still align). Ignored in the `pairs` layout.
          */
         "actionHref"?: string;
         /**
@@ -1362,9 +1736,14 @@ export namespace Components {
          */
         "label": string;
         /**
-          * A plain-text value, used when the default slot is empty. With neither, the row shows "Not provided".
+          * A plain-text value, used when the row has no content. With neither, the row shows "Not provided".
          */
         "value"?: string;
+        /**
+          * `total` marks the amount row of a payment summary (E4): a quiet fill and Bold key and value.
+          * @default 'default'
+         */
+        "variant": SummaryRowVariant;
     }
     /**
      * A table compares rows of the same kind of thing across a few attributes: fines, payments,
@@ -1426,14 +1805,18 @@ export namespace Components {
         /**
           * Overrides the built-in English and Arabic strings, as JSON: `{"tableSelectRow": "Select fine {row}", "tableSelectAll": "Select all fines on this page"}`, or per language: `{"ar": {…}}`.
          */
-        "strings"?: StringsInput;
+        "strings"?: StringsInput1;
     }
     /**
      * A single-line answer, such as a plate number, an email address or a phone number.
-     * Renders its own label, hint, error and native `<input>` in one shadow root, so the
-     * label and `aria-describedby` work. The host is form-associated (it submits `value`
-     * under `name`, resets, and reports validity from the inner input) and delegates focus,
-     * so an error-summary link to the host's `id` focuses the input.
+     * v2 renders its label, hint, error and a native `<input>` in light DOM (Stencil `scoped`,
+     * decision A2). The input is a real form control: it submits under `name`, Enter submits the
+     * form through its default button, and validation, reset, autofill and `<fieldset disabled>`
+     * are native. `focus()` on the host reaches the input, so an error-summary link to the host's
+     * `id` works. Styles: the classes `.sc-field`, `.sc-field__label`, `.sc-field__frame`,
+     * `.sc-field__control` (no `::part()`).
+     * Rich content: a child element with `slot="label"`, `slot="hint"`, `slot="error"`,
+     * `slot="prefix"` or `slot="suffix"` is moved into place once, when the component loads.
      */
     interface ScTextInput {
         /**
@@ -1446,7 +1829,7 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * The error message. Setting it shows the error state: a 3px error bar on the start side, an error border on the input, the message with an icon and a visually hidden "Error:", and `aria-invalid`. Say what to do: "Enter numbers only, like 12345".
+          * The error message. Setting it shows the error state: a 4px error bar at inline-start, a 2px error edge on the box, the message with an icon and a visually hidden "Error:", and `aria-invalid`. Say what to do: "Enter numbers only, like 12345".
          */
         "error"?: string;
         /**
@@ -1466,7 +1849,7 @@ export namespace Components {
          */
         "label"?: string;
         /**
-          * Keeps the value left-to-right (plates, phone numbers, emails, references). In Arabic the value still sits at the start (right) of the box. Use this, not `dir` on the host, which would flip the label and hint too.
+          * Keeps the value left-to-right (plates, phone numbers, emails, references). In Arabic the value still sits at the start (right) of the box. Use this, not `dir` on the host.
           * @default false
          */
         "ltr": boolean;
@@ -1492,7 +1875,7 @@ export namespace Components {
          */
         "pattern"?: string;
         /**
-          * Text before the value inside the box, such as "AED". (Named `prefixText` because `prefix` is a reserved DOM property.)
+          * Text before the value inside the box, such as "AED".
          */
         "prefixText"?: string;
         /**
@@ -1527,9 +1910,12 @@ export namespace Components {
     }
     /**
      * A longer answer, such as a reason or a description, with an optional character count.
-     * Renders its own label, hint, error, native `<textarea>` and count in one shadow root.
-     * The count is shown as you type, but announced to screen readers politely, once typing
-     * pauses, never on every keystroke. Form-associated and delegates focus, like `sc-text-input`.
+     * v2 renders its label, hint, error, a native `<textarea>` and the count in light DOM
+     * (Stencil `scoped`, decision A2), so the textarea is a real form control. The count is shown
+     * as you type but announced politely only once typing pauses. People can type past the limit:
+     * the count then says how many characters to remove and the textarea reports a custom
+     * validity error, which is easier to fix than text that silently stops.
+     * Rich content: a child with `slot="label"`, `slot="hint"` or `slot="error"` is moved into place once.
      */
     interface ScTextarea {
         /**
@@ -1542,7 +1928,7 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * The error message. Setting it shows the error state (bar, border, icon, "Error:", `aria-invalid`).
+          * The error message. Setting it shows the error state (bar, edge, icon, "Error:", `aria-invalid`).
          */
         "error"?: string;
         /**
@@ -1558,7 +1944,7 @@ export namespace Components {
          */
         "label"?: string;
         /**
-          * Shows a character count for this limit: "You have 120 characters remaining". People can type past it (the count then says how many to remove and the field reports `tooLong`), which is easier to fix than text that silently stops.
+          * Shows a character count for this limit: "You have 120 characters remaining". People can type past it; the count then says how many to remove and the field is invalid.
          */
         "maxlength"?: number;
         /**
@@ -1581,7 +1967,7 @@ export namespace Components {
          */
         "required": boolean;
         /**
-          * Visible height in lines.
+          * Visible height in lines (at least 3).
           * @default 5
          */
         "rows": number;
@@ -1590,6 +1976,32 @@ export namespace Components {
           * @default ''
          */
         "value": string;
+    }
+    /**
+     * A compact single-link tile: a tinted icon tile, a title and an optional count. Use it for
+     * life events ("Moving home · 14 services"), categories ("Transport and vehicles") and
+     * favourite services ("Pay a traffic fine").
+     * The whole tile is one link, because the title (and the count) is its only content and so
+     * the link's whole name: "Moving home, 14 services". That does not conflict with CMP-06,
+     * which is about cards that hold more than one thing. Tiles carry no other links or buttons.
+     */
+    interface ScTile {
+        /**
+          * How many things the tile leads to, e.g. 14. Shown as "14 services" with the right plural form in both languages.
+         */
+        "count"?: number;
+        /**
+          * Overrides the count text, with `{count}` and plural forms separated by `|`: "{count} step|{count} steps"; in Arabic zero|one|two|few|many|other.
+         */
+        "countLabel"?: string;
+        /**
+          * Where the tile goes. Required.
+         */
+        "href": string;
+        /**
+          * The icon tile's decorative topic tint (foundations §2.7): `blue` transport and vehicles, `violet` residency and identity, `rose` family, `orange` housing and utilities, `amber` bills and money, `green` health. Without it the tile takes the channel's container colour.
+         */
+        "tint"?: TileTint;
     }
     /**
      * The status history of an application: each change, with its status, date and a line of
@@ -1624,6 +2036,50 @@ export namespace Components {
          */
         "order": TimelineOrder;
     }
+    /**
+     * The help and feedback bar of a channel site (decision U4, Standard CHR-05; component-
+     * language B4 as amended by U4): the Happiness Meter, contact and complaints (04), chat and
+     * accessibility options, each an icon with a visible label (labels never collapse to icons).
+     * From 1024px it is a flat bar docked to the bottom of the viewport across the full width,
+     * at `elevation-1`, with a 1px `outline-variant` edge along its top. It publishes its height
+     * as `--sc-utility-bar-block-size` on `<html>`: `sc-page` pads its end by it and `sc.css`
+     * sets `scroll-padding-block-end` from it, so the bar never covers content or the focused
+     * element (WCAG 2.4.11). Below 1024px it folds into the footer: place it straight after
+     * `sc-footer`, and it becomes an in-flow "Help and feedback" group, a 2 × 2 grid of outlined
+     * buttons. It is present when the page loads and does not animate.
+     * A `<nav>` labelled "Help and feedback". Items appear when their `*-href` is set.
+     */
+    interface ScUtilityBar {
+        /**
+          * Accessibility options or the accessibility statement.
+         */
+        "accessibilityHref"?: string;
+        /**
+          * The chat service.
+         */
+        "chatHref"?: string;
+        /**
+          * Contact and complaints: usually `tel:04…` or the contact page.
+         */
+        "contactHref"?: string;
+        /**
+          * The number shown after "Contact and complaints", isolated left to right.
+          * @default '04'
+         */
+        "contactNumber": string;
+        /**
+          * The Happiness Meter survey.
+         */
+        "happinessHref"?: string;
+    }
+}
+export interface ScAccountMenuCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLScAccountMenuElement;
+}
+export interface ScAnnouncementBarCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLScAnnouncementBarElement;
 }
 export interface ScCheckboxCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1640,6 +2096,10 @@ export interface ScDateInputCustomEvent<T> extends CustomEvent<T> {
 export interface ScDateRangeCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLScDateRangeElement;
+}
+export interface ScFilterChipsCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLScFilterChipsElement;
 }
 export interface ScLanguageSwitchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1679,6 +2139,53 @@ export interface ScTextareaCustomEvent<T> extends CustomEvent<T> {
 }
 declare global {
     /**
+     * Sections that open and close, for frequently asked questions and long guidance. Built on
+     * native `<details>` and `<summary>`: they open with Enter or Space, expose their expanded
+     * state to assistive technology and work before (and without) JavaScript. The component adds
+     * the v2 look (ruled sections, a title-medium summary, a chevron at the end that turns over
+     * when open) and an optional "Show all sections" toggle.
+     * v2 renders in light DOM (Stencil `scoped`, architecture §3.1): the `<details>` stay your
+     * own markup, so in-page links and `id`s inside them work as usual.
+     * Put the question in `<summary>` as plain text, optionally followed by a `<small>` summary
+     * line; put the answer after it. Keep headings out of `<summary>`: it is a button, so a
+     * heading inside it is not announced as one.
+     */
+    interface HTMLScAccordionElement extends Components.ScAccordion, HTMLStencilElement {
+    }
+    var HTMLScAccordionElement: {
+        prototype: HTMLScAccordionElement;
+        new (): HTMLScAccordionElement;
+    };
+    interface HTMLScAccountMenuElementEventMap {
+        "scSignOut": void;
+    }
+    /**
+     * The signed-in account control in `sc-site-header` (`slot="account"`; component-language
+     * B3, Standard CHR-01). It replaces "Sign in with UAE PASS" once the user is signed in.
+     * - A notifications button (a link to the notifications page) with the unread count, named
+     *   "Notifications, 3 unread".
+     * - A `<button aria-expanded>` with the user's initials (and name from 1280px) that opens a
+     *   non-modal panel: the name and who they are acting for, links to Profile, Settings and
+     *   representation ("Change who you act for"), and Sign out.
+     * The panel is a disclosure, not an ARIA menu: Tab moves through its links, Escape closes it
+     * and returns focus to the button, a press outside or focus leaving closes it. From a
+     * pointer it grows from the button's corner; from the keyboard it appears instantly.
+     */
+    interface HTMLScAccountMenuElement extends Components.ScAccountMenu, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLScAccountMenuElementEventMap>(type: K, listener: (this: HTMLScAccountMenuElement, ev: ScAccountMenuCustomEvent<HTMLScAccountMenuElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLScAccountMenuElementEventMap>(type: K, listener: (this: HTMLScAccountMenuElement, ev: ScAccountMenuCustomEvent<HTMLScAccountMenuElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLScAccountMenuElement: {
+        prototype: HTMLScAccountMenuElement;
+        new (): HTMLScAccountMenuElement;
+    };
+    /**
      * The side navigation of the signed-in account area: Applications, Payments,
      * Notifications, Profile and settings, then a divider and Sign out. It takes 3 of 12
      * columns on wide screens and becomes a horizontal row of 44px items below 600px.
@@ -1705,22 +2212,68 @@ declare global {
         prototype: HTMLScAccountNavElement;
         new (): HTMLScAccountNavElement;
     };
+    interface HTMLScAnnouncementBarElementEventMap {
+        "scDismiss": { id?: string };
+    }
     /**
-     * The top bar of every mobile screen and desktop page: a translucent glass bar with a
-     * start control (usually `sc-back-link`), the channel name, and an end control (usually
-     * `sc-language-switch`).
-     * - `align="center"` (default) is the mobile bar: start, title in the middle, end.
-     * - `align="start"` is the desktop header: title (with a mark) at the start, then the
-     *   default slot (primary navigation), and the end slot pushed to the end.
-     * - `shape="floating"` turns the bar into the inset glass capsule used on desktop.
-     * The glass becomes a solid surface under `prefers-reduced-transparency: reduce` and in
-     * forced colours. The host is a `banner` landmark unless `landmark` is false.
+     * A site-wide announcement above the header: planned maintenance, a service outage, a change
+     * people need to know about (component-language B1). One message, one optional link, and an
+     * optional dismiss button.
+     * A labelled region ("Announcement" / "إعلان"), present when the page loads. It is not a
+     * live region and not an alert. The text carries the severity in words ("Planned
+     * maintenance…"); the tone's icon and container repeat it.
+     * Dismissing it fires `scDismiss` (cancelable) and hides it. With `announcement-id`, the
+     * dismissal is remembered in this browser, so the same announcement does not come back.
+     * Focus moves to the next focusable element after it. From a pointer it fades out over
+     * `duration-exit`; from the keyboard it goes at once. Its height is never animated (MOT-11).
+     */
+    interface HTMLScAnnouncementBarElement extends Components.ScAnnouncementBar, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLScAnnouncementBarElementEventMap>(type: K, listener: (this: HTMLScAnnouncementBarElement, ev: ScAnnouncementBarCustomEvent<HTMLScAnnouncementBarElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLScAnnouncementBarElementEventMap>(type: K, listener: (this: HTMLScAnnouncementBarElement, ev: ScAnnouncementBarCustomEvent<HTMLScAnnouncementBarElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLScAnnouncementBarElement: {
+        prototype: HTMLScAnnouncementBarElement;
+        new (): HTMLScAnnouncementBarElement;
+    };
+    /**
+     * The transaction app bar (component-language A4; Standard TPL-01, LANG-04): the bar at the
+     * top of every step of a journey (E2–E4). Channel pages outside a transaction use
+     * `sc-site-header` instead.
+     * A 4px rule in `channel-action` along the top; a start slot (the back link), the title (a
+     * 10px channel swatch and the channel name, centred) and an end slot (the language switch),
+     * with fixed 96px side slots so the title stays centred; a 1px `outline-variant` rule
+     * beneath. 60px tall on `surface`. Flat: no glass, no shadow.
+     * The host is a `banner` landmark unless `landmark` is false. It is not fixed by default;
+     * with `sticky`, `sc-page sync-document` sets `scroll-padding-top` so focus never slides
+     * under it (WCAG 2.4.11).
      */
     interface HTMLScAppBarElement extends Components.ScAppBar, HTMLStencilElement {
     }
     var HTMLScAppBarElement: {
         prototype: HTMLScAppBarElement;
         new (): HTMLScAppBarElement;
+    };
+    /**
+     * One thing that is due ("Needs your attention"): a bill to pay, a document to upload, a
+     * registration about to expire. A thin topic-tint strip on top, an icon tile, a status tag,
+     * the title, the key fact, a meta line (amount and reference) and one action.
+     * The card is neutral and is not a link: the action is the only thing to press, and its
+     * label names the action and the item ("Pay AED 412.60"). Status is never shown by colour:
+     * the strip and the icon tile are decorative topic tints, and the urgency is in the status
+     * tag's words. Put the cards in a list (`<ul>`), most urgent first, under a heading that
+     * gives the count ("4 things, most urgent first").
+     */
+    interface HTMLScAttentionCardElement extends Components.ScAttentionCard, HTMLStencilElement {
+    }
+    var HTMLScAttentionCardElement: {
+        prototype: HTMLScAttentionCardElement;
+        new (): HTMLScAttentionCardElement;
     };
     /**
      * The "Back" control at the start of an app bar or above a question: plain text with a
@@ -1809,11 +2362,15 @@ declare global {
         new (): HTMLScCalloutElement;
     };
     /**
-     * A surface container: surface fill, card radius, elevation 1. Groups related content,
-     * such as a life event and its steps, or the answers in one section of "Check your answers".
+     * A surface that groups related content: a life event and its steps, the answers in one
+     * section of "Check your answers", a totals card. Flat and outline-first (ELV-01): 12px
+     * corners, a 1px `outline-variant` edge, no shadow. Cards are never links (CMP-06): put the
+     * link on a heading or a button inside.
+     * v2 renders in light DOM (Stencil `scoped`, architecture §3.1): the host is the surface and
+     * your content stays its direct children, so `aria-labelledby` points at your own heading
+     * with an ordinary id. There is no `::part(surface)`; style the host (`.sc-card`) if you must.
      * With `landmark`, the card becomes a named region (`section`) or an `article`, labelled by
-     * the first heading inside it. The role and `aria-labelledby` go on the host, in light DOM,
-     * so the reference to the slotted heading resolves.
+     * the first heading inside it, or by `label`.
      */
     interface HTMLScCardElement extends Components.ScCard, HTMLStencilElement {
     }
@@ -1836,11 +2393,13 @@ declare global {
         new (): HTMLScChannelChipElement;
     };
     /**
-     * The top wash of a channel page: a gradient from the channel's wash-start to wash-end
-     * colour (interpolated in OKLAB), holding an eyebrow, the page's `<h1>`, a lede and a
-     * search field. It follows `data-channel` and the theme like every component.
-     * The hero is full-bleed; its content sits in an `sc-container`, so it lines up with the
-     * page below.
+     * The top band of a channel's home or section page (E1): a flat `channel-subtle` band
+     * (decision Q-hero: no gradient), holding optional breadcrumbs, an eyebrow, the page's
+     * `<h1>` at display size, an optional lede, search and a "Popular now" row of suggestion
+     * chips. It follows `data-channel` and the theme like every component.
+     * The band is full-bleed; its content follows the page grid's margins (20, 32, 48, 80px)
+     * and the 1280px cap, so it lines up with `sc-container` content below. The hero never
+     * carries a carousel or autoplaying media.
      */
     interface HTMLScChannelHeroElement extends Components.ScChannelHero, HTMLStencilElement {
     }
@@ -1848,16 +2407,57 @@ declare global {
         prototype: HTMLScChannelHeroElement;
         new (): HTMLScChannelHeroElement;
     };
+    /**
+     * The channel network strip (component-language B21, Standard CHR-08): "One network · seven
+     * channels" and a tile for each of the seven channels, in the Standard 3.1 order, at the end
+     * of every channel home page, before the footer.
+     * City indigo marks it as shared (the eyebrow and its rule). Each tile carries its own
+     * channel's colour only as attribution: a 4px top rule in that channel's `channel-action`.
+     * Each tile sets its own `data-channel` (FND-26), which is why the strip renders into light
+     * DOM (Stencil `scoped`). The current channel's tile is filled with its `channel-subtle`,
+     * says "You are here", carries `aria-current="true"` and is not a link (it would lead to
+     * this site).
+     * A `<nav>` labelled "Government of Dubai channels" with a list of links. Seven tiles in a
+     * row from 1024px (by the strip's own width), four from 600px, two below.
+     */
+    interface HTMLScChannelNetworkElement extends Components.ScChannelNetwork, HTMLStencilElement {
+    }
+    var HTMLScChannelNetworkElement: {
+        prototype: HTMLScChannelNetworkElement;
+        new (): HTMLScChannelNetworkElement;
+    };
+    /**
+     * The channel's logo and the channel switcher, at the inline-end of `sc-site-header`
+     * (Standard CHR-01, CHR-03; component-language B2a).
+     * A disclosure, not an ARIA menu: a `<button aria-expanded>` named "Choose a channel: Dubai
+     * Now" opens a non-modal panel listing all seven channels as links, in the Standard 3.1
+     * order, each with its name, a one-line descriptor in the page language and a swatch in
+     * that channel's own colour. Every item carries its own `data-channel` (FND-26), so the
+     * swatch is that channel's `channel-action`; that is why the component renders into light
+     * DOM (Stencil `scoped`): the document's channel rules must reach the items. The current
+     * channel carries a check and `aria-current="true"`.
+     * Escape and a press outside close the panel; Escape returns focus to the button; the panel
+     * closes when focus leaves it. From a pointer it grows from the trigger's corner over
+     * `duration-base`; from the keyboard it appears instantly (MOT-02). Below 1024px the trigger
+     * shrinks to the logo and chevron and keeps its accessible name (CHR-04).
+     */
+    interface HTMLScChannelSwitcherElement extends Components.ScChannelSwitcher, HTMLStencilElement {
+    }
+    var HTMLScChannelSwitcherElement: {
+        prototype: HTMLScChannelSwitcherElement;
+        new (): HTMLScChannelSwitcherElement;
+    };
     interface HTMLScCheckboxElementEventMap {
         "scChange": { checked: boolean; value: string };
     }
     /**
      * A checkbox: one of several choices in an `sc-checkbox-group`, or on its own for a single
-     * yes/no statement ("I confirm the vehicle details are correct").
-     * Renders a native `<input type="checkbox">`, its `<label>` (the default slot) and hint in
-     * its own shadow root. Space toggles it. Form-associated: when checked it submits `value`
-     * under its `name`, or under the group's `name` inside `sc-checkbox-group`. On its own it can
-     * show an error; inside a group the group shows the error and marks every box invalid.
+     * statement ("I confirm the vehicle details are correct").
+     * v2 renders a native `<input type="checkbox">`, its `<label>` (the default slot) and hint in
+     * light DOM (Stencil `scoped`, decision A2). Space toggles it; clicking the label or the 44px
+     * target around the box toggles it. When checked it submits `value` under its `name`, or under
+     * the group's `name` inside `sc-checkbox-group`. On its own it can show an error and use
+     * native `required`; inside a group the group shows the error and marks every box invalid.
      */
     interface HTMLScCheckboxElement extends Components.ScCheckbox, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScCheckboxElementEventMap>(type: K, listener: (this: HTMLScCheckboxElement, ev: ScCheckboxCustomEvent<HTMLScCheckboxElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1878,14 +2478,11 @@ declare global {
     }
     /**
      * Several choices from a short list: "Which documents do you have?".
-     * A `<fieldset>` with a `<legend>`, hint and error in this element's shadow root, with the
-     * `sc-checkbox` children slotted inside it. Each checkbox keeps its own native input, label
-     * and hint in its own shadow root (so `sc-checkbox` also works on its own); the fieldset
-     * groups them in the accessibility tree, which follows the flattened tree. The group's
-     * hint and error describe the fieldset, and in the error state every box gets
-     * `aria-invalid` and an error border.
-     * Each checked box submits its own value under the group's `name` (or its own). The group is
-     * form-associated only to report `valueMissing` when `required` and nothing is checked.
+     * v2 renders a native `<fieldset>` with its `<legend>`, hint and error in light DOM (Stencil
+     * `scoped`, decision A2), and moves the `sc-checkbox` children into it, so they are grouped
+     * and named by the legend natively. Each checked box submits its own value under the group's
+     * `name`. `disabled` disables the fieldset (and so every box). With `required`, the first box
+     * carries a native validity error until one is checked.
      */
     interface HTMLScCheckboxGroupElement extends Components.ScCheckboxGroup, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScCheckboxGroupElementEventMap>(type: K, listener: (this: HTMLScCheckboxGroupElement, ev: ScCheckboxGroupCustomEvent<HTMLScCheckboxGroupElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1901,18 +2498,6 @@ declare global {
         prototype: HTMLScCheckboxGroupElement;
         new (): HTMLScCheckboxGroupElement;
     };
-    /**
-     * Centres content and sets the page's outer margins from the layout tokens: 20px on
-     * phones, 32px from 600px, 48px from 1024px and 80px from 1440px, with content capped at
-     * `--sc-container-max` (1280px). `width="reading"` caps it at the 680px reading width instead,
-     * for question pages and running text.
-     */
-    interface HTMLScContainerElement extends Components.ScContainer, HTMLStencilElement {
-    }
-    var HTMLScContainerElement: {
-        prototype: HTMLScContainerElement;
-        new (): HTMLScContainerElement;
-    };
     interface HTMLScDateInputElementEventMap {
         "scInput": { value: string } & Parts;
         "scChange": { value: string } & Parts;
@@ -1920,13 +2505,13 @@ declare global {
     /**
      * A date people know, such as a date of birth or the date on a document: Day, Month and
      * Year boxes (يوم / شهر / سنة) with the numeric keyboard.
-     * A `<fieldset>` and `<legend>` with the hint and error, and three labelled native inputs,
-     * in one shadow root. In Arabic the boxes run right to left (Day on the right). An error can
-     * highlight one part with `error-parts="year"`.
-     * Form-associated: submits the date as an ISO string (`2026-03-07`, or empty while it isn't
-     * a real date) under `name`, plus the raw parts as `name-day`, `name-month` and `name-year`
-     * so a server can re-display what was typed. Reports `valueMissing` and `badInput`.
-     * Delegates focus to the first box.
+     * v2 renders a native `<fieldset>` and `<legend>` with the hint and error, three labelled
+     * native inputs and a hidden input in light DOM (Stencil `scoped`, decision A2). It submits
+     * the date as an ISO string (`2026-03-07`, or empty while it isn't a real date) under `name`,
+     * and the raw parts as `name-day`, `name-month` and `name-year`, so a server can re-display
+     * what was typed. An empty required date and an impossible date are native validity errors
+     * on the first box concerned. In Arabic the boxes run right to left (Day on the right). An
+     * error can mark one box with `error-parts="year"`.
      */
     interface HTMLScDateInputElement extends Components.ScDateInput, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScDateInputElementEventMap>(type: K, listener: (this: HTMLScDateInputElement, ev: ScDateInputCustomEvent<HTMLScDateInputElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1951,14 +2536,18 @@ declare global {
      * A start and an end date that relate to a calendar: filtering payments between two dates,
      * the nights of a hotel stay, how long a permit lasts. For one date people already know
      * (a date of birth), use `sc-date-input`.
-     * Two typed segments (From / To, من / إلى) in one 54px frame, and a calendar button that
+     * Two typed segments (From / To, من / إلى) in one 56px frame, and a calendar button that
      * opens a picker: a popover with one or two months and optional presets on medium and
      * wider screens, a modal bottom sheet below 600px. People can always type instead
      * ("21/9/2026", "21 9 2026", "21-09-2026").
-     * Form-associated: submits `name-start` and `name-end` as ISO dates (empty until each is a
-     * real date). Reports `valueMissing` (with `required`), `badInput`, `rangeUnderflow` and
-     * `rangeOverflow`, and shows its own messages for impossible ranges on blur. Delegates focus
-     * to the start segment.
+     * v2 renders everything in light DOM (Stencil `scoped`, decision A2), with classes prefixed
+     * `.sc-date-range__`. It submits `name-start` and `name-end` as ISO dates through hidden
+     * inputs (empty until each is a real date). The first problem with the range (missing with
+     * `required`, not a real date, end before start, outside `min`/`max`, too long or short) is a
+     * native validity error on the segment concerned; the component shows its own message on
+     * blur or after a failed submit. `focus()` on the host goes to the start segment. One native
+     * `change` is dispatched from the host per committed range.
+     * Rich content: a child with `slot="label"`, `slot="hint"` or `slot="error"` is moved into place once.
      */
     interface HTMLScDateRangeElement extends Components.ScDateRange, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScDateRangeElementEventMap>(type: K, listener: (this: HTMLScDateRangeElement, ev: ScDateRangeCustomEvent<HTMLScDateRangeElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2010,34 +2599,55 @@ declare global {
         prototype: HTMLScErrorSummaryElement;
         new (): HTMLScErrorSummaryElement;
     };
+    interface HTMLScFilterChipsElementEventMap {
+        "scRemove": FilterChip;
+        "scClear": void;
+    }
     /**
-     * The page footer: help and contact, accessibility, privacy and terms links, and
-     * "Government of Dubai". Renders a `<footer>` (the page's `contentinfo` landmark) with a
-     * list of links under a visually hidden "Support links" heading.
-     * The four standard links appear when their `*-href` is set, with text from strings in the
-     * page language. Extra links go in the default slot as plain `<a>` elements; each gets its
-     * own list item (the footer sets their `slot` attribute).
+     * The filters applied to a list of results, as removable chips beside the result count, with
+     * "Clear all filters" when there are two or more (component-language B18, applied filter).
+     * Each chip is a native `<button>` named "Remove filter: Transport and vehicles". Removing one
+     * takes it away at once (no animation), emits `scRemove`, and moves focus to the next chip,
+     * else the previous one, else the element named by `focus-target` (the results heading).
+     * Every change in the number of filters is announced politely: "2 filters applied".
+     * The page updates its results on `scRemove` / `scClear`; set `filters` to change the chips.
+     * Chips are 32px tall (decision Q-chips) with a 44px target. Light DOM (Stencil `scoped`).
+     */
+    interface HTMLScFilterChipsElement extends Components.ScFilterChips, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLScFilterChipsElementEventMap>(type: K, listener: (this: HTMLScFilterChipsElement, ev: ScFilterChipsCustomEvent<HTMLScFilterChipsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLScFilterChipsElementEventMap>(type: K, listener: (this: HTMLScFilterChipsElement, ev: ScFilterChipsCustomEvent<HTMLScFilterChipsElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLScFilterChipsElement: {
+        prototype: HTMLScFilterChipsElement;
+        new (): HTMLScFilterChipsElement;
+    };
+    /**
+     * The page footer, a `<footer>` (the page's `contentinfo` landmark). Two variants:
+     * - `simple` (default; transaction pages, component-language A29): one row of underlined
+     *   links and "Government of Dubai", under a 1px rule.
+     * - `grouped` (channel sites, Standard CHR-06, decision Q-footer; B5): the channel's brand
+     *   group (`slot="brand"`: a one-sentence description and app badges); a **Channels** group
+     *   listing all seven channels in the Standard 3.1 order, the current one Bold with
+     *   `aria-current="true"` and no swatch; **Helpful information** (about, help and contact,
+     *   accessibility statement, sitemap); and **Legal** (privacy and cookies, terms). Each group
+     *   has an `<h2>`. Then "Government of Dubai · Last updated …" and "… is run by the
+     *   Government of Dubai".
+     * The standard links appear when their `*-href` is set, with text from strings in the page
+     * language. Every channel sets all of them (TPL-01, LEG-01). Extra links go in the default
+     * slot as plain `<a href>` elements; each gets its own list item (the footer sets their
+     * `slot` attribute). The footer is on `surface`, never a dark band.
      */
     interface HTMLScFooterElement extends Components.ScFooter, HTMLStencilElement {
     }
     var HTMLScFooterElement: {
         prototype: HTMLScFooterElement;
         new (): HTMLScFooterElement;
-    };
-    /**
-     * The layout grid: 4 columns on phones, 8 from 600px and 12 from 1024px, with gutters from
-     * the layout tokens (16, 20, 24px). Each child is a grid item.
-     * Item widths are set once for all children with `span`, `span-medium` and `span-expanded`
-     * (each falls back to the smaller one, and is capped at the number of columns), or per
-     * child with the `--sc-grid-span` custom property, e.g. `style="--sc-grid-span: 8"`.
-     * Service cards three to a row on desktop, two on tablets and one on phones:
-     * `<sc-grid span-medium="4" span-expanded="4">`.
-     */
-    interface HTMLScGridElement extends Components.ScGrid, HTMLStencilElement {
-    }
-    var HTMLScGridElement: {
-        prototype: HTMLScGridElement;
-        new (): HTMLScGridElement;
     };
     interface HTMLScLanguageSwitchElementEventMap {
         "scSwitch": LanguageSwitchDetail;
@@ -2090,21 +2700,6 @@ declare global {
         prototype: HTMLScLinkElement;
         new (): HTMLScLinkElement;
     };
-    /**
-     * Keeps a value left-to-right inside any text, e.g. a plate number, amount, reference or
-     * phone number in an Arabic sentence. Renders `<bdi dir="ltr">` around its content.
-     * Shadow DOM is used on purpose: the author's text stays in the light DOM (searchable,
-     * copyable, untouched), and layout follows the flat tree, so the `<bdi>` isolates the
-     * slotted text from the surrounding paragraph exactly as a `<bdi>` written in place would.
-     * The host is also `unicode-bidi: isolate; direction: ltr` (here and in sc.css), so the
-     * value is isolated even before the component upgrades.
-     */
-    interface HTMLScLtrElement extends Components.ScLtr, HTMLStencilElement {
-    }
-    var HTMLScLtrElement: {
-        prototype: HTMLScLtrElement;
-        new (): HTMLScLtrElement;
-    };
     interface HTMLScModalElementEventMap {
         "scOpen": void;
         "scClose": { reason: ModalCloseReason };
@@ -2143,6 +2738,20 @@ declare global {
         new (): HTMLScModalElement;
     };
     /**
+     * A titled module on a signed-in home page ("At a glance"): Vehicles, Applications, Traffic
+     * fines. A header row with an optional tinted icon, the title (a heading) and a standalone
+     * link at the end ("Manage", "View all"), then the module's own content.
+     * The card is not a link (CMP-06). The header link's accessible name includes the title
+     * ("View all, Applications"), so a page with several "View all" links still makes sense out
+     * of context.
+     */
+    interface HTMLScModuleCardElement extends Components.ScModuleCard, HTMLStencilElement {
+    }
+    var HTMLScModuleCardElement: {
+        prototype: HTMLScModuleCardElement;
+        new (): HTMLScModuleCardElement;
+    };
+    /**
      * A person's notifications, grouped by day ("Today", "Earlier"). Light DOM (architecture
      * §3.1): you write the headings and native lists, so each group is a real list under a real
      * heading and the links are ordinary links.
@@ -2175,18 +2784,22 @@ declare global {
         new (): HTMLScNotificationListElement;
     };
     /**
-     * The page frame: header, `<main>` and footer, with the page's language, direction and
-     * channel on its root.
+     * The page shell (Standard TPL-01, 11.1 and 11.9): the header, one `<main>` and the footer,
+     * with the page's language, direction and channel on its root.
      * - Set `lang` on `sc-page` as on any element; the page sets `dir` to match (`rtl` for
      *   Arabic) and re-applies it when `lang` changes.
      * - `channel` sets `data-channel`, which themes every component inside.
      * - `<main>` is rendered in light DOM (the component is scoped, not shadowed) with
-     *   `id="main-content"` and `tabindex="-1"`, so a skip link (`<a href="#main-content">`)
-     *   anywhere on the page can reach it and move focus into it.
-     * - With `sync-document` and a sticky `sc-app-bar` in the header, it sets
-     *   `scroll-padding-block-start` on `<html>` to the bar's height plus `--sc-space-8`, so
-     *   focused elements and `#fragment` targets scroll into view below the bar, not under it
-     *   (WCAG 2.4.11). It follows the bar's size and removes the padding when no longer needed.
+     *   `id="main-content"` and `tabindex="-1"`, so the skip link (`sc-skip-link`, whose default
+     *   `href` is `#main-content`) can reach it and move focus into it. The header slot gives
+     *   the banner landmark, the footer slot the contentinfo landmark.
+     * - With `sync-document` it also sets `lang`, `dir` and `data-channel` on `<html>`, and,
+     *   with a sticky `sc-app-bar` or `sc-site-header` in the header, `scroll-padding-block-start`
+     *   on `<html>` to the bar's height plus `--sc-space-8`, so focused elements are never
+     *   hidden under it (WCAG 2.4.11).
+     * - It reserves the height of a docked `sc-utility-bar` (`padding-block-end` from
+     *   `--sc-utility-bar-block-size`, which the bar publishes), so the bar never covers the end
+     *   of the page; `sc.css` sets the matching `scroll-padding-block-end` (CHR-05).
      */
     interface HTMLScPageElement extends Components.ScPage, HTMLStencilElement {
     }
@@ -2225,11 +2838,11 @@ declare global {
     };
     /**
      * One option in an `sc-radio-group`. Its content is the option's label.
-     * `sc-radio` holds data and label content only. The parent `sc-radio-group` renders the
-     * native `<input type="radio">` for every option inside its own shadow root and slots
-     * this element into that option's `<label>`, so all the radios share one tree: they form a
-     * real native radio group (one Tab stop, arrow keys move and select, "2 of 3" announced).
-     * Use it only inside `sc-radio-group`.
+     * v2 renders a native `<input type="radio">`, its `<label>` and hint in light DOM (Stencil
+     * `scoped`, decision A2). Every radio in a group shares the group's `name` in one document
+     * tree, so they form a real native radio group: one Tab stop, arrow keys move and select,
+     * "2 of 3" is announced, and the form submits the chosen value. Use it only inside
+     * `sc-radio-group`, which passes down the name, the chosen value and the error state.
      */
     interface HTMLScRadioElement extends Components.ScRadio, HTMLStencilElement {
     }
@@ -2242,14 +2855,14 @@ declare global {
     }
     /**
      * One choice from a short list: "Who issued the plate?".
-     * A `<fieldset>` with a `<legend>` (exposed as `role="radiogroup"`, labelled by the legend
-     * and described by the hint and error), and one native `<input type="radio">` per
-     * `sc-radio` child, all inside this element's shadow root. Each `sc-radio` is slotted into
-     * its option's `<label>` (manual slot assignment), so its content names the radio while the
-     * radios themselves stay in one tree: native arrow keys, one Tab stop, position in set.
-     * Form-associated: submits the chosen value under `name`, resets, and reports
-     * `valueMissing` when `required`. Delegates focus, so an error-summary link to the host's
-     * `id` focuses the first radio.
+     * v2 renders a native `<fieldset>` (role `radiogroup`) with its `<legend>`, hint and error in
+     * light DOM (Stencil `scoped`, decision A2), and moves the `sc-radio` children into it. Each
+     * `sc-radio` renders a native radio with the group's `name`, so they form a real native radio
+     * group: one Tab stop, arrow keys move and select, position in set, native submission,
+     * reset and `required`. `disabled` disables the fieldset. `focus()` on the host reaches the
+     * chosen radio, or the first.
+     * Without a `name`, the radios share a generated one (`sc-radio-group-3`), which a form
+     * would submit: give the group a `name` inside a form.
      */
     interface HTMLScRadioGroupElement extends Components.ScRadioGroup, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScRadioGroupElementEventMap>(type: K, listener: (this: HTMLScRadioGroupElement, ev: ScRadioGroupCustomEvent<HTMLScRadioGroupElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2269,12 +2882,13 @@ declare global {
         "scSearch": ScSearchDetail;
     }
     /**
-     * A pill search box: search icon, a labelled field and a primary "Search" button, inside a
-     * `<form role="search">` (a search landmark named by the label).
-     * Submitting (the button, or Enter in the field) emits `scSearch`. With `action`, the form
-     * then goes to that URL with the query as `?<name>=…`, unless a listener calls
-     * `preventDefault()`; without `action`, the page handles `scSearch` itself.
-     * The form is self-contained: don't nest `sc-search` inside another `<form>`.
+     * A search field and its button, inside a `<form role="search">` named by the label (E1: the
+     * field and the primary button are siblings with a 12px gap, not one pill).
+     * v2 renders the form, a native `<input type="search">` and an `sc-button type="submit"` in
+     * light DOM (Stencil `scoped`, decision A2), so Enter in the field submits through the button
+     * natively. Submitting emits `scSearch`. With `action`, the form then goes to that URL with the
+     * query as `?<name>=…`, unless a listener calls `preventDefault()`; without `action`, the page
+     * handles `scSearch` itself. Don't nest `sc-search` inside another `<form>`.
      */
     interface HTMLScSearchElement extends Components.ScSearch, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScSearchElementEventMap>(type: K, listener: (this: HTMLScSearchElement, ev: ScSearchCustomEvent<HTMLScSearchElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2295,9 +2909,11 @@ declare global {
     }
     /**
      * One choice from a list too long for radios, such as the emirate that issued a plate.
-     * A native `<select>` inside the shadow root, styled like `sc-text-input`, with a chevron.
-     * Write the options as light-DOM `<option>` (and `<optgroup>`) children: they are copied
-     * into the inner select and kept in sync when they change. Form-associated and delegates focus.
+     * v2 renders a native `<select>` in light DOM (Stencil `scoped`, decision A2), styled like
+     * `sc-text-input` with an `expand_more` chevron. Write the options as `<option>` (and
+     * `<optgroup>`) children: they are moved INTO the native select, so they are the real options
+     * (no copies), and options added later are moved in too. The select submits, resets, validates
+     * and follows `<fieldset disabled>` natively; `focus()` on the host reaches it.
      */
     interface HTMLScSelectElement extends Components.ScSelect, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScSelectElementEventMap>(type: K, listener: (this: HTMLScSelectElement, ev: ScSelectCustomEvent<HTMLScSelectElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2314,20 +2930,45 @@ declare global {
         new (): HTMLScSelectElement;
     };
     /**
-     * A link to a service: its title, the entity that owns it and an optional channel chip.
-     * There is no end chevron: the card is not itself a link, so nothing on it may look like one.
+     * A link to a service: its title, the entity that owns it, an optional icon and an optional
+     * channel chip, on a flat 12px card with a 1px edge (direction E, "Most used services").
      * Only the title is the link (CMP-06), so screen readers hear a short link name ("Renew
-     * vehicle registration"), not the whole card's text. The card is not wrapped in an `<a>`
-     * and the link's hit area is not stretched over the card: it is the title, grown to at
-     * least 44 x 44. The title is a heading containing the link, so heading navigation finds
-     * every service. The owning entity is the link's description. A chip that is a link is a
-     * separate link.
+     * vehicle registration"), with the entity as its description. The card is not wrapped in an
+     * `<a>` and the link's hit area is not stretched over the card: it is the title, grown to at
+     * least 44 × 44. The forward arrow at the top end is decorative: it is not a second link and
+     * is hidden from assistive technology. The title is a heading containing the link, so heading
+     * navigation finds every service. A chip that is a link is a separate link.
      */
     interface HTMLScServiceCardElement extends Components.ScServiceCard, HTMLStencilElement {
     }
     var HTMLScServiceCardElement: {
         prototype: HTMLScServiceCardElement;
         new (): HTMLScServiceCardElement;
+    };
+    /**
+     * The header of channel pages outside a transaction (Standard CHR-01 to CHR-04;
+     * component-language B2). Transaction pages use `sc-app-bar`.
+     * From the inline-start edge: the Government of Dubai lockup (`slot="lockup"`), the main
+     * navigation (`slot="nav"`), search, the language switch (`slot="language"`), sign in with UAE PASS
+     * (`slot="signin"`) or the account menu once signed in (`slot="account"`), and the
+     * channel's logo and switcher (`slot="switcher"`, an `sc-channel-switcher`). Sign in is the
+     * official UAE PASS button (decision U3a), never a themed `sc-button`: until the official kit
+     * arrives the header renders a marked placeholder (black, white label, fingerprint glyph,
+     * 56px) that `slot="signin"` replaces. The order
+     * mirrors in Arabic. A flat `surface` bar, 80px tall, with a 1px `outline-variant` rule.
+     * Below 1024px the row keeps the menu button, the lockup, the language switch and the
+     * channel switcher (64px). Navigation, search and sign in (or the account menu) move into
+     * the mobile menu: a modal `<dialog>` labelled "Menu", with focus on its close button when
+     * it opens, Escape closing it and returning focus to the menu button, and the page behind
+     * it inert. The same slotted elements move; nothing is duplicated.
+     * The host is a `<header>` banner landmark. It is not fixed by default; with `sticky`,
+     * `sc-page` keeps `scroll-padding-top` clear of it (A11Y-05, F-009).
+     */
+    interface HTMLScSiteHeaderElement extends Components.ScSiteHeader, HTMLStencilElement {
+    }
+    var HTMLScSiteHeaderElement: {
+        prototype: HTMLScSiteHeaderElement;
+        new (): HTMLScSiteHeaderElement;
     };
     /**
      * "Skip to main content": the first focusable element on every page. Hidden until it gets
@@ -2427,16 +3068,17 @@ declare global {
         new (): HTMLScStepProgressElement;
     };
     /**
-     * The "Check your answers" pattern: rows of a key, a value and an optional "Change" action,
-     * as one `<dl>`.
-     * Description lists can't span shadow roots (a `<dl>` must directly contain `<dt>`/`<dd>`
-     * or `<div>` groups), so this component renders the whole `<dl>` in its own shadow root:
-     * one `<div>` per row holding the `<dt>` (from the row's `label`), the value `<dd>` and the
-     * action `<dd>`. Each `sc-summary-row` child is assigned to a named slot inside its value
-     * `<dd>`, so rich values (addresses, `<sc-ltr>` plates) stay in light DOM.
-     * Wide containers show three columns (key, value, a fixed-width action column, so rows
-     * align). Below 600px of container width the key sits above the value, with the action at
-     * the end.
+     * The "Check your answers" pattern (E3) and the payment summary (E4): rows of a key, a value
+     * and an optional "Change" action, as one `<dl>`.
+     * v2 renders in light DOM (Stencil `scoped`, architecture §3.1). The list renders the
+     * `<dl>` itself: one `<div>` per row holding the `<dt>` (the row's `label`), the value `<dd>`
+     * and the action `<dd>`. Each `sc-summary-row` child is moved into its value `<dd>`, so the
+     * description list is valid HTML (a `<dl>` may only contain `<div>`, `<dt>` and `<dd>`) and
+     * rich values (addresses, `<sc-ltr>` plates) stay the service's own markup.
+     * Layouts: `stacked` puts the key above the value with the action in a fixed 64px end column
+     * (E3); `columns` shows key, value and a fixed 96px action column; `pairs` puts the key in a
+     * fixed column and end-aligns the value, with no actions (E4); `auto` (default) is `stacked`
+     * below 600px of the list's own width and `columns` from there.
      */
     interface HTMLScSummaryListElement extends Components.ScSummaryList, HTMLStencilElement {
     }
@@ -2447,10 +3089,10 @@ declare global {
     /**
      * One answer in a `sc-summary-list`: a key (`label`), a value (the default slot) and an
      * optional "Change" action.
-     * The row only carries data and its value. The parent `sc-summary-list` renders the
-     * `<dt>`, `<dd>` and action inside its own `<dl>`, and slots this element into the value
-     * `<dd>`, so the description list stays valid across shadow roots. Use it only as a direct
-     * child of `sc-summary-list`; the list sets its `slot` attribute.
+     * v2 renders in light DOM (Stencil `scoped`). The row carries the data and its value; the
+     * parent `sc-summary-list` renders the `<dt>`, the value `<dd>` and the action inside its own
+     * `<dl>`, and moves this element into the value `<dd>`. Use it only as a direct child of
+     * `sc-summary-list`; the list sets its `slot` attribute.
      */
     interface HTMLScSummaryRowElement extends Components.ScSummaryRow, HTMLStencilElement {
     }
@@ -2500,10 +3142,14 @@ declare global {
     }
     /**
      * A single-line answer, such as a plate number, an email address or a phone number.
-     * Renders its own label, hint, error and native `<input>` in one shadow root, so the
-     * label and `aria-describedby` work. The host is form-associated (it submits `value`
-     * under `name`, resets, and reports validity from the inner input) and delegates focus,
-     * so an error-summary link to the host's `id` focuses the input.
+     * v2 renders its label, hint, error and a native `<input>` in light DOM (Stencil `scoped`,
+     * decision A2). The input is a real form control: it submits under `name`, Enter submits the
+     * form through its default button, and validation, reset, autofill and `<fieldset disabled>`
+     * are native. `focus()` on the host reaches the input, so an error-summary link to the host's
+     * `id` works. Styles: the classes `.sc-field`, `.sc-field__label`, `.sc-field__frame`,
+     * `.sc-field__control` (no `::part()`).
+     * Rich content: a child element with `slot="label"`, `slot="hint"`, `slot="error"`,
+     * `slot="prefix"` or `slot="suffix"` is moved into place once, when the component loads.
      */
     interface HTMLScTextInputElement extends Components.ScTextInput, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScTextInputElementEventMap>(type: K, listener: (this: HTMLScTextInputElement, ev: ScTextInputCustomEvent<HTMLScTextInputElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2525,9 +3171,12 @@ declare global {
     }
     /**
      * A longer answer, such as a reason or a description, with an optional character count.
-     * Renders its own label, hint, error, native `<textarea>` and count in one shadow root.
-     * The count is shown as you type, but announced to screen readers politely, once typing
-     * pauses, never on every keystroke. Form-associated and delegates focus, like `sc-text-input`.
+     * v2 renders its label, hint, error, a native `<textarea>` and the count in light DOM
+     * (Stencil `scoped`, decision A2), so the textarea is a real form control. The count is shown
+     * as you type but announced politely only once typing pauses. People can type past the limit:
+     * the count then says how many characters to remove and the textarea reports a custom
+     * validity error, which is easier to fix than text that silently stops.
+     * Rich content: a child with `slot="label"`, `slot="hint"` or `slot="error"` is moved into place once.
      */
     interface HTMLScTextareaElement extends Components.ScTextarea, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScTextareaElementEventMap>(type: K, listener: (this: HTMLScTextareaElement, ev: ScTextareaCustomEvent<HTMLScTextareaElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2542,6 +3191,20 @@ declare global {
     var HTMLScTextareaElement: {
         prototype: HTMLScTextareaElement;
         new (): HTMLScTextareaElement;
+    };
+    /**
+     * A compact single-link tile: a tinted icon tile, a title and an optional count. Use it for
+     * life events ("Moving home · 14 services"), categories ("Transport and vehicles") and
+     * favourite services ("Pay a traffic fine").
+     * The whole tile is one link, because the title (and the count) is its only content and so
+     * the link's whole name: "Moving home, 14 services". That does not conflict with CMP-06,
+     * which is about cards that hold more than one thing. Tiles carry no other links or buttons.
+     */
+    interface HTMLScTileElement extends Components.ScTile, HTMLStencilElement {
+    }
+    var HTMLScTileElement: {
+        prototype: HTMLScTileElement;
+        new (): HTMLScTileElement;
     };
     /**
      * The status history of an application: each change, with its status, date and a line of
@@ -2570,9 +3233,32 @@ declare global {
         prototype: HTMLScTimelineElement;
         new (): HTMLScTimelineElement;
     };
+    /**
+     * The help and feedback bar of a channel site (decision U4, Standard CHR-05; component-
+     * language B4 as amended by U4): the Happiness Meter, contact and complaints (04), chat and
+     * accessibility options, each an icon with a visible label (labels never collapse to icons).
+     * From 1024px it is a flat bar docked to the bottom of the viewport across the full width,
+     * at `elevation-1`, with a 1px `outline-variant` edge along its top. It publishes its height
+     * as `--sc-utility-bar-block-size` on `<html>`: `sc-page` pads its end by it and `sc.css`
+     * sets `scroll-padding-block-end` from it, so the bar never covers content or the focused
+     * element (WCAG 2.4.11). Below 1024px it folds into the footer: place it straight after
+     * `sc-footer`, and it becomes an in-flow "Help and feedback" group, a 2 × 2 grid of outlined
+     * buttons. It is present when the page loads and does not animate.
+     * A `<nav>` labelled "Help and feedback". Items appear when their `*-href` is set.
+     */
+    interface HTMLScUtilityBarElement extends Components.ScUtilityBar, HTMLStencilElement {
+    }
+    var HTMLScUtilityBarElement: {
+        prototype: HTMLScUtilityBarElement;
+        new (): HTMLScUtilityBarElement;
+    };
     interface HTMLElementTagNameMap {
+        "sc-accordion": HTMLScAccordionElement;
+        "sc-account-menu": HTMLScAccountMenuElement;
         "sc-account-nav": HTMLScAccountNavElement;
+        "sc-announcement-bar": HTMLScAnnouncementBarElement;
         "sc-app-bar": HTMLScAppBarElement;
+        "sc-attention-card": HTMLScAttentionCardElement;
         "sc-back-link": HTMLScBackLinkElement;
         "sc-bottom-nav": HTMLScBottomNavElement;
         "sc-breadcrumbs": HTMLScBreadcrumbsElement;
@@ -2581,19 +3267,20 @@ declare global {
         "sc-card": HTMLScCardElement;
         "sc-channel-chip": HTMLScChannelChipElement;
         "sc-channel-hero": HTMLScChannelHeroElement;
+        "sc-channel-network": HTMLScChannelNetworkElement;
+        "sc-channel-switcher": HTMLScChannelSwitcherElement;
         "sc-checkbox": HTMLScCheckboxElement;
         "sc-checkbox-group": HTMLScCheckboxGroupElement;
-        "sc-container": HTMLScContainerElement;
         "sc-date-input": HTMLScDateInputElement;
         "sc-date-range": HTMLScDateRangeElement;
         "sc-empty-state": HTMLScEmptyStateElement;
         "sc-error-summary": HTMLScErrorSummaryElement;
+        "sc-filter-chips": HTMLScFilterChipsElement;
         "sc-footer": HTMLScFooterElement;
-        "sc-grid": HTMLScGridElement;
         "sc-language-switch": HTMLScLanguageSwitchElement;
         "sc-link": HTMLScLinkElement;
-        "sc-ltr": HTMLScLtrElement;
         "sc-modal": HTMLScModalElement;
+        "sc-module-card": HTMLScModuleCardElement;
         "sc-notification-list": HTMLScNotificationListElement;
         "sc-page": HTMLScPageElement;
         "sc-pagination": HTMLScPaginationElement;
@@ -2602,6 +3289,7 @@ declare global {
         "sc-search": HTMLScSearchElement;
         "sc-select": HTMLScSelectElement;
         "sc-service-card": HTMLScServiceCardElement;
+        "sc-site-header": HTMLScSiteHeaderElement;
         "sc-skip-link": HTMLScSkipLinkElement;
         "sc-spinner": HTMLScSpinnerElement;
         "sc-status-tag": HTMLScStatusTagElement;
@@ -2612,12 +3300,89 @@ declare global {
         "sc-table": HTMLScTableElement;
         "sc-text-input": HTMLScTextInputElement;
         "sc-textarea": HTMLScTextareaElement;
+        "sc-tile": HTMLScTileElement;
         "sc-timeline": HTMLScTimelineElement;
+        "sc-utility-bar": HTMLScUtilityBarElement;
     }
 }
 declare namespace LocalJSX {
     type OneOf<K extends string, PropT, AttrT = PropT> = { [P in K]: PropT } & { [P in `attr:${K}`]?: never } | { [P in `attr:${K}`]: AttrT } & { [P in K]?: never };
 
+    /**
+     * Sections that open and close, for frequently asked questions and long guidance. Built on
+     * native `<details>` and `<summary>`: they open with Enter or Space, expose their expanded
+     * state to assistive technology and work before (and without) JavaScript. The component adds
+     * the v2 look (ruled sections, a title-medium summary, a chevron at the end that turns over
+     * when open) and an optional "Show all sections" toggle.
+     * v2 renders in light DOM (Stencil `scoped`, architecture §3.1): the `<details>` stay your
+     * own markup, so in-page links and `id`s inside them work as usual.
+     * Put the question in `<summary>` as plain text, optionally followed by a `<small>` summary
+     * line; put the answer after it. Keep headings out of `<summary>`: it is a button, so a
+     * heading inside it is not announced as one.
+     */
+    interface ScAccordion {
+        /**
+          * Adds a "Show all sections" / "Hide all sections" toggle above the sections. Use it from about four sections.
+          * @default false
+         */
+        "showAll"?: boolean;
+    }
+    /**
+     * The signed-in account control in `sc-site-header` (`slot="account"`; component-language
+     * B3, Standard CHR-01). It replaces "Sign in with UAE PASS" once the user is signed in.
+     * - A notifications button (a link to the notifications page) with the unread count, named
+     *   "Notifications, 3 unread".
+     * - A `<button aria-expanded>` with the user's initials (and name from 1280px) that opens a
+     *   non-modal panel: the name and who they are acting for, links to Profile, Settings and
+     *   representation ("Change who you act for"), and Sign out.
+     * The panel is a disclosure, not an ARIA menu: Tab moves through its links, Escape closes it
+     * and returns focus to the button, a press outside or focus leaving closes it. From a
+     * pointer it grows from the button's corner; from the keyboard it appears instantly.
+     */
+    interface ScAccountMenu {
+        /**
+          * The person or organisation the user is acting for, when it is not themselves.
+         */
+        "actingFor"?: string;
+        /**
+          * Overrides the initials taken from `name` ("SM").
+         */
+        "initials"?: string;
+        /**
+          * The signed-in user's name as written ("Sara Al Mansoori").
+          * @default ''
+         */
+        "name"?: string;
+        /**
+          * The notifications page. Adds the notifications button.
+         */
+        "notificationsHref"?: string;
+        /**
+          * Fired when Sign out is a button (no `sign-out-href`) and the user activates it.
+         */
+        "onScSignOut"?: (event: ScAccountMenuCustomEvent<void>) => void;
+        /**
+          * The profile page.
+         */
+        "profileHref"?: string;
+        /**
+          * Where the user changes who they act for (representation).
+         */
+        "representationHref"?: string;
+        /**
+          * The account settings page.
+         */
+        "settingsHref"?: string;
+        /**
+          * The sign-out URL. Without it, Sign out is a button that fires `scSignOut`, so the service can post its own sign-out form.
+         */
+        "signOutHref"?: string;
+        /**
+          * Unread notifications. Shown as a badge on the notifications button when above 0.
+          * @default 0
+         */
+        "unread"?: number;
+    }
     /**
      * The side navigation of the signed-in account area: Applications, Payments,
      * Notifications, Profile and settings, then a divider and Sign out. It takes 3 of 12
@@ -2646,29 +3411,70 @@ declare namespace LocalJSX {
         "label"?: string;
     }
     /**
-     * The top bar of every mobile screen and desktop page: a translucent glass bar with a
-     * start control (usually `sc-back-link`), the channel name, and an end control (usually
-     * `sc-language-switch`).
-     * - `align="center"` (default) is the mobile bar: start, title in the middle, end.
-     * - `align="start"` is the desktop header: title (with a mark) at the start, then the
-     *   default slot (primary navigation), and the end slot pushed to the end.
-     * - `shape="floating"` turns the bar into the inset glass capsule used on desktop.
-     * The glass becomes a solid surface under `prefers-reduced-transparency: reduce` and in
-     * forced colours. The host is a `banner` landmark unless `landmark` is false.
+     * A site-wide announcement above the header: planned maintenance, a service outage, a change
+     * people need to know about (component-language B1). One message, one optional link, and an
+     * optional dismiss button.
+     * A labelled region ("Announcement" / "إعلان"), present when the page loads. It is not a
+     * live region and not an alert. The text carries the severity in words ("Planned
+     * maintenance…"); the tone's icon and container repeat it.
+     * Dismissing it fires `scDismiss` (cancelable) and hides it. With `announcement-id`, the
+     * dismissal is remembered in this browser, so the same announcement does not come back.
+     * Focus moves to the next focusable element after it. From a pointer it fades out over
+     * `duration-exit`; from the keyboard it goes at once. Its height is never animated (MOT-11).
+     */
+    interface ScAnnouncementBar {
+        /**
+          * Remembers a dismissal in this browser (localStorage) under this id, so the announcement stays hidden on later pages. Change the id when the message changes.
+         */
+        "announcementId"?: string;
+        /**
+          * Shows the dismiss button.
+          * @default false
+         */
+        "dismissible"?: boolean;
+        /**
+          * A link with more detail ("See affected services"). Shown with `link-text`.
+         */
+        "linkHref"?: string;
+        /**
+          * The link's text.
+         */
+        "linkText"?: string;
+        /**
+          * Fired before the bar hides. Call `preventDefault()` to keep it.
+         */
+        "onScDismiss"?: (event: ScAnnouncementBarCustomEvent<{ id?: string }>) => void;
+        /**
+          * `warning` (maintenance; default), `info`, or `error` (a service is down).
+          * @default 'warning'
+         */
+        "tone"?: AnnouncementTone;
+    }
+    /**
+     * The transaction app bar (component-language A4; Standard TPL-01, LANG-04): the bar at the
+     * top of every step of a journey (E2–E4). Channel pages outside a transaction use
+     * `sc-site-header` instead.
+     * A 4px rule in `channel-action` along the top; a start slot (the back link), the title (a
+     * 10px channel swatch and the channel name, centred) and an end slot (the language switch),
+     * with fixed 96px side slots so the title stays centred; a 1px `outline-variant` rule
+     * beneath. 60px tall on `surface`. Flat: no glass, no shadow.
+     * The host is a `banner` landmark unless `landmark` is false. It is not fixed by default;
+     * with `sticky`, `sc-page sync-document` sets `scroll-padding-top` so focus never slides
+     * under it (WCAG 2.4.11).
      */
     interface ScAppBar {
         /**
-          * `center`: mobile layout with the title in the middle. `start`: desktop layout with the title at the start.
+          * `center` (default): the journey bar, title in the middle. `start`: deprecated (v1's desktop header): the title at the start and the default slot after it. Use `sc-site-header` for channel pages.
           * @default 'center'
          */
         "align"?: 'center' | 'start';
         /**
-          * Makes the host a `banner` landmark. Set it to false when the page already has a banner (for example a site header around the bar), or when the bar sits inside a dialog.
+          * Makes the host a `banner` landmark. Set it to false when the page already has a banner, or when the bar sits inside a dialog.
           * @default true
          */
         "landmark"?: boolean;
         /**
-          * `bar`: edge to edge with a hairline at the bottom. `floating`: an inset glass capsule (desktop).
+          * Deprecated and ignored: v2 has no floating glass capsule (ELV-04).
           * @default 'bar'
          */
         "shape"?: 'bar' | 'floating';
@@ -2677,6 +3483,27 @@ declare namespace LocalJSX {
           * @default false
          */
         "sticky"?: boolean;
+    }
+    /**
+     * One thing that is due ("Needs your attention"): a bill to pay, a document to upload, a
+     * registration about to expire. A thin topic-tint strip on top, an icon tile, a status tag,
+     * the title, the key fact, a meta line (amount and reference) and one action.
+     * The card is neutral and is not a link: the action is the only thing to press, and its
+     * label names the action and the item ("Pay AED 412.60"). Status is never shown by colour:
+     * the strip and the icon tile are decorative topic tints, and the urgency is in the status
+     * tag's words. Put the cards in a list (`<ul>`), most urgent first, under a heading that
+     * gives the count ("4 things, most urgent first").
+     */
+    interface ScAttentionCard {
+        /**
+          * The heading level of the title: 3 under a "Needs your attention" `h2` (default).
+          * @default 3
+         */
+        "headingLevel"?: AttentionCardHeadingLevel;
+        /**
+          * The decorative topic tint of the top strip and the icon tile (foundations §2.7): `amber` bills, `violet` documents and residency, `blue` vehicles, `rose` family, `orange` housing, `green` health. Without it there is no strip and the icon tile takes the channel's container colour. Never use a tint to mean urgency: that is the status tag.
+         */
+        "tint"?: AttentionCardTint;
     }
     /**
      * The "Back" control at the start of an app bar or above a question: plain text with a
@@ -2840,11 +3667,15 @@ declare namespace LocalJSX {
         "toneLabel"?: string;
     }
     /**
-     * A surface container: surface fill, card radius, elevation 1. Groups related content,
-     * such as a life event and its steps, or the answers in one section of "Check your answers".
+     * A surface that groups related content: a life event and its steps, the answers in one
+     * section of "Check your answers", a totals card. Flat and outline-first (ELV-01): 12px
+     * corners, a 1px `outline-variant` edge, no shadow. Cards are never links (CMP-06): put the
+     * link on a heading or a button inside.
+     * v2 renders in light DOM (Stencil `scoped`, architecture §3.1): the host is the surface and
+     * your content stays its direct children, so `aria-labelledby` points at your own heading
+     * with an ordinary id. There is no `::part(surface)`; style the host (`.sc-card`) if you must.
      * With `landmark`, the card becomes a named region (`section`) or an `article`, labelled by
-     * the first heading inside it. The role and `aria-labelledby` go on the host, in light DOM,
-     * so the reference to the slotted heading resolves.
+     * the first heading inside it, or by `label`.
      */
     interface ScCard {
         /**
@@ -2852,14 +3683,19 @@ declare namespace LocalJSX {
          */
         "label"?: string;
         /**
-          * Makes the card a landmark. `section` exposes a region (use it for a part of a page a user would want to jump to); `article` is for self-contained content. Both are named by the first heading (`h1`–`h6`) inside the card, or by `label`. Leave unset for a plain box.
+          * Makes the card a landmark. `section` exposes a region (a part of a page a user would want to jump to); `article` is for self-contained content. Both are named by the first heading (`h1`–`h6`) inside the card, or by `label`. Leave unset for a plain box.
          */
         "landmark"?: CardLandmark;
         /**
-          * Inner padding: `m` is 16px, `l` is 24px (default).
+          * Inner padding: `l` is 24px (default), `m` is 16px.
           * @default 'l'
          */
         "padding"?: CardPadding;
+        /**
+          * `outlined` (default): white surface with a 1px `outline-variant` edge, for groups on a page or a neutral band. `filled`: a quiet `surface-container` fill with no edge, for a totals card or a group inside an outlined area.
+          * @default 'outlined'
+         */
+        "variant"?: CardVariant;
     }
     /**
      * Points to another channel that also offers this service: "Also on Dubai Transport".
@@ -2889,21 +3725,81 @@ declare namespace LocalJSX {
         "variant"?: ChannelChipVariant;
     }
     /**
-     * The top wash of a channel page: a gradient from the channel's wash-start to wash-end
-     * colour (interpolated in OKLAB), holding an eyebrow, the page's `<h1>`, a lede and a
-     * search field. It follows `data-channel` and the theme like every component.
-     * The hero is full-bleed; its content sits in an `sc-container`, so it lines up with the
-     * page below.
+     * The top band of a channel's home or section page (E1): a flat `channel-subtle` band
+     * (decision Q-hero: no gradient), holding optional breadcrumbs, an eyebrow, the page's
+     * `<h1>` at display size, an optional lede, search and a "Popular now" row of suggestion
+     * chips. It follows `data-channel` and the theme like every component.
+     * The band is full-bleed; its content follows the page grid's margins (20, 32, 48, 80px)
+     * and the 1280px cap, so it lines up with `sc-container` content below. The hero never
+     * carries a carousel or autoplaying media.
      */
     interface ScChannelHero {
+        /**
+          * Overrides the label before the suggestion chips (default "Popular now" / "الأكثر طلبًا الآن").
+         */
+        "popularLabel"?: string;
+        /**
+          * The heading size from 1024px: `large` (display-large, 80px) for a channel's home page, `medium` (display-medium, 57px) for a section page. Below 1024px both step down (display-small from 600px, headline-large on phones).
+          * @default 'large'
+         */
+        "size"?: ChannelHeroSize;
+    }
+    /**
+     * The channel network strip (component-language B21, Standard CHR-08): "One network · seven
+     * channels" and a tile for each of the seven channels, in the Standard 3.1 order, at the end
+     * of every channel home page, before the footer.
+     * City indigo marks it as shared (the eyebrow and its rule). Each tile carries its own
+     * channel's colour only as attribution: a 4px top rule in that channel's `channel-action`.
+     * Each tile sets its own `data-channel` (FND-26), which is why the strip renders into light
+     * DOM (Stencil `scoped`). The current channel's tile is filled with its `channel-subtle`,
+     * says "You are here", carries `aria-current="true"` and is not a link (it would lead to
+     * this site).
+     * A `<nav>` labelled "Government of Dubai channels" with a list of links. Seven tiles in a
+     * row from 1024px (by the strip's own width), four from 600px, two below.
+     */
+    interface ScChannelNetwork {
+        /**
+          * The current channel. Defaults to the closest `data-channel`.
+         */
+        "channel"?: Channel1;
+        /**
+          * Each channel's home page (as `sc-channel-switcher` `links`; `{lang}` becomes `en` or `ar`).
+         */
+        "links"?: ChannelLinks | string;
+    }
+    /**
+     * The channel's logo and the channel switcher, at the inline-end of `sc-site-header`
+     * (Standard CHR-01, CHR-03; component-language B2a).
+     * A disclosure, not an ARIA menu: a `<button aria-expanded>` named "Choose a channel: Dubai
+     * Now" opens a non-modal panel listing all seven channels as links, in the Standard 3.1
+     * order, each with its name, a one-line descriptor in the page language and a swatch in
+     * that channel's own colour. Every item carries its own `data-channel` (FND-26), so the
+     * swatch is that channel's `channel-action`; that is why the component renders into light
+     * DOM (Stencil `scoped`): the document's channel rules must reach the items. The current
+     * channel carries a check and `aria-current="true"`.
+     * Escape and a press outside close the panel; Escape returns focus to the button; the panel
+     * closes when focus leaves it. From a pointer it grows from the trigger's corner over
+     * `duration-base`; from the keyboard it appears instantly (MOT-02). Below 1024px the trigger
+     * shrinks to the logo and chevron and keeps its accessible name (CHR-04).
+     */
+    interface ScChannelSwitcher {
+        /**
+          * The current channel. Defaults to the closest `data-channel` (as set by `sc-page`).
+         */
+        "channel"?: Channel1;
+        /**
+          * Each channel's home page, as an object or a JSON attribute: `links='{"now":"https://…/{lang}/","transport":"https://…/{lang}/"}'`. `{lang}` becomes `en` or `ar`, so each link leads to that channel's home in the current language. Give all seven; a channel without a link is listed as text.
+         */
+        "links"?: ChannelLinks | string;
     }
     /**
      * A checkbox: one of several choices in an `sc-checkbox-group`, or on its own for a single
-     * yes/no statement ("I confirm the vehicle details are correct").
-     * Renders a native `<input type="checkbox">`, its `<label>` (the default slot) and hint in
-     * its own shadow root. Space toggles it. Form-associated: when checked it submits `value`
-     * under its `name`, or under the group's `name` inside `sc-checkbox-group`. On its own it can
-     * show an error; inside a group the group shows the error and marks every box invalid.
+     * statement ("I confirm the vehicle details are correct").
+     * v2 renders a native `<input type="checkbox">`, its `<label>` (the default slot) and hint in
+     * light DOM (Stencil `scoped`, decision A2). Space toggles it; clicking the label or the 44px
+     * target around the box toggles it. When checked it submits `value` under its `name`, or under
+     * the group's `name` inside `sc-checkbox-group`. On its own it can show an error and use
+     * native `required`; inside a group the group shows the error and marks every box invalid.
      */
     interface ScCheckbox {
         /**
@@ -2921,31 +3817,29 @@ declare namespace LocalJSX {
          */
         "error"?: string;
         /**
-          * The `id` of a `<form>` element to associate this element with.
-         */
-        "form"?: string;
-        /**
-          * @default false
-         */
-        "groupDisabled"?: boolean;
-        /**
           * @default false
          */
         "groupInvalid"?: boolean;
+        "groupName"?: string;
         /**
           * Help text under the label.
          */
         "hint"?: string;
         /**
+          * Shows the mixed state (a 12 × 2 bar), for a box that controls a set of others ("All channels") when only some are checked. Set by script; cleared when the user toggles it. Exposed natively as `aria-checked="mixed"`.
+          * @default false
+         */
+        "indeterminate"?: boolean;
+        /**
           * The name submitted with the form. Inside `sc-checkbox-group`, defaults to the group's `name`.
          */
         "name"?: string;
         /**
-          * Fires when the box is toggled with `{ checked, value }`. A native `change` is also dispatched on the host.
+          * Fires when the box is toggled with `{ checked, value }`. The native `change` event also bubbles.
          */
         "onScChange"?: (event: ScCheckboxCustomEvent<{ checked: boolean; value: string }>) => void;
         /**
-          * On its own: must be checked to submit (`valueMissing`). Inside a group, use the group's `required`.
+          * On its own: must be checked to submit (native `valueMissing`). Inside a group, use the group's `required`.
           * @default false
          */
         "required"?: boolean;
@@ -2957,18 +3851,15 @@ declare namespace LocalJSX {
     }
     /**
      * Several choices from a short list: "Which documents do you have?".
-     * A `<fieldset>` with a `<legend>`, hint and error in this element's shadow root, with the
-     * `sc-checkbox` children slotted inside it. Each checkbox keeps its own native input, label
-     * and hint in its own shadow root (so `sc-checkbox` also works on its own); the fieldset
-     * groups them in the accessibility tree, which follows the flattened tree. The group's
-     * hint and error describe the fieldset, and in the error state every box gets
-     * `aria-invalid` and an error border.
-     * Each checked box submits its own value under the group's `name` (or its own). The group is
-     * form-associated only to report `valueMissing` when `required` and nothing is checked.
+     * v2 renders a native `<fieldset>` with its `<legend>`, hint and error in light DOM (Stencil
+     * `scoped`, decision A2), and moves the `sc-checkbox` children into it, so they are grouped
+     * and named by the legend natively. Each checked box submits its own value under the group's
+     * `name`. `disabled` disables the fieldset (and so every box). With `required`, the first box
+     * carries a native validity error until one is checked.
      */
     interface ScCheckboxGroup {
         /**
-          * Disables every checkbox. Avoid it.
+          * Disables every checkbox (through the fieldset). Avoid it.
           * @default false
          */
         "disabled"?: boolean;
@@ -2976,10 +3867,6 @@ declare namespace LocalJSX {
           * The error message. Setting it shows the error state on the group and every box.
          */
         "error"?: string;
-        /**
-          * The `id` of a `<form>` element to associate this element with.
-         */
-        "form"?: string;
         /**
           * When set (1–6), the legend is also the page heading at this level.
          */
@@ -3011,34 +3898,21 @@ declare namespace LocalJSX {
          */
         "optional"?: boolean;
         /**
-          * Requires at least one box to be checked (`valueMissing`). Not shown visually.
+          * Requires at least one box to be checked. Not shown visually.
           * @default false
          */
         "required"?: boolean;
     }
     /**
-     * Centres content and sets the page's outer margins from the layout tokens: 20px on
-     * phones, 32px from 600px, 48px from 1024px and 80px from 1440px, with content capped at
-     * `--sc-container-max` (1280px). `width="reading"` caps it at the 680px reading width instead,
-     * for question pages and running text.
-     */
-    interface ScContainer {
-        /**
-          * `page` (default) caps content at 1280px; `reading` caps it at 680px and keeps it at the start, aligned with page content.
-          * @default 'page'
-         */
-        "width"?: ContainerWidth;
-    }
-    /**
      * A date people know, such as a date of birth or the date on a document: Day, Month and
      * Year boxes (يوم / شهر / سنة) with the numeric keyboard.
-     * A `<fieldset>` and `<legend>` with the hint and error, and three labelled native inputs,
-     * in one shadow root. In Arabic the boxes run right to left (Day on the right). An error can
-     * highlight one part with `error-parts="year"`.
-     * Form-associated: submits the date as an ISO string (`2026-03-07`, or empty while it isn't
-     * a real date) under `name`, plus the raw parts as `name-day`, `name-month` and `name-year`
-     * so a server can re-display what was typed. Reports `valueMissing` and `badInput`.
-     * Delegates focus to the first box.
+     * v2 renders a native `<fieldset>` and `<legend>` with the hint and error, three labelled
+     * native inputs and a hidden input in light DOM (Stencil `scoped`, decision A2). It submits
+     * the date as an ISO string (`2026-03-07`, or empty while it isn't a real date) under `name`,
+     * and the raw parts as `name-day`, `name-month` and `name-year`, so a server can re-display
+     * what was typed. An empty required date and an impossible date are native validity errors
+     * on the first box concerned. In Arabic the boxes run right to left (Day on the right). An
+     * error can mark one box with `error-parts="year"`.
      */
     interface ScDateInput {
         /**
@@ -3055,13 +3929,9 @@ declare namespace LocalJSX {
          */
         "error"?: string;
         /**
-          * Which boxes the error is about, space-separated: `"day"`, `"month year"`. Only those get the error border and `aria-invalid`. When empty, an error highlights all three.
+          * Which boxes the error is about, space-separated: `"day"`, `"month year"`. Only those get the error edge and `aria-invalid`. When empty, an error marks all three.
          */
         "errorParts"?: string;
-        /**
-          * The `id` of a `<form>` element to associate this element with.
-         */
-        "form"?: string;
         /**
           * When set (1–6), the legend is also the page heading at this level.
          */
@@ -3079,7 +3949,7 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Fires when a box is committed with `{ value, day, month, year }`. A native `change` is also dispatched on the host.
+          * Fires when a box is committed with `{ value, day, month, year }`. The native `change` also bubbles from the box.
          */
         "onScChange"?: (event: ScDateInputCustomEvent<{ value: string } & Parts>) => void;
         /**
@@ -3092,7 +3962,7 @@ declare namespace LocalJSX {
          */
         "optional"?: boolean;
         /**
-          * Requires a date (`valueMissing` while every box is empty).
+          * Requires a date (a validity error while every box is empty).
           * @default false
          */
         "required"?: boolean;
@@ -3106,14 +3976,18 @@ declare namespace LocalJSX {
      * A start and an end date that relate to a calendar: filtering payments between two dates,
      * the nights of a hotel stay, how long a permit lasts. For one date people already know
      * (a date of birth), use `sc-date-input`.
-     * Two typed segments (From / To, من / إلى) in one 54px frame, and a calendar button that
+     * Two typed segments (From / To, من / إلى) in one 56px frame, and a calendar button that
      * opens a picker: a popover with one or two months and optional presets on medium and
      * wider screens, a modal bottom sheet below 600px. People can always type instead
      * ("21/9/2026", "21 9 2026", "21-09-2026").
-     * Form-associated: submits `name-start` and `name-end` as ISO dates (empty until each is a
-     * real date). Reports `valueMissing` (with `required`), `badInput`, `rangeUnderflow` and
-     * `rangeOverflow`, and shows its own messages for impossible ranges on blur. Delegates focus
-     * to the start segment.
+     * v2 renders everything in light DOM (Stencil `scoped`, decision A2), with classes prefixed
+     * `.sc-date-range__`. It submits `name-start` and `name-end` as ISO dates through hidden
+     * inputs (empty until each is a real date). The first problem with the range (missing with
+     * `required`, not a real date, end before start, outside `min`/`max`, too long or short) is a
+     * native validity error on the segment concerned; the component shows its own message on
+     * blur or after a failed submit. `focus()` on the host goes to the start segment. One native
+     * `change` is dispatched from the host per committed range.
+     * Rich content: a child with `slot="label"`, `slot="hint"` or `slot="error"` is moved into place once.
      */
     interface ScDateRange {
         /**
@@ -3135,10 +4009,6 @@ declare namespace LocalJSX {
           * @default 'both'
          */
         "errorParts"?: 'start' | 'end' | 'both';
-        /**
-          * The `id` of a `<form>` element to associate this element with.
-         */
-        "form"?: string;
         /**
           * When set (1–6), the legend is also the page heading at this level.
          */
@@ -3281,53 +4151,105 @@ declare namespace LocalJSX {
         "noAutofocus"?: boolean;
     }
     /**
-     * The page footer: help and contact, accessibility, privacy and terms links, and
-     * "Government of Dubai". Renders a `<footer>` (the page's `contentinfo` landmark) with a
-     * list of links under a visually hidden "Support links" heading.
-     * The four standard links appear when their `*-href` is set, with text from strings in the
-     * page language. Extra links go in the default slot as plain `<a>` elements; each gets its
-     * own list item (the footer sets their `slot` attribute).
+     * The filters applied to a list of results, as removable chips beside the result count, with
+     * "Clear all filters" when there are two or more (component-language B18, applied filter).
+     * Each chip is a native `<button>` named "Remove filter: Transport and vehicles". Removing one
+     * takes it away at once (no animation), emits `scRemove`, and moves focus to the next chip,
+     * else the previous one, else the element named by `focus-target` (the results heading).
+     * Every change in the number of filters is announced politely: "2 filters applied".
+     * The page updates its results on `scRemove` / `scClear`; set `filters` to change the chips.
+     * Chips are 32px tall (decision Q-chips) with a 44px target. Light DOM (Stencil `scoped`).
+     */
+    interface ScFilterChips {
+        /**
+          * The applied filters, in order: an array of `{ value, label }`, or the same as JSON in the attribute (`filters='[{"value":"transport","label":"Transport and vehicles"}]'`).
+          * @default []
+         */
+        "filters"?: FilterChip[] | string;
+        /**
+          * The id of the element that gets focus when the last chip goes, usually the results heading. It is made focusable (`tabindex="-1"`) if it isn't.
+         */
+        "focusTarget"?: string;
+        /**
+          * The group's accessible name. Defaults to "Applied filters" ("عوامل التصفية المطبّقة").
+         */
+        "label"?: string;
+        /**
+          * Hides "Clear all filters".
+          * @default false
+         */
+        "noClear"?: boolean;
+        /**
+          * Fires when "Clear all filters" is used. Every chip is already gone.
+         */
+        "onScClear"?: (event: ScFilterChipsCustomEvent<void>) => void;
+        /**
+          * Fires when a chip is removed, with `{ value, label }`. The chip is already gone.
+         */
+        "onScRemove"?: (event: ScFilterChipsCustomEvent<FilterChip>) => void;
+    }
+    /**
+     * The page footer, a `<footer>` (the page's `contentinfo` landmark). Two variants:
+     * - `simple` (default; transaction pages, component-language A29): one row of underlined
+     *   links and "Government of Dubai", under a 1px rule.
+     * - `grouped` (channel sites, Standard CHR-06, decision Q-footer; B5): the channel's brand
+     *   group (`slot="brand"`: a one-sentence description and app badges); a **Channels** group
+     *   listing all seven channels in the Standard 3.1 order, the current one Bold with
+     *   `aria-current="true"` and no swatch; **Helpful information** (about, help and contact,
+     *   accessibility statement, sitemap); and **Legal** (privacy and cookies, terms). Each group
+     *   has an `<h2>`. Then "Government of Dubai · Last updated …" and "… is run by the
+     *   Government of Dubai".
+     * The standard links appear when their `*-href` is set, with text from strings in the page
+     * language. Every channel sets all of them (TPL-01, LEG-01). Extra links go in the default
+     * slot as plain `<a href>` elements; each gets its own list item (the footer sets their
+     * `slot` attribute). The footer is on `surface`, never a dark band.
      */
     interface ScFooter {
+        /**
+          * About the channel ("About Dubai Now").
+         */
+        "aboutHref"?: string;
         /**
           * The accessibility statement.
          */
         "accessibilityHref"?: string;
         /**
+          * The current channel. Defaults to the closest `data-channel`.
+         */
+        "channel"?: Channel1;
+        /**
+          * A separate cookies page. Splits "Privacy and cookies" into "Privacy" and "Cookies".
+         */
+        "cookiesHref"?: string;
+        /**
           * The help and contact page.
          */
         "helpHref"?: string;
         /**
-          * The privacy notice.
+          * Each channel's home page, for the Channels group (as `sc-channel-switcher` `links`; `{lang}` becomes `en` or `ar`).
+         */
+        "links"?: ChannelLinks | string;
+        /**
+          * The privacy notice. Labelled "Privacy and cookies" unless `cookies-href` is set too.
          */
         "privacyHref"?: string;
         /**
-          * The terms and conditions.
+          * The sitemap.
+         */
+        "sitemapHref"?: string;
+        /**
+          * The terms of use.
          */
         "termsHref"?: string;
-    }
-    /**
-     * The layout grid: 4 columns on phones, 8 from 600px and 12 from 1024px, with gutters from
-     * the layout tokens (16, 20, 24px). Each child is a grid item.
-     * Item widths are set once for all children with `span`, `span-medium` and `span-expanded`
-     * (each falls back to the smaller one, and is capped at the number of columns), or per
-     * child with the `--sc-grid-span` custom property, e.g. `style="--sc-grid-span: 8"`.
-     * Service cards three to a row on desktop, two on tablets and one on phones:
-     * `<sc-grid span-medium="4" span-expanded="4">`.
-     */
-    interface ScGrid {
         /**
-          * Columns each item spans on phones (4 columns). Defaults to the full width.
+          * Grouped: when the site was last updated, as it should read ("12 October 2026").
          */
-        "span"?: number;
+        "updated"?: string;
         /**
-          * Columns each item spans from 1024px (12 columns). Defaults to `span-medium`.
+          * `simple` (one row) or `grouped` (channel sites, with the Channels group).
+          * @default 'simple'
          */
-        "spanExpanded"?: number;
-        /**
-          * Columns each item spans from 600px (8 columns). Defaults to `span`.
-         */
-        "spanMedium"?: number;
+        "variant"?: FooterVariant;
     }
     /**
      * Switches to the same page in the other language. The label is always the other
@@ -3401,17 +4323,6 @@ declare namespace LocalJSX {
         "standalone"?: boolean;
     }
     /**
-     * Keeps a value left-to-right inside any text, e.g. a plate number, amount, reference or
-     * phone number in an Arabic sentence. Renders `<bdi dir="ltr">` around its content.
-     * Shadow DOM is used on purpose: the author's text stays in the light DOM (searchable,
-     * copyable, untouched), and layout follows the flat tree, so the `<bdi>` isolates the
-     * slotted text from the surrounding paragraph exactly as a `<bdi>` written in place would.
-     * The host is also `unicode-bidi: isolate; direction: ltr` (here and in sc.css), so the
-     * value is isolated even before the component upgrades.
-     */
-    interface ScLtr {
-    }
-    /**
      * A modal dialog for a short secondary task or a decision that can't wait, such as the
      * session-timeout warning (TIME-02). On phones (under 600px) the same component is a bottom
      * sheet.
@@ -3476,6 +4387,42 @@ declare namespace LocalJSX {
         "open"?: boolean;
     }
     /**
+     * A titled module on a signed-in home page ("At a glance"): Vehicles, Applications, Traffic
+     * fines. A header row with an optional tinted icon, the title (a heading) and a standalone
+     * link at the end ("Manage", "View all"), then the module's own content.
+     * The card is not a link (CMP-06). The header link's accessible name includes the title
+     * ("View all, Applications"), so a page with several "View all" links still makes sense out
+     * of context.
+     */
+    interface ScModuleCard {
+        /**
+          * Where the header link goes ("Manage", "View all"). Without it (and without `slot="action"`) there is no header link.
+         */
+        "actionHref"?: string;
+        /**
+          * The header link's visible text, e.g. "Manage" or "View all". Its accessible name adds the title.
+         */
+        "actionText"?: string;
+        /**
+          * Separates the top-level content blocks with 1px `outline-variant` rules, 20px apart.
+          * @default false
+         */
+        "divided"?: boolean;
+        /**
+          * The module's title, e.g. "Vehicles". Required.
+         */
+        "heading": string;
+        /**
+          * The heading level of the title: 3 under an "At a glance" `h2` (default).
+          * @default 3
+         */
+        "headingLevel"?: ModuleCardHeadingLevel;
+        /**
+          * The icon tile's decorative topic tint (foundations §2.7). Without it the tile takes the channel's container colour.
+         */
+        "tint"?: ModuleCardTint;
+    }
+    /**
      * A person's notifications, grouped by day ("Today", "Earlier"). Light DOM (architecture
      * §3.1): you write the headings and native lists, so each group is a real list under a real
      * heading and the links are ordinary links.
@@ -3504,18 +4451,22 @@ declare namespace LocalJSX {
     interface ScNotificationList {
     }
     /**
-     * The page frame: header, `<main>` and footer, with the page's language, direction and
-     * channel on its root.
+     * The page shell (Standard TPL-01, 11.1 and 11.9): the header, one `<main>` and the footer,
+     * with the page's language, direction and channel on its root.
      * - Set `lang` on `sc-page` as on any element; the page sets `dir` to match (`rtl` for
      *   Arabic) and re-applies it when `lang` changes.
      * - `channel` sets `data-channel`, which themes every component inside.
      * - `<main>` is rendered in light DOM (the component is scoped, not shadowed) with
-     *   `id="main-content"` and `tabindex="-1"`, so a skip link (`<a href="#main-content">`)
-     *   anywhere on the page can reach it and move focus into it.
-     * - With `sync-document` and a sticky `sc-app-bar` in the header, it sets
-     *   `scroll-padding-block-start` on `<html>` to the bar's height plus `--sc-space-8`, so
-     *   focused elements and `#fragment` targets scroll into view below the bar, not under it
-     *   (WCAG 2.4.11). It follows the bar's size and removes the padding when no longer needed.
+     *   `id="main-content"` and `tabindex="-1"`, so the skip link (`sc-skip-link`, whose default
+     *   `href` is `#main-content`) can reach it and move focus into it. The header slot gives
+     *   the banner landmark, the footer slot the contentinfo landmark.
+     * - With `sync-document` it also sets `lang`, `dir` and `data-channel` on `<html>`, and,
+     *   with a sticky `sc-app-bar` or `sc-site-header` in the header, `scroll-padding-block-start`
+     *   on `<html>` to the bar's height plus `--sc-space-8`, so focused elements are never
+     *   hidden under it (WCAG 2.4.11).
+     * - It reserves the height of a docked `sc-utility-bar` (`padding-block-end` from
+     *   `--sc-utility-bar-block-size`, which the bar publishes), so the bar never covers the end
+     *   of the page; `sc.css` sets the matching `scroll-padding-block-end` (CHR-05).
      */
     interface ScPage {
         /**
@@ -3528,7 +4479,7 @@ declare namespace LocalJSX {
          */
         "mainId"?: string;
         /**
-          * Also sets `lang`, `dir` and `data-channel` on `<html>`. Use it when `sc-page` is the whole page, so browsers and screen readers get the page language from the document root. With a sticky `sc-app-bar` in the header, it also sets `scroll-padding-block-start` on `<html>` so focus is never hidden under the bar.
+          * Also sets `lang`, `dir` and `data-channel` on `<html>`. Use it when `sc-page` is the whole page, so browsers and screen readers get the page language from the document root. With a sticky header, it also keeps `scroll-padding-block-start` on `<html>` clear of it.
           * @default false
          */
         "syncDocument"?: boolean;
@@ -3583,11 +4534,11 @@ declare namespace LocalJSX {
     }
     /**
      * One option in an `sc-radio-group`. Its content is the option's label.
-     * `sc-radio` holds data and label content only. The parent `sc-radio-group` renders the
-     * native `<input type="radio">` for every option inside its own shadow root and slots
-     * this element into that option's `<label>`, so all the radios share one tree: they form a
-     * real native radio group (one Tab stop, arrow keys move and select, "2 of 3" announced).
-     * Use it only inside `sc-radio-group`.
+     * v2 renders a native `<input type="radio">`, its `<label>` and hint in light DOM (Stencil
+     * `scoped`, decision A2). Every radio in a group shares the group's `name` in one document
+     * tree, so they form a real native radio group: one Tab stop, arrow keys move and select,
+     * "2 of 3" is announced, and the form submits the chosen value. Use it only inside
+     * `sc-radio-group`, which passes down the name, the chosen value and the error state.
      */
     interface ScRadio {
         /**
@@ -3601,9 +4552,22 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
+          * @default false
+         */
+        "groupInvalid"?: boolean;
+        "groupName"?: string;
+        /**
+          * @default false
+         */
+        "groupRequired"?: boolean;
+        /**
           * Help text under this option's label.
          */
         "hint"?: string;
+        /**
+          * @default false
+         */
+        "selected"?: boolean;
         /**
           * The value submitted when this option is chosen.
          */
@@ -3611,18 +4575,18 @@ declare namespace LocalJSX {
     }
     /**
      * One choice from a short list: "Who issued the plate?".
-     * A `<fieldset>` with a `<legend>` (exposed as `role="radiogroup"`, labelled by the legend
-     * and described by the hint and error), and one native `<input type="radio">` per
-     * `sc-radio` child, all inside this element's shadow root. Each `sc-radio` is slotted into
-     * its option's `<label>` (manual slot assignment), so its content names the radio while the
-     * radios themselves stay in one tree: native arrow keys, one Tab stop, position in set.
-     * Form-associated: submits the chosen value under `name`, resets, and reports
-     * `valueMissing` when `required`. Delegates focus, so an error-summary link to the host's
-     * `id` focuses the first radio.
+     * v2 renders a native `<fieldset>` (role `radiogroup`) with its `<legend>`, hint and error in
+     * light DOM (Stencil `scoped`, decision A2), and moves the `sc-radio` children into it. Each
+     * `sc-radio` renders a native radio with the group's `name`, so they form a real native radio
+     * group: one Tab stop, arrow keys move and select, position in set, native submission,
+     * reset and `required`. `disabled` disables the fieldset. `focus()` on the host reaches the
+     * chosen radio, or the first.
+     * Without a `name`, the radios share a generated one (`sc-radio-group-3`), which a form
+     * would submit: give the group a `name` inside a form.
      */
     interface ScRadioGroup {
         /**
-          * Disables every option. Avoid it.
+          * Disables every option (through the fieldset). Avoid it.
           * @default false
          */
         "disabled"?: boolean;
@@ -3631,11 +4595,7 @@ declare namespace LocalJSX {
          */
         "error"?: string;
         /**
-          * The `id` of a `<form>` element to associate this element with.
-         */
-        "form"?: string;
-        /**
-          * When set (1–6), the legend is also the page heading at this level (`<legend><h1>…</h1></legend>`). Use it when the question is the only one on the page.
+          * When set (1–6), the legend is also the page heading at this level (`<legend><h1>…</h1></legend>`).
          */
         "headingLevel"?: HeadingLevel;
         /**
@@ -3656,7 +4616,7 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Fires when the choice changes with `{ value }`. A native `change` is also dispatched on the host.
+          * Fires when the choice changes with `{ value }`. The native `change` event also bubbles from the radio.
          */
         "onScChange"?: (event: ScRadioGroupCustomEvent<{ value: string }>) => void;
         /**
@@ -3665,7 +4625,7 @@ declare namespace LocalJSX {
          */
         "optional"?: boolean;
         /**
-          * Requires a choice (`valueMissing` until one is made). Not shown visually.
+          * Requires a choice (native `valueMissing` until one is made). Not shown visually.
           * @default false
          */
         "required"?: boolean;
@@ -3675,12 +4635,13 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     /**
-     * A pill search box: search icon, a labelled field and a primary "Search" button, inside a
-     * `<form role="search">` (a search landmark named by the label).
-     * Submitting (the button, or Enter in the field) emits `scSearch`. With `action`, the form
-     * then goes to that URL with the query as `?<name>=…`, unless a listener calls
-     * `preventDefault()`; without `action`, the page handles `scSearch` itself.
-     * The form is self-contained: don't nest `sc-search` inside another `<form>`.
+     * A search field and its button, inside a `<form role="search">` named by the label (E1: the
+     * field and the primary button are siblings with a 12px gap, not one pill).
+     * v2 renders the form, a native `<input type="search">` and an `sc-button type="submit"` in
+     * light DOM (Stencil `scoped`, decision A2), so Enter in the field submits through the button
+     * natively. Submitting emits `scSearch`. With `action`, the form then goes to that URL with the
+     * query as `?<name>=…`, unless a listener calls `preventDefault()`; without `action`, the page
+     * handles `scSearch` itself. Don't nest `sc-search` inside another `<form>`.
      */
     interface ScSearch {
         /**
@@ -3714,6 +4675,11 @@ declare namespace LocalJSX {
          */
         "placeholder"?: string;
         /**
+          * `m` (default): a 56px field and button. `l`: the 64px hero search (E1).
+          * @default 'm'
+         */
+        "size"?: SearchSize;
+        /**
           * The query. Updated as the user types.
           * @default ''
          */
@@ -3721,9 +4687,11 @@ declare namespace LocalJSX {
     }
     /**
      * One choice from a list too long for radios, such as the emirate that issued a plate.
-     * A native `<select>` inside the shadow root, styled like `sc-text-input`, with a chevron.
-     * Write the options as light-DOM `<option>` (and `<optgroup>`) children: they are copied
-     * into the inner select and kept in sync when they change. Form-associated and delegates focus.
+     * v2 renders a native `<select>` in light DOM (Stencil `scoped`, decision A2), styled like
+     * `sc-text-input` with an `expand_more` chevron. Write the options as `<option>` (and
+     * `<optgroup>`) children: they are moved INTO the native select, so they are the real options
+     * (no copies), and options added later are moved in too. The select submits, resets, validates
+     * and follows `<fieldset disabled>` natively; `focus()` on the host reaches it.
      */
     interface ScSelect {
         /**
@@ -3740,10 +4708,6 @@ declare namespace LocalJSX {
          */
         "error"?: string;
         /**
-          * The `id` of a `<form>` element to associate this element with.
-         */
-        "form"?: string;
-        /**
           * When set (1–6), the label is also the page heading at this level.
          */
         "headingLevel"?: HeadingLevel;
@@ -3752,7 +4716,7 @@ declare namespace LocalJSX {
          */
         "hint"?: string;
         /**
-          * The visible label: "Issuing emirate".
+          * The visible label: "Issuing authority".
          */
         "label"?: string;
         /**
@@ -3760,7 +4724,7 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Fires when the selection changes with `{ value }`. A native `change` (and `input`) also reach the host.
+          * Fires when the selection changes with `{ value }`. The native `change` and `input` events also bubble.
          */
         "onScChange"?: (event: ScSelectCustomEvent<{ value: string }>) => void;
         /**
@@ -3779,14 +4743,14 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     /**
-     * A link to a service: its title, the entity that owns it and an optional channel chip.
-     * There is no end chevron: the card is not itself a link, so nothing on it may look like one.
+     * A link to a service: its title, the entity that owns it, an optional icon and an optional
+     * channel chip, on a flat 12px card with a 1px edge (direction E, "Most used services").
      * Only the title is the link (CMP-06), so screen readers hear a short link name ("Renew
-     * vehicle registration"), not the whole card's text. The card is not wrapped in an `<a>`
-     * and the link's hit area is not stretched over the card: it is the title, grown to at
-     * least 44 x 44. The title is a heading containing the link, so heading navigation finds
-     * every service. The owning entity is the link's description. A chip that is a link is a
-     * separate link.
+     * vehicle registration"), with the entity as its description. The card is not wrapped in an
+     * `<a>` and the link's hit area is not stretched over the card: it is the title, grown to at
+     * least 44 × 44. The forward arrow at the top end is decorative: it is not a second link and
+     * is hidden from assistive technology. The title is a heading containing the link, so heading
+     * navigation finds every service. A chip that is a link is a separate link.
      */
     interface ScServiceCard {
         /**
@@ -3802,6 +4766,48 @@ declare namespace LocalJSX {
           * Where the service starts. Required.
          */
         "href": string;
+        /**
+          * Colours the icon tile with a decorative topic tint (foundations §2.7) instead of the channel container: `blue` transport, `violet` residency, `rose` family, `orange` housing, `amber` bills, `green` health. Decorative only. Ignored without an icon.
+         */
+        "tint"?: ServiceCardTint;
+    }
+    /**
+     * The header of channel pages outside a transaction (Standard CHR-01 to CHR-04;
+     * component-language B2). Transaction pages use `sc-app-bar`.
+     * From the inline-start edge: the Government of Dubai lockup (`slot="lockup"`), the main
+     * navigation (`slot="nav"`), search, the language switch (`slot="language"`), sign in with UAE PASS
+     * (`slot="signin"`) or the account menu once signed in (`slot="account"`), and the
+     * channel's logo and switcher (`slot="switcher"`, an `sc-channel-switcher`). Sign in is the
+     * official UAE PASS button (decision U3a), never a themed `sc-button`: until the official kit
+     * arrives the header renders a marked placeholder (black, white label, fingerprint glyph,
+     * 56px) that `slot="signin"` replaces. The order
+     * mirrors in Arabic. A flat `surface` bar, 80px tall, with a 1px `outline-variant` rule.
+     * Below 1024px the row keeps the menu button, the lockup, the language switch and the
+     * channel switcher (64px). Navigation, search and sign in (or the account menu) move into
+     * the mobile menu: a modal `<dialog>` labelled "Menu", with focus on its close button when
+     * it opens, Escape closing it and returning focus to the menu button, and the page behind
+     * it inert. The same slotted elements move; nothing is duplicated.
+     * The host is a `<header>` banner landmark. It is not fixed by default; with `sticky`,
+     * `sc-page` keeps `scroll-padding-top` clear of it (A11Y-05, F-009).
+     */
+    interface ScSiteHeader {
+        /**
+          * The search page. Adds a search button (an icon link named "Search").
+         */
+        "searchHref"?: string;
+        /**
+          * Where the UAE PASS placeholder button leads. The placeholder shows when this is set and there is neither a `slot="signin"` nor a `slot="account"` child.
+         */
+        "signInHref"?: string;
+        /**
+          * Overrides the placeholder's "Sign in with UAE PASS" (in the page language).
+         */
+        "signInText"?: string;
+        /**
+          * Keeps the header at the top while the page scrolls. `sc-page` then sets `scroll-padding-top`.
+          * @default false
+         */
+        "sticky"?: boolean;
     }
     /**
      * "Skip to main content": the first focusable element on every page. Hidden until it gets
@@ -3932,31 +4938,37 @@ declare namespace LocalJSX {
         "total"?: number;
     }
     /**
-     * The "Check your answers" pattern: rows of a key, a value and an optional "Change" action,
-     * as one `<dl>`.
-     * Description lists can't span shadow roots (a `<dl>` must directly contain `<dt>`/`<dd>`
-     * or `<div>` groups), so this component renders the whole `<dl>` in its own shadow root:
-     * one `<div>` per row holding the `<dt>` (from the row's `label`), the value `<dd>` and the
-     * action `<dd>`. Each `sc-summary-row` child is assigned to a named slot inside its value
-     * `<dd>`, so rich values (addresses, `<sc-ltr>` plates) stay in light DOM.
-     * Wide containers show three columns (key, value, a fixed-width action column, so rows
-     * align). Below 600px of container width the key sits above the value, with the action at
-     * the end.
+     * The "Check your answers" pattern (E3) and the payment summary (E4): rows of a key, a value
+     * and an optional "Change" action, as one `<dl>`.
+     * v2 renders in light DOM (Stencil `scoped`, architecture §3.1). The list renders the
+     * `<dl>` itself: one `<div>` per row holding the `<dt>` (the row's `label`), the value `<dd>`
+     * and the action `<dd>`. Each `sc-summary-row` child is moved into its value `<dd>`, so the
+     * description list is valid HTML (a `<dl>` may only contain `<div>`, `<dt>` and `<dd>`) and
+     * rich values (addresses, `<sc-ltr>` plates) stay the service's own markup.
+     * Layouts: `stacked` puts the key above the value with the action in a fixed 64px end column
+     * (E3); `columns` shows key, value and a fixed 96px action column; `pairs` puts the key in a
+     * fixed column and end-aligns the value, with no actions (E4); `auto` (default) is `stacked`
+     * below 600px of the list's own width and `columns` from there.
      */
     interface ScSummaryList {
         /**
-          * `card` (default) sits the rows on a surface card, as in D+; `plain` draws only the row dividers, for use inside another card.
+          * `card` (default) draws the rows on a 12px card with a 1px edge; `plain` draws only the row dividers, for use inside another card.
           * @default 'card'
          */
         "appearance"?: SummaryListAppearance;
+        /**
+          * `auto` (default), `stacked`, `columns` or `pairs`. See the component description.
+          * @default 'auto'
+         */
+        "layout"?: SummaryListLayout;
     }
     /**
      * One answer in a `sc-summary-list`: a key (`label`), a value (the default slot) and an
      * optional "Change" action.
-     * The row only carries data and its value. The parent `sc-summary-list` renders the
-     * `<dt>`, `<dd>` and action inside its own `<dl>`, and slots this element into the value
-     * `<dd>`, so the description list stays valid across shadow roots. Use it only as a direct
-     * child of `sc-summary-list`; the list sets its `slot` attribute.
+     * v2 renders in light DOM (Stencil `scoped`). The row carries the data and its value; the
+     * parent `sc-summary-list` renders the `<dt>`, the value `<dd>` and the action inside its own
+     * `<dl>`, and moves this element into the value `<dd>`. Use it only as a direct child of
+     * `sc-summary-list`; the list sets its `slot` attribute.
      */
     interface ScSummaryRow {
         /**
@@ -3964,7 +4976,7 @@ declare namespace LocalJSX {
          */
         "actionHiddenText"?: string;
         /**
-          * Where the action goes, e.g. back to the question with `#plate-number` or a page URL. Without it the row has no action (the action column stays, so values still align).
+          * Where the action goes, e.g. back to the question with `#plate-number` or a page URL. Without it the row has no action (the action column stays, so values still align). Ignored in the `pairs` layout.
          */
         "actionHref"?: string;
         /**
@@ -3976,9 +4988,14 @@ declare namespace LocalJSX {
          */
         "label": string;
         /**
-          * A plain-text value, used when the default slot is empty. With neither, the row shows "Not provided".
+          * A plain-text value, used when the row has no content. With neither, the row shows "Not provided".
          */
         "value"?: string;
+        /**
+          * `total` marks the amount row of a payment summary (E4): a quiet fill and Bold key and value.
+          * @default 'default'
+         */
+        "variant"?: SummaryRowVariant;
     }
     /**
      * A table compares rows of the same kind of thing across a few attributes: fines, payments,
@@ -4048,14 +5065,18 @@ declare namespace LocalJSX {
         /**
           * Overrides the built-in English and Arabic strings, as JSON: `{"tableSelectRow": "Select fine {row}", "tableSelectAll": "Select all fines on this page"}`, or per language: `{"ar": {…}}`.
          */
-        "strings"?: StringsInput;
+        "strings"?: StringsInput1;
     }
     /**
      * A single-line answer, such as a plate number, an email address or a phone number.
-     * Renders its own label, hint, error and native `<input>` in one shadow root, so the
-     * label and `aria-describedby` work. The host is form-associated (it submits `value`
-     * under `name`, resets, and reports validity from the inner input) and delegates focus,
-     * so an error-summary link to the host's `id` focuses the input.
+     * v2 renders its label, hint, error and a native `<input>` in light DOM (Stencil `scoped`,
+     * decision A2). The input is a real form control: it submits under `name`, Enter submits the
+     * form through its default button, and validation, reset, autofill and `<fieldset disabled>`
+     * are native. `focus()` on the host reaches the input, so an error-summary link to the host's
+     * `id` works. Styles: the classes `.sc-field`, `.sc-field__label`, `.sc-field__frame`,
+     * `.sc-field__control` (no `::part()`).
+     * Rich content: a child element with `slot="label"`, `slot="hint"`, `slot="error"`,
+     * `slot="prefix"` or `slot="suffix"` is moved into place once, when the component loads.
      */
     interface ScTextInput {
         /**
@@ -4068,13 +5089,9 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * The error message. Setting it shows the error state: a 3px error bar on the start side, an error border on the input, the message with an icon and a visually hidden "Error:", and `aria-invalid`. Say what to do: "Enter numbers only, like 12345".
+          * The error message. Setting it shows the error state: a 4px error bar at inline-start, a 2px error edge on the box, the message with an icon and a visually hidden "Error:", and `aria-invalid`. Say what to do: "Enter numbers only, like 12345".
          */
         "error"?: string;
-        /**
-          * The `id` of a `<form>` element to associate this element with.
-         */
-        "form"?: string;
         /**
           * When set (1–6), the label is also the page heading at this level (`<h1><label>…</label></h1>`).
          */
@@ -4092,7 +5109,7 @@ declare namespace LocalJSX {
          */
         "label"?: string;
         /**
-          * Keeps the value left-to-right (plates, phone numbers, emails, references). In Arabic the value still sits at the start (right) of the box. Use this, not `dir` on the host, which would flip the label and hint too.
+          * Keeps the value left-to-right (plates, phone numbers, emails, references). In Arabic the value still sits at the start (right) of the box. Use this, not `dir` on the host.
           * @default false
          */
         "ltr"?: boolean;
@@ -4109,11 +5126,11 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Fires when the value is committed (blur after a change) with `{ value }`. A native `change` event is also dispatched on the host.
+          * Fires when the value is committed (blur after a change) with `{ value }`. The native `change` event also bubbles from the input.
          */
         "onScChange"?: (event: ScTextInputCustomEvent<{ value: string }>) => void;
         /**
-          * Fires on every keystroke with `{ value }`. The native `input` event also reaches the host.
+          * Fires on every keystroke with `{ value }`. The native `input` event also bubbles from the input.
          */
         "onScInput"?: (event: ScTextInputCustomEvent<{ value: string }>) => void;
         /**
@@ -4126,7 +5143,7 @@ declare namespace LocalJSX {
          */
         "pattern"?: string;
         /**
-          * Text before the value inside the box, such as "AED". (Named `prefixText` because `prefix` is a reserved DOM property.)
+          * Text before the value inside the box, such as "AED".
          */
         "prefixText"?: string;
         /**
@@ -4161,9 +5178,12 @@ declare namespace LocalJSX {
     }
     /**
      * A longer answer, such as a reason or a description, with an optional character count.
-     * Renders its own label, hint, error, native `<textarea>` and count in one shadow root.
-     * The count is shown as you type, but announced to screen readers politely, once typing
-     * pauses, never on every keystroke. Form-associated and delegates focus, like `sc-text-input`.
+     * v2 renders its label, hint, error, a native `<textarea>` and the count in light DOM
+     * (Stencil `scoped`, decision A2), so the textarea is a real form control. The count is shown
+     * as you type but announced politely only once typing pauses. People can type past the limit:
+     * the count then says how many characters to remove and the textarea reports a custom
+     * validity error, which is easier to fix than text that silently stops.
+     * Rich content: a child with `slot="label"`, `slot="hint"` or `slot="error"` is moved into place once.
      */
     interface ScTextarea {
         /**
@@ -4176,13 +5196,9 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * The error message. Setting it shows the error state (bar, border, icon, "Error:", `aria-invalid`).
+          * The error message. Setting it shows the error state (bar, edge, icon, "Error:", `aria-invalid`).
          */
         "error"?: string;
-        /**
-          * The `id` of a `<form>` element to associate this element with.
-         */
-        "form"?: string;
         /**
           * When set (1–6), the label is also the page heading at this level.
          */
@@ -4196,7 +5212,7 @@ declare namespace LocalJSX {
          */
         "label"?: string;
         /**
-          * Shows a character count for this limit: "You have 120 characters remaining". People can type past it (the count then says how many to remove and the field reports `tooLong`), which is easier to fix than text that silently stops.
+          * Shows a character count for this limit: "You have 120 characters remaining". People can type past it; the count then says how many to remove and the field is invalid.
          */
         "maxlength"?: number;
         /**
@@ -4204,11 +5220,11 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Fires when the value is committed with `{ value }`. A native `change` is also dispatched on the host.
+          * Fires when the value is committed with `{ value }`. The native `change` event also bubbles.
          */
         "onScChange"?: (event: ScTextareaCustomEvent<{ value: string }>) => void;
         /**
-          * Fires on every keystroke with `{ value }`.
+          * Fires on every keystroke with `{ value }`. The native `input` event also bubbles.
          */
         "onScInput"?: (event: ScTextareaCustomEvent<{ value: string }>) => void;
         /**
@@ -4227,7 +5243,7 @@ declare namespace LocalJSX {
          */
         "required"?: boolean;
         /**
-          * Visible height in lines.
+          * Visible height in lines (at least 3).
           * @default 5
          */
         "rows"?: number;
@@ -4236,6 +5252,32 @@ declare namespace LocalJSX {
           * @default ''
          */
         "value"?: string;
+    }
+    /**
+     * A compact single-link tile: a tinted icon tile, a title and an optional count. Use it for
+     * life events ("Moving home · 14 services"), categories ("Transport and vehicles") and
+     * favourite services ("Pay a traffic fine").
+     * The whole tile is one link, because the title (and the count) is its only content and so
+     * the link's whole name: "Moving home, 14 services". That does not conflict with CMP-06,
+     * which is about cards that hold more than one thing. Tiles carry no other links or buttons.
+     */
+    interface ScTile {
+        /**
+          * How many things the tile leads to, e.g. 14. Shown as "14 services" with the right plural form in both languages.
+         */
+        "count"?: number;
+        /**
+          * Overrides the count text, with `{count}` and plural forms separated by `|`: "{count} step|{count} steps"; in Arabic zero|one|two|few|many|other.
+         */
+        "countLabel"?: string;
+        /**
+          * Where the tile goes. Required.
+         */
+        "href": string;
+        /**
+          * The icon tile's decorative topic tint (foundations §2.7): `blue` transport and vehicles, `violet` residency and identity, `rose` family, `orange` housing and utilities, `amber` bills and money, `green` health. Without it the tile takes the channel's container colour.
+         */
+        "tint"?: TileTint;
     }
     /**
      * The status history of an application: each change, with its status, date and a line of
@@ -4270,15 +5312,76 @@ declare namespace LocalJSX {
          */
         "order"?: TimelineOrder;
     }
+    /**
+     * The help and feedback bar of a channel site (decision U4, Standard CHR-05; component-
+     * language B4 as amended by U4): the Happiness Meter, contact and complaints (04), chat and
+     * accessibility options, each an icon with a visible label (labels never collapse to icons).
+     * From 1024px it is a flat bar docked to the bottom of the viewport across the full width,
+     * at `elevation-1`, with a 1px `outline-variant` edge along its top. It publishes its height
+     * as `--sc-utility-bar-block-size` on `<html>`: `sc-page` pads its end by it and `sc.css`
+     * sets `scroll-padding-block-end` from it, so the bar never covers content or the focused
+     * element (WCAG 2.4.11). Below 1024px it folds into the footer: place it straight after
+     * `sc-footer`, and it becomes an in-flow "Help and feedback" group, a 2 × 2 grid of outlined
+     * buttons. It is present when the page loads and does not animate.
+     * A `<nav>` labelled "Help and feedback". Items appear when their `*-href` is set.
+     */
+    interface ScUtilityBar {
+        /**
+          * Accessibility options or the accessibility statement.
+         */
+        "accessibilityHref"?: string;
+        /**
+          * The chat service.
+         */
+        "chatHref"?: string;
+        /**
+          * Contact and complaints: usually `tel:04…` or the contact page.
+         */
+        "contactHref"?: string;
+        /**
+          * The number shown after "Contact and complaints", isolated left to right.
+          * @default '04'
+         */
+        "contactNumber"?: string;
+        /**
+          * The Happiness Meter survey.
+         */
+        "happinessHref"?: string;
+    }
 
+    interface ScAccordionAttributes {
+        "showAll": boolean;
+    }
+    interface ScAccountMenuAttributes {
+        "name": string;
+        "initials": string;
+        "actingFor": string;
+        "profileHref": string;
+        "settingsHref": string;
+        "representationHref": string;
+        "signOutHref": string;
+        "notificationsHref": string;
+        "unread": number;
+    }
     interface ScAccountNavAttributes {
         "label": string;
+    }
+    interface ScAnnouncementBarAttributes {
+        "tone": AnnouncementTone;
+        "linkHref": string;
+        "linkText": string;
+        "dismissible": boolean;
+        "announcementId": string;
     }
     interface ScAppBarAttributes {
         "sticky": boolean;
         "align": 'center' | 'start';
         "shape": 'bar' | 'floating';
         "landmark": boolean;
+    }
+    interface ScAttentionCardAttributes {
+        "headingLevel": AttentionCardHeadingLevel;
+        "tint": AttentionCardTint;
     }
     interface ScBackLinkAttributes {
         "href": string;
@@ -4315,6 +5418,7 @@ declare namespace LocalJSX {
     interface ScCardAttributes {
         "landmark": CardLandmark;
         "padding": CardPadding;
+        "variant": CardVariant;
         "label": string;
     }
     interface ScChannelChipAttributes {
@@ -4323,16 +5427,29 @@ declare namespace LocalJSX {
         "label": string;
         "variant": ChannelChipVariant;
     }
+    interface ScChannelHeroAttributes {
+        "size": ChannelHeroSize;
+        "popularLabel": string;
+    }
+    interface ScChannelNetworkAttributes {
+        "channel": Channel;
+        "links": ChannelLinks | string;
+    }
+    interface ScChannelSwitcherAttributes {
+        "channel": Channel;
+        "links": ChannelLinks | string;
+    }
     interface ScCheckboxAttributes {
         "name": string;
         "value": string;
         "checked": boolean;
+        "indeterminate": boolean;
         "hint": string;
         "error": string;
         "required": boolean;
         "disabled": boolean;
+        "groupName": string;
         "groupInvalid": boolean;
-        "groupDisabled": boolean;
     }
     interface ScCheckboxGroupAttributes {
         "label": string;
@@ -4344,9 +5461,6 @@ declare namespace LocalJSX {
         "disabled": boolean;
         "inline": boolean;
         "headingLevel": HeadingLevel;
-    }
-    interface ScContainerAttributes {
-        "width": ContainerWidth;
     }
     interface ScDateInputAttributes {
         "label": string;
@@ -4393,16 +5507,24 @@ declare namespace LocalJSX {
         "headingLevel": ErrorSummaryHeadingLevel;
         "noAutofocus": boolean;
     }
+    interface ScFilterChipsAttributes {
+        "filters": FilterChip[] | string;
+        "label": string;
+        "focusTarget": string;
+        "noClear": boolean;
+    }
     interface ScFooterAttributes {
+        "variant": FooterVariant;
+        "channel": Channel;
+        "links": ChannelLinks | string;
+        "aboutHref": string;
         "helpHref": string;
         "accessibilityHref": string;
         "privacyHref": string;
+        "cookiesHref": string;
         "termsHref": string;
-    }
-    interface ScGridAttributes {
-        "span": number;
-        "spanMedium": number;
-        "spanExpanded": number;
+        "sitemapHref": string;
+        "updated": string;
     }
     interface ScLanguageSwitchAttributes {
         "href": string;
@@ -4425,6 +5547,14 @@ declare namespace LocalJSX {
         "closeLabel": string;
         "countdown": number;
     }
+    interface ScModuleCardAttributes {
+        "heading": string;
+        "headingLevel": ModuleCardHeadingLevel;
+        "actionHref": string;
+        "actionText": string;
+        "tint": ModuleCardTint;
+        "divided": boolean;
+    }
     interface ScPageAttributes {
         "channel": Channel;
         "mainId": string;
@@ -4444,6 +5574,10 @@ declare namespace LocalJSX {
         "hint": string;
         "checked": boolean;
         "disabled": boolean;
+        "groupName": string;
+        "selected": boolean;
+        "groupInvalid": boolean;
+        "groupRequired": boolean;
     }
     interface ScRadioGroupAttributes {
         "label": string;
@@ -4465,6 +5599,7 @@ declare namespace LocalJSX {
         "name": string;
         "value": string;
         "action": string;
+        "size": SearchSize;
     }
     interface ScSelectAttributes {
         "label": string;
@@ -4482,6 +5617,13 @@ declare namespace LocalJSX {
         "href": string;
         "headingLevel": ServiceCardHeadingLevel;
         "entity": string;
+        "tint": ServiceCardTint;
+    }
+    interface ScSiteHeaderAttributes {
+        "signInHref": string;
+        "signInText": string;
+        "searchHref": string;
+        "sticky": boolean;
     }
     interface ScSkipLinkAttributes {
         "href": string;
@@ -4503,6 +5645,7 @@ declare namespace LocalJSX {
     }
     interface ScSummaryListAttributes {
         "appearance": SummaryListAppearance;
+        "layout": SummaryListLayout;
     }
     interface ScSummaryRowAttributes {
         "label": string;
@@ -4510,6 +5653,7 @@ declare namespace LocalJSX {
         "actionHref": string;
         "actionText": string;
         "actionHiddenText": string;
+        "variant": SummaryRowVariant;
     }
     interface ScTableAttributes {
         "caption": string;
@@ -4559,14 +5703,31 @@ declare namespace LocalJSX {
         "autocomplete": string;
         "headingLevel": HeadingLevel;
     }
+    interface ScTileAttributes {
+        "href": string;
+        "tint": TileTint;
+        "count": number;
+        "countLabel": string;
+    }
     interface ScTimelineAttributes {
         "order": TimelineOrder;
         "divided": boolean;
     }
+    interface ScUtilityBarAttributes {
+        "happinessHref": string;
+        "contactHref": string;
+        "contactNumber": string;
+        "chatHref": string;
+        "accessibilityHref": string;
+    }
 
     interface IntrinsicElements {
+        "sc-accordion": Omit<ScAccordion, keyof ScAccordionAttributes> & { [K in keyof ScAccordion & keyof ScAccordionAttributes]?: ScAccordion[K] } & { [K in keyof ScAccordion & keyof ScAccordionAttributes as `attr:${K}`]?: ScAccordionAttributes[K] } & { [K in keyof ScAccordion & keyof ScAccordionAttributes as `prop:${K}`]?: ScAccordion[K] };
+        "sc-account-menu": Omit<ScAccountMenu, keyof ScAccountMenuAttributes> & { [K in keyof ScAccountMenu & keyof ScAccountMenuAttributes]?: ScAccountMenu[K] } & { [K in keyof ScAccountMenu & keyof ScAccountMenuAttributes as `attr:${K}`]?: ScAccountMenuAttributes[K] } & { [K in keyof ScAccountMenu & keyof ScAccountMenuAttributes as `prop:${K}`]?: ScAccountMenu[K] };
         "sc-account-nav": Omit<ScAccountNav, keyof ScAccountNavAttributes> & { [K in keyof ScAccountNav & keyof ScAccountNavAttributes]?: ScAccountNav[K] } & { [K in keyof ScAccountNav & keyof ScAccountNavAttributes as `attr:${K}`]?: ScAccountNavAttributes[K] } & { [K in keyof ScAccountNav & keyof ScAccountNavAttributes as `prop:${K}`]?: ScAccountNav[K] };
+        "sc-announcement-bar": Omit<ScAnnouncementBar, keyof ScAnnouncementBarAttributes> & { [K in keyof ScAnnouncementBar & keyof ScAnnouncementBarAttributes]?: ScAnnouncementBar[K] } & { [K in keyof ScAnnouncementBar & keyof ScAnnouncementBarAttributes as `attr:${K}`]?: ScAnnouncementBarAttributes[K] } & { [K in keyof ScAnnouncementBar & keyof ScAnnouncementBarAttributes as `prop:${K}`]?: ScAnnouncementBar[K] };
         "sc-app-bar": Omit<ScAppBar, keyof ScAppBarAttributes> & { [K in keyof ScAppBar & keyof ScAppBarAttributes]?: ScAppBar[K] } & { [K in keyof ScAppBar & keyof ScAppBarAttributes as `attr:${K}`]?: ScAppBarAttributes[K] } & { [K in keyof ScAppBar & keyof ScAppBarAttributes as `prop:${K}`]?: ScAppBar[K] };
+        "sc-attention-card": Omit<ScAttentionCard, keyof ScAttentionCardAttributes> & { [K in keyof ScAttentionCard & keyof ScAttentionCardAttributes]?: ScAttentionCard[K] } & { [K in keyof ScAttentionCard & keyof ScAttentionCardAttributes as `attr:${K}`]?: ScAttentionCardAttributes[K] } & { [K in keyof ScAttentionCard & keyof ScAttentionCardAttributes as `prop:${K}`]?: ScAttentionCard[K] };
         "sc-back-link": Omit<ScBackLink, keyof ScBackLinkAttributes> & { [K in keyof ScBackLink & keyof ScBackLinkAttributes]?: ScBackLink[K] } & { [K in keyof ScBackLink & keyof ScBackLinkAttributes as `attr:${K}`]?: ScBackLinkAttributes[K] } & { [K in keyof ScBackLink & keyof ScBackLinkAttributes as `prop:${K}`]?: ScBackLink[K] };
         "sc-bottom-nav": Omit<ScBottomNav, keyof ScBottomNavAttributes> & { [K in keyof ScBottomNav & keyof ScBottomNavAttributes]?: ScBottomNav[K] } & { [K in keyof ScBottomNav & keyof ScBottomNavAttributes as `attr:${K}`]?: ScBottomNavAttributes[K] } & { [K in keyof ScBottomNav & keyof ScBottomNavAttributes as `prop:${K}`]?: ScBottomNav[K] };
         "sc-breadcrumbs": Omit<ScBreadcrumbs, keyof ScBreadcrumbsAttributes> & { [K in keyof ScBreadcrumbs & keyof ScBreadcrumbsAttributes]?: ScBreadcrumbs[K] } & { [K in keyof ScBreadcrumbs & keyof ScBreadcrumbsAttributes as `attr:${K}`]?: ScBreadcrumbsAttributes[K] } & { [K in keyof ScBreadcrumbs & keyof ScBreadcrumbsAttributes as `prop:${K}`]?: ScBreadcrumbs[K] };
@@ -4574,20 +5735,21 @@ declare namespace LocalJSX {
         "sc-callout": Omit<ScCallout, keyof ScCalloutAttributes> & { [K in keyof ScCallout & keyof ScCalloutAttributes]?: ScCallout[K] } & { [K in keyof ScCallout & keyof ScCalloutAttributes as `attr:${K}`]?: ScCalloutAttributes[K] } & { [K in keyof ScCallout & keyof ScCalloutAttributes as `prop:${K}`]?: ScCallout[K] };
         "sc-card": Omit<ScCard, keyof ScCardAttributes> & { [K in keyof ScCard & keyof ScCardAttributes]?: ScCard[K] } & { [K in keyof ScCard & keyof ScCardAttributes as `attr:${K}`]?: ScCardAttributes[K] } & { [K in keyof ScCard & keyof ScCardAttributes as `prop:${K}`]?: ScCard[K] };
         "sc-channel-chip": Omit<ScChannelChip, keyof ScChannelChipAttributes> & { [K in keyof ScChannelChip & keyof ScChannelChipAttributes]?: ScChannelChip[K] } & { [K in keyof ScChannelChip & keyof ScChannelChipAttributes as `attr:${K}`]?: ScChannelChipAttributes[K] } & { [K in keyof ScChannelChip & keyof ScChannelChipAttributes as `prop:${K}`]?: ScChannelChip[K] } & OneOf<"channel", ScChannelChip["channel"], ScChannelChipAttributes["channel"]>;
-        "sc-channel-hero": ScChannelHero;
+        "sc-channel-hero": Omit<ScChannelHero, keyof ScChannelHeroAttributes> & { [K in keyof ScChannelHero & keyof ScChannelHeroAttributes]?: ScChannelHero[K] } & { [K in keyof ScChannelHero & keyof ScChannelHeroAttributes as `attr:${K}`]?: ScChannelHeroAttributes[K] } & { [K in keyof ScChannelHero & keyof ScChannelHeroAttributes as `prop:${K}`]?: ScChannelHero[K] };
+        "sc-channel-network": Omit<ScChannelNetwork, keyof ScChannelNetworkAttributes> & { [K in keyof ScChannelNetwork & keyof ScChannelNetworkAttributes]?: ScChannelNetwork[K] } & { [K in keyof ScChannelNetwork & keyof ScChannelNetworkAttributes as `attr:${K}`]?: ScChannelNetworkAttributes[K] } & { [K in keyof ScChannelNetwork & keyof ScChannelNetworkAttributes as `prop:${K}`]?: ScChannelNetwork[K] };
+        "sc-channel-switcher": Omit<ScChannelSwitcher, keyof ScChannelSwitcherAttributes> & { [K in keyof ScChannelSwitcher & keyof ScChannelSwitcherAttributes]?: ScChannelSwitcher[K] } & { [K in keyof ScChannelSwitcher & keyof ScChannelSwitcherAttributes as `attr:${K}`]?: ScChannelSwitcherAttributes[K] } & { [K in keyof ScChannelSwitcher & keyof ScChannelSwitcherAttributes as `prop:${K}`]?: ScChannelSwitcher[K] };
         "sc-checkbox": Omit<ScCheckbox, keyof ScCheckboxAttributes> & { [K in keyof ScCheckbox & keyof ScCheckboxAttributes]?: ScCheckbox[K] } & { [K in keyof ScCheckbox & keyof ScCheckboxAttributes as `attr:${K}`]?: ScCheckboxAttributes[K] } & { [K in keyof ScCheckbox & keyof ScCheckboxAttributes as `prop:${K}`]?: ScCheckbox[K] };
         "sc-checkbox-group": Omit<ScCheckboxGroup, keyof ScCheckboxGroupAttributes> & { [K in keyof ScCheckboxGroup & keyof ScCheckboxGroupAttributes]?: ScCheckboxGroup[K] } & { [K in keyof ScCheckboxGroup & keyof ScCheckboxGroupAttributes as `attr:${K}`]?: ScCheckboxGroupAttributes[K] } & { [K in keyof ScCheckboxGroup & keyof ScCheckboxGroupAttributes as `prop:${K}`]?: ScCheckboxGroup[K] };
-        "sc-container": Omit<ScContainer, keyof ScContainerAttributes> & { [K in keyof ScContainer & keyof ScContainerAttributes]?: ScContainer[K] } & { [K in keyof ScContainer & keyof ScContainerAttributes as `attr:${K}`]?: ScContainerAttributes[K] } & { [K in keyof ScContainer & keyof ScContainerAttributes as `prop:${K}`]?: ScContainer[K] };
         "sc-date-input": Omit<ScDateInput, keyof ScDateInputAttributes> & { [K in keyof ScDateInput & keyof ScDateInputAttributes]?: ScDateInput[K] } & { [K in keyof ScDateInput & keyof ScDateInputAttributes as `attr:${K}`]?: ScDateInputAttributes[K] } & { [K in keyof ScDateInput & keyof ScDateInputAttributes as `prop:${K}`]?: ScDateInput[K] };
         "sc-date-range": Omit<ScDateRange, keyof ScDateRangeAttributes> & { [K in keyof ScDateRange & keyof ScDateRangeAttributes]?: ScDateRange[K] } & { [K in keyof ScDateRange & keyof ScDateRangeAttributes as `attr:${K}`]?: ScDateRangeAttributes[K] } & { [K in keyof ScDateRange & keyof ScDateRangeAttributes as `prop:${K}`]?: ScDateRange[K] };
         "sc-empty-state": Omit<ScEmptyState, keyof ScEmptyStateAttributes> & { [K in keyof ScEmptyState & keyof ScEmptyStateAttributes]?: ScEmptyState[K] } & { [K in keyof ScEmptyState & keyof ScEmptyStateAttributes as `attr:${K}`]?: ScEmptyStateAttributes[K] } & { [K in keyof ScEmptyState & keyof ScEmptyStateAttributes as `prop:${K}`]?: ScEmptyState[K] } & OneOf<"heading", ScEmptyState["heading"], ScEmptyStateAttributes["heading"]>;
         "sc-error-summary": Omit<ScErrorSummary, keyof ScErrorSummaryAttributes> & { [K in keyof ScErrorSummary & keyof ScErrorSummaryAttributes]?: ScErrorSummary[K] } & { [K in keyof ScErrorSummary & keyof ScErrorSummaryAttributes as `attr:${K}`]?: ScErrorSummaryAttributes[K] } & { [K in keyof ScErrorSummary & keyof ScErrorSummaryAttributes as `prop:${K}`]?: ScErrorSummary[K] };
+        "sc-filter-chips": Omit<ScFilterChips, keyof ScFilterChipsAttributes> & { [K in keyof ScFilterChips & keyof ScFilterChipsAttributes]?: ScFilterChips[K] } & { [K in keyof ScFilterChips & keyof ScFilterChipsAttributes as `attr:${K}`]?: ScFilterChipsAttributes[K] } & { [K in keyof ScFilterChips & keyof ScFilterChipsAttributes as `prop:${K}`]?: ScFilterChips[K] };
         "sc-footer": Omit<ScFooter, keyof ScFooterAttributes> & { [K in keyof ScFooter & keyof ScFooterAttributes]?: ScFooter[K] } & { [K in keyof ScFooter & keyof ScFooterAttributes as `attr:${K}`]?: ScFooterAttributes[K] } & { [K in keyof ScFooter & keyof ScFooterAttributes as `prop:${K}`]?: ScFooter[K] };
-        "sc-grid": Omit<ScGrid, keyof ScGridAttributes> & { [K in keyof ScGrid & keyof ScGridAttributes]?: ScGrid[K] } & { [K in keyof ScGrid & keyof ScGridAttributes as `attr:${K}`]?: ScGridAttributes[K] } & { [K in keyof ScGrid & keyof ScGridAttributes as `prop:${K}`]?: ScGrid[K] };
         "sc-language-switch": Omit<ScLanguageSwitch, keyof ScLanguageSwitchAttributes> & { [K in keyof ScLanguageSwitch & keyof ScLanguageSwitchAttributes]?: ScLanguageSwitch[K] } & { [K in keyof ScLanguageSwitch & keyof ScLanguageSwitchAttributes as `attr:${K}`]?: ScLanguageSwitchAttributes[K] } & { [K in keyof ScLanguageSwitch & keyof ScLanguageSwitchAttributes as `prop:${K}`]?: ScLanguageSwitch[K] };
         "sc-link": Omit<ScLink, keyof ScLinkAttributes> & { [K in keyof ScLink & keyof ScLinkAttributes]?: ScLink[K] } & { [K in keyof ScLink & keyof ScLinkAttributes as `attr:${K}`]?: ScLinkAttributes[K] } & { [K in keyof ScLink & keyof ScLinkAttributes as `prop:${K}`]?: ScLink[K] };
-        "sc-ltr": ScLtr;
         "sc-modal": Omit<ScModal, keyof ScModalAttributes> & { [K in keyof ScModal & keyof ScModalAttributes]?: ScModal[K] } & { [K in keyof ScModal & keyof ScModalAttributes as `attr:${K}`]?: ScModalAttributes[K] } & { [K in keyof ScModal & keyof ScModalAttributes as `prop:${K}`]?: ScModal[K] } & OneOf<"heading", ScModal["heading"], ScModalAttributes["heading"]>;
+        "sc-module-card": Omit<ScModuleCard, keyof ScModuleCardAttributes> & { [K in keyof ScModuleCard & keyof ScModuleCardAttributes]?: ScModuleCard[K] } & { [K in keyof ScModuleCard & keyof ScModuleCardAttributes as `attr:${K}`]?: ScModuleCardAttributes[K] } & { [K in keyof ScModuleCard & keyof ScModuleCardAttributes as `prop:${K}`]?: ScModuleCard[K] } & OneOf<"heading", ScModuleCard["heading"], ScModuleCardAttributes["heading"]>;
         "sc-notification-list": ScNotificationList;
         "sc-page": Omit<ScPage, keyof ScPageAttributes> & { [K in keyof ScPage & keyof ScPageAttributes]?: ScPage[K] } & { [K in keyof ScPage & keyof ScPageAttributes as `attr:${K}`]?: ScPageAttributes[K] } & { [K in keyof ScPage & keyof ScPageAttributes as `prop:${K}`]?: ScPage[K] };
         "sc-pagination": Omit<ScPagination, keyof ScPaginationAttributes> & { [K in keyof ScPagination & keyof ScPaginationAttributes]?: ScPagination[K] } & { [K in keyof ScPagination & keyof ScPaginationAttributes as `attr:${K}`]?: ScPaginationAttributes[K] } & { [K in keyof ScPagination & keyof ScPaginationAttributes as `prop:${K}`]?: ScPagination[K] };
@@ -4596,6 +5758,7 @@ declare namespace LocalJSX {
         "sc-search": Omit<ScSearch, keyof ScSearchAttributes> & { [K in keyof ScSearch & keyof ScSearchAttributes]?: ScSearch[K] } & { [K in keyof ScSearch & keyof ScSearchAttributes as `attr:${K}`]?: ScSearchAttributes[K] } & { [K in keyof ScSearch & keyof ScSearchAttributes as `prop:${K}`]?: ScSearch[K] };
         "sc-select": Omit<ScSelect, keyof ScSelectAttributes> & { [K in keyof ScSelect & keyof ScSelectAttributes]?: ScSelect[K] } & { [K in keyof ScSelect & keyof ScSelectAttributes as `attr:${K}`]?: ScSelectAttributes[K] } & { [K in keyof ScSelect & keyof ScSelectAttributes as `prop:${K}`]?: ScSelect[K] };
         "sc-service-card": Omit<ScServiceCard, keyof ScServiceCardAttributes> & { [K in keyof ScServiceCard & keyof ScServiceCardAttributes]?: ScServiceCard[K] } & { [K in keyof ScServiceCard & keyof ScServiceCardAttributes as `attr:${K}`]?: ScServiceCardAttributes[K] } & { [K in keyof ScServiceCard & keyof ScServiceCardAttributes as `prop:${K}`]?: ScServiceCard[K] } & OneOf<"href", ScServiceCard["href"], ScServiceCardAttributes["href"]>;
+        "sc-site-header": Omit<ScSiteHeader, keyof ScSiteHeaderAttributes> & { [K in keyof ScSiteHeader & keyof ScSiteHeaderAttributes]?: ScSiteHeader[K] } & { [K in keyof ScSiteHeader & keyof ScSiteHeaderAttributes as `attr:${K}`]?: ScSiteHeaderAttributes[K] } & { [K in keyof ScSiteHeader & keyof ScSiteHeaderAttributes as `prop:${K}`]?: ScSiteHeader[K] };
         "sc-skip-link": Omit<ScSkipLink, keyof ScSkipLinkAttributes> & { [K in keyof ScSkipLink & keyof ScSkipLinkAttributes]?: ScSkipLink[K] } & { [K in keyof ScSkipLink & keyof ScSkipLinkAttributes as `attr:${K}`]?: ScSkipLinkAttributes[K] } & { [K in keyof ScSkipLink & keyof ScSkipLinkAttributes as `prop:${K}`]?: ScSkipLink[K] };
         "sc-spinner": Omit<ScSpinner, keyof ScSpinnerAttributes> & { [K in keyof ScSpinner & keyof ScSpinnerAttributes]?: ScSpinner[K] } & { [K in keyof ScSpinner & keyof ScSpinnerAttributes as `attr:${K}`]?: ScSpinnerAttributes[K] } & { [K in keyof ScSpinner & keyof ScSpinnerAttributes as `prop:${K}`]?: ScSpinner[K] };
         "sc-status-tag": Omit<ScStatusTag, keyof ScStatusTagAttributes> & { [K in keyof ScStatusTag & keyof ScStatusTagAttributes]?: ScStatusTag[K] } & { [K in keyof ScStatusTag & keyof ScStatusTagAttributes as `attr:${K}`]?: ScStatusTagAttributes[K] } & { [K in keyof ScStatusTag & keyof ScStatusTagAttributes as `prop:${K}`]?: ScStatusTag[K] };
@@ -4606,13 +5769,41 @@ declare namespace LocalJSX {
         "sc-table": Omit<ScTable, keyof ScTableAttributes> & { [K in keyof ScTable & keyof ScTableAttributes]?: ScTable[K] } & { [K in keyof ScTable & keyof ScTableAttributes as `attr:${K}`]?: ScTableAttributes[K] } & { [K in keyof ScTable & keyof ScTableAttributes as `prop:${K}`]?: ScTable[K] };
         "sc-text-input": Omit<ScTextInput, keyof ScTextInputAttributes> & { [K in keyof ScTextInput & keyof ScTextInputAttributes]?: ScTextInput[K] } & { [K in keyof ScTextInput & keyof ScTextInputAttributes as `attr:${K}`]?: ScTextInputAttributes[K] } & { [K in keyof ScTextInput & keyof ScTextInputAttributes as `prop:${K}`]?: ScTextInput[K] };
         "sc-textarea": Omit<ScTextarea, keyof ScTextareaAttributes> & { [K in keyof ScTextarea & keyof ScTextareaAttributes]?: ScTextarea[K] } & { [K in keyof ScTextarea & keyof ScTextareaAttributes as `attr:${K}`]?: ScTextareaAttributes[K] } & { [K in keyof ScTextarea & keyof ScTextareaAttributes as `prop:${K}`]?: ScTextarea[K] };
+        "sc-tile": Omit<ScTile, keyof ScTileAttributes> & { [K in keyof ScTile & keyof ScTileAttributes]?: ScTile[K] } & { [K in keyof ScTile & keyof ScTileAttributes as `attr:${K}`]?: ScTileAttributes[K] } & { [K in keyof ScTile & keyof ScTileAttributes as `prop:${K}`]?: ScTile[K] } & OneOf<"href", ScTile["href"], ScTileAttributes["href"]>;
         "sc-timeline": Omit<ScTimeline, keyof ScTimelineAttributes> & { [K in keyof ScTimeline & keyof ScTimelineAttributes]?: ScTimeline[K] } & { [K in keyof ScTimeline & keyof ScTimelineAttributes as `attr:${K}`]?: ScTimelineAttributes[K] } & { [K in keyof ScTimeline & keyof ScTimelineAttributes as `prop:${K}`]?: ScTimeline[K] };
+        "sc-utility-bar": Omit<ScUtilityBar, keyof ScUtilityBarAttributes> & { [K in keyof ScUtilityBar & keyof ScUtilityBarAttributes]?: ScUtilityBar[K] } & { [K in keyof ScUtilityBar & keyof ScUtilityBarAttributes as `attr:${K}`]?: ScUtilityBarAttributes[K] } & { [K in keyof ScUtilityBar & keyof ScUtilityBarAttributes as `prop:${K}`]?: ScUtilityBar[K] };
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            /**
+             * Sections that open and close, for frequently asked questions and long guidance. Built on
+             * native `<details>` and `<summary>`: they open with Enter or Space, expose their expanded
+             * state to assistive technology and work before (and without) JavaScript. The component adds
+             * the v2 look (ruled sections, a title-medium summary, a chevron at the end that turns over
+             * when open) and an optional "Show all sections" toggle.
+             * v2 renders in light DOM (Stencil `scoped`, architecture §3.1): the `<details>` stay your
+             * own markup, so in-page links and `id`s inside them work as usual.
+             * Put the question in `<summary>` as plain text, optionally followed by a `<small>` summary
+             * line; put the answer after it. Keep headings out of `<summary>`: it is a button, so a
+             * heading inside it is not announced as one.
+             */
+            "sc-accordion": LocalJSX.IntrinsicElements["sc-accordion"] & JSXBase.HTMLAttributes<HTMLScAccordionElement>;
+            /**
+             * The signed-in account control in `sc-site-header` (`slot="account"`; component-language
+             * B3, Standard CHR-01). It replaces "Sign in with UAE PASS" once the user is signed in.
+             * - A notifications button (a link to the notifications page) with the unread count, named
+             *   "Notifications, 3 unread".
+             * - A `<button aria-expanded>` with the user's initials (and name from 1280px) that opens a
+             *   non-modal panel: the name and who they are acting for, links to Profile, Settings and
+             *   representation ("Change who you act for"), and Sign out.
+             * The panel is a disclosure, not an ARIA menu: Tab moves through its links, Escape closes it
+             * and returns focus to the button, a press outside or focus leaving closes it. From a
+             * pointer it grows from the button's corner; from the keyboard it appears instantly.
+             */
+            "sc-account-menu": LocalJSX.IntrinsicElements["sc-account-menu"] & JSXBase.HTMLAttributes<HTMLScAccountMenuElement>;
             /**
              * The side navigation of the signed-in account area: Applications, Payments,
              * Notifications, Profile and settings, then a divider and Sign out. It takes 3 of 12
@@ -4636,17 +5827,42 @@ declare module "@stencil/core" {
              */
             "sc-account-nav": LocalJSX.IntrinsicElements["sc-account-nav"] & JSXBase.HTMLAttributes<HTMLScAccountNavElement>;
             /**
-             * The top bar of every mobile screen and desktop page: a translucent glass bar with a
-             * start control (usually `sc-back-link`), the channel name, and an end control (usually
-             * `sc-language-switch`).
-             * - `align="center"` (default) is the mobile bar: start, title in the middle, end.
-             * - `align="start"` is the desktop header: title (with a mark) at the start, then the
-             *   default slot (primary navigation), and the end slot pushed to the end.
-             * - `shape="floating"` turns the bar into the inset glass capsule used on desktop.
-             * The glass becomes a solid surface under `prefers-reduced-transparency: reduce` and in
-             * forced colours. The host is a `banner` landmark unless `landmark` is false.
+             * A site-wide announcement above the header: planned maintenance, a service outage, a change
+             * people need to know about (component-language B1). One message, one optional link, and an
+             * optional dismiss button.
+             * A labelled region ("Announcement" / "إعلان"), present when the page loads. It is not a
+             * live region and not an alert. The text carries the severity in words ("Planned
+             * maintenance…"); the tone's icon and container repeat it.
+             * Dismissing it fires `scDismiss` (cancelable) and hides it. With `announcement-id`, the
+             * dismissal is remembered in this browser, so the same announcement does not come back.
+             * Focus moves to the next focusable element after it. From a pointer it fades out over
+             * `duration-exit`; from the keyboard it goes at once. Its height is never animated (MOT-11).
+             */
+            "sc-announcement-bar": LocalJSX.IntrinsicElements["sc-announcement-bar"] & JSXBase.HTMLAttributes<HTMLScAnnouncementBarElement>;
+            /**
+             * The transaction app bar (component-language A4; Standard TPL-01, LANG-04): the bar at the
+             * top of every step of a journey (E2–E4). Channel pages outside a transaction use
+             * `sc-site-header` instead.
+             * A 4px rule in `channel-action` along the top; a start slot (the back link), the title (a
+             * 10px channel swatch and the channel name, centred) and an end slot (the language switch),
+             * with fixed 96px side slots so the title stays centred; a 1px `outline-variant` rule
+             * beneath. 60px tall on `surface`. Flat: no glass, no shadow.
+             * The host is a `banner` landmark unless `landmark` is false. It is not fixed by default;
+             * with `sticky`, `sc-page sync-document` sets `scroll-padding-top` so focus never slides
+             * under it (WCAG 2.4.11).
              */
             "sc-app-bar": LocalJSX.IntrinsicElements["sc-app-bar"] & JSXBase.HTMLAttributes<HTMLScAppBarElement>;
+            /**
+             * One thing that is due ("Needs your attention"): a bill to pay, a document to upload, a
+             * registration about to expire. A thin topic-tint strip on top, an icon tile, a status tag,
+             * the title, the key fact, a meta line (amount and reference) and one action.
+             * The card is neutral and is not a link: the action is the only thing to press, and its
+             * label names the action and the item ("Pay AED 412.60"). Status is never shown by colour:
+             * the strip and the icon tile are decorative topic tints, and the urgency is in the status
+             * tag's words. Put the cards in a list (`<ul>`), most urgent first, under a heading that
+             * gives the count ("4 things, most urgent first").
+             */
+            "sc-attention-card": LocalJSX.IntrinsicElements["sc-attention-card"] & JSXBase.HTMLAttributes<HTMLScAttentionCardElement>;
             /**
              * The "Back" control at the start of an app bar or above a question: plain text with a
              * 24px back arrow that mirrors in right-to-left, on a 44px target (v2 drops v1's glass pill).
@@ -4709,11 +5925,15 @@ declare module "@stencil/core" {
              */
             "sc-callout": LocalJSX.IntrinsicElements["sc-callout"] & JSXBase.HTMLAttributes<HTMLScCalloutElement>;
             /**
-             * A surface container: surface fill, card radius, elevation 1. Groups related content,
-             * such as a life event and its steps, or the answers in one section of "Check your answers".
+             * A surface that groups related content: a life event and its steps, the answers in one
+             * section of "Check your answers", a totals card. Flat and outline-first (ELV-01): 12px
+             * corners, a 1px `outline-variant` edge, no shadow. Cards are never links (CMP-06): put the
+             * link on a heading or a button inside.
+             * v2 renders in light DOM (Stencil `scoped`, architecture §3.1): the host is the surface and
+             * your content stays its direct children, so `aria-labelledby` points at your own heading
+             * with an ordinary id. There is no `::part(surface)`; style the host (`.sc-card`) if you must.
              * With `landmark`, the card becomes a named region (`section`) or an `article`, labelled by
-             * the first heading inside it. The role and `aria-labelledby` go on the host, in light DOM,
-             * so the reference to the slotted heading resolves.
+             * the first heading inside it, or by `label`.
              */
             "sc-card": LocalJSX.IntrinsicElements["sc-card"] & JSXBase.HTMLAttributes<HTMLScCardElement>;
             /**
@@ -4726,65 +5946,92 @@ declare module "@stencil/core" {
              */
             "sc-channel-chip": LocalJSX.IntrinsicElements["sc-channel-chip"] & JSXBase.HTMLAttributes<HTMLScChannelChipElement>;
             /**
-             * The top wash of a channel page: a gradient from the channel's wash-start to wash-end
-             * colour (interpolated in OKLAB), holding an eyebrow, the page's `<h1>`, a lede and a
-             * search field. It follows `data-channel` and the theme like every component.
-             * The hero is full-bleed; its content sits in an `sc-container`, so it lines up with the
-             * page below.
+             * The top band of a channel's home or section page (E1): a flat `channel-subtle` band
+             * (decision Q-hero: no gradient), holding optional breadcrumbs, an eyebrow, the page's
+             * `<h1>` at display size, an optional lede, search and a "Popular now" row of suggestion
+             * chips. It follows `data-channel` and the theme like every component.
+             * The band is full-bleed; its content follows the page grid's margins (20, 32, 48, 80px)
+             * and the 1280px cap, so it lines up with `sc-container` content below. The hero never
+             * carries a carousel or autoplaying media.
              */
             "sc-channel-hero": LocalJSX.IntrinsicElements["sc-channel-hero"] & JSXBase.HTMLAttributes<HTMLScChannelHeroElement>;
             /**
+             * The channel network strip (component-language B21, Standard CHR-08): "One network · seven
+             * channels" and a tile for each of the seven channels, in the Standard 3.1 order, at the end
+             * of every channel home page, before the footer.
+             * City indigo marks it as shared (the eyebrow and its rule). Each tile carries its own
+             * channel's colour only as attribution: a 4px top rule in that channel's `channel-action`.
+             * Each tile sets its own `data-channel` (FND-26), which is why the strip renders into light
+             * DOM (Stencil `scoped`). The current channel's tile is filled with its `channel-subtle`,
+             * says "You are here", carries `aria-current="true"` and is not a link (it would lead to
+             * this site).
+             * A `<nav>` labelled "Government of Dubai channels" with a list of links. Seven tiles in a
+             * row from 1024px (by the strip's own width), four from 600px, two below.
+             */
+            "sc-channel-network": LocalJSX.IntrinsicElements["sc-channel-network"] & JSXBase.HTMLAttributes<HTMLScChannelNetworkElement>;
+            /**
+             * The channel's logo and the channel switcher, at the inline-end of `sc-site-header`
+             * (Standard CHR-01, CHR-03; component-language B2a).
+             * A disclosure, not an ARIA menu: a `<button aria-expanded>` named "Choose a channel: Dubai
+             * Now" opens a non-modal panel listing all seven channels as links, in the Standard 3.1
+             * order, each with its name, a one-line descriptor in the page language and a swatch in
+             * that channel's own colour. Every item carries its own `data-channel` (FND-26), so the
+             * swatch is that channel's `channel-action`; that is why the component renders into light
+             * DOM (Stencil `scoped`): the document's channel rules must reach the items. The current
+             * channel carries a check and `aria-current="true"`.
+             * Escape and a press outside close the panel; Escape returns focus to the button; the panel
+             * closes when focus leaves it. From a pointer it grows from the trigger's corner over
+             * `duration-base`; from the keyboard it appears instantly (MOT-02). Below 1024px the trigger
+             * shrinks to the logo and chevron and keeps its accessible name (CHR-04).
+             */
+            "sc-channel-switcher": LocalJSX.IntrinsicElements["sc-channel-switcher"] & JSXBase.HTMLAttributes<HTMLScChannelSwitcherElement>;
+            /**
              * A checkbox: one of several choices in an `sc-checkbox-group`, or on its own for a single
-             * yes/no statement ("I confirm the vehicle details are correct").
-             * Renders a native `<input type="checkbox">`, its `<label>` (the default slot) and hint in
-             * its own shadow root. Space toggles it. Form-associated: when checked it submits `value`
-             * under its `name`, or under the group's `name` inside `sc-checkbox-group`. On its own it can
-             * show an error; inside a group the group shows the error and marks every box invalid.
+             * statement ("I confirm the vehicle details are correct").
+             * v2 renders a native `<input type="checkbox">`, its `<label>` (the default slot) and hint in
+             * light DOM (Stencil `scoped`, decision A2). Space toggles it; clicking the label or the 44px
+             * target around the box toggles it. When checked it submits `value` under its `name`, or under
+             * the group's `name` inside `sc-checkbox-group`. On its own it can show an error and use
+             * native `required`; inside a group the group shows the error and marks every box invalid.
              */
             "sc-checkbox": LocalJSX.IntrinsicElements["sc-checkbox"] & JSXBase.HTMLAttributes<HTMLScCheckboxElement>;
             /**
              * Several choices from a short list: "Which documents do you have?".
-             * A `<fieldset>` with a `<legend>`, hint and error in this element's shadow root, with the
-             * `sc-checkbox` children slotted inside it. Each checkbox keeps its own native input, label
-             * and hint in its own shadow root (so `sc-checkbox` also works on its own); the fieldset
-             * groups them in the accessibility tree, which follows the flattened tree. The group's
-             * hint and error describe the fieldset, and in the error state every box gets
-             * `aria-invalid` and an error border.
-             * Each checked box submits its own value under the group's `name` (or its own). The group is
-             * form-associated only to report `valueMissing` when `required` and nothing is checked.
+             * v2 renders a native `<fieldset>` with its `<legend>`, hint and error in light DOM (Stencil
+             * `scoped`, decision A2), and moves the `sc-checkbox` children into it, so they are grouped
+             * and named by the legend natively. Each checked box submits its own value under the group's
+             * `name`. `disabled` disables the fieldset (and so every box). With `required`, the first box
+             * carries a native validity error until one is checked.
              */
             "sc-checkbox-group": LocalJSX.IntrinsicElements["sc-checkbox-group"] & JSXBase.HTMLAttributes<HTMLScCheckboxGroupElement>;
             /**
-             * Centres content and sets the page's outer margins from the layout tokens: 20px on
-             * phones, 32px from 600px, 48px from 1024px and 80px from 1440px, with content capped at
-             * `--sc-container-max` (1280px). `width="reading"` caps it at the 680px reading width instead,
-             * for question pages and running text.
-             */
-            "sc-container": LocalJSX.IntrinsicElements["sc-container"] & JSXBase.HTMLAttributes<HTMLScContainerElement>;
-            /**
              * A date people know, such as a date of birth or the date on a document: Day, Month and
              * Year boxes (يوم / شهر / سنة) with the numeric keyboard.
-             * A `<fieldset>` and `<legend>` with the hint and error, and three labelled native inputs,
-             * in one shadow root. In Arabic the boxes run right to left (Day on the right). An error can
-             * highlight one part with `error-parts="year"`.
-             * Form-associated: submits the date as an ISO string (`2026-03-07`, or empty while it isn't
-             * a real date) under `name`, plus the raw parts as `name-day`, `name-month` and `name-year`
-             * so a server can re-display what was typed. Reports `valueMissing` and `badInput`.
-             * Delegates focus to the first box.
+             * v2 renders a native `<fieldset>` and `<legend>` with the hint and error, three labelled
+             * native inputs and a hidden input in light DOM (Stencil `scoped`, decision A2). It submits
+             * the date as an ISO string (`2026-03-07`, or empty while it isn't a real date) under `name`,
+             * and the raw parts as `name-day`, `name-month` and `name-year`, so a server can re-display
+             * what was typed. An empty required date and an impossible date are native validity errors
+             * on the first box concerned. In Arabic the boxes run right to left (Day on the right). An
+             * error can mark one box with `error-parts="year"`.
              */
             "sc-date-input": LocalJSX.IntrinsicElements["sc-date-input"] & JSXBase.HTMLAttributes<HTMLScDateInputElement>;
             /**
              * A start and an end date that relate to a calendar: filtering payments between two dates,
              * the nights of a hotel stay, how long a permit lasts. For one date people already know
              * (a date of birth), use `sc-date-input`.
-             * Two typed segments (From / To, من / إلى) in one 54px frame, and a calendar button that
+             * Two typed segments (From / To, من / إلى) in one 56px frame, and a calendar button that
              * opens a picker: a popover with one or two months and optional presets on medium and
              * wider screens, a modal bottom sheet below 600px. People can always type instead
              * ("21/9/2026", "21 9 2026", "21-09-2026").
-             * Form-associated: submits `name-start` and `name-end` as ISO dates (empty until each is a
-             * real date). Reports `valueMissing` (with `required`), `badInput`, `rangeUnderflow` and
-             * `rangeOverflow`, and shows its own messages for impossible ranges on blur. Delegates focus
-             * to the start segment.
+             * v2 renders everything in light DOM (Stencil `scoped`, decision A2), with classes prefixed
+             * `.sc-date-range__`. It submits `name-start` and `name-end` as ISO dates through hidden
+             * inputs (empty until each is a real date). The first problem with the range (missing with
+             * `required`, not a real date, end before start, outside `min`/`max`, too long or short) is a
+             * native validity error on the segment concerned; the component shows its own message on
+             * blur or after a failed submit. `focus()` on the host goes to the start segment. One native
+             * `change` is dispatched from the host per committed range.
+             * Rich content: a child with `slot="label"`, `slot="hint"` or `slot="error"` is moved into place once.
              */
             "sc-date-range": LocalJSX.IntrinsicElements["sc-date-range"] & JSXBase.HTMLAttributes<HTMLScDateRangeElement>;
             /**
@@ -4814,24 +6061,33 @@ declare module "@stencil/core" {
              */
             "sc-error-summary": LocalJSX.IntrinsicElements["sc-error-summary"] & JSXBase.HTMLAttributes<HTMLScErrorSummaryElement>;
             /**
-             * The page footer: help and contact, accessibility, privacy and terms links, and
-             * "Government of Dubai". Renders a `<footer>` (the page's `contentinfo` landmark) with a
-             * list of links under a visually hidden "Support links" heading.
-             * The four standard links appear when their `*-href` is set, with text from strings in the
-             * page language. Extra links go in the default slot as plain `<a>` elements; each gets its
-             * own list item (the footer sets their `slot` attribute).
+             * The filters applied to a list of results, as removable chips beside the result count, with
+             * "Clear all filters" when there are two or more (component-language B18, applied filter).
+             * Each chip is a native `<button>` named "Remove filter: Transport and vehicles". Removing one
+             * takes it away at once (no animation), emits `scRemove`, and moves focus to the next chip,
+             * else the previous one, else the element named by `focus-target` (the results heading).
+             * Every change in the number of filters is announced politely: "2 filters applied".
+             * The page updates its results on `scRemove` / `scClear`; set `filters` to change the chips.
+             * Chips are 32px tall (decision Q-chips) with a 44px target. Light DOM (Stencil `scoped`).
+             */
+            "sc-filter-chips": LocalJSX.IntrinsicElements["sc-filter-chips"] & JSXBase.HTMLAttributes<HTMLScFilterChipsElement>;
+            /**
+             * The page footer, a `<footer>` (the page's `contentinfo` landmark). Two variants:
+             * - `simple` (default; transaction pages, component-language A29): one row of underlined
+             *   links and "Government of Dubai", under a 1px rule.
+             * - `grouped` (channel sites, Standard CHR-06, decision Q-footer; B5): the channel's brand
+             *   group (`slot="brand"`: a one-sentence description and app badges); a **Channels** group
+             *   listing all seven channels in the Standard 3.1 order, the current one Bold with
+             *   `aria-current="true"` and no swatch; **Helpful information** (about, help and contact,
+             *   accessibility statement, sitemap); and **Legal** (privacy and cookies, terms). Each group
+             *   has an `<h2>`. Then "Government of Dubai · Last updated …" and "… is run by the
+             *   Government of Dubai".
+             * The standard links appear when their `*-href` is set, with text from strings in the page
+             * language. Every channel sets all of them (TPL-01, LEG-01). Extra links go in the default
+             * slot as plain `<a href>` elements; each gets its own list item (the footer sets their
+             * `slot` attribute). The footer is on `surface`, never a dark band.
              */
             "sc-footer": LocalJSX.IntrinsicElements["sc-footer"] & JSXBase.HTMLAttributes<HTMLScFooterElement>;
-            /**
-             * The layout grid: 4 columns on phones, 8 from 600px and 12 from 1024px, with gutters from
-             * the layout tokens (16, 20, 24px). Each child is a grid item.
-             * Item widths are set once for all children with `span`, `span-medium` and `span-expanded`
-             * (each falls back to the smaller one, and is capped at the number of columns), or per
-             * child with the `--sc-grid-span` custom property, e.g. `style="--sc-grid-span: 8"`.
-             * Service cards three to a row on desktop, two on tablets and one on phones:
-             * `<sc-grid span-medium="4" span-expanded="4">`.
-             */
-            "sc-grid": LocalJSX.IntrinsicElements["sc-grid"] & JSXBase.HTMLAttributes<HTMLScGridElement>;
             /**
              * Switches to the same page in the other language. The label is always the other
              * language's own name, "العربية" on an English page and "English" on an Arabic page,
@@ -4863,16 +6119,6 @@ declare module "@stencil/core" {
              */
             "sc-link": LocalJSX.IntrinsicElements["sc-link"] & JSXBase.HTMLAttributes<HTMLScLinkElement>;
             /**
-             * Keeps a value left-to-right inside any text, e.g. a plate number, amount, reference or
-             * phone number in an Arabic sentence. Renders `<bdi dir="ltr">` around its content.
-             * Shadow DOM is used on purpose: the author's text stays in the light DOM (searchable,
-             * copyable, untouched), and layout follows the flat tree, so the `<bdi>` isolates the
-             * slotted text from the surrounding paragraph exactly as a `<bdi>` written in place would.
-             * The host is also `unicode-bidi: isolate; direction: ltr` (here and in sc.css), so the
-             * value is isolated even before the component upgrades.
-             */
-            "sc-ltr": LocalJSX.IntrinsicElements["sc-ltr"] & JSXBase.HTMLAttributes<HTMLScLtrElement>;
-            /**
              * A modal dialog for a short secondary task or a decision that can't wait, such as the
              * session-timeout warning (TIME-02). On phones (under 600px) the same component is a bottom
              * sheet.
@@ -4891,6 +6137,15 @@ declare module "@stencil/core" {
              * never submits anything (TIME-03).
              */
             "sc-modal": LocalJSX.IntrinsicElements["sc-modal"] & JSXBase.HTMLAttributes<HTMLScModalElement>;
+            /**
+             * A titled module on a signed-in home page ("At a glance"): Vehicles, Applications, Traffic
+             * fines. A header row with an optional tinted icon, the title (a heading) and a standalone
+             * link at the end ("Manage", "View all"), then the module's own content.
+             * The card is not a link (CMP-06). The header link's accessible name includes the title
+             * ("View all, Applications"), so a page with several "View all" links still makes sense out
+             * of context.
+             */
+            "sc-module-card": LocalJSX.IntrinsicElements["sc-module-card"] & JSXBase.HTMLAttributes<HTMLScModuleCardElement>;
             /**
              * A person's notifications, grouped by day ("Today", "Earlier"). Light DOM (architecture
              * §3.1): you write the headings and native lists, so each group is a real list under a real
@@ -4919,18 +6174,22 @@ declare module "@stencil/core" {
              */
             "sc-notification-list": LocalJSX.IntrinsicElements["sc-notification-list"] & JSXBase.HTMLAttributes<HTMLScNotificationListElement>;
             /**
-             * The page frame: header, `<main>` and footer, with the page's language, direction and
-             * channel on its root.
+             * The page shell (Standard TPL-01, 11.1 and 11.9): the header, one `<main>` and the footer,
+             * with the page's language, direction and channel on its root.
              * - Set `lang` on `sc-page` as on any element; the page sets `dir` to match (`rtl` for
              *   Arabic) and re-applies it when `lang` changes.
              * - `channel` sets `data-channel`, which themes every component inside.
              * - `<main>` is rendered in light DOM (the component is scoped, not shadowed) with
-             *   `id="main-content"` and `tabindex="-1"`, so a skip link (`<a href="#main-content">`)
-             *   anywhere on the page can reach it and move focus into it.
-             * - With `sync-document` and a sticky `sc-app-bar` in the header, it sets
-             *   `scroll-padding-block-start` on `<html>` to the bar's height plus `--sc-space-8`, so
-             *   focused elements and `#fragment` targets scroll into view below the bar, not under it
-             *   (WCAG 2.4.11). It follows the bar's size and removes the padding when no longer needed.
+             *   `id="main-content"` and `tabindex="-1"`, so the skip link (`sc-skip-link`, whose default
+             *   `href` is `#main-content`) can reach it and move focus into it. The header slot gives
+             *   the banner landmark, the footer slot the contentinfo landmark.
+             * - With `sync-document` it also sets `lang`, `dir` and `data-channel` on `<html>`, and,
+             *   with a sticky `sc-app-bar` or `sc-site-header` in the header, `scroll-padding-block-start`
+             *   on `<html>` to the bar's height plus `--sc-space-8`, so focused elements are never
+             *   hidden under it (WCAG 2.4.11).
+             * - It reserves the height of a docked `sc-utility-bar` (`padding-block-end` from
+             *   `--sc-utility-bar-block-size`, which the bar publishes), so the bar never covers the end
+             *   of the page; `sc.css` sets the matching `scroll-padding-block-end` (CHR-05).
              */
             "sc-page": LocalJSX.IntrinsicElements["sc-page"] & JSXBase.HTMLAttributes<HTMLScPageElement>;
             /**
@@ -4948,52 +6207,75 @@ declare module "@stencil/core" {
             "sc-pagination": LocalJSX.IntrinsicElements["sc-pagination"] & JSXBase.HTMLAttributes<HTMLScPaginationElement>;
             /**
              * One option in an `sc-radio-group`. Its content is the option's label.
-             * `sc-radio` holds data and label content only. The parent `sc-radio-group` renders the
-             * native `<input type="radio">` for every option inside its own shadow root and slots
-             * this element into that option's `<label>`, so all the radios share one tree: they form a
-             * real native radio group (one Tab stop, arrow keys move and select, "2 of 3" announced).
-             * Use it only inside `sc-radio-group`.
+             * v2 renders a native `<input type="radio">`, its `<label>` and hint in light DOM (Stencil
+             * `scoped`, decision A2). Every radio in a group shares the group's `name` in one document
+             * tree, so they form a real native radio group: one Tab stop, arrow keys move and select,
+             * "2 of 3" is announced, and the form submits the chosen value. Use it only inside
+             * `sc-radio-group`, which passes down the name, the chosen value and the error state.
              */
             "sc-radio": LocalJSX.IntrinsicElements["sc-radio"] & JSXBase.HTMLAttributes<HTMLScRadioElement>;
             /**
              * One choice from a short list: "Who issued the plate?".
-             * A `<fieldset>` with a `<legend>` (exposed as `role="radiogroup"`, labelled by the legend
-             * and described by the hint and error), and one native `<input type="radio">` per
-             * `sc-radio` child, all inside this element's shadow root. Each `sc-radio` is slotted into
-             * its option's `<label>` (manual slot assignment), so its content names the radio while the
-             * radios themselves stay in one tree: native arrow keys, one Tab stop, position in set.
-             * Form-associated: submits the chosen value under `name`, resets, and reports
-             * `valueMissing` when `required`. Delegates focus, so an error-summary link to the host's
-             * `id` focuses the first radio.
+             * v2 renders a native `<fieldset>` (role `radiogroup`) with its `<legend>`, hint and error in
+             * light DOM (Stencil `scoped`, decision A2), and moves the `sc-radio` children into it. Each
+             * `sc-radio` renders a native radio with the group's `name`, so they form a real native radio
+             * group: one Tab stop, arrow keys move and select, position in set, native submission,
+             * reset and `required`. `disabled` disables the fieldset. `focus()` on the host reaches the
+             * chosen radio, or the first.
+             * Without a `name`, the radios share a generated one (`sc-radio-group-3`), which a form
+             * would submit: give the group a `name` inside a form.
              */
             "sc-radio-group": LocalJSX.IntrinsicElements["sc-radio-group"] & JSXBase.HTMLAttributes<HTMLScRadioGroupElement>;
             /**
-             * A pill search box: search icon, a labelled field and a primary "Search" button, inside a
-             * `<form role="search">` (a search landmark named by the label).
-             * Submitting (the button, or Enter in the field) emits `scSearch`. With `action`, the form
-             * then goes to that URL with the query as `?<name>=…`, unless a listener calls
-             * `preventDefault()`; without `action`, the page handles `scSearch` itself.
-             * The form is self-contained: don't nest `sc-search` inside another `<form>`.
+             * A search field and its button, inside a `<form role="search">` named by the label (E1: the
+             * field and the primary button are siblings with a 12px gap, not one pill).
+             * v2 renders the form, a native `<input type="search">` and an `sc-button type="submit"` in
+             * light DOM (Stencil `scoped`, decision A2), so Enter in the field submits through the button
+             * natively. Submitting emits `scSearch`. With `action`, the form then goes to that URL with the
+             * query as `?<name>=…`, unless a listener calls `preventDefault()`; without `action`, the page
+             * handles `scSearch` itself. Don't nest `sc-search` inside another `<form>`.
              */
             "sc-search": LocalJSX.IntrinsicElements["sc-search"] & JSXBase.HTMLAttributes<HTMLScSearchElement>;
             /**
              * One choice from a list too long for radios, such as the emirate that issued a plate.
-             * A native `<select>` inside the shadow root, styled like `sc-text-input`, with a chevron.
-             * Write the options as light-DOM `<option>` (and `<optgroup>`) children: they are copied
-             * into the inner select and kept in sync when they change. Form-associated and delegates focus.
+             * v2 renders a native `<select>` in light DOM (Stencil `scoped`, decision A2), styled like
+             * `sc-text-input` with an `expand_more` chevron. Write the options as `<option>` (and
+             * `<optgroup>`) children: they are moved INTO the native select, so they are the real options
+             * (no copies), and options added later are moved in too. The select submits, resets, validates
+             * and follows `<fieldset disabled>` natively; `focus()` on the host reaches it.
              */
             "sc-select": LocalJSX.IntrinsicElements["sc-select"] & JSXBase.HTMLAttributes<HTMLScSelectElement>;
             /**
-             * A link to a service: its title, the entity that owns it and an optional channel chip.
-             * There is no end chevron: the card is not itself a link, so nothing on it may look like one.
+             * A link to a service: its title, the entity that owns it, an optional icon and an optional
+             * channel chip, on a flat 12px card with a 1px edge (direction E, "Most used services").
              * Only the title is the link (CMP-06), so screen readers hear a short link name ("Renew
-             * vehicle registration"), not the whole card's text. The card is not wrapped in an `<a>`
-             * and the link's hit area is not stretched over the card: it is the title, grown to at
-             * least 44 x 44. The title is a heading containing the link, so heading navigation finds
-             * every service. The owning entity is the link's description. A chip that is a link is a
-             * separate link.
+             * vehicle registration"), with the entity as its description. The card is not wrapped in an
+             * `<a>` and the link's hit area is not stretched over the card: it is the title, grown to at
+             * least 44 × 44. The forward arrow at the top end is decorative: it is not a second link and
+             * is hidden from assistive technology. The title is a heading containing the link, so heading
+             * navigation finds every service. A chip that is a link is a separate link.
              */
             "sc-service-card": LocalJSX.IntrinsicElements["sc-service-card"] & JSXBase.HTMLAttributes<HTMLScServiceCardElement>;
+            /**
+             * The header of channel pages outside a transaction (Standard CHR-01 to CHR-04;
+             * component-language B2). Transaction pages use `sc-app-bar`.
+             * From the inline-start edge: the Government of Dubai lockup (`slot="lockup"`), the main
+             * navigation (`slot="nav"`), search, the language switch (`slot="language"`), sign in with UAE PASS
+             * (`slot="signin"`) or the account menu once signed in (`slot="account"`), and the
+             * channel's logo and switcher (`slot="switcher"`, an `sc-channel-switcher`). Sign in is the
+             * official UAE PASS button (decision U3a), never a themed `sc-button`: until the official kit
+             * arrives the header renders a marked placeholder (black, white label, fingerprint glyph,
+             * 56px) that `slot="signin"` replaces. The order
+             * mirrors in Arabic. A flat `surface` bar, 80px tall, with a 1px `outline-variant` rule.
+             * Below 1024px the row keeps the menu button, the lockup, the language switch and the
+             * channel switcher (64px). Navigation, search and sign in (or the account menu) move into
+             * the mobile menu: a modal `<dialog>` labelled "Menu", with focus on its close button when
+             * it opens, Escape closing it and returning focus to the menu button, and the page behind
+             * it inert. The same slotted elements move; nothing is duplicated.
+             * The host is a `<header>` banner landmark. It is not fixed by default; with `sticky`,
+             * `sc-page` keeps `scroll-padding-top` clear of it (A11Y-05, F-009).
+             */
+            "sc-site-header": LocalJSX.IntrinsicElements["sc-site-header"] & JSXBase.HTMLAttributes<HTMLScSiteHeaderElement>;
             /**
              * "Skip to main content": the first focusable element on every page. Hidden until it gets
              * keyboard focus, then shown at the top start corner. Activating it moves focus to the
@@ -5067,25 +6349,26 @@ declare module "@stencil/core" {
              */
             "sc-step-progress": LocalJSX.IntrinsicElements["sc-step-progress"] & JSXBase.HTMLAttributes<HTMLScStepProgressElement>;
             /**
-             * The "Check your answers" pattern: rows of a key, a value and an optional "Change" action,
-             * as one `<dl>`.
-             * Description lists can't span shadow roots (a `<dl>` must directly contain `<dt>`/`<dd>`
-             * or `<div>` groups), so this component renders the whole `<dl>` in its own shadow root:
-             * one `<div>` per row holding the `<dt>` (from the row's `label`), the value `<dd>` and the
-             * action `<dd>`. Each `sc-summary-row` child is assigned to a named slot inside its value
-             * `<dd>`, so rich values (addresses, `<sc-ltr>` plates) stay in light DOM.
-             * Wide containers show three columns (key, value, a fixed-width action column, so rows
-             * align). Below 600px of container width the key sits above the value, with the action at
-             * the end.
+             * The "Check your answers" pattern (E3) and the payment summary (E4): rows of a key, a value
+             * and an optional "Change" action, as one `<dl>`.
+             * v2 renders in light DOM (Stencil `scoped`, architecture §3.1). The list renders the
+             * `<dl>` itself: one `<div>` per row holding the `<dt>` (the row's `label`), the value `<dd>`
+             * and the action `<dd>`. Each `sc-summary-row` child is moved into its value `<dd>`, so the
+             * description list is valid HTML (a `<dl>` may only contain `<div>`, `<dt>` and `<dd>`) and
+             * rich values (addresses, `<sc-ltr>` plates) stay the service's own markup.
+             * Layouts: `stacked` puts the key above the value with the action in a fixed 64px end column
+             * (E3); `columns` shows key, value and a fixed 96px action column; `pairs` puts the key in a
+             * fixed column and end-aligns the value, with no actions (E4); `auto` (default) is `stacked`
+             * below 600px of the list's own width and `columns` from there.
              */
             "sc-summary-list": LocalJSX.IntrinsicElements["sc-summary-list"] & JSXBase.HTMLAttributes<HTMLScSummaryListElement>;
             /**
              * One answer in a `sc-summary-list`: a key (`label`), a value (the default slot) and an
              * optional "Change" action.
-             * The row only carries data and its value. The parent `sc-summary-list` renders the
-             * `<dt>`, `<dd>` and action inside its own `<dl>`, and slots this element into the value
-             * `<dd>`, so the description list stays valid across shadow roots. Use it only as a direct
-             * child of `sc-summary-list`; the list sets its `slot` attribute.
+             * v2 renders in light DOM (Stencil `scoped`). The row carries the data and its value; the
+             * parent `sc-summary-list` renders the `<dt>`, the value `<dd>` and the action inside its own
+             * `<dl>`, and moves this element into the value `<dd>`. Use it only as a direct child of
+             * `sc-summary-list`; the list sets its `slot` attribute.
              */
             "sc-summary-row": LocalJSX.IntrinsicElements["sc-summary-row"] & JSXBase.HTMLAttributes<HTMLScSummaryRowElement>;
             /**
@@ -5109,19 +6392,35 @@ declare module "@stencil/core" {
             "sc-table": LocalJSX.IntrinsicElements["sc-table"] & JSXBase.HTMLAttributes<HTMLScTableElement>;
             /**
              * A single-line answer, such as a plate number, an email address or a phone number.
-             * Renders its own label, hint, error and native `<input>` in one shadow root, so the
-             * label and `aria-describedby` work. The host is form-associated (it submits `value`
-             * under `name`, resets, and reports validity from the inner input) and delegates focus,
-             * so an error-summary link to the host's `id` focuses the input.
+             * v2 renders its label, hint, error and a native `<input>` in light DOM (Stencil `scoped`,
+             * decision A2). The input is a real form control: it submits under `name`, Enter submits the
+             * form through its default button, and validation, reset, autofill and `<fieldset disabled>`
+             * are native. `focus()` on the host reaches the input, so an error-summary link to the host's
+             * `id` works. Styles: the classes `.sc-field`, `.sc-field__label`, `.sc-field__frame`,
+             * `.sc-field__control` (no `::part()`).
+             * Rich content: a child element with `slot="label"`, `slot="hint"`, `slot="error"`,
+             * `slot="prefix"` or `slot="suffix"` is moved into place once, when the component loads.
              */
             "sc-text-input": LocalJSX.IntrinsicElements["sc-text-input"] & JSXBase.HTMLAttributes<HTMLScTextInputElement>;
             /**
              * A longer answer, such as a reason or a description, with an optional character count.
-             * Renders its own label, hint, error, native `<textarea>` and count in one shadow root.
-             * The count is shown as you type, but announced to screen readers politely, once typing
-             * pauses, never on every keystroke. Form-associated and delegates focus, like `sc-text-input`.
+             * v2 renders its label, hint, error, a native `<textarea>` and the count in light DOM
+             * (Stencil `scoped`, decision A2), so the textarea is a real form control. The count is shown
+             * as you type but announced politely only once typing pauses. People can type past the limit:
+             * the count then says how many characters to remove and the textarea reports a custom
+             * validity error, which is easier to fix than text that silently stops.
+             * Rich content: a child with `slot="label"`, `slot="hint"` or `slot="error"` is moved into place once.
              */
             "sc-textarea": LocalJSX.IntrinsicElements["sc-textarea"] & JSXBase.HTMLAttributes<HTMLScTextareaElement>;
+            /**
+             * A compact single-link tile: a tinted icon tile, a title and an optional count. Use it for
+             * life events ("Moving home · 14 services"), categories ("Transport and vehicles") and
+             * favourite services ("Pay a traffic fine").
+             * The whole tile is one link, because the title (and the count) is its only content and so
+             * the link's whole name: "Moving home, 14 services". That does not conflict with CMP-06,
+             * which is about cards that hold more than one thing. Tiles carry no other links or buttons.
+             */
+            "sc-tile": LocalJSX.IntrinsicElements["sc-tile"] & JSXBase.HTMLAttributes<HTMLScTileElement>;
             /**
              * The status history of an application: each change, with its status, date and a line of
              * detail. Light DOM (architecture §3.1): you write the native list, so screen readers count
@@ -5144,6 +6443,20 @@ declare module "@stencil/core" {
              * tabular Latin digits. The marker column moves to the right in Arabic.
              */
             "sc-timeline": LocalJSX.IntrinsicElements["sc-timeline"] & JSXBase.HTMLAttributes<HTMLScTimelineElement>;
+            /**
+             * The help and feedback bar of a channel site (decision U4, Standard CHR-05; component-
+             * language B4 as amended by U4): the Happiness Meter, contact and complaints (04), chat and
+             * accessibility options, each an icon with a visible label (labels never collapse to icons).
+             * From 1024px it is a flat bar docked to the bottom of the viewport across the full width,
+             * at `elevation-1`, with a 1px `outline-variant` edge along its top. It publishes its height
+             * as `--sc-utility-bar-block-size` on `<html>`: `sc-page` pads its end by it and `sc.css`
+             * sets `scroll-padding-block-end` from it, so the bar never covers content or the focused
+             * element (WCAG 2.4.11). Below 1024px it folds into the footer: place it straight after
+             * `sc-footer`, and it becomes an in-flow "Help and feedback" group, a 2 × 2 grid of outlined
+             * buttons. It is present when the page loads and does not animate.
+             * A `<nav>` labelled "Help and feedback". Items appear when their `*-href` is set.
+             */
+            "sc-utility-bar": LocalJSX.IntrinsicElements["sc-utility-bar"] & JSXBase.HTMLAttributes<HTMLScUtilityBarElement>;
         }
     }
 }

@@ -1,161 +1,105 @@
-
+/*
+ * sc-app-bar (v2, shadow DOM): the transaction app bar. Rules: component-language.md A4,
+ * read through the role table in docs/v2/decisions.md. Flat: no glass, no shadow (ELV-04).
+ */
 :host {
   display: block;
-  /* A bar is never wider than its container; content inside shrinks and wraps first. */
-  max-inline-size: 100%;
-}
-
-:host([sticky]) {
-  position: sticky;
-  inset-block-start: 0;
-  z-index: 100;
 }
 
 :host([hidden]) {
   display: none;
 }
 
-/* Glass ------------------------------------------------------------------------------- */
+:host([sticky]) {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 10;
+}
 
+/* A 4px channel rule on top, 60px of bar, a 1px rule beneath. Fixed 96px side slots keep the
+   title centred whatever the controls' widths. */
 .bar {
   box-sizing: border-box;
   display: grid;
+  grid-template-columns: var(--sc-space-96) minmax(0, 1fr) var(--sc-space-96);
   align-items: center;
-  column-gap: var(--sc-space-12);
-  min-block-size: calc(var(--sc-size-control-m) + var(--sc-space-16));
+  gap: var(--sc-space-8);
+  min-block-size: calc(var(--sc-space-56) + var(--sc-size-strip) + var(--sc-space-4) + var(--sc-size-border-hairline));
+  padding-block: 0;
+  padding-block-start: env(safe-area-inset-top, 0);
+  padding-inline: max(var(--sc-space-16), env(safe-area-inset-left, 0px), env(safe-area-inset-right, 0px));
+  border-block-start: var(--sc-size-strip) solid var(--sc-color-channel-action);
+  border-block-end: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+  background-color: var(--sc-color-surface);
+  color: var(--sc-color-on-surface);
+}
+
+.slot {
+  display: flex;
+  align-items: center;
+  min-inline-size: 0;
+}
+
+.end {
+  justify-content: flex-end;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sc-space-8);
+  min-inline-size: 0;
   padding-block: var(--sc-space-8);
-  padding-inline: var(--sc-space-16);
-  background: var(--sc-color-glass);
-  border-block-end: var(--sc-size-border-hairline) solid var(--sc-color-glass-edge);
-  box-shadow: var(--sc-elevation-2);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  backdrop-filter: blur(24px) saturate(180%);
-  color: var(--sc-color-ink);
+  font: var(--sc-type-title-small);
+  font-weight: var(--sc-font-weight-bold);
+  letter-spacing: var(--sc-type-title-small-tracking);
+  text-align: center;
 }
 
-/* Edge-to-edge bars respect the notch / status bar in installed web apps. */
-.bar--bar {
-  padding-block-start: max(var(--sc-space-8), env(safe-area-inset-top, 0px));
-  padding-inline: max(var(--sc-space-16), env(safe-area-inset-left, 0px)) max(var(--sc-space-16), env(safe-area-inset-right, 0px));
+/* The 10px channel swatch with a 3px radius. */
+.swatch {
+  flex: none;
+  inline-size: calc(var(--sc-space-8) + var(--sc-space-2));
+  block-size: calc(var(--sc-space-8) + var(--sc-space-2));
+  border-radius: var(--sc-size-border-accent);
+  background-color: var(--sc-color-channel-action);
 }
 
-.bar--floating {
-  min-block-size: calc(var(--sc-size-control-l) + var(--sc-space-12));
-  margin-block-start: var(--sc-space-16);
-  margin-inline: var(--sc-space-16);
-  padding-inline: var(--sc-space-24) var(--sc-space-12);
-  border: var(--sc-size-border-hairline) solid var(--sc-color-glass-edge);
-  border-radius: var(--sc-radius-pill);
+.title-text {
+  min-inline-size: 0;
 }
 
-/* Layout ------------------------------------------------------------------------------ */
-
-/* Mobile: equal start and end columns keep the title centred whatever the controls' widths. */
-.bar--center {
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  grid-template-areas: 'start title end' '. content .';
+.content {
+  display: none;
 }
 
-/* Desktop: start control (if any), title, navigation, then the end controls at the end. */
+/* Deprecated align="start" (v1 desktop header): title, content, end. */
 .bar--start {
   display: flex;
-  flex-wrap: wrap;
-  column-gap: var(--sc-space-24);
-  row-gap: var(--sc-space-8);
+  gap: var(--sc-space-24);
 }
 
-.bar--start .content {
-  flex: 1 1 auto;
+.bar--start .title {
+  justify-content: flex-start;
+}
+
+.bar--start .content:not(.empty) {
+  display: flex;
+  flex: 1;
+  align-items: center;
 }
 
 .bar--start .end {
   margin-inline-start: auto;
 }
 
-.start {
-  grid-area: start;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: var(--sc-space-8);
-  min-inline-size: 0;
-}
-
-.title {
-  grid-area: title;
-  display: flex;
-  align-items: center;
-  gap: var(--sc-space-8);
-  min-inline-size: 0;
-  /* The channel name is bold in both scripts (title-s size, bold face). */
-  font-family: var(--sc-font-family-bold);
-  font-weight: var(--sc-font-weight-bold);
-  color: var(--sc-color-ink-strong);
-  text-align: center;
-}
-
-.bar--start .title {
-  text-align: start;
-}
-
-.content {
-  grid-area: content;
-  display: flex;
-  align-items: center;
-  gap: var(--sc-space-4);
-  min-inline-size: 0;
-}
-
-.end {
-  grid-area: end;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: var(--sc-space-8);
-  min-inline-size: 0;
-}
-
-.empty {
-  /* Keep the column (so the title stays centred) but take no space in the start layout. */
-  min-block-size: 0;
-}
-
-.bar--start .start.empty,
-.bar--start .content.empty {
-  display: none;
-}
-
-.bar--center .content.empty {
-  display: none;
-}
-
-/* Controls in the bar are at least 44px. */
-::slotted([slot='start']),
-::slotted([slot='end']) {
-  min-block-size: var(--sc-size-target-min);
-}
-
-/* Solid fallback ---------------------------------------------------------------------- */
-
-@media (prefers-reduced-transparency: reduce) {
-  .bar {
-    background: var(--sc-color-surface);
-    border-color: var(--sc-color-rule);
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
-  }
-}
-
 @media (forced-colors: active) {
   .bar {
-    background: Canvas;
-    color: CanvasText;
-    border-color: CanvasText;
-    box-shadow: none;
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
+    border-block-start-color: CanvasText;
+    border-block-end-color: CanvasText;
   }
-  .title {
-    color: CanvasText;
+  .swatch {
+    background-color: CanvasText;
   }
 }

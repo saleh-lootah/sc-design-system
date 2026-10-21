@@ -1,14 +1,14 @@
-<h1 class="pg-title sc-type-heading-xl" data-ar="حقل النص">Text input</h1>
-<p class="pg-lede sc-type-body-m" data-ar="لإجابة من سطر واحد. يعرض الحقل التسمية والتلميح والخطأ بنفسه، ويُرسل قيمته مع النموذج.">
+<h1 class="pg-title sc-type-headline-large" data-ar="حقل النص">Text input</h1>
+<p class="pg-lede sc-type-body-large" data-ar="لإجابة من سطر واحد. يعرض الحقل التسمية والتلميح والخطأ بنفسه، ويُرسل قيمته مع النموذج.">
   For a single-line answer. The field renders its own label, hint and error, and submits its value with the form.
 </p>
 
 <section class="pg-section" aria-labelledby="ti-plate">
-  <h2 id="ti-plate" class="sc-type-heading-m" data-ar="سؤال رقم اللوحة (مع أخطاء)">Plate number question (with errors)</h2>
+  <h2 id="ti-plate" class="sc-type-headline-small" data-ar="سؤال رقم اللوحة (مع أخطاء)">Plate number question (with errors)</h2>
   <div class="pg-card pg-narrow" style="max-inline-size: 420px">
     <form id="ti-plate-form" novalidate>
-      <p class="sc-type-heading-l" style="margin: 0 0 var(--sc-space-8); color: var(--sc-color-ink-strong)" data-ar="ما رقم لوحة مركبتك؟">What is your plate number?</p>
-      <p class="sc-type-body-m" style="margin: 0 0 var(--sc-space-24); color: var(--sc-color-muted)" data-ar="تجده على لوحة المركبة أو في بطاقة ملكية المركبة.">You can find it on the plate or on the vehicle ownership card.</p>
+      <p class="sc-type-headline-medium" style="margin: 0 0 var(--sc-space-8); color: var(--sc-color-on-surface)" data-ar="ما رقم لوحة مركبتك؟">What is your plate number?</p>
+      <p class="sc-type-body-large" style="margin: 0 0 var(--sc-space-24); color: var(--sc-color-on-surface-variant)" data-ar="تجده على لوحة المركبة أو في بطاقة ملكية المركبة.">You can find it on the plate or on the vehicle ownership card.</p>
       <div style="display: grid; gap: var(--sc-space-24)">
         <sc-select id="emirate" name="emirate" label="Issuing authority" data-ar-label="جهة الإصدار" value="dubai">
           <option value="dubai" data-ar="دبي">Dubai</option>
@@ -46,7 +46,7 @@
 </section>
 
 <section class="pg-section" aria-labelledby="ti-states">
-  <h2 id="ti-states" class="sc-type-heading-m" data-ar="الحالات">States</h2>
+  <h2 id="ti-states" class="sc-type-headline-small" data-ar="الحالات">States</h2>
   <div class="pg-card">
     <div class="pg-grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); justify-items: stretch">
       <div class="pg-cell">
@@ -78,7 +78,7 @@
 </section>
 
 <section class="pg-section" aria-labelledby="ti-widths">
-  <h2 id="ti-widths" class="sc-type-heading-m" data-ar="العرض">Widths</h2>
+  <h2 id="ti-widths" class="sc-type-headline-small" data-ar="العرض">Widths</h2>
   <div class="pg-card">
     <div style="display: grid; gap: var(--sc-space-16)">
       <sc-text-input label="2 characters" data-ar-label="حرفان" width="2"></sc-text-input>
@@ -93,7 +93,7 @@
 </section>
 
 <section class="pg-section" aria-labelledby="ti-affix">
-  <h2 id="ti-affix" class="sc-type-heading-m" data-ar="بادئة ولاحقة">Prefix and suffix</h2>
+  <h2 id="ti-affix" class="sc-type-headline-small" data-ar="بادئة ولاحقة">Prefix and suffix</h2>
   <div class="pg-card">
     <div class="pg-grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); justify-items: stretch">
       <sc-text-input label="Amount" data-ar-label="المبلغ" prefix-text="AED" data-ar-prefix-text="درهم" width="10" inputmode="decimal" ltr></sc-text-input>
@@ -105,7 +105,7 @@
 </section>
 
 <section class="pg-section" aria-labelledby="ti-heading">
-  <h2 id="ti-heading" class="sc-type-heading-m" data-ar="التسمية كعنوان للصفحة">Label as the page heading</h2>
+  <h2 id="ti-heading" class="sc-type-headline-small" data-ar="التسمية كعنوان للصفحة">Label as the page heading</h2>
   <div class="pg-card">
     <sc-text-input label="What is your plate number?" data-ar-label="ما رقم لوحة مركبتك؟" hint="Up to 5 digits, for example 12345" data-ar-hint="حتى 5 أرقام، مثل 12345" heading-level="2" width="10" inputmode="numeric" ltr></sc-text-input>
     <p class="pg-note" data-ar="مع heading-level تُعرض التسمية داخل عنوان، عندما يكون الحقل هو السؤال الوحيد في الصفحة.">With heading-level the label sits inside a heading, for a page with one question.</p>
@@ -113,10 +113,10 @@
 </section>
 
 <section class="pg-section" aria-labelledby="ti-arabic">
-  <h2 id="ti-arabic" class="sc-type-heading-m" data-ar="بالعربية">In Arabic</h2>
+  <h2 id="ti-arabic" class="sc-type-headline-small" data-ar="بالعربية">In Arabic</h2>
   <div class="pg-card" lang="ar" dir="rtl" style="max-inline-size: 420px">
-    <p class="sc-type-heading-l" style="margin: 0 0 var(--sc-space-8); color: var(--sc-color-ink-strong)">ما رقم لوحة مركبتك؟</p>
-    <p class="sc-type-body-m" style="margin: 0 0 var(--sc-space-24); color: var(--sc-color-muted)">تجده على لوحة المركبة أو في بطاقة ملكية المركبة.</p>
+    <p class="sc-type-headline-medium" style="margin: 0 0 var(--sc-space-8); color: var(--sc-color-on-surface)">ما رقم لوحة مركبتك؟</p>
+    <p class="sc-type-body-large" style="margin: 0 0 var(--sc-space-24); color: var(--sc-color-on-surface-variant)">تجده على لوحة المركبة أو في بطاقة ملكية المركبة.</p>
     <div style="display: grid; gap: var(--sc-space-24)">
       <sc-select label="جهة الإصدار" value="dubai">
         <option value="dubai">دبي</option>

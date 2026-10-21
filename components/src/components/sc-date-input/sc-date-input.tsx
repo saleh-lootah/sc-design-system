@@ -1,52 +1,32 @@
-import { AttachInternals, Component, Element, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
 import { normaliseDigits } from '../../i18n/digits';
-import { LocaleController } from '../../i18n/locale';
-import { AlertCircle } from '../../icons/index'; // explicit /index: enables SVG rendering for this component (see CONTRIBUTING)
-import { FieldError, FieldHint, FieldLabel, HeadingLevel, IDS, describedBy, emitNativeChange, hasSlotted, headingLevel, formSupported } from '../sc-text-input/field';
+import { LocaleController } from '../../i18n/controller';
+import dateStrings from '../../i18n/components/sc-date-input';
+import { FieldError, FieldHint, FieldLabel, HeadingLevel, Slotted, describedBy, forwardFocus, headingLevel, nextId, onFormReset, takeSlotted, withField } from '../sc-text-input/field';
 import { DatePart, PARTS, Parts, isoFromParts, partsFromIso } from './date';
 
-void AlertCircle;
-
 const LABEL_KEYS = { day: 'dateInputDay', month: 'dateInputMonth', year: 'dateInputYear' } as const;
-/** Character widths of each box (a little more than the digits, so they never feel cramped). */
-const CHARS: Record<DatePart, number> = { day: 3, month: 3, year: 5 };
+const strings = withField(dateStrings);
 
 /**
  * A date people know, such as a date of birth or the date on a document: Day, Month and
  * Year boxes (يوم / شهر / سنة) with the numeric keyboard.
  *
- * A `<fieldset>` and `<legend>` with the hint and error, and three labelled native inputs,
- * in one shadow root. In Arabic the boxes run right to left (Day on the right). An error can
- * highlight one part with `error-parts="year"`.
- *
- * Form-associated: submits the date as an ISO string (`2026-03-07`, or empty while it isn't
- * a real date) under `name`, plus the raw parts as `name-day`, `name-month` and `name-year`
- * so a server can re-display what was typed. Reports `valueMissing` and `badInput`.
- * Delegates focus to the first box.
- *
- * @slot label - Rich legend content, instead of the `label` prop.
- * @slot hint - Rich hint content, instead of the `hint` prop.
- * @slot error - Rich error content, instead of the `error` prop.
- *
- * @part field - The `<fieldset>` (gets the error bar).
- * @part label - The `<legend>`.
- * @part hint - The hint.
- * @part error - The error message.
- * @part parts - The row of boxes.
- * @part part-label - The label above a box.
- * @part frame - The bordered box around an input.
- * @part control - A native `<input>`.
+ * v2 renders a native `<fieldset>` and `<legend>` with the hint and error, three labelled
+ * native inputs and a hidden input in light DOM (Stencil `scoped`, decision A2). It submits
+ * the date as an ISO string (`2026-03-07`, or empty while it isn't a real date) under `name`,
+ * and the raw parts as `name-day`, `name-month` and `name-year`, so a server can re-display
+ * what was typed. An empty required date and an impossible date are native validity errors
+ * on the first box concerned. In Arabic the boxes run right to left (Day on the right). An
+ * error can mark one box with `error-parts="year"`.
  */
 @Component({
   tag: 'sc-date-input',
-  styleUrl: 'sc-date-input.css',
-  shadow: { delegatesFocus: true },
-  formAssociated: true,
+  styleUrls: ['../sc-text-input/field.css', 'sc-date-input.css'],
+  scoped: true,
 })
 export class ScDateInput {
   @Element() el!: HTMLElement;
-
-  @AttachInternals() internals!: ElementInternals;
 
   /** The question, shown as the legend: "When does your insurance start?". */
   @Prop() label?: string;
@@ -59,7 +39,7 @@ export class ScDateInput {
 
   /**
    * Which boxes the error is about, space-separated: `"day"`, `"month year"`. Only those get
-   * the error border and `aria-invalid`. When empty, an error highlights all three.
+   * the error edge and `aria-invalid`. When empty, an error marks all three.
    */
   @Prop() errorParts?: string;
 
@@ -72,7 +52,7 @@ export class ScDateInput {
   /** The date as an ISO string (`YYYY-MM-DD`). Empty while the boxes don't make a real date. */
   @Prop({ mutable: true }) value = '';
 
-  /** Requires a date (`valueMissing` while every box is empty). */
+  /** Requires a date (a validity error while every box is empty). */
   @Prop() required = false;
 
   /** Disables the boxes. Avoid it. */
@@ -87,39 +67,39 @@ export class ScDateInput {
   /** Fires on every keystroke with `{ value, day, month, year }`. */
   @Event({ bubbles: true, composed: true }) scInput!: EventEmitter<{ value: string } & Parts>;
 
-  /** Fires when a box is committed with `{ value, day, month, year }`. A native `change` is also dispatched on the host. */
+  /** Fires when a box is committed with `{ value, day, month, year }`. The native `change` also bubbles from the box. */
   @Event({ bubbles: true, composed: true }) scChange!: EventEmitter<{ value: string } & Parts>;
 
-  @State() formDisabled = false;
-  @State() slots = { label: false, hint: false, error: false };
+  @State() slotted: Slotted = {};
   @State() parts: Parts = { day: '', month: '', year: '' };
 
+  private uid = nextId('sc-date-input');
   private inputs: Partial<Record<DatePart, HTMLInputElement>> = {};
-  private defaultValue = '';
-  private locale = new LocaleController(this);
+  private locale = new LocaleController(this, strings);
+  private stopReset?: () => void;
 
   connectedCallback() {
     this.locale.connect();
-    this.readSlots();
-  }
-
-  componentDidLoad() {
-    // slotchange bubbles to the shadow root but not past it.
-    this.el.shadowRoot?.addEventListener('slotchange', this.readSlots);
+    this.slotted = takeSlotted(this.el, ['label', 'hint', 'error'], this.slotted);
+    forwardFocus(this.el, () => this.inputs.day);
+    this.stopReset = onFormReset(this.el, () => {
+      this.parts = { day: this.inputs.day?.value ?? '', month: this.inputs.month?.value ?? '', year: this.inputs.year?.value ?? '' };
+      this.value = isoFromParts(this.parts);
+    });
   }
 
   disconnectedCallback() {
     this.locale.disconnect();
+    this.stopReset?.();
   }
 
   componentWillLoad() {
     this.value = this.value ?? '';
-    this.defaultValue = this.value;
     this.parts = partsFromIso(this.value);
   }
 
   componentDidRender() {
-    this.sync();
+    this.validate();
   }
 
   /** A value set from outside replaces the boxes; one computed from typing leaves them alone. */
@@ -128,55 +108,24 @@ export class ScDateInput {
     if ((next ?? '') !== isoFromParts(this.parts)) this.parts = partsFromIso(next);
   }
 
-  formDisabledCallback(disabled: boolean) {
-    this.formDisabled = disabled;
-  }
-
-  formResetCallback() {
-    this.parts = partsFromIso(this.defaultValue);
-    this.value = this.defaultValue;
-  }
-
-  formStateRestoreCallback(state: unknown) {
-    if (state instanceof FormData && this.name) {
-      this.parts = {
-        day: String(state.get(`${this.name}-day`) ?? ''),
-        month: String(state.get(`${this.name}-month`) ?? ''),
-        year: String(state.get(`${this.name}-year`) ?? ''),
-      };
-      this.value = isoFromParts(this.parts);
-    }
-  }
-
-  private sync() {
-    if (!formSupported()) return;
-    const { parts } = this;
-    const iso = isoFromParts(parts);
-    if (this.internals?.setFormValue) {
-      if (this.name && typeof FormData !== 'undefined') {
-        const data = new FormData();
-        data.append(this.name, iso);
-        for (const p of PARTS) data.append(`${this.name}-${p}`, parts[p]);
-        this.internals.setFormValue(data);
-      } else {
-        this.internals.setFormValue(iso);
-      }
-    }
-    if (!this.internals?.setValidity) return;
+  /** "Enter a date" while empty and required; "The date must be a real date" when it isn't one. */
+  private validate() {
+    const { parts, inputs } = this;
     const empty = PARTS.every((p) => !parts[p].trim());
     const firstEmpty = PARTS.find((p) => !parts[p].trim()) ?? 'day';
-    if (empty && this.required && this.inputs.day) {
-      this.internals.setValidity({ valueMissing: true }, this.locale.t('dateInputRequired'), this.inputs.day);
-    } else if (!empty && !iso && this.inputs[firstEmpty]) {
-      this.internals.setValidity({ badInput: true }, this.locale.t('dateInputInvalid'), this.inputs[firstEmpty]);
-    } else {
-      this.internals.setValidity({});
+    let message = '';
+    let anchor: DatePart = 'day';
+    if (empty && this.required) message = this.locale.t('dateInputRequired');
+    else if (!empty && !isoFromParts(parts)) {
+      message = this.locale.t('dateInputInvalid');
+      anchor = firstEmpty;
     }
+    for (const p of PARTS) inputs[p]?.setCustomValidity?.(p === anchor ? message : '');
   }
 
-  private readSlots = () => {
-    const next = { label: hasSlotted(this.el, 'label'), hint: hasSlotted(this.el, 'hint'), error: hasSlotted(this.el, 'error') };
-    if (JSON.stringify(next) !== JSON.stringify(this.slots)) this.slots = next;
+  private setInput = (p: DatePart) => (el?: HTMLInputElement) => {
+    if (el && !this.inputs[p]) el.defaultValue = this.parts[p];
+    this.inputs[p] = el;
   };
 
   private detail() {
@@ -191,7 +140,6 @@ export class ScDateInput {
 
   private onChange = () => {
     this.scChange.emit(this.detail());
-    emitNativeChange(this.el);
   };
 
   /** The parts the error is about. */
@@ -203,47 +151,36 @@ export class ScDateInput {
 
   render() {
     const { t } = this.locale;
-    const hasHint = !!this.hint || this.slots.hint;
-    const hasError = !!this.error || this.slots.error;
-    const disabled = this.disabled || this.formDisabled;
+    const id = this.uid;
+    const { slotted } = this;
+    const hasHint = !!this.hint || !!slotted.hint;
+    const hasError = !!this.error || !!slotted.error;
     const invalid = this.invalidParts(hasError);
     const auto = this.autocomplete && this.autocomplete !== 'off' ? this.autocomplete : undefined;
 
     return (
       <Host>
-        <fieldset
-          class={{ 'field': true, 'field--error': hasError }}
-          part="field"
-          role="group"
-          aria-describedby={describedBy(hasHint && IDS.hint, hasError && IDS.error)}
-          disabled={disabled}
-         
-        >
-          <FieldLabel text={this.label} optional={this.optional} optionalText={t('optional')} level={headingLevel(this.headingLevel)} as="legend" />
-          <FieldHint text={this.hint} show={hasHint} />
-          <FieldError text={this.error} show={hasError} prefix={t('errorPrefix')} />
-          <div class="parts" part="parts">
+        <fieldset class={{ 'sc-field': true, 'sc-field--error': hasError }} role="group" aria-describedby={describedBy(hasHint && `${id}-hint`, hasError && `${id}-error`)} disabled={this.disabled}>
+          <FieldLabel id={`${id}-label`} text={this.label} rich={slotted.label} optional={this.optional} optionalText={t('fieldOptional')} level={headingLevel(this.headingLevel)} as="legend" />
+          <FieldHint id={`${id}-hint`} text={this.hint} rich={slotted.hint} show={hasHint} />
+          <FieldError id={`${id}-error`} text={this.error} rich={slotted.error} show={hasError} prefix={t('fieldErrorPrefix')} />
+          <div class="sc-date-input__parts">
             {PARTS.map((p) => (
-              <div class={`part part--${p}`}>
-                <label class="part-label" htmlFor={p} part="part-label">
+              <div class={`sc-date-input__part sc-date-input__part--${p}`}>
+                <label class="sc-date-input__part-label" htmlFor={`${id}-${p}`}>
                   {t(LABEL_KEYS[p])}
                 </label>
-                <div
-                  class={{ 'frame': true, 'frame--chars': true, 'frame--error': invalid.has(p), 'frame--disabled': disabled }}
-                  style={{ '--_chars': String(CHARS[p]) }}
-                  part="frame"
-                >
+                <div class={{ 'sc-field__frame': true, 'sc-field__frame--error': invalid.has(p) }}>
                   <input
-                    ref={(el) => (this.inputs[p] = el)}
-                    id={p}
-                    class="control"
-                    part="control"
+                    ref={this.setInput(p)}
+                    id={`${id}-${p}`}
+                    class="sc-field__control sc-date-input__control"
                     type="text"
+                    name={this.name ? `${this.name}-${p}` : undefined}
                     inputMode="numeric"
                     autoComplete={auto ? `${auto}-${p}` : 'off'}
                     spellcheck={false}
                     value={this.parts[p]}
-                    disabled={disabled}
                     aria-invalid={invalid.has(p) ? 'true' : undefined}
                     onInput={this.onInput(p)}
                     onChange={this.onChange}
@@ -252,6 +189,7 @@ export class ScDateInput {
               </div>
             ))}
           </div>
+          {this.name && <input type="hidden" name={this.name} value={isoFromParts(this.parts)} />}
         </fieldset>
       </Host>
     );

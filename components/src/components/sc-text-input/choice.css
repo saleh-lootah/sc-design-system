@@ -1,205 +1,253 @@
 /*
- * Shared styles for one radio or checkbox option (sc-radio-group renders radios, sc-checkbox
- * renders a checkbox). Import after field.css:
+ * Shared styles for one checkbox or radio option (v2, light DOM). sc-checkbox and sc-radio
+ * list it after field.css in their `styleUrls`.
+ * Rules: component-language.md A10–A13.
  *
- *   @import '../sc-text-input/choice.css';
- *
- * .option            a 44px-tall grid row: [44px target column][label] / [ ][hint]
- *   .box             the native <input>, drawn as a 24px circle (.box--radio) or rounded square
- *   .mark            the dot or tick, painted over the input when it is checked
- *   .option-label    the <label>; it also covers the target column, so the whole row is clickable
- *   .option-hint     hint for this option
+ *   .sc-choice                a grid row at least 48px tall: [44px target][label] / [ ][hint]
+ *     .sc-choice__halo        the 40px hover circle behind the box (state layer, fine pointers)
+ *     .sc-choice__box         the native <input>: a 24px box (radius 4) or circle, 2px outline edge
+ *     .sc-choice__mark        the 18px check or the 12px dot, drawn over the input
+ *     .sc-choice__label       the <label>; it also covers the target column, so the whole row works
+ *     .sc-choice__hint        the option's hint
  */
+@layer sc.reset, sc.tokens, sc.base, sc.components, sc.utilities;
 
-.options {
-  display: grid;
-  gap: var(--sc-space-4);
-  justify-items: start;
-}
-
-.options--inline {
-  display: flex;
-  flex-wrap: wrap;
-  column-gap: var(--sc-space-24);
-}
-
-.option {
-  --_target: var(--sc-size-target-min);
-  --_box: var(--sc-size-icon-l);
-  --_inset: calc((var(--_target) - var(--_box)) / 2);
-  position: relative;
-  display: grid;
-  grid-template-columns: var(--_target) minmax(0, 1fr);
-  column-gap: var(--sc-space-8);
-  align-items: start;
-  /* Shift the 44px target back so the 24px box lines up with the label above. A relative
-     offset, not a negative margin, so the row's intrinsic width isn't reduced. */
-  inset-inline-start: calc(-1 * var(--_inset));
-}
-
-.box {
-  position: relative;
-  z-index: 1;
-  grid-row: 1;
-  grid-column: 1;
-  justify-self: center;
-  box-sizing: border-box;
-  inline-size: var(--_box);
-  block-size: var(--_box);
-  margin: 0;
-  margin-block-start: var(--_inset);
-  border: var(--sc-size-border-strong) solid var(--sc-color-control);
-  border-radius: var(--sc-radius-xs);
-  background: var(--sc-color-surface);
-  appearance: none;
-  cursor: pointer;
-  transition:
-    background-color var(--sc-duration-fast) var(--sc-easing-hover),
-    border-color var(--sc-duration-fast) var(--sc-easing-hover);
-}
-
-/* Toggling with Space while the box has keyboard focus is instant: no fade on the fill or mark. */
-.box:focus-visible,
-.box:focus-visible + .mark {
-  transition: none;
-}
-
-.box--radio {
-  border-radius: var(--sc-radius-pill);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .option:hover .box:not(:disabled) {
-    border-color: var(--sc-color-ink);
+@layer sc.components {
+  .sc-choice {
+    --_row: var(--sc-size-control-secondary);
+    --_col: var(--sc-size-target-min);
+    --_box: var(--sc-size-icon-l);
+    --_gap: calc(var(--sc-space-12) - (var(--_col) - var(--_box)) / 2);
+    --_leading: var(--sc-type-body-large-leading);
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--_col) minmax(0, 1fr);
+    column-gap: var(--_gap);
+    align-items: start;
+    /* Shift the 44px target column back, so the 24px box lines up with the legend above.
+       A relative offset, not a negative margin, so the row keeps its intrinsic width. */
+    inset-inline-start: calc((var(--_box) - var(--_col)) / 2);
   }
-}
 
-.box:checked {
-  border-color: var(--sc-channel-action);
-}
-
-.box--check:checked {
-  background: var(--sc-channel-action);
-}
-
-.box--invalid,
-.option:hover .box--invalid:not(:disabled) {
-  border-color: var(--sc-color-error);
-}
-
-.box:disabled {
-  cursor: not-allowed;
-  background: var(--sc-color-fill-quiet);
-  border-color: var(--sc-color-control);
-}
-
-.box--check:checked:disabled {
-  background: var(--sc-color-control);
-}
-
-/* The dot (radio) and tick (checkbox), drawn over the input when checked. */
-.mark {
-  position: relative;
-  z-index: 2;
-  grid-row: 1;
-  grid-column: 1;
-  justify-self: center;
-  box-sizing: border-box;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity var(--sc-duration-fast) var(--sc-easing-hover);
-}
-
-.box:checked + .mark {
-  opacity: 1;
-}
-
-.mark--radio {
-  inline-size: var(--sc-space-12);
-  block-size: var(--sc-space-12);
-  margin-block-start: calc(var(--_inset) + (var(--_box) - var(--sc-space-12)) / 2);
-  border-radius: var(--sc-radius-pill);
-  background: var(--sc-channel-action);
-}
-
-.box:disabled + .mark--radio {
-  background: var(--sc-color-muted);
-}
-
-/* A tick is a symbol, not an arrow: it never mirrors, so it is drawn in LTR. */
-.mark--check {
-  direction: ltr;
-  inline-size: var(--sc-space-8);
-  block-size: var(--sc-space-12);
-  margin-block-start: calc(var(--_inset) + var(--sc-space-4) + var(--sc-space-2) / 2);
-  border-block-end: var(--sc-size-border-strong) solid var(--sc-color-on-action);
-  border-inline-end: var(--sc-size-border-strong) solid var(--sc-color-on-action);
-  transform: rotate(45deg);
-}
-
-.option-label {
-  position: relative;
-  grid-row: 1;
-  grid-column: 2;
-  box-sizing: border-box;
-  min-block-size: var(--_target);
-  /* The label reaches back over the target column, so clicks around the box select it.
-     (Padding and negative margin cancel out, so the label's intrinsic width is its text.) */
-  margin-inline-start: calc(-1 * (var(--_target) + var(--sc-space-8)));
-  padding-inline-start: calc(var(--_target) + var(--sc-space-8));
-  padding-block: calc((var(--_target) - var(--type-body-m-leading)) / 2);
-  padding-inline-end: var(--sc-space-8);
-  color: var(--sc-color-ink);
-  font-family: var(--type-body-m-family);
-  font-weight: var(--type-body-m-weight);
-  font-size: var(--type-body-m-size);
-  line-height: var(--type-body-m-leading);
-  letter-spacing: var(--type-body-m-tracking);
-  cursor: pointer;
-  overflow-wrap: break-word;
-}
-
-.box:disabled ~ .option-label {
-  color: var(--sc-color-muted);
-  cursor: not-allowed;
-}
-
-.option-hint {
-  grid-row: 2;
-  grid-column: 2;
-  margin: 0;
-  margin-block-start: calc(-1 * var(--sc-space-8));
-  padding-block-end: var(--sc-space-8);
-  color: var(--sc-color-muted);
-  font-family: var(--type-hint-family);
-  font-weight: var(--type-hint-weight);
-  font-size: var(--type-hint-size);
-  line-height: var(--type-hint-leading);
-  letter-spacing: var(--type-hint-tracking);
-}
-
-@media (forced-colors: active) {
-  .box,
-  .mark {
-    forced-color-adjust: none;
+  .sc-choice__halo,
+  .sc-choice__box,
+  .sc-choice__mark {
+    grid-row: 1;
+    grid-column: 1;
+    justify-self: center;
+    box-sizing: border-box;
   }
-  .box {
-    border-color: ButtonText;
-    background: Canvas;
+
+  .sc-choice__halo {
+    inline-size: calc(var(--_box) + 2 * var(--sc-space-8));
+    block-size: calc(var(--_box) + 2 * var(--sc-space-8));
+    margin-block-start: calc((var(--_row) - var(--_box)) / 2 - var(--sc-space-8));
+    border-radius: var(--sc-radius-full);
+    pointer-events: none;
+    transition: background-color var(--sc-duration-fast) var(--sc-easing-hover);
   }
-  .box:checked {
-    border-color: Highlight;
+
+  @media (hover: hover) and (pointer: fine) {
+    .sc-choice:hover .sc-choice__halo:has(+ .sc-choice__box:enabled) {
+      background-color: color-mix(in oklab, var(--sc-color-on-surface) var(--sc-opacity-hover), transparent);
+    }
+    .sc-choice:hover .sc-choice__box:enabled:not(:checked, .sc-choice__box--invalid) {
+      border-color: var(--sc-color-outline-strong);
+    }
   }
-  .box--check:checked {
-    background: Highlight;
+
+  .sc-choice__box {
+    position: relative;
+    z-index: 1;
+    inline-size: var(--_box);
+    block-size: var(--_box);
+    margin: 0;
+    margin-block-start: calc((var(--_row) - var(--_box)) / 2);
+    border: var(--sc-size-border-strong) solid var(--sc-color-outline);
+    border-radius: var(--sc-radius-control);
+    background: var(--sc-color-surface);
+    appearance: none;
+    cursor: pointer;
+    transition:
+      background-color var(--sc-duration-fast) var(--sc-easing-hover),
+      border-color var(--sc-duration-fast) var(--sc-easing-hover);
   }
-  .box:disabled {
-    border-color: GrayText;
+
+  .sc-choice__box--radio {
+    border-radius: var(--sc-radius-full);
   }
-  .mark--radio {
-    background: Highlight;
+
+  .sc-choice__box:checked {
+    border-color: var(--sc-color-channel-action);
   }
-  .mark--check {
-    border-color: HighlightText;
+
+  .sc-choice__box--check:is(:checked, :indeterminate) {
+    border-color: var(--sc-color-channel-action);
+    background: var(--sc-color-channel-action);
+  }
+
+  .sc-choice__box--invalid {
+    border-color: var(--sc-color-error);
+  }
+
+  .sc-choice__box:disabled {
+    cursor: not-allowed;
+    border-color: var(--sc-color-on-disabled);
+    background: var(--sc-color-disabled-container);
+  }
+
+  .sc-choice__box--check:checked:disabled {
+    background: var(--sc-color-on-disabled);
+  }
+
+  /* The check (18px, drawn over 120ms) and the dot (12px, from 0.5 to 1 over 120ms). Pointer
+     only: toggled from the keyboard (the input is :focus-visible) they appear at once (MOT-02). */
+  .sc-choice__mark {
+    position: relative;
+    z-index: 2;
+    pointer-events: none;
+    opacity: 0;
+    transition:
+      opacity var(--sc-duration-fast) var(--sc-easing-hover),
+      transform var(--sc-duration-fast) var(--sc-easing-hover),
+      stroke-dashoffset var(--sc-duration-fast) var(--sc-easing-hover);
+  }
+
+  .sc-choice__box:checked + .sc-choice__mark {
+    opacity: 1;
+  }
+
+  .sc-choice__mark--check {
+    --icon-size: calc(var(--sc-size-icon-s) + var(--sc-space-2));
+    margin-block-start: calc((var(--_row) - var(--sc-size-icon-s) - var(--sc-space-2)) / 2);
+    color: var(--sc-color-channel-on-action);
+  }
+
+  .sc-choice__mark--check .sc-check__path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset var(--sc-duration-fast) var(--sc-easing-hover);
+  }
+
+  .sc-choice__box:checked + .sc-choice__mark--check .sc-check__path {
+    stroke-dashoffset: 0;
+  }
+
+  .sc-choice__box:disabled + .sc-choice__mark--check {
+    color: var(--sc-color-disabled-container);
+  }
+
+  /* The indeterminate bar: 12 × 2 in channel-on-action (A13). It replaces the check. */
+  .sc-choice__mark--mixed {
+    inline-size: var(--sc-space-12);
+    block-size: var(--sc-space-2);
+    margin-block-start: calc((var(--_row) - var(--sc-space-2)) / 2);
+    border-radius: var(--sc-space-2);
+    background: var(--sc-color-channel-on-action);
+  }
+
+  .sc-choice__box:indeterminate ~ .sc-choice__mark--mixed {
+    opacity: 1;
+  }
+
+  .sc-choice__box:indeterminate + .sc-choice__mark--check {
+    opacity: 0;
+  }
+
+  .sc-choice__mark--radio {
+    inline-size: var(--sc-space-12);
+    block-size: var(--sc-space-12);
+    margin-block-start: calc((var(--_row) - var(--sc-space-12)) / 2);
+    border-radius: var(--sc-radius-full);
+    background: var(--sc-color-channel-action);
+    transform: scale(0.5);
+  }
+
+  .sc-choice__box:checked + .sc-choice__mark--radio {
+    transform: none;
+  }
+
+  .sc-choice__box:disabled + .sc-choice__mark--radio {
+    background: var(--sc-color-on-disabled);
+  }
+
+  .sc-choice__box:focus-visible,
+  .sc-choice__box:focus-visible + .sc-choice__mark,
+  .sc-choice__box:focus-visible + .sc-choice__mark .sc-check__path {
+    transition: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sc-choice__mark--radio {
+      transform: none;
+    }
+  }
+
+  .sc-choice__label {
+    position: relative;
+    grid-row: 1;
+    grid-column: 2;
+    box-sizing: border-box;
+    min-block-size: var(--_row);
+    /* The label reaches back over the target column, so a click near the box toggles it.
+       (Padding and negative margin cancel out, so the label's own width is its text.) */
+    margin-inline-start: calc(-1 * (var(--_col) + var(--_gap)));
+    padding-inline-start: calc(var(--_col) + var(--_gap));
+    padding-block: calc((var(--_row) - var(--_leading)) / 2);
+    padding-inline-end: var(--sc-space-8);
+    color: var(--sc-color-on-surface);
+    font: var(--sc-type-body-large);
+    letter-spacing: var(--sc-type-body-large-tracking);
+    cursor: pointer;
+    overflow-wrap: break-word;
+  }
+
+  .sc-choice__box:disabled ~ .sc-choice__label {
+    color: var(--sc-color-on-disabled);
+    cursor: not-allowed;
+  }
+
+  .sc-choice__hint {
+    grid-row: 2;
+    grid-column: 2;
+    margin: 0;
+    margin-block-start: calc(var(--sc-space-4) - (var(--_row) - var(--_leading)) / 2);
+    padding-block-end: var(--sc-space-4);
+    color: var(--sc-color-on-surface-variant);
+    font: var(--sc-type-body-medium);
+    letter-spacing: var(--sc-type-body-medium-tracking);
+  }
+
+  .sc-choice__hint[hidden] {
+    display: none;
+  }
+
+  @media (forced-colors: active) {
+    .sc-choice__box,
+    .sc-choice__mark {
+      forced-color-adjust: none;
+    }
+    .sc-choice__box {
+      border-color: ButtonText;
+      background: Canvas;
+    }
+    .sc-choice__box:checked {
+      border-color: Highlight;
+    }
+    .sc-choice__box--check:is(:checked, :indeterminate) {
+      background: Highlight;
+    }
+    .sc-choice__mark--mixed {
+      background: HighlightText;
+    }
+    .sc-choice__box:disabled {
+      border-color: GrayText;
+    }
+    .sc-choice__mark--radio {
+      background: Highlight;
+    }
+    .sc-choice__mark--check {
+      color: HighlightText;
+    }
   }
 }

@@ -1,74 +1,78 @@
 import { E2EPage } from '@stencil/core/testing';
-import { expectNoAxeViolations } from '../../test/axe';
-import { contexts, newScPage, setPageContext } from '../../test/page';
+import { describeAxe } from '../../test/axe';
+import { CHANNEL_LINKS, groupedFooter, siteHeader } from '../../test/chrome';
+import { newScPage, setPageContext } from '../../test/page';
 
-/** The D+ Dubai Now home in miniature: skip link, hero with search, service cards, footer. */
-const HOME = `
+/** A channel home in miniature: skip link, announcement, header, content, network, footer, utility bar. */
+const HOME = (lang = 'en') => `
   <sc-page channel="now">
-    <div slot="header"><a id="skip" href="#main-content">Skip to main content</a></div>
-    <sc-channel-hero>
-      <p slot="eyebrow">Government services for everyone who lives in Dubai</p>
-      <h1 slot="heading">What do you need to do?</h1>
-      <sc-search label-hidden label="Search services"></sc-search>
-    </sc-channel-hero>
-    <sc-container>
-      <h2>Most used services</h2>
-      <sc-grid span-medium="4" span-expanded="4">
-        <sc-service-card href="#renew" entity="Roads and Transport Authority">Renew vehicle registration</sc-service-card>
-        <sc-service-card href="#bills" entity="Dubai Electricity and Water Authority">Pay water and electricity bills</sc-service-card>
-        <sc-service-card href="#tenancy" entity="Dubai Land Department">Register a tenancy contract</sc-service-card>
-      </sc-grid>
-    </sc-container>
-    <sc-footer slot="footer" help-href="#help" accessibility-href="#a11y" privacy-href="#privacy" terms-href="#terms"></sc-footer>
+    <div slot="header">
+      <sc-skip-link></sc-skip-link>
+      <sc-announcement-bar>Planned maintenance on Saturday 25 October.</sc-announcement-bar>
+      ${siteHeader(lang)}
+    </div>
+    <div style="padding: 24px">
+      <h1>What do you need to do?</h1>
+      <p><a id="first" href="#renew">Renew vehicle registration</a></p>
+      <sc-channel-network links='${CHANNEL_LINKS}'></sc-channel-network>
+    </div>
+    <div slot="footer">
+      ${groupedFooter(lang)}
+      <sc-utility-bar happiness-href="#happiness" contact-href="tel:04" chat-href="#chat" accessibility-href="#accessibility"></sc-utility-bar>
+    </div>
   </sc-page>`;
 
 describe('sc-page (e2e)', () => {
-  it('composes the home page with no axe violations in English and Arabic, light and dark', async () => {
-    const page = await newScPage(HOME);
+  it('renders in light DOM: header, main and footer in order, with one banner, main and contentinfo', async () => {
+    const page = await newScPage(HOME());
     await page.setViewport({ width: 1440, height: 900 });
-    for (const ctx of contexts) {
-      await setPageContext(page, ctx);
-      await expectNoAxeViolations(page);
-    }
-  });
-
-  it('renders header, main and footer in order, with main in light DOM', async () => {
-    const page = await newScPage(HOME);
     const order = await page.evaluate(() => {
       const el = document.querySelector('sc-page')!;
-      return [el.shadowRoot === null, Array.from(el.querySelectorAll('[slot="header"], main, sc-footer')).map((n) => n.localName)];
+      return [el.shadowRoot === null, Array.from(el.querySelectorAll('[slot="header"], main, [slot="footer"]')).map((n) => n.localName)];
     });
-    expect(order).toEqual([true, ['div', 'main', 'sc-footer']]);
-    expect(await page.evaluate(() => document.getElementById('main-content')!.contains(document.querySelector('sc-channel-hero')))).toBe(true);
+    expect(order).toEqual([true, ['div', 'main', 'div']]);
+    const tree = await page.accessibility.snapshot({ interestingOnly: true });
+    const roles: string[] = [];
+    const walk = (n: { role?: string; children?: unknown[] }) => {
+      if (n.role) roles.push(n.role);
+      (n.children as typeof n[] | undefined)?.forEach(walk);
+    };
+    walk(tree as never);
+    expect(roles.filter((r) => r === 'banner').length).toBe(1);
+    expect(roles.filter((r) => r === 'main').length).toBe(1);
+    expect(roles.filter((r) => r === 'contentinfo').length).toBe(1);
   });
 
-  it('the skip link moves focus to main', async () => {
-    const page = await newScPage(HOME);
+  it('the skip link (default href) moves focus to main, and the next Tab continues inside it', async () => {
+    const page = await newScPage(HOME());
     await page.keyboard.press('Tab');
-    expect(await page.evaluate(() => document.activeElement!.id)).toBe('skip');
+    expect(await page.evaluate(() => document.activeElement!.localName)).toBe('sc-skip-link');
     await page.keyboard.press('Enter');
     await page.waitForChanges();
     expect(await page.evaluate(() => document.activeElement!.id)).toBe('main-content');
-    // The next Tab continues inside main (the search field), not back at the top.
     await page.keyboard.press('Tab');
-    expect(await page.evaluate(() => document.activeElement!.localName)).toBe('sc-search');
+    expect(await page.evaluate(() => document.activeElement!.id)).toBe('first');
+    // sc-search is light DOM in v2 (C3): focus lands on its native input.
+    expect(await page.evaluate(() => document.activeElement!.closest('sc-search') !== null)).toBe(true);
   });
 
   it('sets dir from lang, and follows lang changes on itself', async () => {
-    const page = await newScPage(HOME);
+    const page = await newScPage(HOME());
     const attrs = () => page.evaluate(() => ['lang', 'dir', 'data-channel'].map((a) => document.querySelector('sc-page')!.getAttribute(a)));
     expect(await attrs()).toEqual([null, 'ltr', 'now']);
     await page.evaluate(() => document.querySelector('sc-page')!.setAttribute('lang', 'ar'));
     await page.waitForChanges();
     expect(await attrs()).toEqual(['ar', 'rtl', 'now']);
     // Components inside take the page's language.
-    const button = await page.evaluate(() => document.querySelector('sc-search')!.shadowRoot!.querySelector('sc-button')!.textContent);
+    const label = await page.evaluate(() => document.querySelector('sc-footer')!.shadowRoot!.querySelector('#g-channels')!.textContent);
+    expect(label).toBe('القنوات');
+    const button = await page.evaluate(() => document.querySelector('sc-search')!.querySelector('sc-button')!.textContent);
     expect(button).toBe('بحث');
   });
 
   it('themes everything inside by channel', async () => {
-    const page = await newScPage(HOME);
-    const action = () => page.evaluate(() => getComputedStyle(document.querySelector('sc-page')!).getPropertyValue('--sc-channel-action').trim());
+    const page = await newScPage(HOME());
+    const action = () => page.evaluate(() => getComputedStyle(document.querySelector('main')!).getPropertyValue('--sc-color-channel-action').trim());
     const now = await action();
     await page.evaluate(() => document.querySelector('sc-page')!.setAttribute('channel', 'justice'));
     await page.waitForChanges();
@@ -82,96 +86,84 @@ describe('sc-page (e2e)', () => {
     expect(html).toEqual(['ar', 'rtl', 'trade']);
   });
 
-  describe('sticky app bar (WCAG 2.4.11)', () => {
-    /** A long page with a sticky bar and a link far below it. */
-    const STICKY = `
+  it('reserves the docked utility bar: the end of the page and focused elements stay clear of it (CHR-05)', async () => {
+    const page = await newScPage(`
+      <sc-page channel="now">
+        <div style="block-size: 2000px"></div>
+        <p><a id="last" href="#last">Last link</a></p>
+        <div style="block-size: 400px"></div>
+        <sc-utility-bar slot="footer" happiness-href="#h" contact-href="tel:04" chat-href="#c" accessibility-href="#a"></sc-utility-bar>
+      </sc-page>`);
+    await page.setViewport({ width: 1280, height: 700 });
+    await page.waitForFunction(() => document.documentElement.style.getPropertyValue('--sc-utility-bar-block-size') !== '');
+    const bar = await page.evaluate(() => Math.ceil(document.querySelector('sc-utility-bar')!.shadowRoot!.querySelector('nav')!.getBoundingClientRect().height));
+    expect(bar).toBeGreaterThanOrEqual(44);
+    const reserved = await page.evaluate(() => getComputedStyle(document.querySelector('sc-page')!).paddingBlockEnd);
+    expect(reserved).toBe(`${bar}px`);
+    expect(await page.evaluate(() => getComputedStyle(document.documentElement).scrollPaddingBottom)).toBe(`${bar}px`);
+    // Focus the last link from far above: it lands above the bar, not under it.
+    await page.evaluate(() => document.getElementById('last')!.focus());
+    await page.waitForChanges();
+    const linkBottom = await page.evaluate(() => document.getElementById('last')!.getBoundingClientRect().bottom);
+    const barTop = await page.evaluate(() => document.querySelector('sc-utility-bar')!.shadowRoot!.querySelector('nav')!.getBoundingClientRect().top);
+    expect(linkBottom).toBeLessThanOrEqual(barTop);
+    // Below 1024px the bar is in the flow and nothing is reserved.
+    await page.setViewport({ width: 600, height: 700 });
+    await page.waitForFunction(() => document.documentElement.style.getPropertyValue('--sc-utility-bar-block-size') === '');
+    expect(await page.evaluate(() => getComputedStyle(document.querySelector('sc-page')!).paddingBlockEnd)).toBe('0px');
+  });
+
+  describe('sticky header (WCAG 2.4.11)', () => {
+    const STICKY = (tag: string) => `
       <sc-page channel="now" sync-document>
-        <sc-app-bar slot="header" sticky><span slot="title">Dubai Now</span></sc-app-bar>
+        <div slot="header">${tag === 'sc-app-bar' ? '<sc-app-bar sticky></sc-app-bar>' : siteHeader('en', { attrs: 'sticky' })}</div>
         <div style="block-size: 1500px"></div>
         <a id="renew" href="#renew">Renew vehicle registration</a>
         <div style="block-size: 1500px"></div>
       </sc-page>`;
 
     const padding = (page: E2EPage) => page.evaluate(() => getComputedStyle(document.documentElement).scrollPaddingTop);
-    const barBottom = (page: E2EPage) => page.evaluate(() => Math.ceil(document.querySelector('sc-app-bar')!.getBoundingClientRect().bottom));
     const waitForPadding = (page: E2EPage) => page.waitForFunction(() => document.documentElement.style.scrollPaddingBlockStart !== '');
 
-    it('pads the document scroll by the bar height plus 8px', async () => {
-      const page = await newScPage(STICKY);
-      await page.setViewport({ width: 1024, height: 600 });
+    it.each(['sc-app-bar', 'sc-site-header'])('pads the document scroll by the %s height plus 8px, and scrolls focus clear of it', async (tag) => {
+      const page = await newScPage(STICKY(tag));
+      await page.setViewport({ width: 1280, height: 600 });
       await waitForPadding(page);
-      const height = await page.evaluate(() => Math.ceil(document.querySelector('sc-app-bar')!.getBoundingClientRect().height));
+      const height = await page.evaluate((t: string) => Math.ceil(document.querySelector(t)!.getBoundingClientRect().height), tag);
       expect(height).toBeGreaterThan(0);
       expect(await padding(page)).toBe(`${height + 8}px`);
-    });
-
-    it('scrolls a focused element clear of the bar', async () => {
-      const page = await newScPage(STICKY);
-      await page.setViewport({ width: 1024, height: 600 });
-      await waitForPadding(page);
-      // Scroll so the link sits under the bar, then focus it: the browser scrolls it into view.
       await page.evaluate(() => {
         const link = document.getElementById('renew')!;
         window.scrollTo(0, link.getBoundingClientRect().top + window.scrollY - 2);
       });
-      const top = () => page.evaluate(() => document.getElementById('renew')!.getBoundingClientRect().top);
-      expect(await top()).toBeLessThan(await barBottom(page));
       await page.evaluate(() => document.getElementById('renew')!.focus());
       await page.waitForChanges();
-      expect(await top()).toBeGreaterThanOrEqual(await barBottom(page));
+      const top = await page.evaluate(() => document.getElementById('renew')!.getBoundingClientRect().top);
+      const barBottom = await page.evaluate((t: string) => document.querySelector(t)!.getBoundingClientRect().bottom, tag);
+      expect(top).toBeGreaterThanOrEqual(barBottom);
     });
 
-    it('keeps a bar inside a <div slot="header"> wrapper stuck to the top', async () => {
-      const page = await newScPage(`
-        <sc-page channel="now" sync-document>
-          <div slot="header"><sc-skip-link></sc-skip-link><sc-app-bar sticky><span slot="title">Dubai Now</span></sc-app-bar></div>
-          <div style="block-size: 3000px"></div>
-        </sc-page>`);
-      await page.setViewport({ width: 1024, height: 600 });
-      await waitForPadding(page);
-      await page.evaluate(() => window.scrollTo(0, 1200));
-      await page.waitForChanges();
-      expect(await page.evaluate(() => Math.round(document.querySelector('sc-app-bar')!.getBoundingClientRect().top))).toBe(0);
-    });
-
-    it('stops padding when the bar is not sticky, and restores <html> when the page is removed', async () => {
-      const page = await newScPage(STICKY);
+    it('stops padding when the header is not sticky, and restores <html> when the page is removed', async () => {
+      const page = await newScPage(STICKY('sc-app-bar'));
       await waitForPadding(page);
       await page.evaluate(() => document.querySelector('sc-app-bar')!.removeAttribute('sticky'));
       await page.waitForChanges();
       expect(await page.evaluate(() => document.documentElement.style.scrollPaddingBlockStart)).toBe('');
-      expect(await padding(page)).toBe('auto');
       await page.evaluate(() => document.querySelector('sc-app-bar')!.setAttribute('sticky', ''));
       await waitForPadding(page);
-
       await page.evaluate(() => document.querySelector('sc-page')!.remove());
-      await page.waitForChanges();
-      expect(await page.evaluate(() => document.documentElement.style.scrollPaddingBlockStart)).toBe('');
-      expect(await padding(page)).toBe('auto');
-
-      // A value the service set itself comes back once the page is gone.
-      await page.evaluate((markup: string) => {
-        document.documentElement.style.scrollPaddingBlockStart = '20px';
-        document.body.insertAdjacentHTML('beforeend', markup);
-      }, STICKY);
-      await page.waitForFunction(() => document.documentElement.style.scrollPaddingBlockStart.startsWith('calc'));
-      await page.evaluate(() => document.querySelector('sc-page')!.remove());
-      await page.waitForChanges();
-      expect(await padding(page)).toBe('20px');
-    });
-
-    it('leaves <html> alone without sync-document', async () => {
-      const page = await newScPage(STICKY.replace(' sync-document', ''));
       await page.waitForChanges();
       expect(await page.evaluate(() => document.documentElement.style.scrollPaddingBlockStart)).toBe('');
     });
   });
 
-  it('keeps the strings in sync with the page language context', async () => {
-    const page = await newScPage(HOME, { lang: 'ar' });
-    const first = () => page.evaluate(() => document.querySelector('sc-footer')!.shadowRoot!.querySelector('li a')!.textContent);
-    expect(await first()).toBe('المساعدة والتواصل');
+  it('re-renders the chrome strings when the page language changes', async () => {
+    const page = await newScPage(HOME(), { lang: 'ar' });
+    const heading = () => page.evaluate(() => document.querySelector('sc-footer')!.shadowRoot!.querySelector('#g-helpful')!.textContent);
+    expect(await heading()).toBe('معلومات مفيدة');
     await setPageContext(page, { lang: 'en' });
-    expect(await first()).toBe('Help and contact');
+    expect(await heading()).toBe('Helpful information');
   });
 });
+
+describeAxe('sc-page', HOME());

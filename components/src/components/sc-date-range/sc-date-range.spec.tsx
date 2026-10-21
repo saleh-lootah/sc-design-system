@@ -2,7 +2,8 @@ import { newSpecPage } from '@stencil/core/testing';
 import { addDays, addMonths, fromIso, lengthInDays, monthGrid, parseTyped, weekday } from './dates';
 import { ScDateRange } from './sc-date-range';
 
-const root = (el: Element) => el.shadowRoot!;
+/** v2 is light DOM: everything is under the host (the visible segment inputs exclude the hidden ISO inputs). */
+const root = (el: Element) => el;
 const NAMES = [
   'January,February,March,April,May,June,July,August,September,October,November,December'.split(','),
   'Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec'.split(','),
@@ -51,13 +52,15 @@ describe('sc-date-range (spec)', () => {
     });
     const r = root(page.root!);
     expect(r.querySelector('legend')!.textContent).toBe('Show payments between');
-    const inputs = Array.from(r.querySelectorAll('input'));
-    expect(inputs.map((i) => [i.id, i.getAttribute('aria-label'), i.getAttribute('inputmode'), i.getAttribute('aria-describedby'), i.getAttribute('value')])).toEqual([
-      ['start', 'Start date', 'numeric', 'hint', '21 Sep 2026'],
-      ['end', 'End date', 'numeric', 'hint', '9 Oct 2026'],
+    const inputs = Array.from(r.querySelectorAll('input:not([type=hidden])'));
+    expect(page.root!.shadowRoot).toBeNull();
+    const hint = r.querySelector('.sc-field__hint')!.id;
+    expect(inputs.map((i) => [i.id.replace(/^sc-date-range-\d+-/, ''), i.getAttribute('aria-label'), i.getAttribute('inputmode'), i.getAttribute('aria-describedby'), i.getAttribute('value')])).toEqual([
+      ['start', 'Start date', 'numeric', hint, '21 Sep 2026'],
+      ['end', 'End date', 'numeric', hint, '9 Oct 2026'],
     ]);
-    expect(Array.from(r.querySelectorAll('.segment-label')).map((l) => l.textContent)).toEqual(['From', 'To']);
-    const button = r.querySelector('.calendar-button')!;
+    expect(Array.from(r.querySelectorAll('.sc-date-range__segment-label')).map((l) => l.textContent)).toEqual(['From', 'To']);
+    const button = r.querySelector('.sc-date-range__calendar-button')!;
     expect(button.getAttribute('aria-label')).toBe('Choose dates, 21 September to 9 October 2026');
     expect(button.getAttribute('aria-haspopup')).toBe('dialog');
     expect(button.getAttribute('aria-expanded')).toBe('false');
@@ -69,9 +72,9 @@ describe('sc-date-range (spec)', () => {
       html: `<div lang="ar" dir="rtl"><sc-date-range label="عرض المدفوعات بين" start="2026-09-21" end="2026-10-09"></sc-date-range></div>`,
     });
     const r = root(page.body.querySelector('sc-date-range')!);
-    expect(Array.from(r.querySelectorAll('.segment-label')).map((l) => l.textContent)).toEqual(['من', 'إلى']);
-    expect(Array.from(r.querySelectorAll('input')).map((i) => i.getAttribute('value'))).toEqual(['21 سبتمبر 2026', '9 أكتوبر 2026']);
-    expect(r.querySelector('.calendar-button')!.getAttribute('aria-label')).toBe('اختيار التاريخين، من 21 سبتمبر إلى 9 أكتوبر 2026');
+    expect(Array.from(r.querySelectorAll('.sc-date-range__segment-label')).map((l) => l.textContent)).toEqual(['من', 'إلى']);
+    expect(Array.from(r.querySelectorAll('input:not([type=hidden])')).map((i) => i.getAttribute('value'))).toEqual(['21 سبتمبر 2026', '9 أكتوبر 2026']);
+    expect(r.querySelector('.sc-date-range__calendar-button')!.getAttribute('aria-label')).toBe('اختيار التاريخين، من 21 سبتمبر إلى 9 أكتوبر 2026');
   });
 
   it('marks only the segment named by error-parts', async () => {
@@ -80,23 +83,23 @@ describe('sc-date-range (spec)', () => {
       html: `<sc-date-range label="Dates" error="The end date must be the same as or after the start date" error-parts="end"></sc-date-range>`,
     });
     const r = root(page.root!);
-    expect(Array.from(r.querySelectorAll('input')).map((i) => i.getAttribute('aria-invalid'))).toEqual([null, 'true']);
-    expect(r.querySelector('fieldset')!.classList.contains('field--error')).toBe(true);
-    expect(r.querySelector('.error')!.textContent).toContain('Error: The end date must be the same as or after the start date');
-    expect(r.querySelector('.frame')!.classList.contains('frame--error')).toBe(false);
+    expect(Array.from(r.querySelectorAll('input:not([type=hidden])')).map((i) => i.getAttribute('aria-invalid'))).toEqual([null, 'true']);
+    expect(r.querySelector('fieldset')!.classList.contains('sc-field--error')).toBe(true);
+    expect(r.querySelector('.sc-field__error')!.textContent).toContain('Error: The end date must be the same as or after the start date');
+    expect(r.querySelector('.sc-date-range__frame')!.classList.contains('sc-field__frame--error')).toBe(false);
   });
 
   it('ignores a start or end that is not a real ISO date', async () => {
     const page = await newSpecPage({ components: [ScDateRange], html: `<sc-date-range label="Dates" start="2026-02-30" end="21/9/2026"></sc-date-range>` });
     expect(page.root!.getAttribute('start')).toBe('');
     expect((page.root as HTMLElement & { start: string }).start).toBe('');
-    expect(Array.from(root(page.root!).querySelectorAll('input')).map((i) => i.getAttribute('placeholder'))).toEqual(['Start date', 'End date']);
+    expect(Array.from(root(page.root!).querySelectorAll('input:not([type=hidden])')).map((i) => i.getAttribute('placeholder'))).toEqual(['Start date', 'End date']);
   });
 
   it('shows "(optional)" and disables both segments and the button', async () => {
     const page = await newSpecPage({ components: [ScDateRange], html: `<sc-date-range label="Permit dates" optional disabled></sc-date-range>` });
     const r = root(page.root!);
-    expect(r.querySelector('.optional')!.textContent).toBe(' (optional)');
+    expect(r.querySelector('.sc-field__optional')!.textContent).toBe(' (optional)');
     expect(r.querySelector('fieldset')!.hasAttribute('disabled')).toBe(true);
   });
 });

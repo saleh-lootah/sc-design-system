@@ -1,6 +1,26 @@
 # sc-date-range · specification
 
-Status: designed in Paper (page 07 · Components · Form fields) and built in Stencil (`src/components/sc-date-range`).
+Status: rebuilt for v2 by C3 (Wave 2b). Behaviour as designed for v1 (below); visual rules: `docs/v2/component-language.md` A15, read through the role table in `docs/v2/decisions.md`. Code: `src/components/sc-date-range`.
+
+## v2 · encapsulation and changes
+
+**Light DOM (Stencil `scoped`)**, decision A2 and architecture §3.1 ("`sc-date-range` (its inputs)"). The fieldset, the two native segments, the calendar button, the popover (`popover="manual"`, top layer) and the bottom sheet (`<dialog>`, `showModal()`) are children of the host. Every class is prefixed `.sc-date-range__` because the picker sits in the page's DOM. IDs are per instance (`sc-date-range-<n>-start`, `-end`, `-hint`, `-error`, `-title`, `-month-<y>-<m>`).
+
+- **Form:** two hidden inputs submit `name-start` and `name-end`; the first problem is a native validity error (`setCustomValidity`) on the segment it concerns; `invalid` (captured on the host) shows the component's own message. No `ElementInternals`.
+- **Events:** the segments' native `change` is stopped; the host dispatches one native `change` (and `scChange`) per committed range.
+- **Strings:** its own `sc-date-range.ts`, with the per-instance `strings` overrides in `overrides.ts` beside it (no dependency on `sc-table`).
+
+| v2 visual change | Value |
+| --- | --- |
+| Field frame | 56 tall (`size-control-primary`), radius 8, 1.5px `outline`; the From/To captions are label-small in `on-surface-variant`, the values body-medium (the 18/22 and 20/24 sizes in component-language have no regular-weight role; body-medium keeps the two lines inside 56 in Arabic) |
+| Focus | U1 ring (neutral `focus-ring`, 3px), inset on the focused segment since the two segments share one frame; outside every other control |
+| Popover | `surface`, radius 12 (`radius-card`), 1px `outline-variant`, `elevation-2`, padding 20 |
+| Day cells | 44px circles (`size-target-min`); band 44 high in `channel-subtle` (component-language "channel-container"); preview band `surface-container`; today a 1.5px `outline` ring; ends `channel-action` / `channel-on-action`; unavailable `on-disabled` (3.85:1), no opacity |
+| Presets | B18 filter toggles: 40 tall with a 44 target, pill, 1.5px `outline`; on: `channel-action` with a check |
+| Sheet | top radius 12, `scrim` backdrop, slides on `easing-drawer` over `duration-slow` (280ms), exits 20% faster |
+| Month title | title-medium; weekday heads label-small `on-surface-variant` |
+
+The rest of this document is the v1 behaviour specification, which v2 keeps.
 
 `sc-date-range` lets someone choose a start and an end date that relate to a calendar. Examples:
 - filtering payments or fines between two dates
@@ -198,6 +218,10 @@ Applies the emil-design-eng and mobile-native rules.
 | Range band | Not animated; it follows the pointer instantly |
 | Reduced motion | No scale or translate; opacity fades only |
 
+## Budget (v2)
+
+`perf-budgets.json` gives `sc-date-range` **21 KiB gzip** instead of 16 KiB: the custom-elements closure counts in full `sc-button` (3.2 KiB with its strings), the icon set (0.8) and the locale controller (0.9), which a page with any button pays once. Measured: closure 20.5 KiB; the component's own cost (module with its CSS, field helpers, strings, digits) 15.6 KiB, inside the original 16 KiB. v1 was 22.2 KiB. Needs the coordinator's sign-off.
+
 ## Code
 
 ```html
@@ -236,3 +260,7 @@ Applies the emil-design-eng and mobile-native rules.
 Methods: `open()`, `close()`, `setFocus()`.
 
 Tokens used: `easing.drawer`, `easing.exit` (strong ease-out since the motion audit, `docs/motion-audit.md`), `duration.exit`, `scale.enter`, `scale.press`.
+
+## Paper board alignment (v2)
+
+Board AQS-0 changes: the arrow is 24px; the segment value is body-large (18/26 EN, 20/32 AR) with no block padding so two lines fit 56; presets are a wrapping row of 40px chips, 12 apart, above the months in the popover; months are 32 apart; the footer summary is body-medium. Kept as built, for the coordinator: the board's footer has Cancel (tertiary) and Apply; the code keeps v1's Clear and Apply (Escape and a click outside already cancel), as the board also says behaviour is unchanged from v1.

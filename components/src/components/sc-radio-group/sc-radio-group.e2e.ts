@@ -1,29 +1,10 @@
 import { E2EPage } from '@stencil/core/testing';
-import { expectNoAxeViolations } from '../../test/axe';
-import { contexts, newScPage, setPageContext } from '../../test/page';
+import { describeAxe, expectNoAxeViolations } from '../../test/axe';
+import { newScPage, setPageContext } from '../../test/page';
+import { CHANNELS, axNode, forceColors, inner, token } from '../sc-text-input/field-test';
 
-/** Evaluates `expr` with `host`, `root` (its shadow root) and `input` (the inner control). */
-function inner(page: E2EPage, selector: string, expr: string) {
-  return page.evaluate(
-    (sel: string, e: string) => {
-      const host = document.querySelector(sel)!;
-      const root = host.shadowRoot!;
-      const input = root.querySelector('input, textarea, select');
-      // eslint-disable-next-line no-new-func
-      return new Function('host', 'root', 'input', `return (${e});`)(host, root, input);
-    },
-    selector,
-    expr,
-  );
-}
-
-/** The accessibility-tree node of an element inside a shadow root, as Chromium exposes it. */
-async function axNode(page: E2EPage, selector: string, inside = 'input, textarea, select') {
-  const handle = await page.evaluateHandle((sel: string, q: string) => document.querySelector(sel)!.shadowRoot!.querySelector(q)!, selector, inside);
-  return page.accessibility.snapshot({ root: handle as never, interestingOnly: false });
-}
-
-const radio = (page: E2EPage, sel: string, i: number, expr: string) => inner(page, sel, `((r) => ${expr})(root.querySelectorAll('input[type=radio]')[${i}])`);
+const radio = (page: E2EPage, sel: string, i: number, expr: string) => inner(page, sel, `((r) => ${expr})(host.querySelectorAll('input[type=radio]')[${i}])`);
+const focused = (page: E2EPage, sel: string) => inner<number>(page, sel, '[...host.querySelectorAll("input")].indexOf(document.activeElement)');
 
 const GROUP = `
   <form novalidate>
@@ -47,8 +28,9 @@ const ALL_STATES = `
   </main>`;
 
 describe('sc-radio-group (e2e)', () => {
-  it('exposes a radiogroup named by the legend, with radios named by their sc-radio content', async () => {
+  it('exposes a radiogroup named by the legend, with native radios named by their sc-radio content', async () => {
     const page = await newScPage(GROUP);
+    expect(await inner(page, '#issuer', '[host.shadowRoot, host.querySelectorAll("fieldset input[type=radio]").length]')).toEqual([null, 3]);
     const group = await axNode(page, '#issuer', 'fieldset');
     expect(group!.role).toBe('radiogroup');
     expect(group!.name).toBe('Who issued the plate?');
@@ -58,8 +40,7 @@ describe('sc-radio-group (e2e)', () => {
     });
     expect(radios.map((r) => r.name)).toEqual(['Dubai', 'Abu Dhabi', 'Another emirate']);
     expect(radios[1].description).toBe('Including Al Ain');
-    // Position in set comes from the native radio group.
-    expect(await radio(page, '#issuer', 1, 'r.name')).toBe(await radio(page, '#issuer', 0, 'r.name'));
+    expect(await radio(page, '#issuer', 1, 'r.name')).toBe('issuer');
   });
 
   it('is one Tab stop; arrow keys move and select; Tab leaves the group', async () => {
@@ -72,110 +53,118 @@ describe('sc-radio-group (e2e)', () => {
       el.addEventListener('change', () => w.events.push('change'));
     });
     const data = () => page.evaluate(() => new FormData(document.querySelector('form')!).get('issuer'));
-    const focused = () => inner(page, '#issuer', '[...root.querySelectorAll("input")].indexOf(root.activeElement)');
-
     await page.keyboard.press('Tab');
-    expect(await focused()).toBe(0);
+    expect(await focused(page, '#issuer')).toBe(0);
     expect(await data()).toBeNull();
     await page.keyboard.press('ArrowDown');
-    await page.waitForChanges();
-    expect(await focused()).toBe(1);
+    expect(await focused(page, '#issuer')).toBe(1);
     expect(await data()).toBe('abu-dhabi');
     await page.keyboard.press('ArrowDown');
-    await page.waitForChanges();
     expect(await data()).toBe('other');
     await page.keyboard.press('ArrowUp');
     await page.waitForChanges();
     expect(await data()).toBe('abu-dhabi');
     expect(await page.$eval('#issuer', (el) => (el as HTMLElement & { value: string }).value)).toBe('abu-dhabi');
-    expect(await page.evaluate(() => (window as unknown as { events: string[] }).events)).toEqual([
-      'scChange:abu-dhabi',
-      'change',
-      'scChange:other',
-      'change',
-      'scChange:abu-dhabi',
-      'change',
-    ]);
+    expect(await page.evaluate(() => (window as unknown as { events: string[] }).events)).toEqual(['scChange:abu-dhabi', 'change', 'scChange:other', 'change', 'scChange:abu-dhabi', 'change']);
     await page.keyboard.press('Tab');
     expect(await page.evaluate(() => document.activeElement!.id)).toBe('after');
-    // Shift+Tab returns to the checked radio.
     await page.keyboard.down('Shift');
     await page.keyboard.press('Tab');
     await page.keyboard.up('Shift');
-    expect(await focused()).toBe(1);
+    expect(await focused(page, '#issuer')).toBe(1);
   });
 
-  it('selects with Space and by clicking the option text', async () => {
+  it('selects with Space and by clicking the option text; the dot is the channel colour', async () => {
     const page = await newScPage(GROUP);
     await page.keyboard.press('Tab');
     await page.keyboard.press('Space');
     await page.waitForChanges();
     expect(await page.$eval('#issuer', (el) => (el as HTMLElement & { value: string }).value)).toBe('dubai');
-    await page.click('sc-radio[value="other"]');
+    await page.click('sc-radio[value="other"] label');
     await page.waitForChanges();
     expect(await page.$eval('#issuer', (el) => (el as HTMLElement & { value: string }).value)).toBe('other');
     expect(await radio(page, '#issuer', 2, 'r.checked')).toBe(true);
+    expect(await inner(page, 'sc-radio[value="other"]', 'getComputedStyle(q(".sc-choice__mark")).backgroundColor')).toBe(await token(page, 'body', '--sc-color-channel-action'));
   });
 
   it('moves with the arrow keys in Arabic too, and mirrors the layout', async () => {
     const page = await newScPage(`<sc-radio-group id="g" label="من أصدر اللوحة؟" error="يُرجى اختيار جهة إصدار اللوحة"><sc-radio value="dubai">دبي</sc-radio><sc-radio value="other">إمارة أخرى</sc-radio></sc-radio-group>`, { lang: 'ar' });
-    expect(await inner(page, '#g', 'getComputedStyle(root.querySelector("fieldset")).borderRightWidth')).toBe('3px');
-    expect(await radio(page, '#g', 0, 'r.getBoundingClientRect().left > root.querySelector("label.option-label slot").assignedElements()[0].getBoundingClientRect().right')).toBe(true);
-    expect(await inner(page, '#g', 'root.querySelector(".error .visually-hidden").textContent')).toBe('خطأ: ');
+    expect(await inner(page, '#g', 'getComputedStyle(q("fieldset")).borderRightWidth')).toBe('4px');
+    expect(await radio(page, '#g', 0, 'r.getBoundingClientRect().left > host.querySelector("sc-radio label").getBoundingClientRect().left')).toBe(true);
+    expect(await inner(page, '#g', 'q(".sc-field__error .visually-hidden").textContent')).toBe('خطأ: ');
+    expect(await radio(page, '#g', 0, 'getComputedStyle(r).borderTopColor')).toBe(await token(page, 'body', '--sc-color-error'));
     await page.keyboard.press('Tab');
     await page.keyboard.press('ArrowDown');
     await page.waitForChanges();
     expect(await page.$eval('#g', (el) => (el as HTMLElement & { value: string }).value)).toBe('other');
   });
 
-  it('submits, resets to the initial choice and reports a missing required choice', async () => {
+  it('submits, resets to the initial choice and reports a missing required choice natively', async () => {
     const page = await newScPage(`<form><sc-radio-group name="term" label="Renew for" value="1"><sc-radio value="1">1 year</sc-radio><sc-radio value="2">2 years</sc-radio></sc-radio-group><sc-radio-group id="req" name="issuer" label="Issuer" required><sc-radio value="dubai">Dubai</sc-radio></sc-radio-group></form>`);
     const data = () => page.evaluate(() => Object.fromEntries(new FormData(document.querySelector('form')!)));
     expect(await data()).toEqual({ term: '1' });
-    expect(await page.$eval('#req', (el) => el.matches(':invalid'))).toBe(true);
+    expect(await radio(page, '#req', 0, 'r.validity.valueMissing')).toBe(true);
     await page.evaluate(() => document.querySelector('form')!.reportValidity());
-    expect(await radio(page, '#req', 0, 'root.activeElement === r')).toBe(true);
+    expect(await radio(page, '#req', 0, 'document.activeElement === r')).toBe(true);
     await page.keyboard.press('Space');
-    await page.click('sc-radio[value="2"]');
+    await page.click('sc-radio[value="2"] label');
     await page.waitForChanges();
     expect(await data()).toEqual({ term: '2', issuer: 'dubai' });
-    expect(await page.$eval('#req', (el) => el.matches(':valid'))).toBe(true);
+    expect(await page.evaluate(() => document.querySelector('form')!.checkValidity())).toBe(true);
     await page.evaluate(() => document.querySelector('form')!.reset());
     await page.waitForChanges();
     expect(await data()).toEqual({ term: '1' });
-    expect(await radio(page, 'sc-radio-group', 0, 'r.checked')).toBe(true);
+    expect(await page.$eval('sc-radio-group', (el) => (el as HTMLElement & { value: string }).value)).toBe('1');
   });
 
-  it('re-renders when options change, and disables with a fieldset', async () => {
-    const page = await newScPage(`<form><fieldset><sc-radio-group label="Issuer"><sc-radio value="dubai">Dubai</sc-radio></sc-radio-group></fieldset></form>`);
+  it('takes options added later, disables through the fieldset, and focuses from the host', async () => {
+    const page = await newScPage(`<form><fieldset><sc-radio-group id="g" label="Issuer" value="dubai"><sc-radio value="dubai">Dubai</sc-radio></sc-radio-group></fieldset></form>`);
     await page.evaluate(() => {
       const r = document.createElement('sc-radio');
       r.setAttribute('value', 'sharjah');
       r.textContent = 'Sharjah';
       document.querySelector('sc-radio-group')!.append(r);
     });
-    await page.waitForChanges();
-    const node = await axNode(page, 'sc-radio-group', '#option-1');
+    await page.waitForFunction(() => document.querySelectorAll('sc-radio-group input[type=radio]').length === 2);
+    const node = await axNode(page, 'sc-radio[value="sharjah"]', 'input');
     expect(node!.name).toBe('Sharjah');
+    expect(await radio(page, '#g', 1, 'r.name')).toBe(await radio(page, '#g', 0, 'r.name'));
+    await page.evaluate(() => (document.getElementById('g') as HTMLElement).focus());
+    expect(await radio(page, '#g', 0, 'document.activeElement === r')).toBe(true);
     await page.evaluate(() => (document.querySelector('fieldset')!.disabled = true));
-    await page.waitForChanges();
-    expect(await radio(page, 'sc-radio-group', 0, 'r.matches(":disabled")')).toBe(true);
+    expect(await radio(page, '#g', 0, 'r.matches(":disabled")')).toBe(true);
   });
 
-  for (const ctx of contexts) {
-    it(`has no axe violations (${ctx.lang}, ${ctx.theme})`, async () => {
-      const page = await newScPage(ALL_STATES, ctx);
-      await expectNoAxeViolations(page);
+  it('scales the dot in from 0.5 with the pointer, never from 0, and shows it at once from the keyboard', async () => {
+    const page = await newScPage(GROUP);
+    expect(await inner(page, 'sc-radio[value="dubai"]', 'getComputedStyle(q(".sc-choice__mark")).transform')).toBe('matrix(0.5, 0, 0, 0.5, 0, 0)');
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Space');
+    expect(await inner(page, 'sc-radio[value="dubai"]', 'getComputedStyle(q(".sc-choice__mark")).transitionDuration')).toBe('0s');
+  });
+
+  it('stays visible in forced colours', async () => {
+    const page = await newScPage(`<sc-radio-group label="R" value="a"><sc-radio value="a">A</sc-radio></sc-radio-group>`);
+    await forceColors(page);
+    const highlight = await page.evaluate(() => {
+      const probe = document.createElement('div');
+      probe.style.backgroundColor = 'Highlight';
+      document.body.append(probe);
+      return getComputedStyle(probe).backgroundColor;
     });
-  }
+    expect(await inner(page, 'sc-radio', 'getComputedStyle(q(".sc-choice__mark")).backgroundColor')).toBe(highlight);
+    expect(await inner(page, 'sc-radio', 'getComputedStyle(q(".sc-choice__mark")).opacity')).toBe('1');
+  });
 
   it('has no axe violations while focused, on every channel', async () => {
     const page = await newScPage(ALL_STATES);
     await page.keyboard.press('Tab');
     await page.keyboard.press('ArrowDown');
-    for (const channel of ['now', 'transport', 'visit', 'justice', 'build', 'invest', 'trade'] as const) {
+    for (const channel of CHANNELS) {
       await setPageContext(page, { channel, theme: 'dark' });
       await expectNoAxeViolations(page);
     }
   });
 });
+
+describeAxe('sc-radio-group', ALL_STATES);

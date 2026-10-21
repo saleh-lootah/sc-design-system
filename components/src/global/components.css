@@ -19,6 +19,108 @@ sc-button:not(:defined)[full-width] {
   display: block;
 }
 
+/* Site chrome (C1): sc-page, sc-site-header, sc-app-bar, sc-channel-switcher,
+   sc-channel-network. Hosts keep their final block size before they upgrade. */
+sc-page:not(:defined) {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 100dvh;
+}
+sc-site-header:not(:defined) {
+  display: block;
+  min-block-size: calc(var(--sc-space-80) + var(--sc-size-border-hairline));
+}
+@media (max-width: 1023.98px) {
+  sc-site-header:not(:defined) {
+    min-block-size: calc(var(--sc-space-64) + var(--sc-size-border-hairline));
+  }
+}
+sc-app-bar:not(:defined) {
+  display: block;
+  min-block-size: calc(var(--sc-space-56) + var(--sc-space-4) + var(--sc-size-strip) + var(--sc-size-border-hairline));
+}
+sc-channel-switcher:not(:defined) {
+  display: inline-block;
+  vertical-align: middle;
+  min-block-size: var(--sc-size-control-secondary);
+}
+sc-channel-network:not(:defined) {
+  display: block;
+}
+
+/* sc-footer and sc-utility-bar render everything in shadow DOM, so before upgrade they are
+   empty: reserve the heights measured with the standard links (EN; Arabic is equal or
+   taller), so the footer does not jump in (CLS 0). The docked utility bar (from 1024px) is
+   fixed and takes no space. */
+sc-footer:not(:defined) {
+  display: block;
+  min-block-size: 241px;
+}
+sc-footer:not(:defined)[variant='grouped'] {
+  min-block-size: 964px;
+}
+sc-utility-bar:not(:defined) {
+  display: block;
+  min-block-size: 210px;
+}
+@media (min-width: 600px) {
+  sc-footer:not(:defined) {
+    min-block-size: 137px;
+  }
+  sc-footer:not(:defined)[variant='grouped'] {
+    min-block-size: 754px;
+  }
+}
+@media (min-width: 1024px) {
+  sc-footer:not(:defined) {
+    min-block-size: 109px;
+  }
+  sc-footer:not(:defined)[variant='grouped'] {
+    min-block-size: 388px;
+  }
+  sc-utility-bar:not(:defined) {
+    min-block-size: 0;
+  }
+}
+
+/* A docked sc-utility-bar publishes its height here; focus and #fragments scroll clear of it
+   (CHR-05, WCAG 2.4.11). sc-page pads its end by the same amount. */
+:root {
+  scroll-padding-block-end: var(--sc-utility-bar-block-size, 0px);
+}
+
+/* Form fields (C3): block until upgraded, at least their final label + 56px box, so the box
+   never jumps in. A hint or error adds to this once rendered (they come from props, so the
+   component's own first render already has them). */
+:is(sc-text-input, sc-textarea, sc-select, sc-date-input, sc-date-range, sc-search, sc-checkbox-group, sc-radio-group, sc-checkbox, sc-radio, sc-filter-chips):not(:defined) {
+  display: block;
+}
+:is(sc-text-input, sc-select, sc-date-range):not(:defined) {
+  min-block-size: calc(var(--sc-type-label-large-leading) + var(--sc-space-8) + var(--sc-size-control-primary));
+}
+sc-textarea:not(:defined) {
+  min-block-size: calc(var(--sc-type-label-large-leading) + var(--sc-space-8) + 3 * var(--sc-type-body-large-leading) + 2 * var(--sc-space-12));
+}
+sc-date-input:not(:defined) {
+  min-block-size: calc(var(--sc-type-label-large-leading) + var(--sc-type-label-medium-leading) + 2 * var(--sc-space-8) + var(--sc-size-control-primary));
+}
+sc-search:not(:defined) {
+  --_box: var(--sc-size-control-primary);
+  min-block-size: calc(var(--sc-type-label-large-leading) + var(--sc-space-8) + var(--_box));
+}
+sc-search[size='l']:not(:defined) {
+  --_box: calc(var(--sc-size-control-primary) + var(--sc-space-8));
+}
+sc-search[label-hidden]:not(:defined) {
+  min-block-size: var(--_box);
+}
+:is(sc-checkbox, sc-radio):not(:defined) {
+  min-block-size: var(--sc-size-control-secondary);
+}
+sc-filter-chips:not(:defined) {
+  min-block-size: var(--sc-size-chip);
+}
+
 /* C2 navigation. Shadow components whose items are plain child links: before upgrade the
    links show as a simple list at about their final size. */
 sc-breadcrumbs:not(:defined) {
@@ -75,4 +177,132 @@ sc-step-list:not(:defined) {
 sc-modal:not(:defined),
 sc-step-progress:not(:defined) > * {
   display: none;
+}
+/* ---------------------------------------------------------------------------------------
+ * CSS-only layout primitives (C5, architecture §3.1): sc-container, sc-grid and sc-ltr are
+ * never registered as custom elements. They have no behaviour, so they cost no JS, no
+ * shadow root and no hydration (no CLS). Media queries cannot read custom properties, so
+ * the breakpoints are repeated from tokens/layout.json: medium 600px, expanded 1024px,
+ * wide 1440px (--sc-breakpoint-*). Use them in page markup only: element selectors in the
+ * document do not reach into a shadow root.
+ * --------------------------------------------------------------------------------------- */
+
+/* sc-container: page margins 20 / 32 / 48 / 80px, content capped at 1280px (LAY-01).
+   width="reading" caps the column at 680px, kept at the start edge so it lines up with the
+   page content above and below it. */
+sc-container {
+  --_cm: var(--sc-grid-compact-margin);
+  display: block;
+  box-sizing: border-box;
+  inline-size: 100%;
+  max-inline-size: calc(var(--sc-container-max) + 2 * var(--_cm));
+  margin-inline: auto;
+  padding-inline: var(--_cm);
+}
+sc-container[width="reading"] {
+  /* The end padding takes up whatever is wider than the reading column. 100% is the
+     containing block width, which is the host width before max-inline-size clamps it. */
+  padding-inline-end: max(
+    var(--_cm),
+    min(100%, var(--sc-container-max) + 2 * var(--_cm)) - var(--_cm) - var(--sc-container-reading)
+  );
+}
+@media (min-width: 600px) {
+  sc-container { --_cm: var(--sc-grid-medium-margin); }
+}
+@media (min-width: 1024px) {
+  sc-container { --_cm: var(--sc-grid-expanded-margin); }
+}
+@media (min-width: 1440px) {
+  sc-container { --_cm: var(--sc-grid-wide-margin); }
+}
+
+/* sc-grid: 4, 8 or 12 columns with 16, 20 or 24px gutters. span, span-medium and
+   span-expanded set every item width (each falls back to the smaller one); a child can
+   override with style="--sc-grid-span: 8". Spans are capped at the columns available. */
+sc-grid {
+  --_gs: initial;
+  --_gm: initial;
+  --_gx: initial;
+  --_gc: var(--sc-grid-compact-columns);
+  --_gspan: var(--_gs, 12);
+  display: grid;
+  grid-template-columns: repeat(var(--_gc), minmax(0, 1fr));
+  gap: var(--sc-grid-compact-gutter);
+}
+sc-grid[span="1"] { --_gs: 1; }
+sc-grid[span="2"] { --_gs: 2; }
+sc-grid[span="3"] { --_gs: 3; }
+sc-grid[span="4"] { --_gs: 4; }
+sc-grid[span="5"] { --_gs: 5; }
+sc-grid[span="6"] { --_gs: 6; }
+sc-grid[span="7"] { --_gs: 7; }
+sc-grid[span="8"] { --_gs: 8; }
+sc-grid[span="9"] { --_gs: 9; }
+sc-grid[span="10"] { --_gs: 10; }
+sc-grid[span="11"] { --_gs: 11; }
+sc-grid[span="12"] { --_gs: 12; }
+sc-grid[span-medium="1"] { --_gm: 1; }
+sc-grid[span-medium="2"] { --_gm: 2; }
+sc-grid[span-medium="3"] { --_gm: 3; }
+sc-grid[span-medium="4"] { --_gm: 4; }
+sc-grid[span-medium="5"] { --_gm: 5; }
+sc-grid[span-medium="6"] { --_gm: 6; }
+sc-grid[span-medium="7"] { --_gm: 7; }
+sc-grid[span-medium="8"] { --_gm: 8; }
+sc-grid[span-medium="9"] { --_gm: 9; }
+sc-grid[span-medium="10"] { --_gm: 10; }
+sc-grid[span-medium="11"] { --_gm: 11; }
+sc-grid[span-medium="12"] { --_gm: 12; }
+sc-grid[span-expanded="1"] { --_gx: 1; }
+sc-grid[span-expanded="2"] { --_gx: 2; }
+sc-grid[span-expanded="3"] { --_gx: 3; }
+sc-grid[span-expanded="4"] { --_gx: 4; }
+sc-grid[span-expanded="5"] { --_gx: 5; }
+sc-grid[span-expanded="6"] { --_gx: 6; }
+sc-grid[span-expanded="7"] { --_gx: 7; }
+sc-grid[span-expanded="8"] { --_gx: 8; }
+sc-grid[span-expanded="9"] { --_gx: 9; }
+sc-grid[span-expanded="10"] { --_gx: 10; }
+sc-grid[span-expanded="11"] { --_gx: 11; }
+sc-grid[span-expanded="12"] { --_gx: 12; }
+@media (min-width: 600px) {
+  sc-grid {
+    --_gc: var(--sc-grid-medium-columns);
+    --_gspan: var(--_gm, var(--_gs, 12));
+    gap: var(--sc-grid-medium-gutter);
+  }
+}
+@media (min-width: 1024px) {
+  sc-grid {
+    --_gc: var(--sc-grid-expanded-columns);
+    --_gspan: var(--_gx, var(--_gm, var(--_gs, 12)));
+    gap: var(--sc-grid-expanded-gutter);
+  }
+}
+@media (min-width: 1440px) {
+  sc-grid {
+    --_gc: var(--sc-grid-wide-columns);
+    gap: var(--sc-grid-wide-gutter);
+  }
+}
+sc-grid > * {
+  grid-column: span min(var(--sc-grid-span, var(--_gspan)), var(--_gc));
+  min-inline-size: 0;
+}
+
+/* sc-ltr: keeps a value left-to-right inside any text (plates, amounts, references, phone
+   numbers): the same as <bdi dir="ltr">. */
+sc-ltr {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+:is(sc-container, sc-grid, sc-ltr)[hidden] { display: none; }
+
+/* ---------------------------------------------------------------------------------------
+ * C5 content and layout: size reservations before upgrade (architecture §3.1), so each
+ * host already has its final box at first paint.
+ * --------------------------------------------------------------------------------------- */
+:is(sc-card, sc-summary-list, sc-summary-row, sc-table, sc-accordion):not(:defined) {
+  display: block;
 }
