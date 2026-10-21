@@ -12,8 +12,8 @@ import { CardLandmark, CardPadding } from "./components/sc-card/sc-card";
 import { Channel } from "./i18n/strings";
 import { HeadingLevel } from "./components/sc-text-input/field";
 import { ContainerWidth } from "./components/sc-container/sc-container";
-import { HeadingLevel as HeadingLevel1 } from "./components/sc-text-input/field-v1";
 import { Parts } from "./components/sc-date-input/date";
+import { HeadingLevel as HeadingLevel1 } from "./components/sc-text-input/field-v1";
 import { StringsInput } from "./components/sc-table/overrides";
 import { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
 import { LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
@@ -30,8 +30,8 @@ export { CardLandmark, CardPadding } from "./components/sc-card/sc-card";
 export { Channel } from "./i18n/strings";
 export { HeadingLevel } from "./components/sc-text-input/field";
 export { ContainerWidth } from "./components/sc-container/sc-container";
-export { HeadingLevel as HeadingLevel1 } from "./components/sc-text-input/field-v1";
 export { Parts } from "./components/sc-date-input/date";
+export { HeadingLevel as HeadingLevel1 } from "./components/sc-text-input/field-v1";
 export { StringsInput } from "./components/sc-table/overrides";
 export { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
 export { LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
@@ -353,13 +353,13 @@ export namespace Components {
     /**
      * A date people know, such as a date of birth or the date on a document: Day, Month and
      * Year boxes (يوم / شهر / سنة) with the numeric keyboard.
-     * A `<fieldset>` and `<legend>` with the hint and error, and three labelled native inputs,
-     * in one shadow root. In Arabic the boxes run right to left (Day on the right). An error can
-     * highlight one part with `error-parts="year"`.
-     * Form-associated: submits the date as an ISO string (`2026-03-07`, or empty while it isn't
-     * a real date) under `name`, plus the raw parts as `name-day`, `name-month` and `name-year`
-     * so a server can re-display what was typed. Reports `valueMissing` and `badInput`.
-     * Delegates focus to the first box.
+     * v2 renders a native `<fieldset>` and `<legend>` with the hint and error, three labelled
+     * native inputs and a hidden input in light DOM (Stencil `scoped`, decision A2). It submits
+     * the date as an ISO string (`2026-03-07`, or empty while it isn't a real date) under `name`,
+     * and the raw parts as `name-day`, `name-month` and `name-year`, so a server can re-display
+     * what was typed. An empty required date and an impossible date are native validity errors
+     * on the first box concerned. In Arabic the boxes run right to left (Day on the right). An
+     * error can mark one box with `error-parts="year"`.
      */
     interface ScDateInput {
         /**
@@ -376,13 +376,13 @@ export namespace Components {
          */
         "error"?: string;
         /**
-          * Which boxes the error is about, space-separated: `"day"`, `"month year"`. Only those get the error border and `aria-invalid`. When empty, an error highlights all three.
+          * Which boxes the error is about, space-separated: `"day"`, `"month year"`. Only those get the error edge and `aria-invalid`. When empty, an error marks all three.
          */
         "errorParts"?: string;
         /**
           * When set (1–6), the legend is also the page heading at this level.
          */
-        "headingLevel"?: HeadingLevel1;
+        "headingLevel"?: HeadingLevel;
         /**
           * Help text below the legend: "For example, 27 3 2026".
          */
@@ -401,7 +401,7 @@ export namespace Components {
          */
         "optional": boolean;
         /**
-          * Requires a date (`valueMissing` while every box is empty).
+          * Requires a date (a validity error while every box is empty).
           * @default false
          */
         "required": boolean;
@@ -1492,13 +1492,13 @@ declare global {
     /**
      * A date people know, such as a date of birth or the date on a document: Day, Month and
      * Year boxes (يوم / شهر / سنة) with the numeric keyboard.
-     * A `<fieldset>` and `<legend>` with the hint and error, and three labelled native inputs,
-     * in one shadow root. In Arabic the boxes run right to left (Day on the right). An error can
-     * highlight one part with `error-parts="year"`.
-     * Form-associated: submits the date as an ISO string (`2026-03-07`, or empty while it isn't
-     * a real date) under `name`, plus the raw parts as `name-day`, `name-month` and `name-year`
-     * so a server can re-display what was typed. Reports `valueMissing` and `badInput`.
-     * Delegates focus to the first box.
+     * v2 renders a native `<fieldset>` and `<legend>` with the hint and error, three labelled
+     * native inputs and a hidden input in light DOM (Stencil `scoped`, decision A2). It submits
+     * the date as an ISO string (`2026-03-07`, or empty while it isn't a real date) under `name`,
+     * and the raw parts as `name-day`, `name-month` and `name-year`, so a server can re-display
+     * what was typed. An empty required date and an impossible date are native validity errors
+     * on the first box concerned. In Arabic the boxes run right to left (Day on the right). An
+     * error can mark one box with `error-parts="year"`.
      */
     interface HTMLScDateInputElement extends Components.ScDateInput, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScDateInputElementEventMap>(type: K, listener: (this: HTMLScDateInputElement, ev: ScDateInputCustomEvent<HTMLScDateInputElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2311,13 +2311,13 @@ declare namespace LocalJSX {
     /**
      * A date people know, such as a date of birth or the date on a document: Day, Month and
      * Year boxes (يوم / شهر / سنة) with the numeric keyboard.
-     * A `<fieldset>` and `<legend>` with the hint and error, and three labelled native inputs,
-     * in one shadow root. In Arabic the boxes run right to left (Day on the right). An error can
-     * highlight one part with `error-parts="year"`.
-     * Form-associated: submits the date as an ISO string (`2026-03-07`, or empty while it isn't
-     * a real date) under `name`, plus the raw parts as `name-day`, `name-month` and `name-year`
-     * so a server can re-display what was typed. Reports `valueMissing` and `badInput`.
-     * Delegates focus to the first box.
+     * v2 renders a native `<fieldset>` and `<legend>` with the hint and error, three labelled
+     * native inputs and a hidden input in light DOM (Stencil `scoped`, decision A2). It submits
+     * the date as an ISO string (`2026-03-07`, or empty while it isn't a real date) under `name`,
+     * and the raw parts as `name-day`, `name-month` and `name-year`, so a server can re-display
+     * what was typed. An empty required date and an impossible date are native validity errors
+     * on the first box concerned. In Arabic the boxes run right to left (Day on the right). An
+     * error can mark one box with `error-parts="year"`.
      */
     interface ScDateInput {
         /**
@@ -2334,17 +2334,13 @@ declare namespace LocalJSX {
          */
         "error"?: string;
         /**
-          * Which boxes the error is about, space-separated: `"day"`, `"month year"`. Only those get the error border and `aria-invalid`. When empty, an error highlights all three.
+          * Which boxes the error is about, space-separated: `"day"`, `"month year"`. Only those get the error edge and `aria-invalid`. When empty, an error marks all three.
          */
         "errorParts"?: string;
         /**
-          * The `id` of a `<form>` element to associate this element with.
-         */
-        "form"?: string;
-        /**
           * When set (1–6), the legend is also the page heading at this level.
          */
-        "headingLevel"?: HeadingLevel1;
+        "headingLevel"?: HeadingLevel;
         /**
           * Help text below the legend: "For example, 27 3 2026".
          */
@@ -2358,7 +2354,7 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Fires when a box is committed with `{ value, day, month, year }`. A native `change` is also dispatched on the host.
+          * Fires when a box is committed with `{ value, day, month, year }`. The native `change` also bubbles from the box.
          */
         "onScChange"?: (event: ScDateInputCustomEvent<{ value: string } & Parts>) => void;
         /**
@@ -2371,7 +2367,7 @@ declare namespace LocalJSX {
          */
         "optional"?: boolean;
         /**
-          * Requires a date (`valueMissing` while every box is empty).
+          * Requires a date (a validity error while every box is empty).
           * @default false
          */
         "required"?: boolean;
@@ -3673,13 +3669,13 @@ declare module "@stencil/core" {
             /**
              * A date people know, such as a date of birth or the date on a document: Day, Month and
              * Year boxes (يوم / شهر / سنة) with the numeric keyboard.
-             * A `<fieldset>` and `<legend>` with the hint and error, and three labelled native inputs,
-             * in one shadow root. In Arabic the boxes run right to left (Day on the right). An error can
-             * highlight one part with `error-parts="year"`.
-             * Form-associated: submits the date as an ISO string (`2026-03-07`, or empty while it isn't
-             * a real date) under `name`, plus the raw parts as `name-day`, `name-month` and `name-year`
-             * so a server can re-display what was typed. Reports `valueMissing` and `badInput`.
-             * Delegates focus to the first box.
+             * v2 renders a native `<fieldset>` and `<legend>` with the hint and error, three labelled
+             * native inputs and a hidden input in light DOM (Stencil `scoped`, decision A2). It submits
+             * the date as an ISO string (`2026-03-07`, or empty while it isn't a real date) under `name`,
+             * and the raw parts as `name-day`, `name-month` and `name-year`, so a server can re-display
+             * what was typed. An empty required date and an impossible date are native validity errors
+             * on the first box concerned. In Arabic the boxes run right to left (Day on the right). An
+             * error can mark one box with `error-parts="year"`.
              */
             "sc-date-input": LocalJSX.IntrinsicElements["sc-date-input"] & JSXBase.HTMLAttributes<HTMLScDateInputElement>;
             /**

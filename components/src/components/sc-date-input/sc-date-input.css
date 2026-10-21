@@ -1,28 +1,29 @@
-@import '../sc-text-input/field-v1.css';
+/*
+ * sc-date-input (v2, light DOM). field.css gives the fieldset, legend, hint, error, bar and
+ * the 56px boxes; this lays out Day, Month and Year (component-language.md A14). In RTL the
+ * row runs right to left, Day on the right.
+ */
+@layer sc.components {
+  .sc-date-input__parts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sc-space-16);
+  }
 
-/* Day, Month, Year in a row. In RTL the row runs right to left (Day on the right). */
-.parts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--sc-space-16);
-}
+  .sc-date-input__part {
+    display: grid;
+    gap: var(--sc-space-8);
+    justify-items: start;
+  }
 
-.part {
-  display: grid;
-  gap: var(--sc-space-6);
-  justify-items: start;
-}
+  .sc-date-input__part-label {
+    color: var(--sc-color-on-surface);
+    font: var(--sc-type-label-medium);
+    letter-spacing: var(--sc-type-label-medium-tracking);
+  }
 
-.part-label {
-  color: var(--sc-color-ink);
-  font-family: var(--type-hint-family);
-  font-weight: var(--type-hint-weight);
-  font-size: var(--type-hint-size);
-  line-height: var(--type-hint-leading);
-  letter-spacing: var(--type-hint-tracking);
-}
-
-.part .control {
-  text-align: center;
-  font-variant-numeric: tabular-nums;
+  .sc-date-input__control {
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
 }

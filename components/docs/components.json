@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-21T14:38:18",
+  "timestamp": "2026-10-21T14:41:00",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.45.2",
@@ -2129,56 +2129,11 @@
     },
     {
       "filePath": "src/components/sc-date-input/sc-date-input.tsx",
-      "encapsulation": "shadow",
+      "encapsulation": "scoped",
       "tag": "sc-date-input",
-      "readme": "# sc-date-input\n\nA date people know: a date of birth, the start date on an insurance policy, the date a vehicle was exported. Don't use it for a date people need to pick from a calendar (an appointment): that needs a date picker.\n\n## Usage\n\n```html\n<sc-date-input\n  name=\"insuranceStart\"\n  label=\"When does your insurance policy start?\"\n  hint=\"For example, 27 3 2026\"\n></sc-date-input>\n```\n\n- Three labelled boxes, Day, Month and Year (يوم / شهر / سنة), in a `<fieldset>` with the question as the `<legend>`. Each box uses the numeric keyboard (`inputmode=\"numeric\"`).\n- **In Arabic** the boxes run right to left: Day on the right, Year on the left. Digits stay Latin.\n- **Hint:** give an example in the order of the boxes: \"For example, 27 3 2026\".\n- **Error on one part:** set `error` and `error-parts` to the boxes it's about, for example `error-parts=\"year\"` with \"The date your policy starts must include a year\". Only those boxes get the error border and `aria-invalid`. Without `error-parts`, the error highlights all three.\n- **Date of birth:** `autocomplete=\"bday\"` sets `bday-day`, `bday-month`, `bday-year` on the boxes.\n- `optional`, `heading-level` and `disabled` work as in the other fields.\n\n### Value and forms\n\n- `value` is an ISO date (`2026-03-27`). It's empty while the boxes don't make a real date (31 April, a 2-digit year). Setting `value` fills the boxes.\n- The form gets the ISO date under `name`, plus the raw parts as `name-day`, `name-month` and `name-year`, so the server can validate and re-display exactly what was typed.\n- Validity: `valueMissing` when `required` and every box is empty; `badInput` (\"The date must be a real date\") when something is typed but it isn't a real date. Reset restores the initial `value`.\n- `scInput` and `scChange` carry `{ value, day, month, year }`. The host delegates focus to the Day box, so an error summary can focus the field by its `id`.\n",
-      "docs": "A date people know, such as a date of birth or the date on a document: Day, Month and\nYear boxes (يوم / شهر / سنة) with the numeric keyboard.\n\nA `<fieldset>` and `<legend>` with the hint and error, and three labelled native inputs,\nin one shadow root. In Arabic the boxes run right to left (Day on the right). An error can\nhighlight one part with `error-parts=\"year\"`.\n\nForm-associated: submits the date as an ISO string (`2026-03-07`, or empty while it isn't\na real date) under `name`, plus the raw parts as `name-day`, `name-month` and `name-year`\nso a server can re-display what was typed. Reports `valueMissing` and `badInput`.\nDelegates focus to the first box.",
-      "docsTags": [
-        {
-          "name": "slot",
-          "text": "label - Rich legend content, instead of the `label` prop."
-        },
-        {
-          "name": "slot",
-          "text": "hint - Rich hint content, instead of the `hint` prop."
-        },
-        {
-          "name": "slot",
-          "text": "error - Rich error content, instead of the `error` prop."
-        },
-        {
-          "name": "part",
-          "text": "field - The `<fieldset>` (gets the error bar)."
-        },
-        {
-          "name": "part",
-          "text": "label - The `<legend>`."
-        },
-        {
-          "name": "part",
-          "text": "hint - The hint."
-        },
-        {
-          "name": "part",
-          "text": "error - The error message."
-        },
-        {
-          "name": "part",
-          "text": "parts - The row of boxes."
-        },
-        {
-          "name": "part",
-          "text": "part-label - The label above a box."
-        },
-        {
-          "name": "part",
-          "text": "frame - The bordered box around an input."
-        },
-        {
-          "name": "part",
-          "text": "control - A native `<input>`."
-        }
-      ],
+      "readme": "# sc-date-input\n\nA date people know: a date of birth, the start date on an insurance policy, the date a vehicle was exported. Don't use it for a date people need to pick from a calendar (an appointment): that needs a date picker.\n\n## Usage\n\n```html\n<sc-date-input\n  name=\"insuranceStart\"\n  label=\"When does your insurance policy start?\"\n  hint=\"For example, 27 3 2026\"\n></sc-date-input>\n```\n\n- Three labelled boxes, Day, Month and Year (يوم / شهر / سنة), in a `<fieldset>` with the question as the `<legend>`. Each box uses the numeric keyboard (`inputmode=\"numeric\"`).\n- **In Arabic** the boxes run right to left: Day on the right, Year on the left. Digits stay Latin.\n- **Hint:** give an example in the order of the boxes: \"For example, 27 3 2026\".\n- **Error on one part:** set `error` and `error-parts` to the boxes it's about, for example `error-parts=\"year\"` with \"The date your policy starts must include a year\". Only those boxes get the error border and `aria-invalid`. Without `error-parts`, the error highlights all three.\n- **Date of birth:** `autocomplete=\"bday\"` sets `bday-day`, `bday-month`, `bday-year` on the boxes.\n- `optional`, `heading-level` and `disabled` work as in the other fields.\n\n### Value and forms\n\n- `value` is an ISO date (`2026-03-27`). It's empty while the boxes don't make a real date (31 April, a 2-digit year). Setting `value` fills the boxes.\n- The form gets the ISO date under `name`, plus the raw parts as `name-day`, `name-month` and `name-year`, so the server can validate and re-display exactly what was typed.\n- v2 renders a native fieldset, three native inputs (named `name-day`, `name-month`, `name-year`) and a hidden input carrying the ISO date under `name`, in light DOM (decision A2).\n- Validity: a native custom validity error on the Day box (\"Enter a date\") when `required` and every box is empty, and on the first empty box (\"The date must be a real date\") when something is typed but it isn't a real date. `reportValidity()` focuses that box. Reset restores the initial `value`.\n- `scInput` and `scChange` carry `{ value, day, month, year }`. `focus()` on the host is forwarded to the Day box, so an error summary can focus the field by its `id`. The native `change` bubbles from each box.\n",
+      "docs": "A date people know, such as a date of birth or the date on a document: Day, Month and\nYear boxes (يوم / شهر / سنة) with the numeric keyboard.\n\nv2 renders a native `<fieldset>` and `<legend>` with the hint and error, three labelled\nnative inputs and a hidden input in light DOM (Stencil `scoped`, decision A2). It submits\nthe date as an ISO string (`2026-03-07`, or empty while it isn't a real date) under `name`,\nand the raw parts as `name-day`, `name-month` and `name-year`, so a server can re-display\nwhat was typed. An empty required date and an impossible date are native validity errors\non the first box concerned. In Arabic the boxes run right to left (Day on the right). An\nerror can mark one box with `error-parts=\"year\"`.",
+      "docsTags": [],
       "usage": {},
       "props": [
         {
@@ -2273,7 +2228,7 @@
           "mutable": false,
           "attr": "error-parts",
           "reflectToAttr": false,
-          "docs": "Which boxes the error is about, space-separated: `\"day\"`, `\"month year\"`. Only those get\nthe error border and `aria-invalid`. When empty, an error highlights all three.",
+          "docs": "Which boxes the error is about, space-separated: `\"day\"`, `\"month year\"`. Only those get\nthe error edge and `aria-invalid`. When empty, an error marks all three.",
           "docsTags": [],
           "values": [
             {
@@ -2297,8 +2252,8 @@
             "references": {
               "HeadingLevel": {
                 "location": "import",
-                "path": "../sc-text-input/field-v1",
-                "id": "src/components/sc-text-input/field-v1.tsx::HeadingLevel",
+                "path": "../sc-text-input/field",
+                "id": "src/components/sc-text-input/field.tsx::HeadingLevel",
                 "referenceLocation": "HeadingLevel"
               }
             }
@@ -2460,7 +2415,7 @@
           "mutable": false,
           "attr": "required",
           "reflectToAttr": false,
-          "docs": "Requires a date (`valueMissing` while every box is empty).",
+          "docs": "Requires a date (a validity error while every box is empty).",
           "docsTags": [
             {
               "name": "default",
@@ -2528,7 +2483,7 @@
           },
           "cancelable": true,
           "composed": true,
-          "docs": "Fires when a box is committed with `{ value, day, month, year }`. A native `change` is also dispatched on the host.",
+          "docs": "Fires when a box is committed with `{ value, day, month, year }`. The native `change` also bubbles from the box.",
           "docsTags": []
         },
         {
@@ -2555,54 +2510,8 @@
       ],
       "listeners": [],
       "styles": [],
-      "slots": [
-        {
-          "name": "error",
-          "docs": "Rich error content, instead of the `error` prop."
-        },
-        {
-          "name": "hint",
-          "docs": "Rich hint content, instead of the `hint` prop."
-        },
-        {
-          "name": "label",
-          "docs": "Rich legend content, instead of the `label` prop."
-        }
-      ],
-      "parts": [
-        {
-          "name": "control",
-          "docs": "A native `<input>`."
-        },
-        {
-          "name": "error",
-          "docs": "The error message."
-        },
-        {
-          "name": "field",
-          "docs": "The `<fieldset>` (gets the error bar)."
-        },
-        {
-          "name": "frame",
-          "docs": "The bordered box around an input."
-        },
-        {
-          "name": "hint",
-          "docs": "The hint."
-        },
-        {
-          "name": "label",
-          "docs": "The `<legend>`."
-        },
-        {
-          "name": "part-label",
-          "docs": "The label above a box."
-        },
-        {
-          "name": "parts",
-          "docs": "The row of boxes."
-        }
-      ],
+      "slots": [],
+      "parts": [],
       "states": [],
       "dependents": [],
       "dependencies": [],
@@ -8103,15 +8012,15 @@
       "docstring": "",
       "path": "src/i18n/strings.ts"
     },
-    "src/components/sc-text-input/field-v1.tsx::HeadingLevel": {
-      "declaration": "export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;",
-      "docstring": "",
-      "path": "src/components/sc-text-input/field-v1.tsx"
-    },
     "src/components/sc-date-input/date.ts::Parts": {
       "declaration": "{\n    [P in K]: T;\n}",
       "docstring": "",
       "path": "src/components/sc-date-input/date.ts"
+    },
+    "src/components/sc-text-input/field-v1.tsx::HeadingLevel": {
+      "declaration": "export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;",
+      "docstring": "",
+      "path": "src/components/sc-text-input/field-v1.tsx"
     }
   }
 }
