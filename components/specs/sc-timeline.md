@@ -12,9 +12,9 @@ The status history of an application.
 
 | Part | Rule |
 | --- | --- |
-| Entry | Padding-inline-start 36 (a 24 marker column plus 12); 20 between entries; tag, time and description stacked with a gap of 4. |
+| Entry | Padding-inline-start 36 (a 24 marker column plus 12); 20 between entries; the time 6 below the tag and the description 2 below the time (board A9D-0). |
 | Dot | 12px, centred in the column, centred on the 32px tag. Latest: its tone (`error`, `warning`, `success`, `info`; neutral uses `on-surface-variant`). Earlier: `outline`. |
-| Connector | 2px `outline-variant`, from 4 below one dot to 4 above the next. |
+| Connector | 2px `outline-variant`, from 4 below one dot to the bottom of its entry (board A9C-0); with `divided`, to the rule. None after the last entry. |
 | Time | `body-small`, `on-surface-variant`. Latin digits; Dubai W23's digits are tabular. |
 | Description | `body-medium`. |
 | `divided` | 1px `outline-variant` rules between entries, for a timeline in a card. |

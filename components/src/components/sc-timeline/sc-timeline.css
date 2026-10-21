@@ -33,7 +33,8 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: var(--sc-space-4);
+    /* Board A9D-0: tag, then the time 6 below it, then the description 2 below that. */
+    gap: var(--sc-space-2);
     padding-inline-start: calc(var(--_col) + var(--sc-space-12));
     padding-block-end: var(--_gap);
   }
@@ -41,6 +42,11 @@
   ::slotted(ol) > li + li,
   ::slotted(ul) > li + li {
     padding-block-start: 0;
+  }
+
+  ::slotted(ol) > li > sc-status-tag,
+  ::slotted(ul) > li > sc-status-tag {
+    margin-block-end: var(--sc-space-4);
   }
 
   /* The dot. */
@@ -56,12 +62,12 @@
     background: var(--sc-color-outline);
   }
 
-  /* The connector, from below this dot to the next dot. */
+  /* The connector, from 4 below this dot to the bottom of the entry (board A9C-0). */
   ::slotted(ol) > li:not(:last-child)::after,
   ::slotted(ul) > li:not(:last-child)::after {
     content: '';
     position: absolute;
-    inset-block: calc(var(--_dot-top) + var(--_dot) + var(--sc-space-4)) calc(var(--sc-space-4) - var(--_dot-top));
+    inset-block: calc(var(--_dot-top) + var(--_dot) + var(--sc-space-4)) 0;
     inset-inline-start: calc((var(--_col) - var(--sc-size-border-strong)) / 2);
     inline-size: var(--sc-size-border-strong);
     background: var(--sc-color-outline-variant);
@@ -107,10 +113,6 @@
 
   :host([divided]) ::slotted(ol) > li + li:not(:last-child)::after {
     inset-block-start: calc(var(--_gap) + var(--_dot-top) + var(--_dot) + var(--sc-space-4));
-  }
-
-  :host([divided]) ::slotted(ol) > li:not(:last-child)::after {
-    inset-block-end: calc(var(--sc-space-4) - var(--_dot-top) - var(--_gap));
   }
 
 
