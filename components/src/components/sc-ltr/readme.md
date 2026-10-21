@@ -13,27 +13,6 @@ Wrap any value that must read left to right whatever the page direction: vehicle
 - Don't use it for whole sentences in another language; set `lang` and `dir` on that element instead.
 - Inside a shadow root (in a component's own template), write `<bdi dir="ltr">` directly instead.
 
-<!-- Auto Generated Below -->
+## v2: CSS only
 
-
-## Overview
-
-Keeps a value left-to-right inside any text, e.g. a plate number, amount, reference or
-phone number in an Arabic sentence. Renders `<bdi dir="ltr">` around its content.
-
-Shadow DOM is used on purpose: the author's text stays in the light DOM (searchable,
-copyable, untouched), and layout follows the flat tree, so the `<bdi>` isolates the
-slotted text from the surrounding paragraph exactly as a `<bdi>` written in place would.
-The host is also `unicode-bidi: isolate; direction: ltr` (here and in sc.css), so the
-value is isolated even before the component upgrades.
-
-## Slots
-
-| Slot | Description                      |
-| ---- | -------------------------------- |
-|      | The value to keep left-to-right. |
-
-
-----------------------------------------------
-
-
+`sc-ltr` is not a registered custom element in v2 (architecture §3.1): `sc.css` gives the tag `direction: ltr; unicode-bidi: isolate`, which is exactly what `<bdi dir="ltr">` does. Nothing changes in markup, and the value is isolated from first paint.

@@ -1,20 +1,24 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { ScCard } from './sc-card';
 
-const surface = (root: HTMLElement) => root.shadowRoot!.querySelector('[part="surface"]') as HTMLElement;
-
 describe('sc-card (spec)', () => {
-  it('renders a plain surface with large padding by default and no role', async () => {
+  it('renders the host as a light-DOM surface with large padding, outlined, and no role', async () => {
     const page = await newSpecPage({ components: [ScCard], html: `<sc-card><p>Seven services</p></sc-card>` });
-    expect(surface(page.root!)).toHaveClasses(['surface', 'surface--l']);
+    expect(page.root!.shadowRoot).toBeNull();
+    expect(page.root).toHaveClasses(['sc-card', 'sc-card--l', 'sc-card--outlined']);
     expect(page.root!.getAttribute('role')).toBeNull();
     expect(page.root!.getAttribute('aria-labelledby')).toBeNull();
-    expect(surface(page.root!).querySelector('slot')).not.toBeNull();
+    expect(page.root!.querySelector('p')!.textContent).toBe('Seven services');
   });
 
-  it('renders medium padding', async () => {
-    const page = await newSpecPage({ components: [ScCard], html: `<sc-card padding="m"></sc-card>` });
-    expect(surface(page.root!)).toHaveClass('surface--m');
+  it('renders medium padding and the filled variant', async () => {
+    const page = await newSpecPage({ components: [ScCard], html: `<sc-card padding="m" variant="filled"></sc-card>` });
+    expect(page.root).toHaveClasses(['sc-card--m', 'sc-card--filled']);
+  });
+
+  it('falls back to the defaults for unknown values', async () => {
+    const page = await newSpecPage({ components: [ScCard], html: `<sc-card padding="xl" variant="raised"></sc-card>` });
+    expect(page.root).toHaveClasses(['sc-card--l', 'sc-card--outlined']);
   });
 
   it('becomes a region named by its first heading with landmark="section"', async () => {

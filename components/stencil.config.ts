@@ -20,7 +20,7 @@ const scCss = (dest: string) => ({ src: 'global/generated/sc.css', dest, warn: t
  */
 const bundles = [
   { components: ['sc-page', 'sc-skip-link', 'sc-app-bar', 'sc-language-switch', 'sc-footer', 'sc-back-link', 'sc-link'] },
-  { components: ['sc-channel-hero', 'sc-service-card', 'sc-callout', 'sc-status-tag', 'sc-channel-chip', 'sc-card', 'sc-spinner', 'sc-step-progress', 'sc-container', 'sc-grid', 'sc-ltr'] },
+  { components: ['sc-channel-hero', 'sc-service-card', 'sc-callout', 'sc-status-tag', 'sc-channel-chip', 'sc-card', 'sc-spinner', 'sc-step-progress'] },
   {
     components: [
       'sc-button',

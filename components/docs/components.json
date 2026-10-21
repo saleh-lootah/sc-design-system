@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-21T14:05:20",
+  "timestamp": "2026-10-21T14:13:54",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.45.2",
@@ -555,7 +555,7 @@
             "references": {
               "ButtonIconPosition": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-content/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonIconPosition"
               }
             }
@@ -676,7 +676,7 @@
             "references": {
               "ButtonSize": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-content/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonSize"
               }
             }
@@ -717,7 +717,7 @@
             "references": {
               "ButtonType": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-content/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonType"
               }
             }
@@ -787,7 +787,7 @@
             "references": {
               "ButtonVariant": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-content/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonVariant"
               }
             }
@@ -936,7 +936,7 @@
             "references": {
               "CalloutHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-callout/sc-callout.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-content/components/src/components/sc-callout/sc-callout.tsx",
                 "id": "src/components/sc-callout/sc-callout.tsx::CalloutHeadingLevel"
               }
             }
@@ -985,7 +985,7 @@
             "references": {
               "CalloutTone": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-callout/sc-callout.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-content/components/src/components/sc-callout/sc-callout.tsx",
                 "id": "src/components/sc-callout/sc-callout.tsx::CalloutTone"
               }
             }
@@ -1141,7 +1141,7 @@
             "references": {
               "CardLandmark": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-card/sc-card.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-content/components/src/components/sc-card/sc-card.tsx",
                 "id": "src/components/sc-card/sc-card.tsx::CardLandmark"
               }
             }
@@ -1178,7 +1178,7 @@
             "references": {
               "CardPadding": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-card/sc-card.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-content/components/src/components/sc-card/sc-card.tsx",
                 "id": "src/components/sc-card/sc-card.tsx::CardPadding"
               }
             }
@@ -2194,7 +2194,7 @@
             "references": {
               "ContainerWidth": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-container/sc-container.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-content/components/src/components/sc-container/sc-container.tsx",
                 "id": "src/components/sc-container/sc-container.tsx::ContainerWidth"
               }
             }
@@ -3585,7 +3585,7 @@
             "references": {
               "ErrorSummaryItem": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-error-summary/sc-error-summary.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-content/components/src/components/sc-error-summary/sc-error-summary.tsx",
                 "id": "src/components/sc-error-summary/sc-error-summary.tsx::ErrorSummaryItem"
               }
             }
@@ -3642,7 +3642,7 @@
             "references": {
               "ErrorSummaryHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-error-summary/sc-error-summary.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-content/components/src/components/sc-error-summary/sc-error-summary.tsx",
                 "id": "src/components/sc-error-summary/sc-error-summary.tsx::ErrorSummaryHeadingLevel"
               }
             }
@@ -4154,7 +4154,7 @@
             "references": {
               "LanguageSwitchDetail": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-language-switch/sc-language-switch.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-content/components/src/components/sc-language-switch/sc-language-switch.tsx",
                 "id": "src/components/sc-language-switch/sc-language-switch.tsx::LanguageSwitchDetail"
               }
             }
@@ -5424,7 +5424,7 @@
             "references": {
               "ScSearchDetail": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-search/sc-search.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-content/components/src/components/sc-search/sc-search.tsx",
                 "id": "src/components/sc-search/sc-search.tsx::ScSearchDetail"
               }
             }
@@ -5944,7 +5944,7 @@
             "references": {
               "ServiceCardHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-service-card/sc-service-card.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-content/components/src/components/sc-service-card/sc-service-card.tsx",
                 "id": "src/components/sc-service-card/sc-service-card.tsx::ServiceCardHeadingLevel"
               }
             }
@@ -6246,7 +6246,7 @@
             "references": {
               "StatusTagTone": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-status-tag/sc-status-tag.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-content/components/src/components/sc-status-tag/sc-status-tag.tsx",
                 "id": "src/components/sc-status-tag/sc-status-tag.tsx::StatusTagTone"
               }
             }
@@ -6523,7 +6523,7 @@
             "references": {
               "SummaryListAppearance": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-summary-list/sc-summary-list.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-content/components/src/components/sc-summary-list/sc-summary-list.tsx",
                 "id": "src/components/sc-summary-list/sc-summary-list.tsx::SummaryListAppearance"
               }
             }
@@ -7088,7 +7088,7 @@
             "references": {
               "SortDirection": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-table/sc-table.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-content/components/src/components/sc-table/sc-table.tsx",
                 "id": "src/components/sc-table/sc-table.tsx::SortDirection"
               }
             }
@@ -7714,7 +7714,7 @@
             "references": {
               "TextInputType": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-text-input/sc-text-input.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-content/components/src/components/sc-text-input/sc-text-input.tsx",
                 "id": "src/components/sc-text-input/sc-text-input.tsx::TextInputType"
               }
             }
@@ -7799,7 +7799,7 @@
             "references": {
               "TextInputWidth": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-text-input/sc-text-input.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-content/components/src/components/sc-text-input/sc-text-input.tsx",
                 "id": "src/components/sc-text-input/sc-text-input.tsx::TextInputWidth"
               }
             }

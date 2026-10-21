@@ -8,16 +8,16 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { ButtonIconPosition, ButtonSize, ButtonType, ButtonVariant } from "./components/sc-button/sc-button";
 import { IconName } from "./icons/index";
 import { CalloutHeadingLevel, CalloutTone } from "./components/sc-callout/sc-callout";
-import { CardLandmark, CardPadding } from "./components/sc-card/sc-card";
+import { CardLandmark, CardPadding, CardVariant } from "./components/sc-card/sc-card";
 import { Channel } from "./i18n/strings";
+import { ChannelHeroSize } from "./components/sc-channel-hero/sc-channel-hero";
 import { HeadingLevel } from "./components/sc-text-input/field";
-import { ContainerWidth } from "./components/sc-container/sc-container";
 import { Parts } from "./components/sc-date-input/date";
 import { StringsInput } from "./components/sc-table/overrides";
 import { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
 import { LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
 import { ScSearchDetail } from "./components/sc-search/sc-search";
-import { ServiceCardHeadingLevel } from "./components/sc-service-card/sc-service-card";
+import { ServiceCardHeadingLevel, ServiceCardTint } from "./components/sc-service-card/sc-service-card";
 import { StatusTagTone } from "./components/sc-status-tag/sc-status-tag";
 import { SummaryListAppearance } from "./components/sc-summary-list/sc-summary-list";
 import { SortDirection } from "./components/sc-table/sc-table";
@@ -25,16 +25,16 @@ import { TextInputType, TextInputWidth } from "./components/sc-text-input/sc-tex
 export { ButtonIconPosition, ButtonSize, ButtonType, ButtonVariant } from "./components/sc-button/sc-button";
 export { IconName } from "./icons/index";
 export { CalloutHeadingLevel, CalloutTone } from "./components/sc-callout/sc-callout";
-export { CardLandmark, CardPadding } from "./components/sc-card/sc-card";
+export { CardLandmark, CardPadding, CardVariant } from "./components/sc-card/sc-card";
 export { Channel } from "./i18n/strings";
+export { ChannelHeroSize } from "./components/sc-channel-hero/sc-channel-hero";
 export { HeadingLevel } from "./components/sc-text-input/field";
-export { ContainerWidth } from "./components/sc-container/sc-container";
 export { Parts } from "./components/sc-date-input/date";
 export { StringsInput } from "./components/sc-table/overrides";
 export { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
 export { LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
 export { ScSearchDetail } from "./components/sc-search/sc-search";
-export { ServiceCardHeadingLevel } from "./components/sc-service-card/sc-service-card";
+export { ServiceCardHeadingLevel, ServiceCardTint } from "./components/sc-service-card/sc-service-card";
 export { StatusTagTone } from "./components/sc-status-tag/sc-status-tag";
 export { SummaryListAppearance } from "./components/sc-summary-list/sc-summary-list";
 export { SortDirection } from "./components/sc-table/sc-table";
@@ -187,11 +187,15 @@ export namespace Components {
         "toneLabel"?: string;
     }
     /**
-     * A surface container: surface fill, card radius, elevation 1. Groups related content,
-     * such as a life event and its steps, or the answers in one section of "Check your answers".
+     * A surface that groups related content: a life event and its steps, the answers in one
+     * section of "Check your answers", a totals card. Flat and outline-first (ELV-01): 12px
+     * corners, a 1px `outline-variant` edge, no shadow. Cards are never links (CMP-06): put the
+     * link on a heading or a button inside.
+     * v2 renders in light DOM (Stencil `scoped`, architecture §3.1): the host is the surface and
+     * your content stays its direct children, so `aria-labelledby` points at your own heading
+     * with an ordinary id. There is no `::part(surface)`; style the host (`.sc-card`) if you must.
      * With `landmark`, the card becomes a named region (`section`) or an `article`, labelled by
-     * the first heading inside it. The role and `aria-labelledby` go on the host, in light DOM,
-     * so the reference to the slotted heading resolves.
+     * the first heading inside it, or by `label`.
      */
     interface ScCard {
         /**
@@ -199,14 +203,19 @@ export namespace Components {
          */
         "label"?: string;
         /**
-          * Makes the card a landmark. `section` exposes a region (use it for a part of a page a user would want to jump to); `article` is for self-contained content. Both are named by the first heading (`h1`–`h6`) inside the card, or by `label`. Leave unset for a plain box.
+          * Makes the card a landmark. `section` exposes a region (a part of a page a user would want to jump to); `article` is for self-contained content. Both are named by the first heading (`h1`–`h6`) inside the card, or by `label`. Leave unset for a plain box.
          */
         "landmark"?: CardLandmark;
         /**
-          * Inner padding: `m` is 16px, `l` is 24px (default).
+          * Inner padding: `l` is 24px (default), `m` is 16px.
           * @default 'l'
          */
         "padding": CardPadding;
+        /**
+          * `outlined` (default): white surface with a 1px `outline-variant` edge, for groups on a page or a neutral band. `filled`: a quiet `surface-container` fill with no edge, for a totals card or a group inside an outlined area.
+          * @default 'outlined'
+         */
+        "variant": CardVariant;
     }
     /**
      * Points to another channel that also offers this service: "Also on Dubai Transport".
@@ -229,13 +238,24 @@ export namespace Components {
         "label"?: string;
     }
     /**
-     * The top wash of a channel page: a gradient from the channel's wash-start to wash-end
-     * colour (interpolated in OKLAB), holding an eyebrow, the page's `<h1>`, a lede and a
-     * search field. It follows `data-channel` and the theme like every component.
-     * The hero is full-bleed; its content sits in an `sc-container`, so it lines up with the
-     * page below.
+     * The top band of a channel's home or section page (E1): a flat `channel-subtle` band
+     * (decision Q-hero: no gradient), holding optional breadcrumbs, an eyebrow, the page's
+     * `<h1>` at display size, an optional lede, search and a "Popular now" row of suggestion
+     * chips. It follows `data-channel` and the theme like every component.
+     * The band is full-bleed; its content follows the page grid's margins (20, 32, 48, 80px)
+     * and the 1280px cap, so it lines up with `sc-container` content below. The hero never
+     * carries a carousel or autoplaying media.
      */
     interface ScChannelHero {
+        /**
+          * Overrides the label before the suggestion chips (default "Popular now" / "الأكثر طلبًا الآن").
+         */
+        "popularLabel"?: string;
+        /**
+          * The heading size from 1024px: `large` (display-large, 80px) for a channel's home page, `medium` (display-medium, 57px) for a section page. Below 1024px both step down (display-small from 600px, headline-large on phones).
+          * @default 'large'
+         */
+        "size": ChannelHeroSize;
     }
     /**
      * A checkbox: one of several choices in an `sc-checkbox-group`, or on its own for a single
@@ -339,19 +359,6 @@ export namespace Components {
           * @default false
          */
         "required": boolean;
-    }
-    /**
-     * Centres content and sets the page's outer margins from the layout tokens: 20px on
-     * phones, 32px from 600px, 48px from 1024px and 80px from 1440px, with content capped at
-     * `--sc-container-max` (1280px). `width="reading"` caps it at the 680px reading width instead,
-     * for question pages and running text.
-     */
-    interface ScContainer {
-        /**
-          * `page` (default) caps content at 1280px; `reading` caps it at 680px and keeps it at the start, aligned with page content.
-          * @default 'page'
-         */
-        "width": ContainerWidth;
     }
     /**
      * A date people know, such as a date of birth or the date on a document: Day, Month and
@@ -586,29 +593,6 @@ export namespace Components {
         "termsHref"?: string;
     }
     /**
-     * The layout grid: 4 columns on phones, 8 from 600px and 12 from 1024px, with gutters from
-     * the layout tokens (16, 20, 24px). Each child is a grid item.
-     * Item widths are set once for all children with `span`, `span-medium` and `span-expanded`
-     * (each falls back to the smaller one, and is capped at the number of columns), or per
-     * child with the `--sc-grid-span` custom property, e.g. `style="--sc-grid-span: 8"`.
-     * Service cards three to a row on desktop, two on tablets and one on phones:
-     * `<sc-grid span-medium="4" span-expanded="4">`.
-     */
-    interface ScGrid {
-        /**
-          * Columns each item spans on phones (4 columns). Defaults to the full width.
-         */
-        "span"?: number;
-        /**
-          * Columns each item spans from 1024px (12 columns). Defaults to `span-medium`.
-         */
-        "spanExpanded"?: number;
-        /**
-          * Columns each item spans from 600px (8 columns). Defaults to `span`.
-         */
-        "spanMedium"?: number;
-    }
-    /**
      * Switches to the same page in the other language. The label is always the other
      * language's own name, "العربية" on an English page and "English" on an Arabic page,
      * marked with its own `lang` and direction so screen readers pronounce it correctly.
@@ -666,17 +650,6 @@ export namespace Components {
           * @default false
          */
         "standalone": boolean;
-    }
-    /**
-     * Keeps a value left-to-right inside any text, e.g. a plate number, amount, reference or
-     * phone number in an Arabic sentence. Renders `<bdi dir="ltr">` around its content.
-     * Shadow DOM is used on purpose: the author's text stays in the light DOM (searchable,
-     * copyable, untouched), and layout follows the flat tree, so the `<bdi>` isolates the
-     * slotted text from the surrounding paragraph exactly as a `<bdi>` written in place would.
-     * The host is also `unicode-bidi: isolate; direction: ltr` (here and in sc.css), so the
-     * value is isolated even before the component upgrades.
-     */
-    interface ScLtr {
     }
     /**
      * The page frame: header, `<main>` and footer, with the page's language, direction and
@@ -890,14 +863,14 @@ export namespace Components {
         "value"?: string;
     }
     /**
-     * A link to a service: its title, the entity that owns it and an optional channel chip.
-     * There is no end chevron: the card is not itself a link, so nothing on it may look like one.
+     * A link to a service: its title, the entity that owns it, an optional icon and an optional
+     * channel chip, on a flat 12px card with a 1px edge (direction E, "Most used services").
      * Only the title is the link (CMP-06), so screen readers hear a short link name ("Renew
-     * vehicle registration"), not the whole card's text. The card is not wrapped in an `<a>`
-     * and the link's hit area is not stretched over the card: it is the title, grown to at
-     * least 44 x 44. The title is a heading containing the link, so heading navigation finds
-     * every service. The owning entity is the link's description. A chip that is a link is a
-     * separate link.
+     * vehicle registration"), with the entity as its description. The card is not wrapped in an
+     * `<a>` and the link's hit area is not stretched over the card: it is the title, grown to at
+     * least 44 × 44. The forward arrow at the top end is decorative: it is not a second link and
+     * is hidden from assistive technology. The title is a heading containing the link, so heading
+     * navigation finds every service. A chip that is a link is a separate link.
      */
     interface ScServiceCard {
         /**
@@ -913,6 +886,10 @@ export namespace Components {
           * Where the service starts. Required.
          */
         "href": string;
+        /**
+          * Colours the icon tile with a decorative topic tint (foundations §2.7) instead of the channel container: `blue` transport, `violet` residency, `rose` family, `orange` housing, `amber` bills, `green` health. Decorative only. Ignored without an icon.
+         */
+        "tint"?: ServiceCardTint;
     }
     /**
      * "Skip to main content": the first focusable element on every page. Hidden until it gets
@@ -1366,11 +1343,15 @@ declare global {
         new (): HTMLScCalloutElement;
     };
     /**
-     * A surface container: surface fill, card radius, elevation 1. Groups related content,
-     * such as a life event and its steps, or the answers in one section of "Check your answers".
+     * A surface that groups related content: a life event and its steps, the answers in one
+     * section of "Check your answers", a totals card. Flat and outline-first (ELV-01): 12px
+     * corners, a 1px `outline-variant` edge, no shadow. Cards are never links (CMP-06): put the
+     * link on a heading or a button inside.
+     * v2 renders in light DOM (Stencil `scoped`, architecture §3.1): the host is the surface and
+     * your content stays its direct children, so `aria-labelledby` points at your own heading
+     * with an ordinary id. There is no `::part(surface)`; style the host (`.sc-card`) if you must.
      * With `landmark`, the card becomes a named region (`section`) or an `article`, labelled by
-     * the first heading inside it. The role and `aria-labelledby` go on the host, in light DOM,
-     * so the reference to the slotted heading resolves.
+     * the first heading inside it, or by `label`.
      */
     interface HTMLScCardElement extends Components.ScCard, HTMLStencilElement {
     }
@@ -1391,11 +1372,13 @@ declare global {
         new (): HTMLScChannelChipElement;
     };
     /**
-     * The top wash of a channel page: a gradient from the channel's wash-start to wash-end
-     * colour (interpolated in OKLAB), holding an eyebrow, the page's `<h1>`, a lede and a
-     * search field. It follows `data-channel` and the theme like every component.
-     * The hero is full-bleed; its content sits in an `sc-container`, so it lines up with the
-     * page below.
+     * The top band of a channel's home or section page (E1): a flat `channel-subtle` band
+     * (decision Q-hero: no gradient), holding optional breadcrumbs, an eyebrow, the page's
+     * `<h1>` at display size, an optional lede, search and a "Popular now" row of suggestion
+     * chips. It follows `data-channel` and the theme like every component.
+     * The band is full-bleed; its content follows the page grid's margins (20, 32, 48, 80px)
+     * and the 1280px cap, so it lines up with `sc-container` content below. The hero never
+     * carries a carousel or autoplaying media.
      */
     interface HTMLScChannelHeroElement extends Components.ScChannelHero, HTMLStencilElement {
     }
@@ -1455,18 +1438,6 @@ declare global {
     var HTMLScCheckboxGroupElement: {
         prototype: HTMLScCheckboxGroupElement;
         new (): HTMLScCheckboxGroupElement;
-    };
-    /**
-     * Centres content and sets the page's outer margins from the layout tokens: 20px on
-     * phones, 32px from 600px, 48px from 1024px and 80px from 1440px, with content capped at
-     * `--sc-container-max` (1280px). `width="reading"` caps it at the 680px reading width instead,
-     * for question pages and running text.
-     */
-    interface HTMLScContainerElement extends Components.ScContainer, HTMLStencilElement {
-    }
-    var HTMLScContainerElement: {
-        prototype: HTMLScContainerElement;
-        new (): HTMLScContainerElement;
     };
     interface HTMLScDateInputElementEventMap {
         "scInput": { value: string } & Parts;
@@ -1559,21 +1530,6 @@ declare global {
         prototype: HTMLScFooterElement;
         new (): HTMLScFooterElement;
     };
-    /**
-     * The layout grid: 4 columns on phones, 8 from 600px and 12 from 1024px, with gutters from
-     * the layout tokens (16, 20, 24px). Each child is a grid item.
-     * Item widths are set once for all children with `span`, `span-medium` and `span-expanded`
-     * (each falls back to the smaller one, and is capped at the number of columns), or per
-     * child with the `--sc-grid-span` custom property, e.g. `style="--sc-grid-span: 8"`.
-     * Service cards three to a row on desktop, two on tablets and one on phones:
-     * `<sc-grid span-medium="4" span-expanded="4">`.
-     */
-    interface HTMLScGridElement extends Components.ScGrid, HTMLStencilElement {
-    }
-    var HTMLScGridElement: {
-        prototype: HTMLScGridElement;
-        new (): HTMLScGridElement;
-    };
     interface HTMLScLanguageSwitchElementEventMap {
         "scSwitch": LanguageSwitchDetail;
     }
@@ -1616,21 +1572,6 @@ declare global {
     var HTMLScLinkElement: {
         prototype: HTMLScLinkElement;
         new (): HTMLScLinkElement;
-    };
-    /**
-     * Keeps a value left-to-right inside any text, e.g. a plate number, amount, reference or
-     * phone number in an Arabic sentence. Renders `<bdi dir="ltr">` around its content.
-     * Shadow DOM is used on purpose: the author's text stays in the light DOM (searchable,
-     * copyable, untouched), and layout follows the flat tree, so the `<bdi>` isolates the
-     * slotted text from the surrounding paragraph exactly as a `<bdi>` written in place would.
-     * The host is also `unicode-bidi: isolate; direction: ltr` (here and in sc.css), so the
-     * value is isolated even before the component upgrades.
-     */
-    interface HTMLScLtrElement extends Components.ScLtr, HTMLStencilElement {
-    }
-    var HTMLScLtrElement: {
-        prototype: HTMLScLtrElement;
-        new (): HTMLScLtrElement;
     };
     /**
      * The page frame: header, `<main>` and footer, with the page's language, direction and
@@ -1743,14 +1684,14 @@ declare global {
         new (): HTMLScSelectElement;
     };
     /**
-     * A link to a service: its title, the entity that owns it and an optional channel chip.
-     * There is no end chevron: the card is not itself a link, so nothing on it may look like one.
+     * A link to a service: its title, the entity that owns it, an optional icon and an optional
+     * channel chip, on a flat 12px card with a 1px edge (direction E, "Most used services").
      * Only the title is the link (CMP-06), so screen readers hear a short link name ("Renew
-     * vehicle registration"), not the whole card's text. The card is not wrapped in an `<a>`
-     * and the link's hit area is not stretched over the card: it is the title, grown to at
-     * least 44 x 44. The title is a heading containing the link, so heading navigation finds
-     * every service. The owning entity is the link's description. A chip that is a link is a
-     * separate link.
+     * vehicle registration"), with the entity as its description. The card is not wrapped in an
+     * `<a>` and the link's hit area is not stretched over the card: it is the title, grown to at
+     * least 44 × 44. The forward arrow at the top end is decorative: it is not a second link and
+     * is hidden from assistive technology. The title is a heading containing the link, so heading
+     * navigation finds every service. A chip that is a link is a separate link.
      */
     interface HTMLScServiceCardElement extends Components.ScServiceCard, HTMLStencilElement {
     }
@@ -1937,15 +1878,12 @@ declare global {
         "sc-channel-hero": HTMLScChannelHeroElement;
         "sc-checkbox": HTMLScCheckboxElement;
         "sc-checkbox-group": HTMLScCheckboxGroupElement;
-        "sc-container": HTMLScContainerElement;
         "sc-date-input": HTMLScDateInputElement;
         "sc-date-range": HTMLScDateRangeElement;
         "sc-error-summary": HTMLScErrorSummaryElement;
         "sc-footer": HTMLScFooterElement;
-        "sc-grid": HTMLScGridElement;
         "sc-language-switch": HTMLScLanguageSwitchElement;
         "sc-link": HTMLScLinkElement;
-        "sc-ltr": HTMLScLtrElement;
         "sc-page": HTMLScPageElement;
         "sc-radio": HTMLScRadioElement;
         "sc-radio-group": HTMLScRadioGroupElement;
@@ -2113,11 +2051,15 @@ declare namespace LocalJSX {
         "toneLabel"?: string;
     }
     /**
-     * A surface container: surface fill, card radius, elevation 1. Groups related content,
-     * such as a life event and its steps, or the answers in one section of "Check your answers".
+     * A surface that groups related content: a life event and its steps, the answers in one
+     * section of "Check your answers", a totals card. Flat and outline-first (ELV-01): 12px
+     * corners, a 1px `outline-variant` edge, no shadow. Cards are never links (CMP-06): put the
+     * link on a heading or a button inside.
+     * v2 renders in light DOM (Stencil `scoped`, architecture §3.1): the host is the surface and
+     * your content stays its direct children, so `aria-labelledby` points at your own heading
+     * with an ordinary id. There is no `::part(surface)`; style the host (`.sc-card`) if you must.
      * With `landmark`, the card becomes a named region (`section`) or an `article`, labelled by
-     * the first heading inside it. The role and `aria-labelledby` go on the host, in light DOM,
-     * so the reference to the slotted heading resolves.
+     * the first heading inside it, or by `label`.
      */
     interface ScCard {
         /**
@@ -2125,14 +2067,19 @@ declare namespace LocalJSX {
          */
         "label"?: string;
         /**
-          * Makes the card a landmark. `section` exposes a region (use it for a part of a page a user would want to jump to); `article` is for self-contained content. Both are named by the first heading (`h1`–`h6`) inside the card, or by `label`. Leave unset for a plain box.
+          * Makes the card a landmark. `section` exposes a region (a part of a page a user would want to jump to); `article` is for self-contained content. Both are named by the first heading (`h1`–`h6`) inside the card, or by `label`. Leave unset for a plain box.
          */
         "landmark"?: CardLandmark;
         /**
-          * Inner padding: `m` is 16px, `l` is 24px (default).
+          * Inner padding: `l` is 24px (default), `m` is 16px.
           * @default 'l'
          */
         "padding"?: CardPadding;
+        /**
+          * `outlined` (default): white surface with a 1px `outline-variant` edge, for groups on a page or a neutral band. `filled`: a quiet `surface-container` fill with no edge, for a totals card or a group inside an outlined area.
+          * @default 'outlined'
+         */
+        "variant"?: CardVariant;
     }
     /**
      * Points to another channel that also offers this service: "Also on Dubai Transport".
@@ -2155,13 +2102,24 @@ declare namespace LocalJSX {
         "label"?: string;
     }
     /**
-     * The top wash of a channel page: a gradient from the channel's wash-start to wash-end
-     * colour (interpolated in OKLAB), holding an eyebrow, the page's `<h1>`, a lede and a
-     * search field. It follows `data-channel` and the theme like every component.
-     * The hero is full-bleed; its content sits in an `sc-container`, so it lines up with the
-     * page below.
+     * The top band of a channel's home or section page (E1): a flat `channel-subtle` band
+     * (decision Q-hero: no gradient), holding optional breadcrumbs, an eyebrow, the page's
+     * `<h1>` at display size, an optional lede, search and a "Popular now" row of suggestion
+     * chips. It follows `data-channel` and the theme like every component.
+     * The band is full-bleed; its content follows the page grid's margins (20, 32, 48, 80px)
+     * and the 1280px cap, so it lines up with `sc-container` content below. The hero never
+     * carries a carousel or autoplaying media.
      */
     interface ScChannelHero {
+        /**
+          * Overrides the label before the suggestion chips (default "Popular now" / "الأكثر طلبًا الآن").
+         */
+        "popularLabel"?: string;
+        /**
+          * The heading size from 1024px: `large` (display-large, 80px) for a channel's home page, `medium` (display-medium, 57px) for a section page. Below 1024px both step down (display-small from 600px, headline-large on phones).
+          * @default 'large'
+         */
+        "size"?: ChannelHeroSize;
     }
     /**
      * A checkbox: one of several choices in an `sc-checkbox-group`, or on its own for a single
@@ -2281,19 +2239,6 @@ declare namespace LocalJSX {
           * @default false
          */
         "required"?: boolean;
-    }
-    /**
-     * Centres content and sets the page's outer margins from the layout tokens: 20px on
-     * phones, 32px from 600px, 48px from 1024px and 80px from 1440px, with content capped at
-     * `--sc-container-max` (1280px). `width="reading"` caps it at the 680px reading width instead,
-     * for question pages and running text.
-     */
-    interface ScContainer {
-        /**
-          * `page` (default) caps content at 1280px; `reading` caps it at 680px and keeps it at the start, aligned with page content.
-          * @default 'page'
-         */
-        "width"?: ContainerWidth;
     }
     /**
      * A date people know, such as a date of birth or the date on a document: Day, Month and
@@ -2540,29 +2485,6 @@ declare namespace LocalJSX {
         "termsHref"?: string;
     }
     /**
-     * The layout grid: 4 columns on phones, 8 from 600px and 12 from 1024px, with gutters from
-     * the layout tokens (16, 20, 24px). Each child is a grid item.
-     * Item widths are set once for all children with `span`, `span-medium` and `span-expanded`
-     * (each falls back to the smaller one, and is capped at the number of columns), or per
-     * child with the `--sc-grid-span` custom property, e.g. `style="--sc-grid-span: 8"`.
-     * Service cards three to a row on desktop, two on tablets and one on phones:
-     * `<sc-grid span-medium="4" span-expanded="4">`.
-     */
-    interface ScGrid {
-        /**
-          * Columns each item spans on phones (4 columns). Defaults to the full width.
-         */
-        "span"?: number;
-        /**
-          * Columns each item spans from 1024px (12 columns). Defaults to `span-medium`.
-         */
-        "spanExpanded"?: number;
-        /**
-          * Columns each item spans from 600px (8 columns). Defaults to `span`.
-         */
-        "spanMedium"?: number;
-    }
-    /**
      * Switches to the same page in the other language. The label is always the other
      * language's own name, "العربية" on an English page and "English" on an Arabic page,
      * marked with its own `lang` and direction so screen readers pronounce it correctly.
@@ -2624,17 +2546,6 @@ declare namespace LocalJSX {
           * @default false
          */
         "standalone"?: boolean;
-    }
-    /**
-     * Keeps a value left-to-right inside any text, e.g. a plate number, amount, reference or
-     * phone number in an Arabic sentence. Renders `<bdi dir="ltr">` around its content.
-     * Shadow DOM is used on purpose: the author's text stays in the light DOM (searchable,
-     * copyable, untouched), and layout follows the flat tree, so the `<bdi>` isolates the
-     * slotted text from the surrounding paragraph exactly as a `<bdi>` written in place would.
-     * The host is also `unicode-bidi: isolate; direction: ltr` (here and in sc.css), so the
-     * value is isolated even before the component upgrades.
-     */
-    interface ScLtr {
     }
     /**
      * The page frame: header, `<main>` and footer, with the page's language, direction and
@@ -2864,14 +2775,14 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     /**
-     * A link to a service: its title, the entity that owns it and an optional channel chip.
-     * There is no end chevron: the card is not itself a link, so nothing on it may look like one.
+     * A link to a service: its title, the entity that owns it, an optional icon and an optional
+     * channel chip, on a flat 12px card with a 1px edge (direction E, "Most used services").
      * Only the title is the link (CMP-06), so screen readers hear a short link name ("Renew
-     * vehicle registration"), not the whole card's text. The card is not wrapped in an `<a>`
-     * and the link's hit area is not stretched over the card: it is the title, grown to at
-     * least 44 x 44. The title is a heading containing the link, so heading navigation finds
-     * every service. The owning entity is the link's description. A chip that is a link is a
-     * separate link.
+     * vehicle registration"), with the entity as its description. The card is not wrapped in an
+     * `<a>` and the link's hit area is not stretched over the card: it is the title, grown to at
+     * least 44 × 44. The forward arrow at the top end is decorative: it is not a second link and
+     * is hidden from assistive technology. The title is a heading containing the link, so heading
+     * navigation finds every service. A chip that is a link is a separate link.
      */
     interface ScServiceCard {
         /**
@@ -2887,6 +2798,10 @@ declare namespace LocalJSX {
           * Where the service starts. Required.
          */
         "href": string;
+        /**
+          * Colours the icon tile with a decorative topic tint (foundations §2.7) instead of the channel container: `blue` transport, `violet` residency, `rose` family, `orange` housing, `amber` bills, `green` health. Decorative only. Ignored without an icon.
+         */
+        "tint"?: ServiceCardTint;
     }
     /**
      * "Skip to main content": the first focusable element on every page. Hidden until it gets
@@ -3302,12 +3217,17 @@ declare namespace LocalJSX {
     interface ScCardAttributes {
         "landmark": CardLandmark;
         "padding": CardPadding;
+        "variant": CardVariant;
         "label": string;
     }
     interface ScChannelChipAttributes {
         "channel": Channel;
         "href": string;
         "label": string;
+    }
+    interface ScChannelHeroAttributes {
+        "size": ChannelHeroSize;
+        "popularLabel": string;
     }
     interface ScCheckboxAttributes {
         "name": string;
@@ -3330,9 +3250,6 @@ declare namespace LocalJSX {
         "disabled": boolean;
         "inline": boolean;
         "headingLevel": HeadingLevel;
-    }
-    interface ScContainerAttributes {
-        "width": ContainerWidth;
     }
     interface ScDateInputAttributes {
         "label": string;
@@ -3378,11 +3295,6 @@ declare namespace LocalJSX {
         "accessibilityHref": string;
         "privacyHref": string;
         "termsHref": string;
-    }
-    interface ScGridAttributes {
-        "span": number;
-        "spanMedium": number;
-        "spanExpanded": number;
     }
     interface ScLanguageSwitchAttributes {
         "href": string;
@@ -3444,6 +3356,7 @@ declare namespace LocalJSX {
         "href": string;
         "headingLevel": ServiceCardHeadingLevel;
         "entity": string;
+        "tint": ServiceCardTint;
     }
     interface ScSkipLinkAttributes {
         "href": string;
@@ -3527,18 +3440,15 @@ declare namespace LocalJSX {
         "sc-callout": Omit<ScCallout, keyof ScCalloutAttributes> & { [K in keyof ScCallout & keyof ScCalloutAttributes]?: ScCallout[K] } & { [K in keyof ScCallout & keyof ScCalloutAttributes as `attr:${K}`]?: ScCalloutAttributes[K] } & { [K in keyof ScCallout & keyof ScCalloutAttributes as `prop:${K}`]?: ScCallout[K] };
         "sc-card": Omit<ScCard, keyof ScCardAttributes> & { [K in keyof ScCard & keyof ScCardAttributes]?: ScCard[K] } & { [K in keyof ScCard & keyof ScCardAttributes as `attr:${K}`]?: ScCardAttributes[K] } & { [K in keyof ScCard & keyof ScCardAttributes as `prop:${K}`]?: ScCard[K] };
         "sc-channel-chip": Omit<ScChannelChip, keyof ScChannelChipAttributes> & { [K in keyof ScChannelChip & keyof ScChannelChipAttributes]?: ScChannelChip[K] } & { [K in keyof ScChannelChip & keyof ScChannelChipAttributes as `attr:${K}`]?: ScChannelChipAttributes[K] } & { [K in keyof ScChannelChip & keyof ScChannelChipAttributes as `prop:${K}`]?: ScChannelChip[K] } & OneOf<"channel", ScChannelChip["channel"], ScChannelChipAttributes["channel"]>;
-        "sc-channel-hero": ScChannelHero;
+        "sc-channel-hero": Omit<ScChannelHero, keyof ScChannelHeroAttributes> & { [K in keyof ScChannelHero & keyof ScChannelHeroAttributes]?: ScChannelHero[K] } & { [K in keyof ScChannelHero & keyof ScChannelHeroAttributes as `attr:${K}`]?: ScChannelHeroAttributes[K] } & { [K in keyof ScChannelHero & keyof ScChannelHeroAttributes as `prop:${K}`]?: ScChannelHero[K] };
         "sc-checkbox": Omit<ScCheckbox, keyof ScCheckboxAttributes> & { [K in keyof ScCheckbox & keyof ScCheckboxAttributes]?: ScCheckbox[K] } & { [K in keyof ScCheckbox & keyof ScCheckboxAttributes as `attr:${K}`]?: ScCheckboxAttributes[K] } & { [K in keyof ScCheckbox & keyof ScCheckboxAttributes as `prop:${K}`]?: ScCheckbox[K] };
         "sc-checkbox-group": Omit<ScCheckboxGroup, keyof ScCheckboxGroupAttributes> & { [K in keyof ScCheckboxGroup & keyof ScCheckboxGroupAttributes]?: ScCheckboxGroup[K] } & { [K in keyof ScCheckboxGroup & keyof ScCheckboxGroupAttributes as `attr:${K}`]?: ScCheckboxGroupAttributes[K] } & { [K in keyof ScCheckboxGroup & keyof ScCheckboxGroupAttributes as `prop:${K}`]?: ScCheckboxGroup[K] };
-        "sc-container": Omit<ScContainer, keyof ScContainerAttributes> & { [K in keyof ScContainer & keyof ScContainerAttributes]?: ScContainer[K] } & { [K in keyof ScContainer & keyof ScContainerAttributes as `attr:${K}`]?: ScContainerAttributes[K] } & { [K in keyof ScContainer & keyof ScContainerAttributes as `prop:${K}`]?: ScContainer[K] };
         "sc-date-input": Omit<ScDateInput, keyof ScDateInputAttributes> & { [K in keyof ScDateInput & keyof ScDateInputAttributes]?: ScDateInput[K] } & { [K in keyof ScDateInput & keyof ScDateInputAttributes as `attr:${K}`]?: ScDateInputAttributes[K] } & { [K in keyof ScDateInput & keyof ScDateInputAttributes as `prop:${K}`]?: ScDateInput[K] };
         "sc-date-range": Omit<ScDateRange, keyof ScDateRangeAttributes> & { [K in keyof ScDateRange & keyof ScDateRangeAttributes]?: ScDateRange[K] } & { [K in keyof ScDateRange & keyof ScDateRangeAttributes as `attr:${K}`]?: ScDateRangeAttributes[K] } & { [K in keyof ScDateRange & keyof ScDateRangeAttributes as `prop:${K}`]?: ScDateRange[K] };
         "sc-error-summary": Omit<ScErrorSummary, keyof ScErrorSummaryAttributes> & { [K in keyof ScErrorSummary & keyof ScErrorSummaryAttributes]?: ScErrorSummary[K] } & { [K in keyof ScErrorSummary & keyof ScErrorSummaryAttributes as `attr:${K}`]?: ScErrorSummaryAttributes[K] } & { [K in keyof ScErrorSummary & keyof ScErrorSummaryAttributes as `prop:${K}`]?: ScErrorSummary[K] };
         "sc-footer": Omit<ScFooter, keyof ScFooterAttributes> & { [K in keyof ScFooter & keyof ScFooterAttributes]?: ScFooter[K] } & { [K in keyof ScFooter & keyof ScFooterAttributes as `attr:${K}`]?: ScFooterAttributes[K] } & { [K in keyof ScFooter & keyof ScFooterAttributes as `prop:${K}`]?: ScFooter[K] };
-        "sc-grid": Omit<ScGrid, keyof ScGridAttributes> & { [K in keyof ScGrid & keyof ScGridAttributes]?: ScGrid[K] } & { [K in keyof ScGrid & keyof ScGridAttributes as `attr:${K}`]?: ScGridAttributes[K] } & { [K in keyof ScGrid & keyof ScGridAttributes as `prop:${K}`]?: ScGrid[K] };
         "sc-language-switch": Omit<ScLanguageSwitch, keyof ScLanguageSwitchAttributes> & { [K in keyof ScLanguageSwitch & keyof ScLanguageSwitchAttributes]?: ScLanguageSwitch[K] } & { [K in keyof ScLanguageSwitch & keyof ScLanguageSwitchAttributes as `attr:${K}`]?: ScLanguageSwitchAttributes[K] } & { [K in keyof ScLanguageSwitch & keyof ScLanguageSwitchAttributes as `prop:${K}`]?: ScLanguageSwitch[K] };
         "sc-link": Omit<ScLink, keyof ScLinkAttributes> & { [K in keyof ScLink & keyof ScLinkAttributes]?: ScLink[K] } & { [K in keyof ScLink & keyof ScLinkAttributes as `attr:${K}`]?: ScLinkAttributes[K] } & { [K in keyof ScLink & keyof ScLinkAttributes as `prop:${K}`]?: ScLink[K] };
-        "sc-ltr": ScLtr;
         "sc-page": Omit<ScPage, keyof ScPageAttributes> & { [K in keyof ScPage & keyof ScPageAttributes]?: ScPage[K] } & { [K in keyof ScPage & keyof ScPageAttributes as `attr:${K}`]?: ScPageAttributes[K] } & { [K in keyof ScPage & keyof ScPageAttributes as `prop:${K}`]?: ScPage[K] };
         "sc-radio": Omit<ScRadio, keyof ScRadioAttributes> & { [K in keyof ScRadio & keyof ScRadioAttributes]?: ScRadio[K] } & { [K in keyof ScRadio & keyof ScRadioAttributes as `attr:${K}`]?: ScRadioAttributes[K] } & { [K in keyof ScRadio & keyof ScRadioAttributes as `prop:${K}`]?: ScRadio[K] } & OneOf<"value", ScRadio["value"], ScRadioAttributes["value"]>;
         "sc-radio-group": Omit<ScRadioGroup, keyof ScRadioGroupAttributes> & { [K in keyof ScRadioGroup & keyof ScRadioGroupAttributes]?: ScRadioGroup[K] } & { [K in keyof ScRadioGroup & keyof ScRadioGroupAttributes as `attr:${K}`]?: ScRadioGroupAttributes[K] } & { [K in keyof ScRadioGroup & keyof ScRadioGroupAttributes as `prop:${K}`]?: ScRadioGroup[K] };
@@ -3599,11 +3509,15 @@ declare module "@stencil/core" {
              */
             "sc-callout": LocalJSX.IntrinsicElements["sc-callout"] & JSXBase.HTMLAttributes<HTMLScCalloutElement>;
             /**
-             * A surface container: surface fill, card radius, elevation 1. Groups related content,
-             * such as a life event and its steps, or the answers in one section of "Check your answers".
+             * A surface that groups related content: a life event and its steps, the answers in one
+             * section of "Check your answers", a totals card. Flat and outline-first (ELV-01): 12px
+             * corners, a 1px `outline-variant` edge, no shadow. Cards are never links (CMP-06): put the
+             * link on a heading or a button inside.
+             * v2 renders in light DOM (Stencil `scoped`, architecture §3.1): the host is the surface and
+             * your content stays its direct children, so `aria-labelledby` points at your own heading
+             * with an ordinary id. There is no `::part(surface)`; style the host (`.sc-card`) if you must.
              * With `landmark`, the card becomes a named region (`section`) or an `article`, labelled by
-             * the first heading inside it. The role and `aria-labelledby` go on the host, in light DOM,
-             * so the reference to the slotted heading resolves.
+             * the first heading inside it, or by `label`.
              */
             "sc-card": LocalJSX.IntrinsicElements["sc-card"] & JSXBase.HTMLAttributes<HTMLScCardElement>;
             /**
@@ -3614,11 +3528,13 @@ declare module "@stencil/core" {
              */
             "sc-channel-chip": LocalJSX.IntrinsicElements["sc-channel-chip"] & JSXBase.HTMLAttributes<HTMLScChannelChipElement>;
             /**
-             * The top wash of a channel page: a gradient from the channel's wash-start to wash-end
-             * colour (interpolated in OKLAB), holding an eyebrow, the page's `<h1>`, a lede and a
-             * search field. It follows `data-channel` and the theme like every component.
-             * The hero is full-bleed; its content sits in an `sc-container`, so it lines up with the
-             * page below.
+             * The top band of a channel's home or section page (E1): a flat `channel-subtle` band
+             * (decision Q-hero: no gradient), holding optional breadcrumbs, an eyebrow, the page's
+             * `<h1>` at display size, an optional lede, search and a "Popular now" row of suggestion
+             * chips. It follows `data-channel` and the theme like every component.
+             * The band is full-bleed; its content follows the page grid's margins (20, 32, 48, 80px)
+             * and the 1280px cap, so it lines up with `sc-container` content below. The hero never
+             * carries a carousel or autoplaying media.
              */
             "sc-channel-hero": LocalJSX.IntrinsicElements["sc-channel-hero"] & JSXBase.HTMLAttributes<HTMLScChannelHeroElement>;
             /**
@@ -3642,13 +3558,6 @@ declare module "@stencil/core" {
              * form-associated only to report `valueMissing` when `required` and nothing is checked.
              */
             "sc-checkbox-group": LocalJSX.IntrinsicElements["sc-checkbox-group"] & JSXBase.HTMLAttributes<HTMLScCheckboxGroupElement>;
-            /**
-             * Centres content and sets the page's outer margins from the layout tokens: 20px on
-             * phones, 32px from 600px, 48px from 1024px and 80px from 1440px, with content capped at
-             * `--sc-container-max` (1280px). `width="reading"` caps it at the 680px reading width instead,
-             * for question pages and running text.
-             */
-            "sc-container": LocalJSX.IntrinsicElements["sc-container"] & JSXBase.HTMLAttributes<HTMLScContainerElement>;
             /**
              * A date people know, such as a date of birth or the date on a document: Day, Month and
              * Year boxes (يوم / شهر / سنة) with the numeric keyboard.
@@ -3696,16 +3605,6 @@ declare module "@stencil/core" {
              */
             "sc-footer": LocalJSX.IntrinsicElements["sc-footer"] & JSXBase.HTMLAttributes<HTMLScFooterElement>;
             /**
-             * The layout grid: 4 columns on phones, 8 from 600px and 12 from 1024px, with gutters from
-             * the layout tokens (16, 20, 24px). Each child is a grid item.
-             * Item widths are set once for all children with `span`, `span-medium` and `span-expanded`
-             * (each falls back to the smaller one, and is capped at the number of columns), or per
-             * child with the `--sc-grid-span` custom property, e.g. `style="--sc-grid-span: 8"`.
-             * Service cards three to a row on desktop, two on tablets and one on phones:
-             * `<sc-grid span-medium="4" span-expanded="4">`.
-             */
-            "sc-grid": LocalJSX.IntrinsicElements["sc-grid"] & JSXBase.HTMLAttributes<HTMLScGridElement>;
-            /**
              * Switches to the same page in the other language. The label is always the other
              * language's own name, "العربية" on an English page and "English" on an Arabic page,
              * marked with its own `lang` and direction so screen readers pronounce it correctly.
@@ -3727,16 +3626,6 @@ declare module "@stencil/core" {
              *   "(opens in new tab)" in the page language.
              */
             "sc-link": LocalJSX.IntrinsicElements["sc-link"] & JSXBase.HTMLAttributes<HTMLScLinkElement>;
-            /**
-             * Keeps a value left-to-right inside any text, e.g. a plate number, amount, reference or
-             * phone number in an Arabic sentence. Renders `<bdi dir="ltr">` around its content.
-             * Shadow DOM is used on purpose: the author's text stays in the light DOM (searchable,
-             * copyable, untouched), and layout follows the flat tree, so the `<bdi>` isolates the
-             * slotted text from the surrounding paragraph exactly as a `<bdi>` written in place would.
-             * The host is also `unicode-bidi: isolate; direction: ltr` (here and in sc.css), so the
-             * value is isolated even before the component upgrades.
-             */
-            "sc-ltr": LocalJSX.IntrinsicElements["sc-ltr"] & JSXBase.HTMLAttributes<HTMLScLtrElement>;
             /**
              * The page frame: header, `<main>` and footer, with the page's language, direction and
              * channel on its root.
@@ -3790,14 +3679,14 @@ declare module "@stencil/core" {
              */
             "sc-select": LocalJSX.IntrinsicElements["sc-select"] & JSXBase.HTMLAttributes<HTMLScSelectElement>;
             /**
-             * A link to a service: its title, the entity that owns it and an optional channel chip.
-             * There is no end chevron: the card is not itself a link, so nothing on it may look like one.
+             * A link to a service: its title, the entity that owns it, an optional icon and an optional
+             * channel chip, on a flat 12px card with a 1px edge (direction E, "Most used services").
              * Only the title is the link (CMP-06), so screen readers hear a short link name ("Renew
-             * vehicle registration"), not the whole card's text. The card is not wrapped in an `<a>`
-             * and the link's hit area is not stretched over the card: it is the title, grown to at
-             * least 44 x 44. The title is a heading containing the link, so heading navigation finds
-             * every service. The owning entity is the link's description. A chip that is a link is a
-             * separate link.
+             * vehicle registration"), with the entity as its description. The card is not wrapped in an
+             * `<a>` and the link's hit area is not stretched over the card: it is the title, grown to at
+             * least 44 × 44. The forward arrow at the top end is decorative: it is not a second link and
+             * is hidden from assistive technology. The title is a heading containing the link, so heading
+             * navigation finds every service. A chip that is a link is a separate link.
              */
             "sc-service-card": LocalJSX.IntrinsicElements["sc-service-card"] & JSXBase.HTMLAttributes<HTMLScServiceCardElement>;
             /**
