@@ -187,7 +187,7 @@ const collect = () => {
   };
 };
 
-const browser = await puppeteer.launch({ executablePath: browserPath, headless: true, args: ['--hide-scrollbars', '--no-first-run'] });
+const browser = await puppeteer.launch({ executablePath: browserPath, headless: true, args: ['--hide-scrollbars', '--no-first-run', ...(process.env.CI ? ['--no-sandbox'] : [])] });
 const variants = [
   ['lazy', 'en'],
   ['lazy', 'ar'],

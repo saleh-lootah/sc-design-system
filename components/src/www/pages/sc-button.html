@@ -1,122 +1,127 @@
-<h1 class="pg-title sc-type-heading-xl" data-ar="الزر">Button</h1>
-<p class="pg-lede sc-type-body-m" data-ar="يبدأ إجراءً. تصف التسمية الإجراء بمصدر، مع زر أساسي واحد في كل صفحة.">
+<h1 class="pg-title sc-type-headline-large" data-ar="الزر">Button</h1>
+<p class="pg-lede sc-type-body-large" data-ar="يبدأ إجراءً. تصف التسمية الإجراء بمصدر، مع زر أساسي واحد في كل صفحة.">
   Starts an action. Label it with a verb, and use one primary button per page.
 </p>
 
 <section class="pg-section" aria-labelledby="b-variants">
-  <h2 id="b-variants" class="sc-type-heading-m" data-ar="الأنواع">Variants</h2>
+  <h2 id="b-variants" class="sc-type-headline-small" data-ar="الأنواع">Variants</h2>
   <div class="pg-card">
     <div class="pg-grid">
       <div class="pg-cell">
         <span class="pg-label">primary</span>
-        <sc-button variant="primary" data-ar="متابعة">Continue</sc-button>
+        <sc-button variant="primary"><span data-ar="متابعة">Continue</span></sc-button>
       </div>
       <div class="pg-cell">
         <span class="pg-label">secondary</span>
-        <sc-button variant="secondary" data-ar="حفظ وإكمال لاحقًا">Save and finish later</sc-button>
+        <sc-button variant="secondary"><span data-ar="حفظ وإكمال لاحقًا">Save and finish later</span></sc-button>
       </div>
       <div class="pg-cell">
         <span class="pg-label">tertiary</span>
-        <sc-button variant="tertiary" data-ar="إلغاء">Cancel</sc-button>
+        <sc-button variant="tertiary"><span data-ar="إلغاء">Cancel</span></sc-button>
+      </div>
+      <div class="pg-cell">
+        <span class="pg-label">handoff (U3)</span>
+        <sc-button variant="handoff"><span data-ar="تسجيل الدخول باستخدام الهوية الرقمية">Sign in with UAE PASS</span></sc-button>
       </div>
       <div class="pg-cell">
         <span class="pg-label">destructive</span>
-        <sc-button variant="destructive" data-ar="حذف المسودة">Delete draft</sc-button>
+        <sc-button variant="destructive"><span data-ar="حذف المسودة">Delete draft</span></sc-button>
       </div>
     </div>
   </div>
 </section>
 
 <section class="pg-section" aria-labelledby="b-sizes">
-  <h2 id="b-sizes" class="sc-type-heading-m" data-ar="الأحجام">Sizes</h2>
+  <h2 id="b-sizes" class="sc-type-headline-small" data-ar="الأحجام">Sizes</h2>
   <div class="pg-card">
     <div class="pg-row">
-      <span class="pg-label" style="min-inline-size: 80px">l · 54px</span>
-      <sc-button data-ar="متابعة">Continue</sc-button>
-      <sc-button variant="secondary" data-ar="تغيير">Change</sc-button>
-      <sc-button variant="tertiary" data-ar="إلغاء">Cancel</sc-button>
-      <sc-button variant="destructive" data-ar="حذف">Delete</sc-button>
+      <span class="pg-label" style="min-inline-size: 80px">l · 56px</span>
+      <sc-button><span data-ar="متابعة">Continue</span></sc-button>
+      <sc-button size="l" variant="secondary"><span data-ar="تغيير">Change</span></sc-button>
+      <sc-button size="l" variant="tertiary"><span data-ar="إلغاء">Cancel</span></sc-button>
+      <sc-button variant="destructive"><span data-ar="حذف">Delete</span></sc-button>
     </div>
     <div class="pg-row">
-      <span class="pg-label" style="min-inline-size: 80px">m · 44px</span>
-      <sc-button size="m" data-ar="متابعة">Continue</sc-button>
-      <sc-button size="m" variant="secondary" data-ar="تغيير">Change</sc-button>
-      <sc-button size="m" variant="tertiary" data-ar="إلغاء">Cancel</sc-button>
-      <sc-button size="m" variant="destructive" data-ar="حذف">Delete</sc-button>
+      <span class="pg-label" style="min-inline-size: 80px">m · 48px</span>
+      <sc-button size="m"><span data-ar="متابعة">Continue</span></sc-button>
+      <sc-button size="m" variant="secondary"><span data-ar="تغيير">Change</span></sc-button>
+      <sc-button size="m" variant="tertiary"><span data-ar="إلغاء">Cancel</span></sc-button>
+      <sc-button size="m" variant="destructive"><span data-ar="حذف">Delete</span></sc-button>
     </div>
   </div>
 </section>
 
 <section class="pg-section" aria-labelledby="b-states">
-  <h2 id="b-states" class="sc-type-heading-m" data-ar="الحالات">States</h2>
+  <h2 id="b-states" class="sc-type-headline-small" data-ar="الحالات">States</h2>
   <div class="pg-card">
     <div class="pg-grid">
       <div class="pg-cell">
         <span class="pg-label">default</span>
-        <sc-button data-ar="متابعة">Continue</sc-button>
+        <sc-button><span data-ar="متابعة">Continue</span></sc-button>
       </div>
       <div class="pg-cell">
         <span class="pg-label">hover / pressed</span>
-        <sc-button data-ar="مرّر المؤشر فوقي">Hover over me</sc-button>
-        <span class="pg-note" data-ar="يقترب لون التمرير من اللون المضغوط، ويستخدم الضغط اللون المضغوط للقناة. للأجهزة ذات المؤشر فقط.">Hover blends toward, and pressing uses, the channel pressed colour. Pointer devices only.</span>
+        <sc-button><span data-ar="مرّر المؤشر فوقي">Hover over me</span></sc-button>
+        <span class="pg-note" data-ar="التمرير يستخدم لون التمرير للقناة، والضغط يستخدم لون الضغط ويصغّر الزر قليلًا. للأجهزة ذات المؤشر فقط.">Hover uses the channel hover tone; pressing uses the pressed tone and scales to 0.97. Pointer devices only.</span>
       </div>
       <div class="pg-cell">
         <span class="pg-label">focus (keyboard)</span>
-        <sc-button data-demo-focus data-ar="متابعة">Continue</sc-button>
-        <span class="pg-note" data-ar="حلقة بلون القناة بسماكة 3 بكسل وفراغ 2 بكسل، عند التنقل بلوحة المفاتيح فقط.">3px channel ring with a 2px surface gap, for keyboard focus only.</span>
+        <sc-button data-demo-focus><span data-ar="متابعة">Continue</span></sc-button>
+        <span class="pg-note" data-ar="حلقة محايدة بسماكة 3 بكسل وفراغ 2 بكسل، عند التنقل بلوحة المفاتيح فقط.">Neutral 3px ring with a 2px gap (U1), for keyboard focus only.</span>
       </div>
       <div class="pg-cell">
         <span class="pg-label">loading</span>
-        <sc-button loading data-ar="الدفع عبر دبي باي">Pay with Dubai Pay</sc-button>
+        <sc-button loading><span data-ar="الدفع عبر دبي باي">Pay with Dubai Pay</span></sc-button>
         <span class="pg-note" data-ar="يحافظ على عرضه، ويضبط aria-busy، ويعلن «جارٍ التحميل»، ويتجاهل النقرات.">Keeps its width, sets aria-busy, announces "Loading", ignores clicks.</span>
       </div>
       <div class="pg-cell">
         <span class="pg-label">disabled (avoid)</span>
-        <sc-button disabled data-ar="متابعة">Continue</sc-button>
+        <sc-button disabled><span data-ar="متابعة">Continue</span></sc-button>
         <span class="pg-note" data-ar="الزر المعطّل لا يوضح السبب ولا يمكن التركيز عليه. أبقِه مفعّلًا واعرض رسالة خطأ بدلًا من ذلك.">Disabled buttons give no reason and can't be focused. Keep it enabled and show an error instead.</span>
       </div>
       <div class="pg-cell">
         <span class="pg-label">loading · secondary</span>
-        <sc-button loading variant="secondary" data-ar="حفظ">Save</sc-button>
+        <sc-button loading variant="secondary"><span data-ar="حفظ">Save</span></sc-button>
       </div>
     </div>
   </div>
 </section>
 
 <section class="pg-section" aria-labelledby="b-icons">
-  <h2 id="b-icons" class="sc-type-heading-m" data-ar="مع أيقونة">With an icon</h2>
+  <h2 id="b-icons" class="sc-type-headline-small" data-ar="مع أيقونة">With an icon</h2>
   <div class="pg-card">
     <div class="pg-row">
-      <sc-button icon="arrow-forward" data-ar="متابعة">Continue</sc-button>
-      <sc-button icon="search" icon-position="start" variant="secondary" data-ar="البحث في الخدمات">Search services</sc-button>
-      <sc-button icon="arrow-forward" size="m" variant="tertiary" data-ar="عرض كل الخدمات">View all services</sc-button>
+      <sc-button icon="arrow-forward"><span data-ar="متابعة">Continue</span></sc-button>
+      <sc-button icon="search" icon-position="start" variant="secondary"><span data-ar="البحث في الخدمات">Search services</span></sc-button>
+      <sc-button icon="arrow-forward" size="m" variant="tertiary"><span data-ar="عرض كل الخدمات">View all services</span></sc-button>
     </div>
     <p class="pg-note" data-ar="ينعكس سهم التقدم في العربية. أيقونة البحث لا تنعكس أبدًا.">The forward arrow mirrors in Arabic. The search icon never mirrors.</p>
   </div>
 </section>
 
 <section class="pg-section" aria-labelledby="b-link">
-  <h2 id="b-link" class="sc-type-heading-m" data-ar="كرابط">As a link</h2>
+  <h2 id="b-link" class="sc-type-headline-small" data-ar="كرابط">As a link</h2>
   <div class="pg-card">
     <div class="pg-row">
-      <sc-button href="#start" icon="arrow-forward" data-ar="البدء الآن">Start now</sc-button>
-      <sc-button href="#vehicles" variant="secondary" data-ar="مركباتي">My vehicles</sc-button>
+      <sc-button href="#start" icon="arrow-forward"><span data-ar="البدء الآن">Start now</span></sc-button>
+      <sc-button href="#vehicles" variant="secondary"><span data-ar="مركباتي">My vehicles</span></sc-button>
     </div>
     <p class="pg-note" data-ar="مع href يُعرض الزر كرابط: استخدمه عندما ينقلك الإجراء إلى صفحة أخرى.">With href, the button renders a link: use it when the action goes to another page.</p>
   </div>
 </section>
 
 <section class="pg-section" aria-labelledby="b-form">
-  <h2 id="b-form" class="sc-type-heading-m" data-ar="داخل نموذج">Inside a form</h2>
+  <h2 id="b-form" class="sc-type-headline-small" data-ar="داخل نموذج">Inside a form</h2>
   <div class="pg-card">
     <form id="b-demo-form">
       <label class="pg-field">
-        <span class="sc-type-label-m" data-ar="رقم اللوحة">Plate number</span>
+        <span class="sc-type-label-large" data-ar="رقم اللوحة">Plate number</span>
         <input name="plate" value="A 12345" autocomplete="off" dir="ltr" />
       </label>
+      <p class="pg-note" data-ar="اضغط Enter في الحقل: الزر هو زر الإرسال الافتراضي للنموذج.">Press Enter in the field: the button is the form's default button.</p>
       <div class="pg-row">
-        <sc-button type="submit" icon="arrow-forward" data-ar="متابعة">Continue</sc-button>
-        <sc-button type="reset" variant="tertiary" data-ar="مسح">Clear</sc-button>
+        <sc-button type="submit" icon="arrow-forward"><span data-ar="متابعة">Continue</span></sc-button>
+        <sc-button type="reset" variant="tertiary"><span data-ar="مسح">Clear</span></sc-button>
       </div>
       <p class="pg-output" id="b-demo-output" role="status"></p>
     </form>
@@ -124,22 +129,23 @@
 </section>
 
 <section class="pg-section" aria-labelledby="b-full">
-  <h2 id="b-full" class="sc-type-heading-m" data-ar="بعرض كامل">Full width</h2>
+  <h2 id="b-full" class="sc-type-headline-small" data-ar="بعرض كامل">Full width</h2>
   <div class="pg-card pg-narrow">
-    <sc-button full-width icon="arrow-forward" data-ar="تجديد التسجيل">Renew registration</sc-button>
+    <sc-button full-width icon="arrow-forward"><span data-ar="تجديد التسجيل">Renew registration</span></sc-button>
     <div style="block-size: var(--sc-space-12)"></div>
-    <sc-button full-width variant="secondary" data-ar="حفظ وإكمال لاحقًا">Save and finish later</sc-button>
+    <sc-button full-width variant="secondary"><span data-ar="حفظ وإكمال لاحقًا">Save and finish later</span></sc-button>
   </div>
 </section>
 
 <section class="pg-section" aria-labelledby="b-arabic">
-  <h2 id="b-arabic" class="sc-type-heading-m" data-ar="بالعربية">In Arabic</h2>
+  <h2 id="b-arabic" class="sc-type-headline-small" data-ar="بالعربية">In Arabic</h2>
   <div class="pg-card" lang="ar" dir="rtl">
     <div class="pg-row">
       <sc-button icon="arrow-forward">متابعة</sc-button>
       <sc-button variant="secondary">حفظ وإكمال لاحقًا</sc-button>
       <sc-button variant="tertiary">إلغاء</sc-button>
       <sc-button variant="destructive">حذف المسودة</sc-button>
+      <sc-button variant="handoff">الدفع عبر دبي للدفع</sc-button>
     </div>
     <div class="pg-row">
       <sc-button size="m" icon="arrow-forward">متابعة</sc-button>

@@ -1,0 +1,120 @@
+# Checks for the v2 design system (decision A5, docs/v2/architecture.md §3.8).
+#
+# - Every push and PR: token build and checks, check:literals, the component build, spec
+#   tests, and the bundle budget report.
+# - PRs to v2 and main, and pushes to main: e2e (one worker), axe (inside e2e, one test per
+#   language and theme), screenshots, the enforced budget check and the runtime measurement.
+#
+# Publishing is NOT here: pages.yml still builds and deploys main (v1) to GitHub Pages, and
+# secret-scan.yml is unchanged.
+name: CI
+
+on:
+  push:
+  pull_request:
+    branches: [v2, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Lint, build and spec
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PUPPETEER_SKIP_DOWNLOAD: 'true'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: components/package-lock.json
+
+      - name: Build tokens and run token checks (contrast, teal, no hex)
+        run: npm run build
+
+      - name: Install component dependencies
+        working-directory: components
+        run: npm ci
+
+      - name: Check component sources
+        working-directory: components
+        run: npm run check:literals
+
+      - name: Build components
+        working-directory: components
+        run: npm run build
+
+      - name: Spec tests
+        working-directory: components
+        run: npm run test:spec
+
+      - name: Bundle report (informational on every push)
+        working-directory: components
+        run: npm run measure:bundle >> "$GITHUB_STEP_SUMMARY"
+
+  quality:
+    name: e2e, axe, screenshots, budgets, runtime
+    if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main') || github.event_name == 'workflow_dispatch'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: components/package-lock.json
+
+      - name: Build tokens
+        run: npm run build
+
+      - name: Install component dependencies (Puppeteer downloads Chromium)
+        working-directory: components
+        run: npm ci
+
+      - name: Point the tests at Puppeteer's Chromium
+        working-directory: components
+        run: echo "SC_BROWSER=$(node -e "console.log(require('puppeteer').executablePath())")" >> "$GITHUB_ENV"
+
+      - name: Build components
+        working-directory: components
+        run: npm run build
+
+      - name: Budgets (fails on an enforced budget)
+        working-directory: components
+        run: npm run check:budget
+
+      - name: e2e and axe, rebuilt components (one worker)
+        working-directory: components
+        run: npm run test:e2e:v2
+
+      - name: Screenshots (EN/AR x light/dark)
+        working-directory: components
+        env:
+          SC_VISUAL_PLATFORM: linux
+        run: npm run test:visual
+
+      - name: Runtime measurement (artefact)
+        working-directory: components
+        run: npm run measure:runtime -- --runs 3 --cpu 4 --net slow4g --json > runtime.json
+
+      - name: Upload screenshots, diffs and runtime
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-${{ github.run_id }}
+          path: |
+            components/test/visual/
+            components/runtime.json
+          if-no-files-found: ignore

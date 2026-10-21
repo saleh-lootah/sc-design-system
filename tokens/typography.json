@@ -1,49 +1,30 @@
 {
-  "$description": "Dubai Font (Dubai W23) for both scripts on a Material-style scale. Arabic roles run one step larger with taller leading, never letter-spaced and never below 16px. Leading is tighter than direction E drew it (user preference: Dubai Font looks better set tight). Line height is authored in px ($extensions.lineHeightPx); lineHeight is the same value as a ratio.",
+  "$description": "Dubai Font for both scripts, as one web family (\"Dubai W23\") with real weights 400, 500 and 700 (Light is dropped: no role uses it, decision A3). Latin and Arabic are separate subset files under one family; Arabic contexts put the Arabic face first (\"Dubai W23 Arabic\", the same files) so spaces, digits and punctuation in Arabic text come from the Arabic file and an Arabic page does not download the Latin file. \"Dubai W23 Fallback\" is a metric-matched local face (Arial for Latin, Tahoma for Arabic) so the swap does not move text. Material-style scale: Arabic roles run one step larger with taller leading, never letter-spaced and never below 16px. Leading is tighter than direction E drew it (user preference: Dubai Font looks better set tight). Line height is authored in px ($extensions.lineHeightPx); lineHeight is the same value as a ratio.",
   "font": {
     "family": {
-      "light": {
+      "latin": {
         "$type": "fontFamily",
         "$value": [
-          "Dubai W23 Light",
-          "Dubai",
+          "Dubai W23",
+          "Dubai W23 Fallback",
           "system-ui",
           "sans-serif"
-        ]
+        ],
+        "$description": "English and every non-Arabic language"
       },
-      "regular": {
+      "arabic": {
         "$type": "fontFamily",
         "$value": [
-          "Dubai W23 Regular",
-          "Dubai",
+          "Dubai W23 Arabic",
+          "Dubai W23",
+          "Dubai W23 Fallback",
           "system-ui",
           "sans-serif"
-        ]
-      },
-      "medium": {
-        "$type": "fontFamily",
-        "$value": [
-          "Dubai W23 Medium",
-          "Dubai",
-          "system-ui",
-          "sans-serif"
-        ]
-      },
-      "bold": {
-        "$type": "fontFamily",
-        "$value": [
-          "Dubai W23 Bold",
-          "Dubai",
-          "system-ui",
-          "sans-serif"
-        ]
+        ],
+        "$description": "lang=\"ar\": the Arabic file first, so Arabic text with spaces, digits and punctuation needs only the Arabic file; Latin letters fall through to the Latin file"
       }
     },
     "weight": {
-      "light": {
-        "$type": "fontWeight",
-        "$value": 300
-      },
       "regular": {
         "$type": "fontWeight",
         "$value": 400
@@ -63,7 +44,7 @@
       "display-large": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.bold}",
+          "fontFamily": "{font.family.latin}",
           "fontWeight": "{font.weight.bold}",
           "fontSize": {
             "value": 80,
@@ -83,7 +64,7 @@
       "display-medium": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.bold}",
+          "fontFamily": "{font.family.latin}",
           "fontWeight": "{font.weight.bold}",
           "fontSize": {
             "value": 57,
@@ -103,7 +84,7 @@
       "display-small": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.bold}",
+          "fontFamily": "{font.family.latin}",
           "fontWeight": "{font.weight.bold}",
           "fontSize": {
             "value": 45,
@@ -123,7 +104,7 @@
       "headline-large": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.bold}",
+          "fontFamily": "{font.family.latin}",
           "fontWeight": "{font.weight.bold}",
           "fontSize": {
             "value": 32,
@@ -143,7 +124,7 @@
       "headline-medium": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.bold}",
+          "fontFamily": "{font.family.latin}",
           "fontWeight": "{font.weight.bold}",
           "fontSize": {
             "value": 28,
@@ -163,7 +144,7 @@
       "headline-small": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.bold}",
+          "fontFamily": "{font.family.latin}",
           "fontWeight": "{font.weight.bold}",
           "fontSize": {
             "value": 24,
@@ -183,7 +164,7 @@
       "title-large": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.bold}",
+          "fontFamily": "{font.family.latin}",
           "fontWeight": "{font.weight.bold}",
           "fontSize": {
             "value": 22,
@@ -203,7 +184,7 @@
       "title-medium": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.bold}",
+          "fontFamily": "{font.family.latin}",
           "fontWeight": "{font.weight.bold}",
           "fontSize": {
             "value": 18,
@@ -223,7 +204,7 @@
       "title-small": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.medium}",
+          "fontFamily": "{font.family.latin}",
           "fontWeight": "{font.weight.medium}",
           "fontSize": {
             "value": 17,
@@ -243,7 +224,7 @@
       "body-large": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.regular}",
+          "fontFamily": "{font.family.latin}",
           "fontWeight": "{font.weight.regular}",
           "fontSize": {
             "value": 18,
@@ -263,7 +244,7 @@
       "body-medium": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.regular}",
+          "fontFamily": "{font.family.latin}",
           "fontWeight": "{font.weight.regular}",
           "fontSize": {
             "value": 16,
@@ -283,7 +264,7 @@
       "body-small": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.regular}",
+          "fontFamily": "{font.family.latin}",
           "fontWeight": "{font.weight.regular}",
           "fontSize": {
             "value": 14,
@@ -303,7 +284,7 @@
       "label-large": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.bold}",
+          "fontFamily": "{font.family.latin}",
           "fontWeight": "{font.weight.bold}",
           "fontSize": {
             "value": 18,
@@ -323,7 +304,7 @@
       "label-medium": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.medium}",
+          "fontFamily": "{font.family.latin}",
           "fontWeight": "{font.weight.medium}",
           "fontSize": {
             "value": 16,
@@ -343,7 +324,7 @@
       "label-small": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.medium}",
+          "fontFamily": "{font.family.latin}",
           "fontWeight": "{font.weight.medium}",
           "fontSize": {
             "value": 14,
@@ -365,7 +346,7 @@
       "display-large": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.bold}",
+          "fontFamily": "{font.family.arabic}",
           "fontWeight": "{font.weight.bold}",
           "fontSize": {
             "value": 88,
@@ -385,7 +366,7 @@
       "display-medium": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.bold}",
+          "fontFamily": "{font.family.arabic}",
           "fontWeight": "{font.weight.bold}",
           "fontSize": {
             "value": 64,
@@ -405,7 +386,7 @@
       "display-small": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.bold}",
+          "fontFamily": "{font.family.arabic}",
           "fontWeight": "{font.weight.bold}",
           "fontSize": {
             "value": 50,
@@ -425,7 +406,7 @@
       "headline-large": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.bold}",
+          "fontFamily": "{font.family.arabic}",
           "fontWeight": "{font.weight.bold}",
           "fontSize": {
             "value": 36,
@@ -445,7 +426,7 @@
       "headline-medium": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.bold}",
+          "fontFamily": "{font.family.arabic}",
           "fontWeight": "{font.weight.bold}",
           "fontSize": {
             "value": 32,
@@ -465,7 +446,7 @@
       "headline-small": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.bold}",
+          "fontFamily": "{font.family.arabic}",
           "fontWeight": "{font.weight.bold}",
           "fontSize": {
             "value": 28,
@@ -485,7 +466,7 @@
       "title-large": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.bold}",
+          "fontFamily": "{font.family.arabic}",
           "fontWeight": "{font.weight.bold}",
           "fontSize": {
             "value": 24,
@@ -505,7 +486,7 @@
       "title-medium": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.bold}",
+          "fontFamily": "{font.family.arabic}",
           "fontWeight": "{font.weight.bold}",
           "fontSize": {
             "value": 20,
@@ -525,7 +506,7 @@
       "title-small": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.bold}",
+          "fontFamily": "{font.family.arabic}",
           "fontWeight": "{font.weight.bold}",
           "fontSize": {
             "value": 19,
@@ -545,7 +526,7 @@
       "body-large": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.regular}",
+          "fontFamily": "{font.family.arabic}",
           "fontWeight": "{font.weight.regular}",
           "fontSize": {
             "value": 20,
@@ -565,7 +546,7 @@
       "body-medium": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.regular}",
+          "fontFamily": "{font.family.arabic}",
           "fontWeight": "{font.weight.regular}",
           "fontSize": {
             "value": 18,
@@ -585,7 +566,7 @@
       "body-small": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.regular}",
+          "fontFamily": "{font.family.arabic}",
           "fontWeight": "{font.weight.regular}",
           "fontSize": {
             "value": 16,
@@ -605,7 +586,7 @@
       "label-large": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.bold}",
+          "fontFamily": "{font.family.arabic}",
           "fontWeight": "{font.weight.bold}",
           "fontSize": {
             "value": 20,
@@ -625,7 +606,7 @@
       "label-medium": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.bold}",
+          "fontFamily": "{font.family.arabic}",
           "fontWeight": "{font.weight.bold}",
           "fontSize": {
             "value": 18,
@@ -645,7 +626,7 @@
       "label-small": {
         "$type": "typography",
         "$value": {
-          "fontFamily": "{font.family.bold}",
+          "fontFamily": "{font.family.arabic}",
           "fontWeight": "{font.weight.bold}",
           "fontSize": {
             "value": 16,
@@ -662,6 +643,23 @@
           "lineHeightPx": 22
         }
       }
+    }
+  },
+  "$extensions": {
+    "sc.localFaces": {
+      "400": {
+        "family": "Dubai W23 Regular",
+        "postScript": "DubaiW23-Regular"
+      },
+      "500": {
+        "family": "Dubai W23 Medium",
+        "postScript": "DubaiW23-Medium"
+      },
+      "700": {
+        "family": "Dubai W23 Bold",
+        "postScript": "DubaiW23-Bold"
+      },
+      "$description": "Installed desktop font names (each weight is its own family in the TTF name table). Used by the Paper, iOS and Android outputs, which load the local or bundled TTFs rather than the web subsets."
     }
   }
 }

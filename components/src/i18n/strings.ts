@@ -1,4 +1,10 @@
 /**
+ * LEGACY (v1): every component's strings merged into one dictionary. v1 components still
+ * read it through ./locale.ts; any component that imports it carries every other
+ * component's strings. v2 components never import this file: they use ./controller.ts with
+ * their own ./components/<tag>.ts (CONVENTIONS.md, "Strings"). Delete this file, ./locale.ts
+ * and ./components/index.ts once the last v1 component has migrated (Wave 2b).
+ *
  * Every string a component renders by itself, in English and Arabic.
  *
  * Strings live in one file per component under src/i18n/components/ and are merged here,
@@ -13,9 +19,11 @@
  * Placeholders use `{name}`. Digits are always Latin (0–9) in both languages.
  */
 import * as parts from './components/index';
-import type { Lang, Dir, StringPart } from './define';
+import { Channel, FormatValues, Lang, format } from './core';
+import type { StringPart } from './define';
 
-export type { Lang, Dir };
+export { channels, dirFor, format, toLang } from './core';
+export type { Channel, Dir, FormatValues, Lang } from './core';
 
 type Parts = typeof parts;
 type UnionToIntersection<U> = (U extends unknown ? (k: U) => void : never) extends (k: infer I) => void ? I : never;
@@ -43,29 +51,10 @@ function merge(): Record<Lang, Dictionary> {
 
 export const strings: Record<Lang, Dictionary> = merge();
 
-/** The seven channels, in their canonical order. Values match `data-channel`. */
-export const channels = ['now', 'transport', 'visit', 'justice', 'build', 'invest', 'trade'] as const;
-export type Channel = (typeof channels)[number];
 
 /** The string key holding a channel's display name, e.g. `channelKey('visit')` is `'channelVisit'`. */
 export function channelKey(channel: Channel): StringKey {
   return `channel${channel.charAt(0).toUpperCase()}${channel.slice(1)}` as StringKey;
-}
-
-export type FormatValues = Record<string, string | number>;
-
-/**
- * Fills `{name}` placeholders. Numbers are written with Latin digits in both languages.
- * Unknown placeholders are left as they are, so a missing value is visible rather than silent.
- *
- * @example format('Step {current} of {total}', { current: 2, total: 4 }) // "Step 2 of 4"
- */
-export function format(template: string, values: FormatValues = {}): string {
-  return template.replace(/\{(\w+)\}/g, (match, name: string) => {
-    const value = values[name];
-    if (value === undefined) return match;
-    return typeof value === 'number' ? value.toLocaleString('en-US', { useGrouping: false }) : value;
-  });
 }
 
 /** Looks up a string in a language and fills its placeholders. */
@@ -74,11 +63,3 @@ export function translate(lang: Lang, key: StringKey, values?: FormatValues): st
   return values ? format(template, values) : template;
 }
 
-/** Normalises any BCP 47 tag ("ar-AE", "en-GB", "") to a supported language. */
-export function toLang(tag: string | null | undefined): Lang {
-  return tag?.trim().toLowerCase().startsWith('ar') ? 'ar' : 'en';
-}
-
-export function dirFor(lang: Lang): Dir {
-  return lang === 'ar' ? 'rtl' : 'ltr';
-}

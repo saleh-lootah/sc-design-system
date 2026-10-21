@@ -93,16 +93,23 @@ export namespace Components {
     }
     /**
      * Starts an action. Use a verb: "Continue", "Pay with Dubai Pay", "Save and finish later".
-     * Renders a native `<button>` (or an `<a>` when `href` is set) inside its shadow root.
-     * The host is form-associated, so `type="submit"` and `type="reset"` work with the
-     * surrounding `<form>`, and it delegates focus to the inner control.
+     * v2 renders a native `<button>` (or an `<a>` when `href` is set) in light DOM (Stencil
+     * `scoped`, decision A2). The button is a real form control: Enter in a field submits the
+     * form through the first `type="submit"` button (it is the form's default button), and
+     * `name`, `value`, `form` and a disabled `<fieldset>` all work natively. `focus()` and
+     * `click()` on the host reach the inner control. There is no `::part()`: if you must style
+     * it, use the classes `.sc-button`, `.sc-button__label` and `.sc-button__icon`.
      */
     interface ScButton {
         /**
-          * Prevents interaction. Avoid it: a disabled button gives no reason and can't be focused, so many users can't tell why they're stuck. Leave the button enabled and explain the problem with an error message instead.
+          * Prevents interaction. Avoid it (A11Y-08): a disabled button gives no reason and can't be focused. Leave the button enabled and explain the problem with an error message instead.
           * @default false
          */
         "disabled": boolean;
+        /**
+          * The id of the `<form>` this button belongs to when it sits outside it (the native `form` attribute).
+         */
+        "formId"?: string;
         /**
           * Stretches the button to the width of its container. Use it on narrow screens.
           * @default false
@@ -122,7 +129,7 @@ export namespace Components {
          */
         "iconPosition": ButtonIconPosition;
         /**
-          * Shows a spinner while an action is in progress. The button keeps its width, sets `aria-busy`, announces "Loading" and ignores clicks until `loading` is removed.
+          * Shows a spinner while an action is in progress. The button keeps its width and focus, sets `aria-busy`, announces "Loading" and ignores activation (no click handlers, no submit) until `loading` is removed.
           * @default false
          */
         "loading": boolean;
@@ -131,17 +138,24 @@ export namespace Components {
          */
         "loadingText"?: string;
         /**
-          * Height: `l` is 54px (default, for primary actions), `m` is 44px (dense layouts).
-          * @default 'l'
+          * Submitted with the form as `name=value` when this button submits it.
          */
-        "size": ButtonSize;
+        "name"?: string;
         /**
-          * What the button does in a form. `submit` submits the surrounding `<form>` (through `form.requestSubmit()`, so validation and `submit` listeners run); `reset` resets it. Defaults to `button`, unlike the native element, so a button never submits by accident. Ignored when `href` is set.
+          * Height. Leave it unset for the variant's own height (56px for primary, destructive and handoff; 48px for secondary and tertiary). `l` is 56px, `m` 48px (compact layouts, tables, headers), `xl` 64px (the hero search only).
+         */
+        "size"?: ButtonSize;
+        /**
+          * What the button does in a form. `submit` submits the surrounding `<form>` natively, so validation and `submit` listeners run, and the first submit button is the form's default button for Enter in a field. `reset` resets it. Defaults to `button`, unlike the native element, so a button never submits by accident. Ignored when `href` is set.
           * @default 'button'
          */
         "type": ButtonType;
         /**
-          * Visual weight. - `primary`: the one main action on a page (channel action fill). - `secondary`: other actions next to a primary one (channel subtle fill). - `tertiary`: low-emphasis actions (no fill, underline on hover). - `destructive`: deletes or cancels something that can't be undone (error fill).
+          * The value submitted with `name`.
+         */
+        "value"?: string;
+        /**
+          * Visual weight. - `primary`: the one main action on a page (channel action fill). 56px. - `secondary`: other actions beside a primary one (outlined in the channel colour). 48px. - `tertiary`: low-emphasis actions, styled as an underlined link. 48px. - `destructive`: deletes or cancels something that can't be undone (error fill). 56px. - `handoff`: a shared government hand-off, such as "Sign in with UAE PASS" or "Pay with   Dubai Pay": city indigo on every channel (decision U3). 56px.
           * @default 'primary'
          */
         "variant": ButtonVariant;
@@ -1325,9 +1339,12 @@ declare global {
     };
     /**
      * Starts an action. Use a verb: "Continue", "Pay with Dubai Pay", "Save and finish later".
-     * Renders a native `<button>` (or an `<a>` when `href` is set) inside its shadow root.
-     * The host is form-associated, so `type="submit"` and `type="reset"` work with the
-     * surrounding `<form>`, and it delegates focus to the inner control.
+     * v2 renders a native `<button>` (or an `<a>` when `href` is set) in light DOM (Stencil
+     * `scoped`, decision A2). The button is a real form control: Enter in a field submits the
+     * form through the first `type="submit"` button (it is the form's default button), and
+     * `name`, `value`, `form` and a disabled `<fieldset>` all work natively. `focus()` and
+     * `click()` on the host reach the inner control. There is no `::part()`: if you must style
+     * it, use the classes `.sc-button`, `.sc-button__label` and `.sc-button__icon`.
      */
     interface HTMLScButtonElement extends Components.ScButton, HTMLStencilElement {
     }
@@ -2002,20 +2019,23 @@ declare namespace LocalJSX {
     }
     /**
      * Starts an action. Use a verb: "Continue", "Pay with Dubai Pay", "Save and finish later".
-     * Renders a native `<button>` (or an `<a>` when `href` is set) inside its shadow root.
-     * The host is form-associated, so `type="submit"` and `type="reset"` work with the
-     * surrounding `<form>`, and it delegates focus to the inner control.
+     * v2 renders a native `<button>` (or an `<a>` when `href` is set) in light DOM (Stencil
+     * `scoped`, decision A2). The button is a real form control: Enter in a field submits the
+     * form through the first `type="submit"` button (it is the form's default button), and
+     * `name`, `value`, `form` and a disabled `<fieldset>` all work natively. `focus()` and
+     * `click()` on the host reach the inner control. There is no `::part()`: if you must style
+     * it, use the classes `.sc-button`, `.sc-button__label` and `.sc-button__icon`.
      */
     interface ScButton {
         /**
-          * Prevents interaction. Avoid it: a disabled button gives no reason and can't be focused, so many users can't tell why they're stuck. Leave the button enabled and explain the problem with an error message instead.
+          * Prevents interaction. Avoid it (A11Y-08): a disabled button gives no reason and can't be focused. Leave the button enabled and explain the problem with an error message instead.
           * @default false
          */
         "disabled"?: boolean;
         /**
-          * The `id` of a `<form>` element to associate this element with.
+          * The id of the `<form>` this button belongs to when it sits outside it (the native `form` attribute).
          */
-        "form"?: string;
+        "formId"?: string;
         /**
           * Stretches the button to the width of its container. Use it on narrow screens.
           * @default false
@@ -2035,7 +2055,7 @@ declare namespace LocalJSX {
          */
         "iconPosition"?: ButtonIconPosition;
         /**
-          * Shows a spinner while an action is in progress. The button keeps its width, sets `aria-busy`, announces "Loading" and ignores clicks until `loading` is removed.
+          * Shows a spinner while an action is in progress. The button keeps its width and focus, sets `aria-busy`, announces "Loading" and ignores activation (no click handlers, no submit) until `loading` is removed.
           * @default false
          */
         "loading"?: boolean;
@@ -2044,21 +2064,24 @@ declare namespace LocalJSX {
          */
         "loadingText"?: string;
         /**
-          * The name of the element, used when submitting an HTML form.
+          * Submitted with the form as `name=value` when this button submits it.
          */
         "name"?: string;
         /**
-          * Height: `l` is 54px (default, for primary actions), `m` is 44px (dense layouts).
-          * @default 'l'
+          * Height. Leave it unset for the variant's own height (56px for primary, destructive and handoff; 48px for secondary and tertiary). `l` is 56px, `m` 48px (compact layouts, tables, headers), `xl` 64px (the hero search only).
          */
         "size"?: ButtonSize;
         /**
-          * What the button does in a form. `submit` submits the surrounding `<form>` (through `form.requestSubmit()`, so validation and `submit` listeners run); `reset` resets it. Defaults to `button`, unlike the native element, so a button never submits by accident. Ignored when `href` is set.
+          * What the button does in a form. `submit` submits the surrounding `<form>` natively, so validation and `submit` listeners run, and the first submit button is the form's default button for Enter in a field. `reset` resets it. Defaults to `button`, unlike the native element, so a button never submits by accident. Ignored when `href` is set.
           * @default 'button'
          */
         "type"?: ButtonType;
         /**
-          * Visual weight. - `primary`: the one main action on a page (channel action fill). - `secondary`: other actions next to a primary one (channel subtle fill). - `tertiary`: low-emphasis actions (no fill, underline on hover). - `destructive`: deletes or cancels something that can't be undone (error fill).
+          * The value submitted with `name`.
+         */
+        "value"?: string;
+        /**
+          * Visual weight. - `primary`: the one main action on a page (channel action fill). 56px. - `secondary`: other actions beside a primary one (outlined in the channel colour). 48px. - `tertiary`: low-emphasis actions, styled as an underlined link. 48px. - `destructive`: deletes or cancels something that can't be undone (error fill). 56px. - `handoff`: a shared government hand-off, such as "Sign in with UAE PASS" or "Pay with   Dubai Pay": city indigo on every channel (decision U3). 56px.
           * @default 'primary'
          */
         "variant"?: ButtonVariant;
@@ -3259,6 +3282,9 @@ declare namespace LocalJSX {
         "variant": ButtonVariant;
         "size": ButtonSize;
         "type": ButtonType;
+        "name": string;
+        "value": string;
+        "formId": string;
         "href": string;
         "disabled": boolean;
         "loading": boolean;
@@ -3556,9 +3582,12 @@ declare module "@stencil/core" {
             "sc-back-link": LocalJSX.IntrinsicElements["sc-back-link"] & JSXBase.HTMLAttributes<HTMLScBackLinkElement>;
             /**
              * Starts an action. Use a verb: "Continue", "Pay with Dubai Pay", "Save and finish later".
-             * Renders a native `<button>` (or an `<a>` when `href` is set) inside its shadow root.
-             * The host is form-associated, so `type="submit"` and `type="reset"` work with the
-             * surrounding `<form>`, and it delegates focus to the inner control.
+             * v2 renders a native `<button>` (or an `<a>` when `href` is set) in light DOM (Stencil
+             * `scoped`, decision A2). The button is a real form control: Enter in a field submits the
+             * form through the first `type="submit"` button (it is the form's default button), and
+             * `name`, `value`, `form` and a disabled `<fieldset>` all work natively. `focus()` and
+             * `click()` on the host reach the inner control. There is no `::part()`: if you must style
+             * it, use the classes `.sc-button`, `.sc-button__label` and `.sc-button__icon`.
              */
             "sc-button": LocalJSX.IntrinsicElements["sc-button"] & JSXBase.HTMLAttributes<HTMLScButtonElement>;
             /**

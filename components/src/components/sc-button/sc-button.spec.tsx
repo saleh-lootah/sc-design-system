@@ -1,43 +1,68 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { ScButton } from './sc-button';
 
-const control = (root: HTMLElement) => root.shadowRoot!.querySelector('[part="control"]') as HTMLElement;
+/** The native control sc-button renders into its own light DOM. */
+const control = (root: HTMLElement) => root.querySelector('.sc-button') as HTMLElement;
+const render = (html: string) => newSpecPage({ components: [ScButton], html });
+/** The visually hidden "Loading" word inside the control. */
+const hiddenText = (el: HTMLElement) => Array.from(el.children).find((c) => c.classList.contains('visually-hidden'))?.textContent;
 
 describe('sc-button (spec)', () => {
-  it.each(['primary', 'secondary', 'tertiary', 'destructive'])('renders the %s variant', async (variant) => {
-    const page = await newSpecPage({ components: [ScButton], html: `<sc-button variant="${variant}">Continue</sc-button>` });
+  it('renders a native button in light DOM, with no shadow root', async () => {
+    const page = await render(`<sc-button>Continue</sc-button>`);
+    expect(page.root!.shadowRoot).toBeNull();
     const el = control(page.root!);
     expect(el.tagName).toBe('BUTTON');
-    expect(el).toHaveClasses(['control', `control--${variant}`, 'control--l', 'type-title-s', 'focus-ring']);
     expect(el.getAttribute('type')).toBe('button');
-    expect(page.root!.shadowRoot!.querySelector('[part="label"] slot')).not.toBeNull();
+    expect(el.querySelector('.sc-button__label')!.textContent).toBe('Continue');
+  });
+
+  it.each([
+    ['primary', 'l'],
+    ['secondary', 'm'],
+    ['tertiary', 'm'],
+    ['destructive', 'l'],
+    ['handoff', 'l'],
+  ])('renders the %s variant at its own height (%s)', async (variant, size) => {
+    const page = await render(`<sc-button variant="${variant}">Continue</sc-button>`);
+    expect(control(page.root!)).toHaveClasses(['sc-button', `sc-button--${variant}`, `sc-button--${size}`, 'focus-ring']);
+  });
+
+  it('lets size override the variant height', async () => {
+    const page = await render(`<sc-button variant="secondary" size="l">Change</sc-button><sc-button id="x" size="xl">Search</sc-button>`);
+    expect(control(page.body.querySelector('sc-button')!)).toHaveClass('sc-button--l');
+    expect(control(page.body.querySelector('#x')!)).toHaveClass('sc-button--xl');
   });
 
   it('falls back to primary for an unknown variant', async () => {
-    const page = await newSpecPage({ components: [ScButton], html: `<sc-button variant="loud">Continue</sc-button>` });
-    expect(control(page.root!)).toHaveClass('control--primary');
+    const page = await render(`<sc-button variant="loud">Continue</sc-button>`);
+    expect(control(page.root!)).toHaveClass('sc-button--primary');
   });
 
-  it('renders size m with the label-m type role', async () => {
-    const page = await newSpecPage({ components: [ScButton], html: `<sc-button size="m">Change</sc-button>` });
-    expect(control(page.root!)).toHaveClasses(['control--m', 'type-label-m']);
+  it('passes type, name, value and form to the native button', async () => {
+    const page = await render(`<sc-button type="submit" name="action" value="save" form="renewal">Save</sc-button>`);
+    const el = control(page.root!);
+    expect(el.getAttribute('type')).toBe('submit');
+    expect(el.getAttribute('name')).toBe('action');
+    expect(el.getAttribute('value')).toBe('save');
+    expect(el.getAttribute('form')).toBe('renewal');
   });
 
   it('renders a link when href is set', async () => {
-    const page = await newSpecPage({ components: [ScButton], html: `<sc-button href="/renew">Start now</sc-button>` });
+    const page = await render(`<sc-button href="/renew">Start now</sc-button>`);
     const el = control(page.root!);
     expect(el.tagName).toBe('A');
     expect(el.getAttribute('href')).toBe('/renew');
-    expect(page.root!.shadowRoot!.querySelector('button')).toBeNull();
+    expect(page.root!.querySelector('button')).toBeNull();
   });
 
-  it('disables the inner button', async () => {
-    const page = await newSpecPage({ components: [ScButton], html: `<sc-button disabled>Continue</sc-button>` });
+  it('disables the native button', async () => {
+    const page = await render(`<sc-button disabled>Continue</sc-button>`);
     expect(control(page.root!).hasAttribute('disabled')).toBe(true);
   });
 
   it('removes href and sets aria-disabled on a disabled link', async () => {
-    const page = await newSpecPage({ components: [ScButton], html: `<sc-button href="/renew" disabled>Start now</sc-button>` });
+    const page = await render(`<sc-button href="/renew" disabled>Start now</sc-button>`);
     const el = control(page.root!);
     expect(el.hasAttribute('href')).toBe(false);
     expect(el.getAttribute('role')).toBe('link');
@@ -45,59 +70,38 @@ describe('sc-button (spec)', () => {
   });
 
   it('shows a spinner, sets aria-busy and announces while loading', async () => {
-    const page = await newSpecPage({ components: [ScButton], html: `<sc-button loading>Pay with Dubai Pay</sc-button>` });
-    const root = page.root!.shadowRoot!;
-    expect(control(page.root!).getAttribute('aria-busy')).toBe('true');
-    expect(control(page.root!)).toHaveClass('is-loading');
-    expect(root.querySelector('.spinner svg')).not.toBeNull();
-    expect(root.querySelector('[part="control"] .visually-hidden')!.textContent).toBe('Loading');
-    expect(root.querySelector('[role="status"]')!.textContent).toBe('Pay with Dubai Pay, Loading');
+    const page = await render(`<sc-button loading>Pay with Dubai Pay</sc-button>`);
+    const el = control(page.root!);
+    expect(el.getAttribute('aria-busy')).toBe('true');
+    expect(el).toHaveClass('is-loading');
+    expect(el.querySelector('.sc-button__spinner svg')).not.toBeNull();
+    expect(hiddenText(el)).toBe('Loading');
+    expect(page.root!.querySelector('[role="status"]')!.textContent).toBe('Pay with Dubai Pay, Loading');
   });
 
   it('lets loading-text override the string', async () => {
-    const page = await newSpecPage({ components: [ScButton], html: `<sc-button loading loading-text="Starting payment">Pay</sc-button>` });
-    const root = page.root!.shadowRoot!;
-    expect(root.querySelector('[part="control"] .visually-hidden')!.textContent).toBe('Starting payment');
-    expect(root.querySelector('[role="status"]')!.textContent).toBe('Pay, Starting payment');
+    const page = await render(`<sc-button loading loading-text="Starting payment">Pay</sc-button>`);
+    expect(hiddenText(control(page.root!))).toBe('Starting payment');
   });
 
-  it('keeps an empty live region when not loading', async () => {
-    const page = await newSpecPage({ components: [ScButton], html: `<sc-button>Continue</sc-button>` });
-    const root = page.root!.shadowRoot!;
-    expect(control(page.root!).hasAttribute('aria-busy')).toBe(false);
-    expect(root.querySelector('[role="status"]')!.textContent).toBe('');
-    expect(root.querySelector('.spinner')).toBeNull();
+  it('uses Arabic strings under lang="ar"', async () => {
+    const page = await render(`<div lang="ar"><sc-button loading>ادفع</sc-button></div>`);
+    const host = page.body.querySelector('sc-button')!;
+    expect(hiddenText(control(host))).toBe('جارٍ التحميل');
+    expect(host.querySelector('[role="status"]')!.textContent).toBe('ادفع، جارٍ التحميل');
   });
 
-  it('uses Arabic strings from the closest lang', async () => {
-    const page = await newSpecPage({
-      components: [ScButton],
-      html: `<div lang="ar" dir="rtl"><sc-button loading>متابعة</sc-button></div>`,
-    });
-    const root = page.body.querySelector('sc-button')!.shadowRoot!;
-    expect(root.querySelector('[part="control"] .visually-hidden')!.textContent).toBe('جارٍ التحميل');
-    expect(root.querySelector('[role="status"]')!.textContent).toBe('متابعة، جارٍ التحميل');
+  it('renders an icon at the end by default, at the start on request', async () => {
+    const page = await render(`<sc-button icon="arrow-forward">Continue</sc-button><sc-button id="s" icon="search" icon-position="start">Search</sc-button>`);
+    const end = control(page.body.querySelector('sc-button')!);
+    expect(end.lastElementChild).toHaveClass('sc-button__icon');
+    expect(end.querySelector('svg.icon-directional')).not.toBeNull();
+    const start = control(page.body.querySelector('#s')!);
+    expect(start.firstElementChild).toHaveClass('sc-button__icon');
   });
 
-  it('places the icon at the end by default and at the start on request', async () => {
-    const end = await newSpecPage({ components: [ScButton], html: `<sc-button icon="arrow-forward">Continue</sc-button>` });
-    const endParts = Array.from(control(end.root!).children).map((c) => c.getAttribute('part'));
-    expect(endParts).toEqual(['label', 'icon']);
-    expect(control(end.root!).querySelector('svg.icon-directional')).not.toBeNull();
-
-    const start = await newSpecPage({ components: [ScButton], html: `<sc-button icon="search" icon-position="start">Search</sc-button>` });
-    const startParts = Array.from(control(start.root!).children).map((c) => c.getAttribute('part'));
-    expect(startParts).toEqual(['icon', 'label']);
-    expect(control(start.root!).querySelector('svg.icon-directional')).toBeNull();
-  });
-
-  it('hides the icon box when there is no icon', async () => {
-    const page = await newSpecPage({ components: [ScButton], html: `<sc-button>Continue</sc-button>` });
-    expect(page.root!.shadowRoot!.querySelector('[part="icon"]')).toHaveClass('icon-box--empty');
-  });
-
-  it('reflects state attributes for styling', async () => {
-    const page = await newSpecPage({ components: [ScButton], html: `<sc-button full-width loading variant="secondary">Save</sc-button>` });
-    expect(page.root).toEqualAttributes({ 'full-width': '', 'loading': '', 'variant': 'secondary', 'size': 'l' });
+  it('renders no icon box without an icon', async () => {
+    const page = await render(`<sc-button>Continue</sc-button>`);
+    expect(page.root!.querySelector('.sc-button__icon')).toBeNull();
   });
 });

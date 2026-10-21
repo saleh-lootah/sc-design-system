@@ -11,12 +11,6 @@
  *     .frame                   the bordered box around a text control (+ prefix/suffix)
  *       .control               the native <input>/<textarea>/<select>
  */
-@import '../../styles/shared.css';
-@import '../../styles/type/label-m.css';
-@import '../../styles/type/hint.css';
-@import '../../styles/type/error.css';
-@import '../../styles/type/body-m.css';
-@import '../../styles/type/heading-l.css';
 
 :host {
   display: block;

@@ -6,3 +6,5 @@ node_modules/
 /.stencil/
 /screenshot/
 *.log
+/test/visual/__diff__/
+/src/global/generated/

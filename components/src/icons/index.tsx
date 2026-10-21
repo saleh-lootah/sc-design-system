@@ -3,9 +3,9 @@
  *
  * - Drawn on a 24px grid, 2px strokes, `currentColor`, so they take the text colour.
  * - Always decorative (`aria-hidden`): the words next to an icon carry the meaning.
- * - Size with the `.icon` class from src/styles/shared.css (`--icon-size`, default 20px).
+ * - Size with the `.icon` class from the shared helper sheet (src/global/shadow.css) (`--icon-size`, default 20px).
  * - DIRECTIONAL icons (marked below) get the `icon-directional` class and are mirrored in
- *   right-to-left by `:host(:dir(rtl)) .icon-directional` in shared.css. Icons for time,
+ *   right-to-left by `.icon-directional:dir(rtl)` in the shared helper sheet. Icons for time,
  *   media, real objects and logos are never mirrored.
  *
  *   import { ArrowForward, Icon } from '../../icons/index'; // always '/index', never the folder:

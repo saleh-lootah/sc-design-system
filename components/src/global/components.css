@@ -1,0 +1,20 @@
+/*
+ * Light-DOM (scoped) component support delivered once per page (@layer sc.components):
+ * size reservations so a host keeps its final size before it upgrades (CLS 0 without
+ * hiding anything, architecture §3.1), and later the CSS-only primitives and shared
+ * field styles. Each family agent adds its own block here.
+ */
+
+/* sc-button: inline until upgraded, at its final height (56px; 48px for secondary and
+   tertiary, and for size="m"). */
+sc-button:not(:defined) {
+  display: inline-block;
+  vertical-align: middle;
+  min-block-size: var(--sc-size-control-primary);
+}
+sc-button:not(:defined):is([variant='secondary'], [variant='tertiary'], [size='m']) {
+  min-block-size: var(--sc-size-control-secondary);
+}
+sc-button:not(:defined)[full-width] {
+  display: block;
+}

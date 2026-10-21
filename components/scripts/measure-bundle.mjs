@@ -115,11 +115,18 @@ const cssLiterals = (src) => {
 const loaderFile = 'sc-components.esm.js';
 const loaderSrc = read(join(LAZY, loaderFile));
 const coreFile = staticImports(loaderSrc)[0];
+if (!coreFile) {
+  console.error('dist/ is not a production build (`stencil test` overwrites it with a dev build). Run `npm run build` first.');
+  process.exit(2);
+}
 /** bundle id -> tags, parsed from the bootstrapLazy() table in the loader. */
 const lazyBundles = {};
-for (const m of loaderSrc.matchAll(/\["(p-[A-Za-z0-9_-]+)",\[(.*?)\]\]\]?/g)) {
-  lazyBundles[m[1]] = [...m[2].matchAll(/\[\d+,"(sc-[a-z-]+)"/g)].map((t) => t[1]);
-}
+// Each bundle starts with ["p-<hash>",[[flags,"sc-tag",…; a bundle may hold several tags.
+const bundleStarts = [...loaderSrc.matchAll(/\["(p-[A-Za-z0-9_-]+)",\[\[/g)];
+bundleStarts.forEach((m, i) => {
+  const body = loaderSrc.slice(m.index, bundleStarts[i + 1]?.index ?? loaderSrc.length);
+  lazyBundles[m[1]] = [...body.matchAll(/\[\d+,"(sc-[a-z-]+)"/g)].map((t) => t[1]);
+});
 const tagToEntry = {};
 for (const [id, tags] of Object.entries(lazyBundles)) for (const t of tags) tagToEntry[t] = `${id}.entry.js`;
 const allTags = Object.keys(tagToEntry).sort();
@@ -127,7 +134,11 @@ const coreSet = new Set([coreFile]);
 const lazy = {
   loader: size(readFileSync(join(LAZY, loaderFile))),
   core: filesSize(LAZY, closure(LAZY, coreFile)),
-  globalCss: size(readFileSync(join(LAZY, 'sc-components.css'))),
+  // v2: sc.css is the document stylesheet (tokens, fonts, base, light-DOM component styles,
+  // helpers); sc-components.css is Stencil's globalStyle, the helper sheet that shadow roots
+  // adopt (it also ships inside the runtime JS).
+  globalCss: size(readFileSync(join(LAZY, existsSync(join(LAZY, 'sc.css')) ? 'sc.css' : 'sc-components.css'))),
+  shadowCss: size(readFileSync(join(LAZY, 'sc-components.css'))),
   components: {},
 };
 for (const tag of allTags) {
@@ -290,7 +301,11 @@ const woff2Info = (file) => {
 };
 const fontDir = join(root, 'src', 'assets', 'fonts');
 const fonts = existsSync(fontDir) ? readdirSync(fontDir).filter((f) => f.endsWith('.woff2')).map((f) => woff2Info(join(fontDir, f))) : [];
-const globalSrc = read(join(LAZY, 'sc-components.css'));
+/** What a page downloads: English, the three Latin weights; Arabic, the Arabic Regular and
+    Bold files (no Arabic role uses Medium, D12) plus nothing Latin unless Latin letters appear. */
+const fontBytes = (re) => fonts.filter((f) => re.test(f.file)).reduce((n, f) => n + f.bytes, 0);
+const pageFonts = { en: fontBytes(/-latin\.woff2$/), ar: fontBytes(/-(400|700)-arabic\.woff2$/) };
+const globalSrc = read(join(LAZY, existsSync(join(LAZY, 'sc.css')) ? 'sc.css' : 'sc-components.css'));
 const fontFace = {
   count: (globalSrc.match(/@font-face/g) ?? []).length,
   display: [...new Set([...globalSrc.matchAll(/font-display:\s*([a-z]+)/g)].map((m) => m[1]))],
@@ -315,7 +330,8 @@ const page = {
   lazy: { requests: lazyPageFiles.size + 1, js: filesSize(LAZY, lazyPageFiles), css: lazy.globalCss },
   ce: { modules: cePageFiles.size, js: filesSize(CE, cePageFiles), jsBundled: size(ceConcat), css: lazy.globalCss },
   componentCss: size(uniqueTags.map((t) => ce.components[t]?.cssRaw ?? '').join('')),
-  fonts: fontsUsed.reduce((n, f) => n + f.bytes, 0),
+  fonts: pageFonts.en,
+  fontsAr: pageFonts.ar,
 };
 page.lazy.total = add(add(page.lazy.js, page.lazy.css), { raw: page.fonts, gzip: page.fonts, br: page.fonts });
 page.ce.total = add(add(page.ce.jsBundled, page.ce.css), { raw: page.fonts, gzip: page.fonts, br: page.fonts });
@@ -356,11 +372,29 @@ if (budgetFile) {
     if (typeof limit === 'string') return;
     if (limit != null && actual > limit) failures.push(`${label}: ${actual} B gzip > budget ${limit} B`);
   };
+  // Components are checked in the custom-elements build (the primary build): the tag's
+  // module plus its import closure, excluding the runtime. With lazy bundles a lazy entry
+  // holds a whole group, so it is reported, not budgeted. Only tags listed in "enforce"
+  // (rebuilt for v2) fail the check; v1 tags are reported as pending until Wave 2b.
+  const enforce = new Set(b.enforce ?? Object.keys(ce.components));
+  const pending = [];
   check('runtime core (lazy)', lazy.core.gzip, b.coreGzip);
-  check('global stylesheet', lazy.globalCss.gzip, b.globalCssGzip);
-  for (const [tag, c] of Object.entries(lazy.components)) check(`${tag} (lazy JS incl. CSS)`, c.js.gzip, b.components?.[tag] ?? b.componentGzip);
-  check('typical page JS (lazy)', page.lazy.js.gzip, b.pageJsGzip);
-  check('typical page component CSS', page.componentCss.gzip, b.pageComponentCssGzip);
+  check('document stylesheet sc.css', lazy.globalCss.gzip, b.globalCssGzip);
+  check('shadow helper sheet', lazy.shadowCss.gzip, b.shadowCssGzip);
+  for (const [tag, c] of Object.entries(ce.components)) {
+    const limit = b.components?.[tag] ?? b.componentGzip;
+    if (enforce.has(tag)) check(`${tag} (custom element JS incl. CSS and strings, excl. runtime)`, c.js.gzip, limit);
+    else if (c.js.gzip > limit) pending.push(`${tag}: ${c.js.gzip} B > ${limit} B (v1, not yet rebuilt)`);
+  }
+  if (uniqueTags.every((t) => enforce.has(t))) {
+    check('typical page JS (lazy)', page.lazy.js.gzip, b.pageJsGzip);
+    check('typical page component CSS', page.componentCss.gzip, b.pageComponentCssGzip);
+  } else {
+    pending.push(`typical page: ${page.lazy.js.gzip} B JS, ${page.componentCss.gzip} B component CSS (enforced once every tag on it is rebuilt)`);
+  }
+  if (b.pageFontsEnBytes != null && pageFonts.en > b.pageFontsEnBytes) failures.push(`fonts on an English page: ${pageFonts.en} B > budget ${b.pageFontsEnBytes} B`);
+  if (b.pageFontsArBytes != null && pageFonts.ar > b.pageFontsArBytes) failures.push(`fonts on an Arabic page: ${pageFonts.ar} B > budget ${b.pageFontsArBytes} B`);
+  report.budgetPending = pending;
   for (const f of fonts) if (b.fontFileBytes != null && f.bytes > b.fontFileBytes) failures.push(`${f.file}: ${f.bytes} B > budget ${b.fontFileBytes} B per font file`);
 }
 
@@ -371,7 +405,7 @@ if (flag('--json')) {
   const L = [];
   L.push(`# Bundle measurement (${report.generated})`, '', 'Sizes in KiB: raw / gzip / brotli. Each file compressed on its own.', '');
   L.push('## Lazy build (dist/sc-components)', '');
-  L.push(`- Loader \`${loaderFile}\`: ${fmt(lazy.loader)}`, `- Runtime core and its imports: ${fmt(lazy.core)}`, `- Global stylesheet (tokens, @font-face, body): ${fmt(lazy.globalCss)}`, `- All JS in the folder: ${fmt(lazyAll.size)} in ${lazyAll.files} files`, '');
+  L.push(`- Loader \`${loaderFile}\`: ${fmt(lazy.loader)}`, `- Runtime core and its imports: ${fmt(lazy.core)}`, `- Document stylesheet sc.css (tokens, @font-face, base, light-DOM styles, helpers): ${fmt(lazy.globalCss)}`, `- Shadow helper sheet (globalStyle, adopted by every shadow root): ${fmt(lazy.shadowCss)}`, `- All JS in the folder: ${fmt(lazyAll.size)} in ${lazyAll.files} files`, '');
   L.push('| Component | Entry (shared with) | JS incl. CSS, excl. core | CSS in entry |', '|---|---|---|---|');
   for (const [tag, c] of Object.entries(lazy.components)) L.push(`| ${tag} | ${c.entry}${c.sharedWith.length ? ` (${c.sharedWith.join(', ')})` : ''} | ${fmt(c.js)} | ${fmt(c.cssInEntry)} |`);
   L.push('', '## Custom-elements build (dist/components)', '', `- Runtime (index.js closure): ${fmt(ce.runtime)}`, `- All JS: ${fmt(ceAll.size)} in ${ceAll.files} files`, '');
@@ -398,10 +432,13 @@ if (flag('--json')) {
   L.push(`- Lazy: ${page.lazy.requests} requests (incl. stylesheet); JS ${fmt(page.lazy.js)}; global CSS ${fmt(page.lazy.css)}`);
   L.push(`- Custom elements: ${page.ce.modules} modules; JS per module ${fmt(page.ce.js)}; as one bundle ${fmt(page.ce.jsBundled)}`);
   L.push(`- Component CSS parsed (once per tag): ${fmt(page.componentCss)}`);
-  L.push(`- Fonts (all four weights, already compressed): ${kb(page.fonts)} KiB`);
+  L.push(`- Fonts a page downloads (already compressed): English ${kb(page.fonts)} KiB (three Latin weights), Arabic ${kb(page.fontsAr)} KiB (Arabic Regular and Bold)`);
   L.push(`- First-load total, lazy, gzip: ${kb(page.lazy.total.gzip)} KiB; brotli: ${kb(page.lazy.total.br)} KiB`);
   L.push('', '## www playground', '', `- build JS: ${fmt(www.js.size)} (${www.js.files} files); build CSS: ${fmt(www.css.size)}; playground shell: ${fmt(www.playground.size)} (${www.playground.files} files)`);
-  if (budgetFile) L.push('', '## Budgets', '', failures.length ? failures.map((f) => `- FAIL ${f}`).join('\n') : '- All within budget');
+  if (budgetFile) {
+    L.push('', '## Budgets', '', failures.length ? failures.map((f) => `- FAIL ${f}`).join('\n') : '- All enforced budgets met');
+    if (report.budgetPending?.length) L.push('', 'Pending (reported, not enforced):', ...report.budgetPending.map((p) => `- ${p}`));
+  }
   console.log(L.join('\n'));
 }
 if (failures.length) process.exit(1);

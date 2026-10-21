@@ -26,6 +26,9 @@
     "outline": {
       "$value": "{palette.neutral.60}"
     },
+    "outline-strong": {
+      "$value": "{palette.neutral.90}"
+    },
     "outline-variant": {
       "$value": "{palette.neutral.24}"
     },
@@ -197,6 +200,9 @@
       },
       "subtle": {
         "$value": "{channel.now.subtle}"
+      },
+      "outline": {
+        "$value": "{channel.now.outline}"
       }
     }
   },
@@ -220,6 +226,9 @@
       },
       "subtle": {
         "$value": "{palette.now.20}"
+      },
+      "outline": {
+        "$value": "{palette.now.40}"
       }
     },
     "transport": {
@@ -240,6 +249,9 @@
       },
       "subtle": {
         "$value": "{palette.transport.20}"
+      },
+      "outline": {
+        "$value": "{palette.transport.40}"
       }
     },
     "visit": {
@@ -260,6 +272,9 @@
       },
       "subtle": {
         "$value": "{palette.visit.20}"
+      },
+      "outline": {
+        "$value": "{palette.visit.40}"
       }
     },
     "justice": {
@@ -280,6 +295,9 @@
       },
       "subtle": {
         "$value": "{palette.justice.20}"
+      },
+      "outline": {
+        "$value": "{palette.justice.40}"
       }
     },
     "build": {
@@ -300,6 +318,9 @@
       },
       "subtle": {
         "$value": "{palette.build.20}"
+      },
+      "outline": {
+        "$value": "{palette.build.40}"
       }
     },
     "invest": {
@@ -320,6 +341,9 @@
       },
       "subtle": {
         "$value": "{palette.invest.20}"
+      },
+      "outline": {
+        "$value": "{palette.invest.40}"
       }
     },
     "trade": {
@@ -340,6 +364,9 @@
       },
       "subtle": {
         "$value": "{palette.trade.20}"
+      },
+      "outline": {
+        "$value": "{palette.trade.40}"
       }
     }
   }

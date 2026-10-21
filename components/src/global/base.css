@@ -1,0 +1,39 @@
+/*
+ * Document base: what a page gets from sc.css before any component loads (@layer sc.base).
+ * Services' own unlayered CSS always wins over it.
+ */
+
+/* Registered so the state layer (.state-layer) can transition its colour. */
+@property --sc-layer {
+  syntax: '<color>';
+  inherits: false;
+  initial-value: transparent;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--sc-color-surface);
+  color: var(--sc-color-on-surface);
+  font: var(--sc-type-body-large);
+  letter-spacing: var(--sc-type-body-large-tracking);
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* U1: every focusable element shows the neutral 3px ring 2px outside its edge (FOC-01).
+   :where() keeps it at zero specificity, so components and services can refine it. */
+:where(:focus-visible) {
+  outline: var(--sc-size-focus-ring) solid var(--sc-color-focus-ring);
+  outline-offset: var(--sc-size-focus-offset);
+}
+@media (forced-colors: active) {
+  :where(:focus-visible) {
+    outline-color: Highlight;
+  }
+}

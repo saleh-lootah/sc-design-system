@@ -22,6 +22,7 @@ data class SCColorScheme(
     val onSurface: Color, // Primary text and icons
     val onSurfaceVariant: Color, // Secondary text: hints, captions, metadata
     val outline: Color, // Control boundaries (1.5px) and inactive markers; at least 3:1
+    val outlineStrong: Color, // Hovered control edges, the sign-in edge and the plate chip; at least 3:1
     val outlineVariant: Color, // Dividers and card edges only; never the only edge of a control
     val inverseSurface: Color, // Tooltips and toasts
     val inverseOnSurface: Color, // Text on inverse-surface
@@ -78,6 +79,7 @@ val SCLightColors = SCColorScheme(
     onSurface = Color(red = 0.1054f, green = 0.1075f, blue = 0.1155f, alpha = 1f), // oklab(0.2242 0.0003 -0.004)
     onSurfaceVariant = Color(red = 0.3669f, green = 0.3694f, blue = 0.3791f, alpha = 1f), // oklab(0.4829 0.0003 -0.004)
     outline = Color(red = 0.3669f, green = 0.3694f, blue = 0.3791f, alpha = 1f), // oklab(0.4829 0.0003 -0.004)
+    outlineStrong = Color(red = 0.1054f, green = 0.1075f, blue = 0.1155f, alpha = 1f), // oklab(0.2242 0.0003 -0.004)
     outlineVariant = Color(red = 0.8844f, green = 0.8874f, blue = 0.8988f, alpha = 1f), // oklab(0.9139 0.0003 -0.004)
     inverseSurface = Color(red = 0.1869f, green = 0.1892f, blue = 0.1979f, alpha = 1f), // oklab(0.3104 0.0003 -0.004)
     inverseOnSurface = Color(red = 0.9515f, green = 0.9545f, blue = 0.9661f, alpha = 1f), // oklab(0.9656 0.0003 -0.004)
@@ -134,6 +136,7 @@ val SCDarkColors = SCColorScheme(
     onSurface = Color(red = 1f, green = 1f, blue = 1f, alpha = 1f), // oklab(1 0 0)
     onSurfaceVariant = Color(red = 0.7747f, green = 0.7776f, blue = 0.7887f, alpha = 1f), // oklab(0.8277 0.0003 -0.004)
     outline = Color(red = 0.564f, green = 0.5667f, blue = 0.5772f, alpha = 1f), // oklab(0.6553 0.0003 -0.004)
+    outlineStrong = Color(red = 0.8844f, green = 0.8874f, blue = 0.8988f, alpha = 1f), // oklab(0.9139 0.0003 -0.004)
     outlineVariant = Color(red = 0.2212f, green = 0.2236f, blue = 0.2325f, alpha = 1f), // oklab(0.3449 0.0003 -0.004)
     inverseSurface = Color(red = 0.8844f, green = 0.8874f, blue = 0.8988f, alpha = 1f), // oklab(0.9139 0.0003 -0.004)
     inverseOnSurface = Color(red = 0.1054f, green = 0.1075f, blue = 0.1155f, alpha = 1f), // oklab(0.2242 0.0003 -0.004)
@@ -192,6 +195,7 @@ data class SCChannel(
     val container: Color,
     val onContainer: Color,
     val subtle: Color,
+    val outline: Color,
 )
 
 object SCLightChannels {
@@ -203,6 +207,7 @@ object SCLightChannels {
         container = Color(red = 0.824f, green = 0.8932f, blue = 0.9998f, alpha = 1f), // oklab(0.9135 -0.008 -0.041)
         onContainer = Color(red = 0.0522f, green = 0.265f, blue = 0.5715f, alpha = 1f), // oklab(0.4014 -0.027 -0.1377)
         subtle = Color(red = 0.9119f, green = 0.9467f, blue = 0.9999f, alpha = 1f), // oklab(0.9567 -0.004 -0.0202)
+        outline = Color(red = 0.6468f, green = 0.7857f, blue = 0.9995f, alpha = 1f), // oklab(0.8276 -0.0166 -0.0845)
     )
     val transport = SCChannel(
         name = "transport",
@@ -212,6 +217,7 @@ object SCLightChannels {
         container = Color(red = 0.9999f, green = 0.8585f, blue = 0.8044f, alpha = 1f), // oklab(0.9177 0.033 0.0298)
         onContainer = Color(red = 0.4943f, green = 0.1724f, blue = 0.0012f, alpha = 1f), // oklab(0.4094 0.0916 0.0825)
         subtle = Color(red = 1f, green = 0.9299f, blue = 0.9033f, alpha = 1f), // oklab(0.9588 0.016 0.0144)
+        outline = Color(red = 1f, green = 0.7107f, blue = 0.5985f, alpha = 1f), // oklab(0.8364 0.0705 0.0636)
     )
     val visit = SCChannel(
         name = "visit",
@@ -221,6 +227,7 @@ object SCLightChannels {
         container = Color(red = 0.9999f, green = 0.8487f, blue = 0.9039f, alpha = 1f), // oklab(0.9198 0.0462 -0.0048)
         onContainer = Color(red = 0.5058f, green = 0.1217f, blue = 0.3166f, alpha = 1f), // oklab(0.4151 0.1395 -0.0144)
         subtle = Color(red = 0.9999f, green = 0.925f, blue = 0.9514f, alpha = 1f), // oklab(0.9598 0.0223 -0.0023)
+        outline = Color(red = 0.9997f, green = 0.689f, blue = 0.8115f, alpha = 1f), // oklab(0.8405 0.0993 -0.0102)
     )
     val justice = SCChannel(
         name = "justice",
@@ -230,6 +237,7 @@ object SCLightChannels {
         container = Color(red = 0.9014f, green = 0.873f, blue = 0.9821f, alpha = 1f), // oklab(0.9166 0.0177 -0.0339)
         onContainer = Color(red = 0.3213f, green = 0.2229f, blue = 0.4984f, alpha = 1f), // oklab(0.408 0.0531 -0.1017)
         subtle = Color(red = 0.9502f, green = 0.9364f, blue = 0.9918f, alpha = 1f), // oklab(0.9583 0.0088 -0.017)
+        outline = Color(red = 0.8091f, green = 0.744f, blue = 0.9744f, alpha = 1f), // oklab(0.8342 0.0383 -0.0735)
     )
     val build = SCChannel(
         name = "build",
@@ -239,6 +247,7 @@ object SCLightChannels {
         container = Color(red = 0.9999f, green = 0.8728f, blue = 0.6252f, alpha = 1f), // oklab(0.9149 0.0097 0.0871)
         onContainer = Color(red = 0.361f, green = 0.2608f, blue = 0.0001f, alpha = 1f), // oklab(0.3984 0.009 0.0813)
         subtle = Color(red = 0.9915f, green = 0.9386f, blue = 0.8375f, alpha = 1f), // oklab(0.9571 0.0041 0.0366)
+        outline = Color(red = 0.9531f, green = 0.7475f, blue = 0.2998f, alpha = 1f), // oklab(0.8304 0.0156 0.1406)
     )
     val invest = SCChannel(
         name = "invest",
@@ -248,6 +257,7 @@ object SCLightChannels {
         container = Color(red = 0.7627f, green = 0.9333f, blue = 0.7376f, alpha = 1f), // oklab(0.9055 -0.0632 0.0503)
         onContainer = Color(red = 0.1094f, green = 0.319f, blue = 0.083f, alpha = 1f), // oklab(0.3864 -0.0837 0.0666)
         subtle = Color(red = 0.8858f, green = 0.9663f, blue = 0.8735f, alpha = 1f), // oklab(0.9529 -0.0298 0.0237)
+        outline = Color(red = 0.5684f, green = 0.8455f, blue = 0.5305f, alpha = 1f), // oklab(0.8145 -0.1023 0.0814)
     )
     val trade = SCChannel(
         name = "trade",
@@ -257,6 +267,7 @@ object SCLightChannels {
         container = Color(red = 0.8425f, green = 0.8943f, blue = 0.947f, alpha = 1f), // oklab(0.9131 -0.0085 -0.0216)
         onContainer = Color(red = 0.2017f, green = 0.285f, blue = 0.367f, alpha = 1f), // oklab(0.3956 -0.0162 -0.0414)
         subtle = Color(red = 0.9205f, green = 0.947f, blue = 0.9742f, alpha = 1f), // oklab(0.9565 -0.0043 -0.011)
+        outline = Color(red = 0.688f, green = 0.7897f, blue = 0.8924f, alpha = 1f), // oklab(0.8263 -0.0169 -0.0432)
     )
     val all = listOf(now, transport, visit, justice, build, invest, trade)
 }
@@ -270,6 +281,7 @@ object SCDarkChannels {
         container = Color(red = 0.0522f, green = 0.265f, blue = 0.5715f, alpha = 1f), // oklab(0.4014 -0.027 -0.1377)
         onContainer = Color(red = 0.824f, green = 0.8932f, blue = 0.9998f, alpha = 1f), // oklab(0.9135 -0.008 -0.041)
         subtle = Color(red = 0.1f, green = 0.1895f, blue = 0.3284f, alpha = 1f), // oklab(0.3115 -0.0135 -0.0689)
+        outline = Color(red = 0.1233f, green = 0.3591f, blue = 0.7131f, alpha = 1f), // oklab(0.4874 -0.03 -0.153)
     )
     val transport = SCChannel(
         name = "transport",
@@ -279,6 +291,7 @@ object SCDarkChannels {
         container = Color(red = 0.4943f, green = 0.1724f, blue = 0.0012f, alpha = 1f), // oklab(0.4094 0.0916 0.0825)
         onContainer = Color(red = 0.9999f, green = 0.8585f, blue = 0.8044f, alpha = 1f), // oklab(0.9177 0.033 0.0298)
         subtle = Color(red = 0.3054f, green = 0.1451f, blue = 0.0802f, alpha = 1f), // oklab(0.317 0.0499 0.045)
+        outline = Color(red = 0.6462f, green = 0.2366f, blue = 0.0064f, alpha = 1f), // oklab(0.4982 0.111 0.1)
     )
     val visit = SCChannel(
         name = "visit",
@@ -288,6 +301,7 @@ object SCDarkChannels {
         container = Color(red = 0.5058f, green = 0.1217f, blue = 0.3166f, alpha = 1f), // oklab(0.4151 0.1395 -0.0144)
         onContainer = Color(red = 0.9999f, green = 0.8487f, blue = 0.9039f, alpha = 1f), // oklab(0.9198 0.0462 -0.0048)
         subtle = Color(red = 0.3036f, green = 0.1328f, blue = 0.208f, alpha = 1f), // oklab(0.3195 0.0698 -0.0072)
+        outline = Color(red = 0.64f, green = 0.2017f, blue = 0.4157f, alpha = 1f), // oklab(0.5033 0.155 -0.016)
     )
     val justice = SCChannel(
         name = "justice",
@@ -297,6 +311,7 @@ object SCDarkChannels {
         container = Color(red = 0.3213f, green = 0.2229f, blue = 0.4984f, alpha = 1f), // oklab(0.408 0.0531 -0.1017)
         onContainer = Color(red = 0.9014f, green = 0.873f, blue = 0.9821f, alpha = 1f), // oklab(0.9166 0.0177 -0.0339)
         subtle = Color(red = 0.208f, green = 0.1683f, blue = 0.2944f, alpha = 1f), // oklab(0.3154 0.0265 -0.0509)
+        outline = Color(red = 0.4199f, green = 0.3093f, blue = 0.6282f, alpha = 1f), // oklab(0.4951 0.059 -0.113)
     )
     val build = SCChannel(
         name = "build",
@@ -306,6 +321,7 @@ object SCDarkChannels {
         container = Color(red = 0.361f, green = 0.2608f, blue = 0.0001f, alpha = 1f), // oklab(0.3984 0.009 0.0813)
         onContainer = Color(red = 0.9999f, green = 0.8728f, blue = 0.6252f, alpha = 1f), // oklab(0.9149 0.0097 0.0871)
         subtle = Color(red = 0.2331f, green = 0.1824f, blue = 0.0787f, alpha = 1f), // oklab(0.3111 0.005 0.0446)
+        outline = Color(red = 0.4771f, green = 0.3489f, blue = 0.0002f, alpha = 1f), // oklab(0.4851 0.011 0.099)
     )
     val invest = SCChannel(
         name = "invest",
@@ -315,6 +331,7 @@ object SCDarkChannels {
         container = Color(red = 0.1094f, green = 0.319f, blue = 0.083f, alpha = 1f), // oklab(0.3864 -0.0837 0.0666)
         onContainer = Color(red = 0.7627f, green = 0.9333f, blue = 0.7376f, alpha = 1f), // oklab(0.9055 -0.0632 0.0503)
         subtle = Color(red = 0.1214f, green = 0.2107f, blue = 0.1093f, alpha = 1f), // oklab(0.305 -0.0418 0.0333)
+        outline = Color(red = 0.1827f, green = 0.4195f, blue = 0.153f, alpha = 1f), // oklab(0.4713 -0.093 0.074)
     )
     val trade = SCChannel(
         name = "trade",
@@ -324,6 +341,7 @@ object SCDarkChannels {
         container = Color(red = 0.2017f, green = 0.285f, blue = 0.367f, alpha = 1f), // oklab(0.3956 -0.0162 -0.0414)
         onContainer = Color(red = 0.8425f, green = 0.8943f, blue = 0.947f, alpha = 1f), // oklab(0.9131 -0.0085 -0.0216)
         subtle = Color(red = 0.1553f, green = 0.1937f, blue = 0.2322f, alpha = 1f), // oklab(0.3098 -0.0081 -0.0207)
+        outline = Color(red = 0.2825f, green = 0.3791f, blue = 0.4748f, alpha = 1f), // oklab(0.4816 -0.018 -0.046)
     )
     val all = listOf(now, transport, visit, justice, build, invest, trade)
 }

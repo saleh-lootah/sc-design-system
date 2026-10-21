@@ -10,22 +10,23 @@
 //   --sc-space-<n>, --sc-radius-<name>, --sc-size-<name>, --sc-elevation-<n>,
 //   --sc-opacity-<name>, --sc-duration-<name>, --sc-easing-<name>, --sc-scale-<name>,
 //   --sc-breakpoint-<name>, --sc-grid-<bp>-<prop>, --sc-container-<name>
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
-import { loadTokens, group, CHANNELS, CHANNEL_ROLES, DEFAULT_CHANNEL, DIST_DIR, ROOT } from './lib/tokens.mjs';
+import { loadTokens, group, CHANNELS, CHANNEL_ROLES, DEFAULT_CHANNEL, DIST_DIR, ROOT, TOKENS_DIR } from './lib/tokens.mjs';
 import { toSrgb01, inGamut } from './lib/oklab.mjs';
 
 const HEADER = 'Generated — edit tokens/source/*.json or tokens/*.json, then npm run build';
 const tokens = loadTokens();
 const { light } = tokens;
 
-// Real PostScript names, read from the name tables (nameID 6) of
-// ~/Library/Fonts/DubaiW23-*.ttf. Each weight ships as its own family.
-const POSTSCRIPT = {
-  'Dubai W23 Light': 'DubaiW23-Light',
-  'Dubai W23 Regular': 'DubaiW23-Regular',
-  'Dubai W23 Medium': 'DubaiW23-Medium',
-  'Dubai W23 Bold': 'DubaiW23-Bold',
+// Installed (desktop and native) font names per weight, from the name tables of the
+// DubaiW23-*.ttf files: each weight is its own family there. The web uses one family,
+// "Dubai W23", with real weights (components/src/global/fonts.css).
+const LOCAL_FACES = JSON.parse(readFileSync(join(TOKENS_DIR, 'typography.json'), 'utf8')).$extensions['sc.localFaces'];
+const localFace = (weight) => {
+  const face = LOCAL_FACES[String(weight)];
+  if (!face) throw new Error(`No local face for weight ${weight} in typography.json $extensions["sc.localFaces"]`);
+  return face;
 };
 
 // ---------------------------------------------------------------- token groups
@@ -91,7 +92,6 @@ const shadow = (layers) =>
   layers.length ? layers.map((s) => `${dim(s.offsetX)} ${dim(s.offsetY)} ${dim(s.blur)} ${dim(s.spread)} ${oklab(s.color)}`).join(', ') : 'none';
 const cubic = (v) => `cubic-bezier(${v.join(', ')})`;
 const pct = (n) => `${Number((n * 100).toFixed(2))}%`;
-const familyKey = (t) => t.ref.fontFamily.replace(/^\{font\.family\.(.+)\}$/, '$1');
 const weightKey = (t) => t.ref.fontWeight.replace(/^\{font\.weight\.(.+)\}$/, '$1');
 const camel = (s) => s.replace(/-([a-z0-9])/g, (_, c) => c.toUpperCase());
 const pascal = (s) => camel(s).replace(/^./, (c) => c.toUpperCase());
@@ -107,11 +107,42 @@ function write(rel, content) {
 
 function typeDecls(t, decl) {
   const role = t.path[2];
-  decl(`--sc-type-${role}-family`, `var(--sc-font-family-${familyKey(t)})`);
+  const v = t.value;
+  // The font shorthand a component writes in one declaration: font: var(--sc-type-<role>).
+  decl(`--sc-type-${role}`, `${v.fontWeight} ${dim(v.fontSize)}/${t.extensions.lineHeightPx}px var(--sc-font-family)`);
+  decl(`--sc-type-${role}-family`, 'var(--sc-font-family)');
   decl(`--sc-type-${role}-weight`, `var(--sc-font-weight-${weightKey(t)})`);
-  decl(`--sc-type-${role}-size`, dim(t.value.fontSize));
+  decl(`--sc-type-${role}-size`, dim(v.fontSize));
   decl(`--sc-type-${role}-leading`, `${t.extensions.lineHeightPx}px`);
-  decl(`--sc-type-${role}-tracking`, t.value.letterSpacing.value === 0 ? '0' : dim(t.value.letterSpacing));
+  decl(`--sc-type-${role}-tracking`, v.letterSpacing.value === 0 ? '0' : dim(v.letterSpacing));
+}
+
+/**
+ * A1 fallback for engines without light-dark() (iOS 16, Safari before 17.5). Custom
+ * properties keep an unsupported light-dark() as text and fail where they are used, so the
+ * fallback redeclares each colour once with both values behind a pair of "space toggles":
+ * --sc-dk is the guaranteed-invalid value (initial) in light mode and empty in dark mode,
+ * --sc-lt the reverse, so var(--sc-dk, <light>) var(--sc-lt, <dark>) leaves exactly one.
+ * System roles re-resolve on :root and on any [data-theme] element; channel roles on each
+ * [data-channel] element, following the theme in force there.
+ */
+function lightDarkFallback(L) {
+  const toggled = (t) => `var(--sc-dk, ${oklab(t.value)}) var(--sc-lt, ${oklab(darkOf(t).value)})`;
+  const varies = (list) => list.filter((t) => lightDark(t).startsWith('light-dark('));
+  L.push('/* A1 fallback: engines without light-dark() (iOS 16, Safari before 17.5). */');
+  L.push('@supports not (color: light-dark(white, black)) {');
+  L.push('  :root, [data-theme="light"] { --sc-dk: initial; --sc-lt: ; }');
+  L.push('  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --sc-dk: ; --sc-lt: initial; } }');
+  L.push('  [data-theme="dark"] { --sc-dk: ; --sc-lt: initial; }');
+  L.push('  :root, [data-theme] {');
+  for (const t of varies(roles)) L.push(`    ${roleVar(t)}: ${toggled(t)};`);
+  L.push('  }');
+  for (const ch of CHANNELS) {
+    L.push(`  ${ch === DEFAULT_CHANNEL ? ':root, ' : ''}[data-channel="${ch}"] {`);
+    for (const t of varies(channelOf(ch))) L.push(`    --sc-color-channel-${t.path[2]}: ${toggled(t)};`);
+    L.push('  }');
+  }
+  L.push('}', '');
 }
 
 function buildCss() {
@@ -129,8 +160,8 @@ function buildCss() {
   section('State layers: color-mix(in oklab, <content colour> var(--sc-opacity-hover), transparent)');
   for (const t of opacity) decl(cssVar(t.path), pct(t.value), t.description);
 
-  section('Font');
-  for (const t of families) decl(cssVar(t.path), fontStack(t.value));
+  section('Font: one family, "Dubai W23", with real weights. --sc-font-family follows lang (see the type roles below).');
+  for (const t of families) decl(cssVar(t.path), fontStack(t.value), t.description);
   for (const t of weights) decl(cssVar(t.path), t.value);
 
   section('Space');
@@ -166,10 +197,14 @@ function buildCss() {
   L.push('   get the Arabic scale, and lang="en" inside Arabic switches back. Components only ever');
   L.push('   read --sc-type-<role>-*, so they never branch on script. */');
   L.push(':root, [lang]:not([lang|="ar"]) {');
+  decl('--sc-font-family', 'var(--sc-font-family-latin)');
   for (const t of en) typeDecls(t, decl);
   L.push('}', '[lang|="ar"] {');
+  decl('--sc-font-family', 'var(--sc-font-family-arabic)');
   for (const t of en) typeDecls(arOf(t.path[2]), decl);
   L.push('}', '');
+
+  lightDarkFallback(L);
 
   // Reduced motion: movement stops, opacity and colour keep their timing.
   L.push('/* Reduced motion: movement stops (spin, scale); opacity and colour transitions keep their durations */');
@@ -184,13 +219,7 @@ function buildCss() {
   L.push('/* Type classes for page markup. Script-aware through the variables above. */');
   for (const t of en) {
     const r = t.path[2];
-    L.push(`.sc-type-${r} {`);
-    L.push(`  font-family: var(--sc-type-${r}-family);`);
-    L.push(`  font-weight: var(--sc-type-${r}-weight);`);
-    L.push(`  font-size: var(--sc-type-${r}-size);`);
-    L.push(`  line-height: var(--sc-type-${r}-leading);`);
-    L.push(`  letter-spacing: var(--sc-type-${r}-tracking);`);
-    L.push('}');
+    L.push(`.sc-type-${r} { font: var(--sc-type-${r}); letter-spacing: var(--sc-type-${r}-tracking); }`);
   }
   return L.join('\n') + '\n';
 }
@@ -227,7 +256,7 @@ function buildTailwind() {
   decl('--shadow-*', 'initial');
   for (const t of elevation) decl(`--shadow-${t.path[1]}`, t.value.length ? `var(${cssVar(t.path)})` : '0 0 transparent');
   L.push('', '  /* Fonts */');
-  decl('--font-sans', 'var(--sc-font-family-regular)');
+  decl('--font-sans', 'var(--sc-font-family)');
   for (const t of families) decl(`--font-${t.path[2]}`, `var(${cssVar(t.path)})`);
   for (const t of weights) decl(`--font-weight-${t.path[2]}`, `var(${cssVar(t.path)})`);
   L.push('', '  /* Type roles: text-<role>. Arabic sizes apply automatically under lang="ar". */');
@@ -349,8 +378,7 @@ function buildSwift() {
     ({ display: '.largeTitle', headline: '.title', title: '.headline', body: '.body', label: '.subheadline' })[role.split('-')[0]] ?? '.body';
   const styleLine = (t) => {
     const v = t.value;
-    const ps = POSTSCRIPT[v.fontFamily[0]];
-    if (!ps) throw new Error(`No PostScript name for ${v.fontFamily[0]}`);
+    const ps = localFace(v.fontWeight).postScript;
     const tracking = Number((v.letterSpacing.value * px(v.fontSize)).toFixed(3));
     return `SCTextStyle(postScriptName: "${ps}", size: ${px(v.fontSize)}, lineHeight: ${t.extensions.lineHeightPx}, tracking: ${tracking}, relativeTo: ${relativeTo(t.path[2])})`;
   };
@@ -487,7 +515,8 @@ function buildPaper() {
   for (const t of palette) add('color', `--sc-palette-${t.path[1]}-${t.path[2]}`, oklab(t.value));
   for (const t of opacity) add('opacity', cssVar(t.path), pct(t.value), t.description);
 
-  for (const t of families) add('fontFamily', cssVar(t.path), t.value[0]);
+  // Paper uses the installed fonts, where each weight is its own family.
+  for (const t of weights) add('fontFamily', `--sc-font-family-${t.path[2]}`, localFace(t.value).family);
   for (const t of weights) add('fontWeight', cssVar(t.path), t.value);
   // Paper wants size tokens smallest first.
   const typeEntries = { fontSize: [], lineHeight: [], letterSpacing: [] };

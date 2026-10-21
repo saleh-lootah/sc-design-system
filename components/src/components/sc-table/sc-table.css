@@ -9,12 +9,6 @@
  * Column types come from `data-type` on each cell (copied from its header):
  *   text · reference · date · amount · status · action
  */
-@import '../../styles/shared.css';
-@import '../../styles/type/title-s.css';
-@import '../../styles/type/title-m.css';
-@import '../../styles/type/label-s.css';
-@import '../../styles/type/label-m.css';
-@import '../../styles/type/body-s.css';
 
 :host {
   /* Queried below for the stacked and scrolling layouts under 600px (--sc-breakpoint-medium). */
