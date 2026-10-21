@@ -8,13 +8,13 @@
   <div class="pg-card">
     <form id="rg-form" novalidate>
       <sc-radio-group name="delivery" label="How do you want to receive your registration card?" data-ar-label="ما الطريقة المفضّلة لاستلام بطاقة الملكية؟" hint="Your digital card is ready straight away" data-ar-hint="تكون البطاقة الرقمية جاهزة فورًا" value="digital">
-        <sc-radio value="digital" hint="In the Dubai Now app and your digital wallet" data-ar-hint="في تطبيق دبي الآن وفي محفظتك الرقمية" data-ar="بطاقة رقمية">Digital card</sc-radio>
-        <sc-radio value="courier" hint="AED 20, delivered in 2 working days" data-ar-hint="20 درهمًا، خلال يومي عمل" data-ar="توصيل بالبريد">Courier delivery</sc-radio>
-        <sc-radio value="centre" data-ar="الاستلام من مركز خدمة العملاء">Collect from a customer service centre</sc-radio>
+        <sc-radio value="digital" hint="In the Dubai Now app and your digital wallet" data-ar-hint="في تطبيق دبي الآن وفي محفظتك الرقمية"><span data-ar="بطاقة رقمية">Digital card</span></sc-radio>
+        <sc-radio value="courier" hint="AED 20, delivered in 2 working days" data-ar-hint="20 درهمًا، خلال يومي عمل"><span data-ar="توصيل بالبريد">Courier delivery</span></sc-radio>
+        <sc-radio value="centre"><span data-ar="الاستلام من مركز خدمة العملاء">Collect from a customer service centre</span></sc-radio>
       </sc-radio-group>
       <div class="pg-row" style="margin-block-start: var(--sc-space-24)">
-        <sc-button type="submit" data-ar="متابعة">Continue</sc-button>
-        <sc-button type="reset" variant="tertiary" data-ar="مسح">Clear</sc-button>
+        <sc-button type="submit"><span data-ar="متابعة">Continue</span></sc-button>
+        <sc-button type="reset" variant="tertiary"><span data-ar="مسح">Clear</span></sc-button>
       </div>
       <p class="pg-output" id="rg-output" role="status"></p>
     </form>
@@ -28,30 +28,30 @@
       <div class="pg-cell">
         <span class="pg-label">inline · focus (keyboard)</span>
         <sc-radio-group label="Is the vehicle insured?" data-ar-label="هل المركبة مؤمّنة؟" inline name="insured" data-demo-focus>
-          <sc-radio value="yes" data-ar="نعم">Yes</sc-radio>
-          <sc-radio value="no" data-ar="لا">No</sc-radio>
+          <sc-radio value="yes"><span data-ar="نعم">Yes</span></sc-radio>
+          <sc-radio value="no"><span data-ar="لا">No</span></sc-radio>
         </sc-radio-group>
       </div>
       <div class="pg-cell">
         <span class="pg-label">error</span>
         <sc-radio-group id="plate-issuer" label="Who issued the plate?" data-ar-label="من أصدر اللوحة؟" error="Select who issued the plate" data-ar-error="يُرجى اختيار جهة إصدار اللوحة" name="issuer">
-          <sc-radio value="dubai" data-ar="دبي">Dubai</sc-radio>
-          <sc-radio value="other" data-ar="إمارة أخرى">Another emirate</sc-radio>
+          <sc-radio value="dubai"><span data-ar="دبي">Dubai</span></sc-radio>
+          <sc-radio value="other"><span data-ar="إمارة أخرى">Another emirate</span></sc-radio>
         </sc-radio-group>
       </div>
       <div class="pg-cell">
         <span class="pg-label">optional · disabled option</span>
         <sc-radio-group label="Preferred language for SMS" data-ar-label="لغة الرسائل النصية المفضلة" optional name="sms">
-          <sc-radio value="ar" data-ar="العربية">Arabic</sc-radio>
-          <sc-radio value="en" data-ar="الإنجليزية">English</sc-radio>
-          <sc-radio value="ur" disabled hint="Coming soon" data-ar-hint="قريبًا" data-ar="الأردية">Urdu</sc-radio>
+          <sc-radio value="ar"><span data-ar="العربية">Arabic</span></sc-radio>
+          <sc-radio value="en"><span data-ar="الإنجليزية">English</span></sc-radio>
+          <sc-radio value="ur" disabled hint="Coming soon" data-ar-hint="قريبًا"><span data-ar="الأردية">Urdu</span></sc-radio>
         </sc-radio-group>
       </div>
       <div class="pg-cell">
         <span class="pg-label">legend as page heading</span>
         <sc-radio-group label="Do you want to renew for 1 or 2 years?" data-ar-label="هل التجديد لسنة أو لسنتين؟" heading-level="2" name="term" value="1">
-          <sc-radio value="1" data-ar="سنة واحدة">1 year</sc-radio>
-          <sc-radio value="2" data-ar="سنتان">2 years</sc-radio>
+          <sc-radio value="1"><span data-ar="سنة واحدة">1 year</span></sc-radio>
+          <sc-radio value="2"><span data-ar="سنتان">2 years</span></sc-radio>
         </sc-radio-group>
       </div>
     </div>
@@ -78,8 +78,8 @@
 <section class="pg-section" aria-labelledby="rg-a11y">
   <h2 id="rg-a11y" class="sc-type-headline-small" data-ar="كيف تعمل إمكانية الوصول">How the accessibility works</h2>
   <div class="pg-card">
-    <p class="pg-note" style="margin: 0" data-ar="ترسم المجموعة حقلًا (fieldset) بدور radiogroup، وزر اختيار أصليًا لكل sc-radio، كلها داخل جذر ظل واحد. يوضع كل sc-radio داخل تسمية زره بالإسناد اليدوي للفتحات، فيسمّي محتواه الزر بينما تبقى الأزرار في شجرة واحدة.">
-      The group renders a fieldset with role="radiogroup" and one native radio per sc-radio, all in its own shadow root. Each sc-radio is slotted into its radio's label with manual slot assignment, so its content names the radio while the radios stay in one tree.
+    <p class="pg-note" style="margin: 0" data-ar="ترسم المجموعة حقلًا (fieldset) أصليًا بدور radiogroup في DOM الصفحة، ويرسم كل sc-radio زر اختيار أصليًا وتسميته. تشترك الأزرار كلها في الاسم نفسه داخل شجرة واحدة، فيوفّر المتصفح سلوك مجموعة الاختيار: محطة Tab واحدة، وتنقل الأسهم وتختار.">
+      The group renders a native fieldset with role="radiogroup" in the page's DOM (light DOM, decision A2), and each sc-radio renders a native radio and its label. All the radios share one name in one tree, so the browser provides the radio group behaviour: one Tab stop, and the arrow keys move and select.
     </p>
   </div>
 </section>
