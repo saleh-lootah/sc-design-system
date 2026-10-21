@@ -376,6 +376,36 @@ describe('sc-table (e2e, v2 look)', () => {
     expect((await read())[1]).toBe('18px');
   });
 
+  it('matches board 09.05: a 48px header row, 14px cell padding, channel-action row-header links, a Bold count and a Medium total', async () => {
+    const page = await newScPage(fines('en'));
+    await page.evaluate(() => (document.querySelector('#t tbody .sc-table__box') as HTMLInputElement).click());
+    await page.waitForChanges();
+    const r = await page.evaluate(() => {
+      const th = document.querySelector('#t thead th:not(.sc-table__select)')!;
+      return {
+        head: Math.round(th.getBoundingClientRect().height),
+        pad: getComputedStyle(document.querySelector('#t tbody td:not(.sc-table__select)')!).paddingTop,
+        link: getComputedStyle(document.querySelector('#t tbody th a')!).color,
+        count: getComputedStyle(document.querySelector('#t .selection-count')!).fontWeight,
+        total: getComputedStyle(document.querySelector('#t .selection-total')!).fontWeight,
+      };
+    });
+    expect(r.head).toBeGreaterThanOrEqual(48);
+    expect(r.pad).toBe('14px');
+    expect(r.link).toBe(await token(page, '--sc-color-channel-action'));
+    expect([r.count, r.total]).toEqual(['700', '500']);
+  });
+
+  it('stacks cells as key and value pairs on one line below 600px, the value end-aligned', async () => {
+    const page = await newScPage(`<div style="inline-size: 360px">${fines('en')}</div>`);
+    const r = await page.evaluate(() => {
+      const td = document.querySelector('#t tbody tr td:not(.sc-table__select)')!;
+      const before = getComputedStyle(td, '::before');
+      return { display: getComputedStyle(td).display, align: getComputedStyle(td).textAlign, label: before.content, labelDisplay: before.display };
+    });
+    expect(r).toEqual({ display: 'table', align: 'end', label: '"Date"', labelDisplay: 'table-cell' });
+  });
+
   it('styles from @layer sc.components, so unlayered service CSS wins without !important', async () => {
     const page = await newScPage(`<style>#t .container { border-radius: 0; }</style>${fines('en')}`);
     expect(await page.evaluate(() => getComputedStyle(document.querySelector('#t .container')!).borderTopLeftRadius)).toBe('0px');

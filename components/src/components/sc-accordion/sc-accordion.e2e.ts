@@ -97,6 +97,19 @@ describe('sc-accordion (e2e)', () => {
     await setPageContext(page, { lang: 'ar' });
     expect((await read())[2]).toBe('20px');
   });
+
+  it('sets the answer in body-medium, 8 apart, clear of the chevron column, with 2 under the title (board 09.10)', async () => {
+    const page = await newScPage(FAQ);
+    await page.evaluate(() => ((document.querySelector('#d2') as HTMLDetailsElement).open = true));
+    await page.waitForChanges();
+    const r = await page.evaluate(() => {
+      const ps = document.querySelectorAll('#d2 > p');
+      const s = getComputedStyle(document.querySelector('#d1 > summary')!);
+      const p = getComputedStyle(ps[1]);
+      return [getComputedStyle(ps[0]).fontSize, getComputedStyle(ps[0]).marginBlockStart, p.marginBlockStart, p.paddingInlineEnd, s.rowGap];
+    });
+    expect(r).toEqual(['16px', '8px', '8px', '40px', '2px']);
+  });
 });
 
 describeAxe('sc-accordion', FAQ);
