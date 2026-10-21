@@ -38,24 +38,26 @@ Columns mirror: key on the right, action on the left. The action text is "تغي
 
 ## Overview
 
-The "Check your answers" pattern: rows of a key, a value and an optional "Change" action,
-as one `<dl>`.
+The "Check your answers" pattern (E3) and the payment summary (E4): rows of a key, a value
+and an optional "Change" action, as one `<dl>`.
 
-Description lists can't span shadow roots (a `<dl>` must directly contain `<dt>`/`<dd>`
-or `<div>` groups), so this component renders the whole `<dl>` in its own shadow root:
-one `<div>` per row holding the `<dt>` (from the row's `label`), the value `<dd>` and the
-action `<dd>`. Each `sc-summary-row` child is assigned to a named slot inside its value
-`<dd>`, so rich values (addresses, `<sc-ltr>` plates) stay in light DOM.
+v2 renders in light DOM (Stencil `scoped`, architecture §3.1). The list renders the
+`<dl>` itself: one `<div>` per row holding the `<dt>` (the row's `label`), the value `<dd>`
+and the action `<dd>`. Each `sc-summary-row` child is moved into its value `<dd>`, so the
+description list is valid HTML (a `<dl>` may only contain `<div>`, `<dt>` and `<dd>`) and
+rich values (addresses, `<sc-ltr>` plates) stay the service's own markup.
 
-Wide containers show three columns (key, value, a fixed-width action column, so rows
-align). Below 600px of container width the key sits above the value, with the action at
-the end.
+Layouts: `stacked` puts the key above the value with the action in a fixed 64px end column
+(E3); `columns` shows key, value and a fixed 96px action column; `pairs` puts the key in a
+fixed column and end-aligns the value, with no actions (E4); `auto` (default) is `stacked`
+below 600px of the list's own width and `columns` from there.
 
 ## Properties
 
-| Property     | Attribute    | Description                                                                                                                   | Type                | Default  |
-| ------------ | ------------ | ----------------------------------------------------------------------------------------------------------------------------- | ------------------- | -------- |
-| `appearance` | `appearance` | `card` (default) sits the rows on a surface card, as in D+; `plain` draws only the row dividers, for use inside another card. | `"card" \| "plain"` | `'card'` |
+| Property     | Attribute    | Description                                                                                                                       | Type                                          | Default  |
+| ------------ | ------------ | --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- | -------- |
+| `appearance` | `appearance` | `card` (default) draws the rows on a 12px card with a 1px edge; `plain` draws only the row dividers, for use inside another card. | `"card" \| "plain"`                           | `'card'` |
+| `layout`     | `layout`     | `auto` (default), `stacked`, `columns` or `pairs`. See the component description.                                                 | `"auto" \| "columns" \| "pairs" \| "stacked"` | `'auto'` |
 
 
 ## Slots
@@ -63,17 +65,6 @@ the end.
 | Slot | Description                                                            |
 | ---- | ---------------------------------------------------------------------- |
 |      | `sc-summary-row` elements, one per answer. Other children are ignored. |
-
-
-## Shadow Parts
-
-| Part       | Description         |
-| ---------- | ------------------- |
-| `"action"` | Each action `<dd>`. |
-| `"key"`    | Each `<dt>`.        |
-| `"list"`   | The `<dl>`.         |
-| `"row"`    | Each row's `<div>`. |
-| `"value"`  | Each value `<dd>`.  |
 
 
 ----------------------------------------------

@@ -35,21 +35,5 @@ export function overrideTranslator<K extends string>(lang: Lang, input: StringsI
   };
 }
 
-/**
- * Picks a plural form from a `|`-separated template with Intl.PluralRules.
- * English: "one|other". Arabic: "zero|one|two|few|many|other" (missing forms fall back to the last).
- * A template without `|` is returned as it is.
- */
-export function plural(template: string, count: number, lang: Lang): string {
-  if (!template.includes('|')) return template;
-  const forms = template.split('|');
-  const order = lang === 'ar' ? ['zero', 'one', 'two', 'few', 'many', 'other'] : ['one', 'other'];
-  let category = 'other';
-  try {
-    category = new Intl.PluralRules(lang).select(count);
-  } catch {
-    /* keep "other" */
-  }
-  const index = order.indexOf(category);
-  return (forms[index] ?? forms[forms.length - 1]).trim();
-}
+/** Plural forms: see ../../i18n/plural. Re-exported for the table's callers and tests. */
+export { plural } from '../../i18n/plural';

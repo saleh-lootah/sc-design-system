@@ -5,6 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { AttentionCardHeadingLevel, AttentionCardTint } from "./components/sc-attention-card/sc-attention-card";
 import { ButtonIconPosition, ButtonSize, ButtonType, ButtonVariant } from "./components/sc-button/sc-button";
 import { IconName } from "./icons/index";
 import { CalloutHeadingLevel, CalloutTone } from "./components/sc-callout/sc-callout";
@@ -16,6 +17,7 @@ import { Parts } from "./components/sc-date-input/date";
 import { StringsInput } from "./components/sc-table/overrides";
 import { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
 import { LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
+import { ModuleCardHeadingLevel, ModuleCardTint } from "./components/sc-module-card/sc-module-card";
 import { ScSearchDetail } from "./components/sc-search/sc-search";
 import { ServiceCardHeadingLevel, ServiceCardTint } from "./components/sc-service-card/sc-service-card";
 import { StatusTagTone } from "./components/sc-status-tag/sc-status-tag";
@@ -24,6 +26,8 @@ import { SummaryRowVariant } from "./components/sc-summary-row/sc-summary-row";
 import { StringsInput as StringsInput1 } from "./components/sc-table/strings-override";
 import { SortDirection } from "./components/sc-table/sc-table";
 import { TextInputType, TextInputWidth } from "./components/sc-text-input/sc-text-input";
+import { TileTint } from "./components/sc-tile/sc-tile";
+export { AttentionCardHeadingLevel, AttentionCardTint } from "./components/sc-attention-card/sc-attention-card";
 export { ButtonIconPosition, ButtonSize, ButtonType, ButtonVariant } from "./components/sc-button/sc-button";
 export { IconName } from "./icons/index";
 export { CalloutHeadingLevel, CalloutTone } from "./components/sc-callout/sc-callout";
@@ -35,6 +39,7 @@ export { Parts } from "./components/sc-date-input/date";
 export { StringsInput } from "./components/sc-table/overrides";
 export { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
 export { LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
+export { ModuleCardHeadingLevel, ModuleCardTint } from "./components/sc-module-card/sc-module-card";
 export { ScSearchDetail } from "./components/sc-search/sc-search";
 export { ServiceCardHeadingLevel, ServiceCardTint } from "./components/sc-service-card/sc-service-card";
 export { StatusTagTone } from "./components/sc-status-tag/sc-status-tag";
@@ -43,7 +48,27 @@ export { SummaryRowVariant } from "./components/sc-summary-row/sc-summary-row";
 export { StringsInput as StringsInput1 } from "./components/sc-table/strings-override";
 export { SortDirection } from "./components/sc-table/sc-table";
 export { TextInputType, TextInputWidth } from "./components/sc-text-input/sc-text-input";
+export { TileTint } from "./components/sc-tile/sc-tile";
 export namespace Components {
+    /**
+     * Sections that open and close, for frequently asked questions and long guidance. Built on
+     * native `<details>` and `<summary>`: they open with Enter or Space, expose their expanded
+     * state to assistive technology and work before (and without) JavaScript. The component adds
+     * the v2 look (ruled sections, a title-medium summary, a chevron at the end that turns over
+     * when open) and an optional "Show all sections" toggle.
+     * v2 renders in light DOM (Stencil `scoped`, architecture §3.1): the `<details>` stay your
+     * own markup, so in-page links and `id`s inside them work as usual.
+     * Put the question in `<summary>` as plain text, optionally followed by a `<small>` summary
+     * line; put the answer after it. Keep headings out of `<summary>`: it is a button, so a
+     * heading inside it is not announced as one.
+     */
+    interface ScAccordion {
+        /**
+          * Adds a "Show all sections" / "Hide all sections" toggle above the sections. Use it from about four sections.
+          * @default false
+         */
+        "showAll": boolean;
+    }
     /**
      * The top bar of every mobile screen and desktop page: a translucent glass bar with a
      * start control (usually `sc-back-link`), the channel name, and an end control (usually
@@ -76,6 +101,27 @@ export namespace Components {
           * @default false
          */
         "sticky": boolean;
+    }
+    /**
+     * One thing that is due ("Needs your attention"): a bill to pay, a document to upload, a
+     * registration about to expire. A thin topic-tint strip on top, an icon tile, a status tag,
+     * the title, the key fact, a meta line (amount and reference) and one action.
+     * The card is neutral and is not a link: the action is the only thing to press, and its
+     * label names the action and the item ("Pay AED 412.60"). Status is never shown by colour:
+     * the strip and the icon tile are decorative topic tints, and the urgency is in the status
+     * tag's words. Put the cards in a list (`<ul>`), most urgent first, under a heading that
+     * gives the count ("4 things, most urgent first").
+     */
+    interface ScAttentionCard {
+        /**
+          * The heading level of the title: 3 under a "Needs your attention" `h2` (default).
+          * @default 3
+         */
+        "headingLevel": AttentionCardHeadingLevel;
+        /**
+          * The decorative topic tint of the top strip and the icon tile (foundations §2.7): `amber` bills, `violet` documents and residency, `blue` vehicles, `rose` family, `orange` housing, `green` health. Without it there is no strip and the icon tile takes the channel's container colour. Never use a tint to mean urgency: that is the status tag.
+         */
+        "tint"?: AttentionCardTint;
     }
     /**
      * The "Back" control at the start of an app bar or above a question. A 44px glass pill with
@@ -654,6 +700,42 @@ export namespace Components {
           * @default false
          */
         "standalone": boolean;
+    }
+    /**
+     * A titled module on a signed-in home page ("At a glance"): Vehicles, Applications, Traffic
+     * fines. A header row with an optional tinted icon, the title (a heading) and a standalone
+     * link at the end ("Manage", "View all"), then the module's own content.
+     * The card is not a link (CMP-06). The header link's accessible name includes the title
+     * ("View all, Applications"), so a page with several "View all" links still makes sense out
+     * of context.
+     */
+    interface ScModuleCard {
+        /**
+          * Where the header link goes ("Manage", "View all"). Without it (and without `slot="action"`) there is no header link.
+         */
+        "actionHref"?: string;
+        /**
+          * The header link's visible text, e.g. "Manage" or "View all". Its accessible name adds the title.
+         */
+        "actionText"?: string;
+        /**
+          * Separates the top-level content blocks with 1px `outline-variant` rules, 20px apart.
+          * @default false
+         */
+        "divided": boolean;
+        /**
+          * The module's title, e.g. "Vehicles". Required.
+         */
+        "heading": string;
+        /**
+          * The heading level of the title: 3 under an "At a glance" `h2` (default).
+          * @default 3
+         */
+        "headingLevel": ModuleCardHeadingLevel;
+        /**
+          * The icon tile's decorative topic tint (foundations §2.7). Without it the tile takes the channel's container colour.
+         */
+        "tint"?: ModuleCardTint;
     }
     /**
      * The page frame: header, `<main>` and footer, with the page's language, direction and
@@ -1253,6 +1335,32 @@ export namespace Components {
          */
         "value": string;
     }
+    /**
+     * A compact single-link tile: a tinted icon tile, a title and an optional count. Use it for
+     * life events ("Moving home · 14 services"), categories ("Transport and vehicles") and
+     * favourite services ("Pay a traffic fine").
+     * The whole tile is one link, because the title (and the count) is its only content and so
+     * the link's whole name: "Moving home, 14 services". That does not conflict with CMP-06,
+     * which is about cards that hold more than one thing. Tiles carry no other links or buttons.
+     */
+    interface ScTile {
+        /**
+          * How many things the tile leads to, e.g. 14. Shown as "14 services" with the right plural form in both languages.
+         */
+        "count"?: number;
+        /**
+          * Overrides the count text, with `{count}` and plural forms separated by `|`: "{count} step|{count} steps"; in Arabic zero|one|two|few|many|other.
+         */
+        "countLabel"?: string;
+        /**
+          * Where the tile goes. Required.
+         */
+        "href": string;
+        /**
+          * The icon tile's decorative topic tint (foundations §2.7): `blue` transport and vehicles, `violet` residency and identity, `rose` family, `orange` housing and utilities, `amber` bills and money, `green` health. Without it the tile takes the channel's container colour.
+         */
+        "tint"?: TileTint;
+    }
 }
 export interface ScCheckboxCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1300,6 +1408,24 @@ export interface ScTextareaCustomEvent<T> extends CustomEvent<T> {
 }
 declare global {
     /**
+     * Sections that open and close, for frequently asked questions and long guidance. Built on
+     * native `<details>` and `<summary>`: they open with Enter or Space, expose their expanded
+     * state to assistive technology and work before (and without) JavaScript. The component adds
+     * the v2 look (ruled sections, a title-medium summary, a chevron at the end that turns over
+     * when open) and an optional "Show all sections" toggle.
+     * v2 renders in light DOM (Stencil `scoped`, architecture §3.1): the `<details>` stay your
+     * own markup, so in-page links and `id`s inside them work as usual.
+     * Put the question in `<summary>` as plain text, optionally followed by a `<small>` summary
+     * line; put the answer after it. Keep headings out of `<summary>`: it is a button, so a
+     * heading inside it is not announced as one.
+     */
+    interface HTMLScAccordionElement extends Components.ScAccordion, HTMLStencilElement {
+    }
+    var HTMLScAccordionElement: {
+        prototype: HTMLScAccordionElement;
+        new (): HTMLScAccordionElement;
+    };
+    /**
      * The top bar of every mobile screen and desktop page: a translucent glass bar with a
      * start control (usually `sc-back-link`), the channel name, and an end control (usually
      * `sc-language-switch`).
@@ -1315,6 +1441,22 @@ declare global {
     var HTMLScAppBarElement: {
         prototype: HTMLScAppBarElement;
         new (): HTMLScAppBarElement;
+    };
+    /**
+     * One thing that is due ("Needs your attention"): a bill to pay, a document to upload, a
+     * registration about to expire. A thin topic-tint strip on top, an icon tile, a status tag,
+     * the title, the key fact, a meta line (amount and reference) and one action.
+     * The card is neutral and is not a link: the action is the only thing to press, and its
+     * label names the action and the item ("Pay AED 412.60"). Status is never shown by colour:
+     * the strip and the icon tile are decorative topic tints, and the urgency is in the status
+     * tag's words. Put the cards in a list (`<ul>`), most urgent first, under a heading that
+     * gives the count ("4 things, most urgent first").
+     */
+    interface HTMLScAttentionCardElement extends Components.ScAttentionCard, HTMLStencilElement {
+    }
+    var HTMLScAttentionCardElement: {
+        prototype: HTMLScAttentionCardElement;
+        new (): HTMLScAttentionCardElement;
     };
     /**
      * The "Back" control at the start of an app bar or above a question. A 44px glass pill with
@@ -1587,6 +1729,20 @@ declare global {
     var HTMLScLinkElement: {
         prototype: HTMLScLinkElement;
         new (): HTMLScLinkElement;
+    };
+    /**
+     * A titled module on a signed-in home page ("At a glance"): Vehicles, Applications, Traffic
+     * fines. A header row with an optional tinted icon, the title (a heading) and a standalone
+     * link at the end ("Manage", "View all"), then the module's own content.
+     * The card is not a link (CMP-06). The header link's accessible name includes the title
+     * ("View all, Applications"), so a page with several "View all" links still makes sense out
+     * of context.
+     */
+    interface HTMLScModuleCardElement extends Components.ScModuleCard, HTMLStencilElement {
+    }
+    var HTMLScModuleCardElement: {
+        prototype: HTMLScModuleCardElement;
+        new (): HTMLScModuleCardElement;
     };
     /**
      * The page frame: header, `<main>` and footer, with the page's language, direction and
@@ -1884,8 +2040,24 @@ declare global {
         prototype: HTMLScTextareaElement;
         new (): HTMLScTextareaElement;
     };
+    /**
+     * A compact single-link tile: a tinted icon tile, a title and an optional count. Use it for
+     * life events ("Moving home · 14 services"), categories ("Transport and vehicles") and
+     * favourite services ("Pay a traffic fine").
+     * The whole tile is one link, because the title (and the count) is its only content and so
+     * the link's whole name: "Moving home, 14 services". That does not conflict with CMP-06,
+     * which is about cards that hold more than one thing. Tiles carry no other links or buttons.
+     */
+    interface HTMLScTileElement extends Components.ScTile, HTMLStencilElement {
+    }
+    var HTMLScTileElement: {
+        prototype: HTMLScTileElement;
+        new (): HTMLScTileElement;
+    };
     interface HTMLElementTagNameMap {
+        "sc-accordion": HTMLScAccordionElement;
         "sc-app-bar": HTMLScAppBarElement;
+        "sc-attention-card": HTMLScAttentionCardElement;
         "sc-back-link": HTMLScBackLinkElement;
         "sc-button": HTMLScButtonElement;
         "sc-callout": HTMLScCalloutElement;
@@ -1900,6 +2072,7 @@ declare global {
         "sc-footer": HTMLScFooterElement;
         "sc-language-switch": HTMLScLanguageSwitchElement;
         "sc-link": HTMLScLinkElement;
+        "sc-module-card": HTMLScModuleCardElement;
         "sc-page": HTMLScPageElement;
         "sc-radio": HTMLScRadioElement;
         "sc-radio-group": HTMLScRadioGroupElement;
@@ -1915,11 +2088,31 @@ declare global {
         "sc-table": HTMLScTableElement;
         "sc-text-input": HTMLScTextInputElement;
         "sc-textarea": HTMLScTextareaElement;
+        "sc-tile": HTMLScTileElement;
     }
 }
 declare namespace LocalJSX {
     type OneOf<K extends string, PropT, AttrT = PropT> = { [P in K]: PropT } & { [P in `attr:${K}`]?: never } | { [P in `attr:${K}`]: AttrT } & { [P in K]?: never };
 
+    /**
+     * Sections that open and close, for frequently asked questions and long guidance. Built on
+     * native `<details>` and `<summary>`: they open with Enter or Space, expose their expanded
+     * state to assistive technology and work before (and without) JavaScript. The component adds
+     * the v2 look (ruled sections, a title-medium summary, a chevron at the end that turns over
+     * when open) and an optional "Show all sections" toggle.
+     * v2 renders in light DOM (Stencil `scoped`, architecture §3.1): the `<details>` stay your
+     * own markup, so in-page links and `id`s inside them work as usual.
+     * Put the question in `<summary>` as plain text, optionally followed by a `<small>` summary
+     * line; put the answer after it. Keep headings out of `<summary>`: it is a button, so a
+     * heading inside it is not announced as one.
+     */
+    interface ScAccordion {
+        /**
+          * Adds a "Show all sections" / "Hide all sections" toggle above the sections. Use it from about four sections.
+          * @default false
+         */
+        "showAll"?: boolean;
+    }
     /**
      * The top bar of every mobile screen and desktop page: a translucent glass bar with a
      * start control (usually `sc-back-link`), the channel name, and an end control (usually
@@ -1952,6 +2145,27 @@ declare namespace LocalJSX {
           * @default false
          */
         "sticky"?: boolean;
+    }
+    /**
+     * One thing that is due ("Needs your attention"): a bill to pay, a document to upload, a
+     * registration about to expire. A thin topic-tint strip on top, an icon tile, a status tag,
+     * the title, the key fact, a meta line (amount and reference) and one action.
+     * The card is neutral and is not a link: the action is the only thing to press, and its
+     * label names the action and the item ("Pay AED 412.60"). Status is never shown by colour:
+     * the strip and the icon tile are decorative topic tints, and the urgency is in the status
+     * tag's words. Put the cards in a list (`<ul>`), most urgent first, under a heading that
+     * gives the count ("4 things, most urgent first").
+     */
+    interface ScAttentionCard {
+        /**
+          * The heading level of the title: 3 under a "Needs your attention" `h2` (default).
+          * @default 3
+         */
+        "headingLevel"?: AttentionCardHeadingLevel;
+        /**
+          * The decorative topic tint of the top strip and the icon tile (foundations §2.7): `amber` bills, `violet` documents and residency, `blue` vehicles, `rose` family, `orange` housing, `green` health. Without it there is no strip and the icon tile takes the channel's container colour. Never use a tint to mean urgency: that is the status tag.
+         */
+        "tint"?: AttentionCardTint;
     }
     /**
      * The "Back" control at the start of an app bar or above a question. A 44px glass pill with
@@ -2562,6 +2776,42 @@ declare namespace LocalJSX {
           * @default false
          */
         "standalone"?: boolean;
+    }
+    /**
+     * A titled module on a signed-in home page ("At a glance"): Vehicles, Applications, Traffic
+     * fines. A header row with an optional tinted icon, the title (a heading) and a standalone
+     * link at the end ("Manage", "View all"), then the module's own content.
+     * The card is not a link (CMP-06). The header link's accessible name includes the title
+     * ("View all, Applications"), so a page with several "View all" links still makes sense out
+     * of context.
+     */
+    interface ScModuleCard {
+        /**
+          * Where the header link goes ("Manage", "View all"). Without it (and without `slot="action"`) there is no header link.
+         */
+        "actionHref"?: string;
+        /**
+          * The header link's visible text, e.g. "Manage" or "View all". Its accessible name adds the title.
+         */
+        "actionText"?: string;
+        /**
+          * Separates the top-level content blocks with 1px `outline-variant` rules, 20px apart.
+          * @default false
+         */
+        "divided"?: boolean;
+        /**
+          * The module's title, e.g. "Vehicles". Required.
+         */
+        "heading": string;
+        /**
+          * The heading level of the title: 3 under an "At a glance" `h2` (default).
+          * @default 3
+         */
+        "headingLevel"?: ModuleCardHeadingLevel;
+        /**
+          * The icon tile's decorative topic tint (foundations §2.7). Without it the tile takes the channel's container colour.
+         */
+        "tint"?: ModuleCardTint;
     }
     /**
      * The page frame: header, `<main>` and footer, with the page's language, direction and
@@ -3209,12 +3459,45 @@ declare namespace LocalJSX {
          */
         "value"?: string;
     }
+    /**
+     * A compact single-link tile: a tinted icon tile, a title and an optional count. Use it for
+     * life events ("Moving home · 14 services"), categories ("Transport and vehicles") and
+     * favourite services ("Pay a traffic fine").
+     * The whole tile is one link, because the title (and the count) is its only content and so
+     * the link's whole name: "Moving home, 14 services". That does not conflict with CMP-06,
+     * which is about cards that hold more than one thing. Tiles carry no other links or buttons.
+     */
+    interface ScTile {
+        /**
+          * How many things the tile leads to, e.g. 14. Shown as "14 services" with the right plural form in both languages.
+         */
+        "count"?: number;
+        /**
+          * Overrides the count text, with `{count}` and plural forms separated by `|`: "{count} step|{count} steps"; in Arabic zero|one|two|few|many|other.
+         */
+        "countLabel"?: string;
+        /**
+          * Where the tile goes. Required.
+         */
+        "href": string;
+        /**
+          * The icon tile's decorative topic tint (foundations §2.7): `blue` transport and vehicles, `violet` residency and identity, `rose` family, `orange` housing and utilities, `amber` bills and money, `green` health. Without it the tile takes the channel's container colour.
+         */
+        "tint"?: TileTint;
+    }
 
+    interface ScAccordionAttributes {
+        "showAll": boolean;
+    }
     interface ScAppBarAttributes {
         "sticky": boolean;
         "align": 'center' | 'start';
         "shape": 'bar' | 'floating';
         "landmark": boolean;
+    }
+    interface ScAttentionCardAttributes {
+        "headingLevel": AttentionCardHeadingLevel;
+        "tint": AttentionCardTint;
     }
     interface ScBackLinkAttributes {
         "href": string;
@@ -3334,6 +3617,14 @@ declare namespace LocalJSX {
         "externalText": string;
         "hreflang": string;
         "download": string;
+    }
+    interface ScModuleCardAttributes {
+        "heading": string;
+        "headingLevel": ModuleCardHeadingLevel;
+        "actionHref": string;
+        "actionText": string;
+        "tint": ModuleCardTint;
+        "divided": boolean;
     }
     interface ScPageAttributes {
         "channel": Channel;
@@ -3461,9 +3752,17 @@ declare namespace LocalJSX {
         "autocomplete": string;
         "headingLevel": HeadingLevel;
     }
+    interface ScTileAttributes {
+        "href": string;
+        "tint": TileTint;
+        "count": number;
+        "countLabel": string;
+    }
 
     interface IntrinsicElements {
+        "sc-accordion": Omit<ScAccordion, keyof ScAccordionAttributes> & { [K in keyof ScAccordion & keyof ScAccordionAttributes]?: ScAccordion[K] } & { [K in keyof ScAccordion & keyof ScAccordionAttributes as `attr:${K}`]?: ScAccordionAttributes[K] } & { [K in keyof ScAccordion & keyof ScAccordionAttributes as `prop:${K}`]?: ScAccordion[K] };
         "sc-app-bar": Omit<ScAppBar, keyof ScAppBarAttributes> & { [K in keyof ScAppBar & keyof ScAppBarAttributes]?: ScAppBar[K] } & { [K in keyof ScAppBar & keyof ScAppBarAttributes as `attr:${K}`]?: ScAppBarAttributes[K] } & { [K in keyof ScAppBar & keyof ScAppBarAttributes as `prop:${K}`]?: ScAppBar[K] };
+        "sc-attention-card": Omit<ScAttentionCard, keyof ScAttentionCardAttributes> & { [K in keyof ScAttentionCard & keyof ScAttentionCardAttributes]?: ScAttentionCard[K] } & { [K in keyof ScAttentionCard & keyof ScAttentionCardAttributes as `attr:${K}`]?: ScAttentionCardAttributes[K] } & { [K in keyof ScAttentionCard & keyof ScAttentionCardAttributes as `prop:${K}`]?: ScAttentionCard[K] };
         "sc-back-link": Omit<ScBackLink, keyof ScBackLinkAttributes> & { [K in keyof ScBackLink & keyof ScBackLinkAttributes]?: ScBackLink[K] } & { [K in keyof ScBackLink & keyof ScBackLinkAttributes as `attr:${K}`]?: ScBackLinkAttributes[K] } & { [K in keyof ScBackLink & keyof ScBackLinkAttributes as `prop:${K}`]?: ScBackLink[K] };
         "sc-button": Omit<ScButton, keyof ScButtonAttributes> & { [K in keyof ScButton & keyof ScButtonAttributes]?: ScButton[K] } & { [K in keyof ScButton & keyof ScButtonAttributes as `attr:${K}`]?: ScButtonAttributes[K] } & { [K in keyof ScButton & keyof ScButtonAttributes as `prop:${K}`]?: ScButton[K] };
         "sc-callout": Omit<ScCallout, keyof ScCalloutAttributes> & { [K in keyof ScCallout & keyof ScCalloutAttributes]?: ScCallout[K] } & { [K in keyof ScCallout & keyof ScCalloutAttributes as `attr:${K}`]?: ScCalloutAttributes[K] } & { [K in keyof ScCallout & keyof ScCalloutAttributes as `prop:${K}`]?: ScCallout[K] };
@@ -3478,6 +3777,7 @@ declare namespace LocalJSX {
         "sc-footer": Omit<ScFooter, keyof ScFooterAttributes> & { [K in keyof ScFooter & keyof ScFooterAttributes]?: ScFooter[K] } & { [K in keyof ScFooter & keyof ScFooterAttributes as `attr:${K}`]?: ScFooterAttributes[K] } & { [K in keyof ScFooter & keyof ScFooterAttributes as `prop:${K}`]?: ScFooter[K] };
         "sc-language-switch": Omit<ScLanguageSwitch, keyof ScLanguageSwitchAttributes> & { [K in keyof ScLanguageSwitch & keyof ScLanguageSwitchAttributes]?: ScLanguageSwitch[K] } & { [K in keyof ScLanguageSwitch & keyof ScLanguageSwitchAttributes as `attr:${K}`]?: ScLanguageSwitchAttributes[K] } & { [K in keyof ScLanguageSwitch & keyof ScLanguageSwitchAttributes as `prop:${K}`]?: ScLanguageSwitch[K] };
         "sc-link": Omit<ScLink, keyof ScLinkAttributes> & { [K in keyof ScLink & keyof ScLinkAttributes]?: ScLink[K] } & { [K in keyof ScLink & keyof ScLinkAttributes as `attr:${K}`]?: ScLinkAttributes[K] } & { [K in keyof ScLink & keyof ScLinkAttributes as `prop:${K}`]?: ScLink[K] };
+        "sc-module-card": Omit<ScModuleCard, keyof ScModuleCardAttributes> & { [K in keyof ScModuleCard & keyof ScModuleCardAttributes]?: ScModuleCard[K] } & { [K in keyof ScModuleCard & keyof ScModuleCardAttributes as `attr:${K}`]?: ScModuleCardAttributes[K] } & { [K in keyof ScModuleCard & keyof ScModuleCardAttributes as `prop:${K}`]?: ScModuleCard[K] } & OneOf<"heading", ScModuleCard["heading"], ScModuleCardAttributes["heading"]>;
         "sc-page": Omit<ScPage, keyof ScPageAttributes> & { [K in keyof ScPage & keyof ScPageAttributes]?: ScPage[K] } & { [K in keyof ScPage & keyof ScPageAttributes as `attr:${K}`]?: ScPageAttributes[K] } & { [K in keyof ScPage & keyof ScPageAttributes as `prop:${K}`]?: ScPage[K] };
         "sc-radio": Omit<ScRadio, keyof ScRadioAttributes> & { [K in keyof ScRadio & keyof ScRadioAttributes]?: ScRadio[K] } & { [K in keyof ScRadio & keyof ScRadioAttributes as `attr:${K}`]?: ScRadioAttributes[K] } & { [K in keyof ScRadio & keyof ScRadioAttributes as `prop:${K}`]?: ScRadio[K] } & OneOf<"value", ScRadio["value"], ScRadioAttributes["value"]>;
         "sc-radio-group": Omit<ScRadioGroup, keyof ScRadioGroupAttributes> & { [K in keyof ScRadioGroup & keyof ScRadioGroupAttributes]?: ScRadioGroup[K] } & { [K in keyof ScRadioGroup & keyof ScRadioGroupAttributes as `attr:${K}`]?: ScRadioGroupAttributes[K] } & { [K in keyof ScRadioGroup & keyof ScRadioGroupAttributes as `prop:${K}`]?: ScRadioGroup[K] };
@@ -3493,12 +3793,26 @@ declare namespace LocalJSX {
         "sc-table": Omit<ScTable, keyof ScTableAttributes> & { [K in keyof ScTable & keyof ScTableAttributes]?: ScTable[K] } & { [K in keyof ScTable & keyof ScTableAttributes as `attr:${K}`]?: ScTableAttributes[K] } & { [K in keyof ScTable & keyof ScTableAttributes as `prop:${K}`]?: ScTable[K] };
         "sc-text-input": Omit<ScTextInput, keyof ScTextInputAttributes> & { [K in keyof ScTextInput & keyof ScTextInputAttributes]?: ScTextInput[K] } & { [K in keyof ScTextInput & keyof ScTextInputAttributes as `attr:${K}`]?: ScTextInputAttributes[K] } & { [K in keyof ScTextInput & keyof ScTextInputAttributes as `prop:${K}`]?: ScTextInput[K] };
         "sc-textarea": Omit<ScTextarea, keyof ScTextareaAttributes> & { [K in keyof ScTextarea & keyof ScTextareaAttributes]?: ScTextarea[K] } & { [K in keyof ScTextarea & keyof ScTextareaAttributes as `attr:${K}`]?: ScTextareaAttributes[K] } & { [K in keyof ScTextarea & keyof ScTextareaAttributes as `prop:${K}`]?: ScTextarea[K] };
+        "sc-tile": Omit<ScTile, keyof ScTileAttributes> & { [K in keyof ScTile & keyof ScTileAttributes]?: ScTile[K] } & { [K in keyof ScTile & keyof ScTileAttributes as `attr:${K}`]?: ScTileAttributes[K] } & { [K in keyof ScTile & keyof ScTileAttributes as `prop:${K}`]?: ScTile[K] } & OneOf<"href", ScTile["href"], ScTileAttributes["href"]>;
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            /**
+             * Sections that open and close, for frequently asked questions and long guidance. Built on
+             * native `<details>` and `<summary>`: they open with Enter or Space, expose their expanded
+             * state to assistive technology and work before (and without) JavaScript. The component adds
+             * the v2 look (ruled sections, a title-medium summary, a chevron at the end that turns over
+             * when open) and an optional "Show all sections" toggle.
+             * v2 renders in light DOM (Stencil `scoped`, architecture §3.1): the `<details>` stay your
+             * own markup, so in-page links and `id`s inside them work as usual.
+             * Put the question in `<summary>` as plain text, optionally followed by a `<small>` summary
+             * line; put the answer after it. Keep headings out of `<summary>`: it is a button, so a
+             * heading inside it is not announced as one.
+             */
+            "sc-accordion": LocalJSX.IntrinsicElements["sc-accordion"] & JSXBase.HTMLAttributes<HTMLScAccordionElement>;
             /**
              * The top bar of every mobile screen and desktop page: a translucent glass bar with a
              * start control (usually `sc-back-link`), the channel name, and an end control (usually
@@ -3511,6 +3825,17 @@ declare module "@stencil/core" {
              * forced colours. The host is a `banner` landmark unless `landmark` is false.
              */
             "sc-app-bar": LocalJSX.IntrinsicElements["sc-app-bar"] & JSXBase.HTMLAttributes<HTMLScAppBarElement>;
+            /**
+             * One thing that is due ("Needs your attention"): a bill to pay, a document to upload, a
+             * registration about to expire. A thin topic-tint strip on top, an icon tile, a status tag,
+             * the title, the key fact, a meta line (amount and reference) and one action.
+             * The card is neutral and is not a link: the action is the only thing to press, and its
+             * label names the action and the item ("Pay AED 412.60"). Status is never shown by colour:
+             * the strip and the icon tile are decorative topic tints, and the urgency is in the status
+             * tag's words. Put the cards in a list (`<ul>`), most urgent first, under a heading that
+             * gives the count ("4 things, most urgent first").
+             */
+            "sc-attention-card": LocalJSX.IntrinsicElements["sc-attention-card"] & JSXBase.HTMLAttributes<HTMLScAttentionCardElement>;
             /**
              * The "Back" control at the start of an app bar or above a question. A 44px glass pill with
              * a back chevron that mirrors in right-to-left.
@@ -3655,6 +3980,15 @@ declare module "@stencil/core" {
              *   "(opens in new tab)" in the page language.
              */
             "sc-link": LocalJSX.IntrinsicElements["sc-link"] & JSXBase.HTMLAttributes<HTMLScLinkElement>;
+            /**
+             * A titled module on a signed-in home page ("At a glance"): Vehicles, Applications, Traffic
+             * fines. A header row with an optional tinted icon, the title (a heading) and a standalone
+             * link at the end ("Manage", "View all"), then the module's own content.
+             * The card is not a link (CMP-06). The header link's accessible name includes the title
+             * ("View all, Applications"), so a page with several "View all" links still makes sense out
+             * of context.
+             */
+            "sc-module-card": LocalJSX.IntrinsicElements["sc-module-card"] & JSXBase.HTMLAttributes<HTMLScModuleCardElement>;
             /**
              * The page frame: header, `<main>` and footer, with the page's language, direction and
              * channel on its root.
@@ -3807,6 +4141,15 @@ declare module "@stencil/core" {
              * pauses, never on every keystroke. Form-associated and delegates focus, like `sc-text-input`.
              */
             "sc-textarea": LocalJSX.IntrinsicElements["sc-textarea"] & JSXBase.HTMLAttributes<HTMLScTextareaElement>;
+            /**
+             * A compact single-link tile: a tinted icon tile, a title and an optional count. Use it for
+             * life events ("Moving home · 14 services"), categories ("Transport and vehicles") and
+             * favourite services ("Pay a traffic fine").
+             * The whole tile is one link, because the title (and the count) is its only content and so
+             * the link's whole name: "Moving home, 14 services". That does not conflict with CMP-06,
+             * which is about cards that hold more than one thing. Tiles carry no other links or buttons.
+             */
+            "sc-tile": LocalJSX.IntrinsicElements["sc-tile"] & JSXBase.HTMLAttributes<HTMLScTileElement>;
         }
     }
 }

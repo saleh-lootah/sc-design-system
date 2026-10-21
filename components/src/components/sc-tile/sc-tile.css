@@ -1,0 +1,112 @@
+/*
+ * sc-tile (v2, shadow DOM). Rules: component-language.md B11 and B10, foundations §2.7
+ * (decorative tints), read through the role table in decisions.md.
+ */
+:host {
+  display: block;
+  /* Fills a stretched grid cell or list item, so cards in a row share a height. */
+  block-size: 100%;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.tile {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sc-space-16);
+  block-size: 100%;
+  min-block-size: calc(var(--sc-space-96) + var(--sc-space-16));
+  padding: var(--sc-space-16);
+  border: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+  border-radius: var(--sc-radius-card);
+  background: var(--sc-color-surface-card);
+  color: var(--sc-color-on-surface);
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    border-color var(--sc-duration-fast) var(--sc-easing-hover),
+    transform var(--sc-duration-press) var(--sc-easing-enter);
+}
+
+.icon-tile {
+  --_tile: var(--sc-color-channel-subtle);
+  --_ink: var(--sc-color-channel-action);
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--sc-space-40);
+  block-size: var(--sc-space-40);
+  border-radius: var(--sc-radius-field);
+  background: var(--_tile);
+  color: var(--_ink);
+}
+.icon-tile ::slotted(svg) {
+  display: block;
+  inline-size: var(--sc-size-icon-l);
+  block-size: var(--sc-size-icon-l);
+}
+.icon-tile--blue { --_tile: var(--sc-color-tint-blue); --_ink: var(--sc-color-on-tint-blue); }
+.icon-tile--violet { --_tile: var(--sc-color-tint-violet); --_ink: var(--sc-color-on-tint-violet); }
+.icon-tile--rose { --_tile: var(--sc-color-tint-rose); --_ink: var(--sc-color-on-tint-rose); }
+.icon-tile--orange { --_tile: var(--sc-color-tint-orange); --_ink: var(--sc-color-on-tint-orange); }
+.icon-tile--amber { --_tile: var(--sc-color-tint-amber); --_ink: var(--sc-color-on-tint-amber); }
+.icon-tile--green { --_tile: var(--sc-color-tint-green); --_ink: var(--sc-color-on-tint-green); }
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-2);
+  margin-block-start: auto;
+  min-inline-size: 0;
+}
+
+.title {
+  font: var(--sc-type-title-small);
+  letter-spacing: var(--sc-type-title-small-tracking);
+  overflow-wrap: anywhere;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+.title:lang(ar) {
+  text-underline-offset: 5px;
+}
+
+.count {
+  color: var(--sc-color-on-surface-variant);
+  font: var(--sc-type-body-small);
+  letter-spacing: var(--sc-type-body-small-tracking);
+}
+
+.is-empty {
+  display: none;
+}
+
+/* Hover (fine pointers only): the edge strengthens and the title underlines. Colour only. */
+@media (hover: hover) and (pointer: fine) {
+  .tile:hover {
+    border-color: var(--sc-color-outline);
+  }
+  .tile:hover .title {
+    text-decoration-line: underline;
+  }
+}
+
+/* Press: scale 0.97, pointer and touch only; keyboard activation is instant (MOT-02). */
+.tile:active:not(:focus-visible) {
+  transform: scale(var(--sc-scale-press));
+}
+
+@media (forced-colors: active) {
+  .tile {
+    border-color: LinkText;
+    color: LinkText;
+  }
+  .icon-tile {
+    border: var(--sc-size-border-hairline) solid CanvasText;
+  }
+}

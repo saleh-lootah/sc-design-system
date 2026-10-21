@@ -34,43 +34,43 @@ Content aligns right; the search field mirrors.
 
 ## Overview
 
-The top wash of a channel page: a gradient from the channel's wash-start to wash-end
-colour (interpolated in OKLAB), holding an eyebrow, the page's `<h1>`, a lede and a
-search field. It follows `data-channel` and the theme like every component.
+The top band of a channel's home or section page (E1): a flat `channel-subtle` band
+(decision Q-hero: no gradient), holding optional breadcrumbs, an eyebrow, the page's
+`<h1>` at display size, an optional lede, search and a "Popular now" row of suggestion
+chips. It follows `data-channel` and the theme like every component.
 
-The hero is full-bleed; its content sits in an `sc-container`, so it lines up with the
-page below.
+The band is full-bleed; its content follows the page grid's margins (20, 32, 48, 80px)
+and the 1280px cap, so it lines up with `sc-container` content below. The hero never
+carries a carousel or autoplaying media.
+
+## Properties
+
+| Property       | Attribute       | Description                                                                                                                                                                                                                  | Type                  | Default     |
+| -------------- | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ----------- |
+| `popularLabel` | `popular-label` | Overrides the label before the suggestion chips (default "Popular now" / "الأكثر طلبًا الآن").                                                                                                                               | `string \| undefined` | `undefined` |
+| `size`         | `size`          | The heading size from 1024px: `large` (display-large, 80px) for a channel's home page, `medium` (display-medium, 57px) for a section page. Below 1024px both step down (display-small from 600px, headline-large on phones). | `"large" \| "medium"` | `'large'`   |
+
 
 ## Slots
 
-| Slot        | Description                                                                                    |
-| ----------- | ---------------------------------------------------------------------------------------------- |
-|             | Search (`sc-search`) and anything that goes with it, such as popular links.                    |
-| `"eyebrow"` | A short line above the heading, e.g. "Government services for everyone who lives in Dubai".    |
-| `"heading"` | The page's `<h1>`. Pass the element itself: `<h1 slot="heading">What do you need to do?</h1>`. |
-| `"lede"`    | An optional paragraph under the heading.                                                       |
+| Slot            | Description                                                                                                                                                       |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|                 | Search (`sc-search size="l"`), up to 880px wide.                                                                                                                  |
+| `"breadcrumbs"` | Optional breadcrumbs, on inner pages.                                                                                                                             |
+| `"eyebrow"`     | A short line above the heading, e.g. "Government services for everyone who lives in Dubai".                                                                       |
+| `"heading"`     | The page's `<h1>`. Pass the element itself: `<h1 slot="heading">What do you need to do?</h1>`.                                                                    |
+| `"lede"`        | An optional paragraph under the heading.                                                                                                                          |
+| `"popular"`     | Suggestion links, one `<a href>` each: "Renew vehicle registration". The hero draws them as 40px capsule chips with a 44px target, after the "Popular now" label. |
 
 
 ## Shadow Parts
 
 | Part        | Description                   |
 | ----------- | ----------------------------- |
+| `"band"`    | The full-bleed band.          |
 | `"content"` | The column holding the slots. |
-| `"wash"`    | The full-bleed gradient.      |
+| `"popular"` | The "Popular now" row.        |
 
-
-## Dependencies
-
-### Depends on
-
-- [sc-container](../sc-container)
-
-### Graph
-```mermaid
-graph TD;
-  sc-channel-hero --> sc-container
-  style sc-channel-hero fill:#f9f,stroke:#333,stroke-width:4px
-```
 
 ----------------------------------------------
 
