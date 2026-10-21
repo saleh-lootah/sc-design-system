@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-21T14:41:00",
+  "timestamp": "2026-10-21T14:44:16",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.45.2",
@@ -4865,24 +4865,11 @@
     },
     {
       "filePath": "src/components/sc-search/sc-search.tsx",
-      "encapsulation": "shadow",
+      "encapsulation": "scoped",
       "tag": "sc-search",
-      "readme": "# sc-search\n\nA search box for a channel or a list of services.\n\n## Usage\n\n```html\n<sc-search label=\"Search Dubai Now services\" placeholder=\"Try “renew car registration” or “school fees”\" action=\"/search\"></sc-search>\n```\n\n```js\ndocument.querySelector('sc-search').addEventListener('scSearch', (ev) => {\n  ev.preventDefault();            // handle it in the page instead of going to `action`\n  showResults(ev.detail.value);\n});\n```\n\n- Give it a specific `label` (\"Search Dubai Now services\"). Hide it visually with `label-hidden` only where the context makes the purpose obvious, such as a hero that asks \"What do you need to do?\"; screen readers still read it.\n- `placeholder` gives example queries. It disappears when typing, so never put instructions there.\n- With `action`, submitting goes to that URL with `?q=…` (`name` changes the parameter) after `scSearch`, unless a listener cancels the event. Without `action`, handle `scSearch`.\n- The button text defaults to \"Search\" (\"بحث\"); change it with `button-text` only for a more specific verb.\n\n### Behaviour\n\nThe component renders `<form role=\"search\">` named by the label, a native `<input type=\"search\">` and a primary `sc-button type=\"submit\"`. Enter in the field and the button both submit; `scSearch` carries the trimmed query. Focus on the host goes to the input (`delegatesFocus`), and the focus ring wraps the whole pill. The form is self-contained: don't put `sc-search` inside another `<form>`.\n\n### Arabic\n\nThe field mirrors: icon on the right, button on the left. The default label and button read \"بحث\". Search terms are typed in either script; the field follows the page direction.\n",
-      "docs": "A pill search box: search icon, a labelled field and a primary \"Search\" button, inside a\n`<form role=\"search\">` (a search landmark named by the label).\n\nSubmitting (the button, or Enter in the field) emits `scSearch`. With `action`, the form\nthen goes to that URL with the query as `?<name>=…`, unless a listener calls\n`preventDefault()`; without `action`, the page handles `scSearch` itself.\n\nThe form is self-contained: don't nest `sc-search` inside another `<form>`.",
-      "docsTags": [
-        {
-          "name": "part",
-          "text": "field - The pill around the icon, input and button."
-        },
-        {
-          "name": "part",
-          "text": "input - The native `<input type=\"search\">`."
-        },
-        {
-          "name": "part",
-          "text": "label - The `<label>`."
-        }
-      ],
+      "readme": "# sc-search\n\nA search box for a channel or a list of services.\n\n## Usage\n\n```html\n<sc-search label=\"Search Dubai Now services\" placeholder=\"Try “renew car registration” or “school fees”\" action=\"/search\"></sc-search>\n```\n\n```js\ndocument.querySelector('sc-search').addEventListener('scSearch', (ev) => {\n  ev.preventDefault();            // handle it in the page instead of going to `action`\n  showResults(ev.detail.value);\n});\n```\n\n- Give it a specific `label` (\"Search Dubai Now services\"). Hide it visually with `label-hidden` only where the context makes the purpose obvious, such as a hero that asks \"What do you need to do?\"; screen readers still read it.\n- `placeholder` gives example queries. It disappears when typing, so never put instructions there.\n- With `action`, submitting goes to that URL with `?q=…` (`name` changes the parameter) after `scSearch`, unless a listener cancels the event. Without `action`, handle `scSearch`.\n- The button text defaults to \"Search\" (\"بحث\"); change it with `button-text` only for a more specific verb.\n\n### Behaviour\n\nv2 renders `<form role=\"search\">` named by the label, a field box (radius 8, 1.5px `outline` edge, search icon at inline-start) holding a native `<input type=\"search\">`, and a separate primary `sc-button type=\"submit\"` 12px away (E1), all in light DOM (decision A2). Enter in the field submits through the button natively; `scSearch` carries the trimmed query. `focus()` on the host goes to the input, and the U1 focus ring wraps the field box. `size=\"l\"` is the 64px hero search; the default `m` is 56px. Arabic-Indic digits typed into the query become Latin digits. The form is self-contained: don't put `sc-search` inside another `<form>`.\n\n### Arabic\n\nThe field mirrors: icon on the right, button on the left. The default label and button read \"بحث\". Search terms are typed in either script; the field follows the page direction.\n",
+      "docs": "A search field and its button, inside a `<form role=\"search\">` named by the label (E1: the\nfield and the primary button are siblings with a 12px gap, not one pill).\n\nv2 renders the form, a native `<input type=\"search\">` and an `sc-button type=\"submit\"` in\nlight DOM (Stencil `scoped`, decision A2), so Enter in the field submits through the button\nnatively. Submitting emits `scSearch`. With `action`, the form then goes to that URL with the\nquery as `?<name>=…`, unless a listener calls `preventDefault()`; without `action`, the page\nhandles `scSearch` itself. Don't nest `sc-search` inside another `<form>`.",
+      "docsTags": [],
       "usage": {},
       "props": [
         {
@@ -5048,6 +5035,46 @@
           "setter": false
         },
         {
+          "name": "size",
+          "type": "\"l\" | \"m\"",
+          "complexType": {
+            "original": "SearchSize",
+            "resolved": "\"l\" | \"m\"",
+            "references": {
+              "SearchSize": {
+                "location": "local",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-forms/components/src/components/sc-search/sc-search.tsx",
+                "id": "src/components/sc-search/sc-search.tsx::SearchSize"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "size",
+          "reflectToAttr": true,
+          "docs": "`m` (default): a 56px field and button. `l`: the 64px hero search (E1).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'m'"
+            }
+          ],
+          "default": "'m'",
+          "values": [
+            {
+              "value": "l",
+              "type": "string"
+            },
+            {
+              "value": "m",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "value",
           "type": "string",
           "complexType": {
@@ -5126,20 +5153,7 @@
       "listeners": [],
       "styles": [],
       "slots": [],
-      "parts": [
-        {
-          "name": "field",
-          "docs": "The pill around the icon, input and button."
-        },
-        {
-          "name": "input",
-          "docs": "The native `<input type=\"search\">`."
-        },
-        {
-          "name": "label",
-          "docs": "The `<label>`."
-        }
-      ],
+      "parts": [],
       "states": [],
       "dependents": [],
       "dependencies": [
@@ -7961,6 +7975,11 @@
       "declaration": "export interface LanguageSwitchDetail {\n  /** The language the user asked for. */\n  lang: Lang;\n}",
       "docstring": "",
       "path": "src/components/sc-language-switch/sc-language-switch.tsx"
+    },
+    "src/components/sc-search/sc-search.tsx::SearchSize": {
+      "declaration": "export type SearchSize = 'm' | 'l';",
+      "docstring": "",
+      "path": "src/components/sc-search/sc-search.tsx"
     },
     "src/components/sc-search/sc-search.tsx::ScSearchDetail": {
       "declaration": "export interface ScSearchDetail {\n  /** The query as typed, trimmed. */\n  value: string;\n}",

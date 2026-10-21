@@ -4,6 +4,10 @@
  * unlayered CSS wins without !important. Shared helpers come from sc.css: .focus-ring (U1),
  * .visually-hidden, .icon, .icon-directional and .spin.
  */
+/* Stencil inserts component styles above sc.css in <head>, so the first layer statement the
+   page meets may be this file's: it must name the full order, or sc.components would rank
+   below sc.base. (Added by C3: every light-DOM component's CSS needs this line.) */
+@layer sc.reset, sc.tokens, sc.base, sc.components, sc.utilities;
 @layer sc.components {
   :host {
     display: inline-block;

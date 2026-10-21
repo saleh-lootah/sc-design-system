@@ -9,7 +9,8 @@
     "sc-checkbox-group",
     "sc-radio",
     "sc-radio-group",
-    "sc-date-input"
+    "sc-date-input",
+    "sc-search"
   ],
   "coreGzip": 14336,
   "globalCssGzip": 7168,
@@ -21,7 +22,7 @@
     "sc-text-input": 7168,
     "sc-textarea": 7168,
     "sc-select": 7168,
-    "sc-search": 7168,
+    "sc-search": 8192,
     "sc-date-input": 7168,
     "sc-checkbox": 7168,
     "sc-checkbox-group": 7168,

@@ -1,86 +1,118 @@
+/*
+ * sc-search (v2, light DOM). Rules: component-language.md A25 and E1: a field box (radius 8,
+ * 1.5px outline edge, search icon at inline-start) and a separate primary button, 12 apart.
+ * `m` is 56px, `l` (hero) 64px.
+ */
+@layer sc.reset, sc.tokens, sc.base, sc.components, sc.utilities;
 
-:host {
-  display: block;
-}
-
-:host([hidden]) {
-  display: none;
-}
-
-.form {
-  margin: 0;
-}
-
-.label {
-  display: block;
-  margin-block-end: var(--sc-space-8);
-  color: var(--sc-color-ink-strong);
-}
-
-.field {
-  --icon-size: var(--sc-size-icon-l);
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  gap: var(--sc-space-8);
-  min-block-size: calc(var(--sc-size-control-l) + 2 * var(--sc-space-6));
-  padding-block: var(--sc-space-6);
-  padding-inline: var(--sc-space-20) var(--sc-space-6);
-  border: var(--sc-size-border-control) solid var(--sc-color-control);
-  border-radius: var(--sc-radius-pill);
-  background: var(--sc-color-surface);
-  box-shadow: var(--sc-elevation-1);
-  cursor: text;
-}
-
-/* The ring goes on the whole pill while the input has focus (not while the button does). */
-.field:has(.input:focus-visible) {
-  outline: var(--sc-size-focus-ring) solid var(--sc-channel-action);
-  outline-offset: var(--sc-size-focus-offset);
-}
-
-.search-icon {
-  color: var(--sc-color-muted);
-}
-
-.input {
-  flex: 1 1 auto;
-  min-inline-size: 0;
-  align-self: stretch;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  outline: none;
-  background: transparent;
-  color: var(--sc-color-ink-strong);
-  -webkit-appearance: none;
-  appearance: none;
-}
-
-.input::placeholder {
-  color: var(--sc-color-muted);
-  opacity: 1;
-}
-
-/* One clear control is enough: Escape clears the field. */
-.input::-webkit-search-cancel-button,
-.input::-webkit-search-decoration {
-  -webkit-appearance: none;
-  appearance: none;
-}
-
-.submit {
-  flex: none;
-}
-
-@media (forced-colors: active) {
-  .field {
-    border-color: ButtonText;
+@layer sc.components {
+  :host {
+    display: block;
   }
-  .field:has(.input:focus-visible) {
-    outline-color: Highlight;
+
+  :host([hidden]) {
+    display: none;
   }
-  .search-icon {
-    color: CanvasText;
+
+  .sc-search {
+    margin: 0;
+  }
+
+  .sc-search__label {
+    display: block;
+    margin-block-end: var(--sc-space-8);
+    color: var(--sc-color-on-surface);
+    font: var(--sc-type-label-large);
+    letter-spacing: var(--sc-type-label-large-tracking);
+  }
+
+  .sc-search__row {
+    --_h: var(--sc-size-control-primary);
+    --_pad: var(--sc-space-16);
+    --icon-size: var(--sc-size-icon-l);
+    display: flex;
+    align-items: stretch;
+    gap: var(--sc-space-12);
+  }
+
+  .sc-search--l {
+    --_h: calc(var(--sc-size-control-primary) + var(--sc-space-8));
+    --_pad: var(--sc-space-20);
+    --icon-size: calc(var(--sc-size-icon-l) + var(--sc-space-2));
+  }
+
+  .sc-search__field {
+    box-sizing: border-box;
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    gap: var(--sc-space-12);
+    min-inline-size: 0;
+    min-block-size: var(--_h);
+    padding-inline: var(--_pad);
+    border: var(--sc-size-border-control) solid var(--sc-color-outline);
+    border-radius: var(--sc-radius-field);
+    background: var(--sc-color-surface);
+    cursor: text;
+    transition: border-color var(--sc-duration-fast) var(--sc-easing-hover);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .sc-search__field:hover {
+      border-color: var(--sc-color-outline-strong);
+    }
+  }
+
+  /* The U1 ring goes round the field box while the input has focus (the button has its own). */
+  .sc-search__field:has(.sc-search__input:focus) {
+    outline: var(--sc-size-focus-ring) solid var(--sc-color-focus-ring);
+    outline-offset: var(--sc-size-focus-offset);
+    transition: none;
+  }
+
+  .sc-search__icon {
+    color: var(--sc-color-on-surface-variant);
+  }
+
+  .sc-search__input {
+    flex: 1 1 auto;
+    align-self: stretch;
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: var(--sc-color-on-surface);
+    font: var(--sc-type-body-large);
+    letter-spacing: var(--sc-type-body-large-tracking);
+    appearance: none;
+  }
+
+  .sc-search__input::placeholder {
+    color: var(--sc-color-on-surface-variant);
+    opacity: 1;
+  }
+
+  /* One clear control is enough: Escape clears the field. */
+  .sc-search__input::-webkit-search-cancel-button,
+  .sc-search__input::-webkit-search-decoration {
+    appearance: none;
+  }
+
+  .sc-search__button {
+    flex: none;
+  }
+
+  @media (forced-colors: active) {
+    .sc-search__field {
+      border-color: ButtonText;
+    }
+    .sc-search__field:has(.sc-search__input:focus) {
+      outline-color: Highlight;
+    }
+    .sc-search__icon {
+      color: CanvasText;
+    }
   }
 }

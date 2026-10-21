@@ -17,7 +17,7 @@ import { HeadingLevel as HeadingLevel1 } from "./components/sc-text-input/field-
 import { StringsInput } from "./components/sc-table/overrides";
 import { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
 import { LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
-import { ScSearchDetail } from "./components/sc-search/sc-search";
+import { ScSearchDetail, SearchSize } from "./components/sc-search/sc-search";
 import { ServiceCardHeadingLevel } from "./components/sc-service-card/sc-service-card";
 import { StatusTagTone } from "./components/sc-status-tag/sc-status-tag";
 import { SummaryListAppearance } from "./components/sc-summary-list/sc-summary-list";
@@ -35,7 +35,7 @@ export { HeadingLevel as HeadingLevel1 } from "./components/sc-text-input/field-
 export { StringsInput } from "./components/sc-table/overrides";
 export { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
 export { LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
-export { ScSearchDetail } from "./components/sc-search/sc-search";
+export { ScSearchDetail, SearchSize } from "./components/sc-search/sc-search";
 export { ServiceCardHeadingLevel } from "./components/sc-service-card/sc-service-card";
 export { StatusTagTone } from "./components/sc-status-tag/sc-status-tag";
 export { SummaryListAppearance } from "./components/sc-summary-list/sc-summary-list";
@@ -804,12 +804,13 @@ export namespace Components {
         "value"?: string;
     }
     /**
-     * A pill search box: search icon, a labelled field and a primary "Search" button, inside a
-     * `<form role="search">` (a search landmark named by the label).
-     * Submitting (the button, or Enter in the field) emits `scSearch`. With `action`, the form
-     * then goes to that URL with the query as `?<name>=…`, unless a listener calls
-     * `preventDefault()`; without `action`, the page handles `scSearch` itself.
-     * The form is self-contained: don't nest `sc-search` inside another `<form>`.
+     * A search field and its button, inside a `<form role="search">` named by the label (E1: the
+     * field and the primary button are siblings with a 12px gap, not one pill).
+     * v2 renders the form, a native `<input type="search">` and an `sc-button type="submit"` in
+     * light DOM (Stencil `scoped`, decision A2), so Enter in the field submits through the button
+     * natively. Submitting emits `scSearch`. With `action`, the form then goes to that URL with the
+     * query as `?<name>=…`, unless a listener calls `preventDefault()`; without `action`, the page
+     * handles `scSearch` itself. Don't nest `sc-search` inside another `<form>`.
      */
     interface ScSearch {
         /**
@@ -842,6 +843,11 @@ export namespace Components {
           * Focuses the input.
          */
         "setFocus": () => Promise<void>;
+        /**
+          * `m` (default): a 56px field and button. `l`: the 64px hero search (E1).
+          * @default 'm'
+         */
+        "size": SearchSize;
         /**
           * The query. Updated as the user types.
           * @default ''
@@ -1715,12 +1721,13 @@ declare global {
         "scSearch": ScSearchDetail;
     }
     /**
-     * A pill search box: search icon, a labelled field and a primary "Search" button, inside a
-     * `<form role="search">` (a search landmark named by the label).
-     * Submitting (the button, or Enter in the field) emits `scSearch`. With `action`, the form
-     * then goes to that URL with the query as `?<name>=…`, unless a listener calls
-     * `preventDefault()`; without `action`, the page handles `scSearch` itself.
-     * The form is self-contained: don't nest `sc-search` inside another `<form>`.
+     * A search field and its button, inside a `<form role="search">` named by the label (E1: the
+     * field and the primary button are siblings with a 12px gap, not one pill).
+     * v2 renders the form, a native `<input type="search">` and an `sc-button type="submit"` in
+     * light DOM (Stencil `scoped`, decision A2), so Enter in the field submits through the button
+     * natively. Submitting emits `scSearch`. With `action`, the form then goes to that URL with the
+     * query as `?<name>=…`, unless a listener calls `preventDefault()`; without `action`, the page
+     * handles `scSearch` itself. Don't nest `sc-search` inside another `<form>`.
      */
     interface HTMLScSearchElement extends Components.ScSearch, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScSearchElementEventMap>(type: K, listener: (this: HTMLScSearchElement, ev: ScSearchCustomEvent<HTMLScSearchElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2778,12 +2785,13 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     /**
-     * A pill search box: search icon, a labelled field and a primary "Search" button, inside a
-     * `<form role="search">` (a search landmark named by the label).
-     * Submitting (the button, or Enter in the field) emits `scSearch`. With `action`, the form
-     * then goes to that URL with the query as `?<name>=…`, unless a listener calls
-     * `preventDefault()`; without `action`, the page handles `scSearch` itself.
-     * The form is self-contained: don't nest `sc-search` inside another `<form>`.
+     * A search field and its button, inside a `<form role="search">` named by the label (E1: the
+     * field and the primary button are siblings with a 12px gap, not one pill).
+     * v2 renders the form, a native `<input type="search">` and an `sc-button type="submit"` in
+     * light DOM (Stencil `scoped`, decision A2), so Enter in the field submits through the button
+     * natively. Submitting emits `scSearch`. With `action`, the form then goes to that URL with the
+     * query as `?<name>=…`, unless a listener calls `preventDefault()`; without `action`, the page
+     * handles `scSearch` itself. Don't nest `sc-search` inside another `<form>`.
      */
     interface ScSearch {
         /**
@@ -2816,6 +2824,11 @@ declare namespace LocalJSX {
           * Example queries, e.g. `Try "renew car registration"`. A hint, never a replacement for the label.
          */
         "placeholder"?: string;
+        /**
+          * `m` (default): a 56px field and button. `l`: the 64px hero search (E1).
+          * @default 'm'
+         */
+        "size"?: SearchSize;
         /**
           * The query. Updated as the user types.
           * @default ''
@@ -3446,6 +3459,7 @@ declare namespace LocalJSX {
         "name": string;
         "value": string;
         "action": string;
+        "size": SearchSize;
     }
     interface ScSelectAttributes {
         "label": string;
@@ -3791,12 +3805,13 @@ declare module "@stencil/core" {
              */
             "sc-radio-group": LocalJSX.IntrinsicElements["sc-radio-group"] & JSXBase.HTMLAttributes<HTMLScRadioGroupElement>;
             /**
-             * A pill search box: search icon, a labelled field and a primary "Search" button, inside a
-             * `<form role="search">` (a search landmark named by the label).
-             * Submitting (the button, or Enter in the field) emits `scSearch`. With `action`, the form
-             * then goes to that URL with the query as `?<name>=…`, unless a listener calls
-             * `preventDefault()`; without `action`, the page handles `scSearch` itself.
-             * The form is self-contained: don't nest `sc-search` inside another `<form>`.
+             * A search field and its button, inside a `<form role="search">` named by the label (E1: the
+             * field and the primary button are siblings with a 12px gap, not one pill).
+             * v2 renders the form, a native `<input type="search">` and an `sc-button type="submit"` in
+             * light DOM (Stencil `scoped`, decision A2), so Enter in the field submits through the button
+             * natively. Submitting emits `scSearch`. With `action`, the form then goes to that URL with the
+             * query as `?<name>=…`, unless a listener calls `preventDefault()`; without `action`, the page
+             * handles `scSearch` itself. Don't nest `sc-search` inside another `<form>`.
              */
             "sc-search": LocalJSX.IntrinsicElements["sc-search"] & JSXBase.HTMLAttributes<HTMLScSearchElement>;
             /**
