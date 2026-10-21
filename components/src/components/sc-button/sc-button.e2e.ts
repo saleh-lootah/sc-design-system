@@ -1,269 +1,330 @@
 import { E2EPage } from '@stencil/core/testing';
-import { expectNoAxeViolations } from '../../test/axe';
-import { contexts, newScPage, setPageContext } from '../../test/page';
+import { describeAxe } from '../../test/axe';
+import { newScPage, setPageContext } from '../../test/page';
 
-/** Reads from the inner control of the nth sc-button on the page. */
-function inner(page: E2EPage, selector: string, read: string) {
+type Win = Window & { submits: string[]; clicks: number };
+
+/** Evaluates `expr` with `host` (the sc-button) and `control` (its native button or link). */
+function read<T = unknown>(page: E2EPage, selector: string, expr: string): Promise<T> {
   return page.evaluate(
-    (sel: string, expr: string) => {
+    (sel: string, e: string) => {
       const host = document.querySelector(sel)!;
-      const control = host.shadowRoot!.querySelector('[part="control"]') as HTMLElement;
+      const control = host.querySelector('.sc-button') as HTMLElement;
       // eslint-disable-next-line no-new-func
-      return new Function('host', 'control', `return (${expr});`)(host, control);
+      return new Function('host', 'control', `return (${e});`)(host, control);
     },
     selector,
-    read,
-  );
+    expr,
+  ) as Promise<T>;
 }
 
-const ALL_STATES = `
+const style = (page: E2EPage, sel: string, prop: string) => read<string>(page, sel, `getComputedStyle(control).${prop}`);
+/** A token as the browser resolves it, through a probe element in the same context. */
+const token = (page: E2EPage, sel: string, name: string, prop = 'backgroundColor') =>
+  page.evaluate(
+    (s: string, n: string, p: string) => {
+      const probe = document.createElement('i');
+      probe.style.setProperty('background-color', `var(${n})`);
+      probe.style.setProperty('outline-color', `var(${n})`);
+      document.querySelector(s)!.append(probe);
+      const v = getComputedStyle(probe)[p as 'backgroundColor'];
+      probe.remove();
+      return v;
+    },
+    sel,
+    name,
+    prop,
+  );
+
+async function trackForm(page: E2EPage) {
+  await page.evaluate(() => {
+    const w = window as unknown as Win;
+    w.submits = [];
+    w.clicks = 0;
+    document.querySelector('form')!.addEventListener('submit', (ev) => {
+      ev.preventDefault();
+      const submitter = (ev as SubmitEvent).submitter as HTMLButtonElement | null;
+      w.submits.push(`${submitter?.name ?? ''}=${submitter?.value ?? ''}`);
+    });
+    document.querySelector('sc-button')!.addEventListener('click', () => w.clicks++);
+  });
+  return {
+    submits: () => page.evaluate(() => (window as unknown as Win).submits),
+    clicks: () => page.evaluate(() => (window as unknown as Win).clicks),
+  };
+}
+
+export const ALL_STATES = `
   <main>
     <h1>Renew your vehicle registration</h1>
-    <sc-button variant="primary" icon="arrow-forward">Continue</sc-button>
-    <sc-button variant="secondary">Save and finish later</sc-button>
-    <sc-button variant="tertiary">Cancel</sc-button>
-    <sc-button variant="destructive">Delete draft</sc-button>
-    <sc-button size="m">Change</sc-button>
-    <sc-button size="m" variant="secondary" icon="search" icon-position="start">Search services</sc-button>
-    <sc-button loading>Pay with Dubai Pay</sc-button>
-    <sc-button disabled>Continue</sc-button>
-    <sc-button href="#start" icon="arrow-forward">Start now</sc-button>
-    <sc-button href="#start" disabled>Start now</sc-button>
+    <form>
+      <sc-button variant="primary" icon="arrow-forward" type="submit">Continue</sc-button>
+      <sc-button variant="secondary">Save and finish later</sc-button>
+      <sc-button variant="tertiary">Cancel</sc-button>
+      <sc-button variant="destructive">Delete draft</sc-button>
+      <sc-button variant="handoff">Sign in with UAE PASS</sc-button>
+      <sc-button size="m">Change</sc-button>
+      <sc-button size="xl" icon="search" icon-position="start">Search services</sc-button>
+      <sc-button loading>Pay with Dubai Pay</sc-button>
+      <sc-button disabled>Continue</sc-button>
+      <sc-button variant="secondary" disabled>Save and finish later</sc-button>
+      <sc-button href="#start" icon="arrow-forward">Start now</sc-button>
+      <sc-button href="#start" disabled>Start now</sc-button>
+    </form>
   </main>`;
 
 describe('sc-button (e2e)', () => {
-  it('renders each variant as a native button with its own fill', async () => {
+  it('renders a native control in light DOM, with the variant heights and 4px corners', async () => {
     const page = await newScPage(`
-      <sc-button id="p" variant="primary">Continue</sc-button>
-      <sc-button id="s" variant="secondary">Continue</sc-button>
-      <sc-button id="t" variant="tertiary">Continue</sc-button>
-      <sc-button id="d" variant="destructive">Continue</sc-button>`);
-    const fills = new Set<string>();
-    for (const id of ['p', 's', 't', 'd']) {
-      expect(await inner(page, `#${id}`, 'control.tagName')).toBe('BUTTON');
-      fills.add(await inner(page, `#${id}`, 'getComputedStyle(control).backgroundColor'));
-    }
-    expect(fills.size).toBe(4);
-    expect(await inner(page, '#p', 'control.getBoundingClientRect().height')).toBeGreaterThanOrEqual(54);
+      <sc-button id="p">Continue</sc-button>
+      <sc-button id="s" variant="secondary">Save</sc-button>
+      <sc-button id="t" variant="tertiary">Cancel</sc-button>
+      <sc-button id="m" size="m">Change</sc-button>
+      <sc-button id="xl" size="xl">Search</sc-button>
+      <sc-button id="sl" variant="secondary" size="l">Save</sc-button>`);
+    expect(await read(page, '#p', 'host.shadowRoot')).toBeNull();
+    expect(await read(page, '#p', 'control.tagName')).toBe('BUTTON');
+    const h = (id: string) => read<number>(page, id, 'Math.round(control.getBoundingClientRect().height)');
+    expect(await h('#p')).toBe(56);
+    expect(await h('#s')).toBe(48);
+    expect(await h('#t')).toBe(48);
+    expect(await h('#m')).toBe(48);
+    expect(await h('#xl')).toBe(64);
+    expect(await h('#sl')).toBe(56);
+    expect(await style(page, '#p', 'borderTopLeftRadius')).toBe('4px');
+    // The edge is the control border token (1.5px; Chromium snaps it to whole device pixels).
+    const edge = await page.evaluate(() => {
+      const probe = document.createElement('i');
+      probe.style.cssText = 'display:block;border-top:var(--sc-size-border-control) solid';
+      document.body.append(probe);
+      return getComputedStyle(probe).borderTopWidth;
+    });
+    expect(await style(page, '#s', 'borderTopWidth')).toBe(edge);
+    expect(await style(page, '#s', 'borderTopStyle')).toBe('solid');
   });
 
-  it('is 54px tall at size l and 44px at size m, and uses the pill radius', async () => {
-    const page = await newScPage(`<sc-button id="l">Continue</sc-button><sc-button id="m" size="m">Continue</sc-button>`);
-    expect(Math.round(await inner(page, '#l', 'control.getBoundingClientRect().height'))).toBe(54);
-    expect(Math.round(await inner(page, '#m', 'control.getBoundingClientRect().height'))).toBe(44);
-    expect(await inner(page, '#l', 'getComputedStyle(control).borderTopLeftRadius')).toBe('999px');
+  it('uses the channel action colours, and city indigo for hand-offs on every channel', async () => {
+    const page = await newScPage(`<sc-button id="p">Continue</sc-button><sc-button id="h" variant="handoff">Pay with Dubai Pay</sc-button><sc-button id="s" variant="secondary">Save</sc-button>`);
+    expect(await style(page, '#p', 'backgroundColor')).toBe(await token(page, 'body', '--sc-color-channel-action'));
+    expect(await style(page, '#p', 'color')).toBe(await token(page, 'body', '--sc-color-channel-on-action'));
+    expect(await style(page, '#s', 'borderTopColor')).toBe(await token(page, 'body', '--sc-color-channel-action'));
+    expect(await style(page, '#s', 'backgroundColor')).toBe('rgba(0, 0, 0, 0)');
+    const indigo = await token(page, 'body', '--sc-color-primary');
+    expect(await style(page, '#h', 'backgroundColor')).toBe(indigo);
+
+    const nowAction = await style(page, '#p', 'backgroundColor');
+    await setPageContext(page, { channel: 'visit' });
+    expect(await style(page, '#p', 'backgroundColor')).not.toBe(nowAction);
+    expect(await style(page, '#h', 'backgroundColor')).toBe(indigo);
+  });
+
+  it('switches to the dark roles under data-theme="dark"', async () => {
+    const page = await newScPage(`<sc-button id="p">Continue</sc-button>`);
+    const light = await style(page, '#p', 'backgroundColor');
+    await setPageContext(page, { theme: 'dark' });
+    const dark = await style(page, '#p', 'backgroundColor');
+    expect(dark).not.toBe(light);
+    expect(dark).toBe(await token(page, 'body', '--sc-color-channel-action'));
+  });
+
+  it('sets the label in Dubai W23 with the label-large role in English and Arabic', async () => {
+    const page = await newScPage(`<sc-button id="p">Continue</sc-button><sc-button id="m" variant="secondary">Save</sc-button>`);
+    expect(await style(page, '#p', 'fontSize')).toBe('18px');
+    expect(await style(page, '#p', 'lineHeight')).toBe('22px');
+    expect(await style(page, '#p', 'fontWeight')).toBe('700');
+    expect(await style(page, '#m', 'fontSize')).toBe('16px');
+    expect(await style(page, '#m', 'fontWeight')).toBe('500');
+    expect(await style(page, '#p', 'fontFamily')).toMatch(/^"Dubai W23"/);
+    await setPageContext(page, { lang: 'ar' });
+    expect(await style(page, '#p', 'fontSize')).toBe('20px');
+    expect(await style(page, '#p', 'lineHeight')).toBe('28px');
+    expect(await style(page, '#m', 'fontWeight')).toBe('700');
+    expect(await style(page, '#p', 'letterSpacing')).toMatch(/^(normal|0px)$/);
+    expect(await style(page, '#p', 'fontFamily')).toMatch(/^"Dubai W23 Arabic"/);
+  });
+
+  it('loads the Dubai W23 subsets it needs, and only those', async () => {
+    const page = await newScPage(`<sc-button>Continue</sc-button>`);
+    await page.evaluate(() => document.fonts.ready);
+    const files = await page.evaluate(() =>
+      performance
+        .getEntriesByType('resource')
+        .map((r) => r.name.split('/').pop()!)
+        .filter((n) => n.endsWith('.woff2')),
+    );
+    expect(files).toContain('dubai-w23-700-latin.woff2');
+    expect(files.filter((f) => f.includes('arabic'))).toEqual([]);
+    expect(await page.evaluate(() => [...document.fonts].some((f) => f.status === 'error'))).toBe(false);
+    expect(await page.evaluate(() => document.fonts.check('700 18px "Dubai W23"', 'Continue'))).toBe(true);
   });
 
   it('stretches to its container with full-width', async () => {
     const page = await newScPage(`<div style="inline-size: 400px"><sc-button full-width>Renew</sc-button><sc-button full-width href="#x">Renew</sc-button></div>`);
-    expect(await inner(page, 'sc-button', 'control.getBoundingClientRect().width')).toBe(400);
-    expect(await inner(page, 'sc-button[href]', 'control.getBoundingClientRect().width')).toBe(400);
+    expect(await read(page, 'sc-button', 'control.getBoundingClientRect().width')).toBe(400);
+    expect(await read(page, 'sc-button[href]', 'control.getBoundingClientRect().width')).toBe(400);
   });
 
   it('renders a link when href is set, and Enter follows it', async () => {
     const page = await newScPage(`<sc-button href="#done">Start now</sc-button>`);
-    expect(await inner(page, 'sc-button', 'control.tagName')).toBe('A');
-    expect(await inner(page, 'sc-button', 'control.getAttribute("href")')).toBe('#done');
+    expect(await read(page, 'sc-button', 'control.tagName')).toBe('A');
     await page.keyboard.press('Tab');
     await page.keyboard.press('Enter');
     await page.waitForChanges();
     expect(await page.evaluate(() => location.hash)).toBe('#done');
   });
 
-  it('submits and resets a native form', async () => {
+  it('is the form default button: Enter in a field submits through it (A2)', async () => {
     const page = await newScPage(`
       <form>
+        <label>Plate number <input id="plate" name="plate" /></label>
+        <label>Plate code <input id="code" name="code" /></label>
+        <sc-button variant="secondary" type="button">Check</sc-button>
+        <sc-button type="submit" name="action" value="continue">Continue</sc-button>
+      </form>`);
+    const form = await trackForm(page);
+    await page.focus('#code');
+    await page.keyboard.type('A');
+    await page.keyboard.press('Enter');
+    await page.waitForChanges();
+    expect(await form.submits()).toEqual(['action=continue']);
+  });
+
+  it('submits and resets a native form, and submits a form named by form=', async () => {
+    const page = await newScPage(`
+      <form id="renewal">
         <label>Plate number <input name="plate" value="A 12345" /></label>
         <sc-button type="submit">Continue</sc-button>
         <sc-button type="reset" variant="tertiary">Clear</sc-button>
         <sc-button variant="secondary">Do nothing</sc-button>
-      </form>`);
-    await page.evaluate(() => {
-      const w = window as unknown as { submits: string[] };
-      w.submits = [];
-      document.querySelector('form')!.addEventListener('submit', (ev) => {
-        ev.preventDefault();
-        w.submits.push(String(new FormData(ev.target as HTMLFormElement).get('plate')));
-      });
-    });
-    const submits = () => page.evaluate(() => (window as unknown as { submits: string[] }).submits);
-
-    await page.click('sc-button[type="submit"]');
-    expect(await submits()).toEqual(['A 12345']);
-
+      </form>
+      <sc-button id="outside" type="submit" form="renewal" name="action" value="later">Save and finish later</sc-button>`);
+    const form = await trackForm(page);
+    await page.click('sc-button[type="submit"]:not([form])');
     await page.click('sc-button:not([type])');
-    expect(await submits()).toEqual(['A 12345']);
+    await page.click('#outside');
+    expect(await form.submits()).toEqual(['=', 'action=later']);
 
-    const input = await page.find('input');
-    await input.press('End');
-    await input.type('6');
-    expect(await page.evaluate(() => document.querySelector('input')!.value)).toBe('A 123456');
+    await page.focus('input');
+    await page.keyboard.press('End');
+    await page.keyboard.type('6');
     await page.click('sc-button[type="reset"]');
     expect(await page.evaluate(() => document.querySelector('input')!.value)).toBe('A 12345');
   });
 
-  it('follows a disabled fieldset', async () => {
+  it('follows a disabled fieldset natively', async () => {
     const page = await newScPage(`<form><fieldset disabled><sc-button type="submit">Continue</sc-button></fieldset></form>`);
-    expect(await inner(page, 'sc-button', 'control.disabled')).toBe(true);
+    expect(await read(page, 'sc-button', 'control.matches(":disabled")')).toBe(true);
     await page.evaluate(() => (document.querySelector('fieldset')!.disabled = false));
-    await page.waitForChanges();
-    expect(await inner(page, 'sc-button', 'control.disabled')).toBe(false);
+    expect(await read(page, 'sc-button', 'control.matches(":disabled")')).toBe(false);
   });
 
-  it('works from the keyboard: Tab focuses the inner button, Enter and Space activate it', async () => {
+  it('works from the keyboard: Tab focuses it with the U1 ring, Enter and Space activate it', async () => {
     const page = await newScPage(`<form><sc-button type="submit">Continue</sc-button></form>`);
-    await page.evaluate(() => {
-      const w = window as unknown as { clicks: number; submits: number };
-      w.clicks = 0;
-      w.submits = 0;
-      document.querySelector('sc-button')!.addEventListener('click', () => w.clicks++);
-      document.querySelector('form')!.addEventListener('submit', (ev) => {
-        ev.preventDefault();
-        w.submits++;
-      });
-    });
+    const form = await trackForm(page);
     await page.keyboard.press('Tab');
-    expect(await page.evaluate(() => document.activeElement!.localName)).toBe('sc-button');
-    expect(await inner(page, 'sc-button', 'host.shadowRoot.activeElement === control')).toBe(true);
-    expect(await inner(page, 'sc-button', 'control.matches(":focus-visible")')).toBe(true);
+    expect(await read(page, 'sc-button', 'document.activeElement === control')).toBe(true);
+    expect(await read(page, 'sc-button', 'control.matches(":focus-visible")')).toBe(true);
+    expect(await style(page, 'sc-button', 'outlineWidth')).toBe('3px');
+    expect(await style(page, 'sc-button', 'outlineOffset')).toBe('2px');
+    expect(await style(page, 'sc-button', 'outlineColor')).toBe(await token(page, 'body', '--sc-color-focus-ring', 'outlineColor'));
 
     await page.keyboard.press('Enter');
     await page.keyboard.press('Space');
     await page.waitForChanges();
-    expect(await page.evaluate(() => (window as unknown as { clicks: number; submits: number }).clicks)).toBe(2);
-    expect(await page.evaluate(() => (window as unknown as { clicks: number; submits: number }).submits)).toBe(2);
+    expect(await form.clicks()).toBe(2);
+    expect((await form.submits()).length).toBe(2);
   });
 
-  it('focuses the inner control when the host is focused (delegatesFocus)', async () => {
-    const page = await newScPage(`<sc-button id="go">Continue</sc-button>`);
-    await page.evaluate(() => (document.getElementById('go') as HTMLElement).focus());
-    expect(await inner(page, '#go', 'host.shadowRoot.activeElement === control')).toBe(true);
-  });
-
-  it('ignores clicks, sets aria-busy and announces while loading, and keeps its width', async () => {
-    const page = await newScPage(`<form><sc-button type="submit">Pay with Dubai Pay</sc-button></form>`);
-    await page.evaluate(() => {
-      const w = window as unknown as { clicks: number; submits: number };
-      w.clicks = 0;
-      w.submits = 0;
-      document.querySelector('sc-button')!.addEventListener('click', () => w.clicks++);
-      document.querySelector('form')!.addEventListener('submit', (ev) => {
-        ev.preventDefault();
-        w.submits++;
-      });
-    });
-    const width = await inner(page, 'sc-button', 'control.getBoundingClientRect().width');
-    expect(await inner(page, 'sc-button', 'host.shadowRoot.querySelector("[role=status]").textContent')).toBe('');
-
-    await page.$eval('sc-button', (el) => el.setAttribute('loading', ''));
-    await page.waitForChanges();
-    expect(await inner(page, 'sc-button', 'control.getAttribute("aria-busy")')).toBe('true');
-    expect(await inner(page, 'sc-button', 'host.shadowRoot.querySelector("[role=status]").textContent')).toBe('Pay with Dubai Pay, Loading');
-    expect(await inner(page, 'sc-button', 'control.querySelector(".visually-hidden").textContent')).toBe('Loading');
-    expect(await inner(page, 'sc-button', 'control.getBoundingClientRect().width')).toBe(width);
-
-    await page.click('sc-button');
-    await page.keyboard.press('Enter');
-    await page.evaluate(() => (document.querySelector('sc-button') as HTMLElement).click());
-    await page.waitForChanges();
-    expect(await page.evaluate(() => (window as unknown as { clicks: number }).clicks)).toBe(0);
-    expect(await page.evaluate(() => (window as unknown as { submits: number }).submits)).toBe(0);
-
-    await page.$eval('sc-button', (el) => el.removeAttribute('loading'));
-    await page.waitForChanges();
-    await page.click('sc-button');
-    expect(await page.evaluate(() => (window as unknown as { clicks: number }).clicks)).toBe(1);
-  });
-
-  it('re-renders its strings when lang changes on <html>', async () => {
-    const page = await newScPage(`<sc-button loading>Continue</sc-button>`, { lang: 'en' });
-    expect(await inner(page, 'sc-button', 'control.querySelector(".visually-hidden").textContent')).toBe('Loading');
-    await setPageContext(page, { lang: 'ar' });
-    expect(await inner(page, 'sc-button', 'control.querySelector(".visually-hidden").textContent')).toBe('جارٍ التحميل');
-  });
-
-  it('mirrors the end arrow in RTL, but not the search icon', async () => {
-    const html = `<sc-button id="a" icon="arrow-forward">Continue</sc-button><sc-button id="s" icon="search" icon-position="start">Search</sc-button>`;
-    const transform = (id: string) => inner(page, `#${id}`, 'getComputedStyle(control.querySelector("svg")).transform');
-
-    const page = await newScPage(html, { lang: 'en' });
-    expect(await transform('a')).toBe('none');
-    expect(await inner(page, '#a', '[...control.children].map((c) => c.getAttribute("part")).join()')).toBe('label,icon');
-
-    await setPageContext(page, { lang: 'ar' });
-    expect(await transform('a')).toBe('matrix(-1, 0, 0, 1, 0, 0)');
-    expect(await transform('s')).toBe('none');
-    // The arrow sits after the label in DOM order, so it is on the left in RTL.
-    const arrowLeft = await inner(page, '#a', 'control.querySelector("svg").getBoundingClientRect().left < control.querySelector(".label").getBoundingClientRect().left');
-    expect(arrowLeft).toBe(true);
-  });
-
-  it('switches to the Arabic type scale under lang="ar"', async () => {
-    const page = await newScPage(`<sc-button id="en">Continue</sc-button><sc-button id="ar" lang="ar">متابعة</sc-button>`);
-    expect(await inner(page, '#en', 'getComputedStyle(control).fontSize')).toBe('17px');
-    expect(await inner(page, '#ar', 'getComputedStyle(control).fontSize')).toBe('19px');
-    expect(await inner(page, '#ar', 'getComputedStyle(control).letterSpacing')).toBe('normal');
-    expect(await inner(page, '#ar', 'getComputedStyle(control).fontFamily')).toContain('Dubai W23 Bold');
-  });
-
-  it('takes its colours from the channel', async () => {
-    const page = await newScPage(`<sc-button>Continue</sc-button>`, { channel: 'now' });
-    const now = await inner(page, 'sc-button', 'getComputedStyle(control).backgroundColor');
-    await setPageContext(page, { channel: 'transport' });
-    const transport = await inner(page, 'sc-button', 'getComputedStyle(control).backgroundColor');
-    expect(transport).not.toBe(now);
-  });
-
-  it('transitions exact properties and scales to 0.97 on a pointer press, not a keyboard press', async () => {
-    const page = await newScPage(`<sc-button>Continue</sc-button>`);
-    expect(await inner(page, 'sc-button', 'getComputedStyle(control).transitionProperty')).toBe('background-color, color, transform');
-    const box = (await (await page.$('sc-button'))!.boundingBox())!;
-    const transformDuringPress = async () => {
-      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-      await page.mouse.down();
-      await new Promise((r) => setTimeout(r, 300)); // longer than the 150ms press transition
-      const t = await inner(page, 'sc-button', 'getComputedStyle(control).transform');
-      await page.mouse.up();
-      return t;
-    };
-    expect(await transformDuringPress()).toBe('matrix(0.97, 0, 0, 0.97, 0, 0)');
-
-    // Space on a keyboard-focused button changes colour instantly and does not scale.
-    const kb = await newScPage(`<sc-button>Continue</sc-button>`);
-    await kb.keyboard.press('Tab');
-    await kb.keyboard.down('Space');
-    expect(await inner(kb, 'sc-button', 'getComputedStyle(control).transform')).toBe('none');
-    expect(await inner(kb, 'sc-button', 'getComputedStyle(control).transitionDuration')).toBe('0s');
-    await kb.keyboard.up('Space');
-  });
-
-  it('keeps colour feedback but drops the press scale under reduced motion', async () => {
-    const page = await newScPage(`<sc-button>Continue</sc-button>`);
-    await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
-    expect(await inner(page, 'sc-button', 'getComputedStyle(control).transitionDuration')).toBe('0.12s, 0.12s, 0.15s');
-    const box = (await (await page.$('sc-button'))!.boundingBox())!;
-    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-    await page.mouse.down();
-    await new Promise((r) => setTimeout(r, 300));
-    expect(await inner(page, 'sc-button', 'getComputedStyle(control).transform')).toBe('matrix(1, 0, 0, 1, 0, 0)');
-    await page.mouse.up();
-  });
-
-  for (const ctx of contexts) {
-    it(`has no axe violations (${ctx.lang}, ${ctx.theme})`, async () => {
-      const page = await newScPage(ALL_STATES, ctx);
-      await expectNoAxeViolations(page);
-    });
-  }
-
-  it('has no axe violations with a focused button and on every channel', async () => {
-    const page = await newScPage(ALL_STATES);
+  it('takes the "on" colour for its focus ring inside a filled area (U1)', async () => {
+    const page = await newScPage(`<div id="strip" style="background: var(--sc-color-primary); --sc-color-focus-ring: var(--sc-color-on-primary); padding: 8px"><sc-button>Sign in</sc-button></div>`);
     await page.keyboard.press('Tab');
-    for (const channel of ['now', 'transport', 'visit', 'justice', 'build', 'invest', 'trade'] as const) {
-      await setPageContext(page, { channel, theme: 'light' });
-      await expectNoAxeViolations(page);
-      await setPageContext(page, { channel, theme: 'dark' });
-      await expectNoAxeViolations(page);
-    }
+    expect(await style(page, 'sc-button', 'outlineColor')).toBe(await token(page, '#strip', '--sc-color-on-primary', 'outlineColor'));
+  });
+
+  it('scales on pointer press but not on a keyboard press (MOT-02, MOT-09)', async () => {
+    const page = await newScPage(`<sc-button>Continue</sc-button>`);
+    const box = await read<{ x: number; y: number }>(page, 'sc-button', '(({x, y, width, height}) => ({ x: x + width / 2, y: y + height / 2 }))(control.getBoundingClientRect())');
+    await page.mouse.move(box.x, box.y);
+    await page.mouse.down();
+    await new Promise((r) => setTimeout(r, 400));
+    expect(await style(page, 'sc-button', 'transform')).toBe('matrix(0.97, 0, 0, 0.97, 0, 0)');
+    await page.mouse.up();
+
+    await page.evaluate(() => (document.activeElement as HTMLElement)?.blur());
+    await page.keyboard.press('Tab');
+    await page.keyboard.down('Space');
+    await new Promise((r) => setTimeout(r, 400));
+    expect(await style(page, 'sc-button', 'transform')).toBe('none');
+    await page.keyboard.up('Space');
+  });
+
+  it('forwards focus() and click() on the host to the native control', async () => {
+    const page = await newScPage(`<form><sc-button id="go" type="submit">Continue</sc-button></form>`);
+    const form = await trackForm(page);
+    await page.evaluate(() => (document.getElementById('go') as HTMLElement).focus());
+    expect(await read(page, '#go', 'document.activeElement === control')).toBe(true);
+    await page.evaluate(() => (document.getElementById('go') as HTMLElement).click());
+    expect((await form.submits()).length).toBe(1);
+  });
+
+  it('ignores activation while loading, keeps its width and focus, and announces', async () => {
+    const page = await newScPage(`<form><input name="plate" /><sc-button type="submit">Pay with Dubai Pay</sc-button></form>`);
+    const form = await trackForm(page);
+    const width = await read<number>(page, 'sc-button', 'control.getBoundingClientRect().width');
+    await page.$eval('sc-button', (el) => ((el as HTMLElement & { loading: boolean }).loading = true));
+    await page.waitForChanges();
+
+    await page.click('sc-button');
+    await page.focus('input');
+    await page.keyboard.press('Enter');
+    await page.waitForChanges();
+    expect(await form.clicks()).toBe(0);
+    expect(await form.submits()).toEqual([]);
+    expect(await read(page, 'sc-button', 'control.getAttribute("aria-busy")')).toBe('true');
+    expect(await read(page, 'sc-button', 'control.getBoundingClientRect().width')).toBe(width);
+    expect(await read(page, 'sc-button', 'host.querySelector("[role=status]").textContent')).toBe('Pay with Dubai Pay, Loading');
+
+    await page.$eval('sc-button', (el) => ((el as HTMLElement & { loading: boolean }).loading = false));
+    await page.waitForChanges();
+    await page.click('sc-button');
+    expect((await form.submits()).length).toBe(1);
+  });
+
+  it('exposes its name and state to assistive technology', async () => {
+    const page = await newScPage(`<sc-button id="b" loading>Pay with Dubai Pay</sc-button><sc-button id="d" disabled>Continue</sc-button><sc-button id="l" href="#x" disabled>Start now</sc-button>`);
+    const b = await page.accessibility.snapshot({ root: (await page.$('#b .sc-button'))! });
+    expect(b).toMatchObject({ role: 'button', name: 'Pay with Dubai Pay Loading' });
+    const d = await page.accessibility.snapshot({ root: (await page.$('#d .sc-button'))! });
+    expect(d).toMatchObject({ role: 'button', name: 'Continue', disabled: true });
+    const l = await page.accessibility.snapshot({ root: (await page.$('#l .sc-button'))!, interestingOnly: false });
+    expect(l).toMatchObject({ role: 'link', name: 'Start now', disabled: true });
+  });
+
+  it('mirrors a directional icon in Arabic and keeps it at the inline end', async () => {
+    const page = await newScPage(`<sc-button icon="arrow-forward">متابعة</sc-button>`, { lang: 'ar' });
+    expect(await read(page, 'sc-button', 'getComputedStyle(control.querySelector("svg")).transform')).toBe('matrix(-1, 0, 0, 1, 0, 0)');
+    const order = await read<number[]>(page, 'sc-button', '[control.querySelector(".sc-button__icon").getBoundingClientRect().x, control.querySelector(".sc-button__label").getBoundingClientRect().x]');
+    expect(order[0]).toBeLessThan(order[1]);
+    await setPageContext(page, { lang: 'en' });
+    expect(await read(page, 'sc-button', 'getComputedStyle(control.querySelector("svg")).transform')).toBe('none');
+  });
+
+  it('reserves its height before it upgrades and is never hidden for hydration (CLS 0)', async () => {
+    const page = await newScPage(`<p>Text</p>`);
+    const rules = await page.evaluate(() => {
+      const text = [...document.styleSheets, ...document.adoptedStyleSheets]
+        .map((s) => {
+          try {
+            return [...s.cssRules].map((r) => r.cssText).join('');
+          } catch {
+            return '';
+          }
+        })
+        .join('');
+      return { reserves: text.includes('sc-button:not(:defined)'), hides: /sc-button[^{]*\{\s*visibility:\s*hidden/.test(text) };
+    });
+    expect(rules).toEqual({ reserves: true, hides: false });
   });
 });
+
+describeAxe('sc-button', ALL_STATES);
