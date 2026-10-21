@@ -116,6 +116,40 @@ describe('sc-modal (e2e)', () => {
     expect(exit).toBe('0.224s');
   });
 
+  it('matches the board geometry: close in the padded corner, radius 4, actions 16 apart; dark panel surface-container-high (BX7-0)', async () => {
+    const geometry = async (theme: 'light' | 'dark') => {
+      const page = await newScPage(HTML, { theme });
+      await page.setViewport({ width: 1200, height: 800 });
+      await page.$eval('#m', (el: any) => el.show());
+      await page.waitForChanges();
+      return page.evaluate(() => {
+        const root = document.getElementById('m')!.shadowRoot!;
+        const d = root.querySelector('dialog')!.getBoundingClientRect();
+        const close = root.querySelector('[part=close]')!;
+        const c = close.getBoundingClientRect();
+        const probe = document.createElement('i');
+        probe.style.color = 'var(--sc-color-surface-container-high)';
+        document.body.append(probe);
+        const high = getComputedStyle(probe).color;
+        probe.style.color = 'var(--sc-color-surface)';
+        const surface = getComputedStyle(probe).color;
+        probe.remove();
+        const bg = getComputedStyle(root.querySelector('dialog')!).backgroundColor;
+        return {
+          top: Math.round(c.top - d.top),
+          end: Math.round(d.right - c.right),
+          size: [Math.round(c.width), Math.round(c.height)],
+          radius: getComputedStyle(close).borderTopLeftRadius,
+          gap: getComputedStyle(root.querySelector('[part=actions]')!).columnGap,
+          bg: bg === high ? 'surface-container-high' : bg === surface ? 'surface' : bg,
+        };
+      });
+    };
+    // 1px edge + 32 padding.
+    expect(await geometry('light')).toEqual({ top: 33, end: 33, size: [44, 44], radius: '4px', gap: '16px', bg: 'surface' });
+    expect((await geometry('dark')).bg).toBe('surface-container-high');
+  });
+
   it('opens instantly from the keyboard (MOT-02)', async () => {
     const page = await newScPage(HTML);
     await page.evaluate(() => document.getElementById('open')!.addEventListener('click', () => (document.getElementById('m') as any).show()));
