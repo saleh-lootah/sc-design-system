@@ -23,7 +23,7 @@ An important message inside the page content: something the user must know befor
 | `warning` | Something the user must know to avoid a problem. | "If your payment is interrupted, don't pay again…" |
 | `error` | Something went wrong that isn't about their answers. | "Your payment didn't go through. No money has been taken." |
 
-v2: a tone-95 container with 8px corners, a tone-40 accent bar at inline-start (3px, `--sc-size-border-accent`) and icon, and the text in `on-surface`. Links inside keep the channel link colour. Each tone has its own fill, its own icon and a visually hidden word read before the message ("Warning:" / "تنبيه:"), so the meaning never relies on colour. Override the word with `tone-label` if a different one fits better.
+v2: a tone-95 container with 8px corners, a tone-40 accent bar at inline-start (3px, `--sc-size-border-accent`) and icon, and the text in `on-surface` (`body-medium` at Medium weight; the heading `title-small` Bold). Links inside keep the channel link colour. Each tone has its own fill, its own icon and a visually hidden word read before the message ("Warning:" / "تنبيه:"), so the meaning never relies on colour. Override the word with `tone-label` if a different one fits better.
 
 ### Content
 

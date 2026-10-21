@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-21T14:52:09",
+  "timestamp": "2026-10-21T15:41:03",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.45.2",
@@ -794,7 +794,7 @@
             "references": {
               "ButtonIconPosition": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-a/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonIconPosition"
               }
             }
@@ -915,7 +915,7 @@
             "references": {
               "ButtonSize": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-a/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonSize"
               }
             }
@@ -956,7 +956,7 @@
             "references": {
               "ButtonType": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-a/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonType"
               }
             }
@@ -1026,7 +1026,7 @@
             "references": {
               "ButtonVariant": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-a/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonVariant"
               }
             }
@@ -1110,7 +1110,7 @@
       "filePath": "src/components/sc-callout/sc-callout.tsx",
       "encapsulation": "shadow",
       "tag": "sc-callout",
-      "readme": "# sc-callout\n\nAn important message inside the page content: something the user must know before they act, or the result of what they just did. If the message is about errors in the user's answers, use `sc-error-summary` and field errors instead. If it's the status of a task or payment in a list, use `sc-status-tag`.\n\n## Usage\n\n```html\n<sc-callout tone=\"warning\">\n  If your payment is interrupted, don't pay again. Check the payment status in My tasks first.\n</sc-callout>\n\n<sc-callout tone=\"success\" heading=\"Registration renewed\" heading-level=\"2\">\n  Your vehicle registration is valid until 18 October 2027.\n</sc-callout>\n```\n\n### Which tone\n\n| Tone | Use it for | Example |\n|---|---|---|\n| `info` (default) | Guidance the user needs. | \"You'll need your plate number and Emirates ID number.\" |\n| `success` | Something worked. | \"We've sent the receipt to your email.\" |\n| `warning` | Something the user must know to avoid a problem. | \"If your payment is interrupted, don't pay again…\" |\n| `error` | Something went wrong that isn't about their answers. | \"Your payment didn't go through. No money has been taken.\" |\n\nv2: a tone-95 container with 8px corners, a tone-40 accent bar at inline-start (3px, `--sc-size-border-accent`) and icon, and the text in `on-surface`. Links inside keep the channel link colour. Each tone has its own fill, its own icon and a visually hidden word read before the message (\"Warning:\" / \"تنبيه:\"), so the meaning never relies on colour. Override the word with `tone-label` if a different one fits better.\n\n### Content\n\n- One callout per section at most; if everything is highlighted, nothing is.\n- Lead with what the user should do or know. Short sentences, sentence case. Write the Arabic, don't translate word for word.\n- `heading` is optional bold text. It is a plain paragraph by default; set `heading-level` (2–6) only when the heading belongs in the page outline. Use the `heading` slot for rich content.\n- Inline links and `<sc-ltr>` for amounts and references are fine in the message.\n- It isn't a live region. If you insert one after the page loads (for example after a payment check), wrap it in an element with `role=\"status\"` or move focus to it.\n\n### Styling hooks\n\nParts: `container`, `icon`, `heading`, `content`.\n",
+      "readme": "# sc-callout\n\nAn important message inside the page content: something the user must know before they act, or the result of what they just did. If the message is about errors in the user's answers, use `sc-error-summary` and field errors instead. If it's the status of a task or payment in a list, use `sc-status-tag`.\n\n## Usage\n\n```html\n<sc-callout tone=\"warning\">\n  If your payment is interrupted, don't pay again. Check the payment status in My tasks first.\n</sc-callout>\n\n<sc-callout tone=\"success\" heading=\"Registration renewed\" heading-level=\"2\">\n  Your vehicle registration is valid until 18 October 2027.\n</sc-callout>\n```\n\n### Which tone\n\n| Tone | Use it for | Example |\n|---|---|---|\n| `info` (default) | Guidance the user needs. | \"You'll need your plate number and Emirates ID number.\" |\n| `success` | Something worked. | \"We've sent the receipt to your email.\" |\n| `warning` | Something the user must know to avoid a problem. | \"If your payment is interrupted, don't pay again…\" |\n| `error` | Something went wrong that isn't about their answers. | \"Your payment didn't go through. No money has been taken.\" |\n\nv2: a tone-95 container with 8px corners, a tone-40 accent bar at inline-start (3px, `--sc-size-border-accent`) and icon, and the text in `on-surface` (`body-medium` at Medium weight; the heading `title-small` Bold). Links inside keep the channel link colour. Each tone has its own fill, its own icon and a visually hidden word read before the message (\"Warning:\" / \"تنبيه:\"), so the meaning never relies on colour. Override the word with `tone-label` if a different one fits better.\n\n### Content\n\n- One callout per section at most; if everything is highlighted, nothing is.\n- Lead with what the user should do or know. Short sentences, sentence case. Write the Arabic, don't translate word for word.\n- `heading` is optional bold text. It is a plain paragraph by default; set `heading-level` (2–6) only when the heading belongs in the page outline. Use the `heading` slot for rich content.\n- Inline links and `<sc-ltr>` for amounts and references are fine in the message.\n- It isn't a live region. If you insert one after the page loads (for example after a payment check), wrap it in an element with `role=\"status\"` or move focus to it.\n\n### Styling hooks\n\nParts: `container`, `icon`, `heading`, `content`.\n",
       "docs": "An important message that sits in the page content: something the user must know\nbefore they act (\"If your payment is interrupted, don't pay again…\"), or the outcome\nof what they just did.\n\nv2: a tone-95 container with an 8px radius, a tone-coloured accent bar at inline-start,\na 24px tone icon and the content in `on-surface`. Each tone also has a visually hidden\nword (\"Warning:\"), so the meaning never relies on colour or the icon alone. Links inside\nkeep the channel link colour.",
       "docsTags": [
         {
@@ -1175,7 +1175,7 @@
             "references": {
               "CalloutHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-callout/sc-callout.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-a/components/src/components/sc-callout/sc-callout.tsx",
                 "id": "src/components/sc-callout/sc-callout.tsx::CalloutHeadingLevel"
               }
             }
@@ -1224,7 +1224,7 @@
             "references": {
               "CalloutTone": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-callout/sc-callout.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-a/components/src/components/sc-callout/sc-callout.tsx",
                 "id": "src/components/sc-callout/sc-callout.tsx::CalloutTone"
               }
             }
@@ -1380,7 +1380,7 @@
             "references": {
               "CardLandmark": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-card/sc-card.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-a/components/src/components/sc-card/sc-card.tsx",
                 "id": "src/components/sc-card/sc-card.tsx::CardLandmark"
               }
             }
@@ -1417,7 +1417,7 @@
             "references": {
               "CardPadding": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-card/sc-card.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-a/components/src/components/sc-card/sc-card.tsx",
                 "id": "src/components/sc-card/sc-card.tsx::CardPadding"
               }
             }
@@ -1612,7 +1612,7 @@
             "references": {
               "ChannelChipVariant": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-channel-chip/sc-channel-chip.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-a/components/src/components/sc-channel-chip/sc-channel-chip.tsx",
                 "id": "src/components/sc-channel-chip/sc-channel-chip.tsx::ChannelChipVariant"
               }
             }
@@ -2473,7 +2473,7 @@
             "references": {
               "ContainerWidth": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-container/sc-container.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-a/components/src/components/sc-container/sc-container.tsx",
                 "id": "src/components/sc-container/sc-container.tsx::ContainerWidth"
               }
             }
@@ -3895,7 +3895,7 @@
             "references": {
               "EmptyStateHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-empty-state/sc-empty-state.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-a/components/src/components/sc-empty-state/sc-empty-state.tsx",
                 "id": "src/components/sc-empty-state/sc-empty-state.tsx::EmptyStateHeadingLevel"
               }
             }
@@ -4030,7 +4030,7 @@
             "references": {
               "EmptyStateVariant": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-empty-state/sc-empty-state.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-a/components/src/components/sc-empty-state/sc-empty-state.tsx",
                 "id": "src/components/sc-empty-state/sc-empty-state.tsx::EmptyStateVariant"
               }
             }
@@ -4107,7 +4107,7 @@
       "filePath": "src/components/sc-error-summary/sc-error-summary.tsx",
       "encapsulation": "shadow",
       "tag": "sc-error-summary",
-      "readme": "# sc-error-summary\n\nLists every error on the page, at the top of `<main>`, after a submission. Each item links to its field.\n\n## Usage\n\n```html\n<sc-error-summary>\n  <a href=\"#plate-code\">Enter the plate code</a>\n  <a href=\"#plate-number\">Enter the plate number using numbers only, like 12345</a>\n</sc-error-summary>\n```\n\nor from JavaScript: `summary.errors = [{ href: '#plate-code', text: 'Enter the plate code' }]`.\n\n- CMP-05: when it first has errors it moves focus to itself (`tabindex=\"-1\"`); it is a `role=\"group\"` named by its heading, and it has **no `role=\"alert\"`**, so screen readers don't read it twice. Use `no-autofocus` only if you move focus yourself (`setFocus()`).\n- The default heading is \"There is a problem\" / \"توجد مشكلة\" (W1). Start the page `<title>` with \"Error: \" / \"خطأ: \" while errors are shown.\n- Link each item to the field's `id`. v2 fields are light DOM, so the `id` can be the native control or the field host (its `focus()` reaches the control).\n- v2 look: `error-container` fill, a 2px `error` border, 8px corners; links in `error`, Bold, underlined, each at least 44 × 44.\n\nParts: `container`, `heading`, `list`.\n",
+      "readme": "# sc-error-summary\n\nLists every error on the page, at the top of `<main>`, after a submission. Each item links to its field.\n\n## Usage\n\n```html\n<sc-error-summary>\n  <a href=\"#plate-code\">Enter the plate code</a>\n  <a href=\"#plate-number\">Enter the plate number using numbers only, like 12345</a>\n</sc-error-summary>\n```\n\nor from JavaScript: `summary.errors = [{ href: '#plate-code', text: 'Enter the plate code' }]`.\n\n- CMP-05: when it first has errors it moves focus to itself (`tabindex=\"-1\"`); it is a `role=\"group\"` named by its heading, and it has **no `role=\"alert\"`**, so screen readers don't read it twice. Use `no-autofocus` only if you move focus yourself (`setFocus()`).\n- The default heading is \"There is a problem\" / \"توجد مشكلة\" (W1). Start the page `<title>` with \"Error: \" / \"خطأ: \" while errors are shown.\n- Link each item to the field's `id`. v2 fields are light DOM, so the `id` can be the native control or the field host (its `focus()` reaches the control).\n- v2 look: `error-container` fill, a 2px `error` border, 8px corners, padding 18 block and 16 inline; the heading `title-medium`; links `body-medium` Bold in `error`, underlined, each at least 44 × 44.\n\nParts: `container`, `heading`, `list`.\n",
       "docs": "Lists every error on the page, at the top of the main content, after a form is\nsubmitted. Each item links to its field; following a link moves focus to the field.\n\nGive it items either as links in the default slot (`<a href=\"#plate-number\">…</a>`,\noptionally inside a `<ul>`) or through the `errors` property. When it first has items\nit moves focus to itself (`tabindex=\"-1\"`), so keyboard and screen reader users hear\nthe heading and errors straight away. It has no `role=\"alert\"`: moving focus already\nannounces it, and a live region on top can make screen readers read it twice (GOV.UK\npractice). The focused box is a `role=\"group\"` named by its heading (CMP-05).\n\nv2: an `error-container` box with a 2px `error` border and an 8px radius; the heading in\n`on-surface`, the links in `error`, Bold and underlined, each at least 44 × 44. Field\ncomponents are light DOM in v2, so a link's `#id` can name the native control or the\nfield host (whose `focus()` is forwarded to its control).",
       "docsTags": [
         {
@@ -4142,7 +4142,7 @@
             "references": {
               "ErrorSummaryItem": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-error-summary/sc-error-summary.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-a/components/src/components/sc-error-summary/sc-error-summary.tsx",
                 "id": "src/components/sc-error-summary/sc-error-summary.tsx::ErrorSummaryItem"
               }
             }
@@ -4199,7 +4199,7 @@
             "references": {
               "ErrorSummaryHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-error-summary/sc-error-summary.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-a/components/src/components/sc-error-summary/sc-error-summary.tsx",
                 "id": "src/components/sc-error-summary/sc-error-summary.tsx::ErrorSummaryHeadingLevel"
               }
             }
@@ -4651,7 +4651,7 @@
             "references": {
               "LanguageSwitchAppearance": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-language-switch/sc-language-switch.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-a/components/src/components/sc-language-switch/sc-language-switch.tsx",
                 "id": "src/components/sc-language-switch/sc-language-switch.tsx::LanguageSwitchAppearance"
               }
             }
@@ -4729,7 +4729,7 @@
             "references": {
               "LanguageSwitchDetail": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-language-switch/sc-language-switch.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-a/components/src/components/sc-language-switch/sc-language-switch.tsx",
                 "id": "src/components/sc-language-switch/sc-language-switch.tsx::LanguageSwitchDetail"
               }
             }
@@ -5170,7 +5170,7 @@
             "references": {
               "ModalHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-modal/sc-modal.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-a/components/src/components/sc-modal/sc-modal.tsx",
                 "id": "src/components/sc-modal/sc-modal.tsx::ModalHeadingLevel"
               }
             }
@@ -5210,7 +5210,7 @@
             "references": {
               "ModalInitialFocus": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-modal/sc-modal.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-a/components/src/components/sc-modal/sc-modal.tsx",
                 "id": "src/components/sc-modal/sc-modal.tsx::ModalInitialFocus"
               }
             }
@@ -5328,7 +5328,7 @@
             "references": {
               "ModalCloseReason": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-modal/sc-modal.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-a/components/src/components/sc-modal/sc-modal.tsx",
                 "id": "src/components/sc-modal/sc-modal.tsx::ModalCloseReason"
               }
             }
@@ -5849,7 +5849,7 @@
             "references": {
               "PaginationChangeDetail": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-pagination/sc-pagination.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-a/components/src/components/sc-pagination/sc-pagination.tsx",
                 "id": "src/components/sc-pagination/sc-pagination.tsx::PaginationChangeDetail"
               }
             }
@@ -6712,7 +6712,7 @@
             "references": {
               "ScSearchDetail": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-search/sc-search.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-a/components/src/components/sc-search/sc-search.tsx",
                 "id": "src/components/sc-search/sc-search.tsx::ScSearchDetail"
               }
             }
@@ -7232,7 +7232,7 @@
             "references": {
               "ServiceCardHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-service-card/sc-service-card.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-a/components/src/components/sc-service-card/sc-service-card.tsx",
                 "id": "src/components/sc-service-card/sc-service-card.tsx::ServiceCardHeadingLevel"
               }
             }
@@ -7413,8 +7413,8 @@
       "filePath": "src/components/sc-spinner/sc-spinner.tsx",
       "encapsulation": "shadow",
       "tag": "sc-spinner",
-      "readme": "# sc-spinner\n\nA short inline wait, with a label saying what is loading. Inside a button, use `sc-button loading` instead.\n\n## Usage\n\n```html\n<sc-spinner label=\"Checking your plate number\"></sc-spinner>\n<sc-spinner show-label label=\"Checking your plate number\"></sc-spinner>\n<sc-spinner size=\"l\"></sc-spinner>\n```\n\n- 20px (`size=\"m\"`, inline with body text) or 24px (`size=\"l\"`), in `currentColor`.\n- One turn per `--sc-duration-spin` (600ms, linear): a faster spinner makes loading feel faster.\n- The label sits in a polite `role=\"status\"` region and is visually hidden unless `show-label` is set. Under reduced motion the arc stops and the label shows. It never mirrors.\n\nParts: `icon`, `label`.\n",
-      "docs": "Shows that something is loading: a short inline wait, with a label saying what.\n\nv2: 20px (`size=\"m\"`, inline) or 24px (`size=\"l\"`), in `currentColor`, turning once per\n`--sc-duration-spin` (600ms, linear: a faster spinner makes loading feel faster). The label\n(\"Loading\" by default) sits in a polite `role=\"status\"` region and is visually hidden.\nUnder `prefers-reduced-motion` the arc stops and the label shows, so the state never\ndepends on motion (MOT-15). It never mirrors.\n\nInside a button, use `sc-button loading` instead.",
+      "readme": "# sc-spinner\n\nA short inline wait, with a label saying what is loading. Inside a button, use `sc-button loading` instead.\n\n## Usage\n\n```html\n<sc-spinner label=\"Checking your plate number\"></sc-spinner>\n<sc-spinner show-label label=\"Checking your plate number\"></sc-spinner>\n<sc-spinner size=\"m\"></sc-spinner>\n```\n\n- 24px (`size=\"l\"`, the default) or 20px (`size=\"m\"`, inline with body text), in `currentColor`. A visible label is `body-medium` in `on-surface`, 12px from the arc.\n- One turn per `--sc-duration-spin` (600ms, linear): a faster spinner makes loading feel faster.\n- The label sits in a polite `role=\"status\"` region and is visually hidden unless `show-label` is set. Under reduced motion the arc stops and the label shows. It never mirrors.\n\nParts: `icon`, `label`.\n",
+      "docs": "Shows that something is loading: a short inline wait, with a label saying what.\n\nv2: 24px (`size=\"l\"`, the default) or 20px (`size=\"m\"`, inline with body text), in\n`currentColor`, turning once per `--sc-duration-spin` (600ms, linear: a faster spinner\nmakes loading feel faster). The label (\"Loading\" by default) sits in a polite\n`role=\"status\"` region, 12px from the arc in `on-surface`, and is visually hidden.\nUnder `prefers-reduced-motion` the arc stops and the label shows, so the state never\ndepends on motion (MOT-15). It never mirrors.\n\nInside a button, use `sc-button loading` instead.",
       "docsTags": [
         {
           "name": "part",
@@ -7491,7 +7491,7 @@
             "references": {
               "SpinnerSize": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-spinner/sc-spinner.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-a/components/src/components/sc-spinner/sc-spinner.tsx",
                 "id": "src/components/sc-spinner/sc-spinner.tsx::SpinnerSize"
               }
             }
@@ -7499,14 +7499,14 @@
           "mutable": false,
           "attr": "size",
           "reflectToAttr": true,
-          "docs": "`m` 20px, inline with body text (default); `l` 24px, standalone.",
+          "docs": "`l` 24px, standalone (default); `m` 20px, inline with body text.",
           "docsTags": [
             {
               "name": "default",
-              "text": "'m'"
+              "text": "'l'"
             }
           ],
-          "default": "'m'",
+          "default": "'l'",
           "values": [
             {
               "value": "l",
@@ -7547,8 +7547,8 @@
       "filePath": "src/components/sc-status-tag/sc-status-tag.tsx",
       "encapsulation": "shadow",
       "tag": "sc-status-tag",
-      "readme": "# sc-status-tag\n\nThe status of an application, task or payment, in the words of the status vocabulary (Standard 9.6). Not interactive, and not announced when it changes.\n\n## Usage\n\n```html\n<sc-status-tag tone=\"success\">Paid</sc-status-tag>\n<sc-status-tag tone=\"error\">Action needed</sc-status-tag>\n<sc-status-tag tone=\"warning\">Expires in 15 days</sc-status-tag>\n<sc-status-tag>In review</sc-status-tag>\n```\n\n| Tone | Icon | Use it for |\n|---|---|---|\n| `neutral` (default) | pending | Draft, Received, In review, Not approved, Withdrawn, Cancelled, Not started, In progress |\n| `info` | hourglass | An informational state, where a service needs one. Standard 9.6 maps no status to it yet |\n| `success` | check circle | Approved, Completed, Paid |\n| `warning` | clock | Expires in {n} days |\n| `error` | error | Action needed, Payment failed |\n\n- v2 is a 32px chip with 6px corners: tone-40 words and icon on a tone-95 container, so status is never colour alone (A11Y-06). Neutral is neutral-40 on neutral-96.\n- There is **no channel tone**: status never takes a channel's colour. v1's `tone=\"channel\"` renders as `neutral`.\n- Two or three words. Use the vocabulary, in both languages (\"تم الدفع\", \"إجراء مطلوب\").\n\nPart: `tag`, `icon`.\n",
-      "docs": "The status of an application, task or payment, in the words of the status vocabulary\n(Standard 9.6): \"Paid\", \"Action needed\", \"In review\", \"Expires in 15 days\".\n\nv2: a 32px chip with a 6px radius, a tone icon and the words, tone-40 text on a tone-95\ncontainer (A11Y-06: never colour alone). It isn't interactive and isn't announced on\nchange (use `sc-callout` or a live region for that). There is no channel tone: status is\nnever in a channel's colour.",
+      "readme": "# sc-status-tag\n\nThe status of an application, task or payment, in the words of the status vocabulary (Standard 9.6). Not interactive, and not announced when it changes.\n\n## Usage\n\n```html\n<sc-status-tag tone=\"success\">Paid</sc-status-tag>\n<sc-status-tag tone=\"error\">Action needed</sc-status-tag>\n<sc-status-tag tone=\"warning\">Expires in 15 days</sc-status-tag>\n<sc-status-tag>In review</sc-status-tag>\n<sc-status-tag tone=\"channel\">Life event</sc-status-tag>\n```\n\n| Tone | Icon | Use it for |\n|---|---|---|\n| `neutral` (default) | pending | Draft, Received, In review, Not approved, Withdrawn, Cancelled, Not started, In progress |\n| `info` | hourglass | An informational state, where a service needs one. Standard 9.6 maps no status to it yet |\n| `success` | check circle | Approved, Completed, Paid |\n| `warning` | clock | Expires in {n} days |\n| `error` | error | Action needed, Payment failed |\n| `channel` | info | A highlight in the channel's colour, such as \"Life event\" (decision W4). Not a status: use the tones above for status |\n\n- v2 is a 32px chip with 6px corners: tone-40 words and icon on a tone-95 container, so status is never colour alone (A11Y-06). Neutral is neutral-40 on neutral-96.\n- The `channel` tone (decision W4) is `channel-action` words and icon on `channel-subtle`, and follows the nearest `data-channel`. The semantic tones are the same on every channel.\n- Two or three words. Use the vocabulary, in both languages (\"تم الدفع\", \"إجراء مطلوب\").\n\nPart: `tag`, `icon`.\n",
+      "docs": "The status of an application, task or payment, in the words of the status vocabulary\n(Standard 9.6): \"Paid\", \"Action needed\", \"In review\", \"Expires in 15 days\".\n\nv2: a 32px chip with a 6px radius, a tone icon and the words, tone-40 text on a tone-95\ncontainer (A11Y-06: never colour alone). It isn't interactive and isn't announced on\nchange (use `sc-callout` or a live region for that). The `channel` tone (decision W4) is\n`channel-action` on `channel-subtle` and follows the nearest `data-channel`.",
       "docsTags": [
         {
           "name": "slot",
@@ -7567,14 +7567,14 @@
       "props": [
         {
           "name": "tone",
-          "type": "\"error\" | \"info\" | \"neutral\" | \"success\" | \"warning\"",
+          "type": "\"channel\" | \"error\" | \"info\" | \"neutral\" | \"success\" | \"warning\"",
           "complexType": {
             "original": "StatusTagTone",
-            "resolved": "\"error\" | \"info\" | \"neutral\" | \"success\" | \"warning\"",
+            "resolved": "\"channel\" | \"error\" | \"info\" | \"neutral\" | \"success\" | \"warning\"",
             "references": {
               "StatusTagTone": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-status-tag/sc-status-tag.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-a/components/src/components/sc-status-tag/sc-status-tag.tsx",
                 "id": "src/components/sc-status-tag/sc-status-tag.tsx::StatusTagTone"
               }
             }
@@ -7582,7 +7582,7 @@
           "mutable": false,
           "attr": "tone",
           "reflectToAttr": true,
-          "docs": "- `neutral`: a plain state (\"Draft\", \"Received\", \"In review\", \"Not started\").\n- `info`: an informational state, where a service needs one (hourglass icon).\n- `success`: done (\"Paid\", \"Approved\", \"Completed\").\n- `warning`: needs attention soon (\"Expires in 15 days\").\n- `error`: blocked or waiting on the user (\"Action needed\", \"Payment failed\").\n\nAn unknown tone, including v1's removed `channel`, renders as `neutral`.",
+          "docs": "- `neutral`: a plain state (\"Draft\", \"Received\", \"In review\", \"Not started\").\n- `info`: an informational state, where a service needs one (hourglass icon).\n- `success`: done (\"Paid\", \"Approved\", \"Completed\").\n- `warning`: needs attention soon (\"Expires in 15 days\").\n- `error`: blocked or waiting on the user (\"Action needed\", \"Payment failed\").\n- `channel`: a highlight in the channel's colour (\"Life event\"), not a status of its own\n  (decision W4: `channel-action` text on `channel-subtle`). Use the semantic tones for status.\n\nAn unknown tone renders as `neutral`.",
           "docsTags": [
             {
               "name": "default",
@@ -7591,6 +7591,10 @@
           ],
           "default": "'neutral'",
           "values": [
+            {
+              "value": "channel",
+              "type": "string"
+            },
             {
               "value": "error",
               "type": "string"
@@ -7677,7 +7681,7 @@
       "filePath": "src/components/sc-step-progress/sc-step-progress.tsx",
       "encapsulation": "shadow",
       "tag": "sc-step-progress",
-      "readme": "# sc-step-progress\n\nThe stepper: where the user is in a short linear journey of 2 to about 7 question pages (NAV-02). Don't use it for branching journeys whose length isn't known.\n\n## Usage\n\n```html\n<!-- Full from 600px wide, compact below -->\n<sc-step-progress current=\"2\">\n  <span>Vehicle</span><span>Plate number</span><span>Check answers</span><span>Pay</span>\n</sc-step-progress>\n\n<!-- Compact only, no step names -->\n<sc-step-progress current=\"2\" total=\"4\" label=\"Plate number\"></sc-step-progress>\n```\n\n- Completed and current steps take the channel action colour; completed ones carry a check, the current one an inner dot and a halo. Green is never used (U2, CMP-09).\n- `layout`: `auto` (default; full when step names are given and the component is at least 600px wide), `compact` or `full`.\n- Step names come from the host's child elements (read as text, never shown themselves) or the `steps` property. `current` is 1-based and clamped.\n- Full layout: an `<ol>` with `aria-current=\"step\"` on the current step and every state in words (\"Step 1 · Done\", a hidden \"Not started\"). Compact: the meta row (\"Step 2 of 4\") carries the meaning; the markers are hidden.\n- Steps run from the right in Arabic; digits stay Latin.\n\nParts: `meta`, `label`, `count`, `track`, `list`.\n",
+      "readme": "# sc-step-progress\n\nThe stepper: where the user is in a short linear journey of 2 to about 7 question pages (NAV-02). Don't use it for branching journeys whose length isn't known.\n\n## Usage\n\n```html\n<!-- Full from 600px wide, compact below -->\n<sc-step-progress current=\"2\">\n  <span>Vehicle</span><span>Plate number</span><span>Check answers</span><span>Pay</span>\n</sc-step-progress>\n\n<!-- Compact only, no step names -->\n<sc-step-progress current=\"2\" total=\"4\" label=\"Plate number\"></sc-step-progress>\n```\n\n- Completed and current steps take the channel action colour; completed ones carry a check, the current one an inner dot and a halo (the channel tint in light mode, the divider in dark mode). Green is never used (U2, CMP-09).\n- `layout`: `auto` (default; full when step names are given and the component is at least 600px wide), `compact` or `full`.\n- Step names come from the host's child elements (read as text, never shown themselves) or the `steps` property. `current` is 1-based and clamped.\n- Full layout: an `<ol>` with `aria-current=\"step\"` on the current step and every state in words (\"Step 1 · Done\", a hidden \"Not started\"). Compact: the meta row (\"Step 2 of 4\") carries the meaning; the markers are hidden.\n- Steps run from the right in Arabic; digits stay Latin.\n\nParts: `meta`, `label`, `count`, `track`, `list`.\n",
       "docs": "The stepper: where the user is in a short linear journey (NAV-02, CMP-09). Direction E's\nsignature component, replacing v1's segmented track.\n\nCompleted and current markers take the channel action colour (decision U2); completed\nmarkers carry a check, the current one an inner dot and a halo, upcoming ones a 2px\n`outline` edge. Green is never used: it is reserved for genuine success messages.\n\nTwo layouts:\n- **compact** (phones; E2–E4): a meta row (\"Plate number\" … \"Step 2 of 4\") that carries\n  the meaning, over a decorative (`aria-hidden`) row of 24px markers.\n- **full** (E0): an `<ol>` with one column per step: a 28px marker, a connector to the next\n  step (solid behind, dashed ahead), a state line (\"Step 1 · Done\") and the step name. The\n  current step has `aria-current=\"step\"`, and every step says its state in words.\n\n`layout=\"auto\"` (the default) shows the full stepper when step names are given and the\ncomponent is at least 600px wide (a container query), and the compact one otherwise.\n\nStep names come from the `steps` property or from the host's child elements, one per step\n(`<span>Vehicle</span><span>Plate number</span>…`): they are read as text and are not\nrendered themselves. `current` is 1-based and clamped (DDS F-036). Steps run from the\nright in Arabic; digits stay Latin.",
       "docsTags": [
         {
@@ -7793,7 +7797,7 @@
             "references": {
               "StepProgressLayout": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-step-progress/sc-step-progress.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-a/components/src/components/sc-step-progress/sc-step-progress.tsx",
                 "id": "src/components/sc-step-progress/sc-step-progress.tsx::StepProgressLayout"
               }
             }
@@ -7958,7 +7962,7 @@
             "references": {
               "SummaryListAppearance": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-summary-list/sc-summary-list.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-a/components/src/components/sc-summary-list/sc-summary-list.tsx",
                 "id": "src/components/sc-summary-list/sc-summary-list.tsx::SummaryListAppearance"
               }
             }
@@ -8523,7 +8527,7 @@
             "references": {
               "SortDirection": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-table/sc-table.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-a/components/src/components/sc-table/sc-table.tsx",
                 "id": "src/components/sc-table/sc-table.tsx::SortDirection"
               }
             }
@@ -9149,7 +9153,7 @@
             "references": {
               "TextInputType": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-text-input/sc-text-input.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-a/components/src/components/sc-text-input/sc-text-input.tsx",
                 "id": "src/components/sc-text-input/sc-text-input.tsx::TextInputType"
               }
             }
@@ -9234,7 +9238,7 @@
             "references": {
               "TextInputWidth": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-text-input/sc-text-input.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-a/components/src/components/sc-text-input/sc-text-input.tsx",
                 "id": "src/components/sc-text-input/sc-text-input.tsx::TextInputWidth"
               }
             }
@@ -9949,7 +9953,7 @@
             "references": {
               "TimelineOrder": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-timeline/sc-timeline.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-a/components/src/components/sc-timeline/sc-timeline.tsx",
                 "id": "src/components/sc-timeline/sc-timeline.tsx::TimelineOrder"
               }
             }
@@ -10125,7 +10129,7 @@
       "path": "src/components/sc-spinner/sc-spinner.tsx"
     },
     "src/components/sc-status-tag/sc-status-tag.tsx::StatusTagTone": {
-      "declaration": "export type StatusTagTone = 'neutral' | 'info' | 'success' | 'warning' | 'error';",
+      "declaration": "export type StatusTagTone = 'neutral' | 'info' | 'success' | 'warning' | 'error' | 'channel';",
       "docstring": "",
       "path": "src/components/sc-status-tag/sc-status-tag.tsx"
     },

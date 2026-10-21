@@ -14,6 +14,7 @@ describeVisual('sc-status-tag screenshots', () => {
         <sc-status-tag tone="success">${t('Paid', 'تم الدفع', l)}</sc-status-tag>
         <sc-status-tag tone="warning">${t('Expires in 15 days', 'ينتهي خلال 15 يومًا', l)}</sc-status-tag>
         <sc-status-tag tone="error">${t('Action needed', 'إجراء مطلوب', l)}</sc-status-tag>
+        <sc-status-tag tone="channel">${t('Life event', 'حدث حياتي', l)}</sc-status-tag>
       </div>`,
       ctx,
     );

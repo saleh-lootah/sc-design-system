@@ -14,7 +14,7 @@
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: var(--sc-space-8);
+  gap: var(--sc-space-12);
   font: var(--sc-type-body-medium);
   letter-spacing: var(--sc-type-body-medium-tracking);
 }
@@ -26,6 +26,11 @@
 .icon-box {
   display: inline-flex;
   flex: none;
+}
+
+/* The arc keeps currentColor; a visible label is on-surface (board A21). */
+.label {
+  color: var(--sc-color-on-surface);
 }
 
 /* Visually hidden unless show-label is set, or motion is reduced. */

@@ -1,7 +1,8 @@
 /*
  * sc-status-tag (v2, shadow). Rules: component-language.md A18 read through the role table
  * in decisions.md; tone-40 text and icon on a tone-95 container. Neutral is neutral-40
- * (on-surface-variant) on neutral-96 (surface-container).
+ * (on-surface-variant) on neutral-96 (surface-container); channel is channel-action on
+ * channel-subtle (W4).
  */
 :host {
   display: inline-block;
@@ -52,6 +53,12 @@
 .tag--error {
   --_fill: var(--sc-color-error-container);
   --_ink: var(--sc-color-error);
+}
+
+/* Decision W4: channel-action on channel-subtle (tone 95). */
+.tag--channel {
+  --_fill: var(--sc-color-channel-subtle);
+  --_ink: var(--sc-color-channel-action);
 }
 
 .icon-box {

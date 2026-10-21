@@ -12,10 +12,10 @@ Lists every error at the top of `<main>` after a submission; each item links to 
 
 | # | Part | Notes |
 | --- | --- | --- |
-| 1 | Box (`container`) | `tabindex="-1"`, `role="group"`, `aria-labelledby` the heading. No `role="alert"`, no live region (CMP-05). Fill `error-container`, 2px `error` border (`size-border-strong`), radius 8, padding 16, gap 6. The U1 ring shows outside the border on focus. |
+| 1 | Box (`container`) | `tabindex="-1"`, `role="group"`, `aria-labelledby` the heading. No `role="alert"`, no live region (CMP-05). Fill `error-container`, 2px `error` border (`size-border-strong`), radius 8, padding 18 block and 16 inline (A16 and the board), gap 6. The U1 ring shows outside the border on focus. |
 | 2 | Heading (`heading`) | `h2` (or `heading-level` 3–4). "There is a problem" / "توجد مشكلة" (W1). `title-medium` (Bold), `on-surface`. |
 | 3 | Description | Optional `slot="description"`, `body-medium`. |
-| 4 | List (`list`) | `<ul>`, no bullets. Links `body-large` Bold in `error`, underlined 1px at 5px (2px on fine-pointer hover, 120ms), each at least 44 × 44 (A11Y-04), rows touching. |
+| 4 | List (`list`) | `<ul>`, no bullets. Links `body-medium` Bold in `error` (A16's 16/24 is body-medium in the tokens, W5), underlined 1px at 5px (2px on fine-pointer hover, 120ms), each at least 44 × 44 (A11Y-04), rows touching. |
 
 Dark: error-20 fill, error-80 border and links.
 

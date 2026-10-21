@@ -16,7 +16,7 @@ An important message in the content: something the user must know before they ac
 | 2 | Accent | `border-inline-start` of `--sc-size-border-accent` (3px) in `{tone}`. component-language.md proposed 4px; the token and FND-16 say 3px. |
 | 3 | Icon (`icon`) | 24px (`icon-l`; E's 22 snapped, ICN-03) in `{tone}`: info `info`, success `check-circle`, warning `warning`, error `alert-circle`. Decorative. |
 | 4 | Heading (`heading`) | Optional. `title-small`, Bold, `on-surface`. A `<p>` unless `heading-level` (2–6). 4 above the content. |
-| 5 | Content (`content`) | `body-medium`, `on-surface`. Slotted links: `channel-action`, underlined 1px at 4px. |
+| 5 | Content (`content`) | `body-medium` at Medium weight (A17 and Paper board sc-callout), `on-surface`. Slotted links: `channel-action`, underlined 1px at 3px. |
 | 6 | Tone word | Visually hidden "Information:", "Success:", "Warning:", "Error:" / "معلومة:", "تم بنجاح:", "تنبيه:", "خطأ:", read first. Overridable with `tone-label`. |
 
 ## Tones
@@ -35,7 +35,7 @@ Dark: containers are tone 20, accents and icons tone 80, text white.
 | Part | Role | English | Arabic |
 | --- | --- | --- | --- |
 | Heading | `title-small`, Bold | 17/22 | 19/28 |
-| Content | `body-medium` | 16/24 | 18/28 |
+| Content | `body-medium`, Medium | 16/24 | 18/28 |
 
 ## States, keyboard, motion
 

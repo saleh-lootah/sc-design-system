@@ -6,7 +6,7 @@ describeVisual('sc-spinner screenshots', () => {
     const label = ctx.lang === 'ar' ? 'جارٍ التحقق من رقم اللوحة' : 'Checking your plate number';
     const page = await newScPage(
       `<style>.shot{display:flex;align-items:center;gap:16px;padding:16px;inline-size:480px;background:var(--sc-color-surface);color:var(--sc-color-on-surface)}</style>
-      <div class="shot"><sc-spinner></sc-spinner><sc-spinner size="l"></sc-spinner><sc-spinner show-label label="${label}"></sc-spinner></div>`,
+      <div class="shot"><sc-spinner size="m"></sc-spinner><sc-spinner></sc-spinner><sc-spinner show-label label="${label}"></sc-spinner></div>`,
       ctx,
     );
     await page.setViewport({ width: 560, height: 200, deviceScaleFactor: 1 });
