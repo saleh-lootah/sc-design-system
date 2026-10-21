@@ -90,7 +90,8 @@
   },
   "$c4Comment": "sc-modal 7 KiB: a dialog that is also a bottom sheet with drag, focus return and the session-timeout countdown with plural announcements; its own module is 4.7 KiB plus the same two shared chunks. See specs/sc-step-progress.md and specs/sc-modal.md.",
   "pageJsGzip": 30720,
-  "pageComponentCssGzip": 3072,
+  "pageComponentCssGzip": 4096,
+  "$pageCssComment": "PROPOSED (v2-perf, pending approval): 4 KiB, from 3 KiB. The typical page parses the stylesheets of 9 components (sc-search renders sc-button): 3,914 B gzip once Stencil's minifier failure is fixed (scripts/lib/minify-css.cjs; it was 4,281 B). Type roles are already shared tokens; what remains is each component's own layout, states, forced-colours and RTL rules. The largest are sc-button (1.3 KiB, six variants and the loading state) and sc-footer (1.1 KiB, both variants). 3 KiB would mean dropping states or variants.",
   "fontFileBytes": 32768,
   "pageFontsEnBytes": 76800,
   "pageFontsArBytes": 102400

@@ -9,6 +9,63 @@ const browser = process.env.SC_BROWSER || '/Applications/Helium.app/Contents/Mac
 // PUPPETEER_EXECUTABLE_PATH / CHROME_PATH. Set it here so `npm test` always uses Helium.
 process.env.PUPPETEER_EXECUTABLE_PATH ||= browser;
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { minifyCss } = require('./scripts/lib/minify-css.cjs') as { minifyCss: (css: string) => string };
+
+/**
+ * Minifies every component stylesheet before Stencil scopes it. Stencil's own CSS minifier
+ * bails out on at-rules nested in a block (`@layer sc.components { @media … }`) and then ships
+ * the sheet as written: 16 source sheets, among them every light-DOM one (scripts/lib/minify-css.cjs).
+ */
+const minifyComponentCss = {
+  name: 'minify-component-css',
+  // A pluginType marks it as a Stencil plugin, which sees each stylesheet; without one Stencil
+  // hands it to Rollup, which only sees the JS.
+  pluginType: 'css',
+  transform(code: string, id: string) {
+    return id.endsWith('.css') && id.includes('/src/components/') ? { code: minifyCss(code) } : null;
+  },
+};
+
+/**
+ * Lazy loader: show a shadow component's light-DOM content until its code has arrived.
+ *
+ * The lazy loader defines every tag as soon as the runtime runs, and the defined element
+ * attaches its (empty) shadow root in its constructor, long before its bundle arrives. An
+ * empty shadow root renders nothing, so the hero, the service cards and every other shadow
+ * component collapsed to zero height for one network round trip and then grew back: CLS 0.10
+ * to 0.12 on the typical page even with every size reserved. The custom-elements build defines
+ * a tag only when its code is there, so it never had this state.
+ *
+ * This patches Stencil's runtime (pinned at 4.45.2) as Rollup bundles it: the lazy host's
+ * constructor puts placeholder `<slot>`s in the new shadow root (one per slot name its children
+ * use, and the default slot), so the content renders as it did before the tag was defined, and
+ * the first render removes them before Stencil patches the shadow root. After the first
+ * render the DOM is exactly what it was. The build fails if either anchor is missing, which
+ * flags a Stencil upgrade.
+ */
+/** One placeholder slot per slot name the host's children use, in order of appearance, plus the default slot. */
+const placeholderSlots =
+  'for (const n of Array.from(self.children, (c) => c.getAttribute("slot") || "").concat("").filter((n, i, a) => a.indexOf(n) === i)) ' +
+  'self.shadowRoot.append(Object.assign(document.createElement("slot"), n ? { name: n, __scPlaceholder: true } : { __scPlaceholder: true }));';
+
+const lazyShadowPlaceholder = {
+  name: 'lazy-shadow-placeholder',
+  transform(code: string, id: string) {
+    if (!/@stencil[\\/]core[\\/]internal[\\/]client[\\/]index\.js(\?|$)/.test(id)) return null;
+    const ctor = /(if \(!self\.shadowRoot\) \{\s*createShadowRoot\.call\(self, cmpMeta\);)/;
+    const render = /(rootVnode\.\$elm\$ = oldVNode\.\$elm\$ = [^;]+;)/;
+    if (!ctor.test(code) || !render.test(code)) {
+      throw new Error('lazy-shadow-placeholder: Stencil runtime anchors not found. Re-check the patch in stencil.config.ts after a Stencil upgrade.');
+    }
+    // Same line as the anchor, so the runtime's line numbers don't move.
+    const patched = code
+      .replace(ctor, `$1 ${placeholderSlots}`)
+      .replace(render, '$1 if (hostElm.shadowRoot) for (const n of Array.from(hostElm.shadowRoot.children)) if (n.__scPlaceholder) n.remove();');
+    return { code: patched, map: null };
+  },
+};
+
 /** Dubai W23 ships next to the document stylesheet, so `url(assets/fonts/…)` in sc.css resolves. */
 const fonts = (dest: string) => ({ src: 'assets/fonts', dest, warn: true });
 /** sc.css, the one document stylesheet (scripts/build-sc-css.mjs, run before every build). */
@@ -17,26 +74,19 @@ const scCss = (dest: string) => ({ src: 'global/generated/sc.css', dest, warn: t
 /**
  * Lazy-loader bundles: tags that appear together load as one request (architecture §3.6).
  * A tag missing from this list gets its own bundle. Family agents keep it in step.
+ *
+ * The first bundle is the page shell plus what a channel home or hub page shows above the
+ * fold: the typical page (test/perf/typical-page.html) needs this bundle and nothing else, and
+ * sc-button rides in it because nearly every page has one (sc-search renders one). One file
+ * instead of two saves 1.2 KiB gzip of repeated chunk overhead on that page, and the chrome
+ * and the hero hydrate in the same frame. A form page also loads the fields bundle, which no
+ * longer duplicates sc-button. scripts/build-preload.mjs lists this bundle for modulepreload.
  */
 const bundles = [
-  { components: ['sc-page', 'sc-skip-link', 'sc-app-bar', 'sc-language-switch', 'sc-footer', 'sc-back-link', 'sc-link'] },
-  { components: ['sc-channel-hero', 'sc-service-card', 'sc-callout', 'sc-status-tag', 'sc-channel-chip', 'sc-card', 'sc-spinner', 'sc-step-progress', 'sc-tile', 'sc-attention-card', 'sc-module-card'] },
+  { components: ['sc-page', 'sc-skip-link', 'sc-app-bar', 'sc-language-switch', 'sc-footer', 'sc-button', 'sc-channel-hero', 'sc-service-card', 'sc-search'] },
+  { components: ['sc-back-link', 'sc-link', 'sc-callout', 'sc-status-tag', 'sc-channel-chip', 'sc-card', 'sc-spinner', 'sc-step-progress', 'sc-tile', 'sc-attention-card', 'sc-module-card'] },
   { components: ['sc-site-header', 'sc-channel-switcher', 'sc-account-menu', 'sc-announcement-bar', 'sc-utility-bar', 'sc-channel-network'] },
-  {
-    components: [
-      'sc-button',
-      'sc-search',
-      'sc-text-input',
-      'sc-textarea',
-      'sc-select',
-      'sc-date-input',
-      'sc-checkbox',
-      'sc-checkbox-group',
-      'sc-radio-group',
-      'sc-radio',
-      'sc-error-summary',
-    ],
-  },
+  { components: ['sc-text-input', 'sc-textarea', 'sc-select', 'sc-date-input', 'sc-checkbox', 'sc-checkbox-group', 'sc-radio-group', 'sc-radio', 'sc-error-summary'] },
   { components: ['sc-summary-list', 'sc-summary-row', 'sc-accordion'] },
   { components: ['sc-table'] },
   { components: ['sc-date-range'] },
@@ -51,8 +101,10 @@ export const config: Config = {
   // sc.css, which the page links; they do nothing inside a shadow root.
   globalStyle: 'src/global/shadow.css',
   bundles,
+  plugins: [minifyComponentCss, lazyShadowPlaceholder],
   // Nothing is hidden before hydration: light-DOM content paints at first paint, and sc.css
-  // reserves each host's final size with :not(:defined) rules, so CLS stays 0.
+  // reserves each host's final size with :not(:defined) rules (emitted to hold until .hydrated, see
+  // scripts/build-sc-css.mjs), so CLS stays 0.
   invisiblePrehydration: false,
   sourceMap: true,
   outputTargets: [

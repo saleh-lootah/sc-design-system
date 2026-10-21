@@ -44,6 +44,12 @@ const NETWORKS = {
 const TYPES = { '.js': 'text/javascript', '.css': 'text/css', '.html': 'text/html', '.woff2': 'font/woff2', '.json': 'application/json', '.map': 'application/json' };
 const template = readFileSync(join(root, 'test', 'perf', 'typical-page.html'), 'utf8');
 const CE_TAGS = ['sc-page', 'sc-skip-link', 'sc-app-bar', 'sc-language-switch', 'sc-channel-hero', 'sc-search', 'sc-service-card', 'sc-footer'];
+// The documented page snippet: modulepreload for the runtime core and the page-shell bundle
+// (scripts/build-preload.mjs writes the list after each build).
+const preloadFile = join(root, 'dist', 'sc-components', 'sc-preload.json');
+const lazyPreload = existsSync(preloadFile)
+  ? (({ core, page }) => [core, ...page].map((f) => `<link rel="modulepreload" href="/dist/sc-components/${f}">`).join(''))(JSON.parse(readFileSync(preloadFile, 'utf8')))
+  : '';
 const pageHtml = (lang, build) => {
   let html = template.replace(/<!--[\s\S]*?-->\n?/, '');
   if (lang === 'ar') {
@@ -52,7 +58,7 @@ const pageHtml = (lang, build) => {
   }
   const loader =
     build === 'lazy'
-      ? '<script type="module" src="/dist/sc-components/sc-components.esm.js"></script>'
+      ? `${lazyPreload}<script type="module" src="/dist/sc-components/sc-components.esm.js"></script>`
       : `<script type="module">\n${CE_TAGS.map((t) => `import '/dist/components/${t}.js';`).join('\n')}\n</script>`;
   return html.replace('{{lang}}', lang).replace('{{dir}}', lang === 'ar' ? 'rtl' : 'ltr').replace('{{loader}}', loader);
 };
