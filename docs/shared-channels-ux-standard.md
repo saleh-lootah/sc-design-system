@@ -1065,8 +1065,6 @@ These rules decide how components behave where version 1.0 or the v1 library did
 **Known gaps in current components**
 
 - Two default Arabic strings use the imperative, which [CNT-11](#arabic-style) does not allow: the call item of `sc-utility-bar` ("اتصل") and the sign-in hint in the `sc-site-header` mobile menu ("سجّل الدخول لعرض مهامك…"). They are to be rewritten in the library (for example "الاتصال" and "يمكنك تسجيل الدخول لعرض مهامك ومدفوعاتك والخدمات المحفوظة."); neither component offers an override.
-- `sc-callout` still draws its start bar at 3px; [FND-15](#spacing) sets the start bar at 4px (`--sc-size-strip`), the same as a field in error.
-- `sc-modal` animates the centred dialog over the sheet's 280ms; [MOT-06](#motion) and [MOT-07](#motion) set 200ms in and 160ms out for a centred dialog.
 
 <a id="backlog"></a>
 

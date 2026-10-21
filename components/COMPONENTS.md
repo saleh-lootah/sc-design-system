@@ -184,7 +184,7 @@ Rebuilt to direction E (`docs/v2/component-language.md`); full specs in `specs/<
 
 **ErrorSummary** (`sc-error-summary`, shadow): error-container box with a 2px error border; takes focus, `role="group"` named by its heading, no `role="alert"` (CMP-05). "There is a problem" / "توجد مشكلة".
 
-**StatusTag** (`sc-status-tag`, shadow): 32px chip, 6px radius, icon plus words, tone-40 on tone-95. Tones `neutral`, `info`, `success`, `warning`, `error`; no channel tone.
+**StatusTag** (`sc-status-tag`, shadow): 32px chip, 6px radius, icon plus words, tone-40 on tone-95. Tones `neutral`, `info`, `success`, `warning`, `error`, plus `channel` as a non-status highlight such as "Life event" (W4a).
 
 **Spinner** (`sc-spinner`, shadow): 20 or 24px, `currentColor`, 600ms per turn, label in a status region.
 
@@ -217,7 +217,7 @@ These entries replace the v1 descriptions of the same tags above. Specs: `specs/
 
 **Tile** (`sc-tile`, new): shadow. One link: a tinted 40px icon tile, a `title-small` title and an optional plural-aware count ("14 services", "خدمتان"). Life events, categories, favourite services.
 
-**AttentionCard** (`sc-attention-card`, new): shadow. A due item: a thin topic-tint top strip, icon tile, `slot="status"` tag, heading, fact, meta (amounts isolated) and one `slot="action"` button. Not a link.
+**AttentionCard** (`sc-attention-card`, new): shadow. A due item (no coloured strip, U5): icon tile, `slot="status"` tag, heading, fact, meta (amounts isolated) and one `slot="action"` button. Not a link.
 
 **ModuleCard** (`sc-module-card`, new): shadow. A titled module: tinted icon, `heading`, a header link (`action-href`, `action-text`, named with the title), content slot, optional `divided` rules.
 

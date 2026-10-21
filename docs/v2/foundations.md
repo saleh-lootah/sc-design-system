@@ -296,7 +296,7 @@ Dark values (generated):
 Rules:
 
 - **COL-10.** The channel is the theme. Entities (RTA, DEWA, Dubai Police) appear only as attribution text, never as colour.
-- **COL-11.** City indigo (`primary`) carries only what all channels share: the network strip, sign-in with UAE PASS, Dubai Pay hand-offs and the "One network" row. Everything inside a channel's service uses the channel roles.
+- **COL-11.** City indigo (`primary`) carries only what all channels share: the network strip, Dubai Pay and other shared hand-offs (UAE PASS uses its own official button, U3a) and the "One network" row. Everything inside a channel's service uses the channel roles.
 - **COL-12.** To show another channel's colour inside a page (an attribution chip, the channel row on the Dubai Now home), set `data-channel` on that element. Never hard-code another channel's values.
 
 ### 2.7 Decorative topic tints
