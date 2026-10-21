@@ -14,7 +14,7 @@ The primary navigation of signed-in channel pages on phones and tablets.
 | --- | --- | --- |
 | 1 | Host | `position: fixed` to the bottom edge, full width, z-index 900. Shown below 1024px only (the header navigation takes over from 1024px, CHR-04) |
 | 2 | Bar | `<nav aria-label="Main">` / "رئيسية": `surface` fill, 1px `outline-variant` top rule, padding for the bottom safe area. Flat, no shadow (U4's docked style) |
-| 3 | Item | `<a>` in an equal share of the width, min 48 wide, min 64 tall, padding 4, gap 4; icon above label |
+| 3 | Item | `<a>` in an equal share of the width, min 48 wide, min 64 tall, padding 6 above and 2 below, 4 inline, gap 2, content top-aligned (board GD6-0), so a one-line Arabic label (16/22) still fits in 64; icon above label |
 | 4 | Indicator | 56 × 32 pill behind the 24px icon |
 | 5 | Label | `label-small` (14/18 Medium EN, 16/22 Bold AR); a long Arabic label wraps and the bar grows |
 
@@ -44,7 +44,7 @@ The item order mirrors (the first destination is on the right).
 
 ## Budget
 
-Custom-elements closure 3,848 B gzip (4 KiB budget), its own CSS 764 B.
+Custom-elements closure 3,858 B gzip (4 KiB budget), its own CSS 777 B.
 
 ## Tests
 

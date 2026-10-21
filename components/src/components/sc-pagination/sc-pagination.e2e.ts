@@ -54,7 +54,7 @@ describe('sc-pagination (e2e)', () => {
 
   it('shows the results count above the navigation', async () => {
     const page = await newScPage(PAGER);
-    expect(await read(page, 'root.querySelector(".count").textContent')).toBe('Showing 121–140 of 1,284 fines');
+    expect(await read(page, 'root.querySelector(".count").textContent')).toBe('Showing 121 to 140 of 1,284 fines');
     await setPageContext(page, { lang: 'ar' });
     expect(await read(page, 'root.querySelector(".count").textContent')).toBe('عرض 121 إلى 140 من 1,284 fines');
   });
@@ -101,6 +101,9 @@ describe('sc-pagination (e2e)', () => {
     await page.waitForChanges();
     const visible = await read<string[]>(page, '[...root.querySelectorAll(".list > li")].filter((li) => li.getBoundingClientRect().width > 0).map((li) => li.textContent)');
     expect(visible).toEqual(['Previous', 'Page 7 of 65', 'Next']);
+    expect(await read(page, 'getComputedStyle(root.querySelector(".of")).fontWeight')).toBe('700');
+    const ends = await read<number[]>(page, '(() => { const l = root.querySelector(".list").getBoundingClientRect(); const t = [...root.querySelectorAll(".turn")].map((a) => a.getBoundingClientRect()); return [t[0].left - l.left, l.right - t[1].right]; })()');
+    expect(ends).toEqual([0, 0]);
   });
 
   it('scales a number cell on pointer press only', async () => {

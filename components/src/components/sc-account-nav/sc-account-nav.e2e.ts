@@ -48,10 +48,11 @@ describe('sc-account-nav (e2e)', () => {
     expect(await read(page, 'getComputedStyle(items[0]).fontWeight')).toBe('700');
   });
 
-  it('marks the current item with a channel-subtle fill, a 3px channel bar at inline-start, a channel icon and Bold', async () => {
+  it('marks the current item with a channel-subtle fill, a 3px channel bar at inline-start, a channel-action icon and Bold label', async () => {
     const page = await newScPage(ALL_STATES);
     expect(await read(page, 'getComputedStyle(items[1]).backgroundColor')).toBe(await token(page, '--sc-color-channel-subtle', 'backgroundColor'));
     expect(await read(page, 'getComputedStyle(items[1]).fontWeight')).toBe('700');
+    expect(await read(page, 'getComputedStyle(items[1]).color')).toBe(await token(page, '--sc-color-channel-action'));
     expect(await read(page, 'getComputedStyle(items[1].querySelector("svg")).color')).toBe(await token(page, '--sc-color-channel-action'));
     expect(await read(page, 'getComputedStyle(items[1], "::before").width')).toBe('3px');
     expect(await read(page, 'getComputedStyle(items[1], "::before").backgroundColor')).toBe(await token(page, '--sc-color-channel-action', 'backgroundColor'));

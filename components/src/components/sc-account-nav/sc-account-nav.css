@@ -14,16 +14,16 @@
 .list {
   display: flex;
   flex-direction: column;
-  gap: var(--sc-space-4);
+  gap: var(--sc-space-2);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-/* The divider before Sign out. */
+/* The divider before Sign out: 1px outline-variant with 8 above and below (board G7G-0). */
 .list--out {
-  margin-block-start: var(--sc-space-12);
-  padding-block-start: var(--sc-space-12);
+  margin-block-start: var(--sc-space-8);
+  padding-block-start: var(--sc-space-8);
   border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
 }
 
@@ -59,13 +59,16 @@
   min-inline-size: 0;
 }
 
-.item--current {
+/* Two classes, so the compact item's font shorthand below keeps the Bold. */
+.item.item--current {
   background-color: var(--sc-color-channel-subtle);
+  color: var(--sc-color-channel-action);
   font-weight: var(--sc-font-weight-bold);
 }
 
+/* The icon follows the channel-action label. */
 .item--current > .icon {
-  color: var(--sc-color-channel-action);
+  color: inherit;
 }
 
 /* The 3px current bar at inline-start. */
@@ -81,10 +84,8 @@
 }
 
 .badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: none;
+  display: inline-grid;
+  place-items: center;
   min-inline-size: var(--sc-space-24);
   min-block-size: var(--sc-space-24);
   padding-inline: var(--sc-space-8);
@@ -117,8 +118,12 @@
     border: 0;
     border-inline-start: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
   }
+  /* Compact items: 44 tall, label-medium (board G7G-0). The board's 8px icon gap is not
+     taken: it would put the component over its 4 KiB budget (see the spec). */
   .item {
     min-block-size: var(--sc-size-target-min);
+    font: var(--sc-type-label-medium);
+    letter-spacing: var(--sc-type-label-medium-tracking);
     white-space: nowrap;
   }
   .item--current::before {

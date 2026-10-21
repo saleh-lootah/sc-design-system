@@ -43,6 +43,11 @@ describe('sc-breadcrumbs (spec)', () => {
     expect(parent.querySelector('.compact')!.textContent).toBe('Back to Vehicles');
   });
 
+  it('overrides the compact text with compact-label', async () => {
+    const page = await render(`<sc-breadcrumbs compact-label="All {parent}">${TRAIL}</sc-breadcrumbs>`);
+    expect(shadow(page).querySelector('.item--parent .compact')!.textContent).toBe('All Vehicles');
+  });
+
   it('uses Arabic strings and the label override', async () => {
     const page = await render(`<div lang="ar" dir="rtl"><sc-breadcrumbs>${TRAIL}</sc-breadcrumbs></div>`);
     expect(shadow(page).querySelector('nav')!.getAttribute('aria-label')).toBe('مسار التنقل');

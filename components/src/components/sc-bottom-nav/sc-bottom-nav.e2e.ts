@@ -77,8 +77,13 @@ describe('sc-bottom-nav (e2e)', () => {
     expect(await read(page, 'getComputedStyle(items[0]).fontWeight')).toBe('700');
     expect(await read(page, 'getComputedStyle(items[1]).color')).toBe(await token(page, '--sc-color-on-surface-variant'));
     expect(await read(page, 'getComputedStyle(items[1]).fontSize')).toBe('14px');
+    // Board GD6-0: indicator 6 below the top rule, label 2 below the indicator.
+    const gaps = await read<number[]>(page, '(() => { const a = items[1].getBoundingClientRect(); const i = items[1].querySelector(".indicator").getBoundingClientRect(); const l = items[1].querySelector(".label").getBoundingClientRect(); return [i.top - a.top, l.top - i.bottom]; })()');
+    expect(gaps).toEqual([6, 2]);
     await setPageContext(page, { lang: 'ar' });
     expect(await read(page, 'getComputedStyle(items[1]).fontSize')).toBe('16px');
+    // A one-line Arabic label still fits the 64px bar.
+    expect(await read(page, 'Math.round(items[1].getBoundingClientRect().height)')).toBe(64);
   });
 
   it('mirrors the item order in Arabic', async () => {

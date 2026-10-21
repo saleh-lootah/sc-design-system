@@ -70,6 +70,7 @@ describe('sc-breadcrumbs (e2e)', () => {
     expect(visible).toEqual(['Back to Vehicles']);
     const snap = await page.accessibility.snapshot({ root: (await page.$('sc-breadcrumbs >>> .item--parent a'))! });
     expect(snap!.name).toBe('Back to Vehicles');
+    expect(await read<number>(page, 'root.querySelector(".item--parent a").getBoundingClientRect().height')).toBeGreaterThanOrEqual(44);
   });
 
   it('Tab reaches each ancestor link and Enter follows it', async () => {

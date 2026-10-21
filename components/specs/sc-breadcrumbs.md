@@ -36,7 +36,7 @@ Parts: `nav`, `list`, `link`, `current`.
 
 ## Compact screens
 
-Below 600px only the parent item shows, as "Back to {parent}" / "رجوع إلى {parent}" with a mirrored back chevron. The full and compact texts are separate spans toggled by the media query, so the link's accessible name always matches what is shown.
+Below 600px only the parent item shows, as "Back to {parent}" / "رجوع إلى {parent}" with a mirrored back chevron; the `compact-label` prop overrides that text (`{parent}` is replaced by the parent's text). The single link has 12px of block padding, so it is at least 44px tall (board AP2-0). The full and compact texts are separate spans toggled by the media query, so the link's accessible name always matches what is shown.
 
 ## Keyboard and motion
 
@@ -52,7 +52,7 @@ Native links. Hover underline thickness over `duration-fast`; otherwise no motio
 
 ## Budget
 
-Custom-elements closure 3,848 B gzip (4 KiB budget), its own CSS 546 B.
+Custom-elements closure 3,198 B gzip (4 KiB budget), its own CSS 556 B. The two chevrons are drawn in the component (about 0.1 KiB), as in `sc-pagination`, rather than imported from the shared icon set (0.9 KiB): with the `compact-label` prop the import put it over budget.
 
 ## Tests
 

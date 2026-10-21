@@ -52,9 +52,9 @@ describe('sc-pagination (spec)', () => {
     expect(root(page).querySelector('.of')!.textContent).toBe('Page 1 of 65');
   });
 
-  it('shows "Showing 1–20 of 1,284 fines" with Latin digits and a thousands comma', async () => {
+  it('shows "Showing 1 to 20 of 1,284 fines" with Latin digits and a thousands comma', async () => {
     const page = await render(`<sc-pagination total-items="1284" item-label="fine|fines"></sc-pagination>`);
-    expect(root(page).querySelector('.count')!.textContent).toBe('Showing 1–20 of 1,284 fines');
+    expect(root(page).querySelector('.count')!.textContent).toBe('Showing 1 to 20 of 1,284 fines');
     const one = await render(`<sc-pagination total-items="1" item-label="fine|fines"></sc-pagination>`);
     expect(root(one).querySelector('.count')!.textContent).toBe('Showing 1 of 1 fine');
     expect(root(one).querySelector('nav')).toBeNull();

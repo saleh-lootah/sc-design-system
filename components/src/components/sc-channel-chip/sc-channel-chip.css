@@ -23,7 +23,8 @@
   max-inline-size: 100%;
   min-block-size: var(--sc-size-chip);
   padding-block: var(--sc-space-2);
-  padding-inline: var(--sc-space-12);
+  /* 10px from the chip's edge to the dot; the transparent hairline (forced colours) counts. */
+  padding-inline: calc(var(--sc-space-8) + var(--sc-space-2) - var(--sc-size-border-hairline));
   border: var(--sc-size-border-hairline) solid transparent;
   border-radius: var(--sc-radius-chip);
   background: var(--sc-color-channel-subtle);
@@ -35,6 +36,7 @@
 
 .chip--outlined {
   gap: var(--sc-space-6);
+  padding-inline: calc(var(--sc-space-8) + var(--sc-space-2));
   border-color: var(--sc-color-channel-outline);
   background: var(--sc-color-surface);
   font-weight: var(--sc-font-weight-bold);
@@ -64,14 +66,15 @@
   --icon-size: var(--sc-size-icon-s);
   display: inline-flex;
   flex: none;
-  margin-inline: calc(var(--sc-space-2) * -1) calc(var(--sc-space-4) * -1);
+  /* 8px from the label, 6px from the end edge (board 8ZA-0). */
+  margin-inline: 0 calc(var(--sc-space-4) * -1);
 }
 
 .label {
   min-inline-size: 0;
   overflow-wrap: anywhere;
   text-decoration-thickness: 1px;
-  text-underline-offset: 4px;
+  text-underline-offset: 3px;
 }
 
 .label:lang(ar) {
