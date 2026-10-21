@@ -2,7 +2,7 @@ import { E2EPage } from '@stencil/core/testing';
 import { describeAxe } from '../../test/axe';
 import { newScPage } from '../../test/page';
 
-const BAR = `<p><a href="#top">Top</a></p><sc-utility-bar happiness-href="#happiness" contact-href="tel:04" chat-href="#chat" accessibility-href="#accessibility"></sc-utility-bar>`;
+const BAR = `<p><a href="#top">Top</a></p><sc-utility-bar happiness-href="#happiness" contact-href="tel:04" services-href="#services" chat-href="#chat" accessibility-href="#accessibility"></sc-utility-bar>`;
 
 function inRoot<T = unknown>(page: E2EPage, expr: string): Promise<T> {
   return page.evaluate((e: string) => {
@@ -36,15 +36,18 @@ describe('sc-utility-bar (e2e)', () => {
     expect(s[2]).toBe('1px');
     expect(s[3]).toBe(await token(page, 'color', 'var(--sc-color-outline-variant)'));
     expect(s[4]).toBe('0px');
+    // Board ERV-0: 48px items, 12px block padding, a gap of 8.
+    const m = await inRoot<number[]>(page, '(() => { const n = root.querySelector("nav"); const a = root.querySelectorAll("a"); return [parseFloat(getComputedStyle(n).paddingTop), Math.round(a[0].getBoundingClientRect().height), Math.round(a[1].getBoundingClientRect().left - a[0].getBoundingClientRect().right)]; })()');
+    expect(m).toEqual([12, 48, 8]);
   });
 
-  it('keeps every label visible and every target at least 44px', async () => {
+  it('keeps all five labels visible and every target 48px', async () => {
     const page = await newScPage(BAR, { lang: 'ar' });
     await page.setViewport({ width: 1024, height: 720 });
     const items = await inRoot<number[][]>(page, 'Array.from(root.querySelectorAll("a")).map((a) => { const r = a.getBoundingClientRect(); return [Math.round(r.height), a.querySelector("span").getBoundingClientRect().width]; })');
-    expect(items.length).toBe(4);
+    expect(items.length).toBe(5);
     for (const [h, label] of items) {
-      expect(h).toBeGreaterThanOrEqual(44);
+      expect(h).toBeGreaterThanOrEqual(48);
       expect(label).toBeGreaterThan(20);
     }
   });
@@ -57,8 +60,10 @@ describe('sc-utility-bar (e2e)', () => {
     await page.waitForFunction(() => document.documentElement.style.getPropertyValue('--sc-utility-bar-block-size') === '');
     expect(await inRoot(page, 'getComputedStyle(root.querySelector("nav")).position')).toBe('static');
     expect(await inRoot(page, 'root.querySelector("h2").getBoundingClientRect().height > 10')).toBe(true);
-    const tops = await inRoot<number[]>(page, 'Array.from(root.querySelectorAll("a")).map((a) => Math.round(a.getBoundingClientRect().top))');
+    const tops = await inRoot<number[]>(page, 'Array.from(root.querySelectorAll("a")).filter((a) => a.getClientRects().length).map((a) => Math.round(a.getBoundingClientRect().top))');
+    expect(tops.length).toBe(4);
     expect(new Set(tops).size).toBe(2);
+    expect(await inRoot(page, 'Array.from(root.querySelectorAll("a svg")).every((s) => getComputedStyle(s).display === "none")')).toBe(true);
   });
 
   it('removes the reservation when it is removed', async () => {

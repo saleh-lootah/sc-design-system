@@ -5,14 +5,16 @@ export default defineStrings({
   en: {
     utilityLabel: 'Help and feedback',
     utilityHappiness: 'Happiness Meter',
-    utilityContact: 'Contact and complaints',
+    utilityContact: 'Call',
+    utilityServices: 'Services',
     utilityChat: 'Chat',
     utilityAccessibility: 'Accessibility',
   },
   ar: {
     utilityLabel: 'المساعدة والملاحظات',
     utilityHappiness: 'مؤشر السعادة',
-    utilityContact: 'التواصل والشكاوى',
+    utilityContact: 'اتصل',
+    utilityServices: 'الخدمات',
     utilityChat: 'المحادثة',
     utilityAccessibility: 'إمكانية الوصول',
   },

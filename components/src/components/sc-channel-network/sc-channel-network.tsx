@@ -35,6 +35,9 @@ export class ScChannelNetwork {
   /** Each channel's home page (as `sc-channel-switcher` `links`; `{lang}` becomes `en` or `ar`). */
   @Prop() links?: ChannelLinks | string;
 
+  /** Replaces the eyebrow, "One network · seven channels" in the page language. */
+  @Prop() eyebrow?: string;
+
   private locale = new LocaleController(this, strings);
 
   connectedCallback() {
@@ -52,7 +55,7 @@ export class ScChannelNetwork {
     return (
       <Host>
         <nav class="sc-channel-network" aria-label={t('networkLabel')}>
-          <p class="sc-channel-network__eyebrow">{t('networkEyebrow')}</p>
+          <p class="sc-channel-network__eyebrow">{this.eyebrow ?? t('networkEyebrow')}</p>
           <ul class="sc-channel-network__list">
             {channels.map((channel) => {
               const isCurrent = channel === current;

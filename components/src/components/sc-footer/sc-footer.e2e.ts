@@ -29,6 +29,13 @@ describe('sc-footer (e2e)', () => {
     expect(Number(s[2])).toBeGreaterThanOrEqual(44);
   });
 
+  it('simple: padding 32 on top and 40 below, meta text in body-medium (A29, board F66-0)', async () => {
+    const page = await newScPage(SIMPLE);
+    await page.setViewport({ width: 1440, height: 800 });
+    const m = await inRoot<string[]>(page, '(() => { const i = getComputedStyle(root.querySelector(".simple")); const m = getComputedStyle(root.querySelector(".meta")); return [i.paddingTop, i.paddingBottom, m.fontSize, m.lineHeight]; })()');
+    expect(m).toEqual(['32px', '40px', '16px', '24px']);
+  });
+
   it('Tab moves through every link in order, including slotted ones', async () => {
     const page = await newScPage(SIMPLE);
     const seen: string[] = [];
@@ -41,7 +48,7 @@ describe('sc-footer (e2e)', () => {
         }),
       );
     }
-    expect(seen).toEqual(['#help', '#a11y', '#privacy', '#cookies', '#terms', '#feedback']);
+    expect(seen).toEqual(['#help', '#a11y', '#privacy', '#terms', '#cookies', '#feedback']);
   });
 
   it('grouped: four columns from 1024px, the Channels group in two columns, mirrored in Arabic', async () => {

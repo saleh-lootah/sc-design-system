@@ -306,3 +306,35 @@ sc-ltr {
 :is(sc-card, sc-summary-list, sc-summary-row, sc-table, sc-accordion):not(:defined) {
   display: block;
 }
+
+/* Board alignment (v2-align-chrome-b): the simple footer gained 8px of top padding and a
+   body-medium meta line, the compact grouped footer lost 24px of top padding and its brand
+   name is headline-small, and the folded utility bar's gap is 8. Re-measured reservations. */
+sc-footer:not(:defined) {
+  min-block-size: 253px;
+}
+sc-footer:not(:defined)[variant='grouped'] {
+  min-block-size: 946px;
+}
+sc-utility-bar:not(:defined) {
+  min-block-size: 206px;
+}
+@media (min-width: 600px) {
+  sc-footer:not(:defined) {
+    min-block-size: 149px;
+  }
+  sc-footer:not(:defined)[variant='grouped'] {
+    min-block-size: 760px;
+  }
+}
+@media (min-width: 1024px) {
+  sc-footer:not(:defined) {
+    min-block-size: 117px;
+  }
+  sc-footer:not(:defined)[variant='grouped'] {
+    min-block-size: 388px;
+  }
+  sc-utility-bar:not(:defined) {
+    min-block-size: 0;
+  }
+}

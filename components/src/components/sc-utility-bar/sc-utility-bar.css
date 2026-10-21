@@ -39,10 +39,16 @@
 .list {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--sc-space-12);
+  gap: var(--sc-space-8);
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+/* Folded: Services is left out (the site's menu has it), and the buttons are text only. */
+.docked-only,
+.item svg {
+  display: none;
 }
 
 /* Outlined buttons, size m (48), as the secondary button. */
@@ -77,7 +83,7 @@
     z-index: 30;
     box-sizing: border-box;
     max-inline-size: none;
-    padding-block: var(--sc-space-2) max(var(--sc-space-2), env(safe-area-inset-bottom));
+    padding-block: var(--sc-space-12) max(var(--sc-space-12), env(safe-area-inset-bottom));
     padding-inline: var(--sc-grid-expanded-margin);
     border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
     box-shadow: var(--sc-elevation-1);
@@ -100,9 +106,17 @@
     gap: 0 var(--sc-space-8);
   }
 
+  .docked-only {
+    display: list-item;
+  }
+
+  .item svg {
+    display: block;
+  }
+
   .item {
     --sc-state-color: var(--sc-color-on-surface);
-    min-block-size: var(--sc-size-target-min);
+    min-block-size: var(--sc-size-control-secondary);
     padding-inline: var(--sc-space-16);
     border-color: transparent;
     color: var(--sc-color-on-surface);

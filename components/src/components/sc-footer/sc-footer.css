@@ -106,8 +106,14 @@ ul {
   align-items: center;
   justify-content: space-between;
   gap: var(--sc-space-8) var(--sc-space-32);
-  padding-block: var(--sc-space-24) var(--sc-space-40);
+  padding-block: var(--sc-space-32) var(--sc-space-40);
   border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+}
+
+/* A29: the simple footer's meta text is body-medium (the grouped lower line is body-small). */
+.meta--simple {
+  font: var(--sc-type-body-medium);
+  letter-spacing: var(--sc-type-body-medium-tracking);
 }
 
 .row {
@@ -123,9 +129,16 @@ ul {
 }
 
 /* Grouped (B5). ------------------------------------------------------------------------- */
+/* Padding 56/40; 32 on top on compact screens (board F66-0). */
 .grouped {
-  padding-block: var(--sc-space-56) var(--sc-space-40);
+  padding-block: var(--sc-space-32) var(--sc-space-40);
   border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+}
+
+@media (min-width: 600px) {
+  .grouped {
+    padding-block-start: var(--sc-space-56);
+  }
 }
 
 .groups {
@@ -159,8 +172,8 @@ ul {
   align-items: center;
   gap: var(--sc-space-12);
   margin: 0 0 var(--sc-space-16);
-  font: var(--sc-type-title-medium);
-  letter-spacing: var(--sc-type-title-medium-tracking);
+  font: var(--sc-type-headline-small);
+  letter-spacing: var(--sc-type-headline-small-tracking);
 }
 
 /* The channel's ring mark, as on the channel switcher. */

@@ -137,9 +137,9 @@ export class ScFooter {
           {t('footerLinksHeading')}
         </h2>
         <ul class="row" part="list" aria-labelledby="heading">
-          {this.renderLinks([helpful[0], helpful[1], ...legal, about, helpful[2]], true)}
+          {this.renderLinks([helpful[0], helpful[1], legal[0], legal[2], legal[1], about, helpful[2]], true)}
         </ul>
-        <p class="meta" part="meta">
+        <p class="meta meta--simple" part="meta">
           <slot name="meta">{t('footerGovernment')}</slot>
         </p>
       </div>

@@ -22,6 +22,11 @@ describe('sc-footer (spec)', () => {
     expect(Array.from(page.root!.shadowRoot!.querySelectorAll('li a')).map((a) => a.textContent)).toEqual(['Privacy', 'Cookies']);
   });
 
+  it('simple: orders the links help, accessibility, privacy, terms, cookies (A29)', async () => {
+    const page = await render(`<sc-footer help-href="/h" accessibility-href="/a" privacy-href="/p" cookies-href="/c" terms-href="/t"></sc-footer>`);
+    expect(Array.from(page.root!.shadowRoot!.querySelectorAll('li a')).map((a) => a.getAttribute('href'))).toEqual(['/h', '/a', '/p', '/t', '/c']);
+  });
+
   it('gives each slotted link its own list item', async () => {
     const page = await render(`<sc-footer help-href="/help"><a href="/feedback">Give feedback</a><a href="/jobs">Jobs</a></sc-footer>`);
     const extra = Array.from(page.root!.querySelectorAll('a'));
