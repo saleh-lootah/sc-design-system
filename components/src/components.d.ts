@@ -21,6 +21,7 @@ import { ServiceCardHeadingLevel, ServiceCardTint } from "./components/sc-servic
 import { StatusTagTone } from "./components/sc-status-tag/sc-status-tag";
 import { SummaryListAppearance, SummaryListLayout } from "./components/sc-summary-list/sc-summary-list";
 import { SummaryRowVariant } from "./components/sc-summary-row/sc-summary-row";
+import { StringsInput as StringsInput1 } from "./components/sc-table/strings-override";
 import { SortDirection } from "./components/sc-table/sc-table";
 import { TextInputType, TextInputWidth } from "./components/sc-text-input/sc-text-input";
 export { ButtonIconPosition, ButtonSize, ButtonType, ButtonVariant } from "./components/sc-button/sc-button";
@@ -39,6 +40,7 @@ export { ServiceCardHeadingLevel, ServiceCardTint } from "./components/sc-servic
 export { StatusTagTone } from "./components/sc-status-tag/sc-status-tag";
 export { SummaryListAppearance, SummaryListLayout } from "./components/sc-summary-list/sc-summary-list";
 export { SummaryRowVariant } from "./components/sc-summary-row/sc-summary-row";
+export { StringsInput as StringsInput1 } from "./components/sc-table/strings-override";
 export { SortDirection } from "./components/sc-table/sc-table";
 export { TextInputType, TextInputWidth } from "./components/sc-text-input/sc-text-input";
 export namespace Components {
@@ -1086,7 +1088,7 @@ export namespace Components {
         /**
           * Overrides the built-in English and Arabic strings, as JSON: `{"tableSelectRow": "Select fine {row}", "tableSelectAll": "Select all fines on this page"}`, or per language: `{"ar": {…}}`.
          */
-        "strings"?: StringsInput;
+        "strings"?: StringsInput1;
     }
     /**
      * A single-line answer, such as a plate number, an email address or a phone number.
@@ -3018,7 +3020,7 @@ declare namespace LocalJSX {
         /**
           * Overrides the built-in English and Arabic strings, as JSON: `{"tableSelectRow": "Select fine {row}", "tableSelectAll": "Select all fines on this page"}`, or per language: `{"ar": {…}}`.
          */
-        "strings"?: StringsInput;
+        "strings"?: StringsInput1;
     }
     /**
      * A single-line answer, such as a plate number, an email address or a phone number.
