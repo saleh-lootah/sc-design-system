@@ -12,25 +12,25 @@ The top band of a channel's home or section page.
 
 | # | Part | Notes |
 | --- | --- | --- |
-| 1 | Band (`band`) | Full bleed, flat `channel-subtle` (Q-hero; v1's OKLAB gradient wash is retired). Padding 32/40 on phones, 56/56 from 600, 80/80 from 1024. |
-| 2 | Content (`content`) | The page grid column. Gap 20 → 24 → 32. |
+| 1 | Band (`band`) | Full bleed, flat `channel-subtle` (Q-hero; v1's OKLAB gradient wash is retired). Padding 32/40 on phones, 56/56 from 600, 80/80 from 1024, 88/80 from 1440 (board 09.06, E1). |
+| 2 | Content (`content`) | The page grid column. One gap between every block (breadcrumbs, eyebrow, heading, lede, search, popular): 20 → 24 → 32 (board 09.06). |
 | 3 | Breadcrumbs (optional) | `slot="breadcrumbs"`, inner pages. |
-| 4 | Eyebrow (optional) | `title-small` in `channel-action`. |
+| 4 | Eyebrow (optional) | `title-medium` in `channel-action` (board 09.06). |
 | 5 | Heading | The page's `<h1>`, `slot="heading"`: `headline-large` on phones, `display-small` from 600px, `display-large` from 1024px (`size="medium"`: `display-medium`). `text-wrap: balance`. |
 | 6 | Lede (optional) | `body-large` in `on-surface-variant`, at most 680 wide. |
 | 7 | Search | The default slot (`sc-search size="l"`), at most 880 wide. |
-| 8 | Popular (`popular`, optional) | "Popular now" label (`label-medium`, `on-surface-variant`) and `slot="popular"` links drawn as suggestion chips (B18). |
+| 8 | Popular (`popular`, optional) | "Popular now" label (`label-medium`, `on-surface`, board 09.06) and `slot="popular"` links drawn as suggestion chips (B18). |
 
 ### Suggestion chips
 
-40px capsules (`radius-full`, SHP-01) with a 1px `channel-outline` edge (an inset shadow, so it sits inside the painted capsule), `channel-action` text, `label-medium`, 16 inline padding, 12 apart. The target is 44px (Q-chips): 2px transparent borders above and below, outside the painted area (`background-clip: padding-box`). Hover (fine pointers): `channel-container`. Press: scale 0.97 from a pointer only.
+40px capsules (`radius-full`, SHP-01) with a 1px `channel-outline` edge (an inset shadow, so it sits inside the painted capsule), `surface-card` fill, `channel-action` text, `label-medium`, 16 inline padding, 12 apart. The target is 44px (Q-chips): 2px transparent borders above and below, outside the painted area (`background-clip: padding-box`). Hover (fine pointers): `channel-container`. Press: scale 0.97 from a pointer only.
 
 ## Accessibility
 
 - The heading stays a real `<h1>` in light DOM.
 - The popular row is a `role="group"` named by its label ("Popular now" / "الأكثر طلبًا الآن").
 - No carousel, slider or autoplaying media (DDS F-026).
-- Contrast: `channel-action` on `channel-subtle` 5.70:1 at the lowest; `on-surface-variant` on `channel-subtle` 5.70:1.
+- Contrast: `channel-action` on `channel-subtle` 5.70:1 at the lowest; `on-surface-variant` (the lede) on `channel-subtle` 5.70:1; the popular label is `on-surface`.
 - Forced colours: `Canvas` with a 1px rule beneath; chips get a `LinkText` edge.
 
 ## RTL and Arabic

@@ -71,6 +71,8 @@ describe('sc-card (e2e)', () => {
     const dark = (await style(page, '#plain')).fill;
     expect(dark).not.toBe(light);
     expect(dark).toBe(await token(page, '--sc-color-surface-card'));
+    // A filled card steps up to surface-container-high in dark mode (board 09.02).
+    expect((await style(page, '#filled')).fill).toBe(await token(page, '--sc-color-surface-container-high'));
   });
 
   it('removes the outer margins of its first and last children', async () => {
