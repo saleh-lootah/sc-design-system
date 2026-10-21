@@ -100,3 +100,10 @@ Where this file disagrees with `foundations.md` or `component-language.md`, this
 | W2 | `--sc-duration-slow` is 280ms everywhere. Paper boards and specs quote 280ms. |
 | W3 | `outline-strong` and `channel-outline` (per channel, with `-dark`) are now in the v2 Paper file. Replace any `--sc-palette-<ch>-80` stand-ins with `--sc-color-channel-<ch>-outline`. |
 | W4 | Status tags in channel colour use `channel-subtle` (95) as the fill and `channel-action` as the text. Tags that need more weight (for example, on a subtle background) use `channel-container` (90). |
+
+## UAE PASS button (supersedes U3 for UAE PASS)
+
+| # | Decision |
+| --- | --- |
+| U3a | **UAE PASS has its own standard button specification, and we follow it exactly.** "Sign in with UAE PASS" (and any "confirm with UAE PASS") uses the official UAE PASS button: its colours, fingerprint mark, label in English and Arabic, sizes, variants and dark-mode treatment. It is a brand exception: we don't restyle it, recolour it to the channel or to city indigo, or swap in our own icon. The user is supplying the official component set (DubaiNow Next has an adapted version, exception X-07, which is not the source). Until the specification arrives, components and boards use a clearly labelled placeholder: black fill, white label "Sign in with UAE PASS", a fingerprint glyph, 56px tall. It is a separate `sc-uaepass-button` (or a `uaepass` variant of `sc-button` that can't be themed), with the exact geometry to be set from the kit. |
+| U3b | **Dubai Pay and other shared hand-offs** keep U3: `sc-button` variant `handoff` in city indigo, unless Dubai Pay also has a mandated button. Ask before building one. |
