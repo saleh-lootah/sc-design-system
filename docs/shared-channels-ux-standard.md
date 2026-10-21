@@ -1013,7 +1013,7 @@ These components behave differently from what this standard requires, or change 
 **Error summary.**
 
 - **CMP-05.** When the page loads with errors, or when errors are added after a submission, focus MUST move to the error summary (`tabindex="-1"`), so screen readers read its heading and the list. The summary MUST NOT also carry `role="alert"`: with focus moving to it, the alert role makes some screen readers announce it twice. This follows GOV.UK Design System practice.
-- `sc-error-summary` currently sets both `tabindex="-1"` and `role="alert"`. Its change to focus only is in progress. Until it ships, services use it as documented; the panel does not mark a service down for this known component issue.
+- `sc-error-summary` follows CMP-05: it takes focus and is a `role="group"` named by its heading, with no `role="alert"`.
 - The page `<title>` starts with "Error: " / "خطأ: " while errors are shown. Each item links to the field's `id`; the field components delegate focus so the link lands in the control.
 
 **Service card.**
