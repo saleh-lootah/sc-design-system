@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-19T18:51:59",
+  "timestamp": "2026-10-21T13:49:28",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.45.2",
@@ -346,30 +346,18 @@
     },
     {
       "filePath": "src/components/sc-button/sc-button.tsx",
-      "encapsulation": "shadow",
+      "encapsulation": "scoped",
       "tag": "sc-button",
       "readme": "# sc-button\n\nStarts an action. If it goes somewhere instead, use `sc-link` (or `sc-button href` for a call to action that must look like a button, such as \"Start now\").\n\n## Usage\n\n```html\n<sc-button type=\"submit\" icon=\"arrow-forward\">Continue</sc-button>\n<sc-button variant=\"secondary\">Save and finish later</sc-button>\n<sc-button href=\"/renew/start\" icon=\"arrow-forward\">Start now</sc-button>\n```\n\n### Which variant\n\n| Variant | Use it for | Example |\n|---|---|---|\n| `primary` | The one main action on the page. Never more than one per page or section. | \"Continue\", \"Pay with Dubai Pay\" |\n| `secondary` | Other actions next to a primary one, or the main action when it isn't the way forward. | \"Save and finish later\", \"Change\" |\n| `tertiary` | Low-emphasis actions that would compete with the primary if they had a fill. | \"Cancel\", \"View all services\" |\n| `destructive` | An action that deletes data or can't be undone. Confirm it on the next screen. | \"Delete draft\", \"Cancel renewal\" |\n\n- `size=\"l\"` (54px) is the default and the size for primary actions. Use `size=\"m\"` (44px) only in dense layouts such as tables and summary lists.\n- Use `full-width` on narrow screens when the button ends a form.\n- Put the primary button first in the reading order. In Arabic it sits on the right automatically.\n\n### Content\n\n- Start with a verb and say what happens: \"Continue\", \"Pay with Dubai Pay\", \"Save and finish later\". Not \"Submit\", \"OK\" or \"Click here\".\n- Sentence case, no full stop, as short as it can be while staying specific. Write the Arabic label, don't machine-translate it.\n- Use the `arrow-forward` icon at the end only for actions that move the user forward in a journey. It mirrors in Arabic. Don't add icons for decoration.\n- Amounts and references inside a label stay left-to-right: `<sc-button>Pay <sc-ltr>AED 450.00</sc-ltr></sc-button>`.\n\n### States\n\n- **Loading:** set `loading` while the action runs (for example, while a payment starts). The button keeps its width, shows a spinner, sets `aria-busy`, announces \"Pay with Dubai Pay, Loading\" (or the Arabic equivalent) and ignores clicks. Remove `loading` when the action ends.\n- **Disabled:** supported, but avoid it. A disabled button can't be focused and gives no reason, so many users can't tell why they're stuck. Leave it enabled and show an error message (and `sc-error-summary`) when the user tries to continue.\n\n### Forms\n\n`sc-button` is form-associated. `type=\"submit\"` submits the surrounding `<form>` with `form.requestSubmit()`, so native validation and `submit` listeners run; `type=\"reset\"` resets it. The default `type` is `button`, unlike the native element. A `<fieldset disabled>` disables it like a native button.\n\nKnown limits of form-associated custom elements: the button isn't the form's `submitter` (`event.submitter` is `null`, and it submits no `name`/`value`), and it doesn't count as the form's default button for implicit submission (pressing Enter in a field submits only when the form has a single text field, or a native submit button).\n\n### Styling hooks\n\nParts: `control` (the inner `<button>` or `<a>`), `label`, `icon`. Colours come from the page's channel (`data-channel`) and theme; don't override them per button.\n",
-      "docs": "Starts an action. Use a verb: \"Continue\", \"Pay with Dubai Pay\", \"Save and finish later\".\n\nRenders a native `<button>` (or an `<a>` when `href` is set) inside its shadow root.\nThe host is form-associated, so `type=\"submit\"` and `type=\"reset\"` work with the\nsurrounding `<form>`, and it delegates focus to the inner control.",
+      "docs": "Starts an action. Use a verb: \"Continue\", \"Pay with Dubai Pay\", \"Save and finish later\".\n\nv2 renders a native `<button>` (or an `<a>` when `href` is set) in light DOM (Stencil\n`scoped`, decision A2). The button is a real form control: Enter in a field submits the\nform through the first `type=\"submit\"` button (it is the form's default button), and\n`name`, `value`, `form` and a disabled `<fieldset>` all work natively. `focus()` and\n`click()` on the host reach the inner control. There is no `::part()`: if you must style\nit, use the classes `.sc-button`, `.sc-button__label` and `.sc-button__icon`.",
       "docsTags": [
         {
           "name": "slot",
-          "text": "- The button label. Text only; keep it short and start with a verb."
+          "text": "- The label. Text only; keep it short and start with a verb."
         },
         {
           "name": "slot",
-          "text": "icon - Optional custom icon (an inline `<svg>`), used instead of the `icon` prop.\nAdd `data-directional` to an arrow or chevron so it mirrors in right-to-left."
-        },
-        {
-          "name": "part",
-          "text": "control - The inner `<button>` or `<a>`."
-        },
-        {
-          "name": "part",
-          "text": "label - The wrapper around the default slot."
-        },
-        {
-          "name": "part",
-          "text": "icon - The wrapper around the icon."
+          "text": "icon - Optional custom icon (an inline `<svg slot=\"icon\">`), used instead of the\n`icon` prop, e.g. provider artwork on a hand-off. Add `data-directional` to an arrow or\nchevron so it mirrors in right-to-left."
         }
       ],
       "usage": {},
@@ -385,7 +373,7 @@
           "mutable": false,
           "attr": "disabled",
           "reflectToAttr": true,
-          "docs": "Prevents interaction. Avoid it: a disabled button gives no reason and can't be\nfocused, so many users can't tell why they're stuck. Leave the button enabled and\nexplain the problem with an error message instead.",
+          "docs": "Prevents interaction. Avoid it (A11Y-08): a disabled button gives no reason and can't be\nfocused. Leave the button enabled and explain the problem with an error message instead.",
           "docsTags": [
             {
               "name": "default",
@@ -399,6 +387,32 @@
             }
           ],
           "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "formId",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "form",
+          "reflectToAttr": false,
+          "docs": "The id of the `<form>` this button belongs to when it sits outside it (the native `form` attribute).",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
           "required": false,
           "getter": false,
           "setter": false
@@ -541,7 +555,7 @@
             "references": {
               "ButtonIconPosition": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonIconPosition"
               }
             }
@@ -583,7 +597,7 @@
           "mutable": false,
           "attr": "loading",
           "reflectToAttr": true,
-          "docs": "Shows a spinner while an action is in progress. The button keeps its width, sets\n`aria-busy`, announces \"Loading\" and ignores clicks until `loading` is removed.",
+          "docs": "Shows a spinner while an action is in progress. The button keeps its width and focus,\nsets `aria-busy`, announces \"Loading\" and ignores activation (no click handlers, no\nsubmit) until `loading` is removed.",
           "docsTags": [
             {
               "name": "default",
@@ -628,15 +642,41 @@
           "setter": false
         },
         {
+          "name": "name",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "name",
+          "reflectToAttr": false,
+          "docs": "Submitted with the form as `name=value` when this button submits it.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "size",
-          "type": "\"l\" | \"m\"",
+          "type": "\"l\" | \"m\" | \"xl\" | undefined",
           "complexType": {
             "original": "ButtonSize",
-            "resolved": "\"l\" | \"m\"",
+            "resolved": "\"l\" | \"m\" | \"xl\" | undefined",
             "references": {
               "ButtonSize": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonSize"
               }
             }
@@ -644,14 +684,8 @@
           "mutable": false,
           "attr": "size",
           "reflectToAttr": true,
-          "docs": "Height: `l` is 54px (default, for primary actions), `m` is 44px (dense layouts).",
-          "docsTags": [
-            {
-              "name": "default",
-              "text": "'l'"
-            }
-          ],
-          "default": "'l'",
+          "docs": "Height. Leave it unset for the variant's own height (56px for primary, destructive and\nhandoff; 48px for secondary and tertiary). `l` is 56px, `m` 48px (compact layouts,\ntables, headers), `xl` 64px (the hero search only).",
+          "docsTags": [],
           "values": [
             {
               "value": "l",
@@ -660,9 +694,16 @@
             {
               "value": "m",
               "type": "string"
+            },
+            {
+              "value": "xl",
+              "type": "string"
+            },
+            {
+              "type": "undefined"
             }
           ],
-          "optional": false,
+          "optional": true,
           "required": false,
           "getter": false,
           "setter": false
@@ -676,7 +717,7 @@
             "references": {
               "ButtonType": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonType"
               }
             }
@@ -684,7 +725,7 @@
           "mutable": false,
           "attr": "type",
           "reflectToAttr": false,
-          "docs": "What the button does in a form. `submit` submits the surrounding `<form>` (through\n`form.requestSubmit()`, so validation and `submit` listeners run); `reset` resets it.\nDefaults to `button`, unlike the native element, so a button never submits by accident.\nIgnored when `href` is set.",
+          "docs": "What the button does in a form. `submit` submits the surrounding `<form>` natively, so\nvalidation and `submit` listeners run, and the first submit button is the form's\ndefault button for Enter in a field. `reset` resets it. Defaults to `button`, unlike the\nnative element, so a button never submits by accident. Ignored when `href` is set.",
           "docsTags": [
             {
               "name": "default",
@@ -712,15 +753,41 @@
           "setter": false
         },
         {
+          "name": "value",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "value",
+          "reflectToAttr": false,
+          "docs": "The value submitted with `name`.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "variant",
-          "type": "\"destructive\" | \"primary\" | \"secondary\" | \"tertiary\"",
+          "type": "\"destructive\" | \"handoff\" | \"primary\" | \"secondary\" | \"tertiary\"",
           "complexType": {
             "original": "ButtonVariant",
-            "resolved": "\"destructive\" | \"primary\" | \"secondary\" | \"tertiary\"",
+            "resolved": "\"destructive\" | \"handoff\" | \"primary\" | \"secondary\" | \"tertiary\"",
             "references": {
               "ButtonVariant": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonVariant"
               }
             }
@@ -728,7 +795,7 @@
           "mutable": false,
           "attr": "variant",
           "reflectToAttr": true,
-          "docs": "Visual weight.\n- `primary`: the one main action on a page (channel action fill).\n- `secondary`: other actions next to a primary one (channel subtle fill).\n- `tertiary`: low-emphasis actions (no fill, underline on hover).\n- `destructive`: deletes or cancels something that can't be undone (error fill).",
+          "docs": "Visual weight.\n- `primary`: the one main action on a page (channel action fill). 56px.\n- `secondary`: other actions beside a primary one (outlined in the channel colour). 48px.\n- `tertiary`: low-emphasis actions, styled as an underlined link. 48px.\n- `destructive`: deletes or cancels something that can't be undone (error fill). 56px.\n- `handoff`: a shared government hand-off, such as \"Sign in with UAE PASS\" or \"Pay with\n  Dubai Pay\": city indigo on every channel (decision U3). 56px.",
           "docsTags": [
             {
               "name": "default",
@@ -739,6 +806,10 @@
           "values": [
             {
               "value": "destructive",
+              "type": "string"
+            },
+            {
+              "value": "handoff",
               "type": "string"
             },
             {
@@ -773,27 +844,14 @@
       "slots": [
         {
           "name": "",
-          "docs": "The button label. Text only; keep it short and start with a verb."
+          "docs": "The label. Text only; keep it short and start with a verb."
         },
         {
           "name": "icon",
-          "docs": "Optional custom icon (an inline `<svg>`), used instead of the `icon` prop.\nAdd `data-directional` to an arrow or chevron so it mirrors in right-to-left."
+          "docs": "Optional custom icon (an inline `<svg slot=\"icon\">`), used instead of the\n`icon` prop, e.g. provider artwork on a hand-off. Add `data-directional` to an arrow or\nchevron so it mirrors in right-to-left."
         }
       ],
-      "parts": [
-        {
-          "name": "control",
-          "docs": "The inner `<button>` or `<a>`."
-        },
-        {
-          "name": "icon",
-          "docs": "The wrapper around the icon."
-        },
-        {
-          "name": "label",
-          "docs": "The wrapper around the default slot."
-        }
-      ],
+      "parts": [],
       "states": [],
       "dependents": [
         "sc-date-range",
@@ -878,7 +936,7 @@
             "references": {
               "CalloutHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-callout/sc-callout.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-callout/sc-callout.tsx",
                 "id": "src/components/sc-callout/sc-callout.tsx::CalloutHeadingLevel"
               }
             }
@@ -927,7 +985,7 @@
             "references": {
               "CalloutTone": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-callout/sc-callout.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-callout/sc-callout.tsx",
                 "id": "src/components/sc-callout/sc-callout.tsx::CalloutTone"
               }
             }
@@ -1083,7 +1141,7 @@
             "references": {
               "CardLandmark": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-card/sc-card.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-card/sc-card.tsx",
                 "id": "src/components/sc-card/sc-card.tsx::CardLandmark"
               }
             }
@@ -1120,7 +1178,7 @@
             "references": {
               "CardPadding": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-card/sc-card.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-card/sc-card.tsx",
                 "id": "src/components/sc-card/sc-card.tsx::CardPadding"
               }
             }
@@ -2136,7 +2194,7 @@
             "references": {
               "ContainerWidth": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-container/sc-container.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-container/sc-container.tsx",
                 "id": "src/components/sc-container/sc-container.tsx::ContainerWidth"
               }
             }
@@ -3527,7 +3585,7 @@
             "references": {
               "ErrorSummaryItem": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-error-summary/sc-error-summary.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-error-summary/sc-error-summary.tsx",
                 "id": "src/components/sc-error-summary/sc-error-summary.tsx::ErrorSummaryItem"
               }
             }
@@ -3584,7 +3642,7 @@
             "references": {
               "ErrorSummaryHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-error-summary/sc-error-summary.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-error-summary/sc-error-summary.tsx",
                 "id": "src/components/sc-error-summary/sc-error-summary.tsx::ErrorSummaryHeadingLevel"
               }
             }
@@ -4096,7 +4154,7 @@
             "references": {
               "LanguageSwitchDetail": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-language-switch/sc-language-switch.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-language-switch/sc-language-switch.tsx",
                 "id": "src/components/sc-language-switch/sc-language-switch.tsx::LanguageSwitchDetail"
               }
             }
@@ -5366,7 +5424,7 @@
             "references": {
               "ScSearchDetail": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-search/sc-search.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-search/sc-search.tsx",
                 "id": "src/components/sc-search/sc-search.tsx::ScSearchDetail"
               }
             }
@@ -5886,7 +5944,7 @@
             "references": {
               "ServiceCardHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-service-card/sc-service-card.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-service-card/sc-service-card.tsx",
                 "id": "src/components/sc-service-card/sc-service-card.tsx::ServiceCardHeadingLevel"
               }
             }
@@ -6188,7 +6246,7 @@
             "references": {
               "StatusTagTone": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-status-tag/sc-status-tag.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-status-tag/sc-status-tag.tsx",
                 "id": "src/components/sc-status-tag/sc-status-tag.tsx::StatusTagTone"
               }
             }
@@ -6465,7 +6523,7 @@
             "references": {
               "SummaryListAppearance": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-summary-list/sc-summary-list.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-summary-list/sc-summary-list.tsx",
                 "id": "src/components/sc-summary-list/sc-summary-list.tsx::SummaryListAppearance"
               }
             }
@@ -7030,7 +7088,7 @@
             "references": {
               "SortDirection": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-table/sc-table.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-table/sc-table.tsx",
                 "id": "src/components/sc-table/sc-table.tsx::SortDirection"
               }
             }
@@ -7656,7 +7714,7 @@
             "references": {
               "TextInputType": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-text-input/sc-text-input.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-text-input/sc-text-input.tsx",
                 "id": "src/components/sc-text-input/sc-text-input.tsx::TextInputType"
               }
             }
@@ -7741,7 +7799,7 @@
             "references": {
               "TextInputWidth": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-standard-wt/components/src/components/sc-text-input/sc-text-input.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-text-input/sc-text-input.tsx",
                 "id": "src/components/sc-text-input/sc-text-input.tsx::TextInputWidth"
               }
             }
@@ -8407,12 +8465,12 @@
   ],
   "typeLibrary": {
     "src/components/sc-button/sc-button.tsx::ButtonVariant": {
-      "declaration": "export type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'destructive';",
+      "declaration": "export type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'destructive' | 'handoff';",
       "docstring": "",
       "path": "src/components/sc-button/sc-button.tsx"
     },
     "src/components/sc-button/sc-button.tsx::ButtonSize": {
-      "declaration": "export type ButtonSize = 'l' | 'm';",
+      "declaration": "export type ButtonSize = 'l' | 'm' | 'xl';",
       "docstring": "",
       "path": "src/components/sc-button/sc-button.tsx"
     },

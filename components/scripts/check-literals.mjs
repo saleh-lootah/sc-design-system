@@ -7,8 +7,16 @@
  *   - rgb()/rgba()/hsl()/hsla() colours
  *   - raw font sizes         font-size: 16px | 1rem | 12pt | 1.2em, `font:` shorthands with a size,
  *                            fontSize: 16 / '16px' in style objects
- * Use var(--sc-…) tokens or the type roles in src/styles/type/ instead.
+ * Use var(--sc-…) tokens and the type roles (font: var(--sc-type-<role>)) instead.
  * System colour keywords (ButtonText, Highlight, …) for forced-colors are allowed.
+ *
+ * v2 structure rules (architecture §3.2, §3.6):
+ *   - no @import in component CSS: shared helpers come from the adopted sheet / sc.css
+ *   - no import of i18n/components/index (it bundles every component's strings)
+ *   - no import of the legacy i18n/locale or i18n/strings, except by the v1 components
+ *     still listed in V1_PENDING below. Family agents delete their tags from the list when
+ *     they rebuild them; the list must be empty by the end of Wave 2b.
+ * src/global/*.css (except the generated files) is checked for literals too.
  */
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
@@ -16,6 +24,22 @@ import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const scanDir = join(root, 'src', 'components');
+const globalDir = join(root, 'src', 'global');
+
+/** v1 components not yet rebuilt: allowed the legacy i18n imports and the field.css/choice.css @imports. */
+const V1_PENDING = new Set([
+  'sc-app-bar', 'sc-back-link', 'sc-callout', 'sc-card', 'sc-channel-chip', 'sc-channel-hero', 'sc-checkbox',
+  'sc-checkbox-group', 'sc-container', 'sc-date-input', 'sc-date-range', 'sc-error-summary', 'sc-footer', 'sc-grid',
+  'sc-language-switch', 'sc-link', 'sc-ltr', 'sc-page', 'sc-radio', 'sc-radio-group', 'sc-search', 'sc-select',
+  'sc-service-card', 'sc-skip-link', 'sc-spinner', 'sc-status-tag', 'sc-step-progress', 'sc-summary-list',
+  'sc-summary-row', 'sc-table', 'sc-text-input', 'sc-textarea',
+]);
+const STRUCTURE = [
+  { name: '@import in component CSS (use the shared sheet, sc.css or your own rules)', re: /@import\b/g, ext: '.css', legacyOk: true },
+  { name: 'import of i18n/components/index (import your own strings file)', re: /from\s+['"][./]*i18n\/components(\/index)?['"]/g, ext: '.tsx' },
+  { name: 'legacy i18n import (use i18n/controller and i18n/components/<tag>)', re: /from\s+['"][./]*i18n\/(locale|strings)['"]/g, ext: '.tsx', legacyOk: true },
+];
+const tagOf = (file) => relative(scanDir, file).split('/')[0];
 
 const RULES = [
   { name: 'hex colour', re: /(?<![\w&$-])#(?:[0-9a-f]{8}|[0-9a-f]{6}|[0-9a-f]{3,4})(?![\w-])/gi },
@@ -38,8 +62,22 @@ function stripComments(src) {
   return src.replace(/\/\*[\s\S]*?\*\//g, blank).replace(/(^|[^:'"`\\])\/\/[^\n]*/g, (m, pre) => pre + blank(m.slice(pre.length)));
 }
 
-const files = walk(scanDir).filter((f) => /\.(css|tsx)$/.test(f));
+const files = [
+  ...walk(scanDir).filter((f) => /\.(css|tsx)$/.test(f)),
+  ...walk(globalDir).filter((f) => f.endsWith('.css') && !f.includes('/generated/') && !f.endsWith('fonts.css')),
+];
 const problems = [];
+
+for (const file of files.filter((f) => f.startsWith(scanDir))) {
+  const lines = stripComments(readFileSync(file, 'utf8')).split('\n');
+  for (const { name, re, ext, legacyOk } of STRUCTURE) {
+    if (!file.endsWith(ext) || (legacyOk && V1_PENDING.has(tagOf(file)))) continue;
+    lines.forEach((line, i) => {
+      re.lastIndex = 0;
+      for (const m of line.matchAll(re)) problems.push(`${relative(root, file)}:${i + 1}:${m.index + 1}  ${name}: ${m[0].trim()}`);
+    });
+  }
+}
 
 for (const file of files) {
   const lines = stripComments(readFileSync(file, 'utf8')).split('\n');
@@ -54,7 +92,7 @@ for (const file of files) {
 }
 
 if (problems.length) {
-  console.error(`check-literals: ${problems.length} problem(s). Use var(--sc-…) tokens or src/styles/type/ roles.\n`);
+  console.error(`check-literals: ${problems.length} problem(s). Use var(--sc-…) tokens and type roles; see CONVENTIONS.md.\n`);
   for (const p of problems) console.error(`  ${p}`);
   process.exit(1);
 }

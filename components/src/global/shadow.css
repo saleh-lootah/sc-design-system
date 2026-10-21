@@ -1,0 +1,136 @@
+/*
+ * Shared helpers: the one stylesheet every sc- component can rely on.
+ *
+ * Stencil's globalStyle. It is parsed once and adopted, by reference, into every shadow root
+ * (extras.addGlobalStyleToComponents, 'client'), and scripts/build-sc-css.mjs copies it into
+ * the document stylesheet (sc.css, @layer sc.utilities) for light-DOM (scoped) components
+ * and page markup. So the same class names work everywhere. Component CSS never @imports
+ * a shared file (check:literals fails on it).
+ *
+ * Keep it small (target 1.5 KiB raw minified, it ships inside the runtime JS) and free of
+ * tokens values, @font-face and body rules, which do nothing inside a shadow root.
+ *
+ *   .focus-ring        U1 focus ring on :focus-visible (neutral, 3px, 2px offset). Inside a
+ *                      filled area, set --sc-color-focus-ring to that area's "on" colour.
+ *   .visually-hidden   hidden on screen, still read by assistive technology
+ *   .icon              inline SVG sized by --icon-size (default 20px)
+ *   .icon-directional  mirrored in right-to-left (arrows, chevrons); never time, media, logos
+ *   .spin              constant rotation for spinners; static under reduced motion
+ *   .state-layer       8% hover / 12% pressed layer of --sc-state-color (default currentColor)
+ *                      over the element's own background, for quiet controls. Add --sc-layer
+ *                      to the component's own transition list to fade it.
+ *   .sc-link           a running-text link on a native <a> (A4)
+ *   .ltr               an isolated left-to-right run (plates, amounts, references)
+ */
+
+/* Inside shadow roots only (:host matches nothing in the document, so sc.css leaves page
+   markup and light-DOM components alone). */
+:host {
+  box-sizing: border-box;
+}
+:host *,
+:host ::before,
+:host ::after {
+  box-sizing: inherit;
+}
+
+/* Focus (U1, FOC-01..04) ---------------------------------------------------------------- */
+.focus-ring:focus-visible,
+.sc-link:focus-visible {
+  outline: var(--sc-size-focus-ring) solid var(--sc-color-focus-ring);
+  outline-offset: var(--sc-size-focus-offset);
+  transition: none;
+}
+.focus-ring:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Visually hidden ---------------------------------------------------------------------- */
+.visually-hidden {
+  position: absolute !important;
+  inline-size: 1px !important;
+  block-size: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Icons and direction ------------------------------------------------------------------ */
+.icon {
+  display: block;
+  flex: none;
+  inline-size: var(--icon-size, var(--sc-size-icon-m));
+  block-size: var(--icon-size, var(--sc-size-icon-m));
+}
+.icon-directional:dir(rtl) {
+  transform: scaleX(-1);
+}
+.ltr {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* State layers (foundations 2.5): content colour at 8% / 12% over the own background ------ */
+.state-layer {
+  background-image: linear-gradient(var(--sc-layer), var(--sc-layer));
+}
+@media (hover: hover) and (pointer: fine) {
+  .state-layer:hover {
+    --sc-layer: color-mix(in oklab, var(--sc-state-color, currentColor) var(--sc-opacity-hover), transparent);
+  }
+}
+.state-layer:active {
+  --sc-layer: color-mix(in oklab, var(--sc-state-color, currentColor) var(--sc-opacity-pressed), transparent);
+}
+
+/* Motion: spinner and reduced motion. Press feedback is written per component (see
+   CONVENTIONS.md): a shared class would override the component's own transition list. --- */
+@keyframes sc-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+.spin {
+  animation: sc-spin var(--sc-duration-spin) linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .spin {
+    animation: none;
+  }
+}
+
+/* Links in running text (A4, COL-08): channel action, underlined 1px at 4px (5px in Arabic) */
+.sc-link {
+  color: var(--sc-color-channel-action);
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  transition: text-decoration-thickness var(--sc-duration-fast) var(--sc-easing-hover);
+}
+.sc-link:lang(ar) {
+  text-underline-offset: 5px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .sc-link:hover {
+    text-decoration-thickness: 2px;
+  }
+}
+
+/* Forced colours (COL-09) -------------------------------------------------------------- */
+@media (forced-colors: active) {
+  .focus-ring:focus-visible,
+  .sc-link:focus-visible {
+    outline-color: Highlight;
+  }
+  .sc-link {
+    color: LinkText;
+  }
+  .state-layer {
+    background-image: none;
+  }
+}

@@ -65,10 +65,27 @@ export async function settleTransitions(page: E2EPage): Promise<void> {
   });
 }
 
-/** Opens a page with the context applied first, so components connect in the right language. */
+/**
+ * Opens a page as a service page would be: sc.css linked (tokens, fonts, base, light-DOM
+ * styles, helpers), and Stencil's own globalStyle link removed, because a real page never
+ * loads that file (it is the helper sheet shadow roots adopt). The context is applied first,
+ * so components connect in the right language.
+ */
 export async function newScPage(html: string, context: PageContext = {}): Promise<E2EPage> {
   const page = await newE2EPage();
   await page.setContent('');
+  await page.evaluate(
+    () =>
+      new Promise<void>((resolve, reject) => {
+        document.querySelector('link[href*="sc-components.css"]')?.remove();
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = '/build/sc.css';
+        link.onload = () => resolve();
+        link.onerror = () => reject(new Error('sc.css did not load: run `npm run build:css`'));
+        document.head.append(link);
+      }),
+  );
   await setPageContext(page, context);
   await page.evaluate((markup: string) => {
     document.body.insertAdjacentHTML('beforeend', markup);

@@ -10,7 +10,6 @@
  *   .option-label    the <label>; it also covers the target column, so the whole row is clickable
  *   .option-hint     hint for this option
  */
-@import '../../styles/type/body-m.css';
 
 .options {
   display: grid;
