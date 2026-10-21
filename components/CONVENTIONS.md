@@ -20,7 +20,7 @@ Read with: `docs/v2/foundations.md` (token values), `docs/v2/component-language.
 ## Stack and outputs
 
 - StencilJS 4, TypeScript (strict). No runtime dependencies beyond Stencil. Icons are inline SVG in `src/icons/` on a 24px grid in `currentColor`.
-- **`dist-custom-elements` is the primary build** (`import '@sc/components/dist/components/sc-button.js'` defines the tag). The lazy loader (`dist/sc-components/sc-components.esm.js`) is kept for plain HTML, CMS pages and the playground; its tags are grouped into a few bundles (`bundles` in `stencil.config.ts`) and nothing is hidden before hydration (`invisiblePrehydration: false`).
+- **`dist-custom-elements` is the primary build** (`import '@sc/components/dist/components/sc-button.js'` defines the tag). The lazy loader (`dist/sc-components/sc-components.esm.js`) is kept for plain HTML, CMS pages and the playground; its tags are grouped into a few bundles (`bundles` in `stencil.config.ts`; the first is the page shell plus the home-page content, everything the typical page needs) and nothing is hidden before hydration (`invisiblePrehydration: false`). Pages include the generated `dist/sc-components/sc-preload.html` (modulepreload for the runtime core and that bundle) so the loader isn't a waterfall. Size reservations are written `tag:not(:defined)` in `src/global/components.css`; `build-sc-css` adds a `tag:not(.hydrated)` copy of each, so they hold until the component has rendered in both builds.
 - No framework wrappers in v2.0 (React 19, Angular and Vue use custom elements directly).
 
 ## Encapsulation by family (architecture §3.1)

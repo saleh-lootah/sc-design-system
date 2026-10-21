@@ -23,6 +23,7 @@
     "build:css": "node scripts/build-sc-css.mjs",
     "prebuild": "npm run build:css",
     "build": "stencil build --docs",
+    "postbuild": "node scripts/build-preload.mjs",
     "prestart": "npm run build:css",
     "start": "stencil build --dev --watch --serve",
     "pretest": "npm run build:css",

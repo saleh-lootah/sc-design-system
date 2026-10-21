@@ -1,10 +1,10 @@
 import { Component, Element, Host, Prop, State, h } from '@stencil/core';
 import { LocaleController } from '../../i18n/controller';
 import own from '../../i18n/components/sc-footer';
-import { channelStrings, nameKey } from '../../i18n/components/channels';
+import { channelNameStrings, nameKey } from '../../i18n/components/channel-names';
 import { Channel, ChannelLinks, channelHref, channels, parseLinks, resolveChannel } from '../../utils/channels';
 
-const strings = channelStrings(own);
+const strings = channelNameStrings(own);
 
 export type FooterVariant = 'simple' | 'grouped';
 

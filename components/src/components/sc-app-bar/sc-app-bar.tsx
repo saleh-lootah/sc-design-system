@@ -1,6 +1,6 @@
 import { Component, Element, Host, Prop, State, h } from '@stencil/core';
 import { LocaleController } from '../../i18n/controller';
-import { channelStrings, nameKey } from '../../i18n/components/channels';
+import { channelNameStrings, nameKey } from '../../i18n/components/channel-names';
 import { resolveChannel } from '../../utils/channels';
 
 /**
@@ -57,7 +57,7 @@ export class ScAppBar {
 
   @State() hasContent = false;
 
-  private locale = new LocaleController(this, channelStrings({ en: {}, ar: {} }));
+  private locale = new LocaleController(this, channelNameStrings({ en: {}, ar: {} }));
 
   connectedCallback() {
     this.locale.connect();

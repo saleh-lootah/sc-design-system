@@ -1,4 +1,5 @@
 import { defineStrings } from '../define';
+import channelNames from './channel-names';
 
 /**
  * Strings shared by several components. Component-specific strings go in their own
@@ -16,13 +17,8 @@ export default defineStrings({
     opensInNewTab: '(opens in new tab)',
     alsoOn: 'Also on {channel}',
 
-    channelNow: 'Dubai Now',
-    channelTransport: 'Dubai Transport',
-    channelVisit: 'Visit Dubai',
-    channelJustice: 'Dubai Justice',
-    channelBuild: 'Build in Dubai',
-    channelInvest: 'Invest in Dubai',
-    channelTrade: 'Dubai Trade',
+    // The official channel names, kept in ./channel-names.ts.
+    ...channelNames.en,
   },
   ar: {
     problem: 'توجد مشكلة',
@@ -35,12 +31,6 @@ export default defineStrings({
     opensInNewTab: '(يفتح في علامة تبويب جديدة)',
     alsoOn: 'متوفر أيضًا في {channel}',
 
-    channelNow: 'دبي الآن',
-    channelTransport: 'مواصلات دبي',
-    channelVisit: 'زوروا دبي',
-    channelJustice: 'عدالة دبي',
-    channelBuild: 'ابنِ في دبي',
-    channelInvest: 'استثمر في دبي',
-    channelTrade: 'دبي التجارية',
+    ...channelNames.ar,
   },
 });
