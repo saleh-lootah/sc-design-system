@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-21T14:05:20",
+  "timestamp": "2026-10-21T14:55:59",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.45.2",
@@ -7,31 +7,623 @@
   },
   "components": [
     {
-      "filePath": "src/components/sc-app-bar/sc-app-bar.tsx",
+      "filePath": "src/components/sc-account-menu/sc-account-menu.tsx",
       "encapsulation": "shadow",
-      "tag": "sc-app-bar",
-      "readme": "# sc-app-bar\n\nThe top bar of every mobile screen and desktop page: translucent glass with a back link at the start, the channel name in bold, and the language switch at the end.\n\n## Usage\n\nMobile (a step in a journey):\n\n```html\n<sc-app-bar sticky>\n  <sc-back-link slot=\"start\" href=\"/renew/vehicle\"></sc-back-link>\n  <span slot=\"title\">Dubai Transport</span>\n  <sc-language-switch slot=\"end\" href=\"/ar/renew/plate\"></sc-language-switch>\n</sc-app-bar>\n```\n\nDesktop (a channel home page):\n\n```html\n<sc-app-bar align=\"start\" shape=\"floating\" sticky>\n  <svg slot=\"title\" aria-hidden=\"true\">…</svg>\n  <span slot=\"title\">Dubai Now</span>\n  <nav aria-label=\"Main\">…</nav>\n  <sc-language-switch slot=\"end\" appearance=\"plain\" href=\"/ar/\"></sc-language-switch>\n  <sc-button slot=\"end\" size=\"m\" href=\"/sign-in\">Sign in with UAE PASS</sc-button>\n</sc-app-bar>\n```\n\n### Options\n\n| Prop | Values | Use |\n|---|---|---|\n| `align` | `center` (default), `start` | `center` is the mobile bar: start, title in the middle, end. `start` is the desktop header: title at the start, the default slot (navigation) next to it, end controls at the far end. |\n| `shape` | `bar` (default), `floating` | `bar` runs edge to edge with a hairline at the bottom and respects the safe area. `floating` is the inset glass capsule used on desktop. |\n| `sticky` | boolean | Keeps the bar at the top while the page scrolls; content passes under the glass. |\n| `landmark` | boolean, default `true` | The host is a `banner` landmark. Set `landmark=\"false\"` when the page already has one, or inside a dialog. |\n\n### Content\n\n- `title` is the channel name (\"Dubai Transport\" / \"مواصلات دبي\"), not the page question: the question is the page's `<h1>`. Keep it short; it truncates nothing, so long service names wrap.\n- `start` holds `sc-back-link` on every step except the first. `end` holds `sc-language-switch`, and on desktop the sign-in button.\n- Controls in the start and end slots are at least 44px tall. Equal start and end columns keep the mobile title centred whatever the controls' widths.\n\n### Arabic\n\nStart and end follow the direction: in Arabic the back link is on the right and the language switch on the left.\n\n### Glass, reduced transparency and forced colours\n\nThe bar uses `--sc-color-glass` with a backdrop blur, a `--sc-color-glass-edge` hairline and elevation 2. Under `prefers-reduced-transparency: reduce` it becomes a solid `--sc-color-surface`; in forced colours it uses `Canvas` and a `CanvasText` border.\n\n### Styling hooks\n\nParts: `bar`, `start`, `title`, `content`, `end`.\n",
-      "docs": "The top bar of every mobile screen and desktop page: a translucent glass bar with a\nstart control (usually `sc-back-link`), the channel name, and an end control (usually\n`sc-language-switch`).\n\n- `align=\"center\"` (default) is the mobile bar: start, title in the middle, end.\n- `align=\"start\"` is the desktop header: title (with a mark) at the start, then the\n  default slot (primary navigation), and the end slot pushed to the end.\n- `shape=\"floating\"` turns the bar into the inset glass capsule used on desktop.\n\nThe glass becomes a solid surface under `prefers-reduced-transparency: reduce` and in\nforced colours. The host is a `banner` landmark unless `landmark` is false.",
+      "tag": "sc-account-menu",
+      "readme": "# sc-account-menu\n\nThe signed-in account control for `sc-site-header`'s `slot=\"account\"`: notifications with the unread count, and a disclosure with profile, settings, representation and sign out. Spec: `specs/sc-account-menu.md`.\n\n## Usage\n\n```html\n<sc-account-menu slot=\"account\" name=\"Sara Al Mansoori\" acting-for=\"Al Mansoori Trading LLC\"\n  profile-href=\"/en/profile\" settings-href=\"/en/settings\" representation-href=\"/en/act-for\"\n  notifications-href=\"/en/notifications\" unread=\"3\"></sc-account-menu>\n```\n\n- Without `sign-out-href`, Sign out is a button that fires `scSignOut`: post your sign-out form from the listener.\n- The initials come from the name as written; `initials` overrides them.\n",
+      "docs": "The signed-in account control in `sc-site-header` (`slot=\"account\"`; component-language\nB3, Standard CHR-01). It replaces \"Sign in with UAE PASS\" once the user is signed in.\n\n- A notifications button (a link to the notifications page) with the unread count, named\n  \"Notifications, 3 unread\".\n- A `<button aria-expanded>` with the user's initials (and name from 1280px) that opens a\n  non-modal panel: the name and who they are acting for, links to Profile, Settings and\n  representation (\"Change who you act for\"), and Sign out.\n\nThe panel is a disclosure, not an ARIA menu: Tab moves through its links, Escape closes it\nand returns focus to the button, a press outside or focus leaving closes it. From a\npointer it grows from the button's corner; from the keyboard it appears instantly.",
       "docsTags": [
         {
-          "name": "slot",
-          "text": "start - Leading control, usually `<sc-back-link>`. Controls are at least 44px."
-        },
-        {
-          "name": "slot",
-          "text": "title - The channel or service name, shown bold. Text, optionally with a logo mark."
-        },
-        {
-          "name": "slot",
-          "text": "- Extra content after the title, such as primary navigation (`align=\"start\"`)."
-        },
-        {
-          "name": "slot",
-          "text": "end - Trailing controls, usually `<sc-language-switch>` and a sign-in button."
+          "name": "part",
+          "text": "trigger - The account button."
         },
         {
           "name": "part",
-          "text": "bar - The glass bar."
+          "text": "panel - The panel."
+        },
+        {
+          "name": "part",
+          "text": "notifications - The notifications button."
+        }
+      ],
+      "usage": {},
+      "props": [
+        {
+          "name": "actingFor",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "acting-for",
+          "reflectToAttr": false,
+          "docs": "The person or organisation the user is acting for, when it is not themselves.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "initials",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "initials",
+          "reflectToAttr": false,
+          "docs": "Overrides the initials taken from `name` (\"SM\").",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "name",
+          "reflectToAttr": false,
+          "docs": "The signed-in user's name as written (\"Sara Al Mansoori\").",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "''"
+            }
+          ],
+          "default": "''",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "notificationsHref",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "notifications-href",
+          "reflectToAttr": false,
+          "docs": "The notifications page. Adds the notifications button.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "profileHref",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "profile-href",
+          "reflectToAttr": false,
+          "docs": "The profile page.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "representationHref",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "representation-href",
+          "reflectToAttr": false,
+          "docs": "Where the user changes who they act for (representation).",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "settingsHref",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "settings-href",
+          "reflectToAttr": false,
+          "docs": "The account settings page.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "signOutHref",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "sign-out-href",
+          "reflectToAttr": false,
+          "docs": "The sign-out URL. Without it, Sign out is a button that fires `scSignOut`, so the\nservice can post its own sign-out form.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "unread",
+          "type": "number",
+          "complexType": {
+            "original": "number",
+            "resolved": "number",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "unread",
+          "reflectToAttr": false,
+          "docs": "Unread notifications. Shown as a badge on the notifications button when above 0.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "0"
+            }
+          ],
+          "default": "0",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "close",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<void>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "close() => Promise<void>",
+          "parameters": [],
+          "docs": "Closes the panel.",
+          "docsTags": []
+        },
+        {
+          "name": "open",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<void>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "open() => Promise<void>",
+          "parameters": [],
+          "docs": "Opens the panel (as from the keyboard: no animation).",
+          "docsTags": []
+        }
+      ],
+      "events": [
+        {
+          "event": "scSignOut",
+          "detail": "void",
+          "bubbles": true,
+          "complexType": {
+            "original": "void",
+            "resolved": "void",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Fired when Sign out is a button (no `sign-out-href`) and the user activates it.",
+          "docsTags": []
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [
+        {
+          "name": "notifications",
+          "docs": "The notifications button."
+        },
+        {
+          "name": "panel",
+          "docs": "The panel."
+        },
+        {
+          "name": "trigger",
+          "docs": "The account button."
+        }
+      ],
+      "states": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/sc-announcement-bar/sc-announcement-bar.tsx",
+      "encapsulation": "shadow",
+      "tag": "sc-announcement-bar",
+      "readme": "# sc-announcement-bar\n\nA site-wide announcement above the header (after the skip link). Spec: `specs/sc-announcement-bar.md`.\n\n## Usage\n\n```html\n<sc-announcement-bar dismissible announcement-id=\"maintenance-2026-10-25\"\n  link-href=\"/en/status\" link-text=\"See affected services\">\n  Planned maintenance on Saturday 25 October. Payment services will be unavailable from 2am to 6am (Dubai time).\n</sc-announcement-bar>\n```\n\n- `tone`: `warning` (default), `info` or `error`. Say the severity in the words too.\n- It is a labelled region present at load, not an alert. Change `announcement-id` when the message changes.\n",
+      "docs": "A site-wide announcement above the header: planned maintenance, a service outage, a change\npeople need to know about (component-language B1). One message, one optional link, and an\noptional dismiss button.\n\nA labelled region (\"Announcement\" / \"إعلان\"), present when the page loads. It is not a\nlive region and not an alert. The text carries the severity in words (\"Planned\nmaintenance…\"); the tone's icon and container repeat it.\n\nDismissing it fires `scDismiss` (cancelable) and hides it. With `announcement-id`, the\ndismissal is remembered in this browser, so the same announcement does not come back.\nFocus moves to the next focusable element after it. From a pointer it fades out over\n`duration-exit`; from the keyboard it goes at once. Its height is never animated (MOT-11).",
+      "docsTags": [
+        {
+          "name": "slot",
+          "text": "- The message. Text, in the page language."
+        },
+        {
+          "name": "part",
+          "text": "bar - The region."
+        },
+        {
+          "name": "part",
+          "text": "link - The link."
+        },
+        {
+          "name": "part",
+          "text": "dismiss - The dismiss button."
+        }
+      ],
+      "usage": {},
+      "props": [
+        {
+          "name": "announcementId",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "announcement-id",
+          "reflectToAttr": false,
+          "docs": "Remembers a dismissal in this browser (localStorage) under this id, so the announcement\nstays hidden on later pages. Change the id when the message changes.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "dismissible",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "dismissible",
+          "reflectToAttr": true,
+          "docs": "Shows the dismiss button.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "linkHref",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "link-href",
+          "reflectToAttr": false,
+          "docs": "A link with more detail (\"See affected services\"). Shown with `link-text`.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "linkText",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "link-text",
+          "reflectToAttr": false,
+          "docs": "The link's text.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "tone",
+          "type": "\"error\" | \"info\" | \"warning\"",
+          "complexType": {
+            "original": "AnnouncementTone",
+            "resolved": "\"error\" | \"info\" | \"warning\"",
+            "references": {
+              "AnnouncementTone": {
+                "location": "local",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-chrome/components/src/components/sc-announcement-bar/sc-announcement-bar.tsx",
+                "id": "src/components/sc-announcement-bar/sc-announcement-bar.tsx::AnnouncementTone"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "tone",
+          "reflectToAttr": true,
+          "docs": "`warning` (maintenance; default), `info`, or `error` (a service is down).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'warning'"
+            }
+          ],
+          "default": "'warning'",
+          "values": [
+            {
+              "value": "error",
+              "type": "string"
+            },
+            {
+              "value": "info",
+              "type": "string"
+            },
+            {
+              "value": "warning",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "dismiss",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<void>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "dismiss() => Promise<void>",
+          "parameters": [],
+          "docs": "Dismisses the announcement, as the dismiss button does from the keyboard.",
+          "docsTags": []
+        }
+      ],
+      "events": [
+        {
+          "event": "scDismiss",
+          "detail": "{ id?: string | undefined; }",
+          "bubbles": true,
+          "complexType": {
+            "original": "{ id?: string }",
+            "resolved": "{ id?: string | undefined; }",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Fired before the bar hides. Call `preventDefault()` to keep it.",
+          "docsTags": []
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [
+        {
+          "name": "",
+          "docs": "The message. Text, in the page language."
+        }
+      ],
+      "parts": [
+        {
+          "name": "bar",
+          "docs": "The region."
+        },
+        {
+          "name": "dismiss",
+          "docs": "The dismiss button."
+        },
+        {
+          "name": "link",
+          "docs": "The link."
+        }
+      ],
+      "states": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/sc-app-bar/sc-app-bar.tsx",
+      "encapsulation": "shadow",
+      "tag": "sc-app-bar",
+      "readme": "# sc-app-bar\n\nThe transaction app bar: the bar at the top of every step of a journey (component-language A4). Channel pages outside a transaction use `sc-site-header`. Spec: `specs/sc-app-bar.md`.\n\n## Usage\n\n```html\n<sc-app-bar sticky>\n  <sc-back-link slot=\"start\" href=\"/en/renew-vehicle-registration/vehicle\"></sc-back-link>\n  <sc-language-switch slot=\"end\" href=\"/ar/renew-vehicle-registration/plate\"></sc-language-switch>\n</sc-app-bar>\n```\n\n- The title is the current channel's name in the page language; `<span slot=\"title\">` overrides it.\n- `align=\"start\"` and `shape=\"floating\"` (v1's desktop header) are deprecated: use `sc-site-header`.\n",
+      "docs": "The transaction app bar (component-language A4; Standard TPL-01, LANG-04): the bar at the\ntop of every step of a journey (E2–E4). Channel pages outside a transaction use\n`sc-site-header` instead.\n\nA 4px rule in `channel-action` along the top; a start slot (the back link), the title (a\n10px channel swatch and the channel name, centred) and an end slot (the language switch),\nwith fixed 96px side slots so the title stays centred; a 1px `outline-variant` rule\nbeneath. 60px tall on `surface`. Flat: no glass, no shadow.\n\nThe host is a `banner` landmark unless `landmark` is false. It is not fixed by default;\nwith `sticky`, `sc-page sync-document` sets `scroll-padding-top` so focus never slides\nunder it (WCAG 2.4.11).",
+      "docsTags": [
+        {
+          "name": "slot",
+          "text": "start - Usually `<sc-back-link>`."
+        },
+        {
+          "name": "slot",
+          "text": "title - The channel name. Defaults to the channel's name in the page language."
+        },
+        {
+          "name": "slot",
+          "text": "- Deprecated (v1 desktop header, `align=\"start\"`): content after the title. Use `sc-site-header`."
+        },
+        {
+          "name": "slot",
+          "text": "end - Usually `<sc-language-switch>`."
+        },
+        {
+          "name": "part",
+          "text": "bar - The bar."
         },
         {
           "name": "part",
@@ -63,7 +655,7 @@
           "mutable": false,
           "attr": "align",
           "reflectToAttr": true,
-          "docs": "`center`: mobile layout with the title in the middle. `start`: desktop layout with the title at the start.",
+          "docs": "`center` (default): the journey bar, title in the middle. `start`: deprecated (v1's\ndesktop header): the title at the start and the default slot after it. Use\n`sc-site-header` for channel pages.",
           "docsTags": [
             {
               "name": "default",
@@ -97,7 +689,7 @@
           "mutable": false,
           "attr": "landmark",
           "reflectToAttr": false,
-          "docs": "Makes the host a `banner` landmark. Set it to false when the page already has a banner\n(for example a site header around the bar), or when the bar sits inside a dialog.",
+          "docs": "Makes the host a `banner` landmark. Set it to false when the page already has a banner,\nor when the bar sits inside a dialog.",
           "docsTags": [
             {
               "name": "default",
@@ -126,7 +718,7 @@
           "mutable": false,
           "attr": "shape",
           "reflectToAttr": true,
-          "docs": "`bar`: edge to edge with a hairline at the bottom. `floating`: an inset glass capsule (desktop).",
+          "docs": "Deprecated and ignored: v2 has no floating glass capsule (ELV-04).",
           "docsTags": [
             {
               "name": "default",
@@ -186,25 +778,25 @@
       "slots": [
         {
           "name": "",
-          "docs": "Extra content after the title, such as primary navigation (`align=\"start\"`)."
+          "docs": "Deprecated (v1 desktop header, `align=\"start\"`): content after the title. Use `sc-site-header`."
         },
         {
           "name": "end",
-          "docs": "Trailing controls, usually `<sc-language-switch>` and a sign-in button."
+          "docs": "Usually `<sc-language-switch>`."
         },
         {
           "name": "start",
-          "docs": "Leading control, usually `<sc-back-link>`. Controls are at least 44px."
+          "docs": "Usually `<sc-back-link>`."
         },
         {
           "name": "title",
-          "docs": "The channel or service name, shown bold. Text, optionally with a logo mark."
+          "docs": "The channel name. Defaults to the channel's name in the page language."
         }
       ],
       "parts": [
         {
           "name": "bar",
-          "docs": "The glass bar."
+          "docs": "The bar."
         },
         {
           "name": "content",
@@ -555,7 +1147,7 @@
             "references": {
               "ButtonIconPosition": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-chrome/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonIconPosition"
               }
             }
@@ -676,7 +1268,7 @@
             "references": {
               "ButtonSize": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-chrome/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonSize"
               }
             }
@@ -717,7 +1309,7 @@
             "references": {
               "ButtonType": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-chrome/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonType"
               }
             }
@@ -787,7 +1379,7 @@
             "references": {
               "ButtonVariant": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-chrome/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonVariant"
               }
             }
@@ -936,7 +1528,7 @@
             "references": {
               "CalloutHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-callout/sc-callout.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-chrome/components/src/components/sc-callout/sc-callout.tsx",
                 "id": "src/components/sc-callout/sc-callout.tsx::CalloutHeadingLevel"
               }
             }
@@ -985,7 +1577,7 @@
             "references": {
               "CalloutTone": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-callout/sc-callout.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-chrome/components/src/components/sc-callout/sc-callout.tsx",
                 "id": "src/components/sc-callout/sc-callout.tsx::CalloutTone"
               }
             }
@@ -1141,7 +1733,7 @@
             "references": {
               "CardLandmark": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-card/sc-card.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-chrome/components/src/components/sc-card/sc-card.tsx",
                 "id": "src/components/sc-card/sc-card.tsx::CardLandmark"
               }
             }
@@ -1178,7 +1770,7 @@
             "references": {
               "CardPadding": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-card/sc-card.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-chrome/components/src/components/sc-card/sc-card.tsx",
                 "id": "src/components/sc-card/sc-card.tsx::CardPadding"
               }
             }
@@ -1470,6 +2062,341 @@
           "sc-container"
         ]
       }
+    },
+    {
+      "filePath": "src/components/sc-channel-network/sc-channel-network.tsx",
+      "encapsulation": "scoped",
+      "tag": "sc-channel-network",
+      "readme": "# sc-channel-network\n\n\"One network · seven channels\" (Standard CHR-08): at the end of every channel home page, before the footer. Spec: `specs/sc-channel-network.md`.\n\n## Usage\n\n```html\n<sc-channel-network links='{\"now\":\"https://…/{lang}/\", \"transport\":\"…\", …}'></sc-channel-network>\n```\n\n- The current channel (from `channel` or the closest `data-channel`) says \"You are here\" and is not a link.\n",
+      "docs": "The channel network strip (component-language B21, Standard CHR-08): \"One network · seven\nchannels\" and a tile for each of the seven channels, in the Standard 3.1 order, at the end\nof every channel home page, before the footer.\n\nCity indigo marks it as shared (the eyebrow and its rule). Each tile carries its own\nchannel's colour only as attribution: a 4px top rule in that channel's `channel-action`.\nEach tile sets its own `data-channel` (FND-26), which is why the strip renders into light\nDOM (Stencil `scoped`). The current channel's tile is filled with its `channel-subtle`,\nsays \"You are here\", carries `aria-current=\"true\"` and is not a link (it would lead to\nthis site).\n\nA `<nav>` labelled \"Government of Dubai channels\" with a list of links. Seven tiles in a\nrow from 1024px (by the strip's own width), four from 600px, two below.",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "channel",
+          "type": "\"build\" | \"invest\" | \"justice\" | \"now\" | \"trade\" | \"transport\" | \"visit\" | undefined",
+          "complexType": {
+            "original": "Channel",
+            "resolved": "\"build\" | \"invest\" | \"justice\" | \"now\" | \"trade\" | \"transport\" | \"visit\" | undefined",
+            "references": {
+              "Channel": {
+                "location": "import",
+                "path": "../../utils/channels",
+                "id": "src/utils/channels.ts::Channel",
+                "referenceLocation": "Channel"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "channel",
+          "reflectToAttr": false,
+          "docs": "The current channel. Defaults to the closest `data-channel`.",
+          "docsTags": [],
+          "values": [
+            {
+              "value": "build",
+              "type": "string"
+            },
+            {
+              "value": "invest",
+              "type": "string"
+            },
+            {
+              "value": "justice",
+              "type": "string"
+            },
+            {
+              "value": "now",
+              "type": "string"
+            },
+            {
+              "value": "trade",
+              "type": "string"
+            },
+            {
+              "value": "transport",
+              "type": "string"
+            },
+            {
+              "value": "visit",
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "links",
+          "type": "\"build\" | \"invest\" | \"justice\" | \"now\" | \"trade\" | \"transport\" | \"visit\" | string | undefined",
+          "complexType": {
+            "original": "ChannelLinks | string",
+            "resolved": "\"build\" | \"invest\" | \"justice\" | \"now\" | \"trade\" | \"transport\" | \"visit\" | string | undefined",
+            "references": {
+              "ChannelLinks": {
+                "location": "import",
+                "path": "../../utils/channels",
+                "id": "src/utils/channels.ts::ChannelLinks",
+                "referenceLocation": "ChannelLinks"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "links",
+          "reflectToAttr": false,
+          "docs": "Each channel's home page (as `sc-channel-switcher` `links`; `{lang}` becomes `en` or `ar`).",
+          "docsTags": [],
+          "values": [
+            {
+              "value": "build",
+              "type": "string"
+            },
+            {
+              "value": "invest",
+              "type": "string"
+            },
+            {
+              "value": "justice",
+              "type": "string"
+            },
+            {
+              "value": "now",
+              "type": "string"
+            },
+            {
+              "value": "trade",
+              "type": "string"
+            },
+            {
+              "value": "transport",
+              "type": "string"
+            },
+            {
+              "value": "visit",
+              "type": "string"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "states": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/sc-channel-switcher/sc-channel-switcher.tsx",
+      "encapsulation": "scoped",
+      "tag": "sc-channel-switcher",
+      "readme": "# sc-channel-switcher\n\nThe channel's logo and the channel switcher (Standard CHR-03), for `sc-site-header`'s `slot=\"switcher\"`. Spec: `specs/sc-channel-switcher.md`.\n\n## Usage\n\n```html\n<sc-channel-switcher slot=\"switcher\"\n  links='{\"now\":\"https://now.example/{lang}/\",\"transport\":\"https://transport.example/{lang}/\",\"visit\":\"…\",\"justice\":\"…\",\"build\":\"…\",\"invest\":\"…\",\"trade\":\"…\"}'>\n</sc-channel-switcher>\n```\n\n- Give all seven links; `{lang}` becomes `en` or `ar`. A channel without a link is listed as text.\n- The current channel comes from `channel` or the closest `data-channel`.\n- Put the channel's own logo (24px, `alt=\"\"`) inside to replace the ring mark.\n- Light DOM: each item sets its own `data-channel`, so its swatch is that channel's colour.\n",
+      "docs": "The channel's logo and the channel switcher, at the inline-end of `sc-site-header`\n(Standard CHR-01, CHR-03; component-language B2a).\n\nA disclosure, not an ARIA menu: a `<button aria-expanded>` named \"Choose a channel: Dubai\nNow\" opens a non-modal panel listing all seven channels as links, in the Standard 3.1\norder, each with its name, a one-line descriptor in the page language and a swatch in\nthat channel's own colour. Every item carries its own `data-channel` (FND-26), so the\nswatch is that channel's `channel-action`; that is why the component renders into light\nDOM (Stencil `scoped`): the document's channel rules must reach the items. The current\nchannel carries a check and `aria-current=\"true\"`.\n\nEscape and a press outside close the panel; Escape returns focus to the button; the panel\ncloses when focus leaves it. From a pointer it grows from the trigger's corner over\n`duration-base`; from the keyboard it appears instantly (MOT-02). Below 1024px the trigger\nshrinks to the logo and chevron and keeps its accessible name (CHR-04).",
+      "docsTags": [
+        {
+          "name": "slot",
+          "text": "- Optional: the channel's own logo (an `<svg>` or `<img alt=\"\">`, 24px). Without it\nthe trigger shows a ring mark in the channel colour."
+        }
+      ],
+      "usage": {},
+      "props": [
+        {
+          "name": "channel",
+          "type": "\"build\" | \"invest\" | \"justice\" | \"now\" | \"trade\" | \"transport\" | \"visit\" | undefined",
+          "complexType": {
+            "original": "Channel",
+            "resolved": "\"build\" | \"invest\" | \"justice\" | \"now\" | \"trade\" | \"transport\" | \"visit\" | undefined",
+            "references": {
+              "Channel": {
+                "location": "import",
+                "path": "../../utils/channels",
+                "id": "src/utils/channels.ts::Channel",
+                "referenceLocation": "Channel"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "channel",
+          "reflectToAttr": true,
+          "docs": "The current channel. Defaults to the closest `data-channel` (as set by `sc-page`).",
+          "docsTags": [],
+          "values": [
+            {
+              "value": "build",
+              "type": "string"
+            },
+            {
+              "value": "invest",
+              "type": "string"
+            },
+            {
+              "value": "justice",
+              "type": "string"
+            },
+            {
+              "value": "now",
+              "type": "string"
+            },
+            {
+              "value": "trade",
+              "type": "string"
+            },
+            {
+              "value": "transport",
+              "type": "string"
+            },
+            {
+              "value": "visit",
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "links",
+          "type": "\"build\" | \"invest\" | \"justice\" | \"now\" | \"trade\" | \"transport\" | \"visit\" | string | undefined",
+          "complexType": {
+            "original": "ChannelLinks | string",
+            "resolved": "\"build\" | \"invest\" | \"justice\" | \"now\" | \"trade\" | \"transport\" | \"visit\" | string | undefined",
+            "references": {
+              "ChannelLinks": {
+                "location": "import",
+                "path": "../../utils/channels",
+                "id": "src/utils/channels.ts::ChannelLinks",
+                "referenceLocation": "ChannelLinks"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "links",
+          "reflectToAttr": false,
+          "docs": "Each channel's home page, as an object or a JSON attribute:\n`links='{\"now\":\"https://…/{lang}/\",\"transport\":\"https://…/{lang}/\"}'`. `{lang}` becomes\n`en` or `ar`, so each link leads to that channel's home in the current language. Give all\nseven; a channel without a link is listed as text.",
+          "docsTags": [],
+          "values": [
+            {
+              "value": "build",
+              "type": "string"
+            },
+            {
+              "value": "invest",
+              "type": "string"
+            },
+            {
+              "value": "justice",
+              "type": "string"
+            },
+            {
+              "value": "now",
+              "type": "string"
+            },
+            {
+              "value": "trade",
+              "type": "string"
+            },
+            {
+              "value": "transport",
+              "type": "string"
+            },
+            {
+              "value": "visit",
+              "type": "string"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "close",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<void>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "close() => Promise<void>",
+          "parameters": [],
+          "docs": "Closes the panel.",
+          "docsTags": []
+        },
+        {
+          "name": "open",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<void>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "open() => Promise<void>",
+          "parameters": [],
+          "docs": "Opens the panel (as from the keyboard: no animation).",
+          "docsTags": []
+        }
+      ],
+      "events": [],
+      "listeners": [],
+      "styles": [],
+      "slots": [
+        {
+          "name": "",
+          "docs": "Optional: the channel's own logo (an `<svg>` or `<img alt=\"\">`, 24px). Without it\nthe trigger shows a ring mark in the channel colour."
+        }
+      ],
+      "parts": [],
+      "states": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
     },
     {
       "filePath": "src/components/sc-checkbox/sc-checkbox.tsx",
@@ -2194,7 +3121,7 @@
             "references": {
               "ContainerWidth": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-container/sc-container.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-chrome/components/src/components/sc-container/sc-container.tsx",
                 "id": "src/components/sc-container/sc-container.tsx::ContainerWidth"
               }
             }
@@ -2244,15 +3171,11 @@
       ],
       "states": [],
       "dependents": [
-        "sc-channel-hero",
-        "sc-footer"
+        "sc-channel-hero"
       ],
       "dependencies": [],
       "dependencyGraph": {
         "sc-channel-hero": [
-          "sc-container"
-        ],
-        "sc-footer": [
           "sc-container"
         ]
       }
@@ -3585,7 +4508,7 @@
             "references": {
               "ErrorSummaryItem": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-error-summary/sc-error-summary.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-chrome/components/src/components/sc-error-summary/sc-error-summary.tsx",
                 "id": "src/components/sc-error-summary/sc-error-summary.tsx::ErrorSummaryItem"
               }
             }
@@ -3642,7 +4565,7 @@
             "references": {
               "ErrorSummaryHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-error-summary/sc-error-summary.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-chrome/components/src/components/sc-error-summary/sc-error-summary.tsx",
                 "id": "src/components/sc-error-summary/sc-error-summary.tsx::ErrorSummaryHeadingLevel"
               }
             }
@@ -3767,16 +4690,20 @@
       "filePath": "src/components/sc-footer/sc-footer.tsx",
       "encapsulation": "shadow",
       "tag": "sc-footer",
-      "readme": "# sc-footer\n\nThe page footer: help and contact, accessibility, privacy, terms and \"Government of Dubai\".\n\n## Usage\n\n```html\n<sc-footer help-href=\"/help\" accessibility-href=\"/accessibility\" privacy-href=\"/privacy\" terms-href=\"/terms\">\n  <a href=\"/cookies\">Cookies</a>\n</sc-footer>\n```\n\n- The four standard links appear when their `*-href` is set; their text comes from strings in the page language (\"Help and contact\" / \"المساعدة والتواصل\", and so on). Every channel should set all four.\n- Extra links go in the default slot as plain `<a href>` elements. Each gets its own list item (the footer sets their `slot` attribute). Keep the list short.\n- `slot=\"meta\"` replaces \"Government of Dubai\" at the end.\n- Use one footer per page, in `sc-page`'s `footer` slot.\n\n### Semantics\n\nA `<footer>` (the `contentinfo` landmark when it isn't inside `<main>`), a visually hidden \"Support links\" heading and a `<ul>` of links. Links are at least 44px tall.\n\n### Arabic\n\nThe order mirrors: links start at the right and the meta text sits at the left.\n",
-      "docs": "The page footer: help and contact, accessibility, privacy and terms links, and\n\"Government of Dubai\". Renders a `<footer>` (the page's `contentinfo` landmark) with a\nlist of links under a visually hidden \"Support links\" heading.\n\nThe four standard links appear when their `*-href` is set, with text from strings in the\npage language. Extra links go in the default slot as plain `<a>` elements; each gets its\nown list item (the footer sets their `slot` attribute).",
+      "readme": "# sc-footer\n\nThe page footer. `simple` for transaction pages; `grouped` for channel sites, with the Channels group (Standard CHR-06). Spec: `specs/sc-footer.md`.\n\n## Usage\n\n```html\n<sc-footer variant=\"grouped\" updated=\"12 October 2026\" links='{\"now\":\"https://…/{lang}/\", …}'\n  about-href=\"/en/about\" help-href=\"/en/help\" accessibility-href=\"/en/accessibility\"\n  privacy-href=\"/en/privacy\" terms-href=\"/en/terms\" sitemap-href=\"/en/sitemap\">\n  <p slot=\"brand\">Government services for everyone who lives in Dubai, in one place.</p>\n</sc-footer>\n\n<sc-footer help-href=\"/en/help\" accessibility-href=\"/en/accessibility\" privacy-href=\"/en/privacy\"\n  cookies-href=\"/en/cookies\" terms-href=\"/en/terms\"></sc-footer>\n```\n\n- Standard links appear when their `*-href` is set, with text in the page language. Extra links go in the default slot as `<a href>`.\n- `privacy-href` reads \"Privacy and cookies\" unless `cookies-href` is set too.\n",
+      "docs": "The page footer, a `<footer>` (the page's `contentinfo` landmark). Two variants:\n\n- `simple` (default; transaction pages, component-language A29): one row of underlined\n  links and \"Government of Dubai\", under a 1px rule.\n- `grouped` (channel sites, Standard CHR-06, decision Q-footer; B5): the channel's brand\n  group (`slot=\"brand\"`: a one-sentence description and app badges); a **Channels** group\n  listing all seven channels in the Standard 3.1 order, the current one Bold with\n  `aria-current=\"true\"` and no swatch; **Helpful information** (about, help and contact,\n  accessibility statement, sitemap); and **Legal** (privacy and cookies, terms). Each group\n  has an `<h2>`. Then \"Government of Dubai · Last updated …\" and \"… is run by the\n  Government of Dubai\".\n\nThe standard links appear when their `*-href` is set, with text from strings in the page\nlanguage. Every channel sets all of them (TPL-01, LEG-01). Extra links go in the default\nslot as plain `<a href>` elements; each gets its own list item (the footer sets their\n`slot` attribute). The footer is on `surface`, never a dark band.",
       "docsTags": [
         {
           "name": "slot",
-          "text": "- Extra links, as `<a href>` elements, listed after the standard ones."
+          "text": "- Extra links, as `<a href>` elements, listed after the standard ones (in Helpful information when grouped)."
         },
         {
           "name": "slot",
-          "text": "meta - Replaces \"Government of Dubai\" at the end of the footer."
+          "text": "brand - Grouped: the channel's description and app badges, under its name."
+        },
+        {
+          "name": "slot",
+          "text": "meta - Replaces \"Government of Dubai\" at the end of the simple footer."
         },
         {
           "name": "part",
@@ -3784,7 +4711,7 @@
         },
         {
           "name": "part",
-          "text": "list - The `<ul>` of links."
+          "text": "list - Each `<ul>` of links."
         },
         {
           "name": "part",
@@ -3798,6 +4725,32 @@
       "usage": {},
       "props": [
         {
+          "name": "aboutHref",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "about-href",
+          "reflectToAttr": false,
+          "docs": "About the channel (\"About Dubai Now\").",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "accessibilityHref",
           "type": "string | undefined",
           "complexType": {
@@ -3809,6 +4762,90 @@
           "attr": "accessibility-href",
           "reflectToAttr": false,
           "docs": "The accessibility statement.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "channel",
+          "type": "\"build\" | \"invest\" | \"justice\" | \"now\" | \"trade\" | \"transport\" | \"visit\" | undefined",
+          "complexType": {
+            "original": "Channel",
+            "resolved": "\"build\" | \"invest\" | \"justice\" | \"now\" | \"trade\" | \"transport\" | \"visit\" | undefined",
+            "references": {
+              "Channel": {
+                "location": "import",
+                "path": "../../utils/channels",
+                "id": "src/utils/channels.ts::Channel",
+                "referenceLocation": "Channel"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "channel",
+          "reflectToAttr": false,
+          "docs": "The current channel. Defaults to the closest `data-channel`.",
+          "docsTags": [],
+          "values": [
+            {
+              "value": "build",
+              "type": "string"
+            },
+            {
+              "value": "invest",
+              "type": "string"
+            },
+            {
+              "value": "justice",
+              "type": "string"
+            },
+            {
+              "value": "now",
+              "type": "string"
+            },
+            {
+              "value": "trade",
+              "type": "string"
+            },
+            {
+              "value": "transport",
+              "type": "string"
+            },
+            {
+              "value": "visit",
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "cookiesHref",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "cookies-href",
+          "reflectToAttr": false,
+          "docs": "A separate cookies page. Splits \"Privacy and cookies\" into \"Privacy\" and \"Cookies\".",
           "docsTags": [],
           "values": [
             {
@@ -3850,6 +4887,67 @@
           "setter": false
         },
         {
+          "name": "links",
+          "type": "\"build\" | \"invest\" | \"justice\" | \"now\" | \"trade\" | \"transport\" | \"visit\" | string | undefined",
+          "complexType": {
+            "original": "ChannelLinks | string",
+            "resolved": "\"build\" | \"invest\" | \"justice\" | \"now\" | \"trade\" | \"transport\" | \"visit\" | string | undefined",
+            "references": {
+              "ChannelLinks": {
+                "location": "import",
+                "path": "../../utils/channels",
+                "id": "src/utils/channels.ts::ChannelLinks",
+                "referenceLocation": "ChannelLinks"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "links",
+          "reflectToAttr": false,
+          "docs": "Each channel's home page, for the Channels group (as `sc-channel-switcher` `links`; `{lang}` becomes `en` or `ar`).",
+          "docsTags": [],
+          "values": [
+            {
+              "value": "build",
+              "type": "string"
+            },
+            {
+              "value": "invest",
+              "type": "string"
+            },
+            {
+              "value": "justice",
+              "type": "string"
+            },
+            {
+              "value": "now",
+              "type": "string"
+            },
+            {
+              "value": "trade",
+              "type": "string"
+            },
+            {
+              "value": "transport",
+              "type": "string"
+            },
+            {
+              "value": "visit",
+              "type": "string"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "privacyHref",
           "type": "string | undefined",
           "complexType": {
@@ -3860,7 +4958,33 @@
           "mutable": false,
           "attr": "privacy-href",
           "reflectToAttr": false,
-          "docs": "The privacy notice.",
+          "docs": "The privacy notice. Labelled \"Privacy and cookies\" unless `cookies-href` is set too.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "sitemapHref",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "sitemap-href",
+          "reflectToAttr": false,
+          "docs": "The sitemap.",
           "docsTags": [],
           "values": [
             {
@@ -3886,7 +5010,7 @@
           "mutable": false,
           "attr": "terms-href",
           "reflectToAttr": false,
-          "docs": "The terms and conditions.",
+          "docs": "The terms of use.",
           "docsTags": [],
           "values": [
             {
@@ -3900,6 +5024,72 @@
           "required": false,
           "getter": false,
           "setter": false
+        },
+        {
+          "name": "updated",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "updated",
+          "reflectToAttr": false,
+          "docs": "Grouped: when the site was last updated, as it should read (\"12 October 2026\").",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "variant",
+          "type": "\"grouped\" | \"simple\"",
+          "complexType": {
+            "original": "FooterVariant",
+            "resolved": "\"grouped\" | \"simple\"",
+            "references": {
+              "FooterVariant": {
+                "location": "local",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-chrome/components/src/components/sc-footer/sc-footer.tsx",
+                "id": "src/components/sc-footer/sc-footer.tsx::FooterVariant"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "variant",
+          "reflectToAttr": true,
+          "docs": "`simple` (one row) or `grouped` (channel sites, with the Channels group).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'simple'"
+            }
+          ],
+          "default": "'simple'",
+          "values": [
+            {
+              "value": "grouped",
+              "type": "string"
+            },
+            {
+              "value": "simple",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
         }
       ],
       "methods": [],
@@ -3909,11 +5099,15 @@
       "slots": [
         {
           "name": "",
-          "docs": "Extra links, as `<a href>` elements, listed after the standard ones."
+          "docs": "Extra links, as `<a href>` elements, listed after the standard ones (in Helpful information when grouped)."
+        },
+        {
+          "name": "brand",
+          "docs": "Grouped: the channel's description and app badges, under its name."
         },
         {
           "name": "meta",
-          "docs": "Replaces \"Government of Dubai\" at the end of the footer."
+          "docs": "Replaces \"Government of Dubai\" at the end of the simple footer."
         }
       ],
       "parts": [
@@ -3927,7 +5121,7 @@
         },
         {
           "name": "list",
-          "docs": "The `<ul>` of links."
+          "docs": "Each `<ul>` of links."
         },
         {
           "name": "meta",
@@ -3936,14 +5130,8 @@
       ],
       "states": [],
       "dependents": [],
-      "dependencies": [
-        "sc-container"
-      ],
-      "dependencyGraph": {
-        "sc-footer": [
-          "sc-container"
-        ]
-      }
+      "dependencies": [],
+      "dependencyGraph": {}
     },
     {
       "filePath": "src/components/sc-grid/sc-grid.tsx",
@@ -4154,7 +5342,7 @@
             "references": {
               "LanguageSwitchDetail": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-language-switch/sc-language-switch.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-chrome/components/src/components/sc-language-switch/sc-language-switch.tsx",
                 "id": "src/components/sc-language-switch/sc-language-switch.tsx::LanguageSwitchDetail"
               }
             }
@@ -4435,12 +5623,12 @@
       "filePath": "src/components/sc-page/sc-page.tsx",
       "encapsulation": "scoped",
       "tag": "sc-page",
-      "readme": "# sc-page\n\nThe frame of every page: header, `<main>` and footer, with the page's language, direction and channel set once on its root.\n\n## Usage\n\n```html\n<sc-page lang=\"ar\" channel=\"transport\" sync-document>\n  <div slot=\"header\">\n    <sc-skip-link></sc-skip-link>\n    <sc-app-bar>…</sc-app-bar>\n  </div>\n  <sc-channel-hero>…</sc-channel-hero>\n  <sc-container>…</sc-container>\n  <sc-footer slot=\"footer\" help-href=\"/help\" accessibility-href=\"/accessibility\" privacy-href=\"/privacy\" terms-href=\"/terms\"></sc-footer>\n</sc-page>\n```\n\n- Set `lang` on `sc-page` like on any element. The page sets `dir` to match (`rtl` for Arabic) and updates it when `lang` changes, so every component inside picks up the language.\n- `channel` sets `data-channel`, which themes everything inside.\n- Use `sync-document` when `sc-page` is the whole page, so `<html>` also gets the language, direction and channel (browsers and screen readers read the page language from the root).\n- Content goes in the default slot and is wrapped in `<main id=\"main-content\" tabindex=\"-1\">`. Point the skip link at `#main-content` (change it with `main-id`).\n\n### Focus stays clear of a sticky app bar\n\nWith `sync-document` and a sticky `sc-app-bar` in the header, `sc-page` sets `scroll-padding-block-start` on `<html>` to the bar's height plus `--sc-space-8`. Browsers then scroll a focused element, or a `#fragment` target, into view below the bar instead of under it (WCAG 2.4.11 Focus not obscured). The padding follows the bar's size (it grows with 200% text or when its content wraps), and is removed, restoring any inline value `<html>` had before, when the bar goes away or stops being sticky, `sync-document` is turned off, or the page is removed.\n\n- The bar can carry `slot=\"header\"` itself, or sit inside a `<div slot=\"header\">` with the skip link, as in the usage example. `sc-page` gives that wrapper `display: contents`, so the bar sticks to the whole page rather than to the wrapper. Use a `<div>`: other wrapper elements keep their box, and the bar scrolls away with them.\n- Without `sync-document`, `sc-page` does not touch `<html>`. A service that uses a sticky bar then sets `scroll-padding-block-start` on its own scroll container, at least the bar's height plus 8px.\n\n### Why it is scoped, not shadowed\n\nA skip link can only reach an element in light DOM: `#main-content` inside a shadow root is invisible to fragment navigation. So `sc-page` uses Stencil's scoped mode and renders `<main>` as a real child.\n\n## Container and grid\n\n- `sc-container` sets the page margins (20, 32, 48, 80px at 0, 600, 1024, 1440px) and caps content at 1280px; `width=\"reading\"` caps it at 680px for question pages.\n- `sc-grid` gives 4, 8 or 12 columns with 16, 20 or 24px gutters.\n",
-      "docs": "The page frame: header, `<main>` and footer, with the page's language, direction and\nchannel on its root.\n\n- Set `lang` on `sc-page` as on any element; the page sets `dir` to match (`rtl` for\n  Arabic) and re-applies it when `lang` changes.\n- `channel` sets `data-channel`, which themes every component inside.\n- `<main>` is rendered in light DOM (the component is scoped, not shadowed) with\n  `id=\"main-content\"` and `tabindex=\"-1\"`, so a skip link (`<a href=\"#main-content\">`)\n  anywhere on the page can reach it and move focus into it.\n- With `sync-document` and a sticky `sc-app-bar` in the header, it sets\n  `scroll-padding-block-start` on `<html>` to the bar's height plus `--sc-space-8`, so\n  focused elements and `#fragment` targets scroll into view below the bar, not under it\n  (WCAG 2.4.11). It follows the bar's size and removes the padding when no longer needed.",
+      "readme": "# sc-page\n\nThe page shell: header, one `<main id=\"main-content\">` and footer, with the page's language, direction and channel. Spec: `specs/sc-page.md`.\n\n## Usage\n\n```html\n<sc-page lang=\"en\" channel=\"now\" sync-document>\n  <div slot=\"header\">\n    <sc-skip-link></sc-skip-link>\n    <sc-announcement-bar>…</sc-announcement-bar>\n    <sc-site-header …>…</sc-site-header>\n  </div>\n  …\n  <div slot=\"footer\">\n    <sc-footer variant=\"grouped\" …></sc-footer>\n    <sc-utility-bar …></sc-utility-bar>\n  </div>\n</sc-page>\n```\n\n- The skip link's default `href` (`#main-content`) is `<main>`.\n- `sync-document` copies `lang`, `dir` and `data-channel` to `<html>` and keeps focus clear of a sticky header.\n- The end of the page is padded by a docked `sc-utility-bar`'s height.\n",
+      "docs": "The page shell (Standard TPL-01, 11.1 and 11.9): the header, one `<main>` and the footer,\nwith the page's language, direction and channel on its root.\n\n- Set `lang` on `sc-page` as on any element; the page sets `dir` to match (`rtl` for\n  Arabic) and re-applies it when `lang` changes.\n- `channel` sets `data-channel`, which themes every component inside.\n- `<main>` is rendered in light DOM (the component is scoped, not shadowed) with\n  `id=\"main-content\"` and `tabindex=\"-1\"`, so the skip link (`sc-skip-link`, whose default\n  `href` is `#main-content`) can reach it and move focus into it. The header slot gives\n  the banner landmark, the footer slot the contentinfo landmark.\n- With `sync-document` it also sets `lang`, `dir` and `data-channel` on `<html>`, and,\n  with a sticky `sc-app-bar` or `sc-site-header` in the header, `scroll-padding-block-start`\n  on `<html>` to the bar's height plus `--sc-space-8`, so focused elements are never\n  hidden under it (WCAG 2.4.11).\n- It reserves the height of a docked `sc-utility-bar` (`padding-block-end` from\n  `--sc-utility-bar-block-size`, which the bar publishes), so the bar never covers the end\n  of the page; `sc.css` sets the matching `scroll-padding-block-end` (CHR-05).",
       "docsTags": [
         {
           "name": "slot",
-          "text": "header - The skip link, then the app bar."
+          "text": "header - The skip link, then the announcement bar if any, then `sc-app-bar` or\n`sc-site-header`. Wrap them in one `<div slot=\"header\">`."
         },
         {
           "name": "slot",
@@ -4448,7 +5636,7 @@
         },
         {
           "name": "slot",
-          "text": "footer - `sc-footer`."
+          "text": "footer - `sc-footer`, then `sc-utility-bar` on channel sites. Wrap several in one\n`<div slot=\"footer\">`."
         }
       ],
       "usage": {},
@@ -4462,8 +5650,8 @@
             "references": {
               "Channel": {
                 "location": "import",
-                "path": "../../i18n/strings",
-                "id": "src/i18n/strings.ts::Channel",
+                "path": "../../utils/channels",
+                "id": "src/utils/channels.ts::Channel",
                 "referenceLocation": "Channel"
               }
             }
@@ -4551,7 +5739,7 @@
           "mutable": false,
           "attr": "sync-document",
           "reflectToAttr": false,
-          "docs": "Also sets `lang`, `dir` and `data-channel` on `<html>`. Use it when `sc-page` is the\nwhole page, so browsers and screen readers get the page language from the document root.\nWith a sticky `sc-app-bar` in the header, it also sets `scroll-padding-block-start` on\n`<html>` so focus is never hidden under the bar.",
+          "docs": "Also sets `lang`, `dir` and `data-channel` on `<html>`. Use it when `sc-page` is the\nwhole page, so browsers and screen readers get the page language from the document root.\nWith a sticky header, it also keeps `scroll-padding-block-start` on `<html>` clear of it.",
           "docsTags": [
             {
               "name": "default",
@@ -4581,11 +5769,11 @@
         },
         {
           "name": "footer",
-          "docs": "`sc-footer`."
+          "docs": "`sc-footer`, then `sc-utility-bar` on channel sites. Wrap several in one\n`<div slot=\"footer\">`."
         },
         {
           "name": "header",
-          "docs": "The skip link, then the app bar."
+          "docs": "The skip link, then the announcement bar if any, then `sc-app-bar` or\n`sc-site-header`. Wrap them in one `<div slot=\"header\">`."
         }
       ],
       "parts": [],
@@ -5424,7 +6612,7 @@
             "references": {
               "ScSearchDetail": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-search/sc-search.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-chrome/components/src/components/sc-search/sc-search.tsx",
                 "id": "src/components/sc-search/sc-search.tsx::ScSearchDetail"
               }
             }
@@ -5944,7 +7132,7 @@
             "references": {
               "ServiceCardHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-service-card/sc-service-card.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-chrome/components/src/components/sc-service-card/sc-service-card.tsx",
                 "id": "src/components/sc-service-card/sc-service-card.tsx::ServiceCardHeadingLevel"
               }
             }
@@ -6045,6 +7233,268 @@
         {
           "name": "title",
           "docs": "The heading."
+        }
+      ],
+      "states": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/sc-site-header/sc-site-header.tsx",
+      "encapsulation": "shadow",
+      "tag": "sc-site-header",
+      "readme": "# sc-site-header\n\nThe header of channel pages outside a transaction (Standard CHR-01 to CHR-04). Transaction pages use `sc-app-bar`. Spec: `specs/sc-site-header.md`.\n\n## Usage\n\n```html\n<sc-site-header sign-in-href=\"/en/sign-in\" search-href=\"/en/search\">\n  <a slot=\"lockup\" href=\"/en/\"><img src=\"/brand/government-of-dubai.svg\" alt=\"Government of Dubai\" height=\"40\"></a>\n  <a slot=\"nav\" href=\"/en/\" aria-current=\"page\">Home</a>\n  <a slot=\"nav\" href=\"/en/services\">Services</a>\n  <a slot=\"nav\" href=\"/en/life-events\">Life events</a>\n  <a slot=\"nav\" href=\"/en/help\">Help and contact</a>\n  <sc-language-switch slot=\"language\" appearance=\"plain\" href=\"/ar/\"></sc-language-switch>\n  <sc-channel-switcher slot=\"switcher\" links='{\"now\":\"https://…/{lang}/\", …}'></sc-channel-switcher>\n</sc-site-header>\n```\n\n- The lockup is the brand owner's artwork, used as supplied (decisions L1–L4); the library ships none.\n- Navigation links are direct children with `slot=\"nav\"`; mark the current one `aria-current=\"page\"`.\n- Sign in is the official UAE PASS button (decision U3a). Put it in `slot=\"signin\"` when the kit is available; until then `sign-in-href` renders a marked black placeholder. Never use `sc-button` for it.\n- Signed in: add `<sc-account-menu slot=\"account\">`; it replaces sign in.\n- Below 1024px (or when the row does not fit) navigation, search and sign in move into a modal menu.\n",
+      "docs": "The header of channel pages outside a transaction (Standard CHR-01 to CHR-04;\ncomponent-language B2). Transaction pages use `sc-app-bar`.\n\nFrom the inline-start edge: the Government of Dubai lockup (`slot=\"lockup\"`), the main\nnavigation (`slot=\"nav\"`), search, the language switch (`slot=\"language\"`), sign in with UAE PASS\n(`slot=\"signin\"`) or the account menu once signed in (`slot=\"account\"`), and the\nchannel's logo and switcher (`slot=\"switcher\"`, an `sc-channel-switcher`). Sign in is the\nofficial UAE PASS button (decision U3a), never a themed `sc-button`: until the official kit\narrives the header renders a marked placeholder (black, white label, fingerprint glyph,\n56px) that `slot=\"signin\"` replaces. The order\nmirrors in Arabic. A flat `surface` bar, 80px tall, with a 1px `outline-variant` rule.\n\nBelow 1024px the row keeps the menu button, the lockup, the language switch and the\nchannel switcher (64px). Navigation, search and sign in (or the account menu) move into\nthe mobile menu: a modal `<dialog>` labelled \"Menu\", with focus on its close button when\nit opens, Escape closing it and returning focus to the menu button, and the page behind\nit inert. The same slotted elements move; nothing is duplicated.\n\nThe host is a `<header>` banner landmark. It is not fixed by default; with `sticky`,\n`sc-page` keeps `scroll-padding-top` clear of it (A11Y-05, F-009).",
+      "docsTags": [
+        {
+          "name": "slot",
+          "text": "lockup - The Government of Dubai lockup, as supplied (decision L1–L4): an `<img>` or\n`<svg>` with the text alternative \"Government of Dubai\" / \"حكومة دبي\", 40px tall, usually\ninside an `<a href>` to the channel home. The library ships no logo."
+        },
+        {
+          "name": "slot",
+          "text": "nav - The main navigation: `<a href>` elements, direct children of the header, four\nor five of them. Mark the current one with `aria-current=\"page\"`."
+        },
+        {
+          "name": "slot",
+          "text": "language - `<sc-language-switch>`."
+        },
+        {
+          "name": "slot",
+          "text": "signin - The official UAE PASS sign-in button, when available (U3a). Replaces the\nbuilt-in placeholder; it moves into the mobile menu on compact screens."
+        },
+        {
+          "name": "slot",
+          "text": "account - `<sc-account-menu>` once the user is signed in. It replaces sign in."
+        },
+        {
+          "name": "slot",
+          "text": "switcher - `<sc-channel-switcher>`, the channel's logo and the channel switcher."
+        },
+        {
+          "name": "part",
+          "text": "bar - The header row."
+        },
+        {
+          "name": "part",
+          "text": "menu - The mobile menu `<dialog>`."
+        }
+      ],
+      "usage": {},
+      "props": [
+        {
+          "name": "searchHref",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "search-href",
+          "reflectToAttr": false,
+          "docs": "The search page. Adds a search button (an icon link named \"Search\").",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "signInHref",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "sign-in-href",
+          "reflectToAttr": false,
+          "docs": "Where the UAE PASS placeholder button leads. The placeholder shows when this is set and\nthere is neither a `slot=\"signin\"` nor a `slot=\"account\"` child.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "signInText",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "sign-in-text",
+          "reflectToAttr": false,
+          "docs": "Overrides the placeholder's \"Sign in with UAE PASS\" (in the page language).",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "sticky",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "sticky",
+          "reflectToAttr": true,
+          "docs": "Keeps the header at the top while the page scrolls. `sc-page` then sets `scroll-padding-top`.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "closeMenu",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "(pointer?: boolean) => Promise<void>",
+            "parameters": [
+              {
+                "name": "pointer",
+                "type": "boolean",
+                "docs": ""
+              }
+            ],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "closeMenu(pointer?: boolean) => Promise<void>",
+          "parameters": [
+            {
+              "name": "pointer",
+              "type": "boolean",
+              "docs": ""
+            }
+          ],
+          "docs": "Closes the mobile menu and returns focus to the menu button.",
+          "docsTags": []
+        },
+        {
+          "name": "openMenu",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<void>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "openMenu() => Promise<void>",
+          "parameters": [],
+          "docs": "Opens the mobile menu (compact layout only).",
+          "docsTags": []
+        }
+      ],
+      "events": [],
+      "listeners": [
+        {
+          "event": "click",
+          "capture": false,
+          "passive": false
+        }
+      ],
+      "styles": [],
+      "slots": [
+        {
+          "name": "account",
+          "docs": "`<sc-account-menu>` once the user is signed in. It replaces sign in."
+        },
+        {
+          "name": "language",
+          "docs": "`<sc-language-switch>`."
+        },
+        {
+          "name": "lockup",
+          "docs": "The Government of Dubai lockup, as supplied (decision L1–L4): an `<img>` or\n`<svg>` with the text alternative \"Government of Dubai\" / \"حكومة دبي\", 40px tall, usually\ninside an `<a href>` to the channel home. The library ships no logo."
+        },
+        {
+          "name": "nav",
+          "docs": "The main navigation: `<a href>` elements, direct children of the header, four\nor five of them. Mark the current one with `aria-current=\"page\"`."
+        },
+        {
+          "name": "signin",
+          "docs": "The official UAE PASS sign-in button, when available (U3a). Replaces the\nbuilt-in placeholder; it moves into the mobile menu on compact screens."
+        },
+        {
+          "name": "switcher",
+          "docs": "`<sc-channel-switcher>`, the channel's logo and the channel switcher."
+        }
+      ],
+      "parts": [
+        {
+          "name": "bar",
+          "docs": "The header row."
+        },
+        {
+          "name": "menu",
+          "docs": "The mobile menu `<dialog>`."
+        },
+        {
+          "name": "signin",
+          "docs": ""
         }
       ],
       "states": [],
@@ -6246,7 +7696,7 @@
             "references": {
               "StatusTagTone": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-status-tag/sc-status-tag.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-chrome/components/src/components/sc-status-tag/sc-status-tag.tsx",
                 "id": "src/components/sc-status-tag/sc-status-tag.tsx::StatusTagTone"
               }
             }
@@ -6523,7 +7973,7 @@
             "references": {
               "SummaryListAppearance": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-summary-list/sc-summary-list.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-chrome/components/src/components/sc-summary-list/sc-summary-list.tsx",
                 "id": "src/components/sc-summary-list/sc-summary-list.tsx::SummaryListAppearance"
               }
             }
@@ -7088,7 +8538,7 @@
             "references": {
               "SortDirection": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-table/sc-table.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-chrome/components/src/components/sc-table/sc-table.tsx",
                 "id": "src/components/sc-table/sc-table.tsx::SortDirection"
               }
             }
@@ -7714,7 +9164,7 @@
             "references": {
               "TextInputType": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-text-input/sc-text-input.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-chrome/components/src/components/sc-text-input/sc-text-input.tsx",
                 "id": "src/components/sc-text-input/sc-text-input.tsx::TextInputType"
               }
             }
@@ -7799,7 +9249,7 @@
             "references": {
               "TextInputWidth": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-text-input/sc-text-input.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-chrome/components/src/components/sc-text-input/sc-text-input.tsx",
                 "id": "src/components/sc-text-input/sc-text-input.tsx::TextInputWidth"
               }
             }
@@ -8461,9 +9911,186 @@
       "dependents": [],
       "dependencies": [],
       "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/sc-utility-bar/sc-utility-bar.tsx",
+      "encapsulation": "shadow",
+      "tag": "sc-utility-bar",
+      "readme": "# sc-utility-bar\n\nHelp and feedback for channel sites (decision U4, Standard CHR-05). Spec: `specs/sc-utility-bar.md`.\n\n## Usage\n\n```html\n<sc-page channel=\"now\" sync-document>\n  …\n  <div slot=\"footer\">\n    <sc-footer variant=\"grouped\" …></sc-footer>\n    <sc-utility-bar happiness-href=\"/en/happiness\" contact-href=\"tel:04…\" chat-href=\"/en/chat\" accessibility-href=\"/en/accessibility\"></sc-utility-bar>\n  </div>\n</sc-page>\n```\n\n- From 1024px it is docked to the bottom of the viewport and `sc-page` reserves its height; below, it is the footer's \"Help and feedback\" group, so place it straight after `sc-footer`.\n",
+      "docs": "The help and feedback bar of a channel site (decision U4, Standard CHR-05; component-\nlanguage B4 as amended by U4): the Happiness Meter, contact and complaints (04), chat and\naccessibility options, each an icon with a visible label (labels never collapse to icons).\n\nFrom 1024px it is a flat bar docked to the bottom of the viewport across the full width,\nat `elevation-1`, with a 1px `outline-variant` edge along its top. It publishes its height\nas `--sc-utility-bar-block-size` on `<html>`: `sc-page` pads its end by it and `sc.css`\nsets `scroll-padding-block-end` from it, so the bar never covers content or the focused\nelement (WCAG 2.4.11). Below 1024px it folds into the footer: place it straight after\n`sc-footer`, and it becomes an in-flow \"Help and feedback\" group, a 2 × 2 grid of outlined\nbuttons. It is present when the page loads and does not animate.\n\nA `<nav>` labelled \"Help and feedback\". Items appear when their `*-href` is set.",
+      "docsTags": [
+        {
+          "name": "part",
+          "text": "bar - The `<nav>`."
+        },
+        {
+          "name": "part",
+          "text": "item - Each link."
+        }
+      ],
+      "usage": {},
+      "props": [
+        {
+          "name": "accessibilityHref",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "accessibility-href",
+          "reflectToAttr": false,
+          "docs": "Accessibility options or the accessibility statement.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "chatHref",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "chat-href",
+          "reflectToAttr": false,
+          "docs": "The chat service.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "contactHref",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "contact-href",
+          "reflectToAttr": false,
+          "docs": "Contact and complaints: usually `tel:04…` or the contact page.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "contactNumber",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "contact-number",
+          "reflectToAttr": false,
+          "docs": "The number shown after \"Contact and complaints\", isolated left to right.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'04'"
+            }
+          ],
+          "default": "'04'",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "happinessHref",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "happiness-href",
+          "reflectToAttr": false,
+          "docs": "The Happiness Meter survey.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [
+        {
+          "name": "bar",
+          "docs": "The `<nav>`."
+        },
+        {
+          "name": "item",
+          "docs": "Each link."
+        }
+      ],
+      "states": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
     }
   ],
   "typeLibrary": {
+    "src/components/sc-announcement-bar/sc-announcement-bar.tsx::AnnouncementTone": {
+      "declaration": "export type AnnouncementTone = 'info' | 'warning' | 'error';",
+      "docstring": "",
+      "path": "src/components/sc-announcement-bar/sc-announcement-bar.tsx"
+    },
     "src/components/sc-button/sc-button.tsx::ButtonVariant": {
       "declaration": "export type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'destructive' | 'handoff';",
       "docstring": "",
@@ -8480,7 +10107,7 @@
       "path": "src/components/sc-button/sc-button.tsx"
     },
     "src/icons/index.tsx::IconName": {
-      "declaration": "\"info\" | \"external\" | \"close\" | \"search\" | \"arrow-forward\" | \"chevron-forward\" | \"chevron-back\" | \"alert-circle\" | \"check-circle\" | \"warning\" | \"spinner\"",
+      "declaration": "\"info\" | \"external\" | \"close\" | \"search\" | \"warning\" | \"arrow-forward\" | \"chevron-forward\" | \"chevron-back\" | \"alert-circle\" | \"check-circle\" | \"spinner\"",
       "docstring": "",
       "path": "src/icons/index.tsx"
     },
@@ -8523,6 +10150,21 @@
       "declaration": "export type ErrorSummaryHeadingLevel = 2 | 3 | 4;",
       "docstring": "",
       "path": "src/components/sc-error-summary/sc-error-summary.tsx"
+    },
+    "src/components/sc-footer/sc-footer.tsx::FooterVariant": {
+      "declaration": "export type FooterVariant = 'simple' | 'grouped';",
+      "docstring": "",
+      "path": "src/components/sc-footer/sc-footer.tsx"
+    },
+    "src/utils/channels.ts::Channel": {
+      "declaration": "\"build\" | \"now\" | \"transport\" | \"visit\" | \"justice\" | \"invest\" | \"trade\"",
+      "docstring": "",
+      "path": "src/utils/channels.ts"
+    },
+    "src/utils/channels.ts::ChannelLinks": {
+      "declaration": "{\n    [P in keyof T]?: T[P];\n}",
+      "docstring": "",
+      "path": "src/utils/channels.ts"
     },
     "src/components/sc-language-switch/sc-language-switch.tsx::LanguageSwitchDetail": {
       "declaration": "export interface LanguageSwitchDetail {\n  /** The language the user asked for. */\n  lang: Lang;\n}",

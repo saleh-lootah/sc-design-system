@@ -71,13 +71,11 @@ for question pages and running text.
 ### Used by
 
  - [sc-channel-hero](../sc-channel-hero)
- - [sc-footer](../sc-footer)
 
 ### Graph
 ```mermaid
 graph TD;
   sc-channel-hero --> sc-container
-  sc-footer --> sc-container
   style sc-container fill:#f9f,stroke:#333,stroke-width:4px
 ```
 

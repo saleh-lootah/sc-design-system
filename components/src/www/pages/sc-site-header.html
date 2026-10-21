@@ -1,0 +1,46 @@
+<h1 class="pg-title sc-type-headline-large" data-ar="ترويسة الموقع">Site header</h1>
+<p class="pg-lede sc-type-body-large" data-ar="ترويسة صفحات القناة خارج المعاملات: شعار حكومة دبي، والتنقل الرئيسي، والبحث، واللغة، وتسجيل الدخول أو الحساب، وشعار القناة ومبدّل القنوات.">
+  The header of channel pages outside a transaction: the Government of Dubai lockup, main navigation, search, language, sign in or the account menu, and the channel's logo and switcher.
+</p>
+
+<section class="pg-section" aria-labelledby="sh-out">
+  <h2 id="sh-out" class="sc-type-headline-small" data-ar="قبل تسجيل الدخول">Signed out</h2>
+  <div class="pg-frame">
+    <sc-site-header sign-in-href="#sign-in" search-href="#search">
+      <a slot="lockup" href="#home" class="pg-lockup"><svg role="img" aria-label="Government of Dubai" viewBox="0 0 680.84 274.11"><rect x="3" y="3" width="674.84" height="268.11" rx="16" fill="none" stroke="currentColor" stroke-width="6" stroke-dasharray="18 12"/><text x="340" y="150" text-anchor="middle" font-size="64" fill="currentColor" font-family="sans-serif">Government of Dubai lockup</text></svg></a>
+      <a slot="nav" href="#home" aria-current="page" data-ar="الرئيسية">Home</a>
+      <a slot="nav" href="#services" data-ar="الخدمات">Services</a>
+      <a slot="nav" href="#life-events" data-ar="أحداث الحياة">Life events</a>
+      <a slot="nav" href="#help" data-ar="المساعدة والتواصل">Help and contact</a>
+      <sc-language-switch slot="language" appearance="plain" href="#other-language"></sc-language-switch>
+      <sc-channel-switcher slot="switcher" links='{"now":"#now-{lang}","transport":"#transport-{lang}","visit":"#visit-{lang}","justice":"#justice-{lang}","build":"#build-{lang}","invest":"#invest-{lang}","trade":"#trade-{lang}"}'></sc-channel-switcher>
+    </sc-site-header>
+  </div>
+  <p class="pg-note" data-ar="زر الهوية الرقمية هنا عنصر نائب مؤقت (قرار U3a) إلى أن تصل مواصفات الزر الرسمية؛ يستبدله slot=&quot;signin&quot;. والشعار عنصر نائب محايد (قرار L2).">The UAE PASS button is a marked placeholder (decision U3a) until the official kit arrives; slot="signin" replaces it. The lockup is a neutral placeholder (decision L2): the library ships no logo.</p>
+</section>
+
+<section class="pg-section" aria-labelledby="sh-in">
+  <h2 id="sh-in" class="sc-type-headline-small" data-ar="بعد تسجيل الدخول">Signed in</h2>
+  <div class="pg-frame">
+    <sc-site-header search-href="#search">
+      <a slot="lockup" href="#home" class="pg-lockup"><svg role="img" aria-label="Government of Dubai" viewBox="0 0 680.84 274.11"><rect x="3" y="3" width="674.84" height="268.11" rx="16" fill="none" stroke="currentColor" stroke-width="6" stroke-dasharray="18 12"/><text x="340" y="150" text-anchor="middle" font-size="64" fill="currentColor" font-family="sans-serif">Government of Dubai lockup</text></svg></a>
+      <a slot="nav" href="#home" aria-current="page" data-ar="الرئيسية">Home</a>
+      <a slot="nav" href="#services" data-ar="الخدمات">Services</a>
+      <a slot="nav" href="#life-events" data-ar="أحداث الحياة">Life events</a>
+      <a slot="nav" href="#help" data-ar="المساعدة والتواصل">Help and contact</a>
+      <sc-language-switch slot="language" appearance="plain" href="#other-language"></sc-language-switch>
+      <sc-account-menu slot="account" name="Sara Al Mansoori" acting-for="Al Mansoori Trading LLC" profile-href="#profile" settings-href="#settings" representation-href="#act-for" notifications-href="#notifications" unread="3"></sc-account-menu>
+      <sc-channel-switcher slot="switcher" links='{"now":"#now-{lang}","transport":"#transport-{lang}","visit":"#visit-{lang}","justice":"#justice-{lang}","build":"#build-{lang}","invest":"#invest-{lang}","trade":"#trade-{lang}"}'></sc-channel-switcher>
+    </sc-site-header>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="sh-compact">
+  <h2 id="sh-compact" class="sc-type-headline-small" data-ar="الشاشات الصغيرة">Compact</h2>
+  <p class="pg-note" data-ar="تحت 1024 بكسل (أو حين لا يتسع الصف الكامل) يبقى زر القائمة والشعار واللغة ومبدّل القنوات، وينتقل التنقل والبحث وتسجيل الدخول إلى قائمة نافذة. ضيّق النافذة لتجربته: يفتح زر القائمة حوارًا، والتركيز على زر الإغلاق، وEsc يغلقه ويعيد التركيز.">Below 1024px (or when the full row does not fit) the row keeps the menu button, lockup, language and switcher; navigation, search and sign in move into a modal menu. Narrow the window to try it: the menu button opens a dialog with focus on its close button; Escape closes it and returns focus.</p>
+</section>
+<style>
+  .pg-frame { overflow: visible; border: 1px solid var(--sc-color-outline-variant); border-radius: var(--sc-radius-card); background: var(--sc-color-surface); }
+  .pg-lockup { color: inherit; }
+  .pg-lockup svg { display: block; block-size: 40px; inline-size: auto; }
+</style>

@@ -1,24 +1,28 @@
 import { Component, Element, Host, Prop, State, h } from '@stencil/core';
+import { LocaleController } from '../../i18n/controller';
+import { channelStrings, nameKey } from '../../i18n/components/channels';
+import { resolveChannel } from '../../utils/channels';
 
 /**
- * The top bar of every mobile screen and desktop page: a translucent glass bar with a
- * start control (usually `sc-back-link`), the channel name, and an end control (usually
- * `sc-language-switch`).
+ * The transaction app bar (component-language A4; Standard TPL-01, LANG-04): the bar at the
+ * top of every step of a journey (E2–E4). Channel pages outside a transaction use
+ * `sc-site-header` instead.
  *
- * - `align="center"` (default) is the mobile bar: start, title in the middle, end.
- * - `align="start"` is the desktop header: title (with a mark) at the start, then the
- *   default slot (primary navigation), and the end slot pushed to the end.
- * - `shape="floating"` turns the bar into the inset glass capsule used on desktop.
+ * A 4px rule in `channel-action` along the top; a start slot (the back link), the title (a
+ * 10px channel swatch and the channel name, centred) and an end slot (the language switch),
+ * with fixed 96px side slots so the title stays centred; a 1px `outline-variant` rule
+ * beneath. 60px tall on `surface`. Flat: no glass, no shadow.
  *
- * The glass becomes a solid surface under `prefers-reduced-transparency: reduce` and in
- * forced colours. The host is a `banner` landmark unless `landmark` is false.
+ * The host is a `banner` landmark unless `landmark` is false. It is not fixed by default;
+ * with `sticky`, `sc-page sync-document` sets `scroll-padding-top` so focus never slides
+ * under it (WCAG 2.4.11).
  *
- * @slot start - Leading control, usually `<sc-back-link>`. Controls are at least 44px.
- * @slot title - The channel or service name, shown bold. Text, optionally with a logo mark.
- * @slot - Extra content after the title, such as primary navigation (`align="start"`).
- * @slot end - Trailing controls, usually `<sc-language-switch>` and a sign-in button.
+ * @slot start - Usually `<sc-back-link>`.
+ * @slot title - The channel name. Defaults to the channel's name in the page language.
+ * @slot - Deprecated (v1 desktop header, `align="start"`): content after the title. Use `sc-site-header`.
+ * @slot end - Usually `<sc-language-switch>`.
  *
- * @part bar - The glass bar.
+ * @part bar - The bar.
  * @part start - The start slot wrapper.
  * @part title - The title wrapper.
  * @part content - The default slot wrapper.
@@ -35,52 +39,60 @@ export class ScAppBar {
   /** Keeps the bar at the top of the viewport while the page scrolls (`position: sticky`). */
   @Prop({ reflect: true }) sticky = false;
 
-  /** `center`: mobile layout with the title in the middle. `start`: desktop layout with the title at the start. */
+  /**
+   * `center` (default): the journey bar, title in the middle. `start`: deprecated (v1's
+   * desktop header): the title at the start and the default slot after it. Use
+   * `sc-site-header` for channel pages.
+   */
   @Prop({ reflect: true }) align: 'center' | 'start' = 'center';
 
-  /** `bar`: edge to edge with a hairline at the bottom. `floating`: an inset glass capsule (desktop). */
+  /** Deprecated and ignored: v2 has no floating glass capsule (ELV-04). */
   @Prop({ reflect: true }) shape: 'bar' | 'floating' = 'bar';
 
   /**
-   * Makes the host a `banner` landmark. Set it to false when the page already has a banner
-   * (for example a site header around the bar), or when the bar sits inside a dialog.
+   * Makes the host a `banner` landmark. Set it to false when the page already has a banner,
+   * or when the bar sits inside a dialog.
    */
   @Prop() landmark = true;
 
-  @State() hasStart = false;
-  @State() hasEnd = false;
   @State() hasContent = false;
 
+  private locale = new LocaleController(this, channelStrings({ en: {}, ar: {} }));
+
   connectedCallback() {
+    this.locale.connect();
     this.readSlots();
   }
 
-  private readSlots() {
-    const children = Array.from(this.el.children);
-    this.hasStart = children.some((c) => c.getAttribute('slot') === 'start');
-    this.hasEnd = children.some((c) => c.getAttribute('slot') === 'end');
-    this.hasContent = children.some((c) => !c.hasAttribute('slot'));
+  disconnectedCallback() {
+    this.locale.disconnect();
   }
 
-  private onSlotChange = () => this.readSlots();
+  private readSlots = () => {
+    this.hasContent = Array.from(this.el.childNodes).some(
+      (c) => (c.nodeType === 1 && !(c as Element).hasAttribute('slot')) || (c.nodeType === 3 && !!c.textContent?.trim()),
+    );
+  };
 
   render() {
-    const align = this.align === 'start' ? 'start' : 'center';
-    const shape = this.shape === 'floating' ? 'floating' : 'bar';
+    const start = this.align === 'start';
     return (
       <Host role={this.landmark ? 'banner' : undefined}>
-        <div class={{ bar: true, [`bar--${align}`]: true, [`bar--${shape}`]: true }} part="bar">
-          <div class={{ start: true, empty: !this.hasStart }} part="start">
-            <slot name="start" onSlotchange={this.onSlotChange} />
+        <div class={{ bar: true, 'bar--start': start }} part="bar">
+          <div class="slot start" part="start">
+            <slot name="start" />
           </div>
-          <div class="title type-title-s" part="title">
-            <slot name="title" />
+          <div class="title" part="title">
+            <span class="swatch" aria-hidden="true" />
+            <span class="title-text">
+              <slot name="title">{this.locale.t(nameKey(resolveChannel(this.el)))}</slot>
+            </span>
           </div>
           <div class={{ content: true, empty: !this.hasContent }} part="content">
-            <slot onSlotchange={this.onSlotChange} />
+            <slot onSlotchange={this.readSlots} />
           </div>
-          <div class={{ end: true, empty: !this.hasEnd }} part="end">
-            <slot name="end" onSlotchange={this.onSlotChange} />
+          <div class="slot end" part="end">
+            <slot name="end" />
           </div>
         </div>
       </Host>

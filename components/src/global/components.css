@@ -18,3 +18,38 @@ sc-button:not(:defined):is([variant='secondary'], [variant='tertiary'], [size='m
 sc-button:not(:defined)[full-width] {
   display: block;
 }
+
+/* Site chrome (C1): sc-page, sc-site-header, sc-app-bar, sc-channel-switcher,
+   sc-channel-network. Hosts keep their final block size before they upgrade. */
+sc-page:not(:defined) {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 100dvh;
+}
+sc-site-header:not(:defined) {
+  display: block;
+  min-block-size: calc(var(--sc-space-80) + var(--sc-size-border-hairline));
+}
+@media (max-width: 1023.98px) {
+  sc-site-header:not(:defined) {
+    min-block-size: calc(var(--sc-space-64) + var(--sc-size-border-hairline));
+  }
+}
+sc-app-bar:not(:defined) {
+  display: block;
+  min-block-size: calc(var(--sc-space-56) + var(--sc-space-4) + var(--sc-size-strip) + var(--sc-size-border-hairline));
+}
+sc-channel-switcher:not(:defined) {
+  display: inline-block;
+  vertical-align: middle;
+  min-block-size: var(--sc-size-control-secondary);
+}
+sc-channel-network:not(:defined) {
+  display: block;
+}
+
+/* A docked sc-utility-bar publishes its height here; focus and #fragments scroll clear of it
+   (CHR-05, WCAG 2.4.11). sc-page pads its end by the same amount. */
+:root {
+  scroll-padding-block-end: var(--sc-utility-bar-block-size, 0px);
+}

@@ -1,0 +1,360 @@
+/*
+ * sc-site-header (v2, shadow DOM). Rules: component-language.md B2 and B2b, Standard CHR-01
+ * to CHR-04, decision Q-header (E1 style: flat white bar, current item underlined in the
+ * channel colour), read through the role table in docs/v2/decisions.md.
+ */
+:host {
+  display: block;
+  /* The container margin: 20, 32, 48, then 80 from 1440px (foundations 9). */
+  --_margin: var(--sc-grid-compact-margin);
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+:host([sticky]) {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 10;
+}
+
+@media (min-width: 600px) {
+  :host {
+    --_margin: var(--sc-grid-medium-margin);
+  }
+}
+@media (min-width: 1024px) {
+  :host {
+    --_margin: var(--sc-grid-expanded-margin);
+  }
+}
+@media (min-width: 1440px) {
+  :host {
+    --_margin: var(--sc-grid-wide-margin);
+  }
+}
+
+/* Bar ------------------------------------------------------------------------------------ */
+.bar {
+  background-color: var(--sc-color-surface);
+  color: var(--sc-color-on-surface);
+  border-block-end: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+}
+
+.inner {
+  box-sizing: content-box;
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-24);
+  max-inline-size: var(--sc-container-max);
+  min-block-size: var(--sc-space-80);
+  margin-inline: auto;
+  padding-inline: var(--_margin);
+}
+
+.compact .inner {
+  gap: var(--sc-space-8);
+  min-block-size: var(--sc-space-64);
+}
+
+/* Lockup (L4: at least 40px tall in the header; never recoloured or mirrored). */
+.lockup {
+  display: flex;
+  flex: none;
+  align-items: center;
+}
+
+::slotted([slot='lockup']) {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--sc-size-target-min);
+  color: inherit;
+}
+
+/* Main navigation: full-height links, a 3px channel-action bar under the current one. */
+.nav {
+  display: flex;
+  align-self: stretch;
+  gap: var(--sc-space-32);
+  margin-inline-start: var(--sc-space-16);
+  min-inline-size: 0;
+}
+
+.nav ::slotted(a) {
+  box-sizing: border-box;
+  display: flex;
+  flex: none;
+  align-items: center;
+  padding-block-start: var(--sc-size-border-accent);
+  border-block-end: var(--sc-size-border-accent) solid transparent;
+  color: var(--sc-color-on-surface);
+  font: var(--sc-type-label-large);
+  font-weight: var(--sc-font-weight-medium);
+  letter-spacing: var(--sc-type-label-large-tracking);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.nav ::slotted(a:lang(ar)) {
+  font-weight: var(--sc-font-weight-bold);
+}
+
+.nav ::slotted(a[aria-current='page']) {
+  border-block-end-color: var(--sc-color-channel-action);
+  color: var(--sc-color-channel-action);
+  font-weight: var(--sc-font-weight-bold);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav ::slotted(a:hover) {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+  }
+}
+
+/* The ring sits 4px inside the link, clear of the bar and the header's edges. */
+.nav ::slotted(a:focus-visible) {
+  outline: var(--sc-size-focus-ring) solid var(--sc-color-focus-ring);
+  outline-offset: calc(-1 * (var(--sc-size-focus-ring) + var(--sc-space-4)));
+}
+
+/* End controls ------------------------------------------------------------------------- */
+.end {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--sc-space-16);
+  margin-inline-start: auto;
+}
+
+.compact .end {
+  gap: var(--sc-space-8);
+}
+
+.language,
+.switcher {
+  display: flex;
+  align-items: center;
+}
+
+/* 44px icon buttons: search, the menu button, the menu's close button. */
+.icon-button {
+  --icon-size: var(--sc-size-icon-l);
+  --sc-state-color: var(--sc-color-on-surface);
+  box-sizing: border-box;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--sc-size-target-min);
+  block-size: var(--sc-size-target-min);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--sc-radius-control);
+  background-color: transparent;
+  color: var(--sc-color-on-surface);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: --sc-layer var(--sc-duration-fast) var(--sc-easing-hover);
+}
+
+.menu-button {
+  margin-inline-start: calc(-1 * var(--sc-space-8));
+}
+
+/* UAE PASS sign-in placeholder (decision U3a). A brand exception like the lockup: never
+   themed, the same in light and dark and on every channel, so its colours are fixed values
+   (written in OKLAB) rather than roles. Black fill, white label, a fingerprint glyph, 56px.
+   The official kit replaces it through slot="signin"; its exact geometry comes from the kit. */
+.uaepass {
+  --icon-size: var(--sc-size-icon-l);
+  --sc-color-focus-ring: var(--sc-color-on-surface);
+  box-sizing: border-box;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sc-space-8);
+  min-block-size: var(--sc-size-control-primary);
+  padding-inline: var(--sc-space-20);
+  border-radius: var(--sc-radius-control);
+  background-color: oklab(0 0 0);
+  color: oklab(1 0 0);
+  font: var(--sc-type-label-large);
+  letter-spacing: var(--sc-type-label-large-tracking);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.menu-foot .uaepass {
+  inline-size: 100%;
+  white-space: normal;
+}
+
+::slotted([slot='signin']) {
+  flex: none;
+}
+
+/* Mobile menu (B2b, CHR-04): a full-screen modal dialog ----------------------------------- */
+.menu {
+  box-sizing: border-box;
+  position: fixed;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  max-inline-size: none;
+  max-block-size: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background-color: var(--sc-color-surface);
+  color: var(--sc-color-on-surface);
+}
+
+.menu[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu::backdrop {
+  background-color: var(--sc-color-scrim);
+}
+
+.menu-head {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--sc-space-8);
+  min-block-size: var(--sc-space-64);
+  padding-inline: var(--_margin);
+  border-block-end: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+}
+
+.menu-head .icon-button {
+  margin-inline-start: calc(-1 * var(--sc-space-8));
+}
+
+.menu-title {
+  flex: 1;
+  margin: 0;
+  font: var(--sc-type-title-medium);
+  letter-spacing: var(--sc-type-title-medium-tracking);
+}
+
+.menu-language {
+  display: flex;
+  align-items: center;
+}
+
+.menu-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding-block: var(--sc-space-8) var(--sc-space-24);
+  padding-inline: var(--_margin);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.menu-nav {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Rows: 56 tall, Bold, divided by 1px rules, a chevron at the end. The current row has a 3px
+   channel-action bar at inline-start. */
+.menu-row,
+.menu-nav ::slotted(a) {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-12);
+  min-block-size: var(--sc-size-control-primary);
+  padding-block: var(--sc-space-8);
+  padding-inline: var(--sc-space-12) var(--sc-space-4);
+  border-block-end: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+  border-inline-start: var(--sc-size-border-accent) solid transparent;
+  color: var(--sc-color-on-surface);
+  font: var(--sc-type-label-large);
+  letter-spacing: var(--sc-type-label-large-tracking);
+  text-decoration: none;
+}
+
+.menu-row {
+  --icon-size: var(--sc-size-icon-l);
+  --sc-state-color: var(--sc-color-on-surface);
+  transition: --sc-layer var(--sc-duration-fast) var(--sc-easing-hover);
+}
+
+.menu-row-label {
+  flex: 1;
+}
+
+.menu-chevron {
+  color: var(--sc-color-on-surface-variant);
+}
+
+.menu-nav ::slotted(a)::after {
+  content: '';
+  flex: none;
+  inline-size: var(--sc-size-icon-l);
+  block-size: var(--sc-size-icon-l);
+  margin-inline-start: auto;
+  background-color: var(--sc-color-on-surface-variant);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 5.5l6.5 6.5L9 18.5'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.menu-nav ::slotted(a:dir(rtl))::after {
+  transform: scaleX(-1);
+}
+
+.menu-nav ::slotted(a[aria-current='page']) {
+  border-inline-start-color: var(--sc-color-channel-action);
+  color: var(--sc-color-channel-action);
+}
+
+.menu-nav ::slotted(a:focus-visible) {
+  outline: var(--sc-size-focus-ring) solid var(--sc-color-focus-ring);
+  outline-offset: calc(-1 * var(--sc-size-focus-ring));
+}
+
+.menu-row:focus-visible {
+  outline-offset: calc(-1 * var(--sc-size-focus-ring));
+}
+
+.menu-foot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-12);
+  margin-block-start: auto;
+  padding-block-start: var(--sc-space-32);
+}
+
+.menu-hint {
+  margin: 0;
+  color: var(--sc-color-on-surface-variant);
+  font: var(--sc-type-body-small);
+  letter-spacing: var(--sc-type-body-small-tracking);
+  text-align: center;
+}
+
+/* Forced colours (COL-09) --------------------------------------------------------------- */
+@media (forced-colors: active) {
+  .bar,
+  .menu-head {
+    border-color: CanvasText;
+  }
+  .nav ::slotted(a[aria-current='page']),
+  .menu-nav ::slotted(a[aria-current='page']) {
+    border-color: Highlight;
+  }
+  .menu-nav ::slotted(a)::after {
+    background-color: CanvasText;
+  }
+  .uaepass {
+    border: var(--sc-size-border-control) solid LinkText;
+  }
+}

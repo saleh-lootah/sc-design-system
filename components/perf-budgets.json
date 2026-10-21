@@ -1,7 +1,16 @@
 {
   "$comment": "v2 budgets from docs/v2/architecture.md §3.7. Bytes, gzip level 9, per file as the browser downloads it (fonts: file bytes). Checked by npm run check:budget. Component budgets are measured in the custom-elements build (module + import closure, excluding the runtime). Only tags in \"enforce\" (rebuilt for v2) fail the check; family agents add theirs when they finish. Others are reported as pending.",
   "enforce": [
-    "sc-button"
+    "sc-button",
+    "sc-app-bar",
+    "sc-site-header",
+    "sc-channel-switcher",
+    "sc-account-menu",
+    "sc-announcement-bar",
+    "sc-utility-bar",
+    "sc-footer",
+    "sc-channel-network",
+    "sc-page"
   ],
   "coreGzip": 14336,
   "globalCssGzip": 7168,
@@ -20,7 +29,16 @@
     "sc-radio-group": 7168,
     "sc-error-summary": 6144,
     "sc-table": 12288,
-    "sc-date-range": 16384
+    "sc-date-range": 16384,
+    "$chromeComment": "Site chrome (C1): each closure counts shared chunks in full that a channel page pays once: the locale controller (0.9 KiB), the chrome icon set (1.1 KiB), the channel names from common.ts and the descriptors (1.0 KiB) and the disclosure and motion helpers (1.2 KiB). Each component's own module is 1.7 to 4.4 KiB. See each spec's Budget section.",
+    "sc-app-bar": 4608,
+    "sc-site-header": 7680,
+    "sc-channel-switcher": 8192,
+    "sc-account-menu": 7168,
+    "sc-announcement-bar": 5632,
+    "sc-utility-bar": 5120,
+    "sc-footer": 6144,
+    "sc-channel-network": 4608
   },
   "pageJsGzip": 30720,
   "pageComponentCssGzip": 3072,

@@ -134,3 +134,38 @@ private locale = new LocaleController(this, strings);
 ```
 
 `i18n/locale.ts`, `i18n/strings.ts` and `i18n/components/index.ts` remain only for v1 components and are deleted when the last one migrates (end of Wave 2b).
+
+## Site chrome (C1, Wave 2b)
+
+### `sc-app-bar` and the new `sc-site-header`
+
+v1's `sc-app-bar` did two jobs. v2 keeps the tag name for the **transaction app bar** (component-language A4: back, channel name, language; a 4px channel rule; flat) and adds **`sc-site-header`** for channel pages (Standard CHR-01 to CHR-04), as component-language B2 and decision Q-names propose.
+
+| v1 | v2 |
+| --- | --- |
+| `<sc-app-bar>` with back, title, language | unchanged markup; flat bar, 4px channel rule, title defaults to the channel name |
+| `<sc-app-bar align="start" shape="floating">` with nav and sign in (desktop header) | **deprecated**: still renders (flat), but move to `<sc-site-header>` with `slot="lockup"`, `slot="nav"` links, `slot="language"`, `sign-in-href` or `slot="signin"`, `slot="account"`, `slot="switcher"` |
+| `shape="floating"`, the glass and its reduced-transparency fallback | ignored / gone |
+| sign in as `<sc-button slot="end">` | the UAE PASS button in `slot="signin"` (decision U3a); until the kit arrives `sign-in-href` renders a marked black placeholder. Not `sc-button`, not city indigo |
+
+### `sc-footer`
+
+| v1 | v2 |
+| --- | --- |
+| one row of links | `variant="simple"` (default, the same row) or `variant="grouped"` (brand, Channels, Helpful information, Legal; CHR-06) |
+| `help-href`, `accessibility-href`, `privacy-href`, `terms-href`, default slot, `slot="meta"`, parts | unchanged |
+| — | new: `variant`, `channel`, `links`, `about-href`, `cookies-href`, `sitemap-href`, `updated`, `slot="brand"` |
+| labels "Accessibility", "Privacy", "Terms" | "Accessibility statement", "Privacy and cookies" (or "Privacy" + "Cookies" with `cookies-href`), "Terms of use". Replace an extra `<a>Cookies</a>` with `cookies-href` |
+| `sc-container` inside | gone; the footer sets its own margins |
+
+### `sc-page`
+
+Props and slots unchanged. New: the sticky-header scroll padding also follows `sc-site-header[sticky]`, and the page pads its end by a docked `sc-utility-bar` (`--sc-utility-bar-block-size`). The background is `surface`.
+
+### New tags
+
+`sc-site-header`, `sc-channel-switcher` (light DOM; component-language B2a), `sc-account-menu`, `sc-announcement-bar`, `sc-utility-bar` (U4), `sc-channel-network`. Channel links for the switcher, the grouped footer and the network strip are one `links` JSON (`{"now":"https://…/{lang}/", …}`); `{lang}` becomes `en` or `ar`.
+
+### Strings
+
+Channel names in the switcher, footer, network strip and app bar come from `src/i18n/components/common.ts` (Standard 3.1) through `channelStrings()` in `src/i18n/components/channels.ts`, which also holds the one-line descriptors.

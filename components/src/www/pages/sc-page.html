@@ -1,150 +1,37 @@
-<h1 class="pg-title sc-type-heading-xl" data-ar="إطار الصفحة">Page shell</h1>
-<p class="pg-lede sc-type-body-m" data-ar="sc-page يضبط اللغة والاتجاه والقناة على جذره ويوفر main كهدف لرابط التخطي. sc-container وsc-grid يضبطان الهوامش والأعمدة من رموز التخطيط.">
-  sc-page sets the language, direction and channel on its root and provides &lt;main&gt; as the skip link's target. sc-container and sc-grid set margins and columns from the layout tokens.
+<h1 class="pg-title sc-type-headline-large" data-ar="هيكل الصفحة">Page shell</h1>
+<p class="pg-lede sc-type-body-large" data-ar="الترويسة والمحتوى الرئيسي والتذييل، مع لغة الصفحة واتجاهها وقناتها. هدف رابط التخطي هو main-content، وتحجز الصفحة ارتفاع شريط المساعدة.">
+  The header, main content and footer, with the page's language, direction and channel. The skip link's target is main-content, and the page reserves the utility bar's height.
 </p>
-
-<section class="pg-section" aria-labelledby="pg-home">
-  <h2 id="pg-home" class="sc-type-heading-m" data-ar="الصفحة الرئيسية لدبي الآن (مصغّرة)">Dubai Now home (in miniature)</h2>
-  <div class="ps-frame">
-    <sc-page channel="now" main-id="home-main" style="min-block-size: 0">
-      <div slot="header" class="ps-bar">
-        <a class="ps-skip" href="#home-main" data-ar="الانتقال إلى المحتوى الرئيسي">Skip to main content</a>
-        <sc-container><div class="ps-bar__inner"><span class="ps-brand" data-ar="دبي الآن">Dubai Now</span><span class="ps-bar__note" data-ar="(شريط التطبيق من مكوّن آخر)">(app bar is another component)</span></div></sc-container>
+<section class="pg-section" aria-labelledby="pg-demo">
+  <h2 id="pg-demo" class="sc-type-headline-small" data-ar="صفحة قناة مصغّرة">A channel page in miniature</h2>
+  <div class="pg-frame">
+    <sc-page channel="now" style="min-block-size: 0">
+      <div slot="header">
+        <sc-announcement-bar><span data-ar="صيانة مجدولة يوم السبت 25 أكتوبر.">Planned maintenance on Saturday 25 October.</span></sc-announcement-bar>
+        <sc-site-header search-href="#search" sign-in-href="#sign-in">
+          <a slot="lockup" href="#home" class="pg-lockup"><svg role="img" aria-label="Government of Dubai" viewBox="0 0 680.84 274.11"><rect x="3" y="3" width="674.84" height="268.11" rx="16" fill="none" stroke="currentColor" stroke-width="6" stroke-dasharray="18 12"/><text x="340" y="150" text-anchor="middle" font-size="64" fill="currentColor" font-family="sans-serif">Government of Dubai lockup</text></svg></a>
+          <a slot="nav" href="#home" aria-current="page" data-ar="الرئيسية">Home</a>
+      <a slot="nav" href="#services" data-ar="الخدمات">Services</a>
+      <a slot="nav" href="#life-events" data-ar="أحداث الحياة">Life events</a>
+      <a slot="nav" href="#help" data-ar="المساعدة والتواصل">Help and contact</a>
+          <sc-language-switch slot="language" appearance="plain" href="#other-language"></sc-language-switch>
+          <sc-channel-switcher slot="switcher" links='{"now":"#now-{lang}","transport":"#transport-{lang}","visit":"#visit-{lang}","justice":"#justice-{lang}","build":"#build-{lang}","invest":"#invest-{lang}","trade":"#trade-{lang}"}'></sc-channel-switcher>
+        </sc-site-header>
       </div>
-      <sc-channel-hero>
-        <p slot="eyebrow" data-ar="خدمات حكومية لكل من يعيش في دبي">Government services for everyone who lives in Dubai</p>
-        <h3 slot="heading" data-ar="بماذا يمكننا مساعدتك؟">What do you need to do?</h3>
-        <sc-search label-hidden label="Search services" placeholder="Try “renew car registration” or “school fees”"
-          data-ar-attrs='{"label":"البحث في الخدمات","placeholder":"مثلًا «تجديد تسجيل السيارة» أو «الرسوم المدرسية»"}'></sc-search>
-      </sc-channel-hero>
-      <sc-container>
-        <h4 class="sc-type-heading-m ps-section-title" data-ar="الخدمات الأكثر استخدامًا">Most used services</h4>
-        <sc-grid span-medium="4" span-expanded="4">
-          <sc-service-card heading-level="5" href="#renew" entity="Roads and Transport Authority" data-ar-attrs='{"entity":"هيئة الطرق والمواصلات"}'><span data-ar="تجديد تسجيل المركبة">Renew vehicle registration</span><span slot="chip" class="ps-chip" data-channel="transport" data-ar="متوفر أيضًا في مواصلات دبي">Also on Dubai Transport</span></sc-service-card>
-          <sc-service-card heading-level="5" href="#bills" entity="Dubai Electricity and Water Authority" data-ar-attrs='{"entity":"هيئة كهرباء ومياه دبي"}'><span data-ar="دفع فواتير الكهرباء والمياه">Pay water and electricity bills</span></sc-service-card>
-          <sc-service-card heading-level="5" href="#tenancy" entity="Dubai Land Department" data-ar-attrs='{"entity":"دائرة الأراضي والأملاك"}'><span data-ar="تسجيل عقد إيجار">Register a tenancy contract</span><span slot="chip" class="ps-chip" data-channel="build" data-ar="متوفر أيضًا في ابنِ في دبي">Also on Build in Dubai</span></sc-service-card>
-          <sc-service-card heading-level="5" href="#fines" entity="Dubai Police" data-ar-attrs='{"entity":"شرطة دبي"}'><span data-ar="دفع المخالفات المرورية">Pay traffic fines</span><span slot="chip" class="ps-chip" data-channel="transport" data-ar="متوفر أيضًا في مواصلات دبي">Also on Dubai Transport</span></sc-service-card>
-          <sc-service-card heading-level="5" href="#fitness" entity="Dubai Health Authority" data-ar-attrs='{"entity":"هيئة الصحة بدبي"}'><span data-ar="حجز فحص اللياقة الطبية">Book a medical fitness test</span></sc-service-card>
-          <sc-service-card heading-level="5" href="#conduct" entity="Dubai Police" data-ar-attrs='{"entity":"شرطة دبي"}'><span data-ar="الحصول على شهادة حسن السيرة والسلوك">Get a good conduct certificate</span><span slot="chip" class="ps-chip" data-channel="justice" data-ar="متوفر أيضًا في عدالة دبي">Also on Dubai Justice</span></sc-service-card>
-        </sc-grid>
-      </sc-container>
-      <sc-footer slot="footer" help-href="#help" accessibility-href="#accessibility" privacy-href="#privacy" terms-href="#terms">
-        <span slot="meta" data-ar="حكومة دبي · محتوى تجريبي لمراجعة التصميم">Government of Dubai · Example content for design review</span>
-      </sc-footer>
+      <div style="padding: var(--sc-space-40) var(--sc-space-48)">
+        <p class="sc-type-headline-medium" data-ar="ماذا تريد أن تفعل؟">What do you need to do?</p>
+        <div style="block-size: var(--sc-space-40)"></div>
+        <sc-channel-network links='{"now":"#now-{lang}","transport":"#transport-{lang}","visit":"#visit-{lang}","justice":"#justice-{lang}","build":"#build-{lang}","invest":"#invest-{lang}","trade":"#trade-{lang}"}'></sc-channel-network>
+      </div>
+      <div slot="footer">
+        <sc-footer variant="grouped" updated="12 October 2026" links='{"now":"#now-{lang}","transport":"#transport-{lang}","visit":"#visit-{lang}","justice":"#justice-{lang}","build":"#build-{lang}","invest":"#invest-{lang}","trade":"#trade-{lang}"}' about-href="#about" help-href="#help" accessibility-href="#accessibility" privacy-href="#privacy" terms-href="#terms" sitemap-href="#sitemap"></sc-footer>
+      </div>
     </sc-page>
   </div>
-  <p class="pg-note" data-ar="الهوامش والأعمدة تتبع عرض النافذة (نقاط التوقف 600 و1024 و1440)، لذا يبدو هذا الإطار كما يبدو على شاشة سطح المكتب.">Margins and columns follow the window width (breakpoints 600, 1024, 1440), so this frame looks as it would on a desktop screen.</p>
+  <p class="pg-note" data-ar="في صفحة حقيقية: sync-document على sc-page، ورابط التخطي أولًا في الترويسة، وsc-utility-bar بعد التذييل.">On a real page: sync-document on sc-page, the skip link first in the header, and sc-utility-bar after the footer.</p>
 </section>
-
-<section class="pg-section" aria-labelledby="pg-cya">
-  <h2 id="pg-cya" class="sc-type-heading-m" data-ar="مراجعة الإجابات (عرض القراءة)">Check your answers (reading width)</h2>
-  <div class="ps-frame">
-    <sc-page channel="transport" main-id="cya-main" style="min-block-size: 0">
-      <sc-container width="reading" class="ps-cya">
-        <h3 class="sc-type-heading-l" data-ar="مراجعة الإجابات قبل الدفع">Check your answers before you pay</h3>
-        <h4 class="sc-type-title-m ps-sub" data-ar="المركبة">Vehicle</h4>
-        <sc-summary-list>
-          <sc-summary-row label="Vehicle" data-ar-attrs='{"label":"المركبة"}' data-ar="نيسان باترول 2021، أبيض">Nissan Patrol 2021, white</sc-summary-row>
-          <sc-summary-row label="Plate" data-ar-attrs='{"label":"رقم اللوحة"}'><span data-ar="دبي">Dubai</span> <sc-ltr>A 48213</sc-ltr></sc-summary-row>
-          <sc-summary-row label="Registration expires" data-ar-attrs='{"label":"ينتهي التسجيل في"}' data-ar="3 نوفمبر 2026">3 November 2026</sc-summary-row>
-        </sc-summary-list>
-        <h4 class="sc-type-title-m ps-sub" data-ar="التجديد">Renewal</h4>
-        <sc-summary-list>
-          <sc-summary-row label="Renew for" action-href="#renew-for" data-ar-attrs='{"label":"مدة التجديد"}' data-ar="سنة واحدة، حتى 3 نوفمبر 2027">1 year, until 3 November 2027</sc-summary-row>
-          <sc-summary-row label="Technical inspection" action-href="#inspection" data-ar-attrs='{"label":"الفحص الفني"}' data-ar="اجتاز الفحص في 12 أكتوبر 2026">Passed on 12 October 2026</sc-summary-row>
-          <sc-summary-row label="Insurance" action-href="#insurance" data-ar-attrs='{"label":"التأمين"}' data-ar="ساري حتى 14 مارس 2027">Valid until 14 March 2027</sc-summary-row>
-          <sc-summary-row label="Registration card" action-href="#card" data-ar-attrs='{"label":"بطاقة التسجيل"}' data-ar="بطاقة رقمية في دبي الآن">Digital card in Dubai Now</sc-summary-row>
-        </sc-summary-list>
-        <div class="ps-actions"><sc-button icon="arrow-forward" data-ar="المتابعة إلى الدفع">Continue to payment</sc-button></div>
-      </sc-container>
-    </sc-page>
-  </div>
-  <p class="pg-note" data-ar="هذه الصفحة تضبط channel=&quot;transport&quot; على sc-page، فتأخذ الروابط والزر لون مواصلات دبي.">This page sets channel="transport" on sc-page, so its links and button take the Dubai Transport colour.</p>
-</section>
-
 <style>
-  .ps-frame {
-    overflow: hidden;
-    border-radius: var(--sc-radius-panel);
-    box-shadow: var(--sc-elevation-3);
-  }
-  .ps-bar {
-    position: relative;
-    background: var(--sc-color-surface);
-    border-block-end: var(--sc-size-border-hairline) solid var(--sc-color-rule);
-  }
-  .ps-bar__inner {
-    display: flex;
-    align-items: center;
-    gap: var(--sc-space-12);
-    min-block-size: var(--sc-space-64);
-  }
-  .ps-brand {
-    font-family: var(--sc-font-family-bold);
-    font-weight: var(--sc-font-weight-bold);
-    color: var(--sc-color-ink-strong);
-  }
-  .ps-bar__note {
-    color: var(--sc-color-muted);
-    font-size: var(--sc-text-latin-caption);
-  }
-  .ps-skip {
-    position: absolute;
-    inset-inline-start: var(--sc-space-16);
-    inset-block-start: var(--sc-space-12);
-    transform: translateY(-200%);
-    padding: var(--sc-space-8) var(--sc-space-16);
-    border-radius: var(--sc-radius-pill);
-    background: var(--sc-color-surface);
-    color: var(--sc-channel-action);
-  }
-  .ps-skip:focus {
-    transform: none;
-    outline: var(--sc-size-focus-ring) solid var(--sc-channel-action);
-  }
-  .ps-section-title {
-    margin-block: var(--sc-space-48) var(--sc-space-20);
-  }
-  sc-page sc-grid {
-    margin-block-end: var(--sc-space-48);
-  }
-  .ps-chip {
-    display: inline-flex;
-    padding-block: var(--sc-space-4);
-    padding-inline: var(--sc-space-12);
-    border-radius: var(--sc-radius-pill);
-    background: var(--sc-channel-subtle);
-    color: var(--sc-channel-ink);
-    font-size: var(--sc-text-latin-label-s);
-    line-height: var(--sc-leading-latin-label-s);
-  }
-  .ps-cya {
-    padding-block: var(--sc-space-40) var(--sc-space-48);
-  }
-  .ps-cya h3 {
-    margin-block: 0 var(--sc-space-16);
-  }
-  .ps-sub {
-    margin-block: var(--sc-space-24) var(--sc-space-12);
-  }
-  .ps-actions {
-    margin-block-start: var(--sc-space-32);
-  }
+  .pg-frame { overflow: visible; border: 1px solid var(--sc-color-outline-variant); border-radius: var(--sc-radius-card); background: var(--sc-color-surface); }
+  .pg-lockup { color: inherit; }
+  .pg-lockup svg { display: block; block-size: 40px; inline-size: auto; }
 </style>
-
-<script>
-  {
-    const preview = document.getElementById("preview");
-    const swap = () => {
-      const ar = preview.lang === "ar";
-      for (const el of preview.querySelectorAll("[data-ar-attrs]")) {
-        const map = JSON.parse(el.dataset.arAttrs);
-        if (!el.dataset.enAttrs) el.dataset.enAttrs = JSON.stringify(Object.fromEntries(Object.keys(map).map((k) => [k, el.getAttribute(k)])));
-        const src = ar ? map : JSON.parse(el.dataset.enAttrs);
-        for (const [k, v] of Object.entries(src)) if (v != null) el.setAttribute(k, v);
-      }
-    };
-    swap();
-    new MutationObserver(swap).observe(preview, { attributes: true, attributeFilter: ["lang"] });
-  }
-</script>
