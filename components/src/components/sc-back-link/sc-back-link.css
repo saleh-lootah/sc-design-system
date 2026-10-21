@@ -24,7 +24,8 @@
   max-inline-size: 100%;
   margin: 0;
   padding-block: 0;
-  padding-inline: var(--sc-space-4);
+  /* 4 on the arrow side, 6 after the label (Paper sc-back-link, focus-visible state). */
+  padding-inline: var(--sc-space-4) var(--sc-space-6);
   border: 0;
   border-radius: var(--sc-radius-control);
   background: none;
