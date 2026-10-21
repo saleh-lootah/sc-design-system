@@ -52,3 +52,33 @@ Where this file disagrees with `foundations.md` or `component-language.md`, this
 | A3 | Dubai W23 Light weight | **Dropped.** No role uses it. |
 | A4 | Links in running text | **Add a CSS-only `.sc-link` class** beside the `sc-link` component. |
 | A5 | CI scope | Lint, spec and the build run on every push. e2e, axe, screenshots, the budget check and runtime run on PRs to `v2` and `main`, and on pushes to `main`. |
+
+## Role names · component-language.md to tokens
+
+`component-language.md` was written in parallel with the tokens and uses some different role names. **Components use the token names below (`--sc-color-…`).** Read every colour role in `component-language.md` through this table.
+
+| component-language.md role | Token to use | Note |
+| --- | --- | --- |
+| `surface` | `surface` (`surface-card` for cards) | |
+| `surface-container-low` | `surface-container` | Neutral-96 |
+| `surface-container-high` | `surface-container-high` | |
+| `surface-disabled` / `on-surface-disabled` | `disabled-container` / `on-disabled` | |
+| `on-surface` | `on-surface` | |
+| `on-surface-variant`, `on-surface-muted` | `on-surface-variant` | Both are neutral-40 (D6) |
+| `outline` | `outline` | The 1.5px control edge |
+| `outline-strong` | `outline-strong` | **New token**, added by C0: neutral-10 in light, neutral-90 in dark. For hovered control edges, the sign-in edge and the plate chip |
+| `outline-variant` (decorative connectors, popover edges) and `divider` | `outline-variant` | Neutral-90. Dividers, decorative connectors and popover edges. Never a control edge |
+| `state-hover` | State layer: `on-surface` at `opacity-hover` (8%), pressed at 12% | |
+| `inverse-surface` / `on-inverse-surface` | `inverse-surface` / `inverse-on-surface` | |
+| `scrim`, `focus-ring` | `scrim`, `focus-ring` (the gap uses the surface behind it) | |
+| `channel-action` / `on-channel-action` | `channel-action` / `channel-on-action` | |
+| `channel-action-hover` / `-pressed` | `channel-action-hover` / `-pressed` | |
+| **`channel-container` (channel-95)** | **`channel-subtle`** | Hero (Q-hero), current network tile, selected rows, unread rows, applied filter chips, the selection bar |
+| **`channel-container-high` (channel-90)** | **`channel-container`** with `channel-on-container` | Mobile step halo, tags, secondary pressed, the bottom-nav indicator |
+| `channel-outline` | `channel-outline` | **New token**, added by C0: channel-80 in light, channel-40 in dark. For the 1px edges on suggestion chips and outlined channel chips |
+| `channel-accent` | `channel-action` | |
+| `city-action` / `on-city-action` | `primary` / `on-primary` | U3 hand-offs, the network eyebrow |
+| `city-container` / `city-container-high` | `primary-subtle` / `primary-container` | |
+| `{tone}`, `on-{tone}`, `{tone}-container` | The same names | Error, success, warning, info |
+| `{tone}-outline-variant` | `outline-variant` | |
+| `shadow-2` (popovers, menus) / `shadow-3` (modals, sheets) | `elevation-2` | Sticky bars and the utility bar use `elevation-1` (U4) |
