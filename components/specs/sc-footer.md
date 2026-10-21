@@ -10,10 +10,10 @@ Status: rebuilt for v2 by C1 (Wave 2b). Rules: component-language A29 (simple) a
 
 | Variant | Use | Anatomy |
 | --- | --- | --- |
-| `simple` (default) | Transaction pages | A 1px `outline-variant` rule; one row of links (help and contact, accessibility statement, privacy, cookies, terms, about, sitemap: those with an href, then slotted extras) under a visually hidden "Support links" `<h2>`; "Government of Dubai" (`slot="meta"`) at inline-end. Links stack as 44px rows below 600px. |
-| `grouped` | Channel sites | A 1px rule, padding 56/40. Four groups on 4/4/2/2 columns from 1024px (two columns from 600, one below): **brand** (the channel's ring mark and name, `slot="brand"` for the description and app badges), **Channels** (all seven in the Standard 3.1 order, two inner columns, the current one Bold with `aria-current="true"`, no swatch), **Helpful information** (about, help and contact, accessibility statement, sitemap, then slotted extras), **Legal** (privacy and cookies, terms). Each group has an `<h2>`. Then a 1px rule, "Government of Dubai · Last updated {updated}" and "{Channel} is run by the Government of Dubai". |
+| `simple` (default) | Transaction pages | A 1px `outline-variant` rule, padding 32/40; one row of links 32 apart (help and contact, accessibility statement, privacy, terms, cookies, about, sitemap: those with an href, then slotted extras) under a visually hidden "Support links" `<h2>`; "Government of Dubai" (`slot="meta"`, body-medium) at inline-end. Links stack as 44px rows below 600px. |
+| `grouped` | Channel sites | A 1px rule, padding 56/40 (32/40 below 600px). Four groups on 4/4/2/2 columns from 1024px (two columns from 600, one below): **brand** (the channel's ring mark and name in headline-small, `slot="brand"` for the description and app badges), **Channels** (all seven in the Standard 3.1 order, two inner columns, the current one Bold with `aria-current="true"`, no swatch), **Helpful information** (about, help and contact, accessibility statement, sitemap, then slotted extras), **Legal** (privacy and cookies, terms). Each group has an `<h2>`. Then a 1px rule, "Government of Dubai · Last updated {updated}" and "{Channel} is run by the Government of Dubai". |
 
-Links: label-medium, `on-surface`, underlined 1px at 4px (5px Arabic), 2px on hover, at least 44px tall. Meta: body-small, `on-surface-variant`. The footer is always on `surface`.
+Links: label-medium, `on-surface`, underlined 1px at 4px (5px Arabic), 2px on hover, at least 44px tall. Meta: body-small in the grouped lower line, body-medium in the simple footer (A29), `on-surface-variant`. Group headings sit 8 above the first 44px link row (16 to its text, as board F66-0 draws compact). The footer is always on `surface`.
 
 ## API changes from v1
 
@@ -35,7 +35,7 @@ Spec: simple links and meta, hrefs only, privacy/cookies split, slotted extras, 
 
 ## Before upgrade
 
-The shadow root is empty until the component upgrades, so `sc.css` reserves the measured height (`sc-footer:not(:defined)`): simple 241 / 137 / 109px and grouped 964 / 754 / 388px at compact / medium (600) / expanded (1024), measured with the standard links in English (Arabic is equal or taller). CLS stays 0 on the typical page.
+The shadow root is empty until the component upgrades, so `sc.css` reserves the measured height (`sc-footer:not(:defined)`): simple 253 / 149 / 117px and grouped 946 / 760 / 388px at compact / medium (600) / expanded (1024), measured with the standard links in English (Arabic is equal or taller). CLS stays 0 on the typical page.
 
 ## Container
 

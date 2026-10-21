@@ -38,4 +38,9 @@ describe('sc-channel-network (spec)', () => {
     expect(host.querySelector('.sc-channel-network__eyebrow')!.textContent).toBe('شبكة واحدة · سبع قنوات');
     expect(host.querySelector('li[data-channel="visit"] a')!.getAttribute('href')).toBe('/visit/ar');
   });
+
+  it('takes an eyebrow override', async () => {
+    const page = await render(`<sc-channel-network channel="now" eyebrow="Seven channels, one government"></sc-channel-network>`);
+    expect(page.root!.querySelector('.sc-channel-network__eyebrow')!.textContent).toBe('Seven channels, one government');
+  });
 });
