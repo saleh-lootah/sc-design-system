@@ -4,25 +4,29 @@
  * elevation-2), FND-19/20 and MOT-01..15. Dialog: centred, at most 560 wide, radius 12.
  * Sheet (under 600px): full width, at most 92% of the viewport, top corners 12, a grabber.
  *
- * Durations: modals and sheets enter over --sc-duration-slow (280ms) and exit 20% faster
- * (224ms); the scrim moves with the panel. .is-instant (opened from the keyboard) makes it
+ * Durations (W21): the centred dialog enters over --sc-duration-base (200ms) and exits over
+ * --sc-duration-exit (160ms); the bottom sheet enters over --sc-duration-slow (280ms) and exits
+ * 20% faster (224ms). The scrim moves with the panel. .is-instant (opened from the keyboard) makes it
  * instant (MOT-02). Under reduced motion the scale tokens are 1 and the sheet does not slide.
  */
 :host {
-  --_enter: var(--sc-duration-slow);
-  --_exit: calc(var(--sc-duration-slow) * 0.8);
+  --_enter: var(--sc-duration-base);
+  --_exit: var(--sc-duration-exit);
   --_ease-in: var(--sc-easing-enter);
   --_ease-out: var(--sc-easing-exit);
   --_from: scale(var(--sc-scale-enter));
   display: contents;
 }
 
-:host(.is-instant) {
+:host(.is-instant),
+:host(.is-instant.is-sheet) {
   --_enter: var(--sc-duration-instant);
   --_exit: var(--sc-duration-instant);
 }
 
 :host(.is-sheet) {
+  --_enter: var(--sc-duration-slow);
+  --_exit: calc(var(--sc-duration-slow) * 0.8);
   --_ease-in: var(--sc-easing-drawer);
   --_ease-out: var(--sc-easing-drawer);
   --_from: translateY(100%);

@@ -96,7 +96,7 @@ describe('sc-modal (e2e)', () => {
     expect(await page.evaluate(() => document.activeElement!.closest('sc-button')?.id)).toBe('stay');
   });
 
-  it('enters over 280ms and exits over 224ms (20% faster); stays centred', async () => {
+  it('enters over 200ms and exits over 160ms (W21); stays centred', async () => {
     const page = await newScPage(HTML);
     await page.setViewport({ width: 1200, height: 800 });
     await page.$eval('#m', (el: any) => el.show());
@@ -106,14 +106,14 @@ describe('sc-modal (e2e)', () => {
       const cs = getComputedStyle(d);
       return { dur: cs.transitionDuration, origin: cs.transformOrigin, centre: Math.round(d.offsetLeft + d.offsetWidth / 2), w: d.offsetWidth, radius: cs.borderTopLeftRadius };
     });
-    expect(s.dur.split(', ')[0]).toBe('0.28s');
+    expect(s.dur.split(', ')[0]).toBe('0.2s');
     expect(s.centre).toBe(600);
     expect(s.w).toBe(560);
     expect(s.radius).toBe('12px');
     await page.$eval('#m', (el: any) => el.close());
     await page.waitForChanges();
     const exit = await page.evaluate(() => getComputedStyle(document.getElementById('m')!.shadowRoot!.querySelector('dialog')!).transitionDuration.split(', ')[0]);
-    expect(exit).toBe('0.224s');
+    expect(exit).toBe('0.16s');
   });
 
   it('matches the board geometry: close in the padded corner, radius 4, actions 16 apart; dark panel surface-container-high (BX7-0)', async () => {
@@ -169,9 +169,25 @@ describe('sc-modal (e2e)', () => {
     const s = await page.evaluate(() => {
       const d = document.getElementById('m')!.shadowRoot!.querySelector('dialog')!;
       const cs = getComputedStyle(d);
-      return { bottom: d.offsetTop + d.offsetHeight, w: d.offsetWidth, ease: cs.transitionTimingFunction.startsWith('cubic-bezier(0.32, 0.72, 0, 1)'), radius: cs.borderTopLeftRadius, bottomRadius: cs.borderBottomLeftRadius, full: document.getElementById('confirm')!.hasAttribute('full-width') };
+      return { bottom: d.offsetTop + d.offsetHeight, w: d.offsetWidth, ease: cs.transitionTimingFunction.startsWith('cubic-bezier(0.32, 0.72, 0, 1)'), radius: cs.borderTopLeftRadius, bottomRadius: cs.borderBottomLeftRadius, full: document.getElementById('confirm')!.hasAttribute('full-width'), dur: cs.transitionDuration.split(', ')[0] };
     });
-    expect(s).toEqual({ bottom: 800, w: 390, ease: true, radius: '12px', bottomRadius: '0px', full: true });
+    // W21: the sheet keeps duration-slow (280ms) in and 20% faster (224ms) out.
+    expect(s).toEqual({ bottom: 800, w: 390, ease: true, radius: '12px', bottomRadius: '0px', full: true, dur: '0.28s' });
+    await page.$eval('#m', (el: any) => el.close());
+    await page.waitForChanges();
+    const exit = await page.evaluate(() => getComputedStyle(document.getElementById('m')!.shadowRoot!.querySelector('dialog')!).transitionDuration.split(', ')[0]);
+    expect(exit).toBe('0.224s');
+  });
+
+  it('opens a sheet instantly from the keyboard too (MOT-02)', async () => {
+    const page = await newScPage(HTML);
+    await page.setViewport({ width: 390, height: 800 });
+    await page.evaluate(() => document.getElementById('open')!.addEventListener('click', () => (document.getElementById('m') as any).show()));
+    await page.focus('#open');
+    await page.keyboard.press('Enter');
+    await page.waitForChanges();
+    const dur = await page.evaluate(() => getComputedStyle(document.getElementById('m')!.shadowRoot!.querySelector('dialog')!).transitionDuration.split(', ')[0]);
+    expect(dur).toBe('0s');
   });
 
   it('shows the time left and announces it only at checkpoints, never every second', async () => {

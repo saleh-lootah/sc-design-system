@@ -83,12 +83,12 @@ describe('sc-callout (e2e)', () => {
     for (const [id, tone] of [['i', 'info'], ['s', 'success'], ['w', 'warning'], ['e', 'error']]) {
       expect(await inner(page, `#${id}`, 'getComputedStyle(box).backgroundColor')).toBe(await token(`--sc-color-${tone}-container`));
       expect(await inner(page, `#${id}`, 'getComputedStyle(box).borderLeftColor')).toBe(await token(`--sc-color-${tone}`));
-      expect(await inner(page, `#${id}`, 'getComputedStyle(box).borderLeftWidth')).toBe('3px');
+      expect(await inner(page, `#${id}`, 'getComputedStyle(box).borderLeftWidth')).toBe('4px');
     }
     expect(await inner(page, '#w', 'getComputedStyle(box).borderTopLeftRadius')).toBe('8px');
     expect(await inner(page, '#w', 'getComputedStyle(box).color')).toBe(await token('--sc-color-on-surface'));
     await setPageContext(page, { lang: 'ar' });
-    expect(await inner(page, '#w', 'getComputedStyle(box).borderRightWidth')).toBe('3px');
+    expect(await inner(page, '#w', 'getComputedStyle(box).borderRightWidth')).toBe('4px');
   });
 
   it('keeps a visible border in forced colours', async () => {

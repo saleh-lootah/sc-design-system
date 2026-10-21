@@ -13,7 +13,7 @@ An important message in the content: something the user must know before they ac
 | # | Part | Notes |
 | --- | --- | --- |
 | 1 | Container (`container`) | Radius `radius-field` (8). Padding 16. Gap 12. Fill `{tone}-container`. A transparent 1px edge that forced colours repaint. |
-| 2 | Accent | `border-inline-start` of `--sc-size-border-accent` (3px) in `{tone}`. component-language.md proposed 4px; the token and FND-16 say 3px. |
+| 2 | Accent | `border-inline-start` of `--sc-size-strip` (4px) in `{tone}`: the same start bar as a field error (W20, W11; board 2YZ-0). |
 | 3 | Icon (`icon`) | 24px (`icon-l`; E's 22 snapped, ICN-03) in `{tone}`: info `info`, success `check-circle`, warning `warning`, error `alert-circle`. Decorative. |
 | 4 | Heading (`heading`) | Optional. `title-small`, Bold, `on-surface`. A `<p>` unless `heading-level` (2–6). 4 above the content. |
 | 5 | Content (`content`) | `body-medium` at Medium weight (A17 and Paper board sc-callout), `on-surface`. Slotted links: `channel-action`, underlined 1px at 3px. |

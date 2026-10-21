@@ -110,7 +110,7 @@
         "value": 3,
         "unit": "px"
       },
-      "$description": "Bar on the start side of an error field group or callout"
+      "$description": "Outlines that need a 3px accent. Start bars (field errors, callouts) use size-strip (W20)"
     },
     "strip": {
       "$type": "dimension",
@@ -118,7 +118,7 @@
         "value": 4,
         "unit": "px"
       },
-      "$description": "The network and channel strip at the top of the header"
+      "$description": "The network and channel strip at the top of the header, and the start bar of a field error or callout (W11, W20)"
     },
     "measure": {
       "$type": "dimension",

@@ -49,9 +49,10 @@ first control). Escape, the close button and a click on the scrim close it (an `
 dialog ignores the scrim and has no close button), and focus returns to whatever had it
 before. A sheet can also be dragged down or flicked closed, never only that (WCAG 2.5.7).
 
-Motion: the dialog stays centred and enters with opacity and a slight scale over
-`--sc-duration-slow` (280ms) with the strong ease-out; the sheet slides up on
-`--sc-easing-drawer`. Both exit 20% faster (224ms). The scrim fades with them. Opened
+Motion (W21): the dialog stays centred and enters with opacity and a slight scale over
+`--sc-duration-base` (200ms) with the strong ease-out, and exits over `--sc-duration-exit`
+(160ms); the sheet slides up over `--sc-duration-slow` (280ms) on `--sc-easing-drawer` and
+exits 20% faster (224ms). The scrim fades with them. Opened
 from the keyboard it appears instantly (MOT-02); under reduced motion it only fades.
 
 Session timeout: set `alert` and `countdown` (seconds). The time left shows as text,

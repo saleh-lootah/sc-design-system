@@ -2888,13 +2888,13 @@
     "type": "spacing",
     "name": "--sc-size-border-accent",
     "value": "3px",
-    "description": "Bar on the start side of an error field group or callout"
+    "description": "Outlines that need a 3px accent. Start bars (field errors, callouts) use size-strip (W20)"
   },
   {
     "type": "spacing",
     "name": "--sc-size-strip",
     "value": "4px",
-    "description": "The network and channel strip at the top of the header"
+    "description": "The network and channel strip at the top of the header, and the start bar of a field error or callout (W11, W20)"
   },
   {
     "type": "spacing",

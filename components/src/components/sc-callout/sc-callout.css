@@ -1,8 +1,7 @@
 /*
  * sc-callout (v2, shadow). Rules: component-language.md A17 read through the role table in
  * decisions.md. Fill {tone}-container, accent bar and icon {tone}, text on-surface. The
- * accent is --sc-size-border-accent (3px, foundations §6 and Standard FND-16), not the 4px
- * component-language.md proposed.
+ * accent is --sc-size-strip (4px), the same start bar as a field error (W20, W11).
  */
 :host {
   display: block;
@@ -23,7 +22,7 @@
   padding: var(--sc-space-16);
   /* Transparent edges until forced colours repaint them; the start edge is the accent. */
   border: var(--sc-size-border-hairline) solid transparent;
-  border-inline-start: var(--sc-size-border-accent) solid var(--_accent);
+  border-inline-start: var(--sc-size-strip) solid var(--_accent);
   border-radius: var(--sc-radius-field);
   background: var(--_fill);
   color: var(--sc-color-on-surface);
