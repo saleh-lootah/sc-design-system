@@ -55,6 +55,16 @@ describe('sc-notification-list (e2e)', () => {
     expect(await item(page, 0, 'getComputedStyle(li.querySelector("strong")).color')).toBe(await token(page, '--sc-color-channel-action'));
   });
 
+  it('sets the body in body-medium on-surface, 2px under the title; the time starts its column (board 8J4-0)', async () => {
+    const page = await newScPage(HTML);
+    const body = 'getComputedStyle(li.querySelector("a > span:not(.visually-hidden)"))';
+    expect(await item(page, 0, `${body}.color`)).toBe(await token(page, '--sc-color-on-surface'));
+    expect(await item(page, 0, `${body}.fontSize`)).toBe('16px');
+    expect(await item(page, 0, `${body}.lineHeight`)).toBe('24px');
+    expect(await item(page, 0, 'getComputedStyle(li.querySelector("a")).rowGap')).toBe('2px');
+    expect(await item(page, 0, 'getComputedStyle(li.querySelector("time")).textAlign')).toBe('start');
+  });
+
   it('groups are cards with 12px corners and 1px rules between rows', async () => {
     const page = await newScPage(HTML);
     const ul = await page.$eval('sc-notification-list ul', (el) => [getComputedStyle(el).borderTopLeftRadius, getComputedStyle(el).borderTopWidth]);
