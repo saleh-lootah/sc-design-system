@@ -38,11 +38,17 @@
 
 <script>
 {
-  const ar = document.getElementById('preview').lang === 'ar';
-  for (const el of document.querySelectorAll('#preview [data-heading-ar]')) {
-    if (!el.dataset.headingEn) el.dataset.headingEn = el.getAttribute('heading');
-    el.setAttribute('heading', ar ? el.dataset.headingAr : el.dataset.headingEn);
-  }
+  // Page scripts run before the shell sets the preview's lang, so follow the attribute.
+  const preview = document.getElementById('preview');
+  const swapHeadings = () => {
+    const ar = preview.lang === 'ar';
+    for (const el of preview.querySelectorAll('[data-heading-ar]')) {
+      if (!el.dataset.headingEn) el.dataset.headingEn = el.getAttribute('heading');
+      el.setAttribute('heading', ar ? el.dataset.headingAr : el.dataset.headingEn);
+    }
+  };
+  swapHeadings();
+  new MutationObserver(swapHeadings).observe(preview, { attributes: true, attributeFilter: ['lang'] });
   const remove = document.getElementById('pg-remove');
   const timeout = document.getElementById('pg-timeout');
   document.getElementById('pg-open-remove').addEventListener('click', () => remove.show());

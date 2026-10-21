@@ -10,14 +10,14 @@ Status: new in v2, built by C4 (Wave 2b). Rules: `docs/v2/component-language.md`
 
 | Part | Dialog (600px and wider) | Sheet (under 600px) |
 | --- | --- | --- |
-| `dialog` | Centred, `min(100% − 32, 560)` wide, radius 12, 1px `outline-variant` edge, `elevation-2`, over `scrim` (`::backdrop`). Panel `surface-card`; dark `surface-container` (FND-20). | Full width, at most 92dvh, top corners 12, docked to the bottom. |
-| `panel` | Padding 32 (24 below 1024px). | Padding 20 block, 20 inline, plus the bottom safe area. |
-| Grabber | none | 32 × 4 `outline-variant`, decorative. The top strip is the drag handle. |
-| `heading` | `headline-small` (Bold), labels the dialog (`aria-labelledby`), `tabindex="-1"`. | same |
-| `close` | 44 × 44 at top inline-end, `on-surface`, state layer on hover; named "Close" / "إغلاق" (`close-label`). Not rendered for `alert`. | same |
+| `dialog` | Centred, `min(100% − 32, 560)` wide, radius 12, 1px `outline-variant` edge, `elevation-2`, over `scrim` (`::backdrop`). Panel `surface`; dark `surface-container-high` (B19 and board BWH-0 dark note; `light-dark()` behind `@supports`, so the A1 fallback keeps `surface`). | Full width, at most 92dvh, top corners 12, docked to the bottom. |
+| `panel` | Padding 32 (24 below 1024px). | Padding 8 top (the grabber), 24 bottom plus the safe area, 20 inline (board BY7-0). |
+| Grabber | none | 32 × 4 `outline-variant`, 8 from the top and 12 above the heading row, decorative. The top strip is the drag handle. |
+| `heading` | `headline-small` (Bold), 6 top padding so its first line centres on the close button; labels the dialog (`aria-labelledby`), `tabindex="-1"`. 16 from the close button. | 12 from the close button |
+| `close` | 44 × 44 in the panel's top inline-end corner (inside the padding), radius 4 (`radius-control`, board BXL-0), `on-surface`, state layer on hover; named "Close" / "إغلاق" (`close-label`). Not rendered for `alert`. | same |
 | `countdown` | `title-medium`: "Time left: 1:45" with the time in an LTR isolate. | same |
-| Body | `body-large`, 12 below the heading. | same |
-| `actions` | A wrapping row, gap 12, 32 below; primary first. | Stacked; slotted `sc-button`s get `full-width`. |
+| Body | `body-large`, 12 below the heading. | 8 below the heading (board BYG-0) |
+| `actions` | A wrapping row, gap 16 (board BXP-0), 32 below the body; primary first. | Stacked, gap 12, 24 below the body; slotted `sc-button`s get `full-width`. |
 
 ## Behaviour
 

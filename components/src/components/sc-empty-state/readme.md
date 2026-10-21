@@ -17,7 +17,7 @@ What a list, table or page shows when there is nothing in it.
 ```
 
 - Write the heading as a sentence ("You have no fines"), never "No data".
-- An optional 48px icon in an 80px circle; one or two sentences; at most one action, usually a secondary button.
+- An optional 48px icon in an 80px circle (a library name in `icon`, or your own `<svg slot="icon" aria-hidden="true">`); one or two sentences, at most 520 wide; at most one action, usually a secondary button.
 - `variant="success"` is the all-clear: a check on the success container. The words still say it.
 - Aligned to the start in both languages. Without `heading-level` the heading is a paragraph at the title role (right inside a card or table).
 
@@ -44,17 +44,18 @@ still say it, so the meaning never rests on colour.
 | Property               | Attribute       | Description                                                                                                                              | Type                                                                                                                                                                                                                                               | Default     |
 | ---------------------- | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
 | `heading` _(required)_ | `heading`       | The heading, as a sentence: "You have no notifications".                                                                                 | `string`                                                                                                                                                                                                                                           | `undefined` |
-| `headingLevel`         | `heading-level` | Renders the heading as `<h2>`–`<h4>`. Leave it unset to render a paragraph at the title role, for an empty state inside a card or table. | `2 \| 3 \| 4 \| undefined`                                                                                                                                                                                                                         | `undefined` |
+| `headingLevel`         | `heading-level` | Renders the heading as `<h2>`–`<h6>`. Leave it unset to render a paragraph at the title role, for an empty state inside a card or table. | `2 \| 3 \| 4 \| 5 \| 6 \| undefined`                                                                                                                                                                                                               | `undefined` |
 | `icon`                 | `icon`          | An icon from the library (`inbox`, `search`, `check-circle` …). Leave unset for no icon; `success` defaults to `check-circle`.           | `"alert-circle" \| "arrow-forward" \| "check" \| "check-circle" \| "chevron-back" \| "chevron-forward" \| "close" \| "external" \| "hourglass" \| "inbox" \| "info" \| "pending" \| "schedule" \| "search" \| "spinner" \| "warning" \| undefined` | `undefined` |
 | `variant`              | `variant`       | `default`: neutral. `success`: the all-clear, with a check on the success container.                                                     | `"default" \| "success"`                                                                                                                                                                                                                           | `'default'` |
 
 
 ## Slots
 
-| Slot       | Description                                                                 |
-| ---------- | --------------------------------------------------------------------------- |
-|            | One or two sentences: what this means and what the user can do.             |
-| `"action"` | Optional, a single action: `<sc-button slot="action" variant="secondary">`. |
+| Slot       | Description                                                                                              |
+| ---------- | -------------------------------------------------------------------------------------------------------- |
+|            | One or two sentences: what this means and what the user can do.                                          |
+| `"action"` | Optional, a single action: `<sc-button slot="action" variant="secondary">`.                              |
+| `"icon"`   | Optional, your own 48px decorative icon (an inline `<svg>`), shown in the 80px circle. Overrides `icon`. |
 
 
 ## Shadow Parts

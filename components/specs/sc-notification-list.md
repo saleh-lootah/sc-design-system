@@ -12,13 +12,13 @@ Status: new in v2, built by C4 (Wave 2b). Rules: `docs/v2/component-language.md`
 | --- | --- |
 | Day heading | The author's `h2`/`h3`: `title-small` Bold, 32 above, 12 below. |
 | Group | The `<ul>`: radius 12, 1px `outline-variant` edge, `surface-card`, 1px rules between rows. |
-| Row | Grid: 16 dot column, the link, a 96 time column; gap 16; padding 20 block, 24 inline. |
+| Row | Grid: 16 dot column, the link, a 96 time column; gap 16; padding 20 block, 24 inline (board 8J4-0). |
 | Unread | `channel-subtle` fill, an 8px `channel-action` dot, a Bold title, the hidden word. |
 | Read | No fill, no dot, a Medium title. |
-| Link | The title in `channel-action`, underlined (CMP-08), 2px on hover; the body in `on-surface-variant` (`body-medium`); at least 44 tall. Focus ring drawn 2px inside, because the card clips. |
-| Time | `body-small`, `on-surface-variant`, aligned end. |
+| Link | The title in `channel-action`, underlined (CMP-08), 2px on hover; the body in `on-surface` (`body-medium`, board 8JC-0), 2 below the title; at least 44 tall. Focus ring drawn 2px inside, because the card clips. |
+| Time | `body-small`, `on-surface-variant`, aligned start in its 96 column (board 8JD-0). |
 
-Under 600px wide the time wraps under the body and the inline padding is 16.
+Under 600px wide the time wraps under the body, the inline padding is 16 and the column gap 12 (board 02 States, compact).
 
 ## Behaviour
 

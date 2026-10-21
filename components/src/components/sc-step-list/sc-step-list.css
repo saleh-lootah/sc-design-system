@@ -132,7 +132,9 @@
     inset-inline: 0;
   }
 
-  ::slotted(ol) > li > :not(a, [class^='sc-step-list__']) {
+  /* No comma inside :not(): Stencil's scoper appends its scope class after a selector list
+     there, which made this rule match nothing. */
+  ::slotted(ol) > li > :not(a):not([class^='sc-step-list__']) {
     grid-column: 2;
     grid-row: 2;
     color: var(--sc-color-on-surface-variant);

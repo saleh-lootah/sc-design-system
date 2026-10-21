@@ -38,6 +38,20 @@ describe('sc-empty-state (e2e)', () => {
     expect(await es(page, '#d', 'getComputedStyle(root.querySelector("[part=body]")).color')).toBe(await token(page, '--sc-color-on-surface-variant'));
   });
 
+  it('steps the icon circle up to surface-container-high in dark mode; the body is at most 520 wide (board 9DG-0)', async () => {
+    const light = await newScPage(HTML);
+    expect(await es(light, '#d', 'getComputedStyle(root.querySelector("[part=icon]")).backgroundColor')).toBe(await token(light, '--sc-color-surface-container'));
+    expect(await es(light, '#d', 'getComputedStyle(root.querySelector("[part=body]")).maxInlineSize')).toBe('520px');
+    const dark = await newScPage(HTML, { theme: 'dark' });
+    expect(await es(dark, '#d', 'getComputedStyle(root.querySelector("[part=icon]")).backgroundColor')).toBe(await token(dark, '--sc-color-surface-container-high'));
+  });
+
+  it('takes its own icon in slot="icon"', async () => {
+    const page = await newScPage(`<sc-empty-state id="i" heading="You have no saved vehicles"><svg slot="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"></circle></svg>Add a vehicle to renew it faster.</sc-empty-state>`);
+    expect(await es(page, '#i', 'root.querySelector("[part=icon]").getBoundingClientRect().width')).toBe(80);
+    expect(await page.$eval('#i svg', (el) => el.getBoundingClientRect().width)).toBe(48);
+  });
+
   it('the all-clear variant uses the success colours, and the words carry the meaning', async () => {
     const page = await newScPage(HTML);
     expect(await es(page, '#s', 'getComputedStyle(root.querySelector("[part=icon]")).backgroundColor')).toBe(await token(page, '--sc-color-success-container'));

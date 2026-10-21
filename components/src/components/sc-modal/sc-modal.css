@@ -39,9 +39,9 @@
   overscroll-behavior: contain;
   border: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
   border-radius: var(--sc-radius-card);
-  /* FND-20: in dark mode the panel steps up to surface-container. */
-  background: var(--sc-color-surface-card);
-  background: light-dark(var(--sc-color-surface-card), var(--sc-color-surface-container));
+  /* Board BWH-0 and B19: surface, stepping up to surface-container-high in dark mode
+     (the light-dark() rule is below, behind @supports, so the A1 fallback keeps a fill). */
+  background: var(--sc-color-surface);
   box-shadow: var(--sc-elevation-2);
   color: var(--sc-color-on-surface);
   /* MOT-08: not anchored to a trigger, so it scales from its own centre and stays centred. */
@@ -53,6 +53,12 @@
     transform var(--_exit) var(--_ease-out),
     overlay var(--_exit) allow-discrete,
     display var(--_exit) allow-discrete;
+}
+
+@supports (color: light-dark(white, black)) {
+  .dialog {
+    background: light-dark(var(--sc-color-surface), var(--sc-color-surface-container-high));
+  }
 }
 
 .dialog[open] {
@@ -119,6 +125,8 @@
   flex: 1 1 0;
   min-inline-size: 0;
   margin: 0;
+  /* Centres the first line on the 44px close button (board BXJ-0). */
+  padding-block-start: var(--sc-space-6);
   font: var(--sc-type-headline-small);
   letter-spacing: var(--sc-type-headline-small-tracking);
   overflow-wrap: anywhere;
@@ -138,11 +146,10 @@
   justify-content: center;
   inline-size: var(--sc-size-target-min);
   block-size: var(--sc-size-target-min);
-  margin-block-start: calc(var(--sc-space-8) * -1);
-  margin-inline-end: calc(var(--sc-space-12) * -1);
   padding: 0;
   border: 0;
-  border-radius: var(--sc-radius-full);
+  /* Board BXL-0: 44 × 44 in the panel's top inline-end corner, radius 4. */
+  border-radius: var(--sc-radius-control);
   background-color: transparent;
   color: var(--sc-color-on-surface);
   cursor: pointer;
@@ -171,7 +178,7 @@
 .actions {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--sc-space-12);
+  gap: var(--sc-space-16);
   margin-block-start: var(--sc-space-32);
 }
 
@@ -197,19 +204,25 @@
 }
 
 :host(.is-sheet) .panel {
-  padding-block: var(--sc-space-20) calc(var(--sc-space-24) + env(safe-area-inset-bottom, 0px));
+  /* Board BY7-0: the grabber 8 from the top, 12 above the heading row; 24 at the bottom. */
+  padding-block: var(--sc-space-8) calc(var(--sc-space-24) + env(safe-area-inset-bottom, 0px));
   padding-inline: var(--sc-space-20);
 }
 
 :host(.is-sheet) .top {
   position: relative;
-  padding-block-start: var(--sc-space-12);
+  gap: var(--sc-space-12);
+  padding-block-start: calc(var(--sc-space-4) + var(--sc-space-12));
   touch-action: none;
+}
+
+:host(.is-sheet) .body {
+  margin-block-start: var(--sc-space-8);
 }
 
 :host(.is-sheet) .grabber {
   position: absolute;
-  inset-block-start: calc(var(--sc-space-12) * -1);
+  inset-block-start: 0;
   inset-inline-start: calc(50% - var(--sc-space-16));
   display: block;
   inline-size: var(--sc-space-32);
@@ -220,6 +233,7 @@
 
 :host(.is-sheet) .actions {
   flex-direction: column;
+  gap: var(--sc-space-12);
   margin-block-start: var(--sc-space-24);
 }
 
