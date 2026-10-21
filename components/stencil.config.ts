@@ -87,7 +87,8 @@ export const config: Config = {
     // Stencil only accepts 'shell' or false. Puppeteer then passes plain --headless, which in
     // Chromium 132+ (Helium 0.19 is Chromium 155) is the new headless mode of the full browser.
     browserHeadless: 'shell',
-    browserArgs: ['--hide-scrollbars'],
+    // GitHub's Ubuntu runners block Chromium's sandbox (AppArmor), so CI runs without it.
+    browserArgs: ['--hide-scrollbars', ...(process.env.CI ? ['--no-sandbox'] : [])],
     // Keep the e2e page small and deterministic.
     browserWaitUntil: 'load',
     // Stencil does not pass testing.testTimeout on to Jest (it stayed at 45 s in v1), so the
