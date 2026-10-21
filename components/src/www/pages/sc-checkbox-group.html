@@ -8,15 +8,15 @@
   <div class="pg-card">
     <form id="cg-form" novalidate>
       <sc-checkbox-group name="documents" label="Which documents do you have?" data-ar-label="ما المستندات المتوفرة لديك؟" hint="Select all that apply" data-ar-hint="يُرجى اختيار كل ما ينطبق">
-        <sc-checkbox value="insurance" checked data-ar="وثيقة تأمين سارية">Valid insurance policy</sc-checkbox>
-        <sc-checkbox value="inspection" hint="From a centre approved by RTA" data-ar-hint="من مركز معتمد من هيئة الطرق والمواصلات" data-ar="شهادة الفحص الفني">Technical inspection certificate</sc-checkbox>
-        <sc-checkbox value="fines" data-ar="إيصال سداد المخالفات">Receipt for paid fines</sc-checkbox>
+        <sc-checkbox value="insurance" checked><span data-ar="وثيقة تأمين سارية">Valid insurance policy</span></sc-checkbox>
+        <sc-checkbox value="inspection" hint="From a centre approved by RTA" data-ar-hint="من مركز معتمد من هيئة الطرق والمواصلات"><span data-ar="شهادة الفحص الفني">Technical inspection certificate</span></sc-checkbox>
+        <sc-checkbox value="fines"><span data-ar="إيصال سداد المخالفات">Receipt for paid fines</span></sc-checkbox>
       </sc-checkbox-group>
       <div style="block-size: var(--sc-space-24)"></div>
-      <sc-checkbox name="confirm" value="yes" data-demo-focus data-ar="أؤكد أن بيانات المركبة صحيحة">I confirm the vehicle details are correct</sc-checkbox>
+      <sc-checkbox name="confirm" value="yes" data-demo-focus><span data-ar="أؤكد أن بيانات المركبة صحيحة">I confirm the vehicle details are correct</span></sc-checkbox>
       <div class="pg-row" style="margin-block-start: var(--sc-space-24)">
-        <sc-button type="submit" data-ar="متابعة">Continue</sc-button>
-        <sc-button type="reset" variant="tertiary" data-ar="مسح">Clear</sc-button>
+        <sc-button type="submit"><span data-ar="متابعة">Continue</span></sc-button>
+        <sc-button type="reset" variant="tertiary"><span data-ar="مسح">Clear</span></sc-button>
       </div>
       <p class="pg-output" id="cg-output" role="status"></p>
     </form>
@@ -30,26 +30,26 @@
       <div class="pg-cell">
         <span class="pg-label">group error</span>
         <sc-checkbox-group label="Which documents do you have?" data-ar-label="ما المستندات المتوفرة لديك؟" error="Select at least one document" data-ar-error="يُرجى اختيار مستند واحد على الأقل">
-          <sc-checkbox value="insurance" data-ar="وثيقة تأمين سارية">Valid insurance policy</sc-checkbox>
-          <sc-checkbox value="inspection" data-ar="شهادة الفحص الفني">Technical inspection certificate</sc-checkbox>
+          <sc-checkbox value="insurance"><span data-ar="وثيقة تأمين سارية">Valid insurance policy</span></sc-checkbox>
+          <sc-checkbox value="inspection"><span data-ar="شهادة الفحص الفني">Technical inspection certificate</span></sc-checkbox>
         </sc-checkbox-group>
       </div>
       <div class="pg-cell">
         <span class="pg-label">single checkbox · error</span>
-        <sc-checkbox error="Confirm the vehicle details are correct" data-ar-error="يُرجى تأكيد أن بيانات المركبة صحيحة" data-ar="أؤكد أن بيانات المركبة صحيحة">I confirm the vehicle details are correct</sc-checkbox>
+        <sc-checkbox error="Confirm the vehicle details are correct" data-ar-error="يُرجى تأكيد أن بيانات المركبة صحيحة"><span data-ar="أؤكد أن بيانات المركبة صحيحة">I confirm the vehicle details are correct</span></sc-checkbox>
       </div>
       <div class="pg-cell">
         <span class="pg-label">inline · optional</span>
         <sc-checkbox-group label="Send reminders by" data-ar-label="إرسال التذكيرات عبر" inline optional>
-          <sc-checkbox value="sms" checked data-ar="رسالة نصية">SMS</sc-checkbox>
-          <sc-checkbox value="email" data-ar="البريد الإلكتروني">Email</sc-checkbox>
+          <sc-checkbox value="sms" checked><span data-ar="رسالة نصية">SMS</span></sc-checkbox>
+          <sc-checkbox value="email"><span data-ar="البريد الإلكتروني">Email</span></sc-checkbox>
         </sc-checkbox-group>
       </div>
       <div class="pg-cell">
         <span class="pg-label">disabled (avoid)</span>
         <sc-checkbox-group label="Included in your renewal" data-ar-label="مشمول في التجديد" disabled>
-          <sc-checkbox value="card" checked data-ar="بطاقة الملكية">Registration card</sc-checkbox>
-          <sc-checkbox value="sticker" data-ar="ملصق الزجاج">Windscreen sticker</sc-checkbox>
+          <sc-checkbox value="card" checked><span data-ar="بطاقة الملكية">Registration card</span></sc-checkbox>
+          <sc-checkbox value="sticker"><span data-ar="ملصق الزجاج">Windscreen sticker</span></sc-checkbox>
         </sc-checkbox-group>
       </div>
     </div>

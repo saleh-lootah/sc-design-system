@@ -40,10 +40,15 @@
     align-content: center;
     align-self: stretch;
     padding-block: 0;
-    padding-inline: var(--sc-space-16) var(--sc-space-8);
+    padding-inline: var(--sc-space-16) var(--sc-space-12);
     border-radius: calc(var(--sc-radius-field) - var(--sc-size-border-control));
     text-align: start;
     cursor: text;
+  }
+
+  /* Board AQS-0: the arrow sits 12 from each value; To starts right after it. */
+  .sc-date-range__segment--end {
+    padding-inline: var(--sc-space-12) var(--sc-space-8);
   }
 
   .sc-date-range__segment-label {
@@ -108,7 +113,8 @@
     place-items: center;
     inline-size: var(--sc-size-target-min);
     block-size: var(--sc-size-target-min);
-    margin-inline: var(--sc-space-8) var(--sc-space-4);
+    /* 6 from the frame's inline-end edge (board AQS-0). */
+    margin-inline: var(--sc-space-8) var(--sc-space-6);
     padding: 0;
     border: var(--sc-size-border-hairline) solid transparent;
     border-radius: var(--sc-radius-full);
@@ -299,8 +305,9 @@
     border-radius: var(--sc-radius-full);
     background: transparent;
     color: var(--sc-color-on-surface);
-    font: var(--sc-type-label-medium);
-    letter-spacing: var(--sc-type-label-medium-tracking);
+    /* Day numbers are title-small Medium, 17/22 (board AQS-0, component-language A15). */
+    font: var(--sc-type-title-small);
+    letter-spacing: var(--sc-type-title-small-tracking);
     font-variant-numeric: tabular-nums;
     cursor: pointer;
     transition:
@@ -353,7 +360,8 @@
     box-sizing: border-box;
     display: inline-flex;
     align-items: center;
-    gap: var(--sc-space-6);
+    /* The check sits 8 from the label (B18). */
+    gap: var(--sc-space-8);
     min-block-size: var(--sc-space-40);
     margin-block: var(--sc-space-2);
     padding-inline: var(--sc-space-16);
@@ -424,7 +432,7 @@
   .sc-date-range__foot-actions {
     display: flex;
     align-items: center;
-    gap: var(--sc-space-8);
+    gap: var(--sc-space-12);
     margin-inline-start: auto;
   }
 
@@ -586,11 +594,12 @@
     cursor: grab;
   }
 
+  /* Board AQS-0: 36 × 4, decorative, so outline-variant. */
   .sc-date-range__grabber {
-    inline-size: var(--sc-space-40);
+    inline-size: calc(var(--sc-space-32) + var(--sc-space-4));
     block-size: var(--sc-space-4);
     border-radius: var(--sc-radius-full);
-    background: var(--sc-color-outline);
+    background: var(--sc-color-outline-variant);
   }
 
   .sc-date-range__sheet-title-row {
@@ -602,8 +611,8 @@
 
   .sc-date-range__sheet-title {
     color: var(--sc-color-on-surface);
-    font: var(--sc-type-title-large);
-    letter-spacing: var(--sc-type-title-large-tracking);
+    font: var(--sc-type-title-medium);
+    letter-spacing: var(--sc-type-title-medium-tracking);
   }
 
   .sc-date-range__chips {
@@ -646,7 +655,7 @@
   /* Preset chips: one row that scrolls sideways (from the right in Arabic). */
   .sc-date-range__picker--sheet .sc-date-range__presets {
     flex-direction: row;
-    gap: var(--sc-space-8);
+    gap: var(--sc-space-12);
     margin-inline: calc(-1 * var(--sc-space-20));
     padding-inline: var(--sc-space-20);
     overflow-x: auto;
