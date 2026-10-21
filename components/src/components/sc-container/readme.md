@@ -35,52 +35,10 @@ Media queries can't read custom properties, so the breakpoint widths (600, 1024,
 
 The reading column starts at the right.
 
-<!-- Auto Generated Below -->
+## v2: CSS only
 
+`sc-container` is not a registered custom element in v2 (architecture §3.1). `sc.css` styles the tag directly (`@layer sc.components`), so it needs no JS, has no shadow root and never waits for hydration. The markup is unchanged; `::part(inner)` and `componentOnReady()` are gone. It works in page markup only: an element selector in the document does not reach into another component's shadow root.
 
-## Overview
-
-Centres content and sets the page's outer margins from the layout tokens: 20px on
-phones, 32px from 600px, 48px from 1024px and 80px from 1440px, with content capped at
-`--sc-container-max` (1280px). `width="reading"` caps it at the 680px reading width instead,
-for question pages and running text.
-
-## Properties
-
-| Property | Attribute | Description                                                                                                               | Type                  | Default  |
-| -------- | --------- | ------------------------------------------------------------------------------------------------------------------------- | --------------------- | -------- |
-| `width`  | `width`   | `page` (default) caps content at 1280px; `reading` caps it at 680px and keeps it at the start, aligned with page content. | `"page" \| "reading"` | `'page'` |
-
-
-## Slots
-
-| Slot | Description       |
-| ---- | ----------------- |
-|      | The page content. |
-
-
-## Shadow Parts
-
-| Part      | Description                                  |
-| --------- | -------------------------------------------- |
-| `"inner"` | The width-capped wrapper inside the margins. |
-
-
-## Dependencies
-
-### Used by
-
- - [sc-channel-hero](../sc-channel-hero)
- - [sc-footer](../sc-footer)
-
-### Graph
-```mermaid
-graph TD;
-  sc-channel-hero --> sc-container
-  sc-footer --> sc-container
-  style sc-container fill:#f9f,stroke:#333,stroke-width:4px
-```
-
-----------------------------------------------
-
-
+| Attribute | Values | Default |
+| --- | --- | --- |
+| `width` | `page` (1280px cap), `reading` (680px cap, kept at the start edge) | `page` |

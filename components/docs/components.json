@@ -1,11 +1,71 @@
 {
-  "timestamp": "2026-10-21T14:52:09",
+  "timestamp": "2026-10-21T15:15:17",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.45.2",
     "typescriptVersion": "5.8.3"
   },
   "components": [
+    {
+      "filePath": "src/components/sc-accordion/sc-accordion.tsx",
+      "encapsulation": "scoped",
+      "tag": "sc-accordion",
+      "readme": "# sc-accordion\n\nSections that open and close, for frequently asked questions and long guidance, built on native `<details>` and `<summary>`. Specification: `specs/sc-accordion.md`.\n\n## Usage\n\n```html\n<sc-accordion show-all>\n  <details>\n    <summary>How long does renewal take?<small>Online, in most cases</small></summary>\n    <p>Usually about 10 minutes, once your vehicle has passed its technical test.</p>\n  </details>\n</sc-accordion>\n```\n",
+      "docs": "Sections that open and close, for frequently asked questions and long guidance. Built on\nnative `<details>` and `<summary>`: they open with Enter or Space, expose their expanded\nstate to assistive technology and work before (and without) JavaScript. The component adds\nthe v2 look (ruled sections, a title-medium summary, a chevron at the end that turns over\nwhen open) and an optional \"Show all sections\" toggle.\n\nv2 renders in light DOM (Stencil `scoped`, architecture §3.1): the `<details>` stay your\nown markup, so in-page links and `id`s inside them work as usual.\n\nPut the question in `<summary>` as plain text, optionally followed by a `<small>` summary\nline; put the answer after it. Keep headings out of `<summary>`: it is a button, so a\nheading inside it is not announced as one.",
+      "docsTags": [
+        {
+          "name": "slot",
+          "text": "- `<details>` elements, one per section."
+        }
+      ],
+      "usage": {},
+      "props": [
+        {
+          "name": "showAll",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "show-all",
+          "reflectToAttr": true,
+          "docs": "Adds a \"Show all sections\" / \"Hide all sections\" toggle above the sections. Use it from about four sections.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [],
+      "listeners": [],
+      "styles": [],
+      "slots": [
+        {
+          "name": "",
+          "docs": "`<details>` elements, one per section."
+        }
+      ],
+      "parts": [],
+      "states": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
     {
       "filePath": "src/components/sc-account-nav/sc-account-nav.tsx",
       "encapsulation": "shadow",
@@ -294,6 +354,207 @@
         {
           "name": "title",
           "docs": "The title wrapper."
+        }
+      ],
+      "states": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/sc-attention-card/sc-attention-card.tsx",
+      "encapsulation": "shadow",
+      "tag": "sc-attention-card",
+      "readme": "# sc-attention-card\n\nOne thing that is due (\"Needs your attention\"): a thin topic-tint strip, an icon tile, a status tag in words, the title, the key fact, a meta line and one action. Specification: `specs/sc-attention-card.md`.\n\n## Usage\n\n```html\n<ul class=\"due\">\n  <li>\n    <sc-attention-card tint=\"amber\">\n      <svg slot=\"icon\" …></svg>\n      <sc-status-tag slot=\"status\" tone=\"warning\">Not paid</sc-status-tag>\n      Electricity and water bill\n      <span slot=\"fact\">Due tomorrow, 21 Oct 2026</span>\n      <span slot=\"meta\"><sc-ltr>AED 412.60</sc-ltr> · DEWA account <sc-ltr>2004 1187</sc-ltr></span>\n      <sc-button slot=\"action\" variant=\"secondary\" size=\"m\" href=\"/pay/dewa\">Pay <sc-ltr>AED 412.60</sc-ltr></sc-button>\n    </sc-attention-card>\n  </li>\n</ul>\n```\n",
+      "docs": "One thing that is due (\"Needs your attention\"): a bill to pay, a document to upload, a\nregistration about to expire. A thin topic-tint strip on top, an icon tile, a status tag,\nthe title, the key fact, a meta line (amount and reference) and one action.\n\nThe card is neutral and is not a link: the action is the only thing to press, and its\nlabel names the action and the item (\"Pay AED 412.60\"). Status is never shown by colour:\nthe strip and the icon tile are decorative topic tints, and the urgency is in the status\ntag's words. Put the cards in a list (`<ul>`), most urgent first, under a heading that\ngives the count (\"4 things, most urgent first\").",
+      "docsTags": [
+        {
+          "name": "slot",
+          "text": "- The title, e.g. \"Electricity and water bill\". Text only; it becomes a heading."
+        },
+        {
+          "name": "slot",
+          "text": "icon - A decorative icon: an inline 24px `<svg>` in `currentColor`, in a 40px tile."
+        },
+        {
+          "name": "slot",
+          "text": "status - An `sc-status-tag` with the urgency in words: \"Not paid\", \"Expires in 21 days\"."
+        },
+        {
+          "name": "slot",
+          "text": "fact - The key fact: \"Due tomorrow, 21 Oct 2026\"."
+        },
+        {
+          "name": "slot",
+          "text": "meta - Amount and reference, each isolated: `<sc-ltr>AED 412.60</sc-ltr> · DEWA account <sc-ltr>2004 1187</sc-ltr>`."
+        },
+        {
+          "name": "slot",
+          "text": "action - One `sc-button variant=\"secondary\" size=\"m\"` (or `href`), named for the action and the item."
+        },
+        {
+          "name": "part",
+          "text": "card - The surface."
+        },
+        {
+          "name": "part",
+          "text": "icon - The 40px icon tile."
+        },
+        {
+          "name": "part",
+          "text": "title - The heading."
+        }
+      ],
+      "usage": {},
+      "props": [
+        {
+          "name": "headingLevel",
+          "type": "2 | 3 | 4 | 5 | 6",
+          "complexType": {
+            "original": "AttentionCardHeadingLevel",
+            "resolved": "2 | 3 | 4 | 5 | 6",
+            "references": {
+              "AttentionCardHeadingLevel": {
+                "location": "local",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-attention-card/sc-attention-card.tsx",
+                "id": "src/components/sc-attention-card/sc-attention-card.tsx::AttentionCardHeadingLevel"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "heading-level",
+          "reflectToAttr": false,
+          "docs": "The heading level of the title: 3 under a \"Needs your attention\" `h2` (default).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "3"
+            }
+          ],
+          "default": "3",
+          "values": [
+            {
+              "value": "2",
+              "type": "number"
+            },
+            {
+              "value": "3",
+              "type": "number"
+            },
+            {
+              "value": "4",
+              "type": "number"
+            },
+            {
+              "value": "5",
+              "type": "number"
+            },
+            {
+              "value": "6",
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "tint",
+          "type": "\"amber\" | \"blue\" | \"green\" | \"orange\" | \"rose\" | \"violet\" | undefined",
+          "complexType": {
+            "original": "AttentionCardTint",
+            "resolved": "\"amber\" | \"blue\" | \"green\" | \"orange\" | \"rose\" | \"violet\" | undefined",
+            "references": {
+              "AttentionCardTint": {
+                "location": "local",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-attention-card/sc-attention-card.tsx",
+                "id": "src/components/sc-attention-card/sc-attention-card.tsx::AttentionCardTint"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "tint",
+          "reflectToAttr": true,
+          "docs": "The decorative topic tint of the top strip and the icon tile (foundations §2.7):\n`amber` bills, `violet` documents and residency, `blue` vehicles, `rose` family,\n`orange` housing, `green` health. Without it there is no strip and the icon tile takes\nthe channel's container colour. Never use a tint to mean urgency: that is the status tag.",
+          "docsTags": [],
+          "values": [
+            {
+              "value": "amber",
+              "type": "string"
+            },
+            {
+              "value": "blue",
+              "type": "string"
+            },
+            {
+              "value": "green",
+              "type": "string"
+            },
+            {
+              "value": "orange",
+              "type": "string"
+            },
+            {
+              "value": "rose",
+              "type": "string"
+            },
+            {
+              "value": "violet",
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [],
+      "listeners": [],
+      "styles": [],
+      "slots": [
+        {
+          "name": "",
+          "docs": "The title, e.g. \"Electricity and water bill\". Text only; it becomes a heading."
+        },
+        {
+          "name": "action",
+          "docs": "One `sc-button variant=\"secondary\" size=\"m\"` (or `href`), named for the action and the item."
+        },
+        {
+          "name": "fact",
+          "docs": "The key fact: \"Due tomorrow, 21 Oct 2026\"."
+        },
+        {
+          "name": "icon",
+          "docs": "A decorative icon: an inline 24px `<svg>` in `currentColor`, in a 40px tile."
+        },
+        {
+          "name": "meta",
+          "docs": "Amount and reference, each isolated: `<sc-ltr>AED 412.60</sc-ltr> · DEWA account <sc-ltr>2004 1187</sc-ltr>`."
+        },
+        {
+          "name": "status",
+          "docs": "An `sc-status-tag` with the urgency in words: \"Not paid\", \"Expires in 21 days\"."
+        }
+      ],
+      "parts": [
+        {
+          "name": "card",
+          "docs": "The surface."
+        },
+        {
+          "name": "icon",
+          "docs": "The 40px icon tile."
+        },
+        {
+          "name": "title",
+          "docs": "The heading."
         }
       ],
       "states": [],
@@ -1329,18 +1590,14 @@
     },
     {
       "filePath": "src/components/sc-card/sc-card.tsx",
-      "encapsulation": "shadow",
+      "encapsulation": "scoped",
       "tag": "sc-card",
-      "readme": "# sc-card\n\nA surface for grouping related content: a life event and its steps, a task, a section of answers. If the whole box is a link to a service, use `sc-service-card` instead; for \"Check your answers\", `sc-summary-list` draws its own card.\n\n## Usage\n\n```html\n<sc-card landmark=\"section\">\n  <h2>My tasks</h2>\n  <p>Your vehicle registration expires in 15 days.</p>\n  <sc-button size=\"m\" variant=\"secondary\" href=\"/renew\">Renew registration</sc-button>\n</sc-card>\n```\n\n- `padding=\"l\"` (24px) is the default. Use `padding=\"m\"` (16px) for dense content or narrow columns.\n- Leave `landmark` unset for most cards: a card is a visual group, not a page region. Set `landmark=\"section\"` only for a part of the page users would want to jump to (\"My tasks\"), and `landmark=\"article\"` for self-contained content such as a news item. The first heading inside names the landmark; use `label` when there is no heading.\n- Start the content with a heading at the right level for the page outline. Don't nest cards.\n- Don't make a card clickable by wrapping it in a link; put a link or button inside it, or use `sc-service-card`.\n\n### Arabic\n\nNothing to configure: padding and radius are symmetrical and content follows the page direction.\n\n### Styling hooks\n\nPart: `surface`. The fill, radius and shadow come from tokens and follow light and dark themes; in forced colours the card keeps a visible edge.\n",
-      "docs": "A surface container: surface fill, card radius, elevation 1. Groups related content,\nsuch as a life event and its steps, or the answers in one section of \"Check your answers\".\n\nWith `landmark`, the card becomes a named region (`section`) or an `article`, labelled by\nthe first heading inside it. The role and `aria-labelledby` go on the host, in light DOM,\nso the reference to the slotted heading resolves.",
+      "readme": "# sc-card\n\nA surface for grouping related content: a life event and its steps, a task, a section of answers. If the whole box is a link to a service, use `sc-service-card` instead; for \"Check your answers\", `sc-summary-list` draws its own card.\n\n## Usage\n\n```html\n<sc-card landmark=\"section\">\n  <h2>My tasks</h2>\n  <p>Your vehicle registration expires in 15 days.</p>\n  <sc-button size=\"m\" variant=\"secondary\" href=\"/renew\">Renew registration</sc-button>\n</sc-card>\n```\n\n- `padding=\"l\"` (24px) is the default. Use `padding=\"m\"` (16px) for dense content or narrow columns.\n- Leave `landmark` unset for most cards: a card is a visual group, not a page region. Set `landmark=\"section\"` only for a part of the page users would want to jump to (\"My tasks\"), and `landmark=\"article\"` for self-contained content such as a news item. The first heading inside names the landmark; use `label` when there is no heading.\n- Start the content with a heading at the right level for the page outline. Don't nest cards.\n- Don't make a card clickable by wrapping it in a link; put a link or button inside it, or use `sc-service-card`.\n\n### Arabic\n\nNothing to configure: padding and radius are symmetrical and content follows the page direction.\n\n- `variant=\"filled\"` gives a quiet fill with no edge: a totals card, or a group inside an outlined area.\n\n### Styling hooks\n\nv2 renders in light DOM: the host is the surface (`.sc-card`), and there is no `::part(surface)`. Cards are flat: a 1px edge and 12px corners, no shadow. In forced colours the card keeps a visible edge.\n",
+      "docs": "A surface that groups related content: a life event and its steps, the answers in one\nsection of \"Check your answers\", a totals card. Flat and outline-first (ELV-01): 12px\ncorners, a 1px `outline-variant` edge, no shadow. Cards are never links (CMP-06): put the\nlink on a heading or a button inside.\n\nv2 renders in light DOM (Stencil `scoped`, architecture §3.1): the host is the surface and\nyour content stays its direct children, so `aria-labelledby` points at your own heading\nwith an ordinary id. There is no `::part(surface)`; style the host (`.sc-card`) if you must.\n\nWith `landmark`, the card becomes a named region (`section`) or an `article`, labelled by\nthe first heading inside it, or by `label`.",
       "docsTags": [
         {
           "name": "slot",
           "text": "- The card's content. Start with a heading when the card is a landmark."
-        },
-        {
-          "name": "part",
-          "text": "surface - The inner surface (fill, radius, shadow, padding)."
         }
       ],
       "usage": {},
@@ -1388,7 +1645,7 @@
           "mutable": false,
           "attr": "landmark",
           "reflectToAttr": true,
-          "docs": "Makes the card a landmark. `section` exposes a region (use it for a part of a page a\nuser would want to jump to); `article` is for self-contained content. Both are named by\nthe first heading (`h1`–`h6`) inside the card, or by `label`. Leave unset for a plain box.",
+          "docs": "Makes the card a landmark. `section` exposes a region (a part of a page a user would want\nto jump to); `article` is for self-contained content. Both are named by the first heading\n(`h1`–`h6`) inside the card, or by `label`. Leave unset for a plain box.",
           "docsTags": [],
           "values": [
             {
@@ -1425,7 +1682,7 @@
           "mutable": false,
           "attr": "padding",
           "reflectToAttr": true,
-          "docs": "Inner padding: `m` is 16px, `l` is 24px (default).",
+          "docs": "Inner padding: `l` is 24px (default), `m` is 16px.",
           "docsTags": [
             {
               "name": "default",
@@ -1447,6 +1704,46 @@
           "required": false,
           "getter": false,
           "setter": false
+        },
+        {
+          "name": "variant",
+          "type": "\"filled\" | \"outlined\"",
+          "complexType": {
+            "original": "CardVariant",
+            "resolved": "\"filled\" | \"outlined\"",
+            "references": {
+              "CardVariant": {
+                "location": "local",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-card/sc-card.tsx",
+                "id": "src/components/sc-card/sc-card.tsx::CardVariant"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "variant",
+          "reflectToAttr": true,
+          "docs": "`outlined` (default): white surface with a 1px `outline-variant` edge, for groups on a\npage or a neutral band. `filled`: a quiet `surface-container` fill with no edge, for a\ntotals card or a group inside an outlined area.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'outlined'"
+            }
+          ],
+          "default": "'outlined'",
+          "values": [
+            {
+              "value": "filled",
+              "type": "string"
+            },
+            {
+              "value": "outlined",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
         }
       ],
       "methods": [],
@@ -1459,12 +1756,7 @@
           "docs": "The card's content. Start with a heading when the card is a landmark."
         }
       ],
-      "parts": [
-        {
-          "name": "surface",
-          "docs": "The inner surface (fill, radius, shadow, padding)."
-        }
-      ],
+      "parts": [],
       "states": [],
       "dependents": [],
       "dependencies": [],
@@ -1677,9 +1969,13 @@
       "filePath": "src/components/sc-channel-hero/sc-channel-hero.tsx",
       "encapsulation": "shadow",
       "tag": "sc-channel-hero",
-      "readme": "# sc-channel-hero\n\nThe top of a channel's home or section page: a wash in the channel's colours, the page heading and usually search.\n\n## Usage\n\n```html\n<sc-channel-hero>\n  <p slot=\"eyebrow\">Government services for everyone who lives in Dubai</p>\n  <h1 slot=\"heading\">What do you need to do?</h1>\n  <sc-search label-hidden label=\"Search services\" placeholder=\"Try “renew car registration” or “school fees”\" action=\"/search\"></sc-search>\n</sc-channel-hero>\n```\n\n- Pass the page's `<h1>` in the `heading` slot. The hero styles it (heading-xl on phones, display-l from 1024px) but it stays a real heading.\n- The eyebrow is optional context, one short line. The lede (`slot=\"lede\"`) is one or two sentences; skip it on a home page whose heading is a question.\n- The default slot holds search and anything that goes with it, such as \"Popular now\" links.\n- One hero per page, at the top of `<main>`. Don't put calls to action in the hero other than search.\n\n### Colour\n\nThe wash is `linear-gradient(in oklab, var(--sc-channel-wash-start), var(--sc-channel-wash-end))`, so it follows `data-channel` and the theme. In forced colours it becomes plain canvas with a rule underneath.\n\n### Layout\n\nThe hero is full-bleed; its content sits in an `sc-container`, so it lines up with the page below, and is capped at eight of twelve columns.\n\n### Arabic\n\nContent aligns right; the search field mirrors.\n",
-      "docs": "The top wash of a channel page: a gradient from the channel's wash-start to wash-end\ncolour (interpolated in OKLAB), holding an eyebrow, the page's `<h1>`, a lede and a\nsearch field. It follows `data-channel` and the theme like every component.\n\nThe hero is full-bleed; its content sits in an `sc-container`, so it lines up with the\npage below.",
+      "readme": "# sc-channel-hero\n\nThe top band of a channel's home or section page: a flat band in the channel's quiet tone (no gradient), the page heading, search and \"Popular now\" suggestions.\n\n## Usage\n\n```html\n<sc-channel-hero>\n  <p slot=\"eyebrow\">Government services for everyone who lives in Dubai</p>\n  <h1 slot=\"heading\">What do you need to do?</h1>\n  <sc-search size=\"l\" label-hidden label=\"Search services\" placeholder=\"Try “renew car registration” or “school fees”\" action=\"/search\"></sc-search>\n  <a slot=\"popular\" href=\"/services/renew-registration\">Renew vehicle registration</a>\n  <a slot=\"popular\" href=\"/services/pay-dewa\">Pay water and electricity</a>\n</sc-channel-hero>\n```\n\n- Pass the page's `<h1>` in the `heading` slot. The hero styles it (headline-large on phones, display-small from 600px, display-large from 1024px, or display-medium with `size=\"medium\"`) but it stays a real heading.\n- The eyebrow is optional context, one short line. The lede (`slot=\"lede\"`) is one or two sentences; skip it on a home page whose heading is a question.\n- The default slot holds search. Suggestion links go in `slot=\"popular\"`: the hero draws them as 40px chips on 44px targets after a \"Popular now\" label.\n- One hero per page, at the top of `<main>`. Don't put calls to action in the hero other than search.\n\n### Colour\n\nA flat `--sc-color-channel-subtle` band (decision Q-hero), so it follows `data-channel` and the theme. In forced colours it becomes plain canvas with a rule underneath.\n\n### Layout\n\nThe hero is full-bleed; its content follows the page grid's margins (20, 32, 48, 80px) and the 1280px cap, so it lines up with `sc-container` below.\n\n### Arabic\n\nContent aligns right; the search field mirrors.\n",
+      "docs": "The top band of a channel's home or section page (E1): a flat `channel-subtle` band\n(decision Q-hero: no gradient), holding optional breadcrumbs, an eyebrow, the page's\n`<h1>` at display size, an optional lede, search and a \"Popular now\" row of suggestion\nchips. It follows `data-channel` and the theme like every component.\n\nThe band is full-bleed; its content follows the page grid's margins (20, 32, 48, 80px)\nand the 1280px cap, so it lines up with `sc-container` content below. The hero never\ncarries a carousel or autoplaying media.",
       "docsTags": [
+        {
+          "name": "slot",
+          "text": "breadcrumbs - Optional breadcrumbs, on inner pages."
+        },
         {
           "name": "slot",
           "text": "eyebrow - A short line above the heading, e.g. \"Government services for everyone who lives in Dubai\"."
@@ -1694,19 +1990,94 @@
         },
         {
           "name": "slot",
-          "text": "- Search (`sc-search`) and anything that goes with it, such as popular links."
+          "text": "- Search (`sc-search size=\"l\"`), up to 880px wide."
+        },
+        {
+          "name": "slot",
+          "text": "popular - Suggestion links, one `<a href>` each: \"Renew vehicle registration\". The hero\ndraws them as 40px capsule chips with a 44px target, after the \"Popular now\" label."
         },
         {
           "name": "part",
-          "text": "wash - The full-bleed gradient."
+          "text": "band - The full-bleed band."
         },
         {
           "name": "part",
           "text": "content - The column holding the slots."
+        },
+        {
+          "name": "part",
+          "text": "popular - The \"Popular now\" row."
         }
       ],
       "usage": {},
-      "props": [],
+      "props": [
+        {
+          "name": "popularLabel",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "popular-label",
+          "reflectToAttr": false,
+          "docs": "Overrides the label before the suggestion chips (default \"Popular now\" / \"الأكثر طلبًا الآن\").",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "size",
+          "type": "\"large\" | \"medium\"",
+          "complexType": {
+            "original": "ChannelHeroSize",
+            "resolved": "\"large\" | \"medium\"",
+            "references": {
+              "ChannelHeroSize": {
+                "location": "local",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-channel-hero/sc-channel-hero.tsx",
+                "id": "src/components/sc-channel-hero/sc-channel-hero.tsx::ChannelHeroSize"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "size",
+          "reflectToAttr": true,
+          "docs": "The heading size from 1024px: `large` (display-large, 80px) for a channel's home page,\n`medium` (display-medium, 57px) for a section page. Below 1024px both step down\n(display-small from 600px, headline-large on phones).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'large'"
+            }
+          ],
+          "default": "'large'",
+          "values": [
+            {
+              "value": "large",
+              "type": "string"
+            },
+            {
+              "value": "medium",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
       "methods": [],
       "events": [],
       "listeners": [],
@@ -1714,7 +2085,11 @@
       "slots": [
         {
           "name": "",
-          "docs": "Search (`sc-search`) and anything that goes with it, such as popular links."
+          "docs": "Search (`sc-search size=\"l\"`), up to 880px wide."
+        },
+        {
+          "name": "breadcrumbs",
+          "docs": "Optional breadcrumbs, on inner pages."
         },
         {
           "name": "eyebrow",
@@ -1727,28 +2102,30 @@
         {
           "name": "lede",
           "docs": "An optional paragraph under the heading."
+        },
+        {
+          "name": "popular",
+          "docs": "Suggestion links, one `<a href>` each: \"Renew vehicle registration\". The hero\ndraws them as 40px capsule chips with a 44px target, after the \"Popular now\" label."
         }
       ],
       "parts": [
+        {
+          "name": "band",
+          "docs": "The full-bleed band."
+        },
         {
           "name": "content",
           "docs": "The column holding the slots."
         },
         {
-          "name": "wash",
-          "docs": "The full-bleed gradient."
+          "name": "popular",
+          "docs": "The \"Popular now\" row."
         }
       ],
       "states": [],
       "dependents": [],
-      "dependencies": [
-        "sc-container"
-      ],
-      "dependencyGraph": {
-        "sc-channel-hero": [
-          "sc-container"
-        ]
-      }
+      "dependencies": [],
+      "dependencyGraph": {}
     },
     {
       "filePath": "src/components/sc-checkbox/sc-checkbox.tsx",
@@ -2445,96 +2822,6 @@
       "dependents": [],
       "dependencies": [],
       "dependencyGraph": {}
-    },
-    {
-      "filePath": "src/components/sc-container/sc-container.tsx",
-      "encapsulation": "shadow",
-      "tag": "sc-container",
-      "readme": "# sc-container\n\nCentres content and sets the page's outer margins from the layout tokens.\n\n## Usage\n\n```html\n<sc-container>\n  <h2>Most used services</h2>\n  <sc-grid span-medium=\"4\" span-expanded=\"4\">…</sc-grid>\n</sc-container>\n\n<sc-container width=\"reading\">\n  <h1>Check your answers before you pay</h1>\n  <sc-summary-list>…</sc-summary-list>\n</sc-container>\n```\n\n| Window | Margin | Token |\n|---|---|---|\n| under 600px | 20px | `--sc-grid-compact-margin` |\n| 600px | 32px | `--sc-grid-medium-margin` |\n| 1024px | 48px | `--sc-grid-expanded-margin` |\n| 1440px | 80px | `--sc-grid-wide-margin` |\n\n- Content is capped at `--sc-container-max` (1280px) and centred beyond that.\n- `width=\"reading\"` caps the column at `--sc-container-reading` (680px) and keeps it at the start edge, aligned with headings and back links. Use it for question pages, \"Check your answers\" and running text.\n- Full-bleed sections (a hero, a coloured band) go outside the container and put one inside.\n\n### Breakpoints\n\nMedia queries can't read custom properties, so the breakpoint widths (600, 1024, 1440px from `tokens/layout.json`) are repeated in the CSS with a comment; the margins themselves are tokens. Margins follow the window, not the parent.\n\n### Arabic\n\nThe reading column starts at the right.\n",
-      "docs": "Centres content and sets the page's outer margins from the layout tokens: 20px on\nphones, 32px from 600px, 48px from 1024px and 80px from 1440px, with content capped at\n`--sc-container-max` (1280px). `width=\"reading\"` caps it at the 680px reading width instead,\nfor question pages and running text.",
-      "docsTags": [
-        {
-          "name": "slot",
-          "text": "- The page content."
-        },
-        {
-          "name": "part",
-          "text": "inner - The width-capped wrapper inside the margins."
-        }
-      ],
-      "usage": {},
-      "props": [
-        {
-          "name": "width",
-          "type": "\"page\" | \"reading\"",
-          "complexType": {
-            "original": "ContainerWidth",
-            "resolved": "\"page\" | \"reading\"",
-            "references": {
-              "ContainerWidth": {
-                "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-container/sc-container.tsx",
-                "id": "src/components/sc-container/sc-container.tsx::ContainerWidth"
-              }
-            }
-          },
-          "mutable": false,
-          "attr": "width",
-          "reflectToAttr": true,
-          "docs": "`page` (default) caps content at 1280px; `reading` caps it at 680px and keeps it at the start, aligned with page content.",
-          "docsTags": [
-            {
-              "name": "default",
-              "text": "'page'"
-            }
-          ],
-          "default": "'page'",
-          "values": [
-            {
-              "value": "page",
-              "type": "string"
-            },
-            {
-              "value": "reading",
-              "type": "string"
-            }
-          ],
-          "optional": false,
-          "required": false,
-          "getter": false,
-          "setter": false
-        }
-      ],
-      "methods": [],
-      "events": [],
-      "listeners": [],
-      "styles": [],
-      "slots": [
-        {
-          "name": "",
-          "docs": "The page content."
-        }
-      ],
-      "parts": [
-        {
-          "name": "inner",
-          "docs": "The width-capped wrapper inside the margins."
-        }
-      ],
-      "states": [],
-      "dependents": [
-        "sc-channel-hero",
-        "sc-footer"
-      ],
-      "dependencies": [],
-      "dependencyGraph": {
-        "sc-channel-hero": [
-          "sc-container"
-        ],
-        "sc-footer": [
-          "sc-container"
-        ]
-      }
     },
     {
       "filePath": "src/components/sc-date-input/sc-date-input.tsx",
@@ -4493,130 +4780,6 @@
       ],
       "states": [],
       "dependents": [],
-      "dependencies": [
-        "sc-container"
-      ],
-      "dependencyGraph": {
-        "sc-footer": [
-          "sc-container"
-        ]
-      }
-    },
-    {
-      "filePath": "src/components/sc-grid/sc-grid.tsx",
-      "encapsulation": "shadow",
-      "tag": "sc-grid",
-      "readme": "# sc-grid\n\nThe 4/8/12-column layout grid.\n\n## Usage\n\n```html\n<!-- Three to a row on desktop, two on tablets, one on phones -->\n<sc-grid span-medium=\"4\" span-expanded=\"4\">\n  <sc-service-card …></sc-service-card>\n  <sc-service-card …></sc-service-card>\n  <sc-service-card …></sc-service-card>\n</sc-grid>\n\n<!-- Main column and sidebar -->\n<sc-grid>\n  <div style=\"--sc-grid-span: 8\">…</div>\n  <div style=\"--sc-grid-span: 4\">…</div>\n</sc-grid>\n```\n\n| Window | Columns | Gutter |\n|---|---|---|\n| under 600px | 4 | 16px |\n| 600px | 8 | 20px |\n| 1024px and up | 12 | 24px |\n\n- Every child is a grid item. `span`, `span-medium` and `span-expanded` set how many columns each item spans; each falls back to the smaller breakpoint's value, and spans are capped at the columns available (so 8 is full width on a phone). Without them, items are full width.\n- Override one item with the `--sc-grid-span` custom property. It inherits, so don't set it on an element that contains another `sc-grid`.\n- Put the grid inside `sc-container` for the page margins.\n\n### Breakpoints\n\nMedia queries can't read custom properties, so the breakpoint widths (600, 1024, 1440px from `tokens/layout.json`) are repeated in the CSS; columns and gutters are tokens.\n\n### Arabic\n\nColumns run right to left.\n",
-      "docs": "The layout grid: 4 columns on phones, 8 from 600px and 12 from 1024px, with gutters from\nthe layout tokens (16, 20, 24px). Each child is a grid item.\n\nItem widths are set once for all children with `span`, `span-medium` and `span-expanded`\n(each falls back to the smaller one, and is capped at the number of columns), or per\nchild with the `--sc-grid-span` custom property, e.g. `style=\"--sc-grid-span: 8\"`.\n\nService cards three to a row on desktop, two on tablets and one on phones:\n`<sc-grid span-medium=\"4\" span-expanded=\"4\">`.",
-      "docsTags": [
-        {
-          "name": "slot",
-          "text": "- Grid items."
-        },
-        {
-          "name": "part",
-          "text": "grid - The grid element."
-        }
-      ],
-      "usage": {},
-      "props": [
-        {
-          "name": "span",
-          "type": "number | undefined",
-          "complexType": {
-            "original": "number",
-            "resolved": "number | undefined",
-            "references": {}
-          },
-          "mutable": false,
-          "attr": "span",
-          "reflectToAttr": false,
-          "docs": "Columns each item spans on phones (4 columns). Defaults to the full width.",
-          "docsTags": [],
-          "values": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "undefined"
-            }
-          ],
-          "optional": true,
-          "required": false,
-          "getter": false,
-          "setter": false
-        },
-        {
-          "name": "spanExpanded",
-          "type": "number | undefined",
-          "complexType": {
-            "original": "number",
-            "resolved": "number | undefined",
-            "references": {}
-          },
-          "mutable": false,
-          "attr": "span-expanded",
-          "reflectToAttr": false,
-          "docs": "Columns each item spans from 1024px (12 columns). Defaults to `span-medium`.",
-          "docsTags": [],
-          "values": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "undefined"
-            }
-          ],
-          "optional": true,
-          "required": false,
-          "getter": false,
-          "setter": false
-        },
-        {
-          "name": "spanMedium",
-          "type": "number | undefined",
-          "complexType": {
-            "original": "number",
-            "resolved": "number | undefined",
-            "references": {}
-          },
-          "mutable": false,
-          "attr": "span-medium",
-          "reflectToAttr": false,
-          "docs": "Columns each item spans from 600px (8 columns). Defaults to `span`.",
-          "docsTags": [],
-          "values": [
-            {
-              "type": "number"
-            },
-            {
-              "type": "undefined"
-            }
-          ],
-          "optional": true,
-          "required": false,
-          "getter": false,
-          "setter": false
-        }
-      ],
-      "methods": [],
-      "events": [],
-      "listeners": [],
-      "styles": [],
-      "slots": [
-        {
-          "name": "",
-          "docs": "Grid items."
-        }
-      ],
-      "parts": [
-        {
-          "name": "grid",
-          "docs": "The grid element."
-        }
-      ],
-      "states": [],
-      "dependents": [],
       "dependencies": [],
       "dependencyGraph": {}
     },
@@ -4980,36 +5143,6 @@
           "docs": "The wrapper around the default slot (it carries the underline)."
         }
       ],
-      "states": [],
-      "dependents": [],
-      "dependencies": [],
-      "dependencyGraph": {}
-    },
-    {
-      "filePath": "src/components/sc-ltr/sc-ltr.tsx",
-      "encapsulation": "shadow",
-      "tag": "sc-ltr",
-      "readme": "# sc-ltr\n\n## Usage\n\nWrap any value that must read left to right whatever the page direction: vehicle plates, amounts, reference numbers, phone numbers, emails.\n\n```html\n<p lang=\"ar\" dir=\"rtl\">رقم اللوحة <sc-ltr>Dubai A 12345</sc-ltr> مسجل باسمك.</p>\n<p>Amount due: <sc-ltr>AED 450.00</sc-ltr></p>\n```\n\n- Digits are always Latin (0–9), in both languages.\n- Don't use it for whole sentences in another language; set `lang` and `dir` on that element instead.\n- Inside a shadow root (in a component's own template), write `<bdi dir=\"ltr\">` directly instead.\n",
-      "docs": "Keeps a value left-to-right inside any text, e.g. a plate number, amount, reference or\nphone number in an Arabic sentence. Renders `<bdi dir=\"ltr\">` around its content.\n\nShadow DOM is used on purpose: the author's text stays in the light DOM (searchable,\ncopyable, untouched), and layout follows the flat tree, so the `<bdi>` isolates the\nslotted text from the surrounding paragraph exactly as a `<bdi>` written in place would.\nThe host is also `unicode-bidi: isolate; direction: ltr` (here and in sc.css), so the\nvalue is isolated even before the component upgrades.",
-      "docsTags": [
-        {
-          "name": "slot",
-          "text": "- The value to keep left-to-right."
-        }
-      ],
-      "usage": {},
-      "props": [],
-      "methods": [],
-      "events": [],
-      "listeners": [],
-      "styles": [],
-      "slots": [
-        {
-          "name": "",
-          "docs": "The value to keep left-to-right."
-        }
-      ],
-      "parts": [],
       "states": [],
       "dependents": [],
       "dependencies": [],
@@ -5403,6 +5536,311 @@
         {
           "name": "panel",
           "docs": "The panel inside it (padding and layout)."
+        }
+      ],
+      "states": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/sc-module-card/sc-module-card.tsx",
+      "encapsulation": "shadow",
+      "tag": "sc-module-card",
+      "readme": "# sc-module-card\n\nA titled module on a signed-in home page (\"At a glance\"): an optional tinted icon, the title, a link at the end of the header, then the content. Specification: `specs/sc-module-card.md`.\n\n## Usage\n\n```html\n<sc-module-card heading=\"Traffic fines\" action-href=\"/fines\" action-text=\"View fines\" tint=\"amber\" divided>\n  <svg slot=\"icon\" …></svg>\n  <div><p>To pay</p><p class=\"sc-type-headline-medium\"><sc-ltr>AED 600.00</sc-ltr></p></div>\n  <p><sc-ltr>F-2026-118204</sc-ltr> · Speeding, 14 Oct 2026</p>\n</sc-module-card>\n```\n",
+      "docs": "A titled module on a signed-in home page (\"At a glance\"): Vehicles, Applications, Traffic\nfines. A header row with an optional tinted icon, the title (a heading) and a standalone\nlink at the end (\"Manage\", \"View all\"), then the module's own content.\n\nThe card is not a link (CMP-06). The header link's accessible name includes the title\n(\"View all, Applications\"), so a page with several \"View all\" links still makes sense out\nof context.",
+      "docsTags": [
+        {
+          "name": "slot",
+          "text": "- The module content: rows, figures, a status tag, one action. With `divided`, the\ntop-level children are separated by 1px rules."
+        },
+        {
+          "name": "slot",
+          "text": "icon - A decorative icon: an inline 24px `<svg>` in `currentColor`, in a 40px tile."
+        },
+        {
+          "name": "slot",
+          "text": "action - A custom header link, used instead of `action-href` and `action-text`."
+        },
+        {
+          "name": "part",
+          "text": "card - The surface."
+        },
+        {
+          "name": "part",
+          "text": "header - The header row."
+        },
+        {
+          "name": "part",
+          "text": "icon - The 40px icon tile."
+        },
+        {
+          "name": "part",
+          "text": "title - The heading."
+        },
+        {
+          "name": "part",
+          "text": "link - The header link (from `action-href`)."
+        },
+        {
+          "name": "part",
+          "text": "body - The content."
+        }
+      ],
+      "usage": {},
+      "props": [
+        {
+          "name": "actionHref",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "action-href",
+          "reflectToAttr": false,
+          "docs": "Where the header link goes (\"Manage\", \"View all\"). Without it (and without `slot=\"action\"`) there is no header link.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "actionText",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "action-text",
+          "reflectToAttr": false,
+          "docs": "The header link's visible text, e.g. \"Manage\" or \"View all\". Its accessible name adds the title.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "divided",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "divided",
+          "reflectToAttr": true,
+          "docs": "Separates the top-level content blocks with 1px `outline-variant` rules, 20px apart.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "heading",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "heading",
+          "reflectToAttr": false,
+          "docs": "The module's title, e.g. \"Vehicles\". Required.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": true,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "headingLevel",
+          "type": "2 | 3 | 4 | 5 | 6",
+          "complexType": {
+            "original": "ModuleCardHeadingLevel",
+            "resolved": "2 | 3 | 4 | 5 | 6",
+            "references": {
+              "ModuleCardHeadingLevel": {
+                "location": "local",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-module-card/sc-module-card.tsx",
+                "id": "src/components/sc-module-card/sc-module-card.tsx::ModuleCardHeadingLevel"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "heading-level",
+          "reflectToAttr": false,
+          "docs": "The heading level of the title: 3 under an \"At a glance\" `h2` (default).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "3"
+            }
+          ],
+          "default": "3",
+          "values": [
+            {
+              "value": "2",
+              "type": "number"
+            },
+            {
+              "value": "3",
+              "type": "number"
+            },
+            {
+              "value": "4",
+              "type": "number"
+            },
+            {
+              "value": "5",
+              "type": "number"
+            },
+            {
+              "value": "6",
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "tint",
+          "type": "\"amber\" | \"blue\" | \"green\" | \"orange\" | \"rose\" | \"violet\" | undefined",
+          "complexType": {
+            "original": "ModuleCardTint",
+            "resolved": "\"amber\" | \"blue\" | \"green\" | \"orange\" | \"rose\" | \"violet\" | undefined",
+            "references": {
+              "ModuleCardTint": {
+                "location": "local",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-module-card/sc-module-card.tsx",
+                "id": "src/components/sc-module-card/sc-module-card.tsx::ModuleCardTint"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "tint",
+          "reflectToAttr": true,
+          "docs": "The icon tile's decorative topic tint (foundations §2.7). Without it the tile takes the channel's container colour.",
+          "docsTags": [],
+          "values": [
+            {
+              "value": "amber",
+              "type": "string"
+            },
+            {
+              "value": "blue",
+              "type": "string"
+            },
+            {
+              "value": "green",
+              "type": "string"
+            },
+            {
+              "value": "orange",
+              "type": "string"
+            },
+            {
+              "value": "rose",
+              "type": "string"
+            },
+            {
+              "value": "violet",
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [],
+      "listeners": [],
+      "styles": [],
+      "slots": [
+        {
+          "name": "",
+          "docs": "The module content: rows, figures, a status tag, one action. With `divided`, the\ntop-level children are separated by 1px rules."
+        },
+        {
+          "name": "action",
+          "docs": "A custom header link, used instead of `action-href` and `action-text`."
+        },
+        {
+          "name": "icon",
+          "docs": "A decorative icon: an inline 24px `<svg>` in `currentColor`, in a 40px tile."
+        }
+      ],
+      "parts": [
+        {
+          "name": "body",
+          "docs": "The content."
+        },
+        {
+          "name": "card",
+          "docs": "The surface."
+        },
+        {
+          "name": "header",
+          "docs": "The header row."
+        },
+        {
+          "name": "icon",
+          "docs": "The 40px icon tile."
+        },
+        {
+          "name": "link",
+          "docs": "The header link (from `action-href`)."
+        },
+        {
+          "name": "title",
+          "docs": "The heading."
         }
       ],
       "states": [],
@@ -7163,8 +7601,8 @@
       "filePath": "src/components/sc-service-card/sc-service-card.tsx",
       "encapsulation": "shadow",
       "tag": "sc-service-card",
-      "readme": "# sc-service-card\n\nA link to a service, as in \"Most used services\" on a channel home page. For a group of content that isn't a single link, use `sc-card`.\n\n## Usage\n\n```html\n<h2>Most used services</h2>\n<sc-grid span-medium=\"4\" span-expanded=\"4\">\n  <sc-service-card href=\"/services/renew-registration\" entity=\"Roads and Transport Authority\">\n    Renew vehicle registration\n    <sc-channel-chip slot=\"chip\" channel=\"transport\"></sc-channel-chip>\n  </sc-service-card>\n  <sc-service-card href=\"/services/pay-bills\" entity=\"Dubai Electricity and Water Authority\">\n    Pay water and electricity bills\n  </sc-service-card>\n</sc-grid>\n```\n\n- The title starts with a verb and names the task, not the department: \"Renew vehicle registration\", not \"Vehicle licensing\".\n- `entity` is the owning government entity, written in full (\"Roads and Transport Authority\", not \"RTA\"). It is the link's accessible description.\n- Set `heading-level` to fit the page outline: 3 under a \"Most used services\" `h2` (default).\n- Put a `sc-channel-chip` in the `chip` slot when the service also lives on another channel. A chip that is a link is a separate link with its own target.\n\n### Behaviour\n\nOnly the title is the link (CMP-06 in the standard): the card is not wrapped in an `<a>`, and the link's hit area is not stretched over the card. Screen readers hear a short link name (\"Renew vehicle registration\"), with the entity as its description, instead of the card's whole text. The heading contains the link, so heading navigation lists every service, and keyboard users meet one tab stop per card (plus a chip, if it is a link). The title's hit area is at least 44 × 44 px; the focus ring goes round the title. With a mouse or trackpad (`(hover: hover) and (pointer: fine)`) hovering the title underlines it; touch screens get no hover state. Pressing the title with a pointer scales the card slightly (`--sc-scale-press`); keyboard activation is instant. There is no end chevron: the card is not a link, so nothing on it suggests that it is. (The `chevron` part is removed.)\n\n### Arabic\n\nEntity names have official Arabic forms (\"هيئة الطرق والمواصلات\"); use them.\n",
-      "docs": "A link to a service: its title, the entity that owns it and an optional channel chip.\nThere is no end chevron: the card is not itself a link, so nothing on it may look like one.\n\nOnly the title is the link (CMP-06), so screen readers hear a short link name (\"Renew\nvehicle registration\"), not the whole card's text. The card is not wrapped in an `<a>`\nand the link's hit area is not stretched over the card: it is the title, grown to at\nleast 44 x 44. The title is a heading containing the link, so heading navigation finds\nevery service. The owning entity is the link's description. A chip that is a link is a\nseparate link.",
+      "readme": "# sc-service-card\n\nA link to a service, as in \"Most used services\" on a channel home page. For a group of content that isn't a single link, use `sc-card`.\n\n## Usage\n\n```html\n<h2>Most used services</h2>\n<sc-grid span-medium=\"4\" span-expanded=\"4\">\n  <sc-service-card href=\"/services/renew-registration\" entity=\"Roads and Transport Authority\">\n    Renew vehicle registration\n    <sc-channel-chip slot=\"chip\" channel=\"transport\"></sc-channel-chip>\n  </sc-service-card>\n  <sc-service-card href=\"/services/pay-bills\" entity=\"Dubai Electricity and Water Authority\">\n    Pay water and electricity bills\n  </sc-service-card>\n</sc-grid>\n```\n\n- The title starts with a verb and names the task, not the department: \"Renew vehicle registration\", not \"Vehicle licensing\".\n- `entity` is the owning government entity, written in full (\"Roads and Transport Authority\", not \"RTA\"). It is the link's accessible description.\n- Set `heading-level` to fit the page outline: 3 under a \"Most used services\" `h2` (default).\n- Put a `sc-channel-chip` in the `chip` slot when the service also lives on another channel. A chip that is a link is a separate link with its own target.\n\n### Behaviour\n\nOnly the title is the link (CMP-06 in the standard): the card is not wrapped in an `<a>`, and the link's hit area is not stretched over the card. Screen readers hear a short link name (\"Renew vehicle registration\"), with the entity as its description, instead of the card's whole text. The heading contains the link, so heading navigation lists every service, and keyboard users meet one tab stop per card (plus a chip, if it is a link). The title's hit area is at least 44 × 44 px; the focus ring goes round the title. With a mouse or trackpad (`(hover: hover) and (pointer: fine)`) hovering the title underlines it; touch screens get no hover state. The forward arrow at the top end (E1) is decorative: it is hidden from assistive technology and is not a target. Add an icon with `slot=\"icon\"` and a decorative topic `tint` if the page uses them. The card is flat (1px edge, 12px corners, no shadow), at least 184px tall; hovering the card strengthens its edge and underlines the title.\n\n### Arabic\n\nEntity names have official Arabic forms (\"هيئة الطرق والمواصلات\"); use them.\n",
+      "docs": "A link to a service: its title, the entity that owns it, an optional icon and an optional\nchannel chip, on a flat 12px card with a 1px edge (direction E, \"Most used services\").\n\nOnly the title is the link (CMP-06), so screen readers hear a short link name (\"Renew\nvehicle registration\"), with the entity as its description. The card is not wrapped in an\n`<a>` and the link's hit area is not stretched over the card: it is the title, grown to at\nleast 44 × 44. The forward arrow at the top end is decorative: it is not a second link and\nis hidden from assistive technology. The title is a heading containing the link, so heading\nnavigation finds every service. A chip that is a link is a separate link.",
       "docsTags": [
         {
           "name": "slot",
@@ -7176,6 +7614,10 @@
         },
         {
           "name": "slot",
+          "text": "icon - An optional decorative icon: an inline 24px `<svg>` in `currentColor`. It sits\nin a 40px tile at the start, in the channel's container colour or the `tint`."
+        },
+        {
+          "name": "slot",
           "text": "chip - An optional `sc-channel-chip` (\"Also on Dubai Transport\")."
         },
         {
@@ -7184,7 +7626,7 @@
         },
         {
           "name": "part",
-          "text": "link - The `<a>` inside the heading."
+          "text": "icon - The 40px icon tile."
         },
         {
           "name": "part",
@@ -7192,7 +7634,15 @@
         },
         {
           "name": "part",
+          "text": "link - The `<a>` inside the heading."
+        },
+        {
+          "name": "part",
           "text": "entity - The entity line."
+        },
+        {
+          "name": "part",
+          "text": "arrow - The decorative forward arrow."
         }
       ],
       "usage": {},
@@ -7297,6 +7747,59 @@
           "required": true,
           "getter": false,
           "setter": false
+        },
+        {
+          "name": "tint",
+          "type": "\"amber\" | \"blue\" | \"green\" | \"orange\" | \"rose\" | \"violet\" | undefined",
+          "complexType": {
+            "original": "ServiceCardTint",
+            "resolved": "\"amber\" | \"blue\" | \"green\" | \"orange\" | \"rose\" | \"violet\" | undefined",
+            "references": {
+              "ServiceCardTint": {
+                "location": "local",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-service-card/sc-service-card.tsx",
+                "id": "src/components/sc-service-card/sc-service-card.tsx::ServiceCardTint"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "tint",
+          "reflectToAttr": true,
+          "docs": "Colours the icon tile with a decorative topic tint (foundations §2.7) instead of the\nchannel container: `blue` transport, `violet` residency, `rose` family, `orange` housing,\n`amber` bills, `green` health. Decorative only. Ignored without an icon.",
+          "docsTags": [],
+          "values": [
+            {
+              "value": "amber",
+              "type": "string"
+            },
+            {
+              "value": "blue",
+              "type": "string"
+            },
+            {
+              "value": "green",
+              "type": "string"
+            },
+            {
+              "value": "orange",
+              "type": "string"
+            },
+            {
+              "value": "rose",
+              "type": "string"
+            },
+            {
+              "value": "violet",
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
         }
       ],
       "methods": [],
@@ -7315,9 +7818,17 @@
         {
           "name": "entity",
           "docs": "The owning entity, when it needs markup. Otherwise use the `entity` prop."
+        },
+        {
+          "name": "icon",
+          "docs": "An optional decorative icon: an inline 24px `<svg>` in `currentColor`. It sits\nin a 40px tile at the start, in the channel's container colour or the `tint`."
         }
       ],
       "parts": [
+        {
+          "name": "arrow",
+          "docs": "The decorative forward arrow."
+        },
         {
           "name": "card",
           "docs": "The surface."
@@ -7325,6 +7836,10 @@
         {
           "name": "entity",
           "docs": "The entity line."
+        },
+        {
+          "name": "icon",
+          "docs": "The 40px icon tile."
         },
         {
           "name": "link",
@@ -7917,34 +8432,14 @@
     },
     {
       "filePath": "src/components/sc-summary-list/sc-summary-list.tsx",
-      "encapsulation": "shadow",
+      "encapsulation": "scoped",
       "tag": "sc-summary-list",
-      "readme": "# sc-summary-list\n\nThe \"Check your answers\" pattern: the answers a user gave, each with a way to change it, before they submit or pay.\n\n## Usage\n\n```html\n<h2>Renewal</h2>\n<sc-summary-list>\n  <sc-summary-row label=\"Vehicle\">Nissan Patrol 2021, white</sc-summary-row>\n  <sc-summary-row label=\"Plate\">Dubai <sc-ltr>A 48213</sc-ltr></sc-summary-row>\n  <sc-summary-row label=\"Renew for\" action-href=\"/renew/period\">1 year, until 3 November 2027</sc-summary-row>\n  <sc-summary-row label=\"Insurance\" action-href=\"/renew/insurance\">Valid until 14 March 2027</sc-summary-row>\n</sc-summary-list>\n```\n\n- Group answers under headings that match the journey's sections (\"Vehicle\", \"Renewal\"), one list per group.\n- Add `action-href` on each row the user can change. The link reads \"Change\" (\"تغيير\") with the key as visually hidden text, so screen reader users hear \"Change Insurance\". Use `action-hidden-text` when the key doesn't read well after \"Change\", and `action-text` only for a different verb.\n- Rows without an action keep the empty action column, so every value starts at the same place.\n- A row with no value (an optional question the user skipped) shows \"Not provided\" (\"لم يتم تقديمه\"), never an empty value. Leave the row empty rather than writing your own placeholder.\n- Keys are short nouns in sentence case. Values are the user's answer, written out (\"1 year, until 3 November 2027\"), not codes. Wrap plates, amounts, references and phone numbers in `<sc-ltr>`.\n- Use `appearance=\"plain\"` when the list sits inside another card.\n\n### Layout\n\nThe list responds to its own width (a container query), not the screen's. From 600px it shows key, value and a fixed 96px action column (`--sc-summary-list-action-width` changes it). Narrower, the key sits above the value and the action moves to the end of the row, as in D+ on mobile.\n\n### Semantics\n\nDescription lists can't span shadow roots: a `<dl>` must directly contain `<dt>`/`<dd>` or `<div>` groups, and axe checks that in the flattened tree. So the list renders the entire `<dl>` itself: one `<div>` per row with the `<dt>` (the row's `label`), the value `<dd>` and the action `<dd>`. Each `sc-summary-row` is slotted into its value `<dd>` (the list sets its `slot` attribute), so values stay in light DOM and can hold any inline markup. Only `sc-summary-row` children are listed; adding, removing, hiding or changing a row re-renders the list.\n\n### Arabic\n\nColumns mirror: key on the right, action on the left. The action text is \"تغيير\", followed by the hidden key in the page language.\n",
-      "docs": "The \"Check your answers\" pattern: rows of a key, a value and an optional \"Change\" action,\nas one `<dl>`.\n\nDescription lists can't span shadow roots (a `<dl>` must directly contain `<dt>`/`<dd>`\nor `<div>` groups), so this component renders the whole `<dl>` in its own shadow root:\none `<div>` per row holding the `<dt>` (from the row's `label`), the value `<dd>` and the\naction `<dd>`. Each `sc-summary-row` child is assigned to a named slot inside its value\n`<dd>`, so rich values (addresses, `<sc-ltr>` plates) stay in light DOM.\n\nWide containers show three columns (key, value, a fixed-width action column, so rows\nalign). Below 600px of container width the key sits above the value, with the action at\nthe end.",
+      "readme": "# sc-summary-list\n\nThe \"Check your answers\" pattern: the answers a user gave, each with a way to change it, before they submit or pay.\n\n## Usage\n\n```html\n<h2>Renewal</h2>\n<sc-summary-list>\n  <sc-summary-row label=\"Vehicle\">Nissan Patrol 2021, white</sc-summary-row>\n  <sc-summary-row label=\"Plate\">Dubai <sc-ltr>A 48213</sc-ltr></sc-summary-row>\n  <sc-summary-row label=\"Renew for\" action-href=\"/renew/period\">1 year, until 3 November 2027</sc-summary-row>\n  <sc-summary-row label=\"Insurance\" action-href=\"/renew/insurance\">Valid until 14 March 2027</sc-summary-row>\n</sc-summary-list>\n```\n\n- Group answers under headings that match the journey's sections (\"Vehicle\", \"Renewal\"), one list per group.\n- Add `action-href` on each row the user can change. The link reads \"Change\" (\"تغيير\") with the key as visually hidden text, so screen reader users hear \"Change Insurance\". Use `action-hidden-text` when the key doesn't read well after \"Change\", and `action-text` only for a different verb.\n- Rows without an action keep the empty action column, so every value starts at the same place.\n- A row with no value (an optional question the user skipped) shows \"Not provided\" (\"لم يتم تقديمه\"), never an empty value. Leave the row empty rather than writing your own placeholder.\n- Keys are short nouns in sentence case. Values are the user's answer, written out (\"1 year, until 3 November 2027\"), not codes. Wrap plates, amounts, references and phone numbers in `<sc-ltr>`.\n- Use `appearance=\"plain\"` when the list sits inside another card.\n\n### Layout\n\n`layout=\"auto\"` (default) responds to the list's own width: below 600px the key sits above the value with the action in a 64px end column (E3); from 600px it shows key, value and a fixed 96px action column. Force either with `stacked` or `columns`. `layout=\"pairs\"` is the payment summary (E4): the key in a fixed column, the value aligned to the end, no actions; mark the amount row with `variant=\"total\"`.\n\n### Semantics\n\nThe list renders one `<dl>` in light DOM: a `<div>` per row with the `<dt>` (the row's `label`), the value `<dd>` and the action `<dd>`. Each `sc-summary-row` is moved into its value `<dd>`, so the description list is valid HTML and values stay your own markup. Only `sc-summary-row` children are listed; adding, removing, hiding or changing a row re-renders the list.\n\n### Arabic\n\nColumns mirror: key on the right, action on the left. The action text is \"تغيير\", followed by the hidden key in the page language.\n",
+      "docs": "The \"Check your answers\" pattern (E3) and the payment summary (E4): rows of a key, a value\nand an optional \"Change\" action, as one `<dl>`.\n\nv2 renders in light DOM (Stencil `scoped`, architecture §3.1). The list renders the\n`<dl>` itself: one `<div>` per row holding the `<dt>` (the row's `label`), the value `<dd>`\nand the action `<dd>`. Each `sc-summary-row` child is moved into its value `<dd>`, so the\ndescription list is valid HTML (a `<dl>` may only contain `<div>`, `<dt>` and `<dd>`) and\nrich values (addresses, `<sc-ltr>` plates) stay the service's own markup.\n\nLayouts: `stacked` puts the key above the value with the action in a fixed 64px end column\n(E3); `columns` shows key, value and a fixed 96px action column; `pairs` puts the key in a\nfixed column and end-aligns the value, with no actions (E4); `auto` (default) is `stacked`\nbelow 600px of the list's own width and `columns` from there.",
       "docsTags": [
         {
           "name": "slot",
           "text": "- `sc-summary-row` elements, one per answer. Other children are ignored."
-        },
-        {
-          "name": "part",
-          "text": "list - The `<dl>`."
-        },
-        {
-          "name": "part",
-          "text": "row - Each row's `<div>`."
-        },
-        {
-          "name": "part",
-          "text": "key - Each `<dt>`."
-        },
-        {
-          "name": "part",
-          "text": "value - Each value `<dd>`."
-        },
-        {
-          "name": "part",
-          "text": "action - Each action `<dd>`."
         }
       ],
       "usage": {},
@@ -7966,7 +8461,7 @@
           "mutable": false,
           "attr": "appearance",
           "reflectToAttr": true,
-          "docs": "`card` (default) sits the rows on a surface card, as in D+; `plain` draws only the row dividers, for use inside another card.",
+          "docs": "`card` (default) draws the rows on a 12px card with a 1px edge; `plain` draws only the row dividers, for use inside another card.",
           "docsTags": [
             {
               "name": "default",
@@ -7988,17 +8483,59 @@
           "required": false,
           "getter": false,
           "setter": false
+        },
+        {
+          "name": "layout",
+          "type": "\"auto\" | \"columns\" | \"pairs\" | \"stacked\"",
+          "complexType": {
+            "original": "SummaryListLayout",
+            "resolved": "\"auto\" | \"columns\" | \"pairs\" | \"stacked\"",
+            "references": {
+              "SummaryListLayout": {
+                "location": "local",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-summary-list/sc-summary-list.tsx",
+                "id": "src/components/sc-summary-list/sc-summary-list.tsx::SummaryListLayout"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "layout",
+          "reflectToAttr": true,
+          "docs": "`auto` (default), `stacked`, `columns` or `pairs`. See the component description.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'auto'"
+            }
+          ],
+          "default": "'auto'",
+          "values": [
+            {
+              "value": "auto",
+              "type": "string"
+            },
+            {
+              "value": "columns",
+              "type": "string"
+            },
+            {
+              "value": "pairs",
+              "type": "string"
+            },
+            {
+              "value": "stacked",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
         }
       ],
       "methods": [],
       "events": [],
-      "listeners": [
-        {
-          "event": "sc-summary-row-update",
-          "capture": false,
-          "passive": false
-        }
-      ],
+      "listeners": [],
       "styles": [],
       "slots": [
         {
@@ -8006,28 +8543,7 @@
           "docs": "`sc-summary-row` elements, one per answer. Other children are ignored."
         }
       ],
-      "parts": [
-        {
-          "name": "action",
-          "docs": "Each action `<dd>`."
-        },
-        {
-          "name": "key",
-          "docs": "Each `<dt>`."
-        },
-        {
-          "name": "list",
-          "docs": "The `<dl>`."
-        },
-        {
-          "name": "row",
-          "docs": "Each row's `<div>`."
-        },
-        {
-          "name": "value",
-          "docs": "Each value `<dd>`."
-        }
-      ],
+      "parts": [],
       "states": [],
       "dependents": [],
       "dependencies": [],
@@ -8035,10 +8551,10 @@
     },
     {
       "filePath": "src/components/sc-summary-row/sc-summary-row.tsx",
-      "encapsulation": "shadow",
+      "encapsulation": "scoped",
       "tag": "sc-summary-row",
       "readme": "# sc-summary-row\n\nOne answer in a `sc-summary-list`. See that component for the full pattern.\n\n## Usage\n\n```html\n<sc-summary-row label=\"Delivery address\" action-href=\"/renew/address\">\n  Villa 14, Street 23<br />Al Sufouh 2, Dubai\n</sc-summary-row>\n<sc-summary-row label=\"Email\" value=\"saeed.almansoori@example.ae\"></sc-summary-row>\n```\n\n- Use it only as a direct child of `sc-summary-list`. The list renders the key, the action and the `<dl>` structure, and sets the row's `slot` attribute; don't set `slot` yourself.\n- `label` is the key (required). The value is the default slot, or `value` for plain text. With neither, the row shows \"Not provided\" (\"لم يتم تقديمه\"). Leave no whitespace between the tags of an empty row (`<sc-summary-row label=\"…\"></sc-summary-row>`): a slotted space counts as a value.\n- `action-href` adds the \"Change\" link; `action-text` and `action-hidden-text` override its words.\n",
-      "docs": "One answer in a `sc-summary-list`: a key (`label`), a value (the default slot) and an\noptional \"Change\" action.\n\nThe row only carries data and its value. The parent `sc-summary-list` renders the\n`<dt>`, `<dd>` and action inside its own `<dl>`, and slots this element into the value\n`<dd>`, so the description list stays valid across shadow roots. Use it only as a direct\nchild of `sc-summary-list`; the list sets its `slot` attribute.",
+      "docs": "One answer in a `sc-summary-list`: a key (`label`), a value (the default slot) and an\noptional \"Change\" action.\n\nv2 renders in light DOM (Stencil `scoped`). The row carries the data and its value; the\nparent `sc-summary-list` renders the `<dt>`, the value `<dd>` and the action inside its own\n`<dl>`, and moves this element into the value `<dd>`. Use it only as a direct child of\n`sc-summary-list`; the list sets its `slot` attribute.",
       "docsTags": [
         {
           "name": "slot",
@@ -8057,7 +8573,7 @@
           },
           "mutable": false,
           "attr": "action-hidden-text",
-          "reflectToAttr": false,
+          "reflectToAttr": true,
           "docs": "Visually hidden text after the action text, so screen reader users hear which answer\nthey're changing (\"Change Plate number\"). Defaults to `label`. Set it when the label alone\ndoesn't read well after the action text, e.g. `action-hidden-text=\"your plate number\"`.",
           "docsTags": [],
           "values": [
@@ -8084,7 +8600,7 @@
           "mutable": false,
           "attr": "action-href",
           "reflectToAttr": true,
-          "docs": "Where the action goes, e.g. back to the question with `#plate-number` or a page URL.\nWithout it the row has no action (the action column stays, so values still align).",
+          "docs": "Where the action goes, e.g. back to the question with `#plate-number` or a page URL.\nWithout it the row has no action (the action column stays, so values still align).\nIgnored in the `pairs` layout.",
           "docsTags": [],
           "values": [
             {
@@ -8109,7 +8625,7 @@
           },
           "mutable": false,
           "attr": "action-text",
-          "reflectToAttr": false,
+          "reflectToAttr": true,
           "docs": "The visible action text. Defaults to \"Change\" (\"تغيير\") in the page language.",
           "docsTags": [],
           "values": [
@@ -8159,7 +8675,7 @@
           "mutable": false,
           "attr": "value",
           "reflectToAttr": false,
-          "docs": "A plain-text value, used when the default slot is empty. With neither, the row shows \"Not provided\".",
+          "docs": "A plain-text value, used when the row has no content. With neither, the row shows \"Not provided\".",
           "docsTags": [],
           "values": [
             {
@@ -8170,6 +8686,46 @@
             }
           ],
           "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "variant",
+          "type": "\"default\" | \"total\"",
+          "complexType": {
+            "original": "SummaryRowVariant",
+            "resolved": "\"default\" | \"total\"",
+            "references": {
+              "SummaryRowVariant": {
+                "location": "local",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-summary-row/sc-summary-row.tsx",
+                "id": "src/components/sc-summary-row/sc-summary-row.tsx::SummaryRowVariant"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "variant",
+          "reflectToAttr": true,
+          "docs": "`total` marks the amount row of a payment summary (E4): a quiet fill and Bold key and value.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'default'"
+            }
+          ],
+          "default": "'default'",
+          "values": [
+            {
+              "value": "default",
+              "type": "string"
+            },
+            {
+              "value": "total",
+              "type": "string"
+            }
+          ],
+          "optional": false,
           "required": false,
           "getter": false,
           "setter": false
@@ -8195,7 +8751,7 @@
       "filePath": "src/components/sc-table/sc-table.tsx",
       "encapsulation": "scoped",
       "tag": "sc-table",
-      "readme": "# sc-table\n\nA table compares rows of the same kind of thing across a few attributes: a person's fines, their payments, the status of their permit applications. Each row is one thing; each column is one attribute. For the details of one thing, use `sc-summary-list`. Never use a table for layout.\n\n## Usage\n\n```html\n<sc-table caption=\"Your fines\" selectable\n  strings='{\"tableSelectAll\": \"Select all fines on this page\", \"tableSelectRow\": \"Select fine {row}\"}'\n  selection-label=\"{count} fine selected|{count} fines selected\">\n  <table>\n    <thead>\n      <tr>\n        <th scope=\"col\" data-type=\"reference\">Reference</th>\n        <th scope=\"col\" data-type=\"date\" data-sort=\"date\" aria-sort=\"descending\">Date</th>\n        <th scope=\"col\">Offence</th>\n        <th scope=\"col\" data-type=\"status\">Status</th>\n        <th scope=\"col\" data-type=\"amount\" data-sort=\"amount\">Amount</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr data-id=\"F-2026-118204\">\n        <th scope=\"row\"><a href=\"/fines/F-2026-118204\"><sc-ltr>F-2026-118204</sc-ltr></a></th>\n        <td>14 Mar 2026</td>\n        <td>Speeding: 21 to 30 km/h over the limit</td>\n        <td><sc-status-tag tone=\"warning\">Not paid</sc-status-tag></td>\n        <td data-value=\"600\">AED 600.00</td>\n      </tr>\n    </tbody>\n  </table>\n  <div slot=\"footer\"><span>Showing 1–20 of 1,284 fines</span> …Previous / Next…</div>\n  <sc-button slot=\"actions\">Pay 2 fines</sc-button>\n</sc-table>\n```\n\n- **Scoped, not shadowed.** The component styles and enhances your native `<table>`, so screen readers announce rows, columns and headers. Write `th scope=\"col\"` headers and a `th scope=\"row\"` as each row's first cell; it usually carries the row's link. Whole rows are never clickable.\n- **Caption** is required: `caption` writes a native `<caption>`. Use `caption-hidden` when a heading straight above says the same thing.\n- **Column types** go on the header cell as `data-type` and set alignment, wrapping and figures for the whole column: `text` (wraps, never truncated), `reference` (nowrap, tabular; wrap the value in `sc-ltr`), `date`, `amount` (end-aligned, nowrap: the column grows instead), `status` (an `sc-status-tag`), `action` (end-aligned). Digits are Latin in both languages.\n- **Missing values:** leave the cell empty and the component writes a muted \"None\" (لا يوجد). Never a bare dash.\n- **Sorting:** add `data-sort` (optionally with a column key, `data-sort=\"amount\"`) to a header. It becomes a button; Enter or a click cycles ascending and descending, one column at a time, sets `aria-sort` and announces \"Sorted by Amount, highest first\". The component only emits `scSort` with `{ column, direction }`: sort the data in the service (usually on the server) and re-render the rows. Sorting is never animated.\n- **Selection:** `selectable` adds a checkbox column at inline-start, identified by `tr[data-id]`, and a selection bar with the count, the total of the amount column (from `data-value`, or the cell text) and your `actions` slot. Label the checkboxes with `strings` (\"Select fine {row}\"). `selection-label` takes plural forms separated by `|` (English one|other; Arabic zero|one|two|few|many|other). `tr[data-selected]` preselects a row. `scSelectionChange` carries `{ ids }`.\n- **States:** `loading` shows 5 skeleton rows at the real column widths (the header stays). With no rows, the `empty` slot replaces the table: a `title-s` sentence and an optional next step (\"You have no fines\"; never \"No data\"). Add `filtered` for \"No results\" after a filter, which keeps the header. Put an `sc-callout tone=\"error\"` with a \"Try again\" button in the `error` slot when the data can't load. Counts in the footer follow plural rules: \"Showing 1 fine\", never \"1–1 of 1\".\n- **Density:** `compact` (44px rows) is for staff tools with long lists.\n- **Below 600px** (the component's own width), `responsive=\"stack\"` (default, up to about 6 columns) turns rows into cards: the row header is the title, the status sits at top inline-end, other cells become label and value pairs, the amount is the last line in `title-m` and the action a full-width link row. `responsive=\"scroll\"` keeps the table in a horizontal scroll region (focusable, named by the caption) with the row header sticky at inline-start and a shadow on the side with more content. A table wider than its container always scrolls rather than clipping.\n- **Links in cells** get a target of at least 44 × 44 px (an invisible hit area around the text) without changing the row height.\n- **Screen-reader context:** `class=\"sc-visually-hidden\"` inside the table hides text visually: `View<span class=\"sc-visually-hidden\"> fine F-2026-118204</span>`.\n- **Arabic:** everything mirrors: the first column and the checkboxes are on the right, amounts and actions align left, and the sort glyph sits after the label. Rows grow with the Arabic leading; nothing is fixed-height.\n",
+      "readme": "# sc-table\n\nA table compares rows of the same kind of thing across a few attributes: a person's fines, their payments, the status of their permit applications. Each row is one thing; each column is one attribute. For the details of one thing, use `sc-summary-list`. Never use a table for layout.\n\n## Usage\n\n```html\n<sc-table caption=\"Your fines\" selectable\n  strings='{\"tableSelectAll\": \"Select all fines on this page\", \"tableSelectRow\": \"Select fine {row}\"}'\n  selection-label=\"{count} fine selected|{count} fines selected\">\n  <table>\n    <thead>\n      <tr>\n        <th scope=\"col\" data-type=\"reference\">Reference</th>\n        <th scope=\"col\" data-type=\"date\" data-sort=\"date\" aria-sort=\"descending\">Date</th>\n        <th scope=\"col\">Offence</th>\n        <th scope=\"col\" data-type=\"status\">Status</th>\n        <th scope=\"col\" data-type=\"amount\" data-sort=\"amount\">Amount</th>\n      </tr>\n    </thead>\n    <tbody>\n      <tr data-id=\"F-2026-118204\">\n        <th scope=\"row\"><a href=\"/fines/F-2026-118204\"><sc-ltr>F-2026-118204</sc-ltr></a></th>\n        <td>14 Mar 2026</td>\n        <td>Speeding: 21 to 30 km/h over the limit</td>\n        <td><sc-status-tag tone=\"warning\">Not paid</sc-status-tag></td>\n        <td data-value=\"600\">AED 600.00</td>\n      </tr>\n    </tbody>\n  </table>\n  <div slot=\"footer\"><span>Showing 1–20 of 1,284 fines</span> …Previous / Next…</div>\n  <sc-button slot=\"actions\">Pay 2 fines</sc-button>\n</sc-table>\n```\n\n- **Scoped, not shadowed.** The component styles and enhances your native `<table>`, so screen readers announce rows, columns and headers. Write `th scope=\"col\"` headers and a `th scope=\"row\"` as each row's first cell; it usually carries the row's link. Whole rows are never clickable.\n- **Caption** is required: `caption` writes a native `<caption>`. Use `caption-hidden` when a heading straight above says the same thing.\n- **Column types** go on the header cell as `data-type` and set alignment, wrapping and figures for the whole column: `text` (wraps, never truncated), `reference` (nowrap, tabular; wrap the value in `sc-ltr`), `date`, `amount` (end-aligned, nowrap: the column grows instead), `status` (an `sc-status-tag`), `action` (end-aligned). Digits are Latin in both languages.\n- **Missing values:** leave the cell empty and the component writes a muted \"None\" (لا يوجد). Never a bare dash.\n- **Sorting:** add `data-sort` (optionally with a column key, `data-sort=\"amount\"`) to a header. It becomes a button; Enter or a click cycles ascending and descending, one column at a time, sets `aria-sort` and announces \"Sorted by Amount, highest first\". The component only emits `scSort` with `{ column, direction }`: sort the data in the service (usually on the server) and re-render the rows. Sorting is never animated.\n- **Selection:** `selectable` adds a checkbox column at inline-start, identified by `tr[data-id]`, and a selection bar with the count, the total of the amount column (from `data-value`, or the cell text) and your `actions` slot. Label the checkboxes with `strings` (\"Select fine {row}\"). `selection-label` takes plural forms separated by `|` (English one|other; Arabic zero|one|two|few|many|other). `tr[data-selected]` preselects a row. `scSelectionChange` carries `{ ids }`.\n- **States:** `loading` shows 5 skeleton rows at the real column widths (the header stays). With no rows, the `empty` slot replaces the table: a `title-s` sentence and an optional next step (\"You have no fines\"; never \"No data\"). Add `filtered` for \"No results\" after a filter, which keeps the header. Put an `sc-callout tone=\"error\"` with a \"Try again\" button in the `error` slot when the data can't load. Counts in the footer follow plural rules: \"Showing 1 fine\", never \"1–1 of 1\".\n- **Density:** `compact` (44px rows) is for staff tools with long lists.\n- **Below 600px** (the component's own width), `responsive=\"stack\"` (default, up to about 6 columns) turns rows into cards: the row header is the title, the status sits at top inline-end, other cells become label and value pairs, the amount is the last line in `title-medium` and the action a full-width link row. `responsive=\"scroll\"` keeps the table in a horizontal scroll region (focusable, named by the caption) with the row header sticky at inline-start and a shadow on the side with more content. A table wider than its container always scrolls rather than clipping.\n- **Links in cells** get a target of at least 44 × 44 px (an invisible hit area around the text) without changing the row height.\n- **Screen-reader context:** `class=\"sc-visually-hidden\"` inside the table hides text visually: `View<span class=\"sc-visually-hidden\"> fine F-2026-118204</span>`.\n- **Arabic:** everything mirrors: the first column and the checkboxes are on the right, amounts and actions align left, and the sort glyph sits after the label. Rows grow with the Arabic leading; nothing is fixed-height.\n",
       "docs": "A table compares rows of the same kind of thing across a few attributes: fines, payments,\npermit applications. It styles and enhances a slotted native `<table>`; it never rebuilds\none out of divs, so screen readers announce rows, columns and headers.\n\nThe component is scoped (light DOM). Mark up the table as usual: `th scope=\"col\"` in the\nheader, `th scope=\"row\"` as each row's first cell, and give header cells a column type with\n`data-type` (`text`, `reference`, `date`, `amount`, `status`, `action`) to set alignment,\nwrapping and figures. The component then:\n- writes the `caption` property into a native `<caption>` (the table's accessible name);\n- turns `th[data-sort]` headers into sort buttons with `aria-sort`, and emits `scSort`\n  (the service sorts the data, usually on the server);\n- with `selectable`, adds a checkbox column (rows are identified by `tr[data-id]`) and a\n  selection bar, and emits `scSelectionChange`;\n- fills empty cells with a muted \"None\";\n- below 600px, stacks rows as cards (`responsive=\"stack\"`) or scrolls sideways (`\"scroll\"`).\n\nUse `class=\"sc-visually-hidden\"` inside the table for context only screen readers need\n(\"View <span class=\"sc-visually-hidden\">fine F-2026-118204</span>\").",
       "docsTags": [
         {
@@ -8466,8 +9022,8 @@
             "references": {
               "StringsInput": {
                 "location": "import",
-                "path": "./overrides",
-                "id": "src/components/sc-table/overrides.ts::StringsInput",
+                "path": "./strings-override",
+                "id": "src/components/sc-table/strings-override.ts::StringsInput",
                 "referenceLocation": "StringsInput"
               }
             }
@@ -9898,6 +10454,206 @@
       "dependencyGraph": {}
     },
     {
+      "filePath": "src/components/sc-tile/sc-tile.tsx",
+      "encapsulation": "shadow",
+      "tag": "sc-tile",
+      "readme": "# sc-tile\n\nA compact tile that is one link: a tinted icon, a title and an optional plural-aware count. For life events, categories and favourite services. Specification: `specs/sc-tile.md`.\n\n## Usage\n\n```html\n<ul class=\"tiles\">\n  <li><sc-tile href=\"/life-events/moving-home\" tint=\"orange\" count=\"14\"><svg slot=\"icon\" …></svg>Moving home</sc-tile></li>\n</ul>\n```\n",
+      "docs": "A compact single-link tile: a tinted icon tile, a title and an optional count. Use it for\nlife events (\"Moving home · 14 services\"), categories (\"Transport and vehicles\") and\nfavourite services (\"Pay a traffic fine\").\n\nThe whole tile is one link, because the title (and the count) is its only content and so\nthe link's whole name: \"Moving home, 14 services\". That does not conflict with CMP-06,\nwhich is about cards that hold more than one thing. Tiles carry no other links or buttons.",
+      "docsTags": [
+        {
+          "name": "slot",
+          "text": "- The title, e.g. \"Moving home\". Text only."
+        },
+        {
+          "name": "slot",
+          "text": "icon - A decorative icon: an inline 24px `<svg>` in `currentColor`, shown in a 40px\ntile in the `tint` colour (or the channel's container colour)."
+        },
+        {
+          "name": "part",
+          "text": "link - The `<a>`, which is the tile."
+        },
+        {
+          "name": "part",
+          "text": "icon - The 40px icon tile."
+        },
+        {
+          "name": "part",
+          "text": "title - The title."
+        },
+        {
+          "name": "part",
+          "text": "count - The count line."
+        }
+      ],
+      "usage": {},
+      "props": [
+        {
+          "name": "count",
+          "type": "number | undefined",
+          "complexType": {
+            "original": "number",
+            "resolved": "number | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "count",
+          "reflectToAttr": false,
+          "docs": "How many things the tile leads to, e.g. 14. Shown as \"14 services\" with the right plural form in both languages.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "countLabel",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "count-label",
+          "reflectToAttr": false,
+          "docs": "Overrides the count text, with `{count}` and plural forms separated by `|`:\n\"{count} step|{count} steps\"; in Arabic zero|one|two|few|many|other.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "href",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "href",
+          "reflectToAttr": true,
+          "docs": "Where the tile goes. Required.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": true,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "tint",
+          "type": "\"amber\" | \"blue\" | \"green\" | \"orange\" | \"rose\" | \"violet\" | undefined",
+          "complexType": {
+            "original": "TileTint",
+            "resolved": "\"amber\" | \"blue\" | \"green\" | \"orange\" | \"rose\" | \"violet\" | undefined",
+            "references": {
+              "TileTint": {
+                "location": "local",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-tile/sc-tile.tsx",
+                "id": "src/components/sc-tile/sc-tile.tsx::TileTint"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "tint",
+          "reflectToAttr": true,
+          "docs": "The icon tile's decorative topic tint (foundations §2.7): `blue` transport and vehicles,\n`violet` residency and identity, `rose` family, `orange` housing and utilities, `amber`\nbills and money, `green` health. Without it the tile takes the channel's container colour.",
+          "docsTags": [],
+          "values": [
+            {
+              "value": "amber",
+              "type": "string"
+            },
+            {
+              "value": "blue",
+              "type": "string"
+            },
+            {
+              "value": "green",
+              "type": "string"
+            },
+            {
+              "value": "orange",
+              "type": "string"
+            },
+            {
+              "value": "rose",
+              "type": "string"
+            },
+            {
+              "value": "violet",
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [],
+      "listeners": [],
+      "styles": [],
+      "slots": [
+        {
+          "name": "",
+          "docs": "The title, e.g. \"Moving home\". Text only."
+        },
+        {
+          "name": "icon",
+          "docs": "A decorative icon: an inline 24px `<svg>` in `currentColor`, shown in a 40px\ntile in the `tint` colour (or the channel's container colour)."
+        }
+      ],
+      "parts": [
+        {
+          "name": "count",
+          "docs": "The count line."
+        },
+        {
+          "name": "icon",
+          "docs": "The 40px icon tile."
+        },
+        {
+          "name": "link",
+          "docs": "The `<a>`, which is the tile."
+        },
+        {
+          "name": "title",
+          "docs": "The title."
+        }
+      ],
+      "states": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
       "filePath": "src/components/sc-timeline/sc-timeline.tsx",
       "encapsulation": "scoped",
       "tag": "sc-timeline",
@@ -9999,6 +10755,16 @@
     }
   ],
   "typeLibrary": {
+    "src/components/sc-attention-card/sc-attention-card.tsx::AttentionCardHeadingLevel": {
+      "declaration": "export type AttentionCardHeadingLevel = 2 | 3 | 4 | 5 | 6;",
+      "docstring": "",
+      "path": "src/components/sc-attention-card/sc-attention-card.tsx"
+    },
+    "src/components/sc-attention-card/sc-attention-card.tsx::AttentionCardTint": {
+      "declaration": "export type AttentionCardTint = 'blue' | 'violet' | 'rose' | 'orange' | 'amber' | 'green';",
+      "docstring": "",
+      "path": "src/components/sc-attention-card/sc-attention-card.tsx"
+    },
     "src/components/sc-button/sc-button.tsx::ButtonVariant": {
       "declaration": "export type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'destructive' | 'handoff';",
       "docstring": "",
@@ -10044,6 +10810,11 @@
       "docstring": "",
       "path": "src/components/sc-card/sc-card.tsx"
     },
+    "src/components/sc-card/sc-card.tsx::CardVariant": {
+      "declaration": "export type CardVariant = 'outlined' | 'filled';",
+      "docstring": "",
+      "path": "src/components/sc-card/sc-card.tsx"
+    },
     "src/i18n/core.ts::Channel": {
       "declaration": "\"build\" | \"now\" | \"transport\" | \"visit\" | \"justice\" | \"invest\" | \"trade\"",
       "docstring": "",
@@ -10054,10 +10825,10 @@
       "docstring": "",
       "path": "src/components/sc-channel-chip/sc-channel-chip.tsx"
     },
-    "src/components/sc-container/sc-container.tsx::ContainerWidth": {
-      "declaration": "export type ContainerWidth = 'page' | 'reading';",
+    "src/components/sc-channel-hero/sc-channel-hero.tsx::ChannelHeroSize": {
+      "declaration": "export type ChannelHeroSize = 'large' | 'medium';",
       "docstring": "",
-      "path": "src/components/sc-container/sc-container.tsx"
+      "path": "src/components/sc-channel-hero/sc-channel-hero.tsx"
     },
     "src/components/sc-empty-state/sc-empty-state.tsx::EmptyStateHeadingLevel": {
       "declaration": "export type EmptyStateHeadingLevel = 2 | 3 | 4;",
@@ -10104,6 +10875,16 @@
       "docstring": "",
       "path": "src/components/sc-modal/sc-modal.tsx"
     },
+    "src/components/sc-module-card/sc-module-card.tsx::ModuleCardHeadingLevel": {
+      "declaration": "export type ModuleCardHeadingLevel = 2 | 3 | 4 | 5 | 6;",
+      "docstring": "",
+      "path": "src/components/sc-module-card/sc-module-card.tsx"
+    },
+    "src/components/sc-module-card/sc-module-card.tsx::ModuleCardTint": {
+      "declaration": "export type ModuleCardTint = 'blue' | 'violet' | 'rose' | 'orange' | 'amber' | 'green';",
+      "docstring": "",
+      "path": "src/components/sc-module-card/sc-module-card.tsx"
+    },
     "src/components/sc-pagination/sc-pagination.tsx::PaginationChangeDetail": {
       "declaration": "export interface PaginationChangeDetail {\n  /** The page asked for (1-based). */\n  page: number;\n}",
       "docstring": "",
@@ -10116,6 +10897,11 @@
     },
     "src/components/sc-service-card/sc-service-card.tsx::ServiceCardHeadingLevel": {
       "declaration": "export type ServiceCardHeadingLevel = 2 | 3 | 4 | 5 | 6;",
+      "docstring": "",
+      "path": "src/components/sc-service-card/sc-service-card.tsx"
+    },
+    "src/components/sc-service-card/sc-service-card.tsx::ServiceCardTint": {
+      "declaration": "export type ServiceCardTint = 'blue' | 'violet' | 'rose' | 'orange' | 'amber' | 'green';",
       "docstring": "",
       "path": "src/components/sc-service-card/sc-service-card.tsx"
     },
@@ -10139,10 +10925,20 @@
       "docstring": "",
       "path": "src/components/sc-summary-list/sc-summary-list.tsx"
     },
-    "src/components/sc-table/overrides.ts::StringsInput": {
+    "src/components/sc-summary-list/sc-summary-list.tsx::SummaryListLayout": {
+      "declaration": "export type SummaryListLayout = 'auto' | 'stacked' | 'columns' | 'pairs';",
+      "docstring": "",
+      "path": "src/components/sc-summary-list/sc-summary-list.tsx"
+    },
+    "src/components/sc-summary-row/sc-summary-row.tsx::SummaryRowVariant": {
+      "declaration": "export type SummaryRowVariant = 'default' | 'total';",
+      "docstring": "",
+      "path": "src/components/sc-summary-row/sc-summary-row.tsx"
+    },
+    "src/components/sc-table/strings-override.ts::StringsInput": {
       "declaration": "export type StringsInput = string | Record<string, unknown> | undefined | null;",
       "docstring": "",
-      "path": "src/components/sc-table/overrides.ts"
+      "path": "src/components/sc-table/strings-override.ts"
     },
     "src/components/sc-table/sc-table.tsx::SortDirection": {
       "declaration": "export type SortDirection = 'ascending' | 'descending';",
@@ -10164,6 +10960,11 @@
       "docstring": "",
       "path": "src/components/sc-text-input/field.tsx"
     },
+    "src/components/sc-tile/sc-tile.tsx::TileTint": {
+      "declaration": "export type TileTint = 'blue' | 'violet' | 'rose' | 'orange' | 'amber' | 'green';",
+      "docstring": "",
+      "path": "src/components/sc-tile/sc-tile.tsx"
+    },
     "src/components/sc-timeline/sc-timeline.tsx::TimelineOrder": {
       "declaration": "export type TimelineOrder = 'newest-first' | 'oldest-first';",
       "docstring": "",
@@ -10173,6 +10974,11 @@
       "declaration": "{\n    [P in K]: T;\n}",
       "docstring": "",
       "path": "src/components/sc-date-input/date.ts"
+    },
+    "src/components/sc-table/overrides.ts::StringsInput": {
+      "declaration": "export type StringsInput = string | Record<string, unknown> | undefined | null;",
+      "docstring": "",
+      "path": "src/components/sc-table/overrides.ts"
     },
     "src/i18n/strings.ts::Channel": {
       "declaration": "\"build\" | \"now\" | \"transport\" | \"visit\" | \"justice\" | \"invest\" | \"trade\"",

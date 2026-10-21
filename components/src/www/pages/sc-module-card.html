@@ -1,0 +1,83 @@
+<h1 class="pg-title sc-type-headline-large" data-ar="بطاقة الوحدة">Module card</h1>
+<p class="pg-lede sc-type-body-large" data-ar="وحدة بعنوان في الصفحة الرئيسية بعد تسجيل الدخول: أيقونة اختيارية، وعنوان، ورابط في نهاية الرأس، ثم محتوى الوحدة.">
+  A titled module on a signed-in home page: an optional icon, the title, a link at the end of the header, then the module's own content.
+</p>
+
+<section class="pg-section" aria-labelledby="mc-glance">
+  <h2 id="mc-glance" class="sc-type-headline-small" data-ar="لمحة سريعة">At a glance</h2>
+  <div class="mc-grid">
+    <sc-module-card heading="Vehicles" data-ar-heading="المركبات" action-href="#vehicles" action-text="Manage" data-ar-action-text="إدارة" tint="blue" divided>
+      <svg slot="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 16h14v-4l-2-5H7l-2 5zM7 19v-3M17 19v-3"/></svg>
+      <div>
+        <p class="mc-plate"><sc-ltr>Dubai A 12345</sc-ltr></p>
+        <p class="sc-type-title-small" data-ar="نيسان باترول 2021، أبيض">Nissan Patrol 2021, white</p>
+        <p class="mc-muted" data-ar="التسجيل ساري حتى 10 نوفمبر 2026">Registration valid until 10 Nov 2026</p>
+      </div>
+      <div>
+        <p class="mc-muted" data-ar="رصيد سالك">Salik balance</p>
+        <p class="sc-type-title-medium"><sc-ltr>AED 38.00</sc-ltr></p>
+      </div>
+    </sc-module-card>
+    <sc-module-card heading="Traffic fines" data-ar-heading="المخالفات المرورية" action-href="#fines" action-text="View fines" data-ar-action-text="عرض المخالفات" tint="amber" divided>
+      <svg slot="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l9 16H3z"/><path d="M12 10v4"/></svg>
+      <div>
+        <p class="mc-muted" data-ar="للدفع">To pay</p>
+        <p class="sc-type-headline-medium"><sc-ltr>AED 600.00</sc-ltr></p>
+      </div>
+      <div>
+        <p class="sc-type-title-small"><sc-ltr>F-2026-118204</sc-ltr></p>
+        <p class="mc-muted" data-ar="تجاوز السرعة، 14 أكتوبر 2026">Speeding, 14 Oct 2026</p>
+      </div>
+    </sc-module-card>
+    <sc-module-card heading="Applications" data-ar-heading="الطلبات" action-href="#applications" action-text="View all" data-ar-action-text="عرض الكل">
+      <p class="sc-type-title-small" data-ar="تجديد عقد إيجار، الخطوة 2 من 4">Ejari tenancy renewal, step 2 of 4</p>
+      <p class="mc-muted" data-ar="حُفظت المسودة في 18 أكتوبر 2026.">Draft saved 18 Oct 2026.</p>
+    </sc-module-card>
+  </div>
+  <p class="pg-note" data-ar="اسم رابط الرأس يضيف العنوان («عرض الكل، الطلبات»)، فتبقى الروابط المتشابهة مفهومة. divided يفصل كتل المحتوى بخطوط.">The header link's name adds the title ("View all, Applications"), so repeated link texts still make sense. divided separates content blocks with rules.</p>
+</section>
+
+<style>
+  .mc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--sc-space-16);
+  }
+  .mc-grid p {
+    margin: 0;
+  }
+  .mc-muted {
+    color: var(--sc-color-on-surface-variant);
+    font: var(--sc-type-body-medium);
+  }
+  .mc-grid .mc-plate {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: calc(var(--sc-space-32) + var(--sc-space-4));
+    margin-block-end: var(--sc-space-8);
+    padding-inline: var(--sc-space-12);
+    border: var(--sc-size-border-control) solid var(--sc-color-outline-strong);
+    border-radius: var(--sc-radius-control);
+    font: var(--sc-type-title-small);
+  }
+</style>
+
+<script>
+  {
+    // data-ar-<attr>="…" swaps an attribute (label, heading, caption…) when the preview is Arabic.
+    const preview = document.getElementById('preview');
+    const apply = () => {
+      const ar = preview.lang === 'ar';
+      for (const el of preview.querySelectorAll('*')) {
+        for (const { name, value } of [...el.attributes]) {
+          if (!name.startsWith('data-ar-')) continue;
+          const attr = name.slice(8);
+          if (!el.hasAttribute(`data-en-${attr}`)) el.setAttribute(`data-en-${attr}`, el.getAttribute(attr) ?? '');
+          el.setAttribute(attr, ar ? value : el.getAttribute(`data-en-${attr}`));
+        }
+      }
+    };
+    new MutationObserver(apply).observe(preview, { attributes: true, attributeFilter: ['lang'] });
+    apply();
+  }
+</script>

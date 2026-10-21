@@ -1,155 +1,196 @@
-
-:host {
-  /* Width of the action column: fits "Change" and "تغيير" with room to spare, so every row's value starts in the same place. */
-  --sc-summary-list-action-width: var(--sc-space-96);
-  display: block;
-  /* The layout responds to the space the list has, not the viewport (it often sits in a narrow column). */
-  container-type: inline-size;
-}
-
-:host([hidden]) {
-  display: none;
-}
-
-.list {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-.list--card {
-  padding-inline: var(--sc-space-16);
-  border: var(--sc-size-border-hairline) solid transparent;
-  border-radius: var(--sc-radius-card);
-  background: var(--sc-color-surface);
-  box-shadow: var(--sc-elevation-1);
-}
-
-/* Row: narrow layout first. Key above value, action at the end, centred on the pair. */
-.row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-areas:
-    'key action'
-    'value action';
-  column-gap: var(--sc-space-16);
-  row-gap: var(--sc-space-2);
-  align-items: center;
-  padding-block: var(--sc-space-12);
-}
-
-.row + .row {
-  border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-rule);
-}
-
-.list--plain .row {
-  border-block-end: var(--sc-size-border-hairline) solid var(--sc-color-rule);
-}
-
-.list--plain .row:first-child {
-  border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-rule);
-}
-
-.row--no-action {
-  grid-template-areas:
-    'key key'
-    'value value';
-}
-
-.key {
-  grid-area: key;
-  margin: 0;
-  color: var(--sc-color-muted);
-  font-family: var(--type-body-s-family);
-  font-weight: var(--type-body-s-weight);
-  font-size: var(--type-body-s-size);
-  line-height: var(--type-body-s-leading);
-  letter-spacing: var(--type-body-s-tracking);
-  overflow-wrap: anywhere;
-}
-
-.value {
-  grid-area: value;
-  min-inline-size: 0;
-  margin: 0;
-  color: var(--sc-color-ink-strong);
-  font-family: var(--type-value-family);
-  font-weight: var(--type-value-weight);
-  font-size: var(--type-value-size);
-  line-height: var(--type-value-leading);
-  letter-spacing: var(--type-value-tracking);
-}
-
-.action {
-  grid-area: action;
-  margin: 0;
-  text-align: end;
-}
-
-.link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-block-size: var(--sc-size-target-min);
-  min-inline-size: var(--sc-size-target-min);
-  border-radius: var(--sc-radius-xs);
-  color: var(--sc-channel-action);
-  font-family: var(--type-label-m-family);
-  font-weight: var(--type-label-m-weight);
-  font-size: var(--type-label-m-size);
-  line-height: var(--type-label-m-leading);
-  letter-spacing: var(--type-label-m-tracking);
-  text-decoration: none;
-  text-underline-offset: 0.2em;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .link:hover {
-    text-decoration: underline;
-    text-decoration-thickness: var(--sc-size-border-control);
-  }
-}
-
-.link:active {
-  color: var(--sc-channel-action-pressed);
-}
-
-/* Wide: key, value and a fixed-width action column. Container widths can't come from a
-   custom property, so this repeats --sc-breakpoint-medium (600px, tokens/layout.json). */
-@container (min-width: 600px) {
-  .list--card {
-    padding-inline: var(--sc-space-24);
+/*
+ * sc-summary-list (v2, light DOM). Rules: component-language.md A26–A27 and §3.4–3.5, read
+ * through the role table in decisions.md. Everything sits in @layer sc.components, so a
+ * service's unlayered CSS wins.
+ *
+ * Container queries cannot read custom properties, so 600px repeats --sc-breakpoint-medium.
+ */
+@layer sc.components {
+  :host {
+    /* Fixed end columns, so every row's value starts in the same place. */
+    --sc-summary-list-action-width: var(--sc-space-96);
+    --_stack-action: var(--sc-space-64);
+    --_pair-key: calc(var(--sc-space-96) + var(--sc-space-8));
+    display: block;
+    /* The layout responds to the list's own width, not the viewport. */
+    container-type: inline-size;
+    color: var(--sc-color-on-surface);
   }
 
-  .row,
-  .row--no-action {
+  :host([hidden]) {
+    display: none;
+  }
+
+  :host(:lang(ar)) {
+    /* Arabic keys run longer (A26, proposed 120). */
+    --_pair-key: calc(var(--sc-space-96) + var(--sc-space-24));
+  }
+
+  .sc-summary-list__list {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  :host(.sc-summary-list--card) .sc-summary-list__list {
+    border: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+    border-radius: var(--sc-radius-card);
+    background: var(--sc-color-surface-card);
+    /* The total row's fill follows the rounded corners. */
+    overflow: clip;
+  }
+
+  /* Row: stacked first. Key above value, the action in a fixed end column, centred. */
+  .sc-summary-list__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--_stack-action);
+    grid-template-areas:
+      'key action'
+      'value action';
+    column-gap: var(--sc-space-16);
+    row-gap: var(--sc-space-2);
+    align-items: center;
+    padding-block: var(--sc-space-12);
+    padding-inline: var(--sc-space-16);
+  }
+
+  .sc-summary-list__row + .sc-summary-list__row {
+    border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+  }
+
+  :host(.sc-summary-list--plain) .sc-summary-list__row {
+    padding-inline: 0;
+    border-block-end: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+  }
+  :host(.sc-summary-list--plain) .sc-summary-list__row:first-child {
+    border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+  }
+  :host(.sc-summary-list--plain) .sc-summary-list__row + .sc-summary-list__row {
+    border-block-start: 0;
+  }
+
+  .sc-summary-list__key {
+    grid-area: key;
+    margin: 0;
+    color: var(--sc-color-on-surface-variant);
+    font: var(--sc-type-body-medium);
+    letter-spacing: var(--sc-type-body-medium-tracking);
+    overflow-wrap: anywhere;
+  }
+
+  .sc-summary-list__value {
+    grid-area: value;
+    min-inline-size: 0;
+    margin: 0;
+    color: var(--sc-color-on-surface);
+    font: var(--sc-type-title-small);
+    letter-spacing: var(--sc-type-title-small-tracking);
+    overflow-wrap: anywhere;
+  }
+
+  .sc-summary-list__action {
+    grid-area: action;
+    margin: 0;
+    text-align: end;
+  }
+
+  /* The action is a link (COL-08): channel action, underlined 1px at 4px (5px in Arabic),
+     2px on hover, with a 44px target. */
+  .sc-summary-list__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-block-size: var(--sc-size-target-min);
+    min-inline-size: var(--sc-size-target-min);
+    border-radius: var(--sc-radius-control);
+    color: var(--sc-color-channel-action);
+    font: var(--sc-type-label-medium);
+    letter-spacing: var(--sc-type-label-medium-tracking);
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    transition: text-decoration-thickness var(--sc-duration-fast) var(--sc-easing-hover);
+  }
+  .sc-summary-list__link:lang(ar) {
+    text-underline-offset: 5px;
+  }
+  .sc-summary-list__link:focus-visible {
+    transition: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .sc-summary-list__link:hover {
+      text-decoration-thickness: 2px;
+    }
+  }
+
+  .sc-summary-list__link:active {
+    color: var(--sc-color-channel-action-pressed);
+  }
+
+  /* Total row (E4): a quiet fill, Bold key and value. */
+  .sc-summary-list__row--total {
+    background: var(--sc-color-surface-container);
+  }
+  .sc-summary-list__row--total .sc-summary-list__key {
+    color: var(--sc-color-on-surface);
+    font: var(--sc-type-title-medium);
+    letter-spacing: var(--sc-type-title-medium-tracking);
+  }
+  .sc-summary-list__row--total .sc-summary-list__value {
+    font: var(--sc-type-title-large);
+    letter-spacing: var(--sc-type-title-large-tracking);
+  }
+
+  /* Columns: key, value and a fixed-width action column, sharing a baseline. */
+  :host(.sc-summary-list--columns) .sc-summary-list__row {
     grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) var(--sc-summary-list-action-width);
     grid-template-areas: 'key value action';
     align-items: baseline;
     padding-block: var(--sc-space-16);
   }
-
-  .key {
-    color: var(--sc-color-ink);
-    font-family: var(--type-body-m-family);
-    font-weight: var(--type-body-m-weight);
-    font-size: var(--type-body-m-size);
-    line-height: var(--type-body-m-leading);
-    letter-spacing: var(--type-body-m-tracking);
+  :host(.sc-summary-list--columns) .sc-summary-list__link {
+    /* The 44px target would push the baseline down; centre it on the value's first line. */
+    margin-block: calc((var(--sc-type-title-small-leading) - var(--sc-size-target-min)) / 2);
   }
 
-  /* The 44px target would push the baseline down; centre it on the first line instead. */
-  .link {
-    margin-block: calc((var(--type-value-leading) - var(--sc-size-target-min)) / 2);
+  /* Pairs (E4): the key in a fixed column, the value end-aligned (never "right": logical end,
+     which is left in Arabic). No actions. */
+  :host(.sc-summary-list--pairs) .sc-summary-list__row {
+    grid-template-columns: var(--_pair-key) minmax(0, 1fr);
+    grid-template-areas: 'key value';
+    column-gap: var(--sc-space-16);
+    align-items: baseline;
+    padding-block: var(--sc-space-12);
   }
-}
+  :host(.sc-summary-list--pairs) .sc-summary-list__value {
+    text-align: end;
+  }
 
-@media (forced-colors: active) {
-  .list--card {
-    border-color: CanvasText;
+  @container (min-width: 600px) {
+    :host(.sc-summary-list--card) .sc-summary-list__row {
+      padding-inline: var(--sc-space-24);
+    }
+    :host(.sc-summary-list--auto) .sc-summary-list__row {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) var(--sc-summary-list-action-width);
+      grid-template-areas: 'key value action';
+      align-items: baseline;
+      padding-block: var(--sc-space-16);
+    }
+    :host(.sc-summary-list--auto) .sc-summary-list__link {
+      margin-block: calc((var(--sc-type-title-small-leading) - var(--sc-size-target-min)) / 2);
+    }
   }
-  .link {
-    color: LinkText;
-    text-decoration: underline;
+
+  @media (forced-colors: active) {
+    :host(.sc-summary-list--card) .sc-summary-list__list {
+      border-color: CanvasText;
+    }
+    .sc-summary-list__link {
+      color: LinkText;
+    }
+    .sc-summary-list__row--total {
+      border-block-start: var(--sc-size-border-control) solid CanvasText;
+    }
   }
 }

@@ -48,3 +48,8 @@ page('Feedback and status', 'sc-timeline', 'Timeline');
 page('Feedback and status', 'sc-notification-list', 'Notification list');
 page('Feedback and status', 'sc-empty-state', 'Empty state');
 page('Feedback and status', 'sc-modal', 'Modal');
+page('Content and layout', 'sc-ltr', 'Left to right (sc-ltr)');
+page('Content and layout', 'sc-tile', 'Tile');
+page('Content and layout', 'sc-attention-card', 'Attention card');
+page('Content and layout', 'sc-module-card', 'Module card');
+page('Content and layout', 'sc-accordion', 'Accordion');

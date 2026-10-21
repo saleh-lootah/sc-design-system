@@ -168,3 +168,22 @@ All shadow DOM, as architecture §3.1 says for links and chrome. Full detail in 
 Strings moved to per-component files: `sc-error-summary.ts` (`errorSummaryHeading`), `sc-spinner.ts` (`spinnerLoading`), `sc-step-progress.ts` (`stepProgressCount` and the state words), plus new `sc-step-list.ts`, `sc-notification-list.ts`, `sc-modal.ts`. The shared `common.ts` keys `problem`, `loading` and `step` are no longer used by these components.
 
 Icons added to the shared set: `check`, `schedule`, `hourglass`, `pending`, `inbox`.
+## 6. Content and layout (C5, Wave 2b)
+
+| Tag | Encapsulation | API changes from v1 |
+| --- | --- | --- |
+| `sc-container` | CSS only (not registered) | Markup unchanged. `::part(inner)`, the `width` property (use the attribute) and `componentOnReady()` are gone. Works in page markup only: it cannot be used inside another component's shadow root. |
+| `sc-grid` | CSS only (not registered) | Markup unchanged. `::part(grid)` and the `span`, `spanMedium`, `spanExpanded` properties are gone: set the attributes. |
+| `sc-ltr` | CSS only (not registered) | Markup unchanged; no shadow root. |
+| `sc-card` | Light DOM (`scoped`) | `::part(surface)` is gone: the host is the surface (`.sc-card`). New `variant` (`outlined`, `filled`). Flat (no elevation), radius 12. |
+| `sc-service-card` | Shadow | No breaking change. New `tint`, `slot="icon"`, parts `icon` and `arrow`. Decorative arrow at the top end; no press scale. |
+| `sc-channel-hero` | Shadow | `::part(wash)` is now `::part(band)`; no gradient. The internal `sc-container` is gone. New `size`, `popular-label`, and the `breadcrumbs` and `popular` slots. |
+| `sc-summary-list` | Light DOM (`scoped`) | Parts `list`, `row`, `key`, `value`, `action` are gone: classes `.sc-summary-list__list`, `__row`, `__key`, `__value`, `__action`, `__link`. Rows get a generated `slot` attribute and are moved into their value `<dd>`. New `layout` (`auto`, `stacked`, `columns`, `pairs`). |
+| `sc-summary-row` | Light DOM (`scoped`) | The internal `sc-summary-row-update` event is gone. `action-text` and `action-hidden-text` now reflect. New `variant="total"`. |
+| `sc-table` | Light DOM (`scoped`), as v1 | No API changes. Styles now in `@layer sc.components`. Strings through the v2 controller; `overrides.ts` stays only for `sc-date-range`. |
+| `sc-tile` | Shadow | New. |
+| `sc-attention-card` | Shadow | New. |
+| `sc-module-card` | Shadow | New. |
+| `sc-accordion` | Light DOM (`scoped`) | New. |
+
+For test authors: `newScPage` now ignores unregistered `sc-` tags when it waits for hydration, so pages using the CSS-only primitives load.

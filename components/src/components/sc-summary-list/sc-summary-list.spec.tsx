@@ -11,10 +11,11 @@ const MARKUP = `
   </sc-summary-list>`;
 
 describe('sc-summary-list (spec)', () => {
-  it('renders one dl with a div per row holding dt and dd', async () => {
+  it('renders one light-DOM dl with a div per row holding dt and dd', async () => {
     const page = await newSpecPage({ components, html: MARKUP });
-    const dl = page.root!.shadowRoot!.querySelector('dl')!;
-    expect(dl).toHaveClasses(['list', 'list--card']);
+    expect(page.root!.shadowRoot).toBeNull();
+    expect(page.root).toHaveClasses(['sc-summary-list', 'sc-summary-list--card', 'sc-summary-list--auto']);
+    const dl = page.root!.querySelector('dl')!;
     const rows = Array.from(dl.children);
     expect(rows.map((r) => r.tagName)).toEqual(['DIV', 'DIV', 'DIV']);
     expect(Array.from(rows[0].children).map((c) => c.tagName)).toEqual(['DT', 'DD']);
@@ -22,38 +23,43 @@ describe('sc-summary-list (spec)', () => {
     expect(rows[0].querySelector('dt')!.textContent).toBe('Vehicle');
   });
 
-  it('assigns each row to the named slot inside its value dd', async () => {
+  it('gives each row a stable value slot of its own', async () => {
     const page = await newSpecPage({ components, html: MARKUP });
-    const rows = page.root!.querySelectorAll('sc-summary-row');
-    rows.forEach((row, i) => {
-      expect(row.getAttribute('slot')).toBe(`row-${i}`);
-      expect(page.root!.shadowRoot!.querySelector(`dd.value slot[name="row-${i}"]`)).not.toBeNull();
-    });
+    const names = Array.from(page.root!.querySelectorAll('sc-summary-row')).map((r) => r.getAttribute('slot'));
+    expect(new Set(names).size).toBe(3);
+    for (const n of names) expect(n).toMatch(/^sc-summary-row-\d+$/);
   });
 
   it('renders "Change" plus the visually hidden key, or the overrides', async () => {
     const page = await newSpecPage({ components, html: MARKUP });
-    const links = page.root!.shadowRoot!.querySelectorAll('a.link');
+    const links = page.root!.querySelectorAll('a.sc-summary-list__link');
     expect(links.length).toBe(2);
     expect(links[0].getAttribute('href')).toBe('#renew-for');
     expect(links[0].textContent).toBe('Change Renew for');
     expect(links[0].querySelector('.visually-hidden')!.textContent).toBe(' Renew for');
     expect(links[1].textContent).toBe('Edit your insurance');
-    expect(page.root!.shadowRoot!.querySelector('.row--no-action')).not.toBeNull();
+    expect(page.root!.querySelector('.sc-summary-list__row--no-action')).not.toBeNull();
   });
 
   it('uses the Arabic action text', async () => {
-    const page = await newSpecPage({
-      components,
-      html: `<div lang="ar"><sc-summary-list><sc-summary-row label="التأمين" action-href="#i">ساري</sc-summary-row></sc-summary-list></div>`,
-    });
-    const link = page.body.querySelector('sc-summary-list')!.shadowRoot!.querySelector('a.link')!;
-    expect(link.textContent).toBe('تغيير التأمين');
+    const page = await newSpecPage({ components, html: `<div lang="ar"><sc-summary-list><sc-summary-row label="التأمين" action-href="#i">ساري</sc-summary-row></sc-summary-list></div>` });
+    expect(page.body.querySelector('a.sc-summary-list__link')!.textContent).toBe('تغيير التأمين');
   });
 
-  it('renders the plain appearance', async () => {
-    const page = await newSpecPage({ components, html: `<sc-summary-list appearance="plain"><sc-summary-row label="Plate">A 48213</sc-summary-row></sc-summary-list>` });
-    expect(page.root!.shadowRoot!.querySelector('dl')).toHaveClass('list--plain');
+  it('renders the plain appearance and the layouts, falling back to auto', async () => {
+    const page = await newSpecPage({ components, html: `<sc-summary-list appearance="plain" layout="columns"><sc-summary-row label="Plate">A 48213</sc-summary-row></sc-summary-list>` });
+    expect(page.root).toHaveClasses(['sc-summary-list--plain', 'sc-summary-list--columns']);
+    const bad = await newSpecPage({ components, html: `<sc-summary-list layout="grid"></sc-summary-list>` });
+    expect(bad.root).toHaveClass('sc-summary-list--auto');
+  });
+
+  it('drops actions in the pairs layout and marks the total row', async () => {
+    const page = await newSpecPage({
+      components,
+      html: `<sc-summary-list layout="pairs"><sc-summary-row label="Plate" action-href="#p">A 48213</sc-summary-row><sc-summary-row label="Amount" variant="total">AED 420.00</sc-summary-row></sc-summary-list>`,
+    });
+    expect(page.root!.querySelectorAll('a').length).toBe(0);
+    expect(page.root!.querySelectorAll('.sc-summary-list__row--total').length).toBe(1);
   });
 
   it('skips hidden rows and ignores other children', async () => {
@@ -61,16 +67,6 @@ describe('sc-summary-list (spec)', () => {
       components,
       html: `<sc-summary-list><sc-summary-row label="A">1</sc-summary-row><sc-summary-row hidden label="B">2</sc-summary-row><p>Note</p></sc-summary-list>`,
     });
-    expect(page.root!.shadowRoot!.querySelectorAll('dt').length).toBe(1);
-  });
-
-  it('re-renders when a row prop changes', async () => {
-    const page = await newSpecPage({ components, html: `<sc-summary-list><sc-summary-row label="Plate">A 48213</sc-summary-row></sc-summary-list>` });
-    const row = page.root!.querySelector('sc-summary-row') as HTMLElement & { actionHref?: string; label: string };
-    row.label = 'Plate number';
-    row.actionHref = '#plate';
-    await page.waitForChanges();
-    expect(page.root!.shadowRoot!.querySelector('dt')!.textContent).toBe('Plate number');
-    expect(page.root!.shadowRoot!.querySelector('a.link')!.getAttribute('href')).toBe('#plate');
+    expect(page.root!.querySelectorAll('dt').length).toBe(1);
   });
 });

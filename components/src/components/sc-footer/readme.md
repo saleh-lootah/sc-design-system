@@ -64,19 +64,6 @@ own list item (the footer sets their `slot` attribute).
 | `"meta"`   | The end text.        |
 
 
-## Dependencies
-
-### Depends on
-
-- [sc-container](../sc-container)
-
-### Graph
-```mermaid
-graph TD;
-  sc-footer --> sc-container
-  style sc-footer fill:#f9f,stroke:#333,stroke-width:4px
-```
-
 ----------------------------------------------
 
 

@@ -1,0 +1,121 @@
+/*
+ * sc-attention-card (v2, shadow DOM). Rules: component-language.md B12 and B10, with the
+ * coordinator's thin topic-tint strip (decorative, foundations §2.7), read through the role
+ * table in decisions.md. The card is neutral; urgency is in the status tag's words.
+ */
+:host {
+  display: block;
+  /* Fills a stretched grid cell or list item, so cards in a row share a height. */
+  block-size: 100%;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.card {
+  --_tile: var(--sc-color-channel-subtle);
+  --_ink: var(--sc-color-channel-action);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-16);
+  block-size: 100%;
+  padding: var(--sc-space-20);
+  border: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+  border-radius: var(--sc-radius-card);
+  background: var(--sc-color-surface-card);
+  color: var(--sc-color-on-surface);
+}
+
+.card--blue { --_tile: var(--sc-color-tint-blue); --_ink: var(--sc-color-on-tint-blue); }
+.card--violet { --_tile: var(--sc-color-tint-violet); --_ink: var(--sc-color-on-tint-violet); }
+.card--rose { --_tile: var(--sc-color-tint-rose); --_ink: var(--sc-color-on-tint-rose); }
+.card--orange { --_tile: var(--sc-color-tint-orange); --_ink: var(--sc-color-on-tint-orange); }
+.card--amber { --_tile: var(--sc-color-tint-amber); --_ink: var(--sc-color-on-tint-amber); }
+.card--green { --_tile: var(--sc-color-tint-green); --_ink: var(--sc-color-on-tint-green); }
+
+/* The thin decorative strip: the card's top edge, 4px in the topic's ink, following the
+   12px corners. Decorative only (COL-13). */
+.card[class*='card--'] {
+  border-block-start: var(--sc-size-strip) solid var(--_ink);
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sc-space-12);
+}
+
+.icon-tile {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--sc-space-40);
+  block-size: var(--sc-space-40);
+  border-radius: var(--sc-radius-field);
+  background: var(--_tile);
+  color: var(--_ink);
+}
+.icon-tile ::slotted(svg) {
+  display: block;
+  inline-size: var(--sc-size-icon-l);
+  block-size: var(--sc-size-icon-l);
+}
+
+.status {
+  margin-inline-start: auto;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-4);
+  min-inline-size: 0;
+}
+
+.title {
+  margin: 0;
+  font: var(--sc-type-title-medium);
+  letter-spacing: var(--sc-type-title-medium-tracking);
+  overflow-wrap: anywhere;
+}
+
+.fact,
+.meta {
+  margin: 0;
+}
+
+.fact {
+  color: var(--sc-color-on-surface);
+  font: var(--sc-type-title-small);
+  letter-spacing: var(--sc-type-title-small-tracking);
+}
+
+/* Amounts and references: Dubai W23's digits are tabular by default (TYP-08). */
+.meta {
+  color: var(--sc-color-on-surface-variant);
+  font: var(--sc-type-body-small);
+  letter-spacing: var(--sc-type-body-small-tracking);
+}
+
+.action {
+  /* Pushed to the bottom, at least 24 below the meta line, so actions line up in a row. */
+  margin-block-start: auto;
+  padding-block-start: var(--sc-space-8);
+}
+
+.is-empty {
+  display: none;
+}
+
+@media (forced-colors: active) {
+  .card {
+    border-color: CanvasText;
+  }
+  .icon-tile {
+    border: var(--sc-size-border-hairline) solid CanvasText;
+  }
+}

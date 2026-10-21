@@ -1,0 +1,160 @@
+/*
+ * sc-accordion (v2, light DOM). Rules: component-language.md B15, read through the role
+ * table in decisions.md. Stencil rewrites `::slotted(details) x` to `.sc-accordion-s >
+ * details x`. Everything is in @layer sc.components, so a service's unlayered CSS wins.
+ *
+ * Stencil 4.45's scoper mangles an @media block whose FIRST rule is a ::slotted rule, so
+ * such blocks open with a `:host { --_at: 1; }` anchor rule (as sc-table does).
+ */
+@layer sc.components {
+  :host {
+    display: block;
+    color: var(--sc-color-on-surface);
+  }
+
+  :host([hidden]) {
+    display: none;
+  }
+
+  /* "Show all sections": a quiet text button in the channel colour, 44px tall. */
+  .sc-accordion__toggle {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--sc-size-target-min);
+    margin-block-end: var(--sc-space-8);
+    padding: 0;
+    border: 0;
+    border-radius: var(--sc-radius-control);
+    background: none;
+    color: var(--sc-color-channel-action);
+    font: var(--sc-type-label-medium);
+    letter-spacing: var(--sc-type-label-medium-tracking);
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    cursor: pointer;
+    transition: text-decoration-thickness var(--sc-duration-fast) var(--sc-easing-hover);
+  }
+  .sc-accordion__toggle:lang(ar) {
+    text-underline-offset: 5px;
+  }
+
+  /* Sections: a 1px rule above each one and below the last. */
+  ::slotted(details) {
+    border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+  }
+  ::slotted(details:last-of-type) {
+    border-block-end: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+  }
+  ::slotted(details[open]) {
+    padding-block-end: var(--sc-space-24);
+  }
+
+  /* The summary: at least 56 tall, no inline padding (it aligns with the text column), the
+     title at title-medium, and a fixed 24px chevron slot at the end. */
+  ::slotted(details) > summary {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--sc-size-icon-l);
+    column-gap: var(--sc-space-16);
+    align-items: center;
+    box-sizing: border-box;
+    min-block-size: var(--sc-size-control-primary);
+    padding-block: var(--sc-space-16);
+    padding-inline: 0;
+    border-radius: var(--sc-radius-control);
+    list-style: none;
+    cursor: pointer;
+    font: var(--sc-type-title-medium);
+    letter-spacing: var(--sc-type-title-medium-tracking);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+  }
+  ::slotted(details) > summary::-webkit-details-marker {
+    display: none;
+  }
+  ::slotted(details) > summary > * {
+    grid-column: 1;
+  }
+
+  /* The optional summary line under the title. */
+  ::slotted(details) > summary > small {
+    color: var(--sc-color-on-surface-variant);
+    font: var(--sc-type-body-medium);
+    letter-spacing: var(--sc-type-body-medium-tracking);
+  }
+
+  /* The chevron (expand_more), drawn with a mask in currentColor. It sits at inline-end, so
+     it moves to the left in Arabic; it turns over vertically, so it never mirrors. */
+  ::slotted(details) > summary::after {
+    content: '';
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    inline-size: var(--sc-size-icon-l);
+    block-size: var(--sc-size-icon-l);
+    background: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") center / contain no-repeat;
+    /* Pointer toggles turn the chevron over 120ms with the in-out curve (MOT-06). */
+    transition: transform var(--sc-duration-fast) var(--sc-easing-standard);
+  }
+  ::slotted(details[open]) > summary::after {
+    transform: rotate(180deg);
+  }
+
+  /* Keyboard toggles are instant (MOT-02): no turn, no fade. */
+  ::slotted(details) > summary:focus-visible::after {
+    transition: none;
+  }
+
+  /* The answer: 8 below the summary; it fades in (opacity only, no height animation, MOT-11). */
+  ::slotted(details) > :not(summary) {
+    margin-block: 0;
+  }
+  ::slotted(details) > summary + * {
+    margin-block-start: var(--sc-space-8);
+  }
+  ::slotted(details) > :not(summary) + :not(summary) {
+    margin-block-start: var(--sc-space-16);
+  }
+  ::slotted(details[open]) > :not(summary) {
+    animation: sc-accordion-fade var(--sc-duration-fast) var(--sc-easing-enter);
+  }
+  ::slotted(details[open]:has(> summary:focus-visible)) > :not(summary) {
+    animation: none;
+  }
+
+  @keyframes sc-accordion-fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    :host {
+      --_at: 1;
+    }
+    ::slotted(details) > summary:hover {
+      text-decoration-line: underline;
+    }
+    .sc-accordion__toggle:hover {
+      text-decoration-thickness: 2px;
+    }
+  }
+
+  @media (forced-colors: active) {
+    :host {
+      --_at: 1;
+    }
+    ::slotted(details),
+    ::slotted(details:last-of-type) {
+      border-color: CanvasText;
+    }
+    ::slotted(details) > summary::after {
+      forced-color-adjust: none;
+      background: CanvasText;
+    }
+    .sc-accordion__toggle {
+      color: LinkText;
+    }
+  }
+}

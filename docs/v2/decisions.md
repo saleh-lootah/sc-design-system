@@ -114,3 +114,4 @@ Where this file disagrees with `foundations.md` or `component-language.md`, this
 | --- | --- |
 | W5 | Where `component-language.md` quotes a type size or leading that differs from the type role tokens (for example title-large 22/28, display-large 80/84, body-large 18/26), **the tokens win**. Components use type roles only. `component-language.md` sizes are indicative. |
 | W6 | The life-event, category and favourite tile is **`sc-tile`**, not `sc-service-tile`. Paper board 09.07 is renamed in Wave 4 (Q4). |
+| W7 | The `sc.css` budget is **9 KiB gzip** (raised from 7 KiB). The `:not(:defined)` pre-upgrade size reservations stay for every component, because CLS 0 on the typical page matters more than 2 KiB. |
