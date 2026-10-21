@@ -1064,7 +1064,6 @@ These rules decide how components behave where version 1.0 or the v1 library did
 
 **Known gaps in current components**
 
-- Two default Arabic strings use the imperative, which [CNT-11](#arabic-style) does not allow: the call item of `sc-utility-bar` ("اتصل") and the sign-in hint in the `sc-site-header` mobile menu ("سجّل الدخول لعرض مهامك…"). They are to be rewritten in the library (for example "الاتصال" and "يمكنك تسجيل الدخول لعرض مهامك ومدفوعاتك والخدمات المحفوظة."); neither component offers an override.
 
 <a id="backlog"></a>
 

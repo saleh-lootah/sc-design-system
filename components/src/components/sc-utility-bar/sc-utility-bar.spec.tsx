@@ -38,7 +38,7 @@ describe('sc-utility-bar (spec)', () => {
     const page = await render(`<div lang="ar">${ALL}</div>`);
     const root = page.body.querySelector('sc-utility-bar')!.shadowRoot!;
     expect(root.querySelector('h2')!.textContent).toBe('المساعدة والملاحظات');
-    expect(text(root.querySelectorAll('a')[1])).toBe('اتصل 04');
+    expect(text(root.querySelectorAll('a')[1])).toBe('الاتصال 04');
     expect(text(root.querySelectorAll('a')[2])).toBe('الخدمات');
   });
 });
