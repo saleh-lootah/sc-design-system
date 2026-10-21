@@ -26,13 +26,13 @@ Event `scPageChange` (`{ page }`, bubbles, composed, cancelable): fires on every
 
 | # | Part | Notes |
 | --- | --- | --- |
-| 1 | Count | `<p>`, `body-medium`, `on-surface-variant`, 12 above the nav. "Showing 121–140 of 1,284 fines" / "عرض 121 إلى 140 من 1,284 مخالفة"; one item: "Showing 1 of 1 fine" |
+| 1 | Count | `<p>`, `body-medium`, `on-surface-variant`, 12 above the nav. "Showing 121 to 140 of 1,284 fines" (a word for the range in both languages, as board BUV-0) / "عرض 121 إلى 140 من 1,284 مخالفة"; one item: "Showing 1 of 1 fine" |
 | 2 | Landmark | `<nav aria-label>`; left out when there is only one page |
 | 3 | Previous | `chevron-back` (20px) and "Previous", `channel-action`, underlined, 44 tall, padding-inline 12, gap 6, `rel="prev"`. Left out on the first page (not disabled) |
 | 4 | Numbers | 44 × 44 cells, radius 4, gap 4, `aria-label="Page 3"`. First, last, current ±1; a gap of one page shows the page, a longer gap an ellipsis |
 | 5 | Current | `channel-action` fill, `channel-on-action` text, Bold, `aria-current="page"` |
 | 6 | Next | As Previous, mirrored order, `rel="next"`; left out on the last page |
-| 7 | Page of | Below 600px, numbers give way to "Page 7 of 65" / "الصفحة 7 من 65" |
+| 7 | Page of | Below 600px, numbers give way to "Page 7 of 65" / "الصفحة 7 من 65" in Bold; Previous sits at the start edge and Next at the end edge (no inline padding), the page between them (board BUV-0) |
 
 ## Type and numbers
 
@@ -52,7 +52,7 @@ Logical properties only (avoiding `dda-pagination`'s physical borders): Previous
 
 ## Budget
 
-Custom-elements closure 3,833 B gzip (4 KiB budget), its own CSS 793 B. The two chevrons are drawn in the component (about 0.1 KiB) rather than imported from the shared icon set (0.9 KiB), which would have put it over budget.
+Custom-elements closure 3,851 B gzip (4 KiB budget), its own CSS 815 B. The two chevrons are drawn in the component (about 0.1 KiB) rather than imported from the shared icon set (0.9 KiB), which would have put it over budget.
 
 ## Tests
 

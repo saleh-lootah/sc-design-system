@@ -2,14 +2,14 @@ import { defineStrings } from '../define';
 
 /**
  * sc-pagination (v2). Numbers are written with Latin digits and a comma for thousands in
- * both languages. Arabic ranges use a word, never a dash (LANG-22A). `paginationItems` is a
+ * both languages. Ranges use a word, never a dash, in both languages (LANG-22A; board BUV-0 and B7 write "Showing 61 to 80"). `paginationItems` is a
  * plural template ("one|other" in English, "zero|one|two|few|many|other" in Arabic) for the
  * thing being counted; services override it with the `item-label` prop ("fine|fines").
  */
 export default defineStrings({
   en: {
     paginationLabel: 'Pagination',
-    paginationShowing: 'Showing {from}–{to} of {total} {items}',
+    paginationShowing: 'Showing {from} to {to} of {total} {items}',
     paginationShowingOne: 'Showing {from} of {total} {items}',
     paginationItems: 'result|results',
     paginationPrevious: 'Previous',

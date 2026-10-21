@@ -25,10 +25,10 @@ Parts: `nav`, `item`, `badge`.
 | # | Part | Notes |
 | --- | --- | --- |
 | 1 | Landmark | `<nav aria-label="Account">` / "الحساب" (overridable with `label`) |
-| 2 | List | `<ul>`, column, gap 4 |
+| 2 | List | `<ul>`, column, gap 2 (board G7G-0) |
 | 3 | Item | `<a>`, min 48 tall, padding 8 × 12, gap 12, radius 4, 24px icon in `on-surface-variant`, label `on-surface` |
 | 4 | Badge | Pill, min 24 × 24, padding-inline 8, `channel-action` fill, `channel-on-action` text, `label-small` Bold; `aria-hidden`, with visually hidden text inside the link ("Notifications 3 unread") |
-| 5 | Divider and Sign out | A second `<ul>` with a 1px `outline-variant` top rule, 12 above and below; the `logout` icon mirrors |
+| 5 | Divider and Sign out | A second `<ul>` with a 1px `outline-variant` top rule, 8 above and below (board G7G-0); the `logout` icon mirrors |
 
 ## Type and states
 
@@ -37,7 +37,7 @@ Items: `label-large` with the `label-medium` weight (18/22 Medium EN, 20/28 Bold
 | State | Rule |
 | --- | --- |
 | Hover | `.state-layer` (8% `on-surface`); pressed 12% |
-| Current | `channel-subtle` fill, a 3px `channel-action` bar at inline-start (`size-border-accent`), icon `channel-action`, Bold, `aria-current="page"` |
+| Current | `channel-subtle` fill, a 3px `channel-action` bar at inline-start (`size-border-accent`), icon and label `channel-action`, Bold, `aria-current="page"` (board G7G-0) |
 | Focus | U1 ring |
 | Forced colours | `LinkText` items; the current item gets a `LinkText` border (transparent otherwise) and bar |
 
@@ -45,7 +45,7 @@ Motion: colour only, `duration-fast`.
 
 ## Compact screens
 
-Below 600px (proposed in B8): one row of 44px items that scrolls sideways, from the right in Arabic; the current bar moves to the bottom edge; the divider becomes an inline-start rule before Sign out. The scroll box has 6px of padding so focus rings are never clipped.
+Below 600px (proposed in B8): one row of 44px items in `label-medium` (board G7G-0; the board's 8px icon gap is not taken, see Budget) that scrolls sideways, from the right in Arabic; the current bar moves to the bottom edge; the divider becomes an inline-start rule before Sign out. The scroll box has 6px of padding so focus rings are never clipped.
 
 ## RTL
 
@@ -61,7 +61,7 @@ The bar and icons sit on the right; the `logout` icon mirrors.
 
 ## Budget
 
-Custom-elements closure 4,080 B gzip (4 KiB budget: 16 B of room), its own CSS 799 B. Shared chunks: the locale controller (0.9 KiB), the destination icons (0.7 KiB, shared with `sc-bottom-nav`) and the nav-items reader (0.5 KiB, shared with `sc-breadcrumbs` and `sc-bottom-nav`). Any addition needs a trim or a budget override.
+Custom-elements closure 4,095 B gzip (4 KiB budget: 1 B of room), its own CSS 813 B. The board's 8px icon gap in the compact row (G7G-0) was left out because it put the closure 2 B over; the compact row keeps the 12px gap. Shared chunks: the locale controller (0.9 KiB), the destination icons (0.7 KiB, shared with `sc-bottom-nav`) and the nav-items reader (0.5 KiB, shared with `sc-breadcrumbs` and `sc-bottom-nav`). Any addition needs a trim or a budget override.
 
 ## Tests
 

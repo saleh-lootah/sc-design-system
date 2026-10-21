@@ -14,7 +14,7 @@ Where the page sits in the channel's hierarchy, on channel pages outside a trans
 
 - Write the trail as plain children, a link per ancestor and the current page last as text. The component renders `<nav aria-label="Breadcrumb">` with an ordered list; the last item is never a link and carries `aria-current="page"`.
 - The children are what shows before upgrade and without JavaScript. Changing them re-renders the trail.
-- Chevrons mirror in Arabic. Below 600px the trail collapses to one "Back to {parent}" / "رجوع إلى {parent}" link.
+- Chevrons mirror in Arabic. Below 600px the trail collapses to one "Back to {parent}" / "رجوع إلى {parent}" link, 44px tall; `compact-label` overrides its text.
 
 ### Styling hooks
 
@@ -44,9 +44,10 @@ chevrons between items mirror in right-to-left. Below 600px the trail collapses 
 
 ## Properties
 
-| Property | Attribute | Description                                                 | Type                  | Default     |
-| -------- | --------- | ----------------------------------------------------------- | --------------------- | ----------- |
-| `label`  | `label`   | Overrides the landmark name ("Breadcrumb" / "مسار التنقل"). | `string \| undefined` | `undefined` |
+| Property       | Attribute       | Description                                                                                                                                                          | Type                  | Default     |
+| -------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ----------- |
+| `compactLabel` | `compact-label` | Overrides the text of the single link shown on compact screens (default "Back to {parent}" / "رجوع إلى {parent}"). `{parent}` is replaced by the parent page's text. | `string \| undefined` | `undefined` |
+| `label`        | `label`         | Overrides the landmark name ("Breadcrumb" / "مسار التنقل").                                                                                                          | `string \| undefined` | `undefined` |
 
 
 ## Shadow Parts

@@ -102,10 +102,11 @@
   color: var(--sc-color-on-surface-variant);
 }
 
-/* "Page 2 of 13" replaces the numbers below 600px. */
+/* "Page 2 of 13" (Bold) replaces the numbers below 600px. */
 .of {
   display: none;
   padding-inline: var(--sc-space-8);
+  font-weight: var(--sc-font-weight-bold);
 }
 
 @media (width < 600px) {
@@ -115,6 +116,13 @@
   }
   .of {
     display: block;
+  }
+  /* Previous at the start edge, the page in the middle, Next at the end edge (board BUV-0). */
+  .list {
+    justify-content: space-between;
+  }
+  .turn {
+    padding-inline: 0;
   }
 }
 

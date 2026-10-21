@@ -14,7 +14,7 @@ The side navigation of the signed-in account area. Spec: `specs/sc-account-nav.m
 </sc-account-nav>
 ```
 
-- Write the items as plain links. `aria-current="page"` marks the current one (channel-subtle fill, 3px bar, channel icon, Bold); `data-icon` picks a 24px icon (`description`, `credit-card`, `notifications`, `person`, `history`, `home`, `apps`, `logout`); `data-count` adds a badge read as `data-count-label` (default "{count} new" / "{count} جديدة"); `data-sign-out` puts the item after the divider.
+- Write the items as plain links. `aria-current="page"` marks the current one (channel-subtle fill, 3px bar, channel-action icon and Bold label); `data-icon` picks a 24px icon (`description`, `credit-card`, `notifications`, `person`, `history`, `home`, `apps`, `logout`); `data-count` adds a badge read as `data-count-label` (default "{count} new" / "{count} جديدة"); `data-sign-out` puts the item after the divider.
 - 3 of 12 columns on wide screens. Below 600px it becomes one row of 44px items that scrolls sideways.
 - The links are what shows before upgrade and without JavaScript. Changing them re-renders the nav.
 
@@ -43,7 +43,7 @@ JavaScript):
   </sc-account-nav>
 
 - `aria-current="page"` marks the current item: a channel-subtle fill, a 3px channel bar
-  at inline-start, a channel icon and a Bold label (never colour alone).
+  at inline-start, and the icon and a Bold label in channel-action (never colour alone).
 - `data-icon`: `description`, `credit-card`, `notifications`, `person`, `history`,
   `home`, `apps` or `logout` (24px; `logout` mirrors in right-to-left).
 - `data-count`: a count badge, read with the visually hidden `data-count-label`

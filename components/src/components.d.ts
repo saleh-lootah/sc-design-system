@@ -70,7 +70,7 @@ export namespace Components {
      *     <a href="/en/sign-out" data-icon="logout" data-sign-out>Sign out</a>
      *   </sc-account-nav>
      * - `aria-current="page"` marks the current item: a channel-subtle fill, a 3px channel bar
-     *   at inline-start, a channel icon and a Bold label (never colour alone).
+     *   at inline-start, and the icon and a Bold label in channel-action (never colour alone).
      * - `data-icon`: `description`, `credit-card`, `notifications`, `person`, `history`,
      *   `home`, `apps` or `logout` (24px; `logout` mirrors in right-to-left).
      * - `data-count`: a count badge, read with the visually hidden `data-count-label`
@@ -171,6 +171,10 @@ export namespace Components {
      * "Back to {parent}" link.
      */
     interface ScBreadcrumbs {
+        /**
+          * Overrides the text of the single link shown on compact screens (default "Back to {parent}" / "رجوع إلى {parent}"). `{parent}` is replaced by the parent page's text.
+         */
+        "compactLabel"?: string;
         /**
           * Overrides the landmark name ("Breadcrumb" / "مسار التنقل").
          */
@@ -938,7 +942,7 @@ export namespace Components {
     /**
      * Moves between the pages of a long list: search results, payments, fines. Inside
      * `sc-table`, put it in the table's `footer` slot.
-     * Renders, in its shadow root, an optional results count ("Showing 1–20 of 1,284 fines";
+     * Renders, in its shadow root, an optional results count ("Showing 1 to 20 of 1,284 fines";
      * in Arabic "عرض 1 إلى 20 من 1,284 مخالفة", with a word for the range, never a dash), then
      * `<nav aria-label="Pagination">` with Previous, the page numbers and Next. Previous is
      * left out on the first page and Next on the last (not disabled). The current page carries
@@ -1687,7 +1691,7 @@ declare global {
      *     <a href="/en/sign-out" data-icon="logout" data-sign-out>Sign out</a>
      *   </sc-account-nav>
      * - `aria-current="page"` marks the current item: a channel-subtle fill, a 3px channel bar
-     *   at inline-start, a channel icon and a Bold label (never colour alone).
+     *   at inline-start, and the icon and a Bold label in channel-action (never colour alone).
      * - `data-icon`: `description`, `credit-card`, `notifications`, `person`, `history`,
      *   `home`, `apps` or `logout` (24px; `logout` mirrors in right-to-left).
      * - `data-count`: a count badge, read with the visually hidden `data-count-label`
@@ -2195,7 +2199,7 @@ declare global {
     /**
      * Moves between the pages of a long list: search results, payments, fines. Inside
      * `sc-table`, put it in the table's `footer` slot.
-     * Renders, in its shadow root, an optional results count ("Showing 1–20 of 1,284 fines";
+     * Renders, in its shadow root, an optional results count ("Showing 1 to 20 of 1,284 fines";
      * in Arabic "عرض 1 إلى 20 من 1,284 مخالفة", with a word for the range, never a dash), then
      * `<nav aria-label="Pagination">` with Previous, the page numbers and Next. Previous is
      * left out on the first page and Next on the last (not disabled). The current page carries
@@ -2626,7 +2630,7 @@ declare namespace LocalJSX {
      *     <a href="/en/sign-out" data-icon="logout" data-sign-out>Sign out</a>
      *   </sc-account-nav>
      * - `aria-current="page"` marks the current item: a channel-subtle fill, a 3px channel bar
-     *   at inline-start, a channel icon and a Bold label (never colour alone).
+     *   at inline-start, and the icon and a Bold label in channel-action (never colour alone).
      * - `data-icon`: `description`, `credit-card`, `notifications`, `person`, `history`,
      *   `home`, `apps` or `logout` (24px; `logout` mirrors in right-to-left).
      * - `data-count`: a count badge, read with the visually hidden `data-count-label`
@@ -2727,6 +2731,10 @@ declare namespace LocalJSX {
      * "Back to {parent}" link.
      */
     interface ScBreadcrumbs {
+        /**
+          * Overrides the text of the single link shown on compact screens (default "Back to {parent}" / "رجوع إلى {parent}"). `{parent}` is replaced by the parent page's text.
+         */
+        "compactLabel"?: string;
         /**
           * Overrides the landmark name ("Breadcrumb" / "مسار التنقل").
          */
@@ -3526,7 +3534,7 @@ declare namespace LocalJSX {
     /**
      * Moves between the pages of a long list: search results, payments, fines. Inside
      * `sc-table`, put it in the table's `footer` slot.
-     * Renders, in its shadow root, an optional results count ("Showing 1–20 of 1,284 fines";
+     * Renders, in its shadow root, an optional results count ("Showing 1 to 20 of 1,284 fines";
      * in Arabic "عرض 1 إلى 20 من 1,284 مخالفة", with a word for the range, never a dash), then
      * `<nav aria-label="Pagination">` with Previous, the page numbers and Next. Previous is
      * left out on the first page and Next on the last (not disabled). The current page carries
@@ -4278,6 +4286,7 @@ declare namespace LocalJSX {
     }
     interface ScBreadcrumbsAttributes {
         "label": string;
+        "compactLabel": string;
     }
     interface ScButtonAttributes {
         "variant": ButtonVariant;
@@ -4615,7 +4624,7 @@ declare module "@stencil/core" {
              *     <a href="/en/sign-out" data-icon="logout" data-sign-out>Sign out</a>
              *   </sc-account-nav>
              * - `aria-current="page"` marks the current item: a channel-subtle fill, a 3px channel bar
-             *   at inline-start, a channel icon and a Bold label (never colour alone).
+             *   at inline-start, and the icon and a Bold label in channel-action (never colour alone).
              * - `data-icon`: `description`, `credit-card`, `notifications`, `person`, `history`,
              *   `home`, `apps` or `logout` (24px; `logout` mirrors in right-to-left).
              * - `data-count`: a count badge, read with the visually hidden `data-count-label`
@@ -4924,7 +4933,7 @@ declare module "@stencil/core" {
             /**
              * Moves between the pages of a long list: search results, payments, fines. Inside
              * `sc-table`, put it in the table's `footer` slot.
-             * Renders, in its shadow root, an optional results count ("Showing 1–20 of 1,284 fines";
+             * Renders, in its shadow root, an optional results count ("Showing 1 to 20 of 1,284 fines";
              * in Arabic "عرض 1 إلى 20 من 1,284 مخالفة", with a word for the range, never a dash), then
              * `<nav aria-label="Pagination">` with Previous, the page numbers and Next. Previous is
              * left out on the first page and Next on the last (not disabled). The current page carries

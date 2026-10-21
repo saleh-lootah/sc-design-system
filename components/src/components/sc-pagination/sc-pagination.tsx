@@ -54,7 +54,7 @@ function pageWindow(page: number, total: number): number[] {
  * Moves between the pages of a long list: search results, payments, fines. Inside
  * `sc-table`, put it in the table's `footer` slot.
  *
- * Renders, in its shadow root, an optional results count ("Showing 1–20 of 1,284 fines";
+ * Renders, in its shadow root, an optional results count ("Showing 1 to 20 of 1,284 fines";
  * in Arabic "عرض 1 إلى 20 من 1,284 مخالفة", with a word for the range, never a dash), then
  * `<nav aria-label="Pagination">` with Previous, the page numbers and Next. Previous is
  * left out on the first page and Next on the last (not disabled). The current page carries
