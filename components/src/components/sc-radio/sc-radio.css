@@ -1,4 +1,6 @@
 /* sc-radio (v2, light DOM): choice.css carries the option row, the 24px circle and the 12px dot. */
+/* W12: the full layer order first; Stencil can insert this sheet before sc.css. */
+@layer sc.reset, sc.tokens, sc.base, sc.components, sc.utilities;
 @layer sc.components {
   :host {
     display: block;

@@ -80,6 +80,10 @@
   .full {
     display: none;
   }
+  /* The single link is at least a 44px target (board AP2-0, compact): 12 + 20 + 12. */
+  .link {
+    padding-block: var(--sc-space-12);
+  }
   .back {
     --icon-size: var(--sc-size-icon-m);
     display: block;

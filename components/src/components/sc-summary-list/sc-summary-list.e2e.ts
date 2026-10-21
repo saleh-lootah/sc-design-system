@@ -200,6 +200,40 @@ describe('sc-summary-list (e2e)', () => {
     expect(await page.evaluate(() => document.querySelector('#renewal a')!.getAttribute('href'))).toBe('#plate');
   });
 
+  it('matches board 09.04: rows 14 by 16, a 200px key column when wide, a headline-small total, surface-container in dark', async () => {
+    const page = await newScPage(`<div style="inline-size: 800px">${CYA}</div>`);
+    const probe = (name: string) =>
+      page.evaluate((n: string) => {
+        const i = document.createElement('i');
+        i.style.backgroundColor = `var(${n})`;
+        document.querySelector('main')!.append(i);
+        const v = getComputedStyle(i).backgroundColor;
+        i.remove();
+        return v;
+      }, name);
+    const read = () =>
+      page.evaluate(() => {
+        const row = getComputedStyle(document.querySelector('#renewal .sc-summary-list__row')!);
+        const total = document.querySelector('#pay .sc-summary-list__row--total')!;
+        return {
+          pad: [row.paddingTop, row.paddingInlineStart],
+          keyCol: row.gridTemplateColumns.split(' ')[0],
+          totalSize: getComputedStyle(total.querySelector('.sc-summary-list__value')!).fontSize,
+          card: getComputedStyle(document.querySelector('#renewal dl')!).backgroundColor,
+          totalFill: getComputedStyle(total).backgroundColor,
+        };
+      });
+    const light = await read();
+    expect(light.pad).toEqual(['14px', '16px']);
+    expect(light.keyCol).toBe('200px');
+    expect(light.totalSize).toBe('24px');
+    expect(light.card).toBe(await probe('--sc-color-surface-card'));
+    await setPageContext(page, { theme: 'dark' });
+    const dark = await read();
+    expect(dark.card).toBe(await probe('--sc-color-surface-container'));
+    expect(dark.totalFill).toBe(await probe('--sc-color-surface-container-high'));
+  });
+
   it('keeps the card edge and link colour in forced colours', async () => {
     const page = await newScPage(CYA);
     await (await (page as unknown as CdpPage).createCDPSession()).send('Emulation.setEmulatedMedia', { features: [{ name: 'forced-colors', value: 'active' }] });

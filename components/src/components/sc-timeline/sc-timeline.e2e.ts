@@ -46,6 +46,18 @@ describe('sc-timeline (e2e)', () => {
     expect(after).toEqual(['2px', await token(page, '--sc-color-outline-variant')]);
   });
 
+  it('spaces tag, time and description 6 and 2 apart; the connector reaches the bottom of the entry (board A97-0)', async () => {
+    const page = await newScPage(HTML);
+    const r = await page.evaluate(() => {
+      const li = document.querySelector('sc-timeline li')!;
+      const tag = li.querySelector('sc-status-tag')!.getBoundingClientRect();
+      const time = li.querySelector('time')!.getBoundingClientRect();
+      const p = li.querySelector('p')!.getBoundingClientRect();
+      return { tagToTime: time.top - tag.bottom, timeToP: p.top - time.bottom, end: getComputedStyle(li, '::after').bottom };
+    });
+    expect(r).toEqual({ tagToTime: 6, timeToP: 2, end: '0px' });
+  });
+
   it('marks the latest entry as the current step for assistive tech', async () => {
     const page = await newScPage(HTML);
     expect(await page.$eval('sc-timeline li', (li) => li.getAttribute('aria-current'))).toBe('step');

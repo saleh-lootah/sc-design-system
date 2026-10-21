@@ -4,6 +4,8 @@
  * link (the coordinator's brief). Stencil rewrites `::slotted(ul) li` to
  * `.sc-sc-notification-list-s > ul li`. Blocks open with a :host rule (scoper bug).
  */
+/* W12: the full layer order first; Stencil can insert this sheet before sc.css. */
+@layer sc.reset, sc.tokens, sc.base, sc.components, sc.utilities;
 @layer sc.components {
   :host {
     /* Queried for the compact layout under 600px (--sc-breakpoint-medium). */
@@ -88,7 +90,7 @@
     grid-row: 1;
     display: flex;
     flex-direction: column;
-    gap: var(--sc-space-4);
+    gap: var(--sc-space-2);
     min-block-size: var(--sc-size-target-min);
     border-radius: var(--sc-radius-control);
     color: inherit;
@@ -110,8 +112,10 @@
     font-weight: var(--sc-font-weight-bold);
   }
 
-  ::slotted(ul) > li > a > :not(:first-child, .sc-notification-list__unread + *) {
-    color: var(--sc-color-on-surface-variant);
+  /* The body (board 8JC-0: body-medium in on-surface). No comma inside :not(): Stencil's
+     scoper appends its scope class after a selector list there, so the rule matched nothing. */
+  ::slotted(ul) > li > a > :not(:first-child):not(.sc-notification-list__unread + *) {
+    color: var(--sc-color-on-surface);
     font: var(--sc-type-body-medium);
     letter-spacing: var(--sc-type-body-medium-tracking);
   }
@@ -122,7 +126,7 @@
     color: var(--sc-color-on-surface-variant);
     font: var(--sc-type-body-small);
     letter-spacing: var(--sc-type-body-small-tracking);
-    text-align: end;
+    text-align: start;
   }
 
 
@@ -142,6 +146,7 @@
     }
     ::slotted(ul) > li {
       grid-template-columns: var(--sc-space-16) minmax(0, 1fr);
+      column-gap: var(--sc-space-12);
       padding-inline: var(--sc-space-16);
     }
     ::slotted(ul) > li > time {

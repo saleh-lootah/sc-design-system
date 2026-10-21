@@ -14,7 +14,7 @@ Status: rebuilt for v2 by C4 (Wave 2b). Rules: `docs/v2/component-language.md` A
 
 | Part | Rule |
 | --- | --- |
-| Meta row (`meta`) | Step name (`label`): `title-small` Bold, `on-surface`. Count (`count`): "Step 2 of 4" / "الخطوة 2 من 4", `body-medium`, `on-surface-variant`, at inline-end. This row carries the meaning. |
+| Meta row (`meta`) | Step name (`label`): `title-small` Bold, `on-surface`, 12 from the count. Count (`count`): "Step 2 of 4" / "الخطوة 2 من 4", `body-medium`, `on-surface-variant`, at inline-end. This row carries the meaning. |
 | Marker row (`track`) | `aria-hidden`. Padding 4 (the halo is never clipped). 24px markers, 2px connectors, gap 6. |
 
 ### Full (E0)
@@ -23,9 +23,9 @@ An `<ol part="list" aria-label="Steps">`, one `<li>` per step, equal columns:
 
 | Part | Rule |
 | --- | --- |
-| Rail | 28px marker (`size-stepper-marker`) then a 2px connector to the next step, gap 8, 12 above the text. |
-| State line | `label-small`: "Step 1 · Done", "Step 2 · Current" (in `channel-action`), "Step 3" plus a visually hidden " · Not started". |
-| Name | `title-small` Bold `on-surface`; upcoming names Medium `on-surface-variant`. |
+| Rail | 28px marker (`size-stepper-marker`) then a 2px connector to the next step, gap 8, 14 above the text. |
+| State line | `label-small` at Regular weight (Medium and `channel-action` on the current step), 2 above the name: "Step 1 · Done", "Step 2 · Current", "Step 3" plus a visually hidden " · Not started". |
+| Name | `title-small` Bold `on-surface`, padding 8 at inline-end; upcoming names Medium `on-surface-variant`. |
 | Current | `aria-current="step"`. |
 
 ## Markers
@@ -36,7 +36,7 @@ An `<ol part="list" aria-label="Steps">`, one `<li>` per step, equal columns:
 | Current | `channel-action` fill, an inner dot (8 / 10) in `channel-on-action`, a halo: compact 4px `channel-container` (CL's channel-container-high), full 5px `channel-subtle` (CL's channel-container) | Dashed `outline` |
 | Upcoming | `surface` fill, 2px `outline` edge | Dashed `outline` |
 
-Dark: tone-80 markers with neutral-10 marks; the halo takes the dark channel-container / channel-subtle (OQ-18 resolved toward the channel tint, not the dark divider). Forced colours: `Highlight` markers, `GrayText` upcoming edges and connectors.
+Dark: tone-80 markers with neutral-10 marks; the halo is the divider, `outline-variant` (A20 E3 and the Paper board's dark note), through `light-dark()` with the A1 `--sc-dk` / `--sc-lt` fallback. Forced colours: `Highlight` markers, `GrayText` upcoming edges and connectors.
 
 ## RTL
 
@@ -55,4 +55,4 @@ Steps run from the right through DOM order (no reversing, LANG-14). The check do
 
 ## Tests
 
-Spec (compact render, clamping, names from children, `aria-current`, states in words, `steps` property, `layout`, Arabic and `count-text`), e2e (container-query switch at 600px, 28 / 24px markers, channel colour not green, the 5px halo, upcoming edge, solid and dashed connectors, accessibility tree, right-to-left order, channel switch, re-render, forced colours), `describeAxe`, visual (full and compact, EN/AR × light/dark).
+Spec (compact render, clamping, names from children, `aria-current`, states in words, `steps` property, `layout`, Arabic and `count-text`), e2e (container-query switch at 600px, 28 / 24px markers, channel colour not green, the 5px halo and its light and dark colours, the 14 / 2 text spacing and state weights, upcoming edge, solid and dashed connectors, accessibility tree, right-to-left order, channel switch, re-render, forced colours), `describeAxe`, visual (full and compact, EN/AR × light/dark).

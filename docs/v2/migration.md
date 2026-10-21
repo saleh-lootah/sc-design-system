@@ -229,6 +229,9 @@ All shadow DOM, as architecture §3.1 says for links and chrome. Full detail in 
 Strings moved to per-component files: `sc-error-summary.ts` (`errorSummaryHeading`), `sc-spinner.ts` (`spinnerLoading`), `sc-step-progress.ts` (`stepProgressCount` and the state words), plus new `sc-step-list.ts`, `sc-notification-list.ts`, `sc-modal.ts`. The shared `common.ts` keys `problem`, `loading` and `step` are no longer used by these components.
 
 Icons added to the shared set: `check`, `schedule`, `hourglass`, `pending`, `inbox`.
+
+**Paper board alignment (feedback and status).** These corrections supersede the rows above. `sc-status-tag` keeps `tone="channel"` (decision W4): `channel-action` words and an info icon on `channel-subtle`, following `data-channel`; it no longer renders as `neutral`. `sc-spinner` now defaults to `size="l"` (24px); set `size="m"` for 20px inline with body text.
+
 ## 6. Content and layout (C5, Wave 2b)
 
 | Tag | Encapsulation | API changes from v1 |

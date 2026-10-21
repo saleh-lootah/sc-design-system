@@ -1,6 +1,6 @@
 # sc-tile
 
-A compact tile that is one link: a tinted icon, a title and an optional plural-aware count. For life events, categories and favourite services. Specification: `specs/sc-tile.md`.
+A compact tile that is one link: a tinted icon, a title and an optional plural-aware count. For life events, categories and favourite services. Specification: `specs/sc-tile.md`; Paper board 09.07.
 
 ## Usage
 

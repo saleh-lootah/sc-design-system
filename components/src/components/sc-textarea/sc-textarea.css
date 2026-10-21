@@ -2,6 +2,8 @@
  * sc-textarea (v2, light DOM). field.css (first in styleUrls) gives the label, hint, error and
  * box; this adds the multi-line control and the count (component-language.md A8).
  */
+/* W12: the full layer order first; Stencil can insert this sheet before sc.css. */
+@layer sc.reset, sc.tokens, sc.base, sc.components, sc.utilities;
 @layer sc.components {
   .sc-textarea__frame {
     min-block-size: auto;

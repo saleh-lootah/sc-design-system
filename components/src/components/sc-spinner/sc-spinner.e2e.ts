@@ -15,8 +15,8 @@ function sp(page: E2EPage, selector: string, read: string) {
 }
 
 describe('sc-spinner (e2e)', () => {
-  it('is 20px (24px at size l), uses currentColor and turns once per 600ms, linear', async () => {
-    const page = await newScPage(`<p style="color: var(--sc-color-error)"><sc-spinner id="m"></sc-spinner><sc-spinner id="l" size="l"></sc-spinner></p>`);
+  it('is 24px (20px at size m), uses currentColor and turns once per 600ms, linear', async () => {
+    const page = await newScPage(`<p style="color: var(--sc-color-error)"><sc-spinner id="m" size="m"></sc-spinner><sc-spinner id="l"></sc-spinner></p>`);
     // Computed size, not the bounding box: a rotating square's box is up to 1.41 times wider.
     expect(await sp(page, '#m', 'getComputedStyle(root.querySelector("svg")).width')).toBe('20px');
     expect(await sp(page, '#l', 'getComputedStyle(root.querySelector("svg")).width')).toBe('24px');
@@ -24,6 +24,18 @@ describe('sc-spinner (e2e)', () => {
     expect(anim).toEqual(['sc-spin', '0.6s', 'linear']);
     const colour = await page.$eval('p', (p) => getComputedStyle(p).color);
     expect(await sp(page, '#m', 'getComputedStyle(root.querySelector("svg")).color')).toBe(colour);
+  });
+
+  it('shows a visible label 12px from the arc, in on-surface', async () => {
+    const page = await newScPage(`<p style="color: var(--sc-color-channel-action)"><sc-spinner show-label label="Checking your plate number"></sc-spinner></p>`);
+    expect(await sp(page, 'sc-spinner', 'getComputedStyle(root.querySelector(".spinner")).columnGap')).toBe('12px');
+    const onSurface = await page.evaluate(() => {
+      const probe = document.createElement('i');
+      probe.style.color = 'var(--sc-color-on-surface)';
+      document.body.append(probe);
+      return getComputedStyle(probe).color;
+    });
+    expect(await sp(page, 'sc-spinner', 'getComputedStyle(root.querySelector("[part=label]")).color')).toBe(onSurface);
   });
 
   it('keeps the label visually hidden but readable', async () => {

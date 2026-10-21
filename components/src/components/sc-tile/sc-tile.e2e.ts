@@ -64,8 +64,23 @@ describe('sc-tile (e2e)', () => {
     await page.mouse.move(box[0], box[1]);
     await page.mouse.down();
     await page.evaluate(() => document.querySelector('#baby')!.shadowRoot!.getAnimations().forEach((a) => a.finish()));
-    expect(await page.evaluate(() => getComputedStyle(document.querySelector('#baby')!.shadowRoot!.querySelector('.tile')!).transform)).toBe('matrix(0.97, 0, 0, 0.97, 0, 0)');
+    const pressed = await page.evaluate(() => {
+      const tile = getComputedStyle(document.querySelector('#baby')!.shadowRoot!.querySelector('.tile')!);
+      return [tile.transform, tile.backgroundImage.startsWith('linear-gradient')];
+    });
+    expect(pressed).toEqual(['matrix(0.97, 0, 0, 0.97, 0, 0)', true]);
     await page.mouse.up();
+  });
+
+  it('sets the title 16 below the icon tile, not pushed to the bottom of a taller tile', async () => {
+    const page = await newScPage(MARKUP.replace('Moving home', 'Moving home to a new emirate with your family'));
+    const gaps = await page.evaluate(() =>
+      ['#moving', '#fine'].map((id) => {
+        const root = document.querySelector(id)!.shadowRoot!;
+        return Math.round(root.querySelector('.title')!.getBoundingClientRect().top - root.querySelector('.icon-tile')!.getBoundingClientRect().bottom);
+      }),
+    );
+    expect(gaps).toEqual([16, 16]);
   });
 
   it('re-renders the count in Arabic with Latin digits', async () => {

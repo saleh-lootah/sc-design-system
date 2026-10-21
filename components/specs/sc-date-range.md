@@ -12,12 +12,12 @@ Status: rebuilt for v2 by C3 (Wave 2b). Behaviour as designed for v1 (below); vi
 
 | v2 visual change | Value |
 | --- | --- |
-| Field frame | 56 tall (`size-control-primary`), radius 8, 1.5px `outline`; the From/To captions are label-small in `on-surface-variant`, the values body-medium (the 18/22 and 20/24 sizes in component-language have no regular-weight role; body-medium keeps the two lines inside 56 in Arabic) |
+| Field frame | 56 tall (`size-control-primary`), radius 8, 1.5px `outline`; the From/To captions are label-small in `on-surface-variant`, the values body-large with no block padding (two lines fit 56). The arrow is 24px, 12 from each value; the calendar button is 6 from the inline-end edge |
 | Focus | U1 ring (neutral `focus-ring`, 3px), inset on the focused segment since the two segments share one frame; outside every other control |
 | Popover | `surface`, radius 12 (`radius-card`), 1px `outline-variant`, `elevation-2`, padding 20 |
-| Day cells | 44px circles (`size-target-min`); band 44 high in `channel-subtle` (component-language "channel-container"); preview band `surface-container`; today a 1.5px `outline` ring; ends `channel-action` / `channel-on-action`; unavailable `on-disabled` (3.85:1), no opacity |
-| Presets | B18 filter toggles: 40 tall with a 44 target, pill, 1.5px `outline`; on: `channel-action` with a check |
-| Sheet | top radius 12, `scrim` backdrop, slides on `easing-drawer` over `duration-slow` (280ms), exits 20% faster |
+| Day cells | 44px circles (`size-target-min`), numbers title-small (17/22 EN); band 44 high in `channel-subtle` (component-language "channel-container"); preview band `surface-container`; today a 1.5px `outline` ring; ends `channel-action` / `channel-on-action`; unavailable `on-disabled` (3.85:1), no opacity |
+| Presets | B18 filter toggles: 40 tall with a 44 target, pill, 1.5px `outline`, 12 apart; on: `channel-action` with an 18px check 8 from the label |
+| Sheet | top radius 12, a 36 × 4 grabber in `outline-variant`, title-medium heading, `scrim` backdrop, slides on `easing-drawer` over `duration-slow` (280ms), exits 20% faster |
 | Month title | title-medium; weekday heads label-small `on-surface-variant` |
 
 The rest of this document is the v1 behaviour specification, which v2 keeps.
@@ -264,3 +264,5 @@ Tokens used: `easing.drawer`, `easing.exit` (strong ease-out since the motion au
 ## Paper board alignment (v2)
 
 Board AQS-0 changes: the arrow is 24px; the segment value is body-large (18/26 EN, 20/32 AR) with no block padding so two lines fit 56; presets are a wrapping row of 40px chips, 12 apart, above the months in the popover; months are 32 apart; the footer summary is body-medium. Kept as built, for the coordinator: the board's footer has Cancel (tertiary) and Apply; the code keeps v1's Clear and Apply (Escape and a click outside already cancel), as the board also says behaviour is unchanged from v1.
+
+Verification pass (board AQS-0): the arrow now sits 12 from each value (it was 8 before it and 16 after), the calendar button 6 from the frame's end (was 4), day numbers are title-small (17/22, as the board and component-language A15; they were label-medium 16/20), the preset check is 8 from its label (was 6), the footer buttons are 12 apart (were 8), and in the sheet the presets are 12 apart (were 8), the grabber is 36 × 4 in `outline-variant` (was 40 × 4 in `outline`) and the heading is title-medium (was title-large). Still different from the board, kept: the previous and next month buttons keep v1's 36px `surface-container` circle (the board draws bare chevrons); the From/To captions are label-small (the board uses the body-small size at 16px leading, which is not a role); the sheet's From/To chips stay 56 tall with 16 padding (the board draws them 6 × 12 with a 2px edge) and its footer keeps 8 between the stacked buttons (board 4); the footer buttons are `sc-button` size `m` (label-medium, padding 16), where the board draws label-large with 20 and 28 padding.

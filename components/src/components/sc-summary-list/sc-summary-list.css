@@ -5,12 +5,18 @@
  *
  * Container queries cannot read custom properties, so 600px repeats --sc-breakpoint-medium.
  */
+/* W12: the full layer order first; Stencil can insert this sheet before sc.css. */
+@layer sc.reset, sc.tokens, sc.base, sc.components, sc.utilities;
 @layer sc.components {
   :host {
     /* Fixed end columns, so every row's value starts in the same place. */
     --sc-summary-list-action-width: var(--sc-space-96);
     --_stack-action: var(--sc-space-64);
     --_pair-key: calc(var(--sc-space-96) + var(--sc-space-8));
+    /* Columns layout: a fixed 200px key column (board 09.04), so values line up across lists. */
+    --_col-key: calc(var(--sc-space-96) * 2 + var(--sc-space-8));
+    /* Rows are padded 14 block (A26, board 09.04). */
+    --_row-pad: calc(var(--sc-space-12) + var(--sc-space-2));
     display: block;
     /* The layout responds to the list's own width, not the viewport. */
     container-type: inline-size;
@@ -40,17 +46,18 @@
     overflow: clip;
   }
 
-  /* Row: stacked first. Key above value, the action in a fixed end column, centred. */
+  /* Row: stacked first. Key above value, the action in a fixed end column, centred. The 64px
+     column is the whole gutter (no extra gap), as board 09.04 draws it. */
   .sc-summary-list__row {
     display: grid;
     grid-template-columns: minmax(0, 1fr) var(--_stack-action);
     grid-template-areas:
       'key action'
       'value action';
-    column-gap: var(--sc-space-16);
+    column-gap: 0;
     row-gap: var(--sc-space-2);
     align-items: center;
-    padding-block: var(--sc-space-12);
+    padding-block: var(--_row-pad);
     padding-inline: var(--sc-space-16);
   }
 
@@ -138,16 +145,28 @@
     letter-spacing: var(--sc-type-title-medium-tracking);
   }
   .sc-summary-list__row--total .sc-summary-list__value {
-    font: var(--sc-type-title-large);
-    letter-spacing: var(--sc-type-title-large-tracking);
+    font: var(--sc-type-headline-small);
+    letter-spacing: var(--sc-type-headline-small-tracking);
+  }
+
+  /* Dark mapping (board 09.04, E3): the card is surface-container and the total row
+     surface-container-high. Behind @supports so browsers without light-dark() (A1 fallback)
+     keep the light-mode roles. */
+  @supports (color: light-dark(white, black)) {
+    :host(.sc-summary-list--card) .sc-summary-list__list {
+      background: light-dark(var(--sc-color-surface-card), var(--sc-color-surface-container));
+    }
+    .sc-summary-list__row--total {
+      background: light-dark(var(--sc-color-surface-container), var(--sc-color-surface-container-high));
+    }
   }
 
   /* Columns: key, value and a fixed-width action column, sharing a baseline. */
   :host(.sc-summary-list--columns) .sc-summary-list__row {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) var(--sc-summary-list-action-width);
+    grid-template-columns: var(--_col-key) minmax(0, 1fr) var(--sc-summary-list-action-width);
     grid-template-areas: 'key value action';
+    column-gap: var(--sc-space-16);
     align-items: baseline;
-    padding-block: var(--sc-space-16);
   }
   :host(.sc-summary-list--columns) .sc-summary-list__link {
     /* The 44px target would push the baseline down; centre it on the value's first line. */
@@ -161,21 +180,17 @@
     grid-template-areas: 'key value';
     column-gap: var(--sc-space-16);
     align-items: baseline;
-    padding-block: var(--sc-space-12);
   }
   :host(.sc-summary-list--pairs) .sc-summary-list__value {
     text-align: end;
   }
 
   @container (min-width: 600px) {
-    :host(.sc-summary-list--card) .sc-summary-list__row {
-      padding-inline: var(--sc-space-24);
-    }
     :host(.sc-summary-list--auto) .sc-summary-list__row {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) var(--sc-summary-list-action-width);
+      grid-template-columns: var(--_col-key) minmax(0, 1fr) var(--sc-summary-list-action-width);
       grid-template-areas: 'key value action';
+      column-gap: var(--sc-space-16);
       align-items: baseline;
-      padding-block: var(--sc-space-16);
     }
     :host(.sc-summary-list--auto) .sc-summary-list__link {
       margin-block: calc((var(--sc-type-title-small-leading) - var(--sc-size-target-min)) / 2);

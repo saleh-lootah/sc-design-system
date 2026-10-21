@@ -1,7 +1,7 @@
 /*
- * sc-attention-card (v2, shadow DOM). Rules: component-language.md B12 and B10, with the
- * coordinator's thin topic-tint strip (decorative, foundations §2.7), read through the role
- * table in decisions.md. The card is neutral; urgency is in the status tag's words.
+ * sc-attention-card (v2, shadow DOM). Rules: component-language.md B12 and B10 and Paper
+ * board 09.08, read through the role table in decisions.md. The card is neutral with no
+ * coloured edge; the icon tile takes the status tone; urgency is in the status tag's words.
  */
 :host {
   display: block;
@@ -35,15 +35,17 @@
 .card--amber { --_tile: var(--sc-color-tint-amber); --_ink: var(--sc-color-on-tint-amber); }
 .card--green { --_tile: var(--sc-color-tint-green); --_ink: var(--sc-color-on-tint-green); }
 
-/* The thin decorative strip: the card's top edge, 4px in the topic's ink, following the
-   12px corners. Decorative only (COL-13). */
-.card[class*='card--'] {
-  border-block-start: var(--sc-size-strip) solid var(--_ink);
-}
+/* The icon tile follows the status tag's tone (B10, board 09.08): reinforcement only, the
+   tag's words carry the status. */
+.card--tone-error { --_tile: var(--sc-color-error-container); --_ink: var(--sc-color-on-error-container); }
+.card--tone-warning { --_tile: var(--sc-color-warning-container); --_ink: var(--sc-color-on-warning-container); }
+.card--tone-info { --_tile: var(--sc-color-info-container); --_ink: var(--sc-color-on-info-container); }
+.card--tone-success { --_tile: var(--sc-color-success-container); --_ink: var(--sc-color-on-success-container); }
 
 .top {
   display: flex;
-  align-items: center;
+  /* The 40px tile and the 32px tag share a top edge (board 09.08). */
+  align-items: flex-start;
   justify-content: space-between;
   gap: var(--sc-space-12);
 }
@@ -90,8 +92,8 @@
 
 .fact {
   color: var(--sc-color-on-surface);
-  font: var(--sc-type-title-small);
-  letter-spacing: var(--sc-type-title-small-tracking);
+  font: var(--sc-type-body-medium);
+  letter-spacing: var(--sc-type-body-medium-tracking);
 }
 
 /* Amounts and references: Dubai W23's digits are tabular by default (TYP-08). */

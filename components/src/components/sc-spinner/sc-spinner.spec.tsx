@@ -8,15 +8,15 @@ describe('sc-spinner (spec)', () => {
     expect(r.querySelector('svg.spin[aria-hidden="true"]')).not.toBeNull();
     expect(r.querySelector('[role="status"]')!.textContent).toBe('Loading');
     expect(r.querySelector('[part="label"]')).toHaveClass('label--hidden');
-    expect(r.querySelector('.spinner')).not.toHaveClass('spinner--l');
+    expect(r.querySelector('.spinner')).toHaveClass('spinner--l');
   });
 
-  it('shows the label with show-label, takes a custom label and size l', async () => {
-    const page = await newSpecPage({ components: [ScSpinner], html: `<sc-spinner show-label size="l" label="Checking your plate number"></sc-spinner>` });
+  it('shows the label with show-label, takes a custom label and size m', async () => {
+    const page = await newSpecPage({ components: [ScSpinner], html: `<sc-spinner show-label size="m" label="Checking your plate number"></sc-spinner>` });
     const r = page.root!.shadowRoot!;
     expect(r.querySelector('[part="label"]')).not.toHaveClass('label--hidden');
     expect(r.querySelector('[part="label"]')!.textContent).toBe('Checking your plate number');
-    expect(r.querySelector('.spinner')).toHaveClass('spinner--l');
+    expect(r.querySelector('.spinner')).not.toHaveClass('spinner--l');
   });
 
   it('uses Arabic from the closest lang', async () => {

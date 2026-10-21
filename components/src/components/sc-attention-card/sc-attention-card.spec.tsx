@@ -29,4 +29,16 @@ describe('sc-attention-card (spec)', () => {
     expect(page.root!.shadowRoot!.querySelector('h3')).not.toBeNull();
     expect(page.root!.shadowRoot!.querySelector('.card')!.className).not.toContain('card--');
   });
+
+  it('takes the status tag tone for the icon tile unless a tint is set', async () => {
+    const tag = (tone: string) => `<sc-status-tag slot="status" tone="${tone}">Overdue</sc-status-tag>`;
+    const toned = await newSpecPage({ components: [ScAttentionCard], html: `<sc-attention-card>${tag('error')}Traffic fine</sc-attention-card>` });
+    expect(toned.root!.shadowRoot!.querySelector('.card')).toHaveClass('card--tone-error');
+    const tinted = await newSpecPage({ components: [ScAttentionCard], html: `<sc-attention-card tint="blue">${tag('error')}Traffic fine</sc-attention-card>` });
+    expect(tinted.root!.shadowRoot!.querySelector('.card')!.className).not.toContain('card--tone-');
+    const neutral = await newSpecPage({ components: [ScAttentionCard], html: `<sc-attention-card><span slot="status"><sc-status-tag tone="neutral">Draft</sc-status-tag></span>x</sc-attention-card>` });
+    expect(neutral.root!.shadowRoot!.querySelector('.card')!.className).not.toContain('card--tone-');
+    const nested = await newSpecPage({ components: [ScAttentionCard], html: `<sc-attention-card><span slot="status"><sc-status-tag tone="info">New</sc-status-tag></span>x</sc-attention-card>` });
+    expect(nested.root!.shadowRoot!.querySelector('.card')).toHaveClass('card--tone-info');
+  });
 });

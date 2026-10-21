@@ -15,11 +15,11 @@ Use `sc-summary-list` for the details of one thing. Never use a table for layout
 | # | Part | Notes |
 | --- | --- | --- |
 | 1 | Caption | `title-small` in `on-surface`. Required, so the table has an accessible name. It can be visually hidden when a heading straight above says the same thing (`caption-hidden`). |
-| 2 | Header row | `label-medium` in `on-surface` (Bold in Arabic), single line, on a `surface-container` fill. A 1px `outline-variant` rule sits under it. A sortable header is a button with a sort glyph at inline-end. |
-| 3 | Body row | Minimum height 56 (compact: 44). Padding-block `space-16` (compact: `space-12`); padding-inline `space-16`. The first and last cells add `space-8` toward the card edge. A 1px `outline-variant` rule sits between rows. There is no zebra striping and there are no vertical rules. |
-| 4 | Row header | The first cell is `th scope="row"`, `title-small` in `on-surface`. It usually carries the row's link ("F-2026-118204" opens that fine). |
+| 2 | Header row | `label-medium` in `on-surface` (Bold in Arabic), single line, 48 tall (14 block padding), on a `surface-container` fill. A 1px `outline-variant` rule sits under it. A sortable header is a button with a sort glyph at inline-end. |
+| 3 | Body row | Minimum height 56 (compact: 44). Padding-block 14 (board 09.05; compact: `space-12`); padding-inline `space-16`. The first and last cells add `space-8` toward the card edge. A 1px `outline-variant` rule sits between rows. There is no zebra striping and there are no vertical rules. |
+| 4 | Row header | The first cell is `th scope="row"`, `title-small` in `on-surface`. It usually carries the row's link, in `channel-action`, underlined ("F-2026-118204" opens that fine). |
 | 5 | Totals row (optional) | `tfoot` row. `title-small`, with a 1px `outline` rule above it (E3). |
-| 6 | Footer (optional) | Count plus pagination, for example "Showing 1–20 of 1,284 fines". Previous and Next are small secondary buttons. |
+| 6 | Footer (optional) | 12 block padding, a 1px `outline-variant` rule above, `body-medium` in `on-surface-variant`. Count plus pagination, for example "Showing 1–20 of 1,284 fines". Previous and Next are small secondary buttons. |
 | 7 | Container | `surface-card`, `radius-card` (12), a 1px `outline-variant` edge, no shadow. `overflow: clip`, so the rules meet the rounded corners cleanly. |
 
 ## Column types
@@ -49,7 +49,7 @@ Rules:
 - **Selection:** optional (`selectable`). This is for "select fines to pay".
   - A checkbox column is added at inline-start. The header checkbox selects every row on the page and shows indeterminate when only some are selected.
   - A selected row gets the `channel-subtle` background (the role table's "selected rows"); in stacked mode the card also gets a 2px `channel-action` inset edge. The checkbox is 24px with a 2px `outline` edge and 4px corners, filled `channel-action` when checked.
-  - A selection bar appears below the table: radius 8, `channel-subtle` fill, padding 12 by 16, the text in `label-large`: "2 fines selected · AED 1,700.00" plus a primary action, "Pay 2 fines".
+  - A selection bar appears below the table: radius 8, `channel-subtle` fill, padding 12 by 16, the count in `label-large` (Bold) and the total in `label-medium` (Medium), 16 apart ("2 fines selected", "AED 1,700.00"; the live region reads them joined with " · "), plus a primary action, "Pay 2 fines".
 - **Row hover:** the `on-surface` state layer (8%). It applies only under `@media (hover: hover) and (pointer: fine)`.
 - **Whole rows are not clickable.** The link lives in the row header, so the target is explicit and keyboard users reach it with one Tab.
 - **Density:** `default` is for the public. `compact` (row 44, `body-small`) is for staff tools with long lists.
@@ -61,8 +61,8 @@ The table is used as-is from `--breakpoint-medium` (600px) up. Below 600px, the 
 - **`stack`** (default; best for up to 6 columns). Each row becomes a card on `surface-card` with `radius-card` (12), a 1px `outline-variant` edge and padding 16, spaced `space-12` apart.
   - The row header becomes the card title (`title-small`).
   - The status tag sits at top inline-end.
-  - The other cells become label and value pairs (`label-medium` in `on-surface-variant` / `body-medium`), as in a summary list.
-  - The amount is the last line, end-aligned, in `title-medium`.
+  - The other cells become key and value pairs on one line, as `sc-summary-list` `pairs` (board 09.05): the key in a fixed 104px start column (120 in Arabic), `body-medium` in `on-surface-variant`; the value `body-medium`, end-aligned.
+  - The amount is the last line, after a 1px `outline-variant` rule and 12 of space, with its key, the value end-aligned in `title-medium`.
   - The action becomes a full-width link row at the bottom.
 - **`scroll`** (for genuinely wide comparisons).
   - The table keeps its layout inside a horizontal scroll region with `role="region"`, `tabindex="0"` and `aria-labelledby` pointing at the caption.
@@ -174,6 +174,16 @@ Applies the emil-design-eng rules.
 Slots: default (the native table), `footer`, `empty`, `actions` (selection bar actions).
 
 **v1 to v2:** no API changes. The look follows v2 (flat 12px container with a 1px edge, filled header, `channel-subtle` selection, underlined links, neutral focus ring, Arabic ranges written with a word in the examples). Styles moved into `@layer sc.components`.
+
+## Board differences kept in code (board 09.05)
+
+| Board | Code | Why |
+| --- | --- | --- |
+| Header and totals text drawn Bold in English | `label-medium` and `title-small` (Medium in English, Bold in Arabic) | W5: type roles only; no Bold English role at those sizes |
+| Row-header link drawn `body-medium` at Medium | `title-small` | This spec's anatomy (row header `title-small`); no role is body-medium Medium |
+| Cells 16 apart and 16 from the card edge (flex mock) | 16 inline padding per cell (32 between columns), 24 at the card edges | This spec and A28 ("cells padded 16 inline", first and last add 8) |
+| Caption drawn as a heading above the container | The native `<caption>` inside the card | The caption is the table's accessible name and part of the native table |
+| End-aligned header: sort glyph before the label | Glyph after the label in every column | This spec ("end-aligned headers keep it there too") |
 
 ## Budget
 

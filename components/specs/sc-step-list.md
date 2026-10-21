@@ -17,7 +17,7 @@ A life event as an ordered list of services, possibly spanning channels.
 | 3 | Marker | 32px circle. Own channel: `surface-card`, 1.5px `channel-action` edge, number in `channel-action`. Another channel: that channel's `channel-action` fill, number in `channel-on-action`. `label-small` Bold. |
 | 4 | Connectors | 2px. An 18px stub above the marker and a line below it to the next row, in `outline-variant`; between two rows of the same other channel, in that channel's `channel-action`. |
 | 5 | Title | The link: `title-medium` (Bold), `on-surface`, underlined on fine-pointer hover; a 44px target without moving the text. |
-| 6 | Entity | `body-medium`, `on-surface-variant`. |
+| 6 | Entity | `body-medium`, `on-surface-variant` (any child of the `<li>` that is not the link or an added part). Rows are 90 tall in English, as on the board. |
 | 7 | Chip | Other channel only: the outlined channel chip (A19): `surface-card`, 1px `channel-outline`, 6px radius, 30 tall, padding 10, an 8px dot and Bold `label-small` in `channel-action`: "On Dubai Transport" / "على مواصلات دبي". |
 | 8 | Chevron | 24px, `on-surface-variant`, decorative, mirrors in Arabic. |
 

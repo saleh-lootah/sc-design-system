@@ -1,8 +1,19 @@
 import { Component, Element, Host, Prop, h } from '@stencil/core';
 import { LocaleController } from '../../i18n/controller';
 import strings from '../../i18n/components/sc-breadcrumbs';
-import { ChevronBack, ChevronForward } from '../../icons/index'; // explicit /index: Stencil only scans file imports for <svg>
 import { readNavItems, watchNavItems } from '../../utils/nav-items';
+
+/**
+ * The two chevrons, drawn here rather than imported from the shared icon set, as
+ * sc-pagination does: that module carries every icon (0.9 KiB gzip) and these two cost about
+ * 0.1 KiB. Same paths and grammar as src/icons: 24px grid, 2px stroke, `currentColor`,
+ * decorative, mirrored in right-to-left.
+ */
+const Chevron = ({ d, cls }: { d: string; cls: string }) => (
+  <svg class={`icon icon-directional ${cls}`} viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+    <path d={d} />
+  </svg>
+);
 
 /**
  * Where this page sits in the channel's hierarchy, on pages outside a transaction (in the
@@ -38,6 +49,12 @@ export class ScBreadcrumbs {
   /** Overrides the landmark name ("Breadcrumb" / "مسار التنقل"). */
   @Prop() label?: string;
 
+  /**
+   * Overrides the text of the single link shown on compact screens (default "Back to {parent}"
+   * / "رجوع إلى {parent}"). `{parent}` is replaced by the parent page's text.
+   */
+  @Prop() compactLabel?: string;
+
   private locale = new LocaleController(this, strings);
   private observer?: MutationObserver;
 
@@ -61,16 +78,16 @@ export class ScBreadcrumbs {
           <ol class="list" part="list">
             {items.map((item, i) => (
               <li class={{ 'item': true, 'item--parent': i === last - 1 }}>
-                {i > 0 && <ChevronForward class="sep" />}
+                {i > 0 && <Chevron cls="sep" d="M9 5.5l6.5 6.5L9 18.5" />}
                 {i === last || item.href === null ? (
                   <span class="current" part="current" aria-current={i === last ? 'page' : undefined} lang={item.lang ?? undefined}>
                     {item.text}
                   </span>
                 ) : (
                   <a class="link focus-ring" part="link" href={item.href} lang={item.lang ?? undefined}>
-                    <ChevronBack class="back" />
+                    <Chevron cls="back" d="M15 5.5L8.5 12l6.5 6.5" />
                     <span class="full">{item.text}</span>
-                    <span class="compact">{t('breadcrumbsBackTo', { page: item.text })}</span>
+                    <span class="compact">{this.compactLabel ? this.compactLabel.replace('{parent}', item.text) : t('breadcrumbsBackTo', { page: item.text })}</span>
                   </a>
                 )}
               </li>

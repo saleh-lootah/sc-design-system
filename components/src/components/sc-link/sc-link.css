@@ -45,12 +45,13 @@
   }
 }
 
-/* Inline icon follows the text size. */
+/* End icon (external, standalone): 20px with a 6px gap (Paper sc-link anatomy). Inline it
+   sits on the middle of the text. */
 .icon-box {
-  --icon-size: 1em;
+  --icon-size: var(--sc-size-icon-m);
   display: inline-block;
-  margin-inline-start: 0.25em;
-  vertical-align: -0.125em;
+  margin-inline-start: var(--sc-space-6);
+  vertical-align: middle;
 }
 
 .icon-box .icon {

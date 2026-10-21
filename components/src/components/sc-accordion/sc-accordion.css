@@ -6,6 +6,8 @@
  * Stencil 4.45's scoper mangles an @media block whose FIRST rule is a ::slotted rule, so
  * such blocks open with a `:host { --_at: 1; }` anchor rule (as sc-table does).
  */
+/* W12: the full layer order first; Stencil can insert this sheet before sc.css. */
+@layer sc.reset, sc.tokens, sc.base, sc.components, sc.utilities;
 @layer sc.components {
   :host {
     display: block;
@@ -42,6 +44,9 @@
   /* Sections: a 1px rule above each one and below the last. */
   ::slotted(details) {
     border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+    /* The answer is body-medium (board 09.10); the summary sets its own role below. */
+    font: var(--sc-type-body-medium);
+    letter-spacing: var(--sc-type-body-medium-tracking);
   }
   ::slotted(details:last-of-type) {
     border-block-end: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
@@ -56,6 +61,8 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr) var(--sc-size-icon-l);
     column-gap: var(--sc-space-16);
+    /* 2 between the title and the summary line (board 09.10). */
+    row-gap: var(--sc-space-2);
     align-items: center;
     box-sizing: border-box;
     min-block-size: var(--sc-size-control-primary);
@@ -107,14 +114,16 @@
   }
 
   /* The answer: 8 below the summary; it fades in (opacity only, no height animation, MOT-11). */
+  /* The answer keeps clear of the chevron column (24 + the 16 gap), as board 09.10 draws it. */
   ::slotted(details) > :not(summary) {
     margin-block: 0;
+    padding-inline-end: calc(var(--sc-size-icon-l) + var(--sc-space-16));
   }
   ::slotted(details) > summary + * {
     margin-block-start: var(--sc-space-8);
   }
   ::slotted(details) > :not(summary) + :not(summary) {
-    margin-block-start: var(--sc-space-16);
+    margin-block-start: var(--sc-space-8);
   }
   ::slotted(details[open]) > :not(summary) {
     animation: sc-accordion-fade var(--sc-duration-fast) var(--sc-easing-enter);
@@ -138,6 +147,16 @@
     }
     .sc-accordion__toggle:hover {
       text-decoration-thickness: 2px;
+    }
+  }
+
+  /* Reduced motion: the chevron turn is dropped (board 09.10); the opacity fade stays. */
+  @media (prefers-reduced-motion: reduce) {
+    :host {
+      --_at: 1;
+    }
+    ::slotted(details) > summary::after {
+      transition: none;
     }
   }
 

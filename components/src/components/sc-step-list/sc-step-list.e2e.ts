@@ -37,6 +37,15 @@ describe('sc-step-list (e2e)', () => {
     expect(await item(page, 0, 'getComputedStyle(li).backgroundColor')).toBe('rgba(0, 0, 0, 0)');
   });
 
+  it('sets the entity in body-medium on-surface-variant (board 7JB-0)', async () => {
+    const page = await newScPage(HTML, { channel: 'now' });
+    const span = 'getComputedStyle(li.querySelector("span:not([class])"))';
+    expect(await item(page, 0, `${span}.color`)).toBe(await tokenOn(page, 0, '--sc-color-on-surface-variant'));
+    expect(await item(page, 0, `${span}.fontSize`)).toBe('16px');
+    expect(await item(page, 0, `${span}.lineHeight`)).toBe('24px');
+    expect(await item(page, 0, 'li.getBoundingClientRect().height')).toBe(90);
+  });
+
   it('joins rows of the same other channel in that channel colour', async () => {
     const page = await newScPage(HTML, { channel: 'now' });
     const transportAction = await tokenOn(page, 2, '--sc-color-channel-action');

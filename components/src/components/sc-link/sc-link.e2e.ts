@@ -52,6 +52,16 @@ describe('sc-link (e2e)', () => {
     expect(await inner(page, 'sc-link', 'getComputedStyle(label).textUnderlineOffset')).toBe('5px');
   });
 
+  it('gives the external icon 20px with a 6px gap, inline as well as standalone', async () => {
+    const page = await newScPage(`<p>Read the <sc-link href="https://www.rta.ae" external>RTA guide</sc-link></p>`);
+    const box = await page.evaluate(() => {
+      const icon = document.querySelector('sc-link')!.shadowRoot!.querySelector('[part="icon"]') as HTMLElement;
+      const svg = icon.querySelector('svg')!.getBoundingClientRect();
+      return { w: svg.width, h: svg.height, gap: getComputedStyle(icon).marginInlineStart };
+    });
+    expect(box).toEqual({ w: 20, h: 20, gap: '6px' });
+  });
+
   it('thickens the underline to 2px on hover', async () => {
     const page = await newScPage(`<p>Read the <sc-link href="#x">fees guide</sc-link></p>`);
     await page.hover('sc-link');

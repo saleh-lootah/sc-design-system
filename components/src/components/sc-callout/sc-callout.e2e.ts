@@ -61,10 +61,12 @@ describe('sc-callout (e2e)', () => {
     expect(await inner(page, '#w', 'box.querySelector(".visually-hidden").textContent.trim()')).toBe('تنبيه:');
   });
 
-  it('switches to the Arabic type scale (body-medium 16 / 18)', async () => {
+  it('switches to the Arabic type scale (body-medium 16 / 18, Medium)', async () => {
     const page = await newScPage(`<sc-callout id="en">Text</sc-callout><sc-callout id="ar" lang="ar">نص</sc-callout>`);
     expect(await inner(page, '#en', 'getComputedStyle(box.querySelector("[part=content]")).fontSize')).toBe('16px');
     expect(await inner(page, '#ar', 'getComputedStyle(box.querySelector("[part=content]")).fontSize')).toBe('18px');
+    expect(await inner(page, '#en', 'getComputedStyle(box.querySelector("[part=content]")).fontWeight')).toBe('500');
+    expect(await inner(page, '#ar', 'getComputedStyle(box.querySelector("[part=content]")).fontWeight')).toBe('500');
   });
 
   it('uses the tone container, an accent bar at inline-start in the tone colour, and an 8px radius', async () => {

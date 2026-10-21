@@ -16,7 +16,7 @@ The `.sc-link` helper (`src/global/shadow.css`, also in `sc.css` `@layer sc.util
 | --- | --- | --- |
 | 1 | Link | `[part=control]`, the native `<a>`. Inline by default, inheriting the sentence's type. Radius 4 (for the focus ring). |
 | 2 | Label | `[part=label]`, the default slot. Carries the underline, so the icon and its gap are not underlined. |
-| 3 | Icon (optional) | `[part=icon]`. `external`: the external icon, 1em inline. `standalone`: `arrow-forward`, 20px, gap 6. |
+| 3 | Icon (optional) | `[part=icon]`. `external`: the external icon, 20px, gap 6, on the middle of the text when inline. `standalone`: `arrow-forward`, 20px, gap 6 (Paper board sc-link, anatomy). |
 | 4 | Hidden text | `external` only: " (opens in new tab)" / " (يفتح في علامة تبويب جديدة)", inside the link, visually hidden. |
 
 ## Kinds

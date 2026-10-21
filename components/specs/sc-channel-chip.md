@@ -12,10 +12,10 @@ Points to another channel that also offers the service: "Also on Dubai Transport
 
 | # | Part | Notes |
 | --- | --- | --- |
-| 1 | Chip | `<span>`, or `<a>` with `href`. Min height 32 (`size-chip`), padding-inline 12, gap 8 (6 outlined), radius 6 (`radius-chip`) |
+| 1 | Chip | `<span>`, or `<a>` with `href`. Min height 32 (`size-chip`, Q-chips; board 8ZA-0 draws 30), padding-inline 10 from the edge (subtle: 9 plus its transparent 1px edge; outlined: 10 inside its 1px edge, as the board), gap 8 (6 outlined), radius 6 (`radius-chip`) |
 | 2 | Dot | 8px circle in the channel's `channel-action` |
 | 3 | Label | Default slot, defaults to "Also on {channel}" / "متوفر أيضًا في {channel}" |
-| 4 | Chevron | Links only, 16px, mirrored in RTL |
+| 4 | Chevron | Links only, 16px, 8 after the label and 6 from the end edge, mirrored in RTL |
 | 5 | Hit area | Links only: `::after` grows the target to 44px without moving the layout |
 
 ## Variants
@@ -25,7 +25,7 @@ Points to another channel that also offers the service: "Also on Dubai Transport
 | `subtle` (default) | `channel-subtle` | none (transparent 1px for forced colours) | `label-small` Medium in `channel-action` | white cards |
 | `outlined` | `surface` | 1px `channel-outline` | `label-small` Bold in `channel-action` | on a channel tint |
 
-`label-small`: 14/18 EN, 16/22 Bold AR. Hover (links, fine pointers): the label underlines 1px at 4px. Focus: U1 ring. Forced colours: `CanvasText` / `LinkText` edge, `CanvasText` dot. Never dismissable.
+`label-small`: 14/18 EN, 16/22 Bold AR. Hover (links, fine pointers): the label underlines 1px at 3px (5px in Arabic). Focus: U1 ring. Forced colours: `CanvasText` / `LinkText` edge, `CanvasText` dot. Never dismissable.
 
 ## Motion
 
@@ -44,7 +44,7 @@ None (A19). v1's press scale and hover tint are dropped.
 
 ## Budget
 
-Custom-elements closure 3,735 B gzip (4 KiB budget), its own CSS 670 B.
+Custom-elements closure 3,966 B gzip (4 KiB budget), its own CSS 678 B.
 
 ## Tests
 

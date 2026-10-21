@@ -2,7 +2,8 @@
  * sc-step-progress (v2, shadow): the E stepper. Rules: component-language.md A20 read through
  * the role table in decisions.md, with U2 / CMP-09 (completed steps in the channel action
  * colour with a check; never green). Halo: compact 4px channel-container (CL's
- * channel-container-high), full 5px channel-subtle (CL's channel-container).
+ * channel-container-high), full 5px channel-subtle (CL's channel-container); in dark mode
+ * both are the divider, outline-variant (A20 E3 and the board's dark note).
  */
 :host {
   /* The full layout appears from 600px of its own width (--sc-breakpoint-medium). */
@@ -37,7 +38,14 @@
 }
 
 .marker--current {
-  box-shadow: 0 0 0 var(--_halo) var(--_halo-colour);
+  box-shadow: 0 0 0 var(--_halo) light-dark(var(--_halo-colour), var(--sc-color-outline-variant));
+}
+
+/* Browsers without light-dark() (decision A1): the token build's --sc-dk / --sc-lt toggles. */
+@supports not (color: light-dark(white, black)) {
+  .marker--current {
+    box-shadow: 0 0 0 var(--_halo) var(--sc-dk, var(--_halo-colour)) var(--sc-lt, var(--sc-color-outline-variant));
+  }
 }
 
 .marker--current::after {
@@ -82,7 +90,7 @@
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--sc-space-4) var(--sc-space-16);
+  gap: var(--sc-space-4) var(--sc-space-12);
 }
 
 .label {
@@ -122,7 +130,7 @@
   display: flex;
   flex: 1 1 0;
   flex-direction: column;
-  gap: var(--sc-space-4);
+  gap: var(--sc-space-2);
   min-inline-size: 0;
 }
 
@@ -134,6 +142,7 @@
   display: flex;
   align-items: center;
   gap: var(--sc-space-8);
+  /* 14 from the markers to the text (A20 full): 12 here plus the step's 2px gap. */
   margin-block-end: var(--sc-space-12);
   padding-inline-end: var(--sc-space-8);
 }
@@ -150,18 +159,21 @@
   --icon-size: calc(var(--sc-size-icon-s) + var(--sc-space-2));
 }
 
+/* label-small; Regular except on the current step, which is Medium (A20 and the board). */
 .state {
   color: var(--sc-color-on-surface-variant);
   font: var(--sc-type-label-small);
+  font-weight: var(--sc-font-weight-regular);
   letter-spacing: var(--sc-type-label-small-tracking);
 }
 
 .step--current .state {
   color: var(--sc-color-channel-action);
+  font-weight: var(--sc-font-weight-medium);
 }
 
 .name {
-  padding-inline-end: var(--sc-space-16);
+  padding-inline-end: var(--sc-space-8);
   font: var(--sc-type-title-small);
   font-weight: var(--sc-font-weight-bold);
   letter-spacing: var(--sc-type-title-small-tracking);

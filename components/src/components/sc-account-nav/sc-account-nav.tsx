@@ -21,7 +21,7 @@ import { NavItem, readNavItems, watchNavItems } from '../../utils/nav-items';
  *   </sc-account-nav>
  *
  * - `aria-current="page"` marks the current item: a channel-subtle fill, a 3px channel bar
- *   at inline-start, a channel icon and a Bold label (never colour alone).
+ *   at inline-start, and the icon and a Bold label in channel-action (never colour alone).
  * - `data-icon`: `description`, `credit-card`, `notifications`, `person`, `history`,
  *   `home`, `apps` or `logout` (24px; `logout` mirrors in right-to-left).
  * - `data-count`: a count badge, read with the visually hidden `data-count-label`

@@ -165,7 +165,7 @@ export namespace Components {
      *     <a href="/en/sign-out" data-icon="logout" data-sign-out>Sign out</a>
      *   </sc-account-nav>
      * - `aria-current="page"` marks the current item: a channel-subtle fill, a 3px channel bar
-     *   at inline-start, a channel icon and a Bold label (never colour alone).
+     *   at inline-start, and the icon and a Bold label in channel-action (never colour alone).
      * - `data-icon`: `description`, `credit-card`, `notifications`, `person`, `history`,
      *   `home`, `apps` or `logout` (24px; `logout` mirrors in right-to-left).
      * - `data-count`: a count badge, read with the visually hidden `data-count-label`
@@ -254,12 +254,12 @@ export namespace Components {
     }
     /**
      * One thing that is due ("Needs your attention"): a bill to pay, a document to upload, a
-     * registration about to expire. A thin topic-tint strip on top, an icon tile, a status tag,
-     * the title, the key fact, a meta line (amount and reference) and one action.
+     * registration about to expire. An icon tile, a status tag, the title, the key fact, a meta
+     * line (amount and reference) and one action.
      * The card is neutral and is not a link: the action is the only thing to press, and its
-     * label names the action and the item ("Pay AED 412.60"). Status is never shown by colour:
-     * the strip and the icon tile are decorative topic tints, and the urgency is in the status
-     * tag's words. Put the cards in a list (`<ul>`), most urgent first, under a heading that
+     * label names the action and the item ("Pay AED 412.60"). There is no coloured edge. Status
+     * is never shown by colour alone: the icon tile takes the status tag's tone (error, warning,
+     * info, success) only as reinforcement, and the urgency is in the tag's words. Put the cards in a list (`<ul>`), most urgent first, under a heading that
      * gives the count ("4 things, most urgent first").
      */
     interface ScAttentionCard {
@@ -269,7 +269,7 @@ export namespace Components {
          */
         "headingLevel": AttentionCardHeadingLevel;
         /**
-          * The decorative topic tint of the top strip and the icon tile (foundations §2.7): `amber` bills, `violet` documents and residency, `blue` vehicles, `rose` family, `orange` housing, `green` health. Without it there is no strip and the icon tile takes the channel's container colour. Never use a tint to mean urgency: that is the status tag.
+          * A decorative topic tint for the icon tile (foundations §2.7), used instead of the status tone: `amber` bills, `violet` documents and residency, `blue` vehicles, `rose` family, `orange` housing, `green` health. Without it the icon tile takes the status tag's tone (error, warning, info, success), or else the channel's colours. Never use a tint to mean urgency: that is the status tag.
          */
         "tint"?: AttentionCardTint;
     }
@@ -328,6 +328,10 @@ export namespace Components {
      * "Back to {parent}" link.
      */
     interface ScBreadcrumbs {
+        /**
+          * Overrides the text of the single link shown on compact screens (default "Back to {parent}" / "رجوع إلى {parent}"). `{parent}` is replaced by the parent page's text.
+         */
+        "compactLabel"?: string;
         /**
           * Overrides the landmark name ("Breadcrumb" / "مسار التنقل").
          */
@@ -456,7 +460,7 @@ export namespace Components {
          */
         "padding": CardPadding;
         /**
-          * `outlined` (default): white surface with a 1px `outline-variant` edge, for groups on a page or a neutral band. `filled`: a quiet `surface-container` fill with no edge, for a totals card or a group inside an outlined area.
+          * `outlined` (default): white surface with a 1px `outline-variant` edge, for groups on a page or a neutral band. `filled`: a quiet `surface-container` fill (`surface-container-high` in dark mode) with no edge, for a totals card or a group inside an outlined area.
           * @default 'outlined'
          */
         "variant": CardVariant;
@@ -859,7 +863,7 @@ export namespace Components {
          */
         "heading": string;
         /**
-          * Renders the heading as `<h2>`–`<h4>`. Leave it unset to render a paragraph at the title role, for an empty state inside a card or table.
+          * Renders the heading as `<h2>`–`<h6>`. Leave it unset to render a paragraph at the title role, for an empty state inside a card or table.
          */
         "headingLevel"?: EmptyStateHeadingLevel;
         /**
@@ -1235,7 +1239,7 @@ export namespace Components {
     /**
      * Moves between the pages of a long list: search results, payments, fines. Inside
      * `sc-table`, put it in the table's `footer` slot.
-     * Renders, in its shadow root, an optional results count ("Showing 1–20 of 1,284 fines";
+     * Renders, in its shadow root, an optional results count ("Showing 1 to 20 of 1,284 fines";
      * in Arabic "عرض 1 إلى 20 من 1,284 مخالفة", with a word for the range, never a dash), then
      * `<nav aria-label="Pagination">` with Previous, the page numbers and Next. Previous is
      * left out on the first page and Next on the last (not disabled). The current page carries
@@ -1570,9 +1574,10 @@ export namespace Components {
     }
     /**
      * Shows that something is loading: a short inline wait, with a label saying what.
-     * v2: 20px (`size="m"`, inline) or 24px (`size="l"`), in `currentColor`, turning once per
-     * `--sc-duration-spin` (600ms, linear: a faster spinner makes loading feel faster). The label
-     * ("Loading" by default) sits in a polite `role="status"` region and is visually hidden.
+     * v2: 24px (`size="l"`, the default) or 20px (`size="m"`, inline with body text), in
+     * `currentColor`, turning once per `--sc-duration-spin` (600ms, linear: a faster spinner
+     * makes loading feel faster). The label ("Loading" by default) sits in a polite
+     * `role="status"` region, 12px from the arc in `on-surface`, and is visually hidden.
      * Under `prefers-reduced-motion` the arc stops and the label shows, so the state never
      * depends on motion (MOT-15). It never mirrors.
      * Inside a button, use `sc-button loading` instead.
@@ -1588,8 +1593,8 @@ export namespace Components {
          */
         "showLabel": boolean;
         /**
-          * `m` 20px, inline with body text (default); `l` 24px, standalone.
-          * @default 'm'
+          * `l` 24px, standalone (default); `m` 20px, inline with body text.
+          * @default 'l'
          */
         "size": SpinnerSize;
     }
@@ -1598,12 +1603,12 @@ export namespace Components {
      * (Standard 9.6): "Paid", "Action needed", "In review", "Expires in 15 days".
      * v2: a 32px chip with a 6px radius, a tone icon and the words, tone-40 text on a tone-95
      * container (A11Y-06: never colour alone). It isn't interactive and isn't announced on
-     * change (use `sc-callout` or a live region for that). There is no channel tone: status is
-     * never in a channel's colour.
+     * change (use `sc-callout` or a live region for that). The `channel` tone (decision W4) is
+     * `channel-action` on `channel-subtle` and follows the nearest `data-channel`.
      */
     interface ScStatusTag {
         /**
-          * - `neutral`: a plain state ("Draft", "Received", "In review", "Not started"). - `info`: an informational state, where a service needs one (hourglass icon). - `success`: done ("Paid", "Approved", "Completed"). - `warning`: needs attention soon ("Expires in 15 days"). - `error`: blocked or waiting on the user ("Action needed", "Payment failed").  An unknown tone, including v1's removed `channel`, renders as `neutral`.
+          * - `neutral`: a plain state ("Draft", "Received", "In review", "Not started"). - `info`: an informational state, where a service needs one (hourglass icon). - `success`: done ("Paid", "Approved", "Completed"). - `warning`: needs attention soon ("Expires in 15 days"). - `error`: blocked or waiting on the user ("Action needed", "Payment failed"). - `channel`: a highlight in the channel's colour ("Life event"), not a status of its own   (decision W4: `channel-action` text on `channel-subtle`). Use the semantic tones for status.  An unknown tone renders as `neutral`.
           * @default 'neutral'
          */
         "tone": StatusTagTone;
@@ -2194,7 +2199,7 @@ declare global {
      *     <a href="/en/sign-out" data-icon="logout" data-sign-out>Sign out</a>
      *   </sc-account-nav>
      * - `aria-current="page"` marks the current item: a channel-subtle fill, a 3px channel bar
-     *   at inline-start, a channel icon and a Bold label (never colour alone).
+     *   at inline-start, and the icon and a Bold label in channel-action (never colour alone).
      * - `data-icon`: `description`, `credit-card`, `notifications`, `person`, `history`,
      *   `home`, `apps` or `logout` (24px; `logout` mirrors in right-to-left).
      * - `data-count`: a count badge, read with the visually hidden `data-count-label`
@@ -2256,12 +2261,12 @@ declare global {
     };
     /**
      * One thing that is due ("Needs your attention"): a bill to pay, a document to upload, a
-     * registration about to expire. A thin topic-tint strip on top, an icon tile, a status tag,
-     * the title, the key fact, a meta line (amount and reference) and one action.
+     * registration about to expire. An icon tile, a status tag, the title, the key fact, a meta
+     * line (amount and reference) and one action.
      * The card is neutral and is not a link: the action is the only thing to press, and its
-     * label names the action and the item ("Pay AED 412.60"). Status is never shown by colour:
-     * the strip and the icon tile are decorative topic tints, and the urgency is in the status
-     * tag's words. Put the cards in a list (`<ul>`), most urgent first, under a heading that
+     * label names the action and the item ("Pay AED 412.60"). There is no coloured edge. Status
+     * is never shown by colour alone: the icon tile takes the status tag's tone (error, warning,
+     * info, success) only as reinforcement, and the urgency is in the tag's words. Put the cards in a list (`<ul>`), most urgent first, under a heading that
      * gives the count ("4 things, most urgent first").
      */
     interface HTMLScAttentionCardElement extends Components.ScAttentionCard, HTMLStencilElement {
@@ -2808,7 +2813,7 @@ declare global {
     /**
      * Moves between the pages of a long list: search results, payments, fines. Inside
      * `sc-table`, put it in the table's `footer` slot.
-     * Renders, in its shadow root, an optional results count ("Showing 1–20 of 1,284 fines";
+     * Renders, in its shadow root, an optional results count ("Showing 1 to 20 of 1,284 fines";
      * in Arabic "عرض 1 إلى 20 من 1,284 مخالفة", with a word for the range, never a dash), then
      * `<nav aria-label="Pagination">` with Previous, the page numbers and Next. Previous is
      * left out on the first page and Next on the last (not disabled). The current page carries
@@ -2981,9 +2986,10 @@ declare global {
     };
     /**
      * Shows that something is loading: a short inline wait, with a label saying what.
-     * v2: 20px (`size="m"`, inline) or 24px (`size="l"`), in `currentColor`, turning once per
-     * `--sc-duration-spin` (600ms, linear: a faster spinner makes loading feel faster). The label
-     * ("Loading" by default) sits in a polite `role="status"` region and is visually hidden.
+     * v2: 24px (`size="l"`, the default) or 20px (`size="m"`, inline with body text), in
+     * `currentColor`, turning once per `--sc-duration-spin` (600ms, linear: a faster spinner
+     * makes loading feel faster). The label ("Loading" by default) sits in a polite
+     * `role="status"` region, 12px from the arc in `on-surface`, and is visually hidden.
      * Under `prefers-reduced-motion` the arc stops and the label shows, so the state never
      * depends on motion (MOT-15). It never mirrors.
      * Inside a button, use `sc-button loading` instead.
@@ -2999,8 +3005,8 @@ declare global {
      * (Standard 9.6): "Paid", "Action needed", "In review", "Expires in 15 days".
      * v2: a 32px chip with a 6px radius, a tone icon and the words, tone-40 text on a tone-95
      * container (A11Y-06: never colour alone). It isn't interactive and isn't announced on
-     * change (use `sc-callout` or a live region for that). There is no channel tone: status is
-     * never in a channel's colour.
+     * change (use `sc-callout` or a live region for that). The `channel` tone (decision W4) is
+     * `channel-action` on `channel-subtle` and follows the nearest `data-channel`.
      */
     interface HTMLScStatusTagElement extends Components.ScStatusTag, HTMLStencilElement {
     }
@@ -3391,7 +3397,7 @@ declare namespace LocalJSX {
      *     <a href="/en/sign-out" data-icon="logout" data-sign-out>Sign out</a>
      *   </sc-account-nav>
      * - `aria-current="page"` marks the current item: a channel-subtle fill, a 3px channel bar
-     *   at inline-start, a channel icon and a Bold label (never colour alone).
+     *   at inline-start, and the icon and a Bold label in channel-action (never colour alone).
      * - `data-icon`: `description`, `credit-card`, `notifications`, `person`, `history`,
      *   `home`, `apps` or `logout` (24px; `logout` mirrors in right-to-left).
      * - `data-count`: a count badge, read with the visually hidden `data-count-label`
@@ -3480,12 +3486,12 @@ declare namespace LocalJSX {
     }
     /**
      * One thing that is due ("Needs your attention"): a bill to pay, a document to upload, a
-     * registration about to expire. A thin topic-tint strip on top, an icon tile, a status tag,
-     * the title, the key fact, a meta line (amount and reference) and one action.
+     * registration about to expire. An icon tile, a status tag, the title, the key fact, a meta
+     * line (amount and reference) and one action.
      * The card is neutral and is not a link: the action is the only thing to press, and its
-     * label names the action and the item ("Pay AED 412.60"). Status is never shown by colour:
-     * the strip and the icon tile are decorative topic tints, and the urgency is in the status
-     * tag's words. Put the cards in a list (`<ul>`), most urgent first, under a heading that
+     * label names the action and the item ("Pay AED 412.60"). There is no coloured edge. Status
+     * is never shown by colour alone: the icon tile takes the status tag's tone (error, warning,
+     * info, success) only as reinforcement, and the urgency is in the tag's words. Put the cards in a list (`<ul>`), most urgent first, under a heading that
      * gives the count ("4 things, most urgent first").
      */
     interface ScAttentionCard {
@@ -3495,7 +3501,7 @@ declare namespace LocalJSX {
          */
         "headingLevel"?: AttentionCardHeadingLevel;
         /**
-          * The decorative topic tint of the top strip and the icon tile (foundations §2.7): `amber` bills, `violet` documents and residency, `blue` vehicles, `rose` family, `orange` housing, `green` health. Without it there is no strip and the icon tile takes the channel's container colour. Never use a tint to mean urgency: that is the status tag.
+          * A decorative topic tint for the icon tile (foundations §2.7), used instead of the status tone: `amber` bills, `violet` documents and residency, `blue` vehicles, `rose` family, `orange` housing, `green` health. Without it the icon tile takes the status tag's tone (error, warning, info, success), or else the channel's colours. Never use a tint to mean urgency: that is the status tag.
          */
         "tint"?: AttentionCardTint;
     }
@@ -3554,6 +3560,10 @@ declare namespace LocalJSX {
      * "Back to {parent}" link.
      */
     interface ScBreadcrumbs {
+        /**
+          * Overrides the text of the single link shown on compact screens (default "Back to {parent}" / "رجوع إلى {parent}"). `{parent}` is replaced by the parent page's text.
+         */
+        "compactLabel"?: string;
         /**
           * Overrides the landmark name ("Breadcrumb" / "مسار التنقل").
          */
@@ -3682,7 +3692,7 @@ declare namespace LocalJSX {
          */
         "padding"?: CardPadding;
         /**
-          * `outlined` (default): white surface with a 1px `outline-variant` edge, for groups on a page or a neutral band. `filled`: a quiet `surface-container` fill with no edge, for a totals card or a group inside an outlined area.
+          * `outlined` (default): white surface with a 1px `outline-variant` edge, for groups on a page or a neutral band. `filled`: a quiet `surface-container` fill (`surface-container-high` in dark mode) with no edge, for a totals card or a group inside an outlined area.
           * @default 'outlined'
          */
         "variant"?: CardVariant;
@@ -4093,7 +4103,7 @@ declare namespace LocalJSX {
          */
         "heading": string;
         /**
-          * Renders the heading as `<h2>`–`<h4>`. Leave it unset to render a paragraph at the title role, for an empty state inside a card or table.
+          * Renders the heading as `<h2>`–`<h6>`. Leave it unset to render a paragraph at the title role, for an empty state inside a card or table.
          */
         "headingLevel"?: EmptyStateHeadingLevel;
         /**
@@ -4477,7 +4487,7 @@ declare namespace LocalJSX {
     /**
      * Moves between the pages of a long list: search results, payments, fines. Inside
      * `sc-table`, put it in the table's `footer` slot.
-     * Renders, in its shadow root, an optional results count ("Showing 1–20 of 1,284 fines";
+     * Renders, in its shadow root, an optional results count ("Showing 1 to 20 of 1,284 fines";
      * in Arabic "عرض 1 إلى 20 من 1,284 مخالفة", with a word for the range, never a dash), then
      * `<nav aria-label="Pagination">` with Previous, the page numbers and Next. Previous is
      * left out on the first page and Next on the last (not disabled). The current page carries
@@ -4816,9 +4826,10 @@ declare namespace LocalJSX {
     }
     /**
      * Shows that something is loading: a short inline wait, with a label saying what.
-     * v2: 20px (`size="m"`, inline) or 24px (`size="l"`), in `currentColor`, turning once per
-     * `--sc-duration-spin` (600ms, linear: a faster spinner makes loading feel faster). The label
-     * ("Loading" by default) sits in a polite `role="status"` region and is visually hidden.
+     * v2: 24px (`size="l"`, the default) or 20px (`size="m"`, inline with body text), in
+     * `currentColor`, turning once per `--sc-duration-spin` (600ms, linear: a faster spinner
+     * makes loading feel faster). The label ("Loading" by default) sits in a polite
+     * `role="status"` region, 12px from the arc in `on-surface`, and is visually hidden.
      * Under `prefers-reduced-motion` the arc stops and the label shows, so the state never
      * depends on motion (MOT-15). It never mirrors.
      * Inside a button, use `sc-button loading` instead.
@@ -4834,8 +4845,8 @@ declare namespace LocalJSX {
          */
         "showLabel"?: boolean;
         /**
-          * `m` 20px, inline with body text (default); `l` 24px, standalone.
-          * @default 'm'
+          * `l` 24px, standalone (default); `m` 20px, inline with body text.
+          * @default 'l'
          */
         "size"?: SpinnerSize;
     }
@@ -4844,12 +4855,12 @@ declare namespace LocalJSX {
      * (Standard 9.6): "Paid", "Action needed", "In review", "Expires in 15 days".
      * v2: a 32px chip with a 6px radius, a tone icon and the words, tone-40 text on a tone-95
      * container (A11Y-06: never colour alone). It isn't interactive and isn't announced on
-     * change (use `sc-callout` or a live region for that). There is no channel tone: status is
-     * never in a channel's colour.
+     * change (use `sc-callout` or a live region for that). The `channel` tone (decision W4) is
+     * `channel-action` on `channel-subtle` and follows the nearest `data-channel`.
      */
     interface ScStatusTag {
         /**
-          * - `neutral`: a plain state ("Draft", "Received", "In review", "Not started"). - `info`: an informational state, where a service needs one (hourglass icon). - `success`: done ("Paid", "Approved", "Completed"). - `warning`: needs attention soon ("Expires in 15 days"). - `error`: blocked or waiting on the user ("Action needed", "Payment failed").  An unknown tone, including v1's removed `channel`, renders as `neutral`.
+          * - `neutral`: a plain state ("Draft", "Received", "In review", "Not started"). - `info`: an informational state, where a service needs one (hourglass icon). - `success`: done ("Paid", "Approved", "Completed"). - `warning`: needs attention soon ("Expires in 15 days"). - `error`: blocked or waiting on the user ("Action needed", "Payment failed"). - `channel`: a highlight in the channel's colour ("Life event"), not a status of its own   (decision W4: `channel-action` text on `channel-subtle`). Use the semantic tones for status.  An unknown tone renders as `neutral`.
           * @default 'neutral'
          */
         "tone"?: StatusTagTone;
@@ -5381,6 +5392,7 @@ declare namespace LocalJSX {
     }
     interface ScBreadcrumbsAttributes {
         "label": string;
+        "compactLabel": string;
     }
     interface ScButtonAttributes {
         "variant": ButtonVariant;
@@ -5806,7 +5818,7 @@ declare module "@stencil/core" {
              *     <a href="/en/sign-out" data-icon="logout" data-sign-out>Sign out</a>
              *   </sc-account-nav>
              * - `aria-current="page"` marks the current item: a channel-subtle fill, a 3px channel bar
-             *   at inline-start, a channel icon and a Bold label (never colour alone).
+             *   at inline-start, and the icon and a Bold label in channel-action (never colour alone).
              * - `data-icon`: `description`, `credit-card`, `notifications`, `person`, `history`,
              *   `home`, `apps` or `logout` (24px; `logout` mirrors in right-to-left).
              * - `data-count`: a count badge, read with the visually hidden `data-count-label`
@@ -5842,12 +5854,12 @@ declare module "@stencil/core" {
             "sc-app-bar": LocalJSX.IntrinsicElements["sc-app-bar"] & JSXBase.HTMLAttributes<HTMLScAppBarElement>;
             /**
              * One thing that is due ("Needs your attention"): a bill to pay, a document to upload, a
-             * registration about to expire. A thin topic-tint strip on top, an icon tile, a status tag,
-             * the title, the key fact, a meta line (amount and reference) and one action.
+             * registration about to expire. An icon tile, a status tag, the title, the key fact, a meta
+             * line (amount and reference) and one action.
              * The card is neutral and is not a link: the action is the only thing to press, and its
-             * label names the action and the item ("Pay AED 412.60"). Status is never shown by colour:
-             * the strip and the icon tile are decorative topic tints, and the urgency is in the status
-             * tag's words. Put the cards in a list (`<ul>`), most urgent first, under a heading that
+             * label names the action and the item ("Pay AED 412.60"). There is no coloured edge. Status
+             * is never shown by colour alone: the icon tile takes the status tag's tone (error, warning,
+             * info, success) only as reinforcement, and the urgency is in the tag's words. Put the cards in a list (`<ul>`), most urgent first, under a heading that
              * gives the count ("4 things, most urgent first").
              */
             "sc-attention-card": LocalJSX.IntrinsicElements["sc-attention-card"] & JSXBase.HTMLAttributes<HTMLScAttentionCardElement>;
@@ -6183,7 +6195,7 @@ declare module "@stencil/core" {
             /**
              * Moves between the pages of a long list: search results, payments, fines. Inside
              * `sc-table`, put it in the table's `footer` slot.
-             * Renders, in its shadow root, an optional results count ("Showing 1–20 of 1,284 fines";
+             * Renders, in its shadow root, an optional results count ("Showing 1 to 20 of 1,284 fines";
              * in Arabic "عرض 1 إلى 20 من 1,284 مخالفة", with a word for the range, never a dash), then
              * `<nav aria-label="Pagination">` with Previous, the page numbers and Next. Previous is
              * left out on the first page and Next on the last (not disabled). The current page carries
@@ -6275,9 +6287,10 @@ declare module "@stencil/core" {
             "sc-skip-link": LocalJSX.IntrinsicElements["sc-skip-link"] & JSXBase.HTMLAttributes<HTMLScSkipLinkElement>;
             /**
              * Shows that something is loading: a short inline wait, with a label saying what.
-             * v2: 20px (`size="m"`, inline) or 24px (`size="l"`), in `currentColor`, turning once per
-             * `--sc-duration-spin` (600ms, linear: a faster spinner makes loading feel faster). The label
-             * ("Loading" by default) sits in a polite `role="status"` region and is visually hidden.
+             * v2: 24px (`size="l"`, the default) or 20px (`size="m"`, inline with body text), in
+             * `currentColor`, turning once per `--sc-duration-spin` (600ms, linear: a faster spinner
+             * makes loading feel faster). The label ("Loading" by default) sits in a polite
+             * `role="status"` region, 12px from the arc in `on-surface`, and is visually hidden.
              * Under `prefers-reduced-motion` the arc stops and the label shows, so the state never
              * depends on motion (MOT-15). It never mirrors.
              * Inside a button, use `sc-button loading` instead.
@@ -6288,8 +6301,8 @@ declare module "@stencil/core" {
              * (Standard 9.6): "Paid", "Action needed", "In review", "Expires in 15 days".
              * v2: a 32px chip with a 6px radius, a tone icon and the words, tone-40 text on a tone-95
              * container (A11Y-06: never colour alone). It isn't interactive and isn't announced on
-             * change (use `sc-callout` or a live region for that). There is no channel tone: status is
-             * never in a channel's colour.
+             * change (use `sc-callout` or a live region for that). The `channel` tone (decision W4) is
+             * `channel-action` on `channel-subtle` and follows the nearest `data-channel`.
              */
             "sc-status-tag": LocalJSX.IntrinsicElements["sc-status-tag"] & JSXBase.HTMLAttributes<HTMLScStatusTagElement>;
             /**

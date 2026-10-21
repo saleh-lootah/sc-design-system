@@ -56,6 +56,28 @@ describe('sc-step-progress (e2e)', () => {
     expect(await sp(page, '#full', 'getComputedStyle(root.querySelector(".full .marker--upcoming")).borderTopColor')).toBe(await token(page, '--sc-color-outline'));
   });
 
+  it('halos the current marker in the channel tint in light mode and the divider in dark mode', async () => {
+    const page = await newScPage(FULL + NARROW, { theme: 'light' });
+    const halo = (sel: string, q: string) => sp(page, sel, `getComputedStyle(root.querySelector("${q}")).boxShadow`);
+    expect(await halo('#full', '.full .marker--current')).toContain(await token(page, '--sc-color-channel-subtle'));
+    expect(await halo('#narrow', '.track .marker--current')).toContain(await token(page, '--sc-color-channel-container'));
+    await setPageContext(page, { theme: 'dark' });
+    const divider = await token(page, '--sc-color-outline-variant');
+    expect(await halo('#full', '.full .marker--current')).toContain(divider);
+    expect(await halo('#narrow', '.track .marker--current')).toContain(divider);
+  });
+
+  it('spaces the full text 14 below the markers, the name 2 below a Regular state line (Medium when current)', async () => {
+    const page = await newScPage(FULL);
+    const read = (expr: string) => sp(page, '#full', expr);
+    const gap = await read('(() => { const li = root.querySelectorAll("li")[0]; return Math.round(li.querySelector(".state").getBoundingClientRect().top - li.querySelector(".marker").getBoundingClientRect().bottom); })()');
+    expect(gap).toBe(14);
+    expect(await read('getComputedStyle(root.querySelector(".step")).rowGap')).toBe('2px');
+    expect(await read('getComputedStyle(root.querySelector(".step--done .state")).fontWeight')).toBe('400');
+    expect(await read('getComputedStyle(root.querySelector(".step--current .state")).fontWeight')).toBe('500');
+    expect(await read('getComputedStyle(root.querySelector(".step--upcoming .state")).fontWeight')).toBe('400');
+  });
+
   it('joins done steps with a solid connector and upcoming ones with a dashed connector', async () => {
     const page = await newScPage(FULL);
     expect(await sp(page, '#full', 'getComputedStyle(root.querySelector(".full .connector--done")).borderTopStyle')).toBe('solid');

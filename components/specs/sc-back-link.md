@@ -12,7 +12,7 @@ Status: rebuilt for v2 by C2 (Wave 2b). Visual rules: `docs/v2/component-languag
 
 | # | Part | Notes |
 | --- | --- | --- |
-| 1 | Control | `<a>` or `<button>`, min 44 × 44, no fill, no border, radius 4 (for the ring), padding-inline 4, gap 6 |
+| 1 | Control | `<a>` or `<button>`, min 44 × 44, no fill, no border, radius 4 (for the ring), padding-inline 4 at the start (arrow side) and 6 at the end (Paper board sc-back-link), gap 6 |
 | 2 | Icon | `arrow-back`, 24px (`size-icon-l`), at inline-start, mirrored in RTL |
 | 3 | Label | Default slot, defaults to "Back" / "رجوع" |
 

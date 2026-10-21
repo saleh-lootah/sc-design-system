@@ -13,7 +13,7 @@ Moves between the pages of a long list: search results, payments, fines. Spec: `
 <sc-pagination page="1" total-items="1284" item-label="مخالفة|مخالفة|مخالفتين|مخالفات|مخالفة|مخالفة" href-template="/ar/fines?page={page}"></sc-pagination>
 ```
 
-- `total-items` shows the count: "Showing 121–140 of 1,284 fines" / "عرض 121 إلى 140 من 1,284 مخالفة". Arabic ranges always use a word, never a dash (LANG-22A). Digits are Latin, with a comma for thousands.
+- `total-items` shows the count: "Showing 121 to 140 of 1,284 fines" / "عرض 121 إلى 140 من 1,284 مخالفة". Ranges always use a word, never a dash (LANG-22A in Arabic; the same in English). Digits are Latin, with a comma for thousands.
 - Set `total-pages` directly, or let it follow from `total-items` and `page-size` (20).
 - With `href-template` the pages are links and work without JavaScript. Without it they are buttons. Either way `scPageChange` fires with `{ page }`; `preventDefault()` stays on the page.
 - Previous is left out on the first page and Next on the last. Below 600px: Previous, "Page 7 of 65", Next.
@@ -31,7 +31,7 @@ Parts: `count`, `nav`, `list`.
 Moves between the pages of a long list: search results, payments, fines. Inside
 `sc-table`, put it in the table's `footer` slot.
 
-Renders, in its shadow root, an optional results count ("Showing 1–20 of 1,284 fines";
+Renders, in its shadow root, an optional results count ("Showing 1 to 20 of 1,284 fines";
 in Arabic "عرض 1 إلى 20 من 1,284 مخالفة", with a word for the range, never a dash), then
 `<nav aria-label="Pagination">` with Previous, the page numbers and Next. Previous is
 left out on the first page and Next on the last (not disabled). The current page carries

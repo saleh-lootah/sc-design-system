@@ -8,6 +8,8 @@
  * Stencil rewrites `::slotted(ol) li` to `.sc-sc-step-list-s > ol li`. Blocks open with a
  * :host rule (Stencil's scoper mangles a block whose first rule is ::slotted).
  */
+/* W12: the full layer order first; Stencil can insert this sheet before sc.css. */
+@layer sc.reset, sc.tokens, sc.base, sc.components, sc.utilities;
 @layer sc.components {
   :host {
     --_marker: var(--sc-space-32);
@@ -132,7 +134,9 @@
     inset-inline: 0;
   }
 
-  ::slotted(ol) > li > :not(a, [class^='sc-step-list__']) {
+  /* No comma inside :not(): Stencil's scoper appends its scope class after a selector list
+     there, which made this rule match nothing. */
+  ::slotted(ol) > li > :not(a):not([class^='sc-step-list__']) {
     grid-column: 2;
     grid-row: 2;
     color: var(--sc-color-on-surface-variant);

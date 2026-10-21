@@ -3,6 +3,8 @@
  * the 56px boxes; this lays out Day, Month and Year (component-language.md A14). In RTL the
  * row runs right to left, Day on the right.
  */
+/* W12: the full layer order first; Stencil can insert this sheet before sc.css. */
+@layer sc.reset, sc.tokens, sc.base, sc.components, sc.utilities;
 @layer sc.components {
   .sc-date-input__parts {
     display: flex;
