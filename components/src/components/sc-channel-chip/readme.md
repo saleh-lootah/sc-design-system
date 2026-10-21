@@ -1,31 +1,22 @@
 # sc-channel-chip
 
-Points to another channel that also offers this service: "Also on Dubai Transport". It is the one component that names a channel: it sets `data-channel` on itself, so it always shows that channel's subtle and ink colours, whatever channel the page is in.
+Points to another channel that also offers this service: "Also on Dubai Transport". Spec: `specs/sc-channel-chip.md`.
 
 ## Usage
 
 ```html
-<!-- A label -->
 <sc-channel-chip channel="transport"></sc-channel-chip>
-
-<!-- A link to the service on that channel -->
-<sc-channel-chip channel="transport" href="https://transport.dubai.gov.ae/renew"></sc-channel-chip>
+<sc-channel-chip channel="transport" href="/en/transport/renew"></sc-channel-chip>
+<sc-channel-chip channel="visit" variant="outlined" label="On Visit Dubai"></sc-channel-chip>
 ```
 
-`channel` is one of `now`, `transport`, `visit`, `justice`, `build`, `invest`, `trade`.
-
-### Content
-
-- The text comes from strings: "Also on {channel}" / "متوفر أيضًا في {channel}", with the channel's own name. Override it with `label` or the default slot only when the chip says something more specific ("Pay fines on Dubai Justice"), and always name the channel.
-- Use it on service cards and service start pages, never as the main way forward.
-
-### Link
-
-With `href` it renders an `<a>` with an end chevron (mirrored in Arabic). The pill stays compact (about 30px) but its hit area grows to 44px without moving the layout; leave a little space above and below it. Without `href` it isn't focusable.
+- The chip sets `data-channel` on itself and shows that channel's colours: an 8px dot and the label in its action colour.
+- `variant="subtle"` (default) on white cards; `variant="outlined"` (surface fill, 1px channel outline, Bold) on a channel tint.
+- 32px tall with a 44px hit area when it is a link. Never dismissable, never the main way forward.
 
 ### Styling hooks
 
-Parts: `chip`, `dot`, `icon` (links only).
+Parts: `chip`, `dot`, `icon`.
 
 <!-- Auto Generated Below -->
 
@@ -34,17 +25,20 @@ Parts: `chip`, `dot`, `icon` (links only).
 
 Points to another channel that also offers this service: "Also on Dubai Transport".
 
-The chip sets `data-channel` on itself, so it shows that channel's subtle and ink
-colours whatever channel the page is in. This is the one component allowed to name
-a channel. With `href` it is a link to the service on that channel.
+The chip sets `data-channel` on itself, so it shows that channel's colours whatever
+channel the page is in. This is the one component allowed to name a channel; other
+channels' colours appear only as attribution like this. With `href` it is a link to the
+service on that channel, with a 44px hit area that does not change the layout.
+Channel chips are never dismissable.
 
 ## Properties
 
-| Property               | Attribute | Description                                                                                    | Type                                                                             | Default     |
-| ---------------------- | --------- | ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ----------- |
-| `channel` _(required)_ | `channel` | The channel to point to: `now`, `transport`, `visit`, `justice`, `build`, `invest` or `trade`. | `"build" \| "invest" \| "justice" \| "now" \| "trade" \| "transport" \| "visit"` | `undefined` |
-| `href`                 | `href`    | Makes the chip a link to the service on that channel.                                          | `string \| undefined`                                                            | `undefined` |
-| `label`                | `label`   | Overrides the text (default "Also on {channel}" / "متوفر أيضًا في {channel}" from strings).    | `string \| undefined`                                                            | `undefined` |
+| Property               | Attribute | Description                                                                                                                                                                                                               | Type                                                                             | Default     |
+| ---------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ----------- |
+| `channel` _(required)_ | `channel` | The channel to point to: `now`, `transport`, `visit`, `justice`, `build`, `invest` or `trade`.                                                                                                                            | `"build" \| "invest" \| "justice" \| "now" \| "trade" \| "transport" \| "visit"` | `undefined` |
+| `href`                 | `href`    | Makes the chip a link to the service on that channel.                                                                                                                                                                     | `string \| undefined`                                                            | `undefined` |
+| `label`                | `label`   | Overrides the text (default "Also on {channel}" / "متوفر أيضًا في {channel}" from strings).                                                                                                                               | `string \| undefined`                                                            | `undefined` |
+| `variant`              | `variant` | - `subtle` (default): the channel's subtle tint, for white cards. - `outlined`: a white chip with a 1px channel outline and a Bold label, for chips that   sit on a channel tint (life-event rows, "On Dubai Transport"). | `"outlined" \| "subtle"`                                                         | `'subtle'`  |
 
 
 ## Slots
@@ -58,8 +52,8 @@ a channel. With `href` it is a link to the service on that channel.
 
 | Part     | Description                                             |
 | -------- | ------------------------------------------------------- |
-| `"chip"` | The pill (`<a>` with `href`, otherwise `<span>`).       |
-| `"dot"`  | The channel dot.                                        |
+| `"chip"` | The chip (`<a>` with `href`, otherwise `<span>`).       |
+| `"dot"`  | The 8px channel dot.                                    |
 | `"icon"` | The end chevron (links only; mirrors in right-to-left). |
 
 

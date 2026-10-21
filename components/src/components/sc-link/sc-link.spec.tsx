@@ -33,10 +33,10 @@ describe('sc-link (spec)', () => {
     expect(control(custom.root!).querySelector('.visually-hidden')!.textContent!.trim()).toBe('(PDF, opens in new tab)');
   });
 
-  it('adds a directional chevron and the label-m role when standalone', async () => {
+  it('adds a directional arrow when standalone', async () => {
     const page = await newSpecPage({ components: [ScLink], html: `<sc-link href="/services" standalone>View all services</sc-link>` });
     const a = control(page.root!);
-    expect(a).toHaveClasses(['link--standalone', 'type-label-m']);
+    expect(a).toHaveClass('link--standalone');
     expect(a.querySelector('[part="icon"] svg.icon-directional')).not.toBeNull();
     expect(page.root).toEqualAttributes({ href: '/services', standalone: '' });
   });

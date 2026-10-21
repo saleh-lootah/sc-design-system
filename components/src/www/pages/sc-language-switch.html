@@ -1,58 +1,27 @@
-<h1 class="pg-title sc-type-heading-xl" data-ar="مبدّل اللغة">Language switch</h1>
-<p class="pg-lede sc-type-body-m" data-ar="ينتقل إلى الصفحة نفسها باللغة الأخرى. التسمية هي اسم اللغة الأخرى بلغتها: «English» في الصفحات العربية و«العربية» في الإنجليزية.">
-  Goes to the same page in the other language. The label is the other language's own name: "العربية" on English pages, "English" on Arabic pages.
+<h1 class="pg-title sc-type-headline-large" data-ar="مبدّل اللغة">Language switch</h1>
+<p class="pg-lede sc-type-body-large" data-ar="رابط إلى الصفحة نفسها باللغة الأخرى، باسم تلك اللغة وبخطّها.">
+  A link to the same page in the other language, named in that language and set in its own script.
 </p>
 
-<section class="pg-section" aria-labelledby="ls-variants">
-  <h2 id="ls-variants" class="sc-type-heading-m" data-ar="الأنواع">Variants</h2>
-  <div class="pg-card" style="background: linear-gradient(in oklab, var(--sc-channel-wash-start), var(--sc-channel-wash-end))">
-    <div class="pg-grid">
-      <div class="pg-cell">
-        <span class="pg-label">glass · href</span>
-        <sc-language-switch href="#other-language"></sc-language-switch>
-      </div>
-      <div class="pg-cell">
-        <span class="pg-label">plain · href</span>
-        <sc-language-switch appearance="plain" href="#other-language"></sc-language-switch>
-      </div>
-      <div class="pg-cell">
-        <span class="pg-label">href · scSwitch, preventDefault (single-page app)</span>
-        <sc-language-switch id="ls-button" href="#other-language"></sc-language-switch>
-        <span class="pg-note" id="ls-out" role="status"></span>
-      </div>
-      <div class="pg-cell">
-        <span class="pg-label">focus (keyboard)</span>
-        <sc-language-switch href="#other-language" data-demo-focus></sc-language-switch>
-      </div>
-    </div>
-    <p class="pg-note" data-ar="يمكنك تغيير لغة المعاينة من شريط الأدوات: تتغير التسمية و lang و hreflang معًا.">Switch the preview language in the toolbar: the label, lang and hreflang change together.</p>
-  </div>
-</section>
-
-<section class="pg-section" aria-labelledby="ls-both">
-  <h2 id="ls-both" class="sc-type-heading-m" data-ar="في الاتجاهين">Both directions</h2>
+<section class="pg-section" aria-labelledby="ls-appearance">
+  <h2 id="ls-appearance" class="sc-type-headline-small" data-ar="المظهر">Appearance</h2>
   <div class="pg-card">
     <div class="pg-grid">
-      <div class="pg-cell" lang="en" dir="ltr">
-        <span class="pg-label">on an English page</span>
-        <sc-language-switch href="/ar/renew"></sc-language-switch>
-        <code class="pg-code">&lt;a href="/ar/renew" hreflang="ar" lang="ar"&gt;العربية&lt;/a&gt;</code>
-      </div>
-      <div class="pg-cell" lang="ar" dir="rtl">
-        <span class="pg-label" lang="en">on an Arabic page</span>
-        <sc-language-switch href="/en/renew"></sc-language-switch>
-        <code class="pg-code">&lt;a href="/en/renew" hreflang="en" lang="en"&gt;English&lt;/a&gt;</code>
-      </div>
+      <div class="pg-cell"><span class="pg-label">inline (app bar)</span><sc-language-switch href="#other"></sc-language-switch></div>
+      <div class="pg-cell"><span class="pg-label">header (site header)</span><sc-language-switch appearance="header" href="#other"></sc-language-switch></div>
+      <div class="pg-cell"><span class="pg-label">focus (keyboard)</span><sc-language-switch href="#other" data-demo-focus></sc-language-switch></div>
     </div>
+    <p class="pg-note" data-ar="لا أعلام، ولا قائمة أبدًا (LANG-05). يطلق الحدث scSwitch ويمكن إلغاؤه في التطبيقات أحادية الصفحة.">No flags, never a menu (LANG-05). Fires scSwitch, cancelable for single-page apps.</p>
   </div>
 </section>
 
-<script>
-  {
-    const out = document.getElementById('ls-out');
-    document.getElementById('ls-button').addEventListener('scSwitch', (ev) => {
-      ev.preventDefault();
-      out.textContent = `scSwitch → { lang: '${ev.detail.lang}' }`;
-    });
-  }
-</script>
+<section class="pg-section" aria-labelledby="ls-arabic">
+  <h2 id="ls-arabic" class="sc-type-headline-small" data-ar="بالعربية">In Arabic</h2>
+  <div class="pg-card" lang="ar" dir="rtl">
+    <div class="pg-row">
+      <sc-language-switch href="#en"></sc-language-switch>
+      <sc-language-switch appearance="header" href="#en"></sc-language-switch>
+    </div>
+    <p class="pg-note" lang="en" dir="ltr">Always lang="ar" dir="rtl": the link reads "English", set in the English type role.</p>
+  </div>
+</section>

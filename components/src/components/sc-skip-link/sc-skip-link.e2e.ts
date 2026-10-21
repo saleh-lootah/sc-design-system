@@ -1,5 +1,5 @@
 import { E2EPage } from '@stencil/core/testing';
-import { expectNoAxeViolations } from '../../test/axe';
+import { describeAxe, expectNoAxeViolations } from '../../test/axe';
 import { contexts, newScPage, setPageContext } from '../../test/page';
 
 function inner(page: E2EPage, read: string) {
@@ -11,19 +11,48 @@ function inner(page: E2EPage, read: string) {
   }, read);
 }
 
+const token = (page: E2EPage, name: string) =>
+  page.evaluate((n: string) => {
+    const probe = document.createElement('i');
+    probe.style.color = `var(${n})`;
+    document.body.append(probe);
+    const v = getComputedStyle(probe).color;
+    probe.remove();
+    return v;
+  }, name);
+
 const PAGE = `
   <sc-skip-link></sc-skip-link>
   <header style="padding-block: 72px 16px"><a href="#home">Dubai Now</a></header>
   <main id="main-content"><h1>Renew your vehicle registration</h1><a href="#start">Start now</a></main>`;
 
 describe('sc-skip-link (e2e)', () => {
-  it('is hidden until focused, then visible as a 44px pill', async () => {
+  it('is hidden until focused, then a 48px inverse-surface block with the U1 ring', async () => {
     const page = await newScPage(PAGE);
     expect(await inner(page, 'control.getBoundingClientRect().width')).toBeLessThanOrEqual(1);
     await page.keyboard.press('Tab');
     expect(await inner(page, 'host.shadowRoot.activeElement === control')).toBe(true);
     expect(await inner(page, 'control.getBoundingClientRect().width')).toBeGreaterThan(100);
-    expect(Math.round(await inner(page, 'control.getBoundingClientRect().height'))).toBeGreaterThanOrEqual(44);
+    expect(Math.round(await inner(page, 'control.getBoundingClientRect().height'))).toBe(48);
+    expect(Math.round(await inner(page, 'control.getBoundingClientRect().top'))).toBe(8);
+    expect(await inner(page, 'getComputedStyle(control).borderTopLeftRadius')).toBe('4px');
+    expect(await inner(page, 'getComputedStyle(control).backgroundColor')).toBe(await token(page, '--sc-color-inverse-surface'));
+    expect(await inner(page, 'getComputedStyle(control).color')).toBe(await token(page, '--sc-color-inverse-on-surface'));
+    expect(await inner(page, 'getComputedStyle(control).fontSize')).toBe('18px');
+    expect(await inner(page, 'getComputedStyle(control).fontWeight')).toBe('700');
+    expect(await inner(page, 'getComputedStyle(control).outlineWidth')).toBe('3px');
+    expect(await inner(page, 'getComputedStyle(control).outlineColor')).toBe(await token(page, '--sc-color-focus-ring'));
+  });
+
+  it('defaults to #main-content, the id sc-page renders', async () => {
+    const page = await newScPage(PAGE);
+    expect(await inner(page, 'control.getAttribute("href")')).toBe('#main-content');
+  });
+
+  it('shows the ring even when focused by a script (it is only visible while focused)', async () => {
+    const page = await newScPage(PAGE);
+    await page.evaluate(() => (document.querySelector('sc-skip-link') as HTMLElement).focus());
+    expect(await inner(page, 'getComputedStyle(control).outlineStyle')).toBe('solid');
   });
 
   it('moves focus to the main content with Enter, so the next Tab continues from there', async () => {
@@ -45,8 +74,11 @@ describe('sc-skip-link (e2e)', () => {
     expect(await inner(page, 'control.textContent')).toBe('الانتقال إلى المحتوى الرئيسي');
     await page.keyboard.press('Tab');
     const right = await inner(page, 'window.innerWidth - control.getBoundingClientRect().right');
-    expect(right).toBeLessThan(20);
+    expect(Math.round(right)).toBe(8);
+    expect(await inner(page, 'getComputedStyle(control).fontSize')).toBe('20px');
   });
+
+  describeAxe('sc-skip-link', PAGE);
 
   for (const ctx of contexts) {
     it(`has no axe violations, focused (${ctx.lang}, ${ctx.theme})`, async () => {
