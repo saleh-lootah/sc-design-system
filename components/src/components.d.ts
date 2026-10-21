@@ -254,12 +254,12 @@ export namespace Components {
     }
     /**
      * One thing that is due ("Needs your attention"): a bill to pay, a document to upload, a
-     * registration about to expire. A thin topic-tint strip on top, an icon tile, a status tag,
-     * the title, the key fact, a meta line (amount and reference) and one action.
+     * registration about to expire. An icon tile, a status tag, the title, the key fact, a meta
+     * line (amount and reference) and one action.
      * The card is neutral and is not a link: the action is the only thing to press, and its
-     * label names the action and the item ("Pay AED 412.60"). Status is never shown by colour:
-     * the strip and the icon tile are decorative topic tints, and the urgency is in the status
-     * tag's words. Put the cards in a list (`<ul>`), most urgent first, under a heading that
+     * label names the action and the item ("Pay AED 412.60"). There is no coloured edge. Status
+     * is never shown by colour alone: the icon tile takes the status tag's tone (error, warning,
+     * info, success) only as reinforcement, and the urgency is in the tag's words. Put the cards in a list (`<ul>`), most urgent first, under a heading that
      * gives the count ("4 things, most urgent first").
      */
     interface ScAttentionCard {
@@ -269,7 +269,7 @@ export namespace Components {
          */
         "headingLevel": AttentionCardHeadingLevel;
         /**
-          * The decorative topic tint of the top strip and the icon tile (foundations §2.7): `amber` bills, `violet` documents and residency, `blue` vehicles, `rose` family, `orange` housing, `green` health. Without it there is no strip and the icon tile takes the channel's container colour. Never use a tint to mean urgency: that is the status tag.
+          * A decorative topic tint for the icon tile (foundations §2.7), used instead of the status tone: `amber` bills, `violet` documents and residency, `blue` vehicles, `rose` family, `orange` housing, `green` health. Without it the icon tile takes the status tag's tone (error, warning, info, success), or else the channel's colours. Never use a tint to mean urgency: that is the status tag.
          */
         "tint"?: AttentionCardTint;
     }
@@ -2261,12 +2261,12 @@ declare global {
     };
     /**
      * One thing that is due ("Needs your attention"): a bill to pay, a document to upload, a
-     * registration about to expire. A thin topic-tint strip on top, an icon tile, a status tag,
-     * the title, the key fact, a meta line (amount and reference) and one action.
+     * registration about to expire. An icon tile, a status tag, the title, the key fact, a meta
+     * line (amount and reference) and one action.
      * The card is neutral and is not a link: the action is the only thing to press, and its
-     * label names the action and the item ("Pay AED 412.60"). Status is never shown by colour:
-     * the strip and the icon tile are decorative topic tints, and the urgency is in the status
-     * tag's words. Put the cards in a list (`<ul>`), most urgent first, under a heading that
+     * label names the action and the item ("Pay AED 412.60"). There is no coloured edge. Status
+     * is never shown by colour alone: the icon tile takes the status tag's tone (error, warning,
+     * info, success) only as reinforcement, and the urgency is in the tag's words. Put the cards in a list (`<ul>`), most urgent first, under a heading that
      * gives the count ("4 things, most urgent first").
      */
     interface HTMLScAttentionCardElement extends Components.ScAttentionCard, HTMLStencilElement {
@@ -3486,12 +3486,12 @@ declare namespace LocalJSX {
     }
     /**
      * One thing that is due ("Needs your attention"): a bill to pay, a document to upload, a
-     * registration about to expire. A thin topic-tint strip on top, an icon tile, a status tag,
-     * the title, the key fact, a meta line (amount and reference) and one action.
+     * registration about to expire. An icon tile, a status tag, the title, the key fact, a meta
+     * line (amount and reference) and one action.
      * The card is neutral and is not a link: the action is the only thing to press, and its
-     * label names the action and the item ("Pay AED 412.60"). Status is never shown by colour:
-     * the strip and the icon tile are decorative topic tints, and the urgency is in the status
-     * tag's words. Put the cards in a list (`<ul>`), most urgent first, under a heading that
+     * label names the action and the item ("Pay AED 412.60"). There is no coloured edge. Status
+     * is never shown by colour alone: the icon tile takes the status tag's tone (error, warning,
+     * info, success) only as reinforcement, and the urgency is in the tag's words. Put the cards in a list (`<ul>`), most urgent first, under a heading that
      * gives the count ("4 things, most urgent first").
      */
     interface ScAttentionCard {
@@ -3501,7 +3501,7 @@ declare namespace LocalJSX {
          */
         "headingLevel"?: AttentionCardHeadingLevel;
         /**
-          * The decorative topic tint of the top strip and the icon tile (foundations §2.7): `amber` bills, `violet` documents and residency, `blue` vehicles, `rose` family, `orange` housing, `green` health. Without it there is no strip and the icon tile takes the channel's container colour. Never use a tint to mean urgency: that is the status tag.
+          * A decorative topic tint for the icon tile (foundations §2.7), used instead of the status tone: `amber` bills, `violet` documents and residency, `blue` vehicles, `rose` family, `orange` housing, `green` health. Without it the icon tile takes the status tag's tone (error, warning, info, success), or else the channel's colours. Never use a tint to mean urgency: that is the status tag.
          */
         "tint"?: AttentionCardTint;
     }
@@ -5854,12 +5854,12 @@ declare module "@stencil/core" {
             "sc-app-bar": LocalJSX.IntrinsicElements["sc-app-bar"] & JSXBase.HTMLAttributes<HTMLScAppBarElement>;
             /**
              * One thing that is due ("Needs your attention"): a bill to pay, a document to upload, a
-             * registration about to expire. A thin topic-tint strip on top, an icon tile, a status tag,
-             * the title, the key fact, a meta line (amount and reference) and one action.
+             * registration about to expire. An icon tile, a status tag, the title, the key fact, a meta
+             * line (amount and reference) and one action.
              * The card is neutral and is not a link: the action is the only thing to press, and its
-             * label names the action and the item ("Pay AED 412.60"). Status is never shown by colour:
-             * the strip and the icon tile are decorative topic tints, and the urgency is in the status
-             * tag's words. Put the cards in a list (`<ul>`), most urgent first, under a heading that
+             * label names the action and the item ("Pay AED 412.60"). There is no coloured edge. Status
+             * is never shown by colour alone: the icon tile takes the status tag's tone (error, warning,
+             * info, success) only as reinforcement, and the urgency is in the tag's words. Put the cards in a list (`<ul>`), most urgent first, under a heading that
              * gives the count ("4 things, most urgent first").
              */
             "sc-attention-card": LocalJSX.IntrinsicElements["sc-attention-card"] & JSXBase.HTMLAttributes<HTMLScAttentionCardElement>;

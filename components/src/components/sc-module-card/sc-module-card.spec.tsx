@@ -27,6 +27,15 @@ describe('sc-module-card (spec)', () => {
     expect(own.root!.shadowRoot!.querySelector('.action')).not.toHaveClass('is-empty');
   });
 
+  it('renders a footer slot, hidden when empty', async () => {
+    const none = await newSpecPage({ components: [ScModuleCard], html: `<sc-module-card heading="Vehicles"><p>x</p></sc-module-card>` });
+    expect(none.root!.shadowRoot!.querySelector('[part="footer"]')).toHaveClass('is-empty');
+    const own = await newSpecPage({ components: [ScModuleCard], html: `<sc-module-card heading="Traffic fines"><p>x</p><button slot="footer">Pay all fines</button></sc-module-card>` });
+    const footer = own.root!.shadowRoot!.querySelector('[part="footer"]')!;
+    expect(footer).not.toHaveClass('is-empty');
+    expect(footer.querySelector('slot[name="footer"]')).not.toBeNull();
+  });
+
   it('uses heading-level and reflects divided', async () => {
     const page = await newSpecPage({ components: [ScModuleCard], html: `<sc-module-card heading="Traffic fines" heading-level="2" divided></sc-module-card>` });
     expect(page.root!.shadowRoot!.querySelector('h2')).not.toBeNull();

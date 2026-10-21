@@ -61,7 +61,6 @@
   display: flex;
   flex-direction: column;
   gap: var(--sc-space-2);
-  margin-block-start: auto;
   min-inline-size: 0;
 }
 
@@ -96,8 +95,13 @@
   }
 }
 
-/* Press: scale 0.97, pointer and touch only; keyboard activation is instant (MOT-02). */
+/* Press: scale 0.97 and a 12% on-surface state layer (board 09.07), pointer and touch only;
+   keyboard activation is instant (MOT-02). */
 .tile:active:not(:focus-visible) {
+  background-image: linear-gradient(
+    color-mix(in oklab, var(--sc-color-on-surface) var(--sc-opacity-pressed), transparent),
+    color-mix(in oklab, var(--sc-color-on-surface) var(--sc-opacity-pressed), transparent)
+  );
   transform: scale(var(--sc-scale-press));
 }
 

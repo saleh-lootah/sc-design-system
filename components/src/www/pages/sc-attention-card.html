@@ -1,6 +1,6 @@
 <h1 class="pg-title sc-type-headline-large" data-ar="بطاقة التنبيه">Attention card</h1>
-<p class="pg-lede sc-type-body-large" data-ar="أمر مستحق: فاتورة أو مستند أو تجديد. شريط رفيع بلون الموضوع، وأيقونة، وشارة حالة بالكلمات، والعنوان، والحقيقة الأساسية، وإجراء واحد.">
-  One thing that is due: a bill, a document, a renewal. A thin topic-tint strip, an icon, a status tag in words, the title, the key fact and one action.
+<p class="pg-lede sc-type-body-large" data-ar="أمر مستحق: فاتورة أو مستند أو تجديد. أيقونة بلون الحالة، وشارة حالة بالكلمات، والعنوان، والحقيقة الأساسية، وإجراء واحد.">
+  One thing that is due: a bill, a document, a renewal. An icon in the status tone, a status tag in words, the title, the key fact and one action.
 </p>
 
 <section class="pg-section" aria-labelledby="at-due">
@@ -8,23 +8,23 @@
   <p class="pg-note" data-ar="4 أمور، الأكثر إلحاحًا أولًا">4 things, most urgent first</p>
   <ul class="at-grid">
     <li>
-      <sc-attention-card tint="amber">
+      <sc-attention-card>
         <svg slot="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9V16h7v-2.1A6 6 0 0 0 12 3z"/></svg>
         <sc-status-tag slot="status" tone="warning"><span data-ar="غير مدفوعة">Not paid</span></sc-status-tag>
         <span data-ar="فاتورة الكهرباء والماء">Electricity and water bill</span>
         <span slot="fact" data-ar="مستحقة غدًا، 21 أكتوبر 2026">Due tomorrow, 21 Oct 2026</span>
         <span slot="meta"><sc-ltr>AED 412.60</sc-ltr> · <span data-ar="حساب ديوا">DEWA account</span> <sc-ltr>2004 1187</sc-ltr></span>
-        <sc-button slot="action" variant="secondary" size="m" href="#pay"><span data-ar="دفع">Pay</span> <sc-ltr>AED 412.60</sc-ltr></sc-button>
+        <sc-button slot="action" variant="secondary" size="m" full-width href="#pay"><span data-ar="دفع">Pay</span> <sc-ltr>AED 412.60</sc-ltr></sc-button>
       </sc-attention-card>
     </li>
     <li>
-      <sc-attention-card tint="violet">
+      <sc-attention-card>
         <svg slot="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h8l4 4v14H6z"/><path d="M9 12h6M9 16h6"/></svg>
         <sc-status-tag slot="status" tone="error"><span data-ar="إجراء مطلوب">Action needed</span></sc-status-tag>
         <span data-ar="تحميل مستند الإقامة">Upload your residence document</span>
         <span slot="fact" data-ar="مطلوب خلال 3 أيام، قبل 23 أكتوبر 2026">Needed in 3 days, by 23 Oct 2026</span>
         <span slot="meta"><span data-ar="تجديد الإقامة">Residence renewal</span> · <sc-ltr>R-2026-55120</sc-ltr></span>
-        <sc-button slot="action" variant="secondary" size="m" href="#upload"><span data-ar="تحميل المستند">Upload document</span></sc-button>
+        <sc-button slot="action" variant="secondary" size="m" full-width href="#upload"><span data-ar="تحميل المستند">Upload document</span></sc-button>
       </sc-attention-card>
     </li>
     <li>
@@ -34,11 +34,11 @@
         <span data-ar="تجديد ترخيص المركبة">Renew vehicle registration</span>
         <span slot="fact" data-ar="تنتهي في 10 نوفمبر 2026">Expires 10 Nov 2026</span>
         <span slot="meta"><span data-ar="دبي">Dubai</span> <sc-ltr>A 12345</sc-ltr> · <span data-ar="نيسان باترول">Nissan Patrol</span></span>
-        <sc-button slot="action" variant="secondary" size="m" href="#renew"><span data-ar="تجديد التسجيل">Renew registration</span></sc-button>
+        <sc-button slot="action" variant="secondary" size="m" full-width href="#renew"><span data-ar="تجديد التسجيل">Renew registration</span></sc-button>
       </sc-attention-card>
     </li>
   </ul>
-  <p class="pg-note" data-ar="البطاقة محايدة وليست رابطًا. الشريط والأيقونة ألوان مواضيع للزينة؛ الإلحاح تقوله شارة الحالة بالكلمات. اسم الإجراء يذكر الفعل والعنصر.">The card is neutral and is not a link. The strip and the icon are decorative topic tints; urgency is in the status tag's words. The action names the verb and the item.</p>
+  <p class="pg-note" data-ar="البطاقة محايدة وليست رابطًا ولا حافة ملوّنة لها. تأخذ الأيقونة لون شارة الحالة تعزيزًا فقط؛ الإلحاح تقوله الشارة بالكلمات. tint يستبدله بلون موضوع للزينة. اسم الإجراء يذكر الفعل والعنصر.">The card is neutral, is not a link and has no coloured edge. The icon tile takes the status tag's tone as reinforcement only; urgency is in the tag's words. tint swaps in a decorative topic colour (the third card). The action names the verb and the item.</p>
 </section>
 
 <style>

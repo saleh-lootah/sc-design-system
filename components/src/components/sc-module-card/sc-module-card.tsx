@@ -19,6 +19,8 @@ const TINTS: readonly ModuleCardTint[] = ['blue', 'violet', 'rose', 'orange', 'a
  *   top-level children are separated by 1px rules.
  * @slot icon - A decorative icon: an inline 24px `<svg>` in `currentColor`, in a 40px tile.
  * @slot action - A custom header link, used instead of `action-href` and `action-text`.
+ * @slot footer - One optional footer action, e.g. `<sc-button variant="secondary" size="m" full-width>`
+ *   "Pay all fines". Pushed to the bottom of the card, below a 1px rule.
  *
  * @part card - The surface.
  * @part header - The header row.
@@ -26,6 +28,7 @@ const TINTS: readonly ModuleCardTint[] = ['blue', 'violet', 'rose', 'orange', 'a
  * @part title - The heading.
  * @part link - The header link (from `action-href`).
  * @part body - The content.
+ * @part footer - The footer action area.
  */
 @Component({
   tag: 'sc-module-card',
@@ -55,17 +58,20 @@ export class ScModuleCard {
 
   @State() hasIcon = false;
   @State() hasAction = false;
+  @State() hasFooter = false;
 
   connectedCallback() {
     const slots = Array.from(this.el.children).map((c) => c.getAttribute('slot'));
     this.hasIcon = slots.includes('icon');
     this.hasAction = slots.includes('action');
+    this.hasFooter = slots.includes('footer');
   }
 
   private onSlotChange = (ev: Event) => {
     const slot = ev.target as HTMLSlotElement;
     const filled = slot.assignedElements().length > 0;
     if (slot.name === 'icon') this.hasIcon = filled;
+    else if (slot.name === 'footer') this.hasFooter = filled;
     else this.hasAction = filled;
   };
 
@@ -95,6 +101,9 @@ export class ScModuleCard {
           </div>
           <div class="body" part="body">
             <slot />
+          </div>
+          <div class={{ footer: true, 'is-empty': !this.hasFooter }} part="footer">
+            <slot name="footer" onSlotchange={this.onSlotChange} />
           </div>
         </div>
       </Host>
