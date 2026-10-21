@@ -39,3 +39,8 @@ page('Form fields', 'sc-checkbox-group', 'Checkbox group');
 page('Form fields', 'sc-date-input', 'Date input');
 page('Content and layout', 'sc-table', 'Table');
 page('Form fields', 'sc-date-range', 'Date range');
+page('Feedback and status', 'sc-step-list', 'Step list');
+page('Feedback and status', 'sc-timeline', 'Timeline');
+page('Feedback and status', 'sc-notification-list', 'Notification list');
+page('Feedback and status', 'sc-empty-state', 'Empty state');
+page('Feedback and status', 'sc-modal', 'Modal');

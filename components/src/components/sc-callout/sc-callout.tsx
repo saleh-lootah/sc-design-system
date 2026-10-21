@@ -1,6 +1,6 @@
 import { Component, Element, Host, Prop, State, h } from '@stencil/core';
-import { LocaleController } from '../../i18n/locale';
-import type { StringKey } from '../../i18n/strings';
+import { LocaleController } from '../../i18n/controller';
+import strings from '../../i18n/components/sc-callout';
 import { AlertCircle, CheckCircle, Info, Warning } from '../../icons/index'; // explicit /index: see CONTRIBUTING
 
 export type CalloutTone = 'info' | 'success' | 'warning' | 'error';
@@ -8,12 +8,12 @@ export type CalloutHeadingLevel = 2 | 3 | 4 | 5 | 6;
 
 const TONES: readonly CalloutTone[] = ['info', 'success', 'warning', 'error'];
 
-const TONE_KEYS: Record<CalloutTone, StringKey> = {
+const TONE_KEYS = {
   info: 'calloutInfo',
   success: 'calloutSuccess',
   warning: 'calloutWarning',
   error: 'calloutError',
-};
+} as const;
 
 const TONE_ICONS = { info: Info, success: CheckCircle, warning: Warning, error: AlertCircle };
 
@@ -22,8 +22,10 @@ const TONE_ICONS = { info: Info, success: CheckCircle, warning: Warning, error: 
  * before they act ("If your payment is interrupted, don't pay again…"), or the outcome
  * of what they just did.
  *
- * Each tone has its own fill, icon and a visually hidden word ("Warning:"), so the
- * meaning never relies on colour alone.
+ * v2: a tone-95 container with an 8px radius, a tone-coloured accent bar at inline-start,
+ * a 24px tone icon and the content in `on-surface`. Each tone also has a visually hidden
+ * word ("Warning:"), so the meaning never relies on colour or the icon alone. Links inside
+ * keep the channel link colour.
  *
  * @slot - The message. Plain text or inline content (links, `<sc-ltr>`); paragraphs are fine.
  * @slot heading - Optional rich heading, used instead of the `heading` prop.
@@ -43,7 +45,7 @@ export class ScCallout {
 
   /**
    * What kind of message it is.
-   * - `info`: neutral fill with an ink icon. Guidance and reassurance.
+   * - `info`: guidance and reassurance (info blue).
    * - `success`: something worked ("Payment received").
    * - `warning`: something the user must know to avoid a problem.
    * - `error`: something went wrong and the user can't continue as planned.
@@ -65,7 +67,7 @@ export class ScCallout {
   /** True when content is slotted into `heading`. */
   @State() hasHeadingSlot = false;
 
-  private locale = new LocaleController(this);
+  private locale = new LocaleController(this, strings);
 
   connectedCallback() {
     this.locale.connect();
@@ -96,13 +98,13 @@ export class ScCallout {
             <ToneIcon />
           </span>
           <div class="body">
-            <HeadingTag class={{ 'heading': true, 'type-title-s': true, 'heading--empty': !hasHeading }} part="heading">
+            <HeadingTag class={{ 'heading': true, 'heading--empty': !hasHeading }} part="heading">
               <span class="visually-hidden">{prefix} </span>
               <slot name="heading" onSlotchange={this.onHeadingSlotChange}>
                 {this.heading}
               </slot>
             </HeadingTag>
-            <div class="content type-body-m" part="content">
+            <div class="content" part="content">
               {!hasHeading && <span class="visually-hidden">{prefix} </span>}
               <slot />
             </div>

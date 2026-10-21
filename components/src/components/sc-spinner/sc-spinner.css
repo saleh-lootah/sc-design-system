@@ -1,4 +1,4 @@
-
+/* sc-spinner (v2, shadow). component-language.md A21; MOT-04 (linear), MOT-15. */
 :host {
   display: inline-block;
   vertical-align: middle;
@@ -10,16 +10,22 @@
 }
 
 .spinner {
+  --icon-size: var(--sc-size-icon-m);
   position: relative;
   display: inline-flex;
   align-items: center;
   gap: var(--sc-space-8);
+  font: var(--sc-type-body-medium);
+  letter-spacing: var(--sc-type-body-medium-tracking);
+}
+
+.spinner--l {
+  --icon-size: var(--sc-size-icon-l);
 }
 
 .icon-box {
   display: inline-flex;
   flex: none;
-  --icon-size: var(--sc-size-icon-m);
 }
 
 /* Visually hidden unless show-label is set, or motion is reduced. */

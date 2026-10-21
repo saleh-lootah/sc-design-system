@@ -1,8 +1,6 @@
 import { E2EPage } from '@stencil/core/testing';
-import { expectNoAxeViolations } from '../../test/axe';
-import { contexts, newScPage, setPageContext } from '../../test/page';
-
-const CHANNELS = ['now', 'transport', 'visit', 'justice', 'build', 'invest', 'trade'] as const;
+import { describeAxe } from '../../test/axe';
+import { newScPage } from '../../test/page';
 
 function tag(page: E2EPage, selector: string, read: string) {
   return page.evaluate(
@@ -16,75 +14,76 @@ function tag(page: E2EPage, selector: string, read: string) {
   );
 }
 
+const token = (page: E2EPage, name: string) =>
+  page.evaluate((n: string) => {
+    const probe = document.createElement('i');
+    probe.style.color = `var(${n})`;
+    document.body.append(probe);
+    const c = getComputedStyle(probe).color;
+    probe.remove();
+    return c;
+  }, name);
+
 const ALL = `
   <main>
-    <h1>My tasks</h1>
+    <h1>My applications</h1>
     <sc-status-tag id="n">In review</sc-status-tag>
+    <sc-status-tag id="i" tone="info">In review</sc-status-tag>
     <sc-status-tag id="s" tone="success">Paid</sc-status-tag>
     <sc-status-tag id="w" tone="warning">Expires in 15 days</sc-status-tag>
     <sc-status-tag id="e" tone="error">Action needed</sc-status-tag>
-    <sc-status-tag id="c" tone="channel">New</sc-status-tag>
   </main>`;
 
-/** Emulates Windows High Contrast. Puppeteer's emulateMediaFeatures rejects forced-colors, so use CDP. */
 async function forceColors(page: E2EPage) {
   const client = await (page as unknown as { createCDPSession(): Promise<{ send(m: string, p: object): Promise<unknown> }> }).createCDPSession();
   await client.send('Emulation.setEmulatedMedia', { features: [{ name: 'forced-colors', value: 'active' }] });
 }
 
 describe('sc-status-tag (e2e)', () => {
-  it('is a pill with a dot, and each tone has its own colours', async () => {
+  it('is a 32px chip with a 6px radius and a 16px icon', async () => {
     const page = await newScPage(ALL);
-    const looks = new Set<string>();
-    for (const id of ['n', 's', 'w', 'e', 'c']) {
-      looks.add(await tag(page, `#${id}`, 'getComputedStyle(tag).backgroundColor + getComputedStyle(tag).color'));
-      expect(await tag(page, `#${id}`, 'getComputedStyle(tag).borderTopLeftRadius')).toBe('999px');
-      expect(await tag(page, `#${id}`, 'tag.querySelector("[part=dot]").getBoundingClientRect().width')).toBe(8);
-    }
-    expect(looks.size).toBe(5);
+    expect(await tag(page, '#s', 'tag.getBoundingClientRect().height')).toBe(32);
+    expect(await tag(page, '#s', 'getComputedStyle(tag).borderTopLeftRadius')).toBe('6px');
+    expect(await tag(page, '#s', 'tag.querySelector("svg").getBoundingClientRect().width')).toBe(16);
   });
 
-  it('reads as its words only (the dot is hidden)', async () => {
+  it('uses tone-40 text on the tone-95 container', async () => {
+    const page = await newScPage(ALL);
+    for (const [id, tone] of [['i', 'info'], ['s', 'success'], ['w', 'warning'], ['e', 'error']]) {
+      expect(await tag(page, `#${id}`, 'getComputedStyle(tag).color')).toBe(await token(page, `--sc-color-${tone}`));
+      expect(await tag(page, `#${id}`, 'getComputedStyle(tag).backgroundColor')).toBe(await token(page, `--sc-color-${tone}-container`));
+    }
+    expect(await tag(page, '#n', 'getComputedStyle(tag).color')).toBe(await token(page, '--sc-color-on-surface-variant'));
+    expect(await tag(page, '#n', 'getComputedStyle(tag).backgroundColor')).toBe(await token(page, '--sc-color-surface-container'));
+  });
+
+  it('does not change with the channel', async () => {
+    const page = await newScPage(ALL, { channel: 'now' });
+    const before = await tag(page, '#n', 'getComputedStyle(tag).backgroundColor');
+    await page.evaluate(() => (document.documentElement.dataset.channel = 'visit'));
+    expect(await tag(page, '#n', 'getComputedStyle(tag).backgroundColor')).toBe(before);
+  });
+
+  it('reads as its words only', async () => {
     const page = await newScPage(ALL);
     expect(await page.$eval('#e', (el) => (el as HTMLElement).innerText.trim())).toBe('Action needed');
-    expect(await tag(page, '#e', 'tag.querySelector("[part=dot]").getAttribute("aria-hidden")')).toBe('true');
+    const snapshot = JSON.stringify(await page.accessibility.snapshot());
+    expect(snapshot).toContain('Action needed');
   });
 
-  it('takes the channel tone from the page channel', async () => {
-    const page = await newScPage(ALL, { channel: 'now' });
-    const now = await tag(page, '#c', 'getComputedStyle(tag).backgroundColor');
-    await setPageContext(page, { channel: 'visit' });
-    expect(await tag(page, '#c', 'getComputedStyle(tag).backgroundColor')).not.toBe(now);
+  it('uses label-small: Medium 14px in English, Bold 16px in Arabic, with the icon at the start', async () => {
+    const page = await newScPage(`<sc-status-tag id="en" tone="success">Paid</sc-status-tag><div lang="ar" dir="rtl"><sc-status-tag id="ar" tone="success">تم الدفع</sc-status-tag></div>`);
+    expect(await tag(page, '#en', '[getComputedStyle(tag).fontSize, getComputedStyle(tag).fontWeight]')).toEqual(['14px', '500']);
+    expect(await tag(page, '#ar', '[getComputedStyle(tag).fontSize, getComputedStyle(tag).fontWeight]')).toEqual(['16px', '700']);
+    expect(await tag(page, '#ar', 'tag.querySelector("svg").getBoundingClientRect().left > tag.querySelector(".label").getBoundingClientRect().left')).toBe(true);
   });
 
-  it('puts the dot at the start: on the right in Arabic', async () => {
-    const page = await newScPage(ALL, { lang: 'ar' });
-    expect(await tag(page, '#s', 'tag.querySelector("[part=dot]").getBoundingClientRect().left > tag.querySelector(".label").getBoundingClientRect().left')).toBe(true);
-    expect(await tag(page, '#s', 'getComputedStyle(tag).fontFamily')).toContain('Dubai W23 Bold');
-  });
-
-  it('keeps its shape and dot in forced colours', async () => {
+  it('keeps its shape in forced colours', async () => {
     const page = await newScPage(ALL);
     await forceColors(page);
     expect(await tag(page, '#e', 'getComputedStyle(tag).borderTopStyle')).toBe('solid');
     expect(await tag(page, '#e', 'getComputedStyle(tag).borderTopColor')).not.toBe('rgba(0, 0, 0, 0)');
-    expect(await tag(page, '#e', 'getComputedStyle(tag.querySelector("[part=dot]")).backgroundColor')).not.toBe('rgba(0, 0, 0, 0)');
-  });
-
-  for (const ctx of contexts) {
-    it(`has no axe violations (${ctx.lang}, ${ctx.theme})`, async () => {
-      const page = await newScPage(ALL, ctx);
-      await expectNoAxeViolations(page);
-    });
-  }
-
-  it('has no axe violations for the channel tone on every channel, light and dark', async () => {
-    const page = await newScPage(ALL);
-    for (const channel of CHANNELS) {
-      await setPageContext(page, { channel, theme: 'light' });
-      await expectNoAxeViolations(page);
-      await setPageContext(page, { channel, theme: 'dark' });
-      await expectNoAxeViolations(page);
-    }
   });
 });
+
+describeAxe('sc-status-tag', ALL);

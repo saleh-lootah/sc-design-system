@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-21T14:05:20",
+  "timestamp": "2026-10-21T14:46:03",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.45.2",
@@ -474,10 +474,10 @@
         },
         {
           "name": "icon",
-          "type": "\"alert-circle\" | \"arrow-forward\" | \"check-circle\" | \"chevron-back\" | \"chevron-forward\" | \"close\" | \"external\" | \"info\" | \"search\" | \"spinner\" | \"warning\" | undefined",
+          "type": "\"alert-circle\" | \"arrow-forward\" | \"check\" | \"check-circle\" | \"chevron-back\" | \"chevron-forward\" | \"close\" | \"external\" | \"hourglass\" | \"inbox\" | \"info\" | \"pending\" | \"schedule\" | \"search\" | \"spinner\" | \"warning\" | undefined",
           "complexType": {
             "original": "IconName",
-            "resolved": "\"alert-circle\" | \"arrow-forward\" | \"check-circle\" | \"chevron-back\" | \"chevron-forward\" | \"close\" | \"external\" | \"info\" | \"search\" | \"spinner\" | \"warning\" | undefined",
+            "resolved": "\"alert-circle\" | \"arrow-forward\" | \"check\" | \"check-circle\" | \"chevron-back\" | \"chevron-forward\" | \"close\" | \"external\" | \"hourglass\" | \"inbox\" | \"info\" | \"pending\" | \"schedule\" | \"search\" | \"spinner\" | \"warning\" | undefined",
             "references": {
               "IconName": {
                 "location": "import",
@@ -502,6 +502,10 @@
               "type": "string"
             },
             {
+              "value": "check",
+              "type": "string"
+            },
+            {
               "value": "check-circle",
               "type": "string"
             },
@@ -522,7 +526,23 @@
               "type": "string"
             },
             {
+              "value": "hourglass",
+              "type": "string"
+            },
+            {
+              "value": "inbox",
+              "type": "string"
+            },
+            {
               "value": "info",
+              "type": "string"
+            },
+            {
+              "value": "pending",
+              "type": "string"
+            },
+            {
+              "value": "schedule",
               "type": "string"
             },
             {
@@ -555,7 +575,7 @@
             "references": {
               "ButtonIconPosition": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-feedback/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonIconPosition"
               }
             }
@@ -676,7 +696,7 @@
             "references": {
               "ButtonSize": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-feedback/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonSize"
               }
             }
@@ -717,7 +737,7 @@
             "references": {
               "ButtonType": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-feedback/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonType"
               }
             }
@@ -787,7 +807,7 @@
             "references": {
               "ButtonVariant": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-feedback/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonVariant"
               }
             }
@@ -871,8 +891,8 @@
       "filePath": "src/components/sc-callout/sc-callout.tsx",
       "encapsulation": "shadow",
       "tag": "sc-callout",
-      "readme": "# sc-callout\n\nAn important message inside the page content: something the user must know before they act, or the result of what they just did. If the message is about errors in the user's answers, use `sc-error-summary` and field errors instead. If it's the status of a task or payment in a list, use `sc-status-tag`.\n\n## Usage\n\n```html\n<sc-callout tone=\"warning\">\n  If your payment is interrupted, don't pay again. Check the payment status in My tasks first.\n</sc-callout>\n\n<sc-callout tone=\"success\" heading=\"Registration renewed\" heading-level=\"2\">\n  Your vehicle registration is valid until 18 October 2027.\n</sc-callout>\n```\n\n### Which tone\n\n| Tone | Use it for | Example |\n|---|---|---|\n| `info` (default) | Guidance the user needs. Neutral fill, ink icon. | \"You'll need your plate number and Emirates ID number.\" |\n| `success` | Something worked. | \"We've sent the receipt to your email.\" |\n| `warning` | Something the user must know to avoid a problem. | \"If your payment is interrupted, don't pay again…\" |\n| `error` | Something went wrong that isn't about their answers. | \"Your payment didn't go through. No money has been taken.\" |\n\nEach tone has its own fill, its own icon and a visually hidden word read before the message (\"Warning:\" / \"تنبيه:\"), so the meaning never relies on colour. Override the word with `tone-label` if a different one fits better.\n\n### Content\n\n- One callout per section at most; if everything is highlighted, nothing is.\n- Lead with what the user should do or know. Short sentences, sentence case. Write the Arabic, don't translate word for word.\n- `heading` is optional bold text. It is a plain paragraph by default; set `heading-level` (2–6) only when the heading belongs in the page outline. Use the `heading` slot for rich content.\n- Inline links and `<sc-ltr>` for amounts and references are fine in the message.\n- It isn't a live region. If you insert one after the page loads (for example after a payment check), wrap it in an element with `role=\"status\"` or move focus to it.\n\n### Styling hooks\n\nParts: `container`, `icon`, `heading`, `content`.\n",
-      "docs": "An important message that sits in the page content: something the user must know\nbefore they act (\"If your payment is interrupted, don't pay again…\"), or the outcome\nof what they just did.\n\nEach tone has its own fill, icon and a visually hidden word (\"Warning:\"), so the\nmeaning never relies on colour alone.",
+      "readme": "# sc-callout\n\nAn important message inside the page content: something the user must know before they act, or the result of what they just did. If the message is about errors in the user's answers, use `sc-error-summary` and field errors instead. If it's the status of a task or payment in a list, use `sc-status-tag`.\n\n## Usage\n\n```html\n<sc-callout tone=\"warning\">\n  If your payment is interrupted, don't pay again. Check the payment status in My tasks first.\n</sc-callout>\n\n<sc-callout tone=\"success\" heading=\"Registration renewed\" heading-level=\"2\">\n  Your vehicle registration is valid until 18 October 2027.\n</sc-callout>\n```\n\n### Which tone\n\n| Tone | Use it for | Example |\n|---|---|---|\n| `info` (default) | Guidance the user needs. | \"You'll need your plate number and Emirates ID number.\" |\n| `success` | Something worked. | \"We've sent the receipt to your email.\" |\n| `warning` | Something the user must know to avoid a problem. | \"If your payment is interrupted, don't pay again…\" |\n| `error` | Something went wrong that isn't about their answers. | \"Your payment didn't go through. No money has been taken.\" |\n\nv2: a tone-95 container with 8px corners, a tone-40 accent bar at inline-start (3px, `--sc-size-border-accent`) and icon, and the text in `on-surface`. Links inside keep the channel link colour. Each tone has its own fill, its own icon and a visually hidden word read before the message (\"Warning:\" / \"تنبيه:\"), so the meaning never relies on colour. Override the word with `tone-label` if a different one fits better.\n\n### Content\n\n- One callout per section at most; if everything is highlighted, nothing is.\n- Lead with what the user should do or know. Short sentences, sentence case. Write the Arabic, don't translate word for word.\n- `heading` is optional bold text. It is a plain paragraph by default; set `heading-level` (2–6) only when the heading belongs in the page outline. Use the `heading` slot for rich content.\n- Inline links and `<sc-ltr>` for amounts and references are fine in the message.\n- It isn't a live region. If you insert one after the page loads (for example after a payment check), wrap it in an element with `role=\"status\"` or move focus to it.\n\n### Styling hooks\n\nParts: `container`, `icon`, `heading`, `content`.\n",
+      "docs": "An important message that sits in the page content: something the user must know\nbefore they act (\"If your payment is interrupted, don't pay again…\"), or the outcome\nof what they just did.\n\nv2: a tone-95 container with an 8px radius, a tone-coloured accent bar at inline-start,\na 24px tone icon and the content in `on-surface`. Each tone also has a visually hidden\nword (\"Warning:\"), so the meaning never relies on colour or the icon alone. Links inside\nkeep the channel link colour.",
       "docsTags": [
         {
           "name": "slot",
@@ -936,7 +956,7 @@
             "references": {
               "CalloutHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-callout/sc-callout.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-feedback/components/src/components/sc-callout/sc-callout.tsx",
                 "id": "src/components/sc-callout/sc-callout.tsx::CalloutHeadingLevel"
               }
             }
@@ -985,7 +1005,7 @@
             "references": {
               "CalloutTone": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-callout/sc-callout.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-feedback/components/src/components/sc-callout/sc-callout.tsx",
                 "id": "src/components/sc-callout/sc-callout.tsx::CalloutTone"
               }
             }
@@ -993,7 +1013,7 @@
           "mutable": false,
           "attr": "tone",
           "reflectToAttr": true,
-          "docs": "What kind of message it is.\n- `info`: neutral fill with an ink icon. Guidance and reassurance.\n- `success`: something worked (\"Payment received\").\n- `warning`: something the user must know to avoid a problem.\n- `error`: something went wrong and the user can't continue as planned.",
+          "docs": "What kind of message it is.\n- `info`: guidance and reassurance (info blue).\n- `success`: something worked (\"Payment received\").\n- `warning`: something the user must know to avoid a problem.\n- `error`: something went wrong and the user can't continue as planned.",
           "docsTags": [
             {
               "name": "default",
@@ -1141,7 +1161,7 @@
             "references": {
               "CardLandmark": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-card/sc-card.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-feedback/components/src/components/sc-card/sc-card.tsx",
                 "id": "src/components/sc-card/sc-card.tsx::CardLandmark"
               }
             }
@@ -1178,7 +1198,7 @@
             "references": {
               "CardPadding": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-card/sc-card.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-feedback/components/src/components/sc-card/sc-card.tsx",
                 "id": "src/components/sc-card/sc-card.tsx::CardPadding"
               }
             }
@@ -2194,7 +2214,7 @@
             "references": {
               "ContainerWidth": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-container/sc-container.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-feedback/components/src/components/sc-container/sc-container.tsx",
                 "id": "src/components/sc-container/sc-container.tsx::ContainerWidth"
               }
             }
@@ -3547,11 +3567,289 @@
       }
     },
     {
+      "filePath": "src/components/sc-empty-state/sc-empty-state.tsx",
+      "encapsulation": "shadow",
+      "tag": "sc-empty-state",
+      "readme": "# sc-empty-state\n\nWhat a list, table or page shows when there is nothing in it.\n\n## Usage\n\n```html\n<sc-empty-state icon=\"inbox\" heading=\"You have no notifications\" heading-level=\"2\">\n  When a service has news for you, it appears here.\n</sc-empty-state>\n\n<!-- The all-clear -->\n<sc-empty-state variant=\"success\" heading=\"You have no fines to pay\">\n  Nothing is due on your vehicles.\n  <sc-button slot=\"action\" variant=\"secondary\">View paid fines</sc-button>\n</sc-empty-state>\n```\n\n- Write the heading as a sentence (\"You have no fines\"), never \"No data\".\n- An optional 48px icon in an 80px circle; one or two sentences; at most one action, usually a secondary button.\n- `variant=\"success\"` is the all-clear: a check on the success container. The words still say it.\n- Aligned to the start in both languages. Without `heading-level` the heading is a paragraph at the title role (right inside a card or table).\n\nParts: `container`, `icon`, `heading`, `body`, `action`.\n",
+      "docs": "What a list, table or page shows when there is nothing in it: \"You have no fines\".\n\nAn optional 48px icon in an 80px circle, a heading written as a sentence (never \"No\ndata\"), one or two sentences in the default slot, and at most one action (usually an\n`sc-button variant=\"secondary\"`) in `slot=\"action\"`. It aligns to the start edge in both\nlanguages, so it scans with the content around it.\n\n`variant=\"success\"` is the all-clear: nothing is left to do (\"You have no fines to pay\").\nThe icon becomes a check in the success colour on a success container, and the words\nstill say it, so the meaning never rests on colour.",
+      "docsTags": [
+        {
+          "name": "slot",
+          "text": "- One or two sentences: what this means and what the user can do."
+        },
+        {
+          "name": "slot",
+          "text": "action - Optional, a single action: `<sc-button slot=\"action\" variant=\"secondary\">`."
+        },
+        {
+          "name": "part",
+          "text": "container - The block."
+        },
+        {
+          "name": "part",
+          "text": "icon - The icon circle (decorative)."
+        },
+        {
+          "name": "part",
+          "text": "heading - The heading."
+        },
+        {
+          "name": "part",
+          "text": "body - The wrapper around the default slot."
+        },
+        {
+          "name": "part",
+          "text": "action - The wrapper around the action slot."
+        }
+      ],
+      "usage": {},
+      "props": [
+        {
+          "name": "heading",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "heading",
+          "reflectToAttr": false,
+          "docs": "The heading, as a sentence: \"You have no notifications\".",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": true,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "headingLevel",
+          "type": "2 | 3 | 4 | undefined",
+          "complexType": {
+            "original": "EmptyStateHeadingLevel",
+            "resolved": "2 | 3 | 4 | undefined",
+            "references": {
+              "EmptyStateHeadingLevel": {
+                "location": "local",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-feedback/components/src/components/sc-empty-state/sc-empty-state.tsx",
+                "id": "src/components/sc-empty-state/sc-empty-state.tsx::EmptyStateHeadingLevel"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "heading-level",
+          "reflectToAttr": false,
+          "docs": "Renders the heading as `<h2>`–`<h4>`. Leave it unset to render a paragraph at the title role, for an empty state inside a card or table.",
+          "docsTags": [],
+          "values": [
+            {
+              "value": "2",
+              "type": "number"
+            },
+            {
+              "value": "3",
+              "type": "number"
+            },
+            {
+              "value": "4",
+              "type": "number"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "icon",
+          "type": "\"alert-circle\" | \"arrow-forward\" | \"check\" | \"check-circle\" | \"chevron-back\" | \"chevron-forward\" | \"close\" | \"external\" | \"hourglass\" | \"inbox\" | \"info\" | \"pending\" | \"schedule\" | \"search\" | \"spinner\" | \"warning\" | undefined",
+          "complexType": {
+            "original": "IconName",
+            "resolved": "\"alert-circle\" | \"arrow-forward\" | \"check\" | \"check-circle\" | \"chevron-back\" | \"chevron-forward\" | \"close\" | \"external\" | \"hourglass\" | \"inbox\" | \"info\" | \"pending\" | \"schedule\" | \"search\" | \"spinner\" | \"warning\" | undefined",
+            "references": {
+              "IconName": {
+                "location": "import",
+                "path": "../../icons/index",
+                "id": "src/icons/index.tsx::IconName",
+                "referenceLocation": "IconName"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "icon",
+          "reflectToAttr": false,
+          "docs": "An icon from the library (`inbox`, `search`, `check-circle` …). Leave unset for no icon; `success` defaults to `check-circle`.",
+          "docsTags": [],
+          "values": [
+            {
+              "value": "alert-circle",
+              "type": "string"
+            },
+            {
+              "value": "arrow-forward",
+              "type": "string"
+            },
+            {
+              "value": "check",
+              "type": "string"
+            },
+            {
+              "value": "check-circle",
+              "type": "string"
+            },
+            {
+              "value": "chevron-back",
+              "type": "string"
+            },
+            {
+              "value": "chevron-forward",
+              "type": "string"
+            },
+            {
+              "value": "close",
+              "type": "string"
+            },
+            {
+              "value": "external",
+              "type": "string"
+            },
+            {
+              "value": "hourglass",
+              "type": "string"
+            },
+            {
+              "value": "inbox",
+              "type": "string"
+            },
+            {
+              "value": "info",
+              "type": "string"
+            },
+            {
+              "value": "pending",
+              "type": "string"
+            },
+            {
+              "value": "schedule",
+              "type": "string"
+            },
+            {
+              "value": "search",
+              "type": "string"
+            },
+            {
+              "value": "spinner",
+              "type": "string"
+            },
+            {
+              "value": "warning",
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "variant",
+          "type": "\"default\" | \"success\"",
+          "complexType": {
+            "original": "EmptyStateVariant",
+            "resolved": "\"default\" | \"success\"",
+            "references": {
+              "EmptyStateVariant": {
+                "location": "local",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-feedback/components/src/components/sc-empty-state/sc-empty-state.tsx",
+                "id": "src/components/sc-empty-state/sc-empty-state.tsx::EmptyStateVariant"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "variant",
+          "reflectToAttr": true,
+          "docs": "`default`: neutral. `success`: the all-clear, with a check on the success container.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'default'"
+            }
+          ],
+          "default": "'default'",
+          "values": [
+            {
+              "value": "default",
+              "type": "string"
+            },
+            {
+              "value": "success",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [],
+      "listeners": [],
+      "styles": [],
+      "slots": [
+        {
+          "name": "",
+          "docs": "One or two sentences: what this means and what the user can do."
+        },
+        {
+          "name": "action",
+          "docs": "Optional, a single action: `<sc-button slot=\"action\" variant=\"secondary\">`."
+        }
+      ],
+      "parts": [
+        {
+          "name": "action",
+          "docs": "The wrapper around the action slot."
+        },
+        {
+          "name": "body",
+          "docs": "The wrapper around the default slot."
+        },
+        {
+          "name": "container",
+          "docs": "The block."
+        },
+        {
+          "name": "heading",
+          "docs": "The heading."
+        },
+        {
+          "name": "icon",
+          "docs": "The icon circle (decorative)."
+        }
+      ],
+      "states": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
       "filePath": "src/components/sc-error-summary/sc-error-summary.tsx",
       "encapsulation": "shadow",
       "tag": "sc-error-summary",
-      "readme": "# sc-error-summary\n\nLists every error on the page after the user submits a form, so they can see all the problems at once and jump to each field. Use it with the field's own error message: the summary never replaces it. Don't use it for problems that aren't about the user's answers (a failed payment, a service that's down): use `sc-callout tone=\"error\"` for those.\n\n## Usage\n\n```html\n<main>\n  <sc-error-summary>\n    <a href=\"#plate-code\">Enter the plate code</a>\n    <a href=\"#plate-number\">Enter the plate number using numbers only, like 12345</a>\n  </sc-error-summary>\n  <h1>What is your plate number?</h1>\n  …\n  <sc-text-input id=\"plate-number\" label=\"Plate number\" error=\"Enter the plate number using numbers only, like 12345\"></sc-text-input>\n</main>\n```\n\nOr from JavaScript, after client-side validation:\n\n```js\nconst summary = document.querySelector('sc-error-summary');\nsummary.errors = [{ href: '#plate-number', text: 'Enter the plate number using numbers only, like 12345' }];\n```\n\n### Placement and behaviour\n\n- Put it at the top of `<main>`, above the `<h1>`, and only when there are errors. With no items it hides itself.\n- When it first has errors (on page load, or when `errors` goes from empty to filled) it moves focus to itself (`tabindex=\"-1\"`), so screen readers read the heading and every error straight away. It deliberately has no `role=\"alert\"`: the focus move is the announcement, and a live region as well can make screen readers read the summary twice. The focused box is a group named by its heading (`aria-labelledby`). Don't move focus anywhere else on that page load. Use `no-autofocus` only if you move focus yourself with `setFocus()`.\n- Add \"Error: \" to the start of the page `<title>` too.\n- Following a link moves focus to the field and scrolls it into view, without changing the URL. It works with a plain `<input id>` and with field components (`sc-text-input`, `sc-date-input` …) that delegate focus to their inner control, and finds the target in the summary's own shadow root first, then in the document.\n- Slotted links are read from the light DOM (directly, or inside a `<ul>`) and rendered as a list inside the component; the list updates when they change. The `errors` property wins when it is set and not empty.\n\n### Content\n\n- Each item is the same message as the one shown next to the field, in the same order as the fields on the page.\n- Link to the field's `id`, not to the label. For a date, link to the first part with a problem.\n- The heading is \"There is a problem\" / \"توجد مشكلة\". Change it (`heading`) only when a more specific heading helps, e.g. \"Check your vehicle details\". Use the `description` slot for one short sentence when the errors need context.\n- In Arabic, keep plates and numbers left-to-right inside the message: `يُرجى إدخال رقم اللوحة بالأرقام فقط، مثل <bdi dir=\"ltr\">12345</bdi>`.\n\n### Styling hooks\n\nParts: `container`, `heading`, `list`. The border and links use the error colour; the focus ring uses the channel action colour.\n",
-      "docs": "Lists every error on the page, at the top of the main content, after a form is\nsubmitted. Each item links to its field; following a link moves focus to the field.\n\nGive it items either as links in the default slot (`<a href=\"#plate-number\">…</a>`,\noptionally inside a `<ul>`) or through the `errors` property. When it first has items\nit moves focus to itself (`tabindex=\"-1\"`), so keyboard and screen reader users hear\nthe heading and errors straight away. It has no `role=\"alert\"`: moving focus already\nannounces it, and a live region on top can make screen readers read it twice (GOV.UK\npractice). The focused box is a `role=\"group\"` named by its heading.",
+      "readme": "# sc-error-summary\n\nLists every error on the page, at the top of `<main>`, after a submission. Each item links to its field.\n\n## Usage\n\n```html\n<sc-error-summary>\n  <a href=\"#plate-code\">Enter the plate code</a>\n  <a href=\"#plate-number\">Enter the plate number using numbers only, like 12345</a>\n</sc-error-summary>\n```\n\nor from JavaScript: `summary.errors = [{ href: '#plate-code', text: 'Enter the plate code' }]`.\n\n- CMP-05: when it first has errors it moves focus to itself (`tabindex=\"-1\"`); it is a `role=\"group\"` named by its heading, and it has **no `role=\"alert\"`**, so screen readers don't read it twice. Use `no-autofocus` only if you move focus yourself (`setFocus()`).\n- The default heading is \"There is a problem\" / \"توجد مشكلة\" (W1). Start the page `<title>` with \"Error: \" / \"خطأ: \" while errors are shown.\n- Link each item to the field's `id`. v2 fields are light DOM, so the `id` can be the native control or the field host (its `focus()` reaches the control).\n- v2 look: `error-container` fill, a 2px `error` border, 8px corners; links in `error`, Bold, underlined, each at least 44 × 44.\n\nParts: `container`, `heading`, `list`.\n",
+      "docs": "Lists every error on the page, at the top of the main content, after a form is\nsubmitted. Each item links to its field; following a link moves focus to the field.\n\nGive it items either as links in the default slot (`<a href=\"#plate-number\">…</a>`,\noptionally inside a `<ul>`) or through the `errors` property. When it first has items\nit moves focus to itself (`tabindex=\"-1\"`), so keyboard and screen reader users hear\nthe heading and errors straight away. It has no `role=\"alert\"`: moving focus already\nannounces it, and a live region on top can make screen readers read it twice (GOV.UK\npractice). The focused box is a `role=\"group\"` named by its heading (CMP-05).\n\nv2: an `error-container` box with a 2px `error` border and an 8px radius; the heading in\n`on-surface`, the links in `error`, Bold and underlined, each at least 44 × 44. Field\ncomponents are light DOM in v2, so a link's `#id` can name the native control or the\nfield host (whose `focus()` is forwarded to its control).",
       "docsTags": [
         {
           "name": "slot",
@@ -3585,7 +3883,7 @@
             "references": {
               "ErrorSummaryItem": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-error-summary/sc-error-summary.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-feedback/components/src/components/sc-error-summary/sc-error-summary.tsx",
                 "id": "src/components/sc-error-summary/sc-error-summary.tsx::ErrorSummaryItem"
               }
             }
@@ -3618,7 +3916,7 @@
           "mutable": false,
           "attr": "heading",
           "reflectToAttr": false,
-          "docs": "Overrides the heading text (default \"There is a problem\" / \"توجد مشكلة\" from strings).",
+          "docs": "Overrides the heading text (default \"There is a problem\" / \"توجد مشكلة\").",
           "docsTags": [],
           "values": [
             {
@@ -3642,7 +3940,7 @@
             "references": {
               "ErrorSummaryHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-error-summary/sc-error-summary.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-feedback/components/src/components/sc-error-summary/sc-error-summary.tsx",
                 "id": "src/components/sc-error-summary/sc-error-summary.tsx::ErrorSummaryHeadingLevel"
               }
             }
@@ -4154,7 +4452,7 @@
             "references": {
               "LanguageSwitchDetail": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-language-switch/sc-language-switch.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-feedback/components/src/components/sc-language-switch/sc-language-switch.tsx",
                 "id": "src/components/sc-language-switch/sc-language-switch.tsx::LanguageSwitchDetail"
               }
             }
@@ -4423,6 +4721,454 @@
         {
           "name": "",
           "docs": "The value to keep left-to-right."
+        }
+      ],
+      "parts": [],
+      "states": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/sc-modal/sc-modal.tsx",
+      "encapsulation": "shadow",
+      "tag": "sc-modal",
+      "readme": "# sc-modal\n\nA dialog for a short secondary task, or a decision that can't wait such as the session-timeout warning. On phones (under 600px) it is a bottom sheet. Prefer a page for anything longer.\n\n## Usage\n\n```html\n<sc-button variant=\"destructive\" id=\"remove\">Remove vehicle</sc-button>\n<sc-modal id=\"confirm\" heading=\"Remove this vehicle?\">\n  <p>You can add it again later.</p>\n  <sc-button slot=\"actions\" variant=\"destructive\">Remove vehicle</sc-button>\n  <sc-button slot=\"actions\" variant=\"secondary\">Keep it</sc-button>\n</sc-modal>\n<script>\n  remove.addEventListener('click', () => confirm.show());\n</script>\n```\n\nSession timeout (TIME-01 to TIME-03):\n\n```html\n<sc-modal alert heading=\"You will be signed out soon\" countdown=\"120\">\n  <p>We'll keep your answers if you stay signed in.</p>\n  <sc-button slot=\"actions\">Stay signed in</sc-button>\n  <sc-button slot=\"actions\" variant=\"secondary\">Sign out</sc-button>\n</sc-modal>\n```\n\n- A native `<dialog>` opened with `showModal()`: the page behind is inert. Focus goes to the heading (or the first control with `initial-focus=\"first\"`) and returns to the trigger on close.\n- Escape, the close button and the scrim close it (`scClose` says why). `alert` makes it an `alertdialog`: the scrim doesn't close it and there is no close button; Escape still does.\n- `countdown` (seconds) shows \"Time left: 1:45\" and announces it politely once on open, at each whole minute and at 30 and 10 seconds, never every second. `scCountdownEnd` fires at zero; nothing is submitted. Set `countdown` again after \"Stay signed in\" to restart.\n- Motion: centred, entering with opacity and a slight scale over 280ms and leaving over 224ms; the sheet slides on the drawer curve and can be dragged or flicked down (it always has a close button too). Opened from the keyboard it appears instantly; under reduced motion it only fades.\n- On a sheet, slotted `sc-button` actions get `full-width` and stack, primary first.\n\nParts: `dialog`, `panel`, `heading`, `close`, `countdown`, `actions`.\n",
+      "docs": "A modal dialog for a short secondary task or a decision that can't wait, such as the\nsession-timeout warning (TIME-02). On phones (under 600px) the same component is a bottom\nsheet.\n\nIt is a native `<dialog>` opened with `showModal()`, so the page behind is inert and focus\ncan't leave it. On open, focus goes to the heading (or, with `initial-focus=\"first\"`, the\nfirst control). Escape, the close button and a click on the scrim close it (an `alert`\ndialog ignores the scrim and has no close button), and focus returns to whatever had it\nbefore. A sheet can also be dragged down or flicked closed, never only that (WCAG 2.5.7).\n\nMotion: the dialog stays centred and enters with opacity and a slight scale over\n`--sc-duration-slow` (280ms) with the strong ease-out; the sheet slides up on\n`--sc-easing-drawer`. Both exit 20% faster (224ms). The scrim fades with them. Opened\nfrom the keyboard it appears instantly (MOT-02); under reduced motion it only fades.\n\nSession timeout: set `alert` and `countdown` (seconds). The time left shows as text,\nupdated every second, and is announced politely only once on open, at each whole minute\nand at 30 and 10 seconds, never every second. `scCountdownEnd` fires at zero; expiring\nnever submits anything (TIME-03).",
+      "docsTags": [
+        {
+          "name": "slot",
+          "text": "- The body: one or two short paragraphs."
+        },
+        {
+          "name": "slot",
+          "text": "actions - The buttons, primary first: `<sc-button slot=\"actions\">Stay signed in</sc-button>`. On a sheet they stack at full width."
+        },
+        {
+          "name": "part",
+          "text": "dialog - The native `<dialog>`."
+        },
+        {
+          "name": "part",
+          "text": "panel - The panel inside it (padding and layout)."
+        },
+        {
+          "name": "part",
+          "text": "heading - The heading that labels the dialog."
+        },
+        {
+          "name": "part",
+          "text": "close - The close button."
+        },
+        {
+          "name": "part",
+          "text": "countdown - The visible \"Time left\" line."
+        },
+        {
+          "name": "part",
+          "text": "actions - The wrapper of the actions slot."
+        }
+      ],
+      "usage": {},
+      "props": [
+        {
+          "name": "alert",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "alert",
+          "reflectToAttr": true,
+          "docs": "An alert dialog (`role=\"alertdialog\"`) for something that needs an answer, such as the\nsession timeout: a click on the scrim does not close it, and there is no close button;\nthe actions decide. Escape still closes it (reason `escape`).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "closeLabel",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "close-label",
+          "reflectToAttr": false,
+          "docs": "Overrides the close button's name (\"Close\" / \"إغلاق\").",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "countdown",
+          "type": "number | undefined",
+          "complexType": {
+            "original": "number",
+            "resolved": "number | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "countdown",
+          "reflectToAttr": false,
+          "docs": "Seconds left, for a countdown such as the session timeout. Shown as \"Time left: 1:45\" and\nannounced sparingly. Set it again (for example after \"Stay signed in\") to restart.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "heading",
+          "type": "string",
+          "complexType": {
+            "original": "string",
+            "resolved": "string",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "heading",
+          "reflectToAttr": false,
+          "docs": "The heading, which names the dialog: \"You will be signed out soon\".",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": true,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "headingLevel",
+          "type": "2 | 3",
+          "complexType": {
+            "original": "ModalHeadingLevel",
+            "resolved": "2 | 3",
+            "references": {
+              "ModalHeadingLevel": {
+                "location": "local",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-feedback/components/src/components/sc-modal/sc-modal.tsx",
+                "id": "src/components/sc-modal/sc-modal.tsx::ModalHeadingLevel"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "heading-level",
+          "reflectToAttr": false,
+          "docs": "The heading level. 2 for a dialog opened from the page (the default).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "2"
+            }
+          ],
+          "default": "2",
+          "values": [
+            {
+              "value": "2",
+              "type": "number"
+            },
+            {
+              "value": "3",
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "initialFocus",
+          "type": "\"first\" | \"heading\"",
+          "complexType": {
+            "original": "ModalInitialFocus",
+            "resolved": "\"first\" | \"heading\"",
+            "references": {
+              "ModalInitialFocus": {
+                "location": "local",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-feedback/components/src/components/sc-modal/sc-modal.tsx",
+                "id": "src/components/sc-modal/sc-modal.tsx::ModalInitialFocus"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "initial-focus",
+          "reflectToAttr": false,
+          "docs": "Where focus goes on open: the `heading` (default), or the `first` control in the body or actions.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'heading'"
+            }
+          ],
+          "default": "'heading'",
+          "values": [
+            {
+              "value": "first",
+              "type": "string"
+            },
+            {
+              "value": "heading",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "open",
+          "reflectToAttr": true,
+          "docs": "Whether the dialog is open. Set it, or call `show()` and `close()`.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "close",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<void>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "close() => Promise<void>",
+          "parameters": [],
+          "docs": "Closes the dialog and returns focus to where it was.",
+          "docsTags": []
+        },
+        {
+          "name": "show",
+          "returns": {
+            "type": "Promise<void>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<void>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<void>"
+          },
+          "signature": "show() => Promise<void>",
+          "parameters": [],
+          "docs": "Opens the dialog.",
+          "docsTags": []
+        }
+      ],
+      "events": [
+        {
+          "event": "scClose",
+          "detail": "{ reason: ModalCloseReason; }",
+          "bubbles": true,
+          "complexType": {
+            "original": "{ reason: ModalCloseReason }",
+            "resolved": "{ reason: ModalCloseReason; }",
+            "references": {
+              "ModalCloseReason": {
+                "location": "local",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-feedback/components/src/components/sc-modal/sc-modal.tsx",
+                "id": "src/components/sc-modal/sc-modal.tsx::ModalCloseReason"
+              }
+            }
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Fires when the dialog closes, with why: `close-button`, `escape`, `scrim`, `drag` or `method`.",
+          "docsTags": []
+        },
+        {
+          "event": "scCountdownEnd",
+          "detail": "void",
+          "bubbles": true,
+          "complexType": {
+            "original": "void",
+            "resolved": "void",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Fires when the countdown reaches zero. The dialog stays open; the service decides what happens.",
+          "docsTags": []
+        },
+        {
+          "event": "scOpen",
+          "detail": "void",
+          "bubbles": true,
+          "complexType": {
+            "original": "void",
+            "resolved": "void",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Fires after the dialog opens.",
+          "docsTags": []
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [
+        {
+          "name": "",
+          "docs": "The body: one or two short paragraphs."
+        },
+        {
+          "name": "actions",
+          "docs": "The buttons, primary first: `<sc-button slot=\"actions\">Stay signed in</sc-button>`. On a sheet they stack at full width."
+        }
+      ],
+      "parts": [
+        {
+          "name": "actions",
+          "docs": "The wrapper of the actions slot."
+        },
+        {
+          "name": "close",
+          "docs": "The close button."
+        },
+        {
+          "name": "countdown",
+          "docs": "The visible \"Time left\" line."
+        },
+        {
+          "name": "dialog",
+          "docs": "The native `<dialog>`."
+        },
+        {
+          "name": "heading",
+          "docs": "The heading that labels the dialog."
+        },
+        {
+          "name": "panel",
+          "docs": "The panel inside it (padding and layout)."
+        }
+      ],
+      "states": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/sc-notification-list/sc-notification-list.tsx",
+      "encapsulation": "scoped",
+      "tag": "sc-notification-list",
+      "readme": "# sc-notification-list\n\nA person's notifications, grouped by day. Each item is a link.\n\n## Usage\n\n```html\n<p>You have 1 unread notification.</p>\n<sc-notification-list>\n  <h2>Today</h2>\n  <ul>\n    <li data-unread>\n      <a href=\"/applications/A-2026-0412\">\n        <strong>Parking permit approved</strong>\n        <span>Your permit for Al Barsha is ready to download.</span>\n      </a>\n      <time datetime=\"2026-10-21T09:40\">09:40</time>\n    </li>\n  </ul>\n  <h2>Earlier</h2>\n  <ul>…</ul>\n</sc-notification-list>\n```\n\n- Light DOM: real headings and real lists. Each `<li>` holds one link (its first child is the title, the rest the body) and a `<time>`.\n- Unread (`data-unread`): `channel-subtle` fill, a dot in the channel colour, a Bold title and a visually hidden \"Unread:\" / \"غير مقروء:\" before the link text. Read: no fill, no dot, Medium title.\n- `markAllRead()` clears every unread item; the fills fade over 200ms when a pointer started it and change instantly from the keyboard (MOT-02). Put the unread count in the page lede.\n- Under 600px wide the time wraps under the body.\n- Name the service and one next action in each notification (NOTE-02), never sensitive details.\n",
+      "docs": "A person's notifications, grouped by day (\"Today\", \"Earlier\"). Light DOM (architecture\n§3.1): you write the headings and native lists, so each group is a real list under a real\nheading and the links are ordinary links.\n\n```html\n<sc-notification-list>\n  <h2>Today</h2>\n  <ul>\n    <li data-unread>\n      <a href=\"/applications/A-2026-0412\">\n        <strong>Parking permit approved</strong>\n        <span>Your permit for Al Barsha is ready to download.</span>\n      </a>\n      <time datetime=\"2026-10-21T09:40\">09:40</time>\n    </li>\n  </ul>\n  <h2>Earlier</h2>\n  <ul>…</ul>\n</sc-notification-list>\n\n```\n\nEach item is a link (its title and body), with the time beside it. An unread item\n(`data-unread`) has a `channel-subtle` fill, a dot in the channel colour, a Bold title and\na visually hidden \"Unread:\" before the link text, so unread is never colour alone; a read\nitem has no fill or dot and a Medium title. Each group is a card with 1px rules between\nrows. Under 600px wide the time wraps under the body.",
+      "docsTags": [
+        {
+          "name": "slot",
+          "text": "- Day headings (`h2`/`h3`) each followed by a `<ul>` of items."
+        }
+      ],
+      "usage": {},
+      "props": [],
+      "methods": [
+        {
+          "name": "markAllRead",
+          "returns": {
+            "type": "Promise<number>",
+            "docs": ""
+          },
+          "complexType": {
+            "signature": "() => Promise<number>",
+            "parameters": [],
+            "references": {
+              "Promise": {
+                "location": "global",
+                "id": "global::Promise"
+              }
+            },
+            "return": "Promise<number>"
+          },
+          "signature": "markAllRead() => Promise<number>",
+          "parameters": [],
+          "docs": "Marks every item as read. The fills fade over 200ms when a pointer started it; from the\nkeyboard the change is instant (MOT-02). Returns the number of items changed.",
+          "docsTags": []
+        }
+      ],
+      "events": [],
+      "listeners": [],
+      "styles": [],
+      "slots": [
+        {
+          "name": "",
+          "docs": "Day headings (`h2`/`h3`) each followed by a `<ul>` of items."
         }
       ],
       "parts": [],
@@ -5424,7 +6170,7 @@
             "references": {
               "ScSearchDetail": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-search/sc-search.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-feedback/components/src/components/sc-search/sc-search.tsx",
                 "id": "src/components/sc-search/sc-search.tsx::ScSearchDetail"
               }
             }
@@ -5944,7 +6690,7 @@
             "references": {
               "ServiceCardHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-service-card/sc-service-card.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-feedback/components/src/components/sc-service-card/sc-service-card.tsx",
                 "id": "src/components/sc-service-card/sc-service-card.tsx::ServiceCardHeadingLevel"
               }
             }
@@ -6125,8 +6871,8 @@
       "filePath": "src/components/sc-spinner/sc-spinner.tsx",
       "encapsulation": "shadow",
       "tag": "sc-spinner",
-      "readme": "# sc-spinner\n\nShows that something is loading: inline, 20px, in the current text colour. Inside a button, use `sc-button loading` instead. For a whole page, prefer showing content as soon as you can.\n\n## Usage\n\n```html\n<sc-spinner></sc-spinner>\n<sc-spinner show-label label=\"Checking your plate number\"></sc-spinner>\n```\n\n### Behaviour\n\n- The label (\"Loading\" / \"جارٍ التحميل\" by default) sits in a polite `role=\"status\"` region. It is visually hidden unless you set `show-label`.\n- Under `prefers-reduced-motion` the icon stops spinning (the `--sc-duration-spin` token is `0ms`) and the label is always shown, so the state never depends on motion.\n- It takes `currentColor`, so it matches the text around it. Put it in a channel-coloured container to use the channel action colour.\n\n### Content\n\n- Say what is loading when you can: \"Checking your plate number\", not just \"Loading\".\n- If loading takes more than a few seconds, add text that says what is happening and what to do if it doesn't finish.\n\n### Styling hooks\n\nParts: `icon`, `label`.\n",
-      "docs": "Shows that something is loading. Inline, 20px, in the current text colour.\n\nThe label (\"Loading\" by default) is visually hidden and sits in a polite status region.\nUnder `prefers-reduced-motion` the icon stops spinning and the label becomes visible,\nso the state never depends on motion.\n\nInside a button, use `sc-button loading` instead.",
+      "readme": "# sc-spinner\n\nA short inline wait, with a label saying what is loading. Inside a button, use `sc-button loading` instead.\n\n## Usage\n\n```html\n<sc-spinner label=\"Checking your plate number\"></sc-spinner>\n<sc-spinner show-label label=\"Checking your plate number\"></sc-spinner>\n<sc-spinner size=\"l\"></sc-spinner>\n```\n\n- 20px (`size=\"m\"`, inline with body text) or 24px (`size=\"l\"`), in `currentColor`.\n- One turn per `--sc-duration-spin` (600ms, linear): a faster spinner makes loading feel faster.\n- The label sits in a polite `role=\"status\"` region and is visually hidden unless `show-label` is set. Under reduced motion the arc stops and the label shows. It never mirrors.\n\nParts: `icon`, `label`.\n",
+      "docs": "Shows that something is loading: a short inline wait, with a label saying what.\n\nv2: 20px (`size=\"m\"`, inline) or 24px (`size=\"l\"`), in `currentColor`, turning once per\n`--sc-duration-spin` (600ms, linear: a faster spinner makes loading feel faster). The label\n(\"Loading\" by default) sits in a polite `role=\"status\"` region and is visually hidden.\nUnder `prefers-reduced-motion` the arc stops and the label shows, so the state never\ndepends on motion (MOT-15). It never mirrors.\n\nInside a button, use `sc-button loading` instead.",
       "docsTags": [
         {
           "name": "part",
@@ -6193,6 +6939,46 @@
           "required": false,
           "getter": false,
           "setter": false
+        },
+        {
+          "name": "size",
+          "type": "\"l\" | \"m\"",
+          "complexType": {
+            "original": "SpinnerSize",
+            "resolved": "\"l\" | \"m\"",
+            "references": {
+              "SpinnerSize": {
+                "location": "local",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-feedback/components/src/components/sc-spinner/sc-spinner.tsx",
+                "id": "src/components/sc-spinner/sc-spinner.tsx::SpinnerSize"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "size",
+          "reflectToAttr": true,
+          "docs": "`m` 20px, inline with body text (default); `l` 24px, standalone.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'m'"
+            }
+          ],
+          "default": "'m'",
+          "values": [
+            {
+              "value": "l",
+              "type": "string"
+            },
+            {
+              "value": "m",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
         }
       ],
       "methods": [],
@@ -6219,8 +7005,8 @@
       "filePath": "src/components/sc-status-tag/sc-status-tag.tsx",
       "encapsulation": "shadow",
       "tag": "sc-status-tag",
-      "readme": "# sc-status-tag\n\nThe status of a task, application or payment, usually in a list or next to a heading: \"Paid\", \"Action needed\", \"In review\", \"Expires in 15 days\". For a message the user must read, use `sc-callout`.\n\n## Usage\n\n```html\n<sc-status-tag tone=\"error\">Action needed</sc-status-tag>\n<sc-status-tag tone=\"success\">Paid</sc-status-tag>\n<sc-status-tag tone=\"warning\">Expires in 15 days</sc-status-tag>\n<sc-status-tag>In review</sc-status-tag>\n```\n\n### Which tone\n\n| Tone | Use it for |\n|---|---|\n| `neutral` (default) | A plain state with nothing to do yet: \"Draft\", \"In review\". |\n| `success` | Done: \"Paid\", \"Approved\", \"Completed\". |\n| `warning` | Needs attention soon: \"Expires in 15 days\". |\n| `error` | Blocked or failed: \"Action needed\", \"Payment failed\". |\n| `channel` | Deprecated: not a status in the vocabulary below. It logs a console warning and will be removed in the next major version. |\n\n### Status words\n\nServices show only the status words in the standard's status vocabulary (chapter 9.6), each with its fixed tone. Arabic forms agree with the noun they describe; task statuses agree with \"مهمة\".\n\n| Kind | Status | Arabic | Tone |\n|---|---|---|---|\n| Application | Draft | مسودة | `neutral` |\n| Application | Received | تم الاستلام | `neutral` |\n| Application | In review | قيد المراجعة | `neutral` |\n| Application | Action needed | إجراء مطلوب | `error` |\n| Application | Approved | تمت الموافقة | `success` |\n| Application | Not approved | لم تتم الموافقة | `neutral` |\n| Application | Completed | مكتمل | `success` |\n| Application | Withdrawn | تم السحب | `neutral` |\n| Application | Cancelled | تم الإلغاء | `neutral` |\n| Application | Expires in {n} days | ينتهي خلال {n} يومًا | `warning` |\n| Task | Not started | لم تبدأ | `neutral` |\n| Task | In progress | قيد التنفيذ | `neutral` |\n| Task | Completed | مكتملة | `success` |\n| Task | Cannot start yet | غير متاحة بعد | `neutral` |\n| Payment | Not paid | بانتظار الدفع | `warning` |\n| Payment | Checking payment | جارٍ التحقق من الدفع | `neutral` |\n| Payment | Paid | تم الدفع | `success` |\n| Payment | Payment failed | تعذّر الدفع | `error` |\n| Payment | Payment cancelled | تم إلغاء الدفع | `neutral` |\n| Payment | Refund requested | تم طلب الاسترداد | `neutral` |\n| Payment | Refund in progress | الاسترداد قيد التنفيذ | `neutral` |\n| Payment | Refunded | تم الاسترداد | `success` |\n\n\"Paid\" never stands for \"Approved\", and \"Received\" never stands for \"Completed\".\n\n### Content\n\n- Always write the status in words; the colour and dot only support them. Two or three words, sentence case, no full stop.\n- Use the words in the table below, the same everywhere in a service.\n- Digits stay Latin in Arabic (\"ينتهي خلال 15 يومًا\").\n- Not interactive and not announced on change. If the status changes while the user is on the page, also announce it (for example with a `role=\"status\"` region).\n\n### Styling hooks\n\nParts: `tag`, `dot`.\n",
-      "docs": "The status of a task, application or payment: \"Paid\", \"Action needed\", \"In review\",\n\"Expires in 15 days\". A pill with a status dot and the status words.\n\nThe words carry the meaning; the colour and the dot only support them. It isn't\ninteractive and isn't announced on change (use `sc-callout` or a live region for that).",
+      "readme": "# sc-status-tag\n\nThe status of an application, task or payment, in the words of the status vocabulary (Standard 9.6). Not interactive, and not announced when it changes.\n\n## Usage\n\n```html\n<sc-status-tag tone=\"success\">Paid</sc-status-tag>\n<sc-status-tag tone=\"error\">Action needed</sc-status-tag>\n<sc-status-tag tone=\"warning\">Expires in 15 days</sc-status-tag>\n<sc-status-tag>In review</sc-status-tag>\n```\n\n| Tone | Icon | Use it for |\n|---|---|---|\n| `neutral` (default) | pending | Draft, Received, In review, Not approved, Withdrawn, Cancelled, Not started, In progress |\n| `info` | hourglass | An informational state, where a service needs one. Standard 9.6 maps no status to it yet |\n| `success` | check circle | Approved, Completed, Paid |\n| `warning` | clock | Expires in {n} days |\n| `error` | error | Action needed, Payment failed |\n\n- v2 is a 32px chip with 6px corners: tone-40 words and icon on a tone-95 container, so status is never colour alone (A11Y-06). Neutral is neutral-40 on neutral-96.\n- There is **no channel tone**: status never takes a channel's colour. v1's `tone=\"channel\"` renders as `neutral`.\n- Two or three words. Use the vocabulary, in both languages (\"تم الدفع\", \"إجراء مطلوب\").\n\nPart: `tag`, `icon`.\n",
+      "docs": "The status of an application, task or payment, in the words of the status vocabulary\n(Standard 9.6): \"Paid\", \"Action needed\", \"In review\", \"Expires in 15 days\".\n\nv2: a 32px chip with a 6px radius, a tone icon and the words, tone-40 text on a tone-95\ncontainer (A11Y-06: never colour alone). It isn't interactive and isn't announced on\nchange (use `sc-callout` or a live region for that). There is no channel tone: status is\nnever in a channel's colour.",
       "docsTags": [
         {
           "name": "slot",
@@ -6228,25 +7014,25 @@
         },
         {
           "name": "part",
-          "text": "tag - The pill."
+          "text": "tag - The chip."
         },
         {
           "name": "part",
-          "text": "dot - The status dot."
+          "text": "icon - The tone icon (decorative)."
         }
       ],
       "usage": {},
       "props": [
         {
           "name": "tone",
-          "type": "\"channel\" | \"error\" | \"neutral\" | \"success\" | \"warning\"",
+          "type": "\"error\" | \"info\" | \"neutral\" | \"success\" | \"warning\"",
           "complexType": {
             "original": "StatusTagTone",
-            "resolved": "\"channel\" | \"error\" | \"neutral\" | \"success\" | \"warning\"",
+            "resolved": "\"error\" | \"info\" | \"neutral\" | \"success\" | \"warning\"",
             "references": {
               "StatusTagTone": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-status-tag/sc-status-tag.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-feedback/components/src/components/sc-status-tag/sc-status-tag.tsx",
                 "id": "src/components/sc-status-tag/sc-status-tag.tsx::StatusTagTone"
               }
             }
@@ -6254,7 +7040,7 @@
           "mutable": false,
           "attr": "tone",
           "reflectToAttr": true,
-          "docs": "- `neutral`: no action needed yet, or a plain state (\"Draft\", \"In review\").\n- `success`: done (\"Paid\", \"Approved\", \"Completed\").\n- `warning`: needs attention soon (\"Expires in 15 days\").\n- `error`: blocked or failed (\"Action needed\", \"Payment failed\").\n- `channel` (deprecated): highlights something in the current channel's colours. It is not\n  a status in the standard's vocabulary (9.6) and will be removed in the next major version.",
+          "docs": "- `neutral`: a plain state (\"Draft\", \"Received\", \"In review\", \"Not started\").\n- `info`: an informational state, where a service needs one (hourglass icon).\n- `success`: done (\"Paid\", \"Approved\", \"Completed\").\n- `warning`: needs attention soon (\"Expires in 15 days\").\n- `error`: blocked or waiting on the user (\"Action needed\", \"Payment failed\").\n\nAn unknown tone, including v1's removed `channel`, renders as `neutral`.",
           "docsTags": [
             {
               "name": "default",
@@ -6264,11 +7050,11 @@
           "default": "'neutral'",
           "values": [
             {
-              "value": "channel",
+              "value": "error",
               "type": "string"
             },
             {
-              "value": "error",
+              "value": "info",
               "type": "string"
             },
             {
@@ -6302,14 +7088,44 @@
       ],
       "parts": [
         {
-          "name": "dot",
-          "docs": "The status dot."
+          "name": "icon",
+          "docs": "The tone icon (decorative)."
         },
         {
           "name": "tag",
-          "docs": "The pill."
+          "docs": "The chip."
         }
       ],
+      "states": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/sc-step-list/sc-step-list.tsx",
+      "encapsulation": "scoped",
+      "tag": "sc-step-list",
+      "readme": "# sc-step-list\n\nA life event as an ordered list of services, possibly across channels (\"Moving home\" on the Dubai Now home page, direction E1).\n\n## Usage\n\n```html\n<sc-step-list>\n  <ol>\n    <li><a href=\"/tenancy\">Register your tenancy contract</a><span>Dubai Land Department</span></li>\n    <li><a href=\"/dewa\">Connect water and electricity</a><span>DEWA</span></li>\n    <li data-channel=\"transport\"><a href=\"https://transport.example/address\">Update the address on your vehicle</a><span>RTA</span></li>\n  </ol>\n</sc-step-list>\n```\n\n- Light DOM: you write the native `<ol>`; the list position is the number screen readers announce. The component adds a numbered marker (hidden from screen readers), a decorative chevron and, for another channel's row, the chip.\n- A row whose `data-channel` differs from the page's channel is attribution: it takes that channel's `channel-subtle` tint, a filled marker, connectors in that channel's colour to neighbouring rows of the same channel, and an outlined chip \"On Dubai Transport\" / \"على مواصلات دبي\".\n- The title is the only link; the row is not a link. Entities are attribution text, never colour.\n- Frameworks that render the list (React) should not re-render the nodes the component adds (`.sc-step-list__marker`, `.sc-step-list__end`).\n- Under 600px wide the chip moves under the entity.\n",
+      "docs": "A life event as an ordered list of services, possibly across channels (direction E1,\n\"Moving home\"). Light DOM: you write the native `<ol>`, so the list position is the number\nscreen readers announce.\n\n```html\n<sc-step-list>\n  <ol>\n    <li><a href=\"/tenancy\">Register your tenancy contract</a><span>Dubai Land Department</span></li>\n    <li data-channel=\"transport\"><a href=\"https://transport…/address\">Update the address on your vehicle</a><span>RTA</span></li>\n  </ol>\n</sc-step-list>\n```\n\nEach row has a 32px numbered marker joined by 2px connectors, the service title (the\nlink; the row is not a link), the owning entity, and a fixed trailing slot with a\ndecorative chevron. A row whose `data-channel` differs from the page's channel belongs to\nanother channel: it takes that channel's `channel-subtle` tint and filled marker, joins\nneighbouring rows of the same channel with that channel's colour, and gets an outlined\nattribution chip, \"On Dubai Transport\", which is read as text. The component adds the\nmarker, chip and chevron to each `<li>` (frameworks that own the list should not\nre-render those nodes). The marker column moves to the right in Arabic and the chevron\npoints left.",
+      "docsTags": [
+        {
+          "name": "slot",
+          "text": "- An `<ol>` of `<li>`, each with a link (`<a>`) and the entity (`<span>`)."
+        }
+      ],
+      "usage": {},
+      "props": [],
+      "methods": [],
+      "events": [],
+      "listeners": [],
+      "styles": [],
+      "slots": [
+        {
+          "name": "",
+          "docs": "An `<ol>` of `<li>`, each with a link (`<a>`) and the entity (`<span>`)."
+        }
+      ],
+      "parts": [],
       "states": [],
       "dependents": [],
       "dependencies": [],
@@ -6319,16 +7135,16 @@
       "filePath": "src/components/sc-step-progress/sc-step-progress.tsx",
       "encapsulation": "shadow",
       "tag": "sc-step-progress",
-      "readme": "# sc-step-progress\n\nShows where the user is in a short journey: \"Step 2 of 4\", the current step's name and a segmented track. Use it for linear journeys of 2 to about 7 question pages. Don't use it for long or branching journeys, where the total isn't known.\n\n## Usage\n\n```html\n<sc-step-progress current=\"2\" total=\"4\" label=\"Plate number\"></sc-step-progress>\n```\n\nIn D+ it sits in a glass capsule at the top of the page; the capsule is layout, not part of the component.\n\n### Behaviour\n\n- The text carries the meaning: \"Step 2 of 4\" / \"الخطوة 2 من 4\", with Latin digits in both languages. The track is decorative and hidden from assistive tech (`aria-hidden`).\n- Done segments and half of the current one are filled with the channel action colour; upcoming segments use the control colour. The track fills from the inline start, so from the right in Arabic.\n- `current` is clamped between 1 and `total`.\n- Override the wording with `count-text`, keeping the `{current}` and `{total}` placeholders.\n\n### Content\n\n- Count only the question pages: not the start page, \"Check your answers\" or the confirmation.\n- `label` is the current step's short name, matching the page's heading in spirit (\"Plate number\", \"Pay\").\n\n### Styling hooks\n\nParts: `meta`, `label`, `count`, `track`.\n",
-      "docs": "Shows where the user is in a short journey: \"Step 2 of 4\", with the current step's\nname and a segmented track.\n\nThe text carries the meaning; the track is decorative (`aria-hidden`). Done and\ncurrent segments use the channel action colour, upcoming ones the control colour;\nthe current segment is half filled. The track fills from the inline start,\nso from the right in Arabic. Digits stay Latin in both languages.",
+      "readme": "# sc-step-progress\n\nThe stepper: where the user is in a short linear journey of 2 to about 7 question pages (NAV-02). Don't use it for branching journeys whose length isn't known.\n\n## Usage\n\n```html\n<!-- Full from 600px wide, compact below -->\n<sc-step-progress current=\"2\">\n  <span>Vehicle</span><span>Plate number</span><span>Check answers</span><span>Pay</span>\n</sc-step-progress>\n\n<!-- Compact only, no step names -->\n<sc-step-progress current=\"2\" total=\"4\" label=\"Plate number\"></sc-step-progress>\n```\n\n- Completed and current steps take the channel action colour; completed ones carry a check, the current one an inner dot and a halo. Green is never used (U2, CMP-09).\n- `layout`: `auto` (default; full when step names are given and the component is at least 600px wide), `compact` or `full`.\n- Step names come from the host's child elements (read as text, never shown themselves) or the `steps` property. `current` is 1-based and clamped.\n- Full layout: an `<ol>` with `aria-current=\"step\"` on the current step and every state in words (\"Step 1 · Done\", a hidden \"Not started\"). Compact: the meta row (\"Step 2 of 4\") carries the meaning; the markers are hidden.\n- Steps run from the right in Arabic; digits stay Latin.\n\nParts: `meta`, `label`, `count`, `track`, `list`.\n",
+      "docs": "The stepper: where the user is in a short linear journey (NAV-02, CMP-09). Direction E's\nsignature component, replacing v1's segmented track.\n\nCompleted and current markers take the channel action colour (decision U2); completed\nmarkers carry a check, the current one an inner dot and a halo, upcoming ones a 2px\n`outline` edge. Green is never used: it is reserved for genuine success messages.\n\nTwo layouts:\n- **compact** (phones; E2–E4): a meta row (\"Plate number\" … \"Step 2 of 4\") that carries\n  the meaning, over a decorative (`aria-hidden`) row of 24px markers.\n- **full** (E0): an `<ol>` with one column per step: a 28px marker, a connector to the next\n  step (solid behind, dashed ahead), a state line (\"Step 1 · Done\") and the step name. The\n  current step has `aria-current=\"step\"`, and every step says its state in words.\n\n`layout=\"auto\"` (the default) shows the full stepper when step names are given and the\ncomponent is at least 600px wide (a container query), and the compact one otherwise.\n\nStep names come from the `steps` property or from the host's child elements, one per step\n(`<span>Vehicle</span><span>Plate number</span>…`): they are read as text and are not\nrendered themselves. `current` is 1-based and clamped (DDS F-036). Steps run from the\nright in Arabic; digits stay Latin.",
       "docsTags": [
         {
           "name": "part",
-          "text": "meta - The row with the step name and \"Step 2 of 4\"."
+          "text": "meta - The compact row with the step name and \"Step 2 of 4\"."
         },
         {
           "name": "part",
-          "text": "label - The current step's name."
+          "text": "label - The current step's name in the compact row."
         },
         {
           "name": "part",
@@ -6336,7 +7152,11 @@
         },
         {
           "name": "part",
-          "text": "track - The segmented track."
+          "text": "track - The compact marker row (decorative)."
+        },
+        {
+          "name": "part",
+          "text": "list - The full layout's `<ol>`."
         }
       ],
       "usage": {},
@@ -6352,7 +7172,7 @@
           "mutable": false,
           "attr": "count-text",
           "reflectToAttr": false,
-          "docs": "Overrides \"Step {current} of {total}\" (default from strings). Use `{current}` and\n`{total}` placeholders to keep the numbers.",
+          "docs": "Overrides \"Step {current} of {total}\". Use the `{current}` and `{total}` placeholders.",
           "docsTags": [],
           "values": [
             {
@@ -6378,7 +7198,7 @@
           "mutable": false,
           "attr": "current",
           "reflectToAttr": true,
-          "docs": "The current step, from 1. Clamped to `total`.",
+          "docs": "The current step, from 1. Clamped to 1…total.",
           "docsTags": [
             {
               "name": "default",
@@ -6407,11 +7227,80 @@
           "mutable": false,
           "attr": "label",
           "reflectToAttr": false,
-          "docs": "The current step's name, e.g. \"Plate number\". Shown at the start of the row.",
+          "docs": "The current step's name in the compact row, e.g. \"Plate number\". Defaults to the current step's name.",
           "docsTags": [],
           "values": [
             {
               "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "layout",
+          "type": "\"auto\" | \"compact\" | \"full\"",
+          "complexType": {
+            "original": "StepProgressLayout",
+            "resolved": "\"auto\" | \"compact\" | \"full\"",
+            "references": {
+              "StepProgressLayout": {
+                "location": "local",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-feedback/components/src/components/sc-step-progress/sc-step-progress.tsx",
+                "id": "src/components/sc-step-progress/sc-step-progress.tsx::StepProgressLayout"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "layout",
+          "reflectToAttr": true,
+          "docs": "`auto` (default): full from 600px wide when step names are given, else compact. `compact` or `full` force one.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'auto'"
+            }
+          ],
+          "default": "'auto'",
+          "values": [
+            {
+              "value": "auto",
+              "type": "string"
+            },
+            {
+              "value": "compact",
+              "type": "string"
+            },
+            {
+              "value": "full",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "steps",
+          "type": "string[] | undefined",
+          "complexType": {
+            "original": "string[]",
+            "resolved": "string[] | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "reflectToAttr": false,
+          "docs": "The step names, in order, set as a property from JavaScript. Used instead of child elements.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string[]"
             },
             {
               "type": "undefined"
@@ -6433,7 +7322,7 @@
           "mutable": false,
           "attr": "total",
           "reflectToAttr": true,
-          "docs": "How many steps there are. Count only the question pages, not \"Check your answers\" or the confirmation.",
+          "docs": "How many steps there are. Count only the question pages. Ignored when step names are given.",
           "docsTags": [
             {
               "name": "default",
@@ -6464,15 +7353,19 @@
         },
         {
           "name": "label",
-          "docs": "The current step's name."
+          "docs": "The current step's name in the compact row."
+        },
+        {
+          "name": "list",
+          "docs": "The full layout's `<ol>`."
         },
         {
           "name": "meta",
-          "docs": "The row with the step name and \"Step 2 of 4\"."
+          "docs": "The compact row with the step name and \"Step 2 of 4\"."
         },
         {
           "name": "track",
-          "docs": "The segmented track."
+          "docs": "The compact marker row (decorative)."
         }
       ],
       "states": [],
@@ -6523,7 +7416,7 @@
             "references": {
               "SummaryListAppearance": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-summary-list/sc-summary-list.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-feedback/components/src/components/sc-summary-list/sc-summary-list.tsx",
                 "id": "src/components/sc-summary-list/sc-summary-list.tsx::SummaryListAppearance"
               }
             }
@@ -7088,7 +7981,7 @@
             "references": {
               "SortDirection": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-table/sc-table.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-feedback/components/src/components/sc-table/sc-table.tsx",
                 "id": "src/components/sc-table/sc-table.tsx::SortDirection"
               }
             }
@@ -7714,7 +8607,7 @@
             "references": {
               "TextInputType": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-text-input/sc-text-input.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-feedback/components/src/components/sc-text-input/sc-text-input.tsx",
                 "id": "src/components/sc-text-input/sc-text-input.tsx::TextInputType"
               }
             }
@@ -7799,7 +8692,7 @@
             "references": {
               "TextInputWidth": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-infra/components/src/components/sc-text-input/sc-text-input.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-feedback/components/src/components/sc-text-input/sc-text-input.tsx",
                 "id": "src/components/sc-text-input/sc-text-input.tsx::TextInputWidth"
               }
             }
@@ -8461,6 +9354,106 @@
       "dependents": [],
       "dependencies": [],
       "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/sc-timeline/sc-timeline.tsx",
+      "encapsulation": "scoped",
+      "tag": "sc-timeline",
+      "readme": "# sc-timeline\n\nThe status history of an application: each change with its status, date and one line of detail.\n\n## Usage\n\n```html\n<sc-timeline>\n  <ol>\n    <li>\n      <sc-status-tag tone=\"error\">Action needed</sc-status-tag>\n      <time datetime=\"2026-10-20T09:40\">20 Oct 2026, 09:40</time>\n      <p>Upload a clearer copy of your Emirates ID.</p>\n    </li>\n    <li>\n      <sc-status-tag>In review</sc-status-tag>\n      <time datetime=\"2026-10-18T14:05\">18 Oct 2026, 14:05</time>\n      <p>RTA is checking your documents.</p>\n    </li>\n  </ol>\n</sc-timeline>\n```\n\n- Light DOM: you write the native list. Newest first by default (`order=\"oldest-first\"` to reverse).\n- The latest entry gets `aria-current=\"step\"`, and its 12px dot takes the tone of its `sc-status-tag`; earlier dots are `outline`. The status words are always in the tag.\n- `divided` adds 1px rules between entries, for a timeline inside a card.\n- Dates use Latin digits; Dubai W23's digits are tabular. The marker column moves to the right in Arabic.\n",
+      "docs": "The status history of an application: each change, with its status, date and a line of\ndetail. Light DOM (architecture §3.1): you write the native list, so screen readers count\nthe entries and nothing crosses a shadow boundary.\n\n```html\n<sc-timeline>\n  <ol>\n    <li>\n      <sc-status-tag tone=\"error\">Action needed</sc-status-tag>\n      <time datetime=\"2026-10-20T09:40\">20 Oct 2026, 09:40</time>\n      <p>Upload a clearer copy of your Emirates ID.</p>\n    </li>\n    …\n  </ol>\n</sc-timeline>\n```\n\nThe latest entry is the current step: it gets `aria-current=\"step\"`, and its 12px dot\ntakes the tone of its `sc-status-tag` (the status words are always in the tag). Earlier\ndots are `outline`; a 2px `outline-variant` connector joins them. Dates use Dubai W23's\ntabular Latin digits. The marker column moves to the right in Arabic.",
+      "docsTags": [
+        {
+          "name": "slot",
+          "text": "- An `<ol>` with one `<li>` per status change, newest first by default."
+        }
+      ],
+      "usage": {},
+      "props": [
+        {
+          "name": "divided",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "divided",
+          "reflectToAttr": true,
+          "docs": "Draws a 1px `outline-variant` rule between entries, for a timeline inside a card.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "order",
+          "type": "\"newest-first\" | \"oldest-first\"",
+          "complexType": {
+            "original": "TimelineOrder",
+            "resolved": "\"newest-first\" | \"oldest-first\"",
+            "references": {
+              "TimelineOrder": {
+                "location": "local",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-feedback/components/src/components/sc-timeline/sc-timeline.tsx",
+                "id": "src/components/sc-timeline/sc-timeline.tsx::TimelineOrder"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "order",
+          "reflectToAttr": true,
+          "docs": "Which end of the list is the latest (current) entry.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'newest-first'"
+            }
+          ],
+          "default": "'newest-first'",
+          "values": [
+            {
+              "value": "newest-first",
+              "type": "string"
+            },
+            {
+              "value": "oldest-first",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [],
+      "listeners": [],
+      "styles": [],
+      "slots": [
+        {
+          "name": "",
+          "docs": "An `<ol>` with one `<li>` per status change, newest first by default."
+        }
+      ],
+      "parts": [],
+      "states": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
     }
   ],
   "typeLibrary": {
@@ -8480,7 +9473,7 @@
       "path": "src/components/sc-button/sc-button.tsx"
     },
     "src/icons/index.tsx::IconName": {
-      "declaration": "\"info\" | \"external\" | \"close\" | \"search\" | \"arrow-forward\" | \"chevron-forward\" | \"chevron-back\" | \"alert-circle\" | \"check-circle\" | \"warning\" | \"spinner\"",
+      "declaration": "\"info\" | \"external\" | \"close\" | \"search\" | \"arrow-forward\" | \"chevron-forward\" | \"chevron-back\" | \"alert-circle\" | \"check-circle\" | \"warning\" | \"spinner\" | \"check\" | \"schedule\" | \"hourglass\" | \"pending\" | \"inbox\"",
       "docstring": "",
       "path": "src/icons/index.tsx"
     },
@@ -8514,6 +9507,16 @@
       "docstring": "",
       "path": "src/components/sc-container/sc-container.tsx"
     },
+    "src/components/sc-empty-state/sc-empty-state.tsx::EmptyStateHeadingLevel": {
+      "declaration": "export type EmptyStateHeadingLevel = 2 | 3 | 4;",
+      "docstring": "",
+      "path": "src/components/sc-empty-state/sc-empty-state.tsx"
+    },
+    "src/components/sc-empty-state/sc-empty-state.tsx::EmptyStateVariant": {
+      "declaration": "export type EmptyStateVariant = 'default' | 'success';",
+      "docstring": "",
+      "path": "src/components/sc-empty-state/sc-empty-state.tsx"
+    },
     "src/components/sc-error-summary/sc-error-summary.tsx::ErrorSummaryItem": {
       "declaration": "export interface ErrorSummaryItem {\n  /** Fragment link to the field, e.g. `#plate-number`. */\n  href: string;\n  /** The error message, exactly as it appears next to the field. */\n  text: string;\n}",
       "docstring": "One error in the summary: a link to the field with the problem and the message to show.",
@@ -8529,6 +9532,21 @@
       "docstring": "",
       "path": "src/components/sc-language-switch/sc-language-switch.tsx"
     },
+    "src/components/sc-modal/sc-modal.tsx::ModalHeadingLevel": {
+      "declaration": "export type ModalHeadingLevel = 2 | 3;",
+      "docstring": "",
+      "path": "src/components/sc-modal/sc-modal.tsx"
+    },
+    "src/components/sc-modal/sc-modal.tsx::ModalInitialFocus": {
+      "declaration": "export type ModalInitialFocus = 'heading' | 'first';",
+      "docstring": "",
+      "path": "src/components/sc-modal/sc-modal.tsx"
+    },
+    "src/components/sc-modal/sc-modal.tsx::ModalCloseReason": {
+      "declaration": "export type ModalCloseReason = 'close-button' | 'escape' | 'scrim' | 'drag' | 'method';",
+      "docstring": "",
+      "path": "src/components/sc-modal/sc-modal.tsx"
+    },
     "src/components/sc-search/sc-search.tsx::ScSearchDetail": {
       "declaration": "export interface ScSearchDetail {\n  /** The query as typed, trimmed. */\n  value: string;\n}",
       "docstring": "",
@@ -8539,10 +9557,20 @@
       "docstring": "",
       "path": "src/components/sc-service-card/sc-service-card.tsx"
     },
+    "src/components/sc-spinner/sc-spinner.tsx::SpinnerSize": {
+      "declaration": "export type SpinnerSize = 'm' | 'l';",
+      "docstring": "",
+      "path": "src/components/sc-spinner/sc-spinner.tsx"
+    },
     "src/components/sc-status-tag/sc-status-tag.tsx::StatusTagTone": {
-      "declaration": "export type StatusTagTone = 'neutral' | 'success' | 'warning' | 'error' | 'channel';",
+      "declaration": "export type StatusTagTone = 'neutral' | 'info' | 'success' | 'warning' | 'error';",
       "docstring": "",
       "path": "src/components/sc-status-tag/sc-status-tag.tsx"
+    },
+    "src/components/sc-step-progress/sc-step-progress.tsx::StepProgressLayout": {
+      "declaration": "export type StepProgressLayout = 'auto' | 'compact' | 'full';",
+      "docstring": "",
+      "path": "src/components/sc-step-progress/sc-step-progress.tsx"
     },
     "src/components/sc-summary-list/sc-summary-list.tsx::SummaryListAppearance": {
       "declaration": "export type SummaryListAppearance = 'card' | 'plain';",
@@ -8573,6 +9601,11 @@
       "declaration": "export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;",
       "docstring": "",
       "path": "src/components/sc-text-input/field.tsx"
+    },
+    "src/components/sc-timeline/sc-timeline.tsx::TimelineOrder": {
+      "declaration": "export type TimelineOrder = 'newest-first' | 'oldest-first';",
+      "docstring": "",
+      "path": "src/components/sc-timeline/sc-timeline.tsx"
     },
     "src/i18n/strings.ts::Channel": {
       "declaration": "\"build\" | \"now\" | \"transport\" | \"visit\" | \"justice\" | \"invest\" | \"trade\"",

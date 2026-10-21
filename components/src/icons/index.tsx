@@ -132,6 +132,49 @@ export const Close: FunctionalComponent<IconProps> = (p) => (
   </Svg>
 );
 
+/** Check mark (completed stepper steps). Not mirrored. */
+export const Check: FunctionalComponent<IconProps> = (p) => (
+  <Svg {...p}>
+    <path d="M5 12.5l4.5 4.5L19 7.5" />
+  </Svg>
+);
+
+/** Clock (status: "Expires in 15 days"). Time runs clockwise in both scripts: not mirrored. */
+export const Schedule: FunctionalComponent<IconProps> = (p) => (
+  <Svg {...p}>
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 7v5l3.5 2" />
+  </Svg>
+);
+
+/** Hourglass (status: "In review"). Not mirrored. */
+export const Hourglass: FunctionalComponent<IconProps> = (p) => (
+  <Svg {...p}>
+    <path d="M6.5 3.5h11" />
+    <path d="M6.5 20.5h11" />
+    <path d="M7.5 3.5c0 4.5 4.5 5.5 4.5 8.5s-4.5 4-4.5 8.5" />
+    <path d="M16.5 3.5c0 4.5-4.5 5.5-4.5 8.5s4.5 4 4.5 8.5" />
+  </Svg>
+);
+
+/** Pending (neutral status: "Draft", "Received"). A circle with three dots. Not mirrored. */
+export const Pending: FunctionalComponent<IconProps> = (p) => (
+  <Svg {...p}>
+    <circle cx="12" cy="12" r="9" />
+    <circle cx="8" cy="12" r="1.1" fill="currentColor" stroke="none" />
+    <circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none" />
+    <circle cx="16" cy="12" r="1.1" fill="currentColor" stroke="none" />
+  </Svg>
+);
+
+/** Inbox (empty states: "You have no notifications"). Not mirrored. */
+export const Inbox: FunctionalComponent<IconProps> = (p) => (
+  <Svg {...p}>
+    <path d="M4 13.5l2.4-8a1.5 1.5 0 0 1 1.44-1h8.32a1.5 1.5 0 0 1 1.44 1l2.4 8" />
+    <path d="M4 13.5V18a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 20 18v-4.5h-4.5l-1 2h-5l-1-2z" />
+  </Svg>
+);
+
 /** Every icon by name, for components that take an `icon` prop. */
 export const icons = {
   'arrow-forward': ArrowForward,
@@ -145,6 +188,11 @@ export const icons = {
   'spinner': Spinner,
   'search': Search,
   'close': Close,
+  'check': Check,
+  'schedule': Schedule,
+  'hourglass': Hourglass,
+  'pending': Pending,
+  'inbox': Inbox,
 } as const;
 
 export type IconName = keyof typeof icons;

@@ -1,4 +1,8 @@
-
+/*
+ * sc-status-tag (v2, shadow). Rules: component-language.md A18 read through the role table
+ * in decisions.md; tone-40 text and icon on a tone-95 container. Neutral is neutral-40
+ * (on-surface-variant) on neutral-96 (surface-container).
+ */
 :host {
   display: inline-block;
   vertical-align: middle;
@@ -10,54 +14,49 @@
 }
 
 .tag {
-  /* Tone roles (set per tone below). Neutral is the default. */
-  --_fill: var(--sc-color-fill-quiet);
-  --_ink: var(--sc-color-ink);
-  --_dot: var(--sc-color-muted);
+  --_fill: var(--sc-color-surface-container);
+  --_ink: var(--sc-color-on-surface-variant);
+  --icon-size: var(--sc-size-icon-s);
 
-  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   gap: var(--sc-space-6);
   max-inline-size: 100%;
-  padding-block: var(--sc-space-2);
-  padding-inline: var(--sc-space-8) var(--sc-space-12);
+  min-block-size: var(--sc-size-chip);
+  padding-block: var(--sc-space-4);
+  padding-inline: var(--sc-space-12);
+  /* Transparent until forced colours repaint it, so the chip keeps its shape there. */
   border: var(--sc-size-border-hairline) solid transparent;
-  border-radius: var(--sc-radius-pill);
+  border-radius: var(--sc-radius-chip);
   background: var(--_fill);
   color: var(--_ink);
+  font: var(--sc-type-label-small);
+  letter-spacing: var(--sc-type-label-small-tracking);
+}
+
+.tag--info {
+  --_fill: var(--sc-color-info-container);
+  --_ink: var(--sc-color-info);
 }
 
 .tag--success {
-  --_fill: var(--sc-color-success-surface);
+  --_fill: var(--sc-color-success-container);
   --_ink: var(--sc-color-success);
-  --_dot: var(--sc-color-success);
 }
 
 .tag--warning {
-  --_fill: var(--sc-color-warning-surface);
+  --_fill: var(--sc-color-warning-container);
   --_ink: var(--sc-color-warning);
-  --_dot: var(--sc-color-warning);
 }
 
 .tag--error {
-  --_fill: var(--sc-color-error-surface);
+  --_fill: var(--sc-color-error-container);
   --_ink: var(--sc-color-error);
-  --_dot: var(--sc-color-error);
 }
 
-.tag--channel {
-  --_fill: var(--sc-channel-subtle);
-  --_ink: var(--sc-channel-ink);
-  --_dot: var(--sc-channel-action);
-}
-
-.dot {
+.icon-box {
+  display: inline-flex;
   flex: none;
-  inline-size: var(--sc-space-8);
-  block-size: var(--sc-space-8);
-  border-radius: var(--sc-radius-pill);
-  background: var(--_dot);
 }
 
 .label {
@@ -68,9 +67,5 @@
 @media (forced-colors: active) {
   .tag {
     border-color: CanvasText;
-  }
-  .dot {
-    background: CanvasText;
-    forced-color-adjust: none;
   }
 }

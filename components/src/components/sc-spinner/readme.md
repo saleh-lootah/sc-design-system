@@ -1,26 +1,18 @@
 # sc-spinner
 
-Shows that something is loading: inline, 20px, in the current text colour. Inside a button, use `sc-button loading` instead. For a whole page, prefer showing content as soon as you can.
+A short inline wait, with a label saying what is loading. Inside a button, use `sc-button loading` instead.
 
 ## Usage
 
 ```html
-<sc-spinner></sc-spinner>
+<sc-spinner label="Checking your plate number"></sc-spinner>
 <sc-spinner show-label label="Checking your plate number"></sc-spinner>
+<sc-spinner size="l"></sc-spinner>
 ```
 
-### Behaviour
-
-- The label ("Loading" / "جارٍ التحميل" by default) sits in a polite `role="status"` region. It is visually hidden unless you set `show-label`.
-- Under `prefers-reduced-motion` the icon stops spinning (the `--sc-duration-spin` token is `0ms`) and the label is always shown, so the state never depends on motion.
-- It takes `currentColor`, so it matches the text around it. Put it in a channel-coloured container to use the channel action colour.
-
-### Content
-
-- Say what is loading when you can: "Checking your plate number", not just "Loading".
-- If loading takes more than a few seconds, add text that says what is happening and what to do if it doesn't finish.
-
-### Styling hooks
+- 20px (`size="m"`, inline with body text) or 24px (`size="l"`), in `currentColor`.
+- One turn per `--sc-duration-spin` (600ms, linear): a faster spinner makes loading feel faster.
+- The label sits in a polite `role="status"` region and is visually hidden unless `show-label` is set. Under reduced motion the arc stops and the label shows. It never mirrors.
 
 Parts: `icon`, `label`.
 
@@ -29,11 +21,13 @@ Parts: `icon`, `label`.
 
 ## Overview
 
-Shows that something is loading. Inline, 20px, in the current text colour.
+Shows that something is loading: a short inline wait, with a label saying what.
 
-The label ("Loading" by default) is visually hidden and sits in a polite status region.
-Under `prefers-reduced-motion` the icon stops spinning and the label becomes visible,
-so the state never depends on motion.
+v2: 20px (`size="m"`, inline) or 24px (`size="l"`), in `currentColor`, turning once per
+`--sc-duration-spin` (600ms, linear: a faster spinner makes loading feel faster). The label
+("Loading" by default) sits in a polite `role="status"` region and is visually hidden.
+Under `prefers-reduced-motion` the arc stops and the label shows, so the state never
+depends on motion (MOT-15). It never mirrors.
 
 Inside a button, use `sc-button loading` instead.
 
@@ -43,6 +37,7 @@ Inside a button, use `sc-button loading` instead.
 | ----------- | ------------ | ------------------------------------------------------------------------------------------- | --------------------- | ----------- |
 | `label`     | `label`      | What is loading, e.g. "Checking your plate number". Defaults to "Loading" / "جارٍ التحميل". | `string \| undefined` | `undefined` |
 | `showLabel` | `show-label` | Shows the label next to the spinner at all times, not only under reduced motion.            | `boolean`             | `false`     |
+| `size`      | `size`       | `m` 20px, inline with body text (default); `l` 24px, standalone.                            | `"l" \| "m"`          | `'m'`       |
 
 
 ## Shadow Parts

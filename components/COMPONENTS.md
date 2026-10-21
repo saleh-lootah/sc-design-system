@@ -141,3 +141,29 @@ The first 24 components, in four families, plus the components added after Phase
 - States: `loading` (5 skeleton rows), `empty` slot (header hidden), `filtered` (no results, header kept), `error` slot (an `sc-callout tone="error"`), `density="compact"` (44px rows).
 - Below 600px: `responsive="stack"` (rows become cards) or `"scroll"` (a named scroll region with a sticky row header and an edge shadow).
 - Mirrors fully in Arabic through logical properties; digits stay Latin.
+
+---
+
+## v2 · Feedback and status (Wave 2b, C4)
+
+Rebuilt to direction E (`docs/v2/component-language.md`); full specs in `specs/<tag>.md`.
+
+**Callout** (`sc-callout`, shadow): tone-95 container, 3px tone accent at inline-start, 24px tone icon, hidden tone word. Tones `info`, `success`, `warning`, `error`.
+
+**ErrorSummary** (`sc-error-summary`, shadow): error-container box with a 2px error border; takes focus, `role="group"` named by its heading, no `role="alert"` (CMP-05). "There is a problem" / "توجد مشكلة".
+
+**StatusTag** (`sc-status-tag`, shadow): 32px chip, 6px radius, icon plus words, tone-40 on tone-95. Tones `neutral`, `info`, `success`, `warning`, `error`; no channel tone.
+
+**Spinner** (`sc-spinner`, shadow): 20 or 24px, `currentColor`, 600ms per turn, label in a status region.
+
+**StepProgress** (`sc-step-progress`, shadow): the E stepper. 28px markers (24 compact), channel-coloured done (with a check) and current (with a halo), never green. Full `<ol>` from 600px when step names are given; compact "Step 2 of 4" below.
+
+**StepList** (`sc-step-list`, light DOM, new): the E1 life-event list. Numbered markers, connectors, other-channel rows in that channel's subtle with an "On Dubai Transport" chip.
+
+**Timeline** (`sc-timeline`, light DOM, new): application status history; the latest entry is current and takes its tag's tone.
+
+**NotificationList** (`sc-notification-list`, light DOM, new): grouped by day; each item a link; unread with fill, dot, Bold and hidden words; `markAllRead()`.
+
+**EmptyState** (`sc-empty-state`, shadow, new): icon, sentence heading, body, one action; `variant="success"` for the all-clear.
+
+**Modal** (`sc-modal`, shadow, new): native `<dialog>`; focus to the heading, Escape, scrim, focus return; `alert` for the session timeout with a sensibly announced `countdown`; a bottom sheet under 600px on the drawer curve.

@@ -18,3 +18,16 @@ sc-button:not(:defined):is([variant='secondary'], [variant='tertiary'], [size='m
 sc-button:not(:defined)[full-width] {
   display: block;
 }
+
+/* Feedback and status (C4). The light-DOM lists show the author's native list at once, as
+   a block; a modal's content never flashes on the page before it upgrades; step names given
+   as children of sc-step-progress are data, never shown. */
+sc-timeline:not(:defined),
+sc-notification-list:not(:defined),
+sc-step-list:not(:defined) {
+  display: block;
+}
+sc-modal:not(:defined),
+sc-step-progress:not(:defined) > * {
+  display: none;
+}

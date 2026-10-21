@@ -1,0 +1,24 @@
+<h1 class="pg-title sc-type-headline-large" data-ar="السجل الزمني">Timeline</h1>
+<p class="pg-lede sc-type-body-large" data-ar="سجل حالات الطلب، الأحدث أولًا. الإدخال الأحدث هو الخطوة الحالية، ونقطته بلون حالته.">
+  The status history of an application, newest first. The latest entry is the current step, and its dot takes its status tone.
+</p>
+
+<section class="pg-section" aria-labelledby="tl-demo">
+  <h2 id="tl-demo" class="sc-type-headline-small" data-ar="الطلب A-2026-0412">Application A-2026-0412</h2>
+  <div class="pg-card">
+    <sc-timeline divided>
+      <ol>
+        <li><sc-status-tag tone="error"><span data-ar="إجراء مطلوب">Action needed</span></sc-status-tag><time datetime="2026-10-20T09:40" data-ar="20 أكتوبر 2026، 09:40">20 Oct 2026, 09:40</time><p data-ar="يُرجى تحميل نسخة أوضح من الهوية الإماراتية.">Upload a clearer copy of your Emirates ID.</p></li>
+        <li><sc-status-tag><span data-ar="قيد المراجعة">In review</span></sc-status-tag><time datetime="2026-10-18T14:05" data-ar="18 أكتوبر 2026، 14:05">18 Oct 2026, 14:05</time><p data-ar="تراجع هيئة الطرق والمواصلات مستنداتك.">RTA is checking your documents.</p></li>
+        <li><sc-status-tag><span data-ar="تم الاستلام">Received</span></sc-status-tag><time datetime="2026-10-17T11:12" data-ar="17 أكتوبر 2026، 11:12">17 Oct 2026, 11:12</time><p data-ar="تم استلام طلبك.">We received your application.</p></li>
+      </ol>
+    </sc-timeline>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="tl-notes">
+  <h2 id="tl-notes" class="sc-type-headline-small" data-ar="ملاحظات">Notes</h2>
+  <div class="pg-card">
+    <p class="pg-note" data-ar="نقطة 12 بكسل في عمود ثابت بعرض 24 بكسل، وموصل بسماكة 2 بكسل. التواريخ بأرقام لاتينية متساوية العرض. ينتقل عمود العلامات إلى اليمين في العربية.">12px dots in a fixed 24px column, joined by a 2px outline-variant connector; divided adds 1px rules for a timeline in a card. Dates use Dubai W23's tabular Latin digits. The marker column moves to the right in Arabic.</p>
+  </div>
+</section>

@@ -1,12 +1,80 @@
-
+/*
+ * sc-step-progress (v2, shadow): the E stepper. Rules: component-language.md A20 read through
+ * the role table in decisions.md, with U2 / CMP-09 (completed steps in the channel action
+ * colour with a check; never green). Halo: compact 4px channel-container (CL's
+ * channel-container-high), full 5px channel-subtle (CL's channel-container).
+ */
 :host {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sc-space-12);
+  /* The full layout appears from 600px of its own width (--sc-breakpoint-medium). */
+  container: sc-step-progress / inline-size;
+  display: block;
+  inline-size: 100%;
+  color: var(--sc-color-on-surface);
 }
 
 :host([hidden]) {
   display: none;
+}
+
+/* Markers ------------------------------------------------------------------------------ */
+.marker {
+  --_size: calc(var(--sc-size-stepper-marker) - var(--sc-space-4));
+  --_halo: var(--sc-space-4);
+  --_halo-colour: var(--sc-color-channel-container);
+  --_dot: var(--sc-space-8);
+  --icon-size: var(--sc-size-icon-s);
+
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--_size);
+  block-size: var(--_size);
+  border-radius: var(--sc-radius-full);
+  background: var(--sc-color-channel-action);
+  color: var(--sc-color-channel-on-action);
+}
+
+.marker--current {
+  box-shadow: 0 0 0 var(--_halo) var(--_halo-colour);
+}
+
+.marker--current::after {
+  content: '';
+  inline-size: var(--_dot);
+  block-size: var(--_dot);
+  border-radius: var(--sc-radius-full);
+  background: currentColor;
+}
+
+.marker--upcoming {
+  border: var(--sc-size-border-strong) solid var(--sc-color-outline);
+  background: var(--sc-color-surface);
+}
+
+.marker > svg {
+  stroke-width: 3;
+}
+
+/* Connectors: solid channel action behind the current step, dashed outline ahead. */
+.connector {
+  flex: 1 1 0;
+  min-inline-size: var(--sc-space-8);
+  block-size: 0;
+  border-block-start: var(--sc-size-border-strong) dashed var(--sc-color-outline);
+}
+
+.connector--done {
+  border-block-start-style: solid;
+  border-block-start-color: var(--sc-color-channel-action);
+}
+
+/* Compact (E2–E4) ---------------------------------------------------------------------- */
+.compact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sc-space-12);
 }
 
 .meta {
@@ -19,58 +87,124 @@
 
 .label {
   min-inline-size: 0;
-  color: var(--sc-color-ink-strong);
-  font-family: var(--sc-font-family-bold);
+  font: var(--sc-type-title-small);
   font-weight: var(--sc-font-weight-bold);
+  letter-spacing: var(--sc-type-title-small-tracking);
   overflow-wrap: anywhere;
 }
 
 /* "Step 2 of 4" stays at the end of the row even without a label. */
 .count {
   margin-inline-start: auto;
-  color: var(--sc-color-muted);
-  font-variant-numeric: tabular-nums;
+  color: var(--sc-color-on-surface-variant);
+  font: var(--sc-type-body-medium);
+  letter-spacing: var(--sc-type-body-medium-tracking);
   white-space: nowrap;
 }
 
-/* Track -------------------------------------------------------------------------------- */
-
+/* Padding 4 around the row, so the halo is never clipped. */
 .track {
   display: flex;
-  gap: var(--sc-space-4);
-  block-size: var(--sc-size-progress);
+  align-items: center;
+  gap: var(--sc-space-6);
+  padding: var(--sc-space-4);
 }
 
-.segment {
-  position: relative;
+/* Full (E0) ---------------------------------------------------------------------------- */
+.full {
+  display: flex;
+  margin: 0;
+  padding: var(--sc-space-6) 0 0;
+  list-style: none;
+}
+
+.step {
+  display: flex;
   flex: 1 1 0;
+  flex-direction: column;
+  gap: var(--sc-space-4);
   min-inline-size: 0;
-  overflow: hidden;
-  border-radius: var(--sc-radius-pill);
-  background: var(--sc-color-control);
 }
 
-.segment--done {
-  background: var(--sc-channel-action);
+.step:last-child {
+  flex: 0 1 auto;
 }
 
-/* The current segment is half filled from the inline start (the right in Arabic). */
-.segment--current::before {
-  content: '';
-  position: absolute;
-  inset-block: 0;
-  inset-inline-start: 0;
-  inline-size: 50%;
-  background: var(--sc-channel-action);
+.rail {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-8);
+  margin-block-end: var(--sc-space-12);
+  padding-inline-end: var(--sc-space-8);
 }
 
-@media (forced-colors: active) {
-  .segment {
-    forced-color-adjust: none;
-    background: GrayText;
+.step:last-child .rail {
+  padding-inline-end: 0;
+}
+
+.full .marker {
+  --_size: var(--sc-size-stepper-marker);
+  --_halo: calc(var(--sc-space-4) + 1px);
+  --_halo-colour: var(--sc-color-channel-subtle);
+  --_dot: calc(var(--sc-space-8) + var(--sc-space-2));
+  --icon-size: calc(var(--sc-size-icon-s) + var(--sc-space-2));
+}
+
+.state {
+  color: var(--sc-color-on-surface-variant);
+  font: var(--sc-type-label-small);
+  letter-spacing: var(--sc-type-label-small-tracking);
+}
+
+.step--current .state {
+  color: var(--sc-color-channel-action);
+}
+
+.name {
+  padding-inline-end: var(--sc-space-16);
+  font: var(--sc-type-title-small);
+  font-weight: var(--sc-font-weight-bold);
+  letter-spacing: var(--sc-type-title-small-tracking);
+  overflow-wrap: anywhere;
+}
+
+.step--upcoming .name {
+  color: var(--sc-color-on-surface-variant);
+  font-weight: var(--sc-font-weight-medium);
+}
+
+/* auto: full from 600px when names are given, compact below. */
+:host(.layout-auto.has-full) .compact {
+  display: none;
+}
+
+@container sc-step-progress (max-width: 599.98px) {
+  :host(.layout-auto.has-full) .compact {
+    display: flex;
   }
-  .segment--done,
-  .segment--current::before {
+  :host(.layout-auto) .full {
+    display: none;
+  }
+}
+
+/* Forced colours: the state stays visible through shapes (check, dot, edge). */
+@media (forced-colors: active) {
+  .marker {
+    forced-color-adjust: none;
     background: Highlight;
+    color: HighlightText;
+  }
+  .marker--current {
+    box-shadow: none;
+  }
+  .marker--upcoming {
+    border-color: GrayText;
+    background: Canvas;
+  }
+  .connector {
+    border-block-start-color: GrayText;
+  }
+  .connector--done {
+    border-block-start-color: Highlight;
   }
 }

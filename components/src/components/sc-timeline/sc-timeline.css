@@ -1,0 +1,133 @@
+/*
+ * sc-timeline (v2, scoped / light DOM). Rules: component-language.md B16 read through the
+ * role table in decisions.md. Stencil rewrites `::slotted(ol) li` to `.sc-sc-timeline-s > ol
+ * li`, so the rules reach the author's list. Each block opens with a :host rule (Stencil's
+ * scoper mangles a block whose first rule is ::slotted).
+ *
+ * Marker column 24 wide; the 12px dot is centred and its centre meets the 32px tag's.
+ */
+@layer sc.components {
+  :host {
+    --_col: var(--sc-space-24);
+    --_dot: var(--sc-space-12);
+    --_dot-top: calc((var(--sc-size-chip) - var(--sc-space-12)) / 2);
+    --_gap: var(--sc-space-20);
+    display: block;
+    color: var(--sc-color-on-surface);
+  }
+
+  :host([hidden]) {
+    display: none;
+  }
+
+  ::slotted(ol),
+  ::slotted(ul) {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  ::slotted(ol) > li,
+  ::slotted(ul) > li {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--sc-space-4);
+    padding-inline-start: calc(var(--_col) + var(--sc-space-12));
+    padding-block-end: var(--_gap);
+  }
+
+  ::slotted(ol) > li + li,
+  ::slotted(ul) > li + li {
+    padding-block-start: 0;
+  }
+
+  /* The dot. */
+  ::slotted(ol) > li::before,
+  ::slotted(ul) > li::before {
+    content: '';
+    position: absolute;
+    inset-block-start: var(--_dot-top);
+    inset-inline-start: calc((var(--_col) - var(--_dot)) / 2);
+    inline-size: var(--_dot);
+    block-size: var(--_dot);
+    border-radius: var(--sc-radius-full);
+    background: var(--sc-color-outline);
+  }
+
+  /* The connector, from below this dot to the next dot. */
+  ::slotted(ol) > li:not(:last-child)::after,
+  ::slotted(ul) > li:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    inset-block: calc(var(--_dot-top) + var(--_dot) + var(--sc-space-4)) calc(var(--sc-space-4) - var(--_dot-top));
+    inset-inline-start: calc((var(--_col) - var(--sc-size-border-strong)) / 2);
+    inline-size: var(--sc-size-border-strong);
+    background: var(--sc-color-outline-variant);
+  }
+
+  ::slotted(ol) > li[data-tone='info']::before { background: var(--sc-color-info); }
+  ::slotted(ol) > li[data-tone='success']::before { background: var(--sc-color-success); }
+  ::slotted(ol) > li[data-tone='warning']::before { background: var(--sc-color-warning); }
+  ::slotted(ol) > li[data-tone='error']::before { background: var(--sc-color-error); }
+  ::slotted(ol) > li[data-tone='neutral']::before { background: var(--sc-color-on-surface-variant); }
+
+  ::slotted(ol) time,
+  ::slotted(ul) time {
+    color: var(--sc-color-on-surface-variant);
+    font: var(--sc-type-body-small);
+    letter-spacing: var(--sc-type-body-small-tracking);
+  }
+
+  ::slotted(ol) p,
+  ::slotted(ul) p {
+    margin: 0;
+    font: var(--sc-type-body-medium);
+    letter-spacing: var(--sc-type-body-medium-tracking);
+  }
+
+  /* In a card: a 1px rule between entries, and the gap split around it. */
+  :host([divided]) {
+    --_gap: var(--sc-space-20);
+  }
+
+  :host([divided]) ::slotted(ol) > li + li {
+    padding-block-start: var(--_gap);
+    border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+  }
+
+  :host([divided]) ::slotted(ol) > li + li::before {
+    inset-block-start: calc(var(--_gap) + var(--_dot-top));
+  }
+
+  :host([divided]) ::slotted(ol) > li:not(:last-child)::after {
+    inset-block-start: calc(var(--_dot-top) + var(--_dot) + var(--sc-space-4));
+  }
+
+  :host([divided]) ::slotted(ol) > li + li:not(:last-child)::after {
+    inset-block-start: calc(var(--_gap) + var(--_dot-top) + var(--_dot) + var(--sc-space-4));
+  }
+
+  :host([divided]) ::slotted(ol) > li:not(:last-child)::after {
+    inset-block-end: calc(var(--sc-space-4) - var(--_dot-top) - var(--_gap));
+  }
+
+
+  @media (forced-colors: active) {
+    :host {
+      --_fc: 1;
+    }
+    ::slotted(ol) > li::before {
+      forced-color-adjust: none;
+      background: GrayText;
+    }
+    ::slotted(ol) > li[aria-current='step']::before {
+      background: CanvasText;
+    }
+    ::slotted(ol) > li:not(:last-child)::after {
+      forced-color-adjust: none;
+      background: GrayText;
+    }
+  }
+}

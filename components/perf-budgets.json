@@ -1,7 +1,17 @@
 {
   "$comment": "v2 budgets from docs/v2/architecture.md §3.7. Bytes, gzip level 9, per file as the browser downloads it (fonts: file bytes). Checked by npm run check:budget. Component budgets are measured in the custom-elements build (module + import closure, excluding the runtime). Only tags in \"enforce\" (rebuilt for v2) fail the check; family agents add theirs when they finish. Others are reported as pending.",
   "enforce": [
-    "sc-button"
+    "sc-button",
+    "sc-callout",
+    "sc-error-summary",
+    "sc-status-tag",
+    "sc-spinner",
+    "sc-step-progress",
+    "sc-step-list",
+    "sc-notification-list",
+    "sc-empty-state",
+    "sc-timeline",
+    "sc-modal"
   ],
   "coreGzip": 14336,
   "globalCssGzip": 7168,
@@ -20,8 +30,11 @@
     "sc-radio-group": 7168,
     "sc-error-summary": 6144,
     "sc-table": 12288,
-    "sc-date-range": 16384
+    "sc-date-range": 16384,
+    "sc-step-progress": 5120,
+    "sc-modal": 7168
   },
+  "$c4Comment": "sc-step-progress 5 KiB: like sc-button, its closure counts the shared icon set (0.9 KiB) and locale controller (1.0 KiB) in full; its own module is 2.9 KiB. sc-modal 7 KiB: a dialog that is also a bottom sheet with drag, focus return and the session-timeout countdown with plural announcements; its own module is 4.7 KiB plus the same two shared chunks. See specs/sc-step-progress.md and specs/sc-modal.md.",
   "pageJsGzip": 30720,
   "pageComponentCssGzip": 3072,
   "fontFileBytes": 32768,
