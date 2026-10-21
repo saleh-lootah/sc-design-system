@@ -1,7 +1,7 @@
 import { Component, Element, Host, Listen, Prop, State, h } from '@stencil/core';
 import { LocaleController } from '../../i18n/controller';
 import strings from '../../i18n/components/sc-button';
-import { Icon, IconName, Spinner } from '../../icons/index'; // explicit /index: Stencil only scans file imports for <svg> (see CONTRIBUTING)
+import { ButtonIcon, ButtonIconName, Spinner } from '../../icons/for/sc-button';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'destructive' | 'handoff';
 export type ButtonSize = 'l' | 'm' | 'xl';
@@ -91,8 +91,12 @@ export class ScButton {
   /** Stretches the button to the width of its container. Use it on narrow screens. */
   @Prop({ reflect: true }) fullWidth = false;
 
-  /** An icon from the library (`src/icons`), e.g. `arrow-forward`. Arrows and chevrons mirror in right-to-left. */
-  @Prop() icon?: IconName;
+  /**
+   * An icon by name: `arrow-forward`, `arrow-back`, `chevron-forward`, `chevron-back`, `external`,
+   * `search`, `check` or `close` (Material Symbols). Arrows and chevrons mirror in right-to-left.
+   * For any other icon, use `slot="icon"`.
+   */
+  @Prop() icon?: ButtonIconName;
 
   /** Where the icon sits relative to the label. */
   @Prop() iconPosition: ButtonIconPosition = 'end';
@@ -135,7 +139,7 @@ export class ScButton {
 
   private renderIcon() {
     if (!this.icon && !this.hasIconSlot) return null;
-    return <span class="sc-button__icon">{this.hasIconSlot ? <slot name="icon" /> : <Icon name={this.icon} />}</span>;
+    return <span class="sc-button__icon">{this.hasIconSlot ? <slot name="icon" /> : <ButtonIcon name={this.icon} />}</span>;
   }
 
   render() {

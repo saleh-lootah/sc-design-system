@@ -12,7 +12,7 @@ The channel's logo and the channel switcher (Standard CHR-03), for `sc-site-head
 
 - Give all seven links; `{lang}` becomes `en` or `ar`. A channel without a link is listed as text.
 - The current channel comes from `channel` or the closest `data-channel`.
-- Put the channel's own logo (24px, `alt=""`) inside to replace the ring mark.
+- Put the channel's own logo (24px, `alt=""`) inside to replace the swatch (10px, in the channel colour) the trigger shows without one.
 - Light DOM: each item sets its own `data-channel`, so its swatch is that channel's colour.
 
 <!-- Auto Generated Below -->
@@ -69,9 +69,9 @@ Type: `Promise<void>`
 
 ## Slots
 
-| Slot | Description                                                                                                                            |
-| ---- | -------------------------------------------------------------------------------------------------------------------------------------- |
-|      | Optional: the channel's own logo (an `<svg>` or `<img alt="">`, 24px). Without it the trigger shows a ring mark in the channel colour. |
+| Slot | Description                                                                                                                                                     |
+| ---- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|      | Optional: the channel's own logo (an `<svg>` or `<img alt="">`, 24px). Without it the trigger shows the current channel's swatch (10px, in its channel colour). |
 
 
 ----------------------------------------------

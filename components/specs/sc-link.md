@@ -61,7 +61,7 @@ The arrow and external icon mirror (`icon-directional`). The underline offset is
 
 ## Budget
 
-Custom-elements closure 3,374 B gzip (4 KiB budget), of which its own CSS 524 B. Shared chunks: icon set by name (0.9 KiB) and locale controller (0.9 KiB).
+Custom-elements closure 2,755 B gzip (4 KiB budget), of which its own CSS 524 B. Its two icons (Material Symbols `arrow_forward` and `open_in_new`) are inlined; the one shared chunk is the locale controller (0.9 KiB).
 
 ## Tests
 

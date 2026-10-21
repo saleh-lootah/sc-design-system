@@ -1,7 +1,7 @@
 import { Component, Element, Host, Listen, Method, Prop, State, Watch, h } from '@stencil/core';
 import { LocaleController } from '../../i18n/controller';
 import strings from '../../i18n/components/sc-site-header';
-import { Chevron, CloseIcon, Fingerprint, Menu, SearchIcon } from '../../icons/chrome';
+import { ChevronForward as Chevron, Close as CloseIcon, Fingerprint, Menu, Search as SearchIcon } from '../../icons/for/sc-site-header';
 import { enter, exit, fromPointer } from '../../utils/motion';
 
 /** Below this width the header is compact and navigation moves into the menu (CHR-04). */

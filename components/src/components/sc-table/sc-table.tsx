@@ -2,6 +2,7 @@ import { Component, Element, Event, EventEmitter, Host, Prop, State, h } from '@
 import { LocaleController } from '../../i18n/controller';
 import strings from '../../i18n/components/sc-table';
 import { StringsInput, overrideTranslator, plural } from './strings-override';
+import { ArrowDownwardPath, ArrowUpwardPath, UnfoldMorePath } from '../../icons/for/sc-table';
 
 type StringKey = keyof (typeof strings)['en'];
 
@@ -265,18 +266,15 @@ export class ScTable {
   private sortGlyph(): Element {
     const svg = document.createElementNS(SVG_NS, 'svg');
     svg.setAttribute('class', 'sc-table__sort-glyph');
-    svg.setAttribute('viewBox', '0 0 24 24');
+    // Material Symbols (D13): unfold_more, arrow_upward, arrow_downward, Outlined, on the 960 grid.
+    svg.setAttribute('viewBox', '0 -960 960 960');
     svg.setAttribute('aria-hidden', 'true');
     svg.setAttribute('focusable', 'false');
-    svg.setAttribute('fill', 'none');
-    svg.setAttribute('stroke', 'currentColor');
-    svg.setAttribute('stroke-width', '2');
-    svg.setAttribute('stroke-linecap', 'round');
-    svg.setAttribute('stroke-linejoin', 'round');
+    svg.setAttribute('fill', 'currentColor');
     const paths: Record<string, string> = {
-      none: 'M8 9.5l4-4 4 4M8 14.5l4 4 4-4',
-      ascending: 'M12 19V5M6.5 10.5L12 5l5.5 5.5',
-      descending: 'M12 5v14M6.5 13.5L12 19l5.5-5.5',
+      none: UnfoldMorePath,
+      ascending: ArrowUpwardPath,
+      descending: ArrowDownwardPath,
     };
     for (const [state, d] of Object.entries(paths)) {
       const path = document.createElementNS(SVG_NS, 'path');

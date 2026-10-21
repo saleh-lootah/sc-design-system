@@ -52,7 +52,7 @@ Native links. Hover underline thickness over `duration-fast`; otherwise no motio
 
 ## Budget
 
-Custom-elements closure 3,198 B gzip (4 KiB budget), its own CSS 556 B. The two chevrons are drawn in the component (about 0.1 KiB), as in `sc-pagination`, rather than imported from the shared icon set (0.9 KiB): with the `compact-label` prop the import put it over budget.
+Custom-elements closure 3,193 B gzip (4 KiB budget), its own CSS 556 B. The two chevrons are Material Symbols `chevron_right` and `chevron_left`, inlined from `src/icons/for/sc-breadcrumbs.tsx`.
 
 ## Tests
 

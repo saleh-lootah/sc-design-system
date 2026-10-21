@@ -13,7 +13,7 @@ A short inline wait. Inside a button use `sc-button loading`.
 | # | Part | Notes |
 | --- | --- | --- |
 | 1 | Region | `role="status"` (polite), holding the icon and the label. |
-| 2 | Icon (`icon`) | The shared `Spinner` icon (a faint track and an arc, 2px stroke) in `currentColor`. 24px (`size="l"`, default, per the Paper board) or 20px (`size="m"`, inline). Decorative. |
+| 2 | Icon (`icon`) | A 270° arc with round caps, 2.5px stroke, no track (Paper board, node 4RS-0) in `currentColor`. 24px (`size="l"`, default, per the Paper board) or 20px (`size="m"`, inline). Decorative. |
 | 3 | Label (`label`) | "Loading" / "جارٍ التحميل" or `label`. `body-medium` in `on-surface`, 12px from the arc. Visually hidden unless `show-label`, or motion is reduced. |
 
 ## Motion
@@ -28,10 +28,10 @@ A short inline wait. Inside a button use `sc-button loading`.
 
 ## Budget
 
-Leaf, 4 KiB. Measured **3.2 KiB** gzip (incl. the shared icon set and locale controller); CSS 0.4 KiB.
+Leaf, 4 KiB. Measured **2.3 KiB** gzip (incl. the inlined arc and the locale controller); CSS 0.4 KiB.
 
 ## Tests
 
 Spec (status region, label, size, Arabic), e2e (sizes, `sc-spin` 0.6s linear, currentColor, hidden label, reduced motion, no mirroring, re-render on `lang`), `describeAxe`, visual.
 
-The component-language proposals of a 2.5px stroke and a 270° arc are not taken: the spinner uses the shared icon (FND-21, icons come from the set).
+The arc follows the board and component-language A21 (2.5px stroke, 270°, no track). It is not a Material Symbol: Material has no loading glyph.

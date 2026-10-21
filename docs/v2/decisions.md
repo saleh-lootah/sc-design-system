@@ -122,3 +122,22 @@ Where this file disagrees with `foundations.md` or `component-language.md`, this
 | W12 | **Cascade layer order.** Every light-DOM component stylesheet starts with the full order statement `@layer sc.reset, sc.tokens, sc.base, sc.components, sc.utilities;`. Stencil can insert a component's styles before `sc.css`, and without this the base focus outline outranks component rules. `check:literals` enforces it. |
 | U5 | **Attention cards have no coloured top strip** (user, 22 October 2026). Topic colour appears only on the small icon tile. This supersedes the colour guidance's strip. |
 | W13 | The typical page's **component CSS budget is 4 KiB** (from 3 KiB). It holds nine components' own layout, state, forced-colours and RTL rules, and the type roles are already shared. Typical page JS stays at 30 KiB. |
+| W4a | Clarifies W4: `sc-status-tag tone="channel"` is a **non-status highlight** (for example "Life event"), with `channel-action` text on `channel-subtle`. It never carries a status. Status uses the semantic tones (neutral, info, success, warning, error). Labels about *another* channel use `sc-channel-chip`. |
+| W14 | `sc-bottom-nav` has a **4.5 KiB** budget override: Outlined and Filled Material Symbols paths for 8 destinations. |
+| W15 | **Process:** agents working in worktrees must **not use `git stash`**. The stash is shared across worktrees. Commit work in progress on your own branch instead. |
+
+## Alignment report decisions (docs/v2/alignment-report.md §1)
+
+| # | Item | Decision |
+| --- | --- | --- |
+| W16 | Attention card strip | Removed (U5, user). |
+| W17 | Notification list rows | **Keep the code: the whole item is one link.** It gives a larger target and a single tab stop per item. The board (8J7-0) is corrected in Wave 4. |
+| W18 | Bottom-nav budget | Approved, 4.5 KiB (W14). |
+| W19 | Focus ring at a screen edge | **Accessibility wins: the ring is inset** wherever an outset ring would be clipped (bottom nav and other edge-docked bars). Correct the board (GG4-0). |
+| W20 | Callout accent | **4px `size-strip`**, the same as the field error bar (W11), so the library has one start-bar width. `size-border-accent` (3px) stays only for outlines that need it. |
+| W21 | Modal motion | **Centred dialog: 200ms enter, 160ms exit.** Bottom sheet: 280ms (`duration-slow`) enter, about 224ms exit. Both sit inside the 200–300ms modal and drawer rule, with exits about 20% faster. |
+| W22 | Date input value | **Keep the code: centred tabular figures** in each part box (v1 behaviour). Correct the board. |
+| W23 | Utility bar shadow | **No upward shadow.** The docked bar is flat with a 1px `outline-variant` top hairline (U4). No new token. |
+| W24 | Arabic wording | **The code is right**: «مؤشر السعادة» (the official Happiness Meter name), «المحادثة», «المعلومات القانونية», and «عرض 1 إلى 20 من 1,284» (LANG-22A). Correct the boards. |
+| W25 | Account menu items | **Keep the code**: profile, settings, "change who you act for" and sign out, with notifications as their own bell. Applications and payments live in `sc-account-nav`, so they aren't duplicated in the menu. |
+| W26 | Tags the boards ask for (`sc-plate`, `sc-icon-tile`, general `sc-chip`) | **Build in Wave 3, when the Dubai Now reference needs them.** `sc-plate` (number plate) will be needed. |

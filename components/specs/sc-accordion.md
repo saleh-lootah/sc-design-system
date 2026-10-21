@@ -43,7 +43,7 @@ Native disclosure semantics (DDS F-001 fixed by construction): Enter and Space t
 - API: the board proposes `sc-accordion-section` with `heading`, `summary`, `open`, a `heading-level` prop and an `scToggle` event. The code keeps native `<details>`/`<summary>` children (component-language B15 allows them, and they work before JavaScript); `toggle` is the native event.
 - Motion: the board quotes 150ms for the turn and the fade; the code keeps `duration-fast` (120ms), as above.
 - Focus: the board draws the ring at inset 0; the code keeps U1 (3px with a 2px offset).
-- Chevron: the board uses Material Symbols `expand_more` (filled path); the code draws a stroked chevron mask. Left to the icon pass.
+- Chevron: Material Symbols `expand_more` (Outlined, D13), drawn as a mask in `currentColor`.
 
 ## Code
 

@@ -1,7 +1,7 @@
 import { Component, Element, Host, Prop, State, h } from '@stencil/core';
 import { LocaleController } from '../../i18n/controller';
 import strings from '../../i18n/components/sc-step-progress';
-import { Check } from '../../icons/index'; // explicit /index: see CONTRIBUTING
+import { Check } from '../../icons/for/sc-step-progress';
 
 export type StepProgressLayout = 'auto' | 'compact' | 'full';
 type StepState = 'done' | 'current' | 'upcoming';

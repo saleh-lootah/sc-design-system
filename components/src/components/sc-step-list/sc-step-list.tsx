@@ -2,6 +2,7 @@ import { Component, Element, Host, h } from '@stencil/core';
 import { LocaleController } from '../../i18n/controller';
 import strings from '../../i18n/components/sc-step-list';
 import { channels, Channel } from '../../i18n/core';
+import { ChevronForwardPath } from '../../icons/for/sc-step-list';
 
 const PART = 'sc-step-list__';
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -89,16 +90,13 @@ export class ScStepList {
     const box = this.make('span', 'chevron');
     box.setAttribute('aria-hidden', 'true');
     const svg = this.el.ownerDocument.createElementNS(SVG_NS, 'svg');
-    svg.setAttribute('viewBox', '0 0 24 24');
+    // Material Symbols chevron_right, Outlined, weight 400 (D13).
+    svg.setAttribute('viewBox', '0 -960 960 960');
     svg.setAttribute('class', 'icon icon-directional');
-    svg.setAttribute('fill', 'none');
-    svg.setAttribute('stroke', 'currentColor');
-    svg.setAttribute('stroke-width', '2');
-    svg.setAttribute('stroke-linecap', 'round');
-    svg.setAttribute('stroke-linejoin', 'round');
+    svg.setAttribute('fill', 'currentColor');
     svg.setAttribute('focusable', 'false');
     const path = this.el.ownerDocument.createElementNS(SVG_NS, 'path');
-    path.setAttribute('d', 'M9 5.5l6.5 6.5L9 18.5');
+    path.setAttribute('d', ChevronForwardPath);
     svg.append(path);
     box.append(svg);
     return box;

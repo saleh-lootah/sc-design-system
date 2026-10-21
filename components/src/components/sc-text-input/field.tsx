@@ -17,6 +17,7 @@
 import { FunctionalComponent, h } from '@stencil/core';
 import type { StringPart } from '../../i18n/define';
 import fieldStrings from '../../i18n/components/sc-field';
+import { AlertCircle, ExpandMore } from '../../icons/for/field';
 
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
@@ -136,26 +137,16 @@ export const FieldError: FunctionalComponent<{ id: string; text?: string; rich?:
   </p>
 );
 
+/** The field error icon: Material Symbols `error`, Filled (a status icon, ICN-02). */
+const ErrorIcon: FunctionalComponent = () => <AlertCircle class="sc-field__error-icon" />;
+
+/** The `expand_more` chevron of a select (E2): Material Symbols. Points down in both directions; never mirrors. */
+export { ExpandMore };
+
 /**
- * The error icon, drawn here (as the shared set's AlertCircle) so a field doesn't pull the
- * whole icon module into its bundle.
+ * A check mark: a symbol, not an arrow, so it never mirrors. Drawn as a stroke, not Material's
+ * filled `check`, because the checkbox draws it in (`pathLength`, stroke-dashoffset).
  */
-const ErrorIcon: FunctionalComponent = () => (
-  <svg class="icon sc-field__error-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
-    <circle cx="12" cy="12" r="9" />
-    <path d="M12 7.5v5.5" />
-    <circle cx="12" cy="16.5" r="1.25" fill="currentColor" stroke="none" />
-  </svg>
-);
-
-/** The `expand_more` chevron of a select (E2). Points down in both directions; never mirrors. */
-export const ExpandMore: FunctionalComponent<{ class?: string }> = ({ class: extra }) => (
-  <svg class={{ icon: true, [extra ?? '']: !!extra }} viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-    <path d="M6.5 9.25L12 14.75l5.5-5.5" />
-  </svg>
-);
-
-/** A check mark: a symbol, not an arrow, so it never mirrors. */
 export const CheckMark: FunctionalComponent<{ class?: string }> = ({ class: extra }) => (
   <svg class={{ icon: true, [extra ?? '']: !!extra }} viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
     <path class="sc-check__path" d="M5 12.5l4.5 4.5L19 7.5" pathLength="1" />

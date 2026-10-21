@@ -51,7 +51,7 @@ Steps run from the right through DOM order (no reversing, LANG-14). The check do
 
 ## Budget
 
-`perf-budgets.json` gives **5 KiB** (leaf 4 KiB): like `sc-button`, the closure counts the shared icon set (0.9 KiB) and locale controller (1.0 KiB) in full; its own module is about 2.9 KiB. Measured **4.8 KiB** gzip; CSS 1.0 KiB.
+`perf-budgets.json` gives **5 KiB** (leaf 4 KiB). Since the icon pass inlined its Material Symbols `check` and dropped the shared icon chunk, it measures **3.9 KiB** gzip (CSS 1.0 KiB) and fits the leaf budget; the override can go.
 
 ## Tests
 

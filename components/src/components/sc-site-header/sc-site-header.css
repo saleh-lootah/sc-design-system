@@ -7,6 +7,13 @@
   display: block;
   /* The container margin: 20, 32, 48, then 80 from 1440px (foundations 9). */
   --_margin: var(--sc-grid-compact-margin);
+  /* Row spacing. B2 and board CTM-0 (drawn at 1440, 1280 of content): 56 from the lockup to
+     the navigation, 36 between items, 24 between end controls. From 1024 to 1439 the content
+     is 1184 at most, where those gaps overflow a four-item English row, so the row tightens
+     to 40, 32 and 16 there. */
+  --_brand-gap: var(--sc-space-16);
+  --_nav-gap: var(--sc-space-32);
+  --_end-gap: var(--sc-space-16);
 }
 
 :host([hidden]) {
@@ -32,6 +39,9 @@
 @media (min-width: 1440px) {
   :host {
     --_margin: var(--sc-grid-wide-margin);
+    --_brand-gap: var(--sc-space-32);
+    --_nav-gap: calc(var(--sc-space-32) + var(--sc-space-4));
+    --_end-gap: var(--sc-space-24);
   }
 }
 
@@ -76,8 +86,9 @@
 .nav {
   display: flex;
   align-self: stretch;
-  gap: var(--sc-space-32);
-  margin-inline-start: var(--sc-space-16);
+  /* From the lockup: the row's 24 gap plus --_brand-gap (56 from 1440, else 40). */
+  gap: var(--_nav-gap);
+  margin-inline-start: var(--_brand-gap);
   min-inline-size: 0;
 }
 
@@ -125,7 +136,7 @@
   display: flex;
   flex: none;
   align-items: center;
-  gap: var(--sc-space-16);
+  gap: var(--_end-gap);
   margin-inline-start: auto;
 }
 
@@ -183,14 +194,18 @@
   border-radius: var(--sc-radius-control);
   background-color: oklab(0 0 0);
   color: oklab(1 0 0);
-  font: var(--sc-type-label-large);
-  letter-spacing: var(--sc-type-label-large-tracking);
+  /* B2: the sign-in label is label-medium Bold in the row; label-large in the menu (board). */
+  font: var(--sc-type-label-medium);
+  font-weight: var(--sc-font-weight-bold);
+  letter-spacing: var(--sc-type-label-medium-tracking);
   text-decoration: none;
   white-space: nowrap;
 }
 
 .menu-foot .uaepass {
   inline-size: 100%;
+  font: var(--sc-type-label-large);
+  letter-spacing: var(--sc-type-label-large-tracking);
   white-space: normal;
 }
 
@@ -293,6 +308,7 @@
   flex: 1;
 }
 
+/* Material Symbols chevron_right, Outlined (src/icons/icons.json), as a mask so it takes the row colour. */
 .menu-chevron {
   color: var(--sc-color-on-surface-variant);
 }
@@ -304,7 +320,7 @@
   block-size: var(--sc-size-icon-l);
   margin-inline-start: auto;
   background-color: var(--sc-color-on-surface-variant);
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 5.5l6.5 6.5L9 18.5'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -960 960 960' fill='black'%3E%3Cpath d='M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
 .menu-nav ::slotted(a:dir(rtl))::after {
@@ -338,7 +354,6 @@
   color: var(--sc-color-on-surface-variant);
   font: var(--sc-type-body-small);
   letter-spacing: var(--sc-type-body-small-tracking);
-  text-align: center;
 }
 
 /* Forced colours (COL-09) --------------------------------------------------------------- */

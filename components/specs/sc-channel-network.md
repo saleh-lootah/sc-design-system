@@ -11,8 +11,8 @@ Status: new in v2, built by C1 (Wave 2b). Rules: component-language B21, Standar
 | # | Part | Notes |
 | --- | --- | --- |
 | 1 | Navigation | `<nav aria-label="Government of Dubai channels">`. |
-| 2 | Eyebrow | A 24 × 3 rule and "One network · seven channels" in `primary` (city indigo), label-small Bold; upper case and tracked 0.08em in English only. The number is a word in both languages. |
-| 3 | Tiles | Seven `<li data-channel>`, 12 apart, equal widths: 7 per row from 960px of strip width, 4 from 560, 2 below. Each tile: 8px corners, padding 20/16, gap 6, `surface-container`, a 4px top rule in its own channel's `channel-action`; name (title-small Bold) and descriptor (body-small, `on-surface-variant`). Hover underlines the name. |
+| 2 | Eyebrow | A 24 × 3 rule, gap 12, 24 above the tiles, and "One network · seven channels" (`eyebrow` overrides it) in `primary` (city indigo), label-small Bold; upper case and tracked 0.08em in English only. The number is a word in both languages. |
+| 3 | Tiles | Seven `<li data-channel>`, 12 apart, equal widths: 7 per row from 960px of strip width, 4 from 560, 2 below. Each tile: 8px corners, padding 20/16, gap 6, `surface-container`, a 4px top rule in its own channel's `channel-action`, painted as a background band so the 8px corners clip it square (board FVO-0) rather than tapering it as a rounded border would; content 20 below it; name (title-small Bold) and descriptor (body-small, `on-surface-variant`). Hover underlines the name. |
 | 4 | Current | Plain text, not a link (it would lead to this site), `aria-current="true"`, `channel-subtle` fill, name in `channel-action`, "You are here" in Medium. |
 
 Dubai Trade's rule uses `channel-action` like the others; E drew a lighter line (OQ-14, open).
@@ -27,4 +27,4 @@ Dubai Trade's rule uses `channel-action` like the others; E drew a lighter line 
 
 ## Tests
 
-Spec: nav, eyebrow, seven tiles in order with `data-channel`, links in the page language, current tile as text, inherited channel, Arabic. e2e: 4px rules in seven distinct channel colours matching tokens, current fill and name colour, city indigo eyebrow, English-only case and tracking, 7/2 columns and RTL order; `describeAxe`. Visual: EN/AR × light/dark at 1440.
+Spec: nav, eyebrow and its override, seven tiles in order with `data-channel`, links in the page language, current tile as text, inherited channel, Arabic. e2e: 4px rule bands in seven distinct channel colours matching tokens, current fill and name colour, city indigo eyebrow, English-only case and tracking, 7/2 columns and RTL order; `describeAxe`. Visual: EN/AR × light/dark at 1440.

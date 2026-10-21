@@ -1,5 +1,5 @@
 import { Component, Element, Host, Prop, State, h } from '@stencil/core';
-import { ArrowForward } from '../../icons/index'; // explicit /index: Stencil only scans file imports for <svg>
+import { ArrowForward } from '../../icons/for/sc-service-card';
 
 export type ServiceCardHeadingLevel = 2 | 3 | 4 | 5 | 6;
 /** The six decorative topic tints (foundations §2.7). Decorative only: never status or selection. */

@@ -43,7 +43,7 @@ describe('sc-channel-switcher (spec)', () => {
     expect(host.querySelectorAll('li span.sc-channel-switcher__item').length).toBe(6);
   });
 
-  it('uses a slotted logo instead of the ring mark', async () => {
+  it('uses a slotted logo instead of the swatch mark', async () => {
     const page = await render(`<sc-channel-switcher><img alt="" src="logo.svg"></sc-channel-switcher>`);
     expect(page.root!.querySelector('.sc-channel-switcher__logo')!.classList.contains('is-mark')).toBe(false);
   });

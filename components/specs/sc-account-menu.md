@@ -11,8 +11,8 @@ Status: new in v2, built by C1 (Wave 2b). Rules: component-language B3 (B8 for t
 | # | Part | Notes |
 | --- | --- | --- |
 | 1 | Notifications | With `notifications-href`: a 44 × 44 bell link. With `unread` above 0, a count badge (`channel-action` fill, `channel-on-action` text, label-small Bold, a 2px `surface` ring, 99+ cap). Name: "Notifications" or "Notifications, 3 unread". |
-| 2 | Trigger | `<button aria-expanded aria-controls>`, 48 tall, 1.5px `outline` edge, padding 6 / 8. Avatar (32px circle, `channel-container` with `channel-on-container`, initials from the name as written, or `initials`), the name (shown from 1280px, always in the accessible name "Account: …"), a 20px chevron. |
-| 3 | Panel | As the channel switcher's, 320 wide: the name and "Acting for: …" (`acting-for`), links Profile, Settings, "Change who you act for" (representation), a divider, Sign out. Items 48 tall, 24px icon, 8px corners. |
+| 2 | Trigger | `<button aria-expanded aria-controls>`, 48 tall, 1.5px `outline` edge, padding 6 at the start and 12 at the end. Avatar (32px circle, `channel-container` with `channel-action` initials (B3), initials from the name as written, or `initials`), the name (shown from 1280px, always in the accessible name "Account: …"), a 20px chevron. |
+| 3 | Panel | As the channel switcher's, 320 wide: the name (label-medium Bold) and "Acting for: …" (`acting-for`, body-small, `on-surface-variant`), links Profile, Settings, "Change who you act for" (representation), a divider (4 around it), Sign out. Items 48 tall, 24px icon in `on-surface-variant` (Sign out's in `on-surface`), 8px corners. |
 | 4 | Sign out | `on-surface` with a `logout` icon (mirrors), not `error`. A link with `sign-out-href`, else a button that fires `scSignOut`. |
 
 ## Behaviour
@@ -33,4 +33,4 @@ As the channel switcher. The panel aligns to the trigger's inline-end edge (left
 
 ## Tests
 
-Spec: trigger name and initials, links, acting for, sign out event or link, unread names and badge cap, initials from Latin and Arabic names, Arabic. e2e: Tab order, keyboard open (instant), Escape and focus return, focus leaving, outside press, name from 1280px, 44/48px targets, panel alignment EN/AR, badge colours, axe open; `describeAxe`. Visual: open panel EN/AR × light/dark.
+Spec: trigger name and initials, links, acting for, sign out event or link, unread names and badge cap, initials from Latin and Arabic names, Arabic. e2e: Tab order, keyboard open (instant), Escape and focus return, focus leaving, outside press, name from 1280px, 44/48px targets, panel alignment EN/AR, badge colours, avatar colours and trigger padding, axe open; `describeAxe`. Visual: open panel EN/AR × light/dark.

@@ -1,7 +1,7 @@
 import { Component, Element, Event, EventEmitter, Host, Method, Prop, State, h } from '@stencil/core';
 import { LocaleController } from '../../i18n/controller';
 import strings from '../../i18n/components/sc-announcement-bar';
-import { CloseIcon, ErrorIcon, InfoIcon, WarningIcon } from '../../icons/chrome';
+import { AlertCircle as ErrorIcon, Close as CloseIcon, Info as InfoIcon, Warning as WarningIcon } from '../../icons/for/sc-announcement-bar';
 import { nextFocusable } from '../../utils/focus';
 import { exit, fromPointer } from '../../utils/motion';
 
@@ -62,6 +62,9 @@ export class ScAnnouncementBar {
    * stays hidden on later pages. Change the id when the message changes.
    */
   @Prop() announcementId?: string;
+
+  /** Overrides the dismiss button's name, "Dismiss announcement" (in the page language). */
+  @Prop() dismissLabel?: string;
 
   /** Fired before the bar hides. Call `preventDefault()` to keep it. */
   @Event({ eventName: 'scDismiss', bubbles: true, composed: true, cancelable: true }) scDismiss!: EventEmitter<{ id?: string }>;
@@ -128,7 +131,7 @@ export class ScAnnouncementBar {
             {this.dismissible && (
               <button type="button" class="dismiss focus-ring state-layer" part="dismiss" onClick={this.onDismiss}>
                 <CloseIcon />
-                <span class="visually-hidden">{t('announcementDismiss')}</span>
+                <span class="visually-hidden">{this.dismissLabel || t('announcementDismiss')}</span>
               </button>
             )}
           </div>

@@ -22,6 +22,8 @@ git -C "/Users/saleh/Developer/Claude Workspace/sc-ux-standards/design-system" w
 
 Then run `npm ci` in `components/`, and `npm run build` at the repository root. Never touch the shared checkout's branch.
 
+**Never use `git stash`** (W15): the stash is shared across every worktree. Commit work in progress on your own branch instead.
+
 **Your tags only.** Five agents edit the same repository in parallel. Only edit the files of the tags you've been given. Shared files are append-only; don't reorder or reformat them, so merges stay clean:
 - `src/global/components.css`
 - `perf-budgets.json` (the `enforce` list)

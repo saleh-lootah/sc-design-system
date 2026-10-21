@@ -1,5 +1,5 @@
 import { Component, Element, Host, Prop, State, h } from '@stencil/core';
-import { Icon, IconName } from '../../icons/index'; // explicit /index: see CONTRIBUTING
+import { EmptyStateIcon, EmptyStateIconName } from '../../icons/for/sc-empty-state';
 
 export type EmptyStateVariant = 'default' | 'success';
 export type EmptyStateHeadingLevel = 2 | 3 | 4 | 5 | 6;
@@ -40,8 +40,8 @@ export class ScEmptyState {
   /** Renders the heading as `<h2>`–`<h6>`. Leave it unset to render a paragraph at the title role, for an empty state inside a card or table. */
   @Prop() headingLevel?: EmptyStateHeadingLevel;
 
-  /** An icon from the library (`inbox`, `search`, `check-circle` …). Leave unset for no icon; `success` defaults to `check-circle`. */
-  @Prop() icon?: IconName;
+  /** An icon by name: `inbox`, `search`, `check-circle`, `info`, `warning`, `alert-circle` or `schedule` (Material Symbols). Leave unset for no icon; `success` defaults to `check-circle`. Any other icon goes in `slot="icon"`. */
+  @Prop() icon?: EmptyStateIconName;
 
   /** `default`: neutral. `success`: the all-clear, with a check on the success container. */
   @Prop({ reflect: true }) variant: EmptyStateVariant = 'default';
@@ -67,7 +67,7 @@ export class ScEmptyState {
 
   render() {
     const success = this.variant === 'success';
-    const icon: IconName | undefined = this.icon || (success ? 'check-circle' : undefined);
+    const icon: EmptyStateIconName | undefined = this.icon || (success ? 'check-circle' : undefined);
     const level = Number(this.headingLevel);
     const Heading = (level >= 2 && level <= 6 ? `h${level}` : 'p') as 'p';
 
@@ -77,7 +77,7 @@ export class ScEmptyState {
           {/* The box is always rendered so the icon slot can report its content. */}
           <span class={{ 'icon-box': true, 'icon-box--empty': !this.hasIcon && !icon }} part="icon">
             <slot name="icon" onSlotchange={this.onIconSlotChange} />
-            {!this.hasIcon && icon && <Icon name={icon} />}
+            {!this.hasIcon && icon && <EmptyStateIcon name={icon} />}
           </span>
           <Heading class="heading" part="heading">
             {this.heading}

@@ -1,5 +1,5 @@
 import { Component, Host, Prop, h } from '@stencil/core';
-import { AlertCircle, CheckCircle, Hourglass, Info, Pending, Schedule } from '../../icons/index'; // explicit /index: see CONTRIBUTING
+import { AlertCircle, CheckCircle, Hourglass, Info, Pending, Schedule } from '../../icons/for/sc-status-tag';
 
 export type StatusTagTone = 'neutral' | 'info' | 'success' | 'warning' | 'error' | 'channel';
 

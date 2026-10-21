@@ -12,13 +12,13 @@ The channel's logo and the channel switcher: a real button that discloses a labe
 
 | # | Part | Notes |
 | --- | --- | --- |
-| 1 | Trigger | `<button type="button" aria-expanded aria-controls>`. 48px, 4px corners, 1.5px `outline` edge (`outline-strong` on hover and while open). Accessible name "Choose a channel: Dubai Now" (a visually hidden prefix). |
-| 2 | Logo | 24px. The default slot takes the channel's own logo; without one, a ring mark in `channel-action`. |
+| 1 | Trigger | `<button type="button" aria-expanded aria-controls>`. 48px, padding 16 at the start and 12 at the end (8 compact), 4px corners, 1.5px `outline` edge (`outline-strong` on hover and while open). Accessible name "Choose a channel: Dubai Now" (a visually hidden prefix). |
+| 2 | Logo | 24px. The default slot takes the channel's own logo; without one, the current channel's swatch: 10px, radius 3, `channel-action` (B2a). |
 | 3 | Name | label-large Bold. Visually hidden below 1024px (CHR-04); it stays in the name. |
 | 4 | Chevron | 20px `expand-more`, rotates while open. |
 | 5 | Panel | Non-modal, 360 wide (never wider than the viewport minus 32), 12px corners, 1px `outline-variant` edge, `elevation-2`, padding 8; aligned to the trigger's inline-end edge, 8 below it. |
-| 6 | Caption | "Choose a channel", label-small, `on-surface-variant`; labels the list. |
-| 7 | Items | Seven, in the Standard 3.1 order, each `<li data-channel>` with a link: 12px swatch, name (title-small Bold), descriptor (body-small, `on-surface-variant`), at least 56 tall, 8px corners. Current: `surface-container` fill, a check, `aria-current="true"`. A channel with no link is listed as text. |
+| 6 | Caption | "Choose a channel", label-small, `on-surface-variant`, padded 8 by 12; labels the list. |
+| 7 | Items | Seven, in the Standard 3.1 order, each `<li data-channel>` with a link: 12px swatch (radius 3), name (title-small Bold) directly over the descriptor (body-small, `on-surface-variant`), at least 56 tall, padded 10 by 12, 8px corners. Current: `surface-container` fill, a check, `aria-current="true"`. A channel with no link is listed as text. |
 
 ## Behaviour
 
@@ -40,4 +40,4 @@ Own: `src/i18n/components/sc-channel-switcher.ts` (`switcherPrefix`, `switcherCa
 
 ## Tests
 
-Spec: name, panel, seven items in order with `data-channel`, links in the page language, current item, inherited channel, missing links as text, slotted logo, methods, Arabic. e2e: keyboard open (instant), Tab through, Escape and focus return, focus leaving, pointer animation and outside press, seven distinct swatches matching each channel's token, 48px trigger, panel alignment in both directions, compact shrink keeping the name, axe open; `describeAxe`. Visual: open panel EN/AR × light/dark.
+Spec: name, panel, seven items in order with `data-channel`, links in the page language, current item, inherited channel, missing links as text, slotted logo, methods, Arabic. e2e: keyboard open (instant), Tab through, Escape and focus return, focus leaving, pointer animation and outside press, seven distinct swatches matching each channel's token, 48px trigger, the 10px swatch mark and trigger padding, panel alignment in both directions, compact shrink keeping the name, axe open; `describeAxe`. Visual: open panel EN/AR × light/dark.

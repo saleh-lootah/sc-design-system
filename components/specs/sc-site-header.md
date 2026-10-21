@@ -18,14 +18,14 @@ v1 had one tag, `sc-app-bar`, for both the journey bar and the desktop channel h
 | --- | --- | --- |
 | 1 | Bar | `<header>` (banner landmark), `surface`, a 1px `outline-variant` rule beneath. 80px tall (64 compact). Content capped at `container-max` (1280) with the grid margin inline (20/32/48/80). |
 | 2 | Lockup | `slot="lockup"`: the Government of Dubai lockup as supplied (L1–L4), 40px tall, usually in an `<a>` to the channel home. The library ships no logo; public demos use a neutral placeholder of the same proportions (680.84 × 274.11) labelled "Government of Dubai lockup". |
-| 3 | Main navigation | `<nav aria-label="Main">` around `slot="nav"`: direct `<a>` children. Full-height links, 32px apart, label-large Medium (Bold in Arabic, D12). The current item (`aria-current="page"`) is `channel-action`, Bold, with a 3px `channel-action` bar at block-end. |
-| 4 | Search | With `search-href`: a 44 × 44 icon link named "Search". |
+| 3 | Main navigation | `<nav aria-label="Main">` around `slot="nav"`: direct `<a>` children. Full-height links, 36px apart and 56 from the lockup from 1440px (B2, board CTM-0); 32 and 40 from 1024 to 1439, where the content is at most 1184 and the board's gaps overflow a four-item English row. label-large Medium (Bold in Arabic, D12). The current item (`aria-current="page"`) is `channel-action`, Bold, with a 3px `channel-action` bar at block-end. |
+| 4 | Search | With `search-href`: a 44 × 44 icon link named "Search". The end controls (search, language, sign in or account, switcher) are 24 apart from 1440px, 16 from 1024 to 1439, 8 in the compact row. |
 | 5 | Language | `slot="language"`: `sc-language-switch` (`header` appearance). |
-| 6 | Sign in | U3a: the official UAE PASS button in `slot="signin"`. Until the kit arrives, with `sign-in-href` the header renders a marked placeholder (`data-placeholder="uaepass"`): black fill, white label "Sign in with UAE PASS", a fingerprint glyph, 56px, the same on every channel and in dark mode. It is never an `sc-button` and never city indigo. |
+| 6 | Sign in | U3a: the official UAE PASS button in `slot="signin"`. Until the kit arrives, with `sign-in-href` the header renders a marked placeholder (`data-placeholder="uaepass"`): black fill, white label "Sign in with UAE PASS" (label-medium Bold in the row, label-large in the menu, as B2 and the board), a fingerprint glyph, 56px, the same on every channel and in dark mode. It is never an `sc-button` and never city indigo. |
 | 7 | Account | `slot="account"`: `sc-account-menu`. When present it replaces sign in. |
 | 8 | Channel logo and switcher | `slot="switcher"`: `sc-channel-switcher`. |
 | 9 | Menu button (compact) | 44 × 44, `menu` icon, named "Menu", `aria-haspopup="dialog"`, `aria-expanded`, `aria-controls`. |
-| 10 | Mobile menu (compact) | A full-screen modal `<dialog>` labelled by its title "Menu": a 64px head row (close button, title, the language switch), then search as a 56px row, the navigation as 56px rows with a chevron and 1px rules (current row: 3px `channel-action` bar at inline-start), then sign in (full width) with "Sign in to see your tasks, payments and saved services.", or the account menu. |
+| 10 | Mobile menu (compact) | A full-screen modal `<dialog>` labelled by its title "Menu": a 64px head row (close button, title, the language switch), then search as a 56px row, the navigation as 56px rows with a chevron and 1px rules (current row: 3px `channel-action` bar at inline-start), then sign in (full width) with "Sign in to see your tasks, payments and saved services." (body-small, start-aligned), or the account menu. |
 
 ## Layout
 
@@ -60,7 +60,7 @@ Menu from a pointer: opacity and an 8px rise over `duration-base` with `easing-e
 ## Tests
 
 - `sc-site-header.spec.tsx`: order of parts, UAE PASS placeholder (not `sc-button`), `slot="signin"`, account replaces sign in, dialog labelling, Arabic strings.
-- `sc-site-header.e2e.ts`: order and mirroring, 80px flat bar and rule, banner and "Main", current item (3px bar, Bold, `aria-current`), 44px targets, placeholder identical across channel and theme, account, Tab order, compact row (64px, no overflow at 390px), keyboard open (focus, modal, inert, Escape, focus return, no animation), close button and link close, pointer animation, current row bar in Arabic, overflow fallback at 1024px Arabic, sticky, axe with the menu open; `describeAxe` EN/AR × light/dark.
+- `sc-site-header.e2e.ts`: order and mirroring, 80px flat bar and rule, banner and "Main", current item (3px bar, Bold, `aria-current`), row spacing (56/36/24 at 1440), 44px targets, placeholder identical across channel and theme, account, Tab order, compact row (64px, no overflow at 390px), keyboard open (focus, modal, inert, Escape, focus return, no animation), close button and link close, pointer animation, current row bar in Arabic, overflow fallback at 1024px Arabic, sticky, axe with the menu open; `describeAxe` EN/AR × light/dark.
 - `sc-site-header.visual.e2e.ts`: signed in and signed out at 1440px, EN/AR × light/dark.
 
 ## Open

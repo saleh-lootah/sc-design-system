@@ -23,9 +23,13 @@ describe('sc-channel-network (e2e)', () => {
   it("gives each tile a 4px top rule in its own channel's action colour (FND-26)", async () => {
     const page = await newScPage(NETWORK);
     const rules = await page.evaluate(() =>
-      Array.from(document.querySelectorAll('.sc-channel-network__tile')).map((t) => [getComputedStyle(t).borderTopWidth, getComputedStyle(t).borderTopColor]),
+      Array.from(document.querySelectorAll('.sc-channel-network__tile')).map((t) => {
+        const s = getComputedStyle(t);
+        // The rule is a 4px background band (board FVO-0): the colour is the gradient's.
+        return [s.backgroundSize, s.backgroundImage.replace(/^linear-gradient\((.*), \1\)$/, '$1')];
+      }),
     );
-    expect(rules.every(([w]) => w === '4px')).toBe(true);
+    expect(rules.every(([size]) => size === '100% 4px')).toBe(true);
     expect(new Set(rules.map(([, c]) => c)).size).toBe(7);
     expect(rules[1][1]).toBe(await probe(page, 'transport', 'color', 'var(--sc-color-channel-action)'));
   });

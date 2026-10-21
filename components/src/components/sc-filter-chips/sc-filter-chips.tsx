@@ -1,6 +1,7 @@
 import { Component, Element, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
 import { LocaleController } from '../../i18n/controller';
 import strings from '../../i18n/components/sc-filter-chips';
+import { Close } from '../../icons/for/sc-filter-chips';
 
 export interface FilterChip {
   /** What the filter is, sent back in `scRemove`. */
@@ -149,10 +150,7 @@ export class ScFilterChips {
                   <span class="sc-filter-chips__label" aria-hidden="true">
                     {chip.label}
                   </span>
-                  <svg class="icon sc-filter-chips__close" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
-                    <path d="M6 6l12 12" />
-                    <path d="M18 6L6 18" />
-                  </svg>
+                  <Close class="sc-filter-chips__close" />
                 </button>
               </li>
             ))}

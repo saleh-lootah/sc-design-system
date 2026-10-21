@@ -2,7 +2,7 @@ import { Component, Element, Host, Prop, Watch, h } from '@stencil/core';
 import { LocaleController } from '../../i18n/controller';
 import strings from '../../i18n/components/sc-channel-chip';
 import { Channel, channels } from '../../i18n/core';
-import { ChevronForward } from '../../icons/index'; // explicit /index: see CONTRIBUTING
+import { ChevronForward } from '../../icons/for/sc-channel-chip';
 
 export type ChannelChipVariant = 'subtle' | 'outlined';
 

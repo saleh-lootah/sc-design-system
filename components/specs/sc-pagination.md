@@ -52,7 +52,7 @@ Logical properties only (avoiding `dda-pagination`'s physical borders): Previous
 
 ## Budget
 
-Custom-elements closure 3,851 B gzip (4 KiB budget), its own CSS 815 B. The two chevrons are drawn in the component (about 0.1 KiB) rather than imported from the shared icon set (0.9 KiB), which would have put it over budget.
+Custom-elements closure 3,854 B gzip (4 KiB budget), its own CSS 815 B. The two chevrons are Material Symbols `chevron_left` and `chevron_right`, inlined from `src/icons/for/sc-pagination.tsx`.
 
 ## Tests
 

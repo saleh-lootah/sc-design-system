@@ -2,7 +2,7 @@ import { Component, Element, Host, Method, Prop, State, h } from '@stencil/core'
 import { LocaleController } from '../../i18n/controller';
 import own from '../../i18n/components/sc-channel-switcher';
 import { channelStrings, descKey, nameKey } from '../../i18n/components/channels';
-import { Check, ExpandMore } from '../../icons/chrome';
+import { Check, ExpandMore } from '../../icons/for/sc-channel-switcher';
 import { Disclosure } from '../../utils/disclosure';
 import { Channel, ChannelLinks, channelHref, channels, parseLinks, resolveChannel } from '../../utils/channels';
 
@@ -28,7 +28,7 @@ let instances = 0;
  * shrinks to the logo and chevron and keeps its accessible name (CHR-04).
  *
  * @slot - Optional: the channel's own logo (an `<svg>` or `<img alt="">`, 24px). Without it
- *   the trigger shows a ring mark in the channel colour.
+ *   the trigger shows the current channel's swatch (10px, in its channel colour).
  */
 @Component({
   tag: 'sc-channel-switcher',

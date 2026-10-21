@@ -1,23 +1,26 @@
 import { Component, Element, Host, Prop, h } from '@stencil/core';
 import { LocaleController } from '../../i18n/controller';
 import strings from '../../i18n/components/sc-utility-bar';
-import { AccessibilityIcon, Chat, Mood, Phone } from '../../icons/chrome';
+import { Accessibility as AccessibilityIcon, Chat, GridView, Mood, Phone } from '../../icons/for/sc-utility-bar';
+
 
 /** The custom property the page reads to keep clear of the docked bar. */
 const RESERVE = '--sc-utility-bar-block-size';
 
 /**
  * The help and feedback bar of a channel site (decision U4, Standard CHR-05; component-
- * language B4 as amended by U4): the Happiness Meter, contact and complaints (04), chat and
- * accessibility options, each an icon with a visible label (labels never collapse to icons).
+ * language B4 as amended by U4): the Happiness Meter, Call 04, Services, Chat and
+ * Accessibility, each an icon with a visible label (labels never collapse to icons).
  *
  * From 1024px it is a flat bar docked to the bottom of the viewport across the full width,
- * at `elevation-1`, with a 1px `outline-variant` edge along its top. It publishes its height
+ * at `elevation-1`, with a 1px `outline-variant` edge along its top: 48px items with 12px of
+ * block padding (Paper board ERV-0). It publishes its height
  * as `--sc-utility-bar-block-size` on `<html>`: `sc-page` pads its end by it and `sc.css`
  * sets `scroll-padding-block-end` from it, so the bar never covers content or the focused
  * element (WCAG 2.4.11). Below 1024px it folds into the footer: place it straight after
  * `sc-footer`, and it becomes an in-flow "Help and feedback" group, a 2 × 2 grid of outlined
- * buttons. It is present when the page loads and does not animate.
+ * text buttons (Services is left out there: the site's menu already carries it). It is
+ * present when the page loads and does not animate.
  *
  * A `<nav>` labelled "Help and feedback". Items appear when their `*-href` is set.
  *
@@ -35,11 +38,14 @@ export class ScUtilityBar {
   /** The Happiness Meter survey. */
   @Prop() happinessHref?: string;
 
-  /** Contact and complaints: usually `tel:04…` or the contact page. */
+  /** The call centre ("Call 04"): usually `tel:04…` or the contact page. */
   @Prop() contactHref?: string;
 
-  /** The number shown after "Contact and complaints", isolated left to right. */
+  /** The number shown after "Call", isolated left to right. */
   @Prop() contactNumber = '04';
+
+  /** The channel's services page. Shown in the docked bar only (from 1024px). */
+  @Prop() servicesHref?: string;
 
   /** The chat service. */
   @Prop() chatHref?: string;
@@ -86,7 +92,7 @@ export class ScUtilityBar {
 
   render() {
     const { t } = this.locale;
-    const items: [string | undefined, unknown, unknown][] = [
+    const items: [string | undefined, unknown, unknown, string?][] = [
       [this.happinessHref, <Mood />, t('utilityHappiness')],
       [
         this.contactHref,
@@ -101,6 +107,7 @@ export class ScUtilityBar {
           ],
         ],
       ],
+      [this.servicesHref, <GridView />, t('utilityServices'), 'docked-only'],
       [this.chatHref, <Chat />, t('utilityChat')],
       [this.accessibilityHref, <AccessibilityIcon />, t('utilityAccessibility')],
     ];
@@ -113,8 +120,8 @@ export class ScUtilityBar {
           <ul class="list">
             {items
               .filter(([href]) => !!href)
-              .map(([href, icon, label]) => (
-                <li>
+              .map(([href, icon, label, only]) => (
+                <li class={only}>
                   <a class="item focus-ring state-layer" part="item" href={href as string}>
                     {icon}
                     <span>{label}</span>

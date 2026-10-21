@@ -1,7 +1,7 @@
 import { Component, Element, Event, EventEmitter, Host, Method, Prop, State, Watch, h } from '@stencil/core';
 import { LocaleController } from '../../i18n/controller';
 import strings from '../../i18n/components/sc-modal';
-import { Close } from '../../icons/index'; // explicit /index: see CONTRIBUTING
+import { Close } from '../../icons/for/sc-modal';
 
 export type ModalHeadingLevel = 2 | 3;
 export type ModalInitialFocus = 'heading' | 'first';

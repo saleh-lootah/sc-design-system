@@ -8,7 +8,7 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { AnnouncementTone } from "./components/sc-announcement-bar/sc-announcement-bar";
 import { AttentionCardHeadingLevel, AttentionCardTint } from "./components/sc-attention-card/sc-attention-card";
 import { ButtonIconPosition, ButtonSize, ButtonType, ButtonVariant } from "./components/sc-button/sc-button";
-import { IconName } from "./icons/index";
+import { ButtonIconName } from "./icons/for/sc-button";
 import { CalloutHeadingLevel, CalloutTone } from "./components/sc-callout/sc-callout";
 import { CardLandmark, CardPadding, CardVariant } from "./components/sc-card/sc-card";
 import { Channel } from "./i18n/core";
@@ -19,6 +19,7 @@ import { HeadingLevel } from "./components/sc-text-input/field";
 import { Parts } from "./components/sc-date-input/date";
 import { StringsInput } from "./components/sc-date-range/overrides";
 import { EmptyStateHeadingLevel, EmptyStateVariant } from "./components/sc-empty-state/sc-empty-state";
+import { EmptyStateIconName } from "./icons/for/sc-empty-state";
 import { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
 import { FilterChip } from "./components/sc-filter-chips/sc-filter-chips";
 import { FooterVariant } from "./components/sc-footer/sc-footer";
@@ -41,7 +42,7 @@ import { TimelineOrder } from "./components/sc-timeline/sc-timeline";
 export { AnnouncementTone } from "./components/sc-announcement-bar/sc-announcement-bar";
 export { AttentionCardHeadingLevel, AttentionCardTint } from "./components/sc-attention-card/sc-attention-card";
 export { ButtonIconPosition, ButtonSize, ButtonType, ButtonVariant } from "./components/sc-button/sc-button";
-export { IconName } from "./icons/index";
+export { ButtonIconName } from "./icons/for/sc-button";
 export { CalloutHeadingLevel, CalloutTone } from "./components/sc-callout/sc-callout";
 export { CardLandmark, CardPadding, CardVariant } from "./components/sc-card/sc-card";
 export { Channel } from "./i18n/core";
@@ -52,6 +53,7 @@ export { HeadingLevel } from "./components/sc-text-input/field";
 export { Parts } from "./components/sc-date-input/date";
 export { StringsInput } from "./components/sc-date-range/overrides";
 export { EmptyStateHeadingLevel, EmptyStateVariant } from "./components/sc-empty-state/sc-empty-state";
+export { EmptyStateIconName } from "./icons/for/sc-empty-state";
 export { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
 export { FilterChip } from "./components/sc-filter-chips/sc-filter-chips";
 export { FooterVariant } from "./components/sc-footer/sc-footer";
@@ -199,6 +201,10 @@ export namespace Components {
           * Dismisses the announcement, as the dismiss button does from the keyboard.
          */
         "dismiss": () => Promise<void>;
+        /**
+          * Overrides the dismiss button's name, "Dismiss announcement" (in the page language).
+         */
+        "dismissLabel"?: string;
         /**
           * Shows the dismiss button.
           * @default false
@@ -366,9 +372,9 @@ export namespace Components {
          */
         "href"?: string;
         /**
-          * An icon from the library (`src/icons`), e.g. `arrow-forward`. Arrows and chevrons mirror in right-to-left.
+          * An icon by name: `arrow-forward`, `arrow-back`, `chevron-forward`, `chevron-back`, `external`, `search`, `check` or `close` (Material Symbols). Arrows and chevrons mirror in right-to-left. For any other icon, use `slot="icon"`.
          */
-        "icon"?: IconName;
+        "icon"?: ButtonIconName;
         /**
           * Where the icon sits relative to the label.
           * @default 'end'
@@ -530,6 +536,10 @@ export namespace Components {
           * The current channel. Defaults to the closest `data-channel`.
          */
         "channel"?: Channel1;
+        /**
+          * Replaces the eyebrow, "One network · seven channels" in the page language.
+         */
+        "eyebrow"?: string;
         /**
           * Each channel's home page (as `sc-channel-switcher` `links`; `{lang}` becomes `en` or `ar`).
          */
@@ -867,9 +877,9 @@ export namespace Components {
          */
         "headingLevel"?: EmptyStateHeadingLevel;
         /**
-          * An icon from the library (`inbox`, `search`, `check-circle` …). Leave unset for no icon; `success` defaults to `check-circle`.
+          * An icon by name: `inbox`, `search`, `check-circle`, `info`, `warning`, `alert-circle` or `schedule` (Material Symbols). Leave unset for no icon; `success` defaults to `check-circle`. Any other icon goes in `slot="icon"`.
          */
-        "icon"?: IconName;
+        "icon"?: EmptyStateIconName;
         /**
           * `default`: neutral. `success`: the all-clear, with a check on the success container.
           * @default 'default'
@@ -2038,15 +2048,17 @@ export namespace Components {
     }
     /**
      * The help and feedback bar of a channel site (decision U4, Standard CHR-05; component-
-     * language B4 as amended by U4): the Happiness Meter, contact and complaints (04), chat and
-     * accessibility options, each an icon with a visible label (labels never collapse to icons).
+     * language B4 as amended by U4): the Happiness Meter, Call 04, Services, Chat and
+     * Accessibility, each an icon with a visible label (labels never collapse to icons).
      * From 1024px it is a flat bar docked to the bottom of the viewport across the full width,
-     * at `elevation-1`, with a 1px `outline-variant` edge along its top. It publishes its height
+     * at `elevation-1`, with a 1px `outline-variant` edge along its top: 48px items with 12px of
+     * block padding (Paper board ERV-0). It publishes its height
      * as `--sc-utility-bar-block-size` on `<html>`: `sc-page` pads its end by it and `sc.css`
      * sets `scroll-padding-block-end` from it, so the bar never covers content or the focused
      * element (WCAG 2.4.11). Below 1024px it folds into the footer: place it straight after
      * `sc-footer`, and it becomes an in-flow "Help and feedback" group, a 2 × 2 grid of outlined
-     * buttons. It is present when the page loads and does not animate.
+     * text buttons (Services is left out there: the site's menu already carries it). It is
+     * present when the page loads and does not animate.
      * A `<nav>` labelled "Help and feedback". Items appear when their `*-href` is set.
      */
     interface ScUtilityBar {
@@ -2059,11 +2071,11 @@ export namespace Components {
          */
         "chatHref"?: string;
         /**
-          * Contact and complaints: usually `tel:04…` or the contact page.
+          * The call centre ("Call 04"): usually `tel:04…` or the contact page.
          */
         "contactHref"?: string;
         /**
-          * The number shown after "Contact and complaints", isolated left to right.
+          * The number shown after "Call", isolated left to right.
           * @default '04'
          */
         "contactNumber": string;
@@ -2071,6 +2083,10 @@ export namespace Components {
           * The Happiness Meter survey.
          */
         "happinessHref"?: string;
+        /**
+          * The channel's services page. Shown in the docked bar only (from 1024px).
+         */
+        "servicesHref"?: string;
     }
 }
 export interface ScAccountMenuCustomEvent<T> extends CustomEvent<T> {
@@ -3235,15 +3251,17 @@ declare global {
     };
     /**
      * The help and feedback bar of a channel site (decision U4, Standard CHR-05; component-
-     * language B4 as amended by U4): the Happiness Meter, contact and complaints (04), chat and
-     * accessibility options, each an icon with a visible label (labels never collapse to icons).
+     * language B4 as amended by U4): the Happiness Meter, Call 04, Services, Chat and
+     * Accessibility, each an icon with a visible label (labels never collapse to icons).
      * From 1024px it is a flat bar docked to the bottom of the viewport across the full width,
-     * at `elevation-1`, with a 1px `outline-variant` edge along its top. It publishes its height
+     * at `elevation-1`, with a 1px `outline-variant` edge along its top: 48px items with 12px of
+     * block padding (Paper board ERV-0). It publishes its height
      * as `--sc-utility-bar-block-size` on `<html>`: `sc-page` pads its end by it and `sc.css`
      * sets `scroll-padding-block-end` from it, so the bar never covers content or the focused
      * element (WCAG 2.4.11). Below 1024px it folds into the footer: place it straight after
      * `sc-footer`, and it becomes an in-flow "Help and feedback" group, a 2 × 2 grid of outlined
-     * buttons. It is present when the page loads and does not animate.
+     * text buttons (Services is left out there: the site's menu already carries it). It is
+     * present when the page loads and does not animate.
      * A `<nav>` labelled "Help and feedback". Items appear when their `*-href` is set.
      */
     interface HTMLScUtilityBarElement extends Components.ScUtilityBar, HTMLStencilElement {
@@ -3428,6 +3446,10 @@ declare namespace LocalJSX {
          */
         "announcementId"?: string;
         /**
+          * Overrides the dismiss button's name, "Dismiss announcement" (in the page language).
+         */
+        "dismissLabel"?: string;
+        /**
           * Shows the dismiss button.
           * @default false
          */
@@ -3598,9 +3620,9 @@ declare namespace LocalJSX {
          */
         "href"?: string;
         /**
-          * An icon from the library (`src/icons`), e.g. `arrow-forward`. Arrows and chevrons mirror in right-to-left.
+          * An icon by name: `arrow-forward`, `arrow-back`, `chevron-forward`, `chevron-back`, `external`, `search`, `check` or `close` (Material Symbols). Arrows and chevrons mirror in right-to-left. For any other icon, use `slot="icon"`.
          */
-        "icon"?: IconName;
+        "icon"?: ButtonIconName;
         /**
           * Where the icon sits relative to the label.
           * @default 'end'
@@ -3762,6 +3784,10 @@ declare namespace LocalJSX {
           * The current channel. Defaults to the closest `data-channel`.
          */
         "channel"?: Channel1;
+        /**
+          * Replaces the eyebrow, "One network · seven channels" in the page language.
+         */
+        "eyebrow"?: string;
         /**
           * Each channel's home page (as `sc-channel-switcher` `links`; `{lang}` becomes `en` or `ar`).
          */
@@ -4107,9 +4133,9 @@ declare namespace LocalJSX {
          */
         "headingLevel"?: EmptyStateHeadingLevel;
         /**
-          * An icon from the library (`inbox`, `search`, `check-circle` …). Leave unset for no icon; `success` defaults to `check-circle`.
+          * An icon by name: `inbox`, `search`, `check-circle`, `info`, `warning`, `alert-circle` or `schedule` (Material Symbols). Leave unset for no icon; `success` defaults to `check-circle`. Any other icon goes in `slot="icon"`.
          */
-        "icon"?: IconName;
+        "icon"?: EmptyStateIconName;
         /**
           * `default`: neutral. `success`: the all-clear, with a check on the success container.
           * @default 'default'
@@ -5314,15 +5340,17 @@ declare namespace LocalJSX {
     }
     /**
      * The help and feedback bar of a channel site (decision U4, Standard CHR-05; component-
-     * language B4 as amended by U4): the Happiness Meter, contact and complaints (04), chat and
-     * accessibility options, each an icon with a visible label (labels never collapse to icons).
+     * language B4 as amended by U4): the Happiness Meter, Call 04, Services, Chat and
+     * Accessibility, each an icon with a visible label (labels never collapse to icons).
      * From 1024px it is a flat bar docked to the bottom of the viewport across the full width,
-     * at `elevation-1`, with a 1px `outline-variant` edge along its top. It publishes its height
+     * at `elevation-1`, with a 1px `outline-variant` edge along its top: 48px items with 12px of
+     * block padding (Paper board ERV-0). It publishes its height
      * as `--sc-utility-bar-block-size` on `<html>`: `sc-page` pads its end by it and `sc.css`
      * sets `scroll-padding-block-end` from it, so the bar never covers content or the focused
      * element (WCAG 2.4.11). Below 1024px it folds into the footer: place it straight after
      * `sc-footer`, and it becomes an in-flow "Help and feedback" group, a 2 × 2 grid of outlined
-     * buttons. It is present when the page loads and does not animate.
+     * text buttons (Services is left out there: the site's menu already carries it). It is
+     * present when the page loads and does not animate.
      * A `<nav>` labelled "Help and feedback". Items appear when their `*-href` is set.
      */
     interface ScUtilityBar {
@@ -5335,11 +5363,11 @@ declare namespace LocalJSX {
          */
         "chatHref"?: string;
         /**
-          * Contact and complaints: usually `tel:04…` or the contact page.
+          * The call centre ("Call 04"): usually `tel:04…` or the contact page.
          */
         "contactHref"?: string;
         /**
-          * The number shown after "Contact and complaints", isolated left to right.
+          * The number shown after "Call", isolated left to right.
           * @default '04'
          */
         "contactNumber"?: string;
@@ -5347,6 +5375,10 @@ declare namespace LocalJSX {
           * The Happiness Meter survey.
          */
         "happinessHref"?: string;
+        /**
+          * The channel's services page. Shown in the docked bar only (from 1024px).
+         */
+        "servicesHref"?: string;
     }
 
     interface ScAccordionAttributes {
@@ -5372,6 +5404,7 @@ declare namespace LocalJSX {
         "linkText": string;
         "dismissible": boolean;
         "announcementId": string;
+        "dismissLabel": string;
     }
     interface ScAppBarAttributes {
         "sticky": boolean;
@@ -5406,7 +5439,7 @@ declare namespace LocalJSX {
         "loading": boolean;
         "loadingText": string;
         "fullWidth": boolean;
-        "icon": IconName;
+        "icon": ButtonIconName;
         "iconPosition": ButtonIconPosition;
     }
     interface ScCalloutAttributes {
@@ -5434,6 +5467,7 @@ declare namespace LocalJSX {
     interface ScChannelNetworkAttributes {
         "channel": Channel;
         "links": ChannelLinks | string;
+        "eyebrow": string;
     }
     interface ScChannelSwitcherAttributes {
         "channel": Channel;
@@ -5499,7 +5533,7 @@ declare namespace LocalJSX {
     interface ScEmptyStateAttributes {
         "heading": string;
         "headingLevel": EmptyStateHeadingLevel;
-        "icon": IconName;
+        "icon": EmptyStateIconName;
         "variant": EmptyStateVariant;
     }
     interface ScErrorSummaryAttributes {
@@ -5717,6 +5751,7 @@ declare namespace LocalJSX {
         "happinessHref": string;
         "contactHref": string;
         "contactNumber": string;
+        "servicesHref": string;
         "chatHref": string;
         "accessibilityHref": string;
     }
@@ -6445,15 +6480,17 @@ declare module "@stencil/core" {
             "sc-timeline": LocalJSX.IntrinsicElements["sc-timeline"] & JSXBase.HTMLAttributes<HTMLScTimelineElement>;
             /**
              * The help and feedback bar of a channel site (decision U4, Standard CHR-05; component-
-             * language B4 as amended by U4): the Happiness Meter, contact and complaints (04), chat and
-             * accessibility options, each an icon with a visible label (labels never collapse to icons).
+             * language B4 as amended by U4): the Happiness Meter, Call 04, Services, Chat and
+             * Accessibility, each an icon with a visible label (labels never collapse to icons).
              * From 1024px it is a flat bar docked to the bottom of the viewport across the full width,
-             * at `elevation-1`, with a 1px `outline-variant` edge along its top. It publishes its height
+             * at `elevation-1`, with a 1px `outline-variant` edge along its top: 48px items with 12px of
+             * block padding (Paper board ERV-0). It publishes its height
              * as `--sc-utility-bar-block-size` on `<html>`: `sc-page` pads its end by it and `sc.css`
              * sets `scroll-padding-block-end` from it, so the bar never covers content or the focused
              * element (WCAG 2.4.11). Below 1024px it folds into the footer: place it straight after
              * `sc-footer`, and it becomes an in-flow "Help and feedback" group, a 2 × 2 grid of outlined
-             * buttons. It is present when the page loads and does not animate.
+             * text buttons (Services is left out there: the site's menu already carries it). It is
+             * present when the page loads and does not animate.
              * A `<nav>` labelled "Help and feedback". Items appear when their `*-href` is set.
              */
             "sc-utility-bar": LocalJSX.IntrinsicElements["sc-utility-bar"] & JSXBase.HTMLAttributes<HTMLScUtilityBarElement>;

@@ -1,7 +1,7 @@
 import { Component, Host, Prop, h } from '@stencil/core';
 import { LocaleController } from '../../i18n/controller';
 import strings from '../../i18n/components/sc-spinner';
-import { Spinner } from '../../icons/index'; // explicit /index: see CONTRIBUTING
+import { Spinner } from '../../icons/for/sc-spinner';
 
 export type SpinnerSize = 'm' | 'l';
 

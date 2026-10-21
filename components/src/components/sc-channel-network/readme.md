@@ -9,6 +9,8 @@
 ```
 
 - The current channel (from `channel` or the closest `data-channel`) says "You are here" and is not a link.
+- `eyebrow` replaces "One network · seven channels" if a page needs other wording.
+- The page places it after the last content band, before the footer, with 72 above and 80 below (component-language 3.7); the strip itself has no outer padding.
 
 <!-- Auto Generated Below -->
 
@@ -34,6 +36,7 @@ row from 1024px (by the strip's own width), four from 600px, two below.
 | Property  | Attribute | Description                                                                                 | Type                                                                                                    | Default     |
 | --------- | --------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ----------- |
 | `channel` | `channel` | The current channel. Defaults to the closest `data-channel`.                                | `"build" \| "invest" \| "justice" \| "now" \| "trade" \| "transport" \| "visit" \| undefined`           | `undefined` |
+| `eyebrow` | `eyebrow` | Replaces the eyebrow, "One network · seven channels" in the page language.                  | `string \| undefined`                                                                                   | `undefined` |
 | `links`   | `links`   | Each channel's home page (as `sc-channel-switcher` `links`; `{lang}` becomes `en` or `ar`). | `"build" \| "invest" \| "justice" \| "now" \| "trade" \| "transport" \| "visit" \| string \| undefined` | `undefined` |
 
 
