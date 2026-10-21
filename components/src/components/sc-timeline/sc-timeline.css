@@ -6,6 +6,8 @@
  *
  * Marker column 24 wide; the 12px dot is centred and its centre meets the 32px tag's.
  */
+/* W12: the full layer order first; Stencil can insert this sheet before sc.css. */
+@layer sc.reset, sc.tokens, sc.base, sc.components, sc.utilities;
 @layer sc.components {
   :host {
     --_col: var(--sc-space-24);

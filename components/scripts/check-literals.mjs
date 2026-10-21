@@ -16,6 +16,10 @@
  *   - no import of the legacy i18n/locale or i18n/strings, except by the v1 components
  *     still listed in V1_PENDING below. Family agents delete their tags from the list when
  *     they rebuild them; the list must be empty by the end of Wave 2b.
+ *   - every scoped (light-DOM) component's CSS starts with the full cascade layer order,
+ *     `@layer sc.reset, sc.tokens, sc.base, sc.components, sc.utilities;` (decision W12):
+ *     Stencil can insert a component's styles before sc.css, and without it the base focus
+ *     outline outranks component rules
  * src/global/*.css (except the generated files) is checked for literals too.
  */
 import { readFileSync, readdirSync, statSync } from 'node:fs';
@@ -73,6 +77,17 @@ for (const file of files.filter((f) => f.startsWith(scanDir))) {
       for (const m of line.matchAll(re)) problems.push(`${relative(root, file)}:${i + 1}:${m.index + 1}  ${name}: ${m[0].trim()}`);
     });
   }
+}
+
+// W12: a scoped component's stylesheet must declare the full layer order before its first rule.
+const LAYER_ORDER = '@layer sc.reset, sc.tokens, sc.base, sc.components, sc.utilities;';
+for (const tsx of files.filter((f) => f.endsWith('.tsx'))) {
+  const tag = tagOf(tsx);
+  if (tsx !== join(scanDir, tag, `${tag}.tsx`) || V1_PENDING.has(tag)) continue;
+  if (!/\bscoped\s*:\s*true\b/.test(stripComments(readFileSync(tsx, 'utf8')))) continue;
+  const css = join(scanDir, tag, `${tag}.css`);
+  const body = stripComments(readFileSync(css, 'utf8')).trim();
+  if (!body.startsWith(LAYER_ORDER)) problems.push(`${relative(root, css)}:1:1  missing cascade layer order (W12): start the file with ${LAYER_ORDER}`);
 }
 
 for (const file of files) {

@@ -1,6 +1,8 @@
 /*
  * sc-summary-list (v2, light DOM). Rules: component-language.md A26–A27 and §3.4–3.5, read
- * through the role table in decisions.md. Everything sits in @layer sc.components, so a
+ * through the role table in decisions.md. Everything sits in /* W12: the full layer order first; Stencil can insert this sheet before sc.css. */
+@layer sc.reset, sc.tokens, sc.base, sc.components, sc.utilities;
+@layer sc.components, so a
  * service's unlayered CSS wins.
  *
  * Container queries cannot read custom properties, so 600px repeats --sc-breakpoint-medium.

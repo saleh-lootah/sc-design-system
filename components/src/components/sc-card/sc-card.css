@@ -1,6 +1,8 @@
 /*
  * sc-card (v2, light DOM). Rules: component-language.md A22, read through the role table in
- * decisions.md. The host is the surface. Everything is in @layer sc.components, so a
+ * decisions.md. The host is the surface. Everything is in /* W12: the full layer order first; Stencil can insert this sheet before sc.css. */
+@layer sc.reset, sc.tokens, sc.base, sc.components, sc.utilities;
+@layer sc.components, so a
  * service's own unlayered CSS wins.
  */
 @layer sc.components {

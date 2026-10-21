@@ -8,6 +8,8 @@
  * Stencil rewrites `::slotted(ol) li` to `.sc-sc-step-list-s > ol li`. Blocks open with a
  * :host rule (Stencil's scoper mangles a block whose first rule is ::slotted).
  */
+/* W12: the full layer order first; Stencil can insert this sheet before sc.css. */
+@layer sc.reset, sc.tokens, sc.base, sc.components, sc.utilities;
 @layer sc.components {
   :host {
     --_marker: var(--sc-space-32);

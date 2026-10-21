@@ -2,6 +2,8 @@
  * sc-select (v2, light DOM). field.css gives the label, hint, error and box; this adds the
  * native select and its chevron (component-language.md A9, E2).
  */
+/* W12: the full layer order first; Stencil can insert this sheet before sc.css. */
+@layer sc.reset, sc.tokens, sc.base, sc.components, sc.utilities;
 @layer sc.components {
   /* A select is as wide as its longest option needs, up to the container. */
   .sc-select__frame {

@@ -1,7 +1,9 @@
 /*
  * sc-accordion (v2, light DOM). Rules: component-language.md B15, read through the role
  * table in decisions.md. Stencil rewrites `::slotted(details) x` to `.sc-accordion-s >
- * details x`. Everything is in @layer sc.components, so a service's unlayered CSS wins.
+ * details x`. Everything is in /* W12: the full layer order first; Stencil can insert this sheet before sc.css. */
+@layer sc.reset, sc.tokens, sc.base, sc.components, sc.utilities;
+@layer sc.components, so a service's unlayered CSS wins.
  *
  * Stencil 4.45's scoper mangles an @media block whose FIRST rule is a ::slotted rule, so
  * such blocks open with a `:host { --_at: 1; }` anchor rule (as sc-table does).

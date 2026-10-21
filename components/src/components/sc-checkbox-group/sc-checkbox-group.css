@@ -2,6 +2,8 @@
  * sc-checkbox-group (v2, light DOM). field.css gives the fieldset, legend, hint, error and
  * bar; each sc-checkbox brings its own option styles (choice.css).
  */
+/* W12: the full layer order first; Stencil can insert this sheet before sc.css. */
+@layer sc.reset, sc.tokens, sc.base, sc.components, sc.utilities;
 @layer sc.components {
   .sc-choice-group__options {
     display: grid;

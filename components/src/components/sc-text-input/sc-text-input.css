@@ -2,6 +2,8 @@
  * sc-text-input (v2, light DOM). Everything it needs is in field.css (listed first in
  * styleUrls): the label, hint, error, the 56px box and the prefix and suffix.
  */
+/* W12: the full layer order first; Stencil can insert this sheet before sc.css. */
+@layer sc.reset, sc.tokens, sc.base, sc.components, sc.utilities;
 @layer sc.components {
   .sc-field__control[type='search']::-webkit-search-cancel-button {
     appearance: none;

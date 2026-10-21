@@ -4,6 +4,8 @@
  * (specs/sc-date-range.md) for behaviour. Every class is prefixed .sc-date-range__ because
  * the picker lives in the page's DOM.
  */
+/* W12: the full layer order first; Stencil can insert this sheet before sc.css. */
+@layer sc.reset, sc.tokens, sc.base, sc.components, sc.utilities;
 @layer sc.components {
   :host {
     /* Month change shift: 12px in the direction of travel, mirrored in right-to-left. */

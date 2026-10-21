@@ -1,4 +1,6 @@
 /* sc-summary-row (v2, light DOM): the value. Layout and type come from sc-summary-list. */
+/* W12: the full layer order first; Stencil can insert this sheet before sc.css. */
+@layer sc.reset, sc.tokens, sc.base, sc.components, sc.utilities;
 @layer sc.components {
   :host {
     display: block;

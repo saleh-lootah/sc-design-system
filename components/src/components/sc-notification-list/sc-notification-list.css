@@ -4,6 +4,8 @@
  * link (the coordinator's brief). Stencil rewrites `::slotted(ul) li` to
  * `.sc-sc-notification-list-s > ul li`. Blocks open with a :host rule (scoper bug).
  */
+/* W12: the full layer order first; Stencil can insert this sheet before sc.css. */
+@layer sc.reset, sc.tokens, sc.base, sc.components, sc.utilities;
 @layer sc.components {
   :host {
     /* Queried for the compact layout under 600px (--sc-breakpoint-medium). */

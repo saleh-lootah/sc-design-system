@@ -2,6 +2,8 @@
  * sc-page (v2, light DOM). The page shell: header, main and footer in a column, the footer at
  * the bottom of short pages, and the end reserved for a docked sc-utility-bar (CHR-05).
  */
+/* W12: the full layer order first; Stencil can insert this sheet before sc.css. */
+@layer sc.reset, sc.tokens, sc.base, sc.components, sc.utilities;
 @layer sc.components {
   :host {
     display: flex;

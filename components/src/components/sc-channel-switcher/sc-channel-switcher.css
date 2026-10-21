@@ -3,6 +3,8 @@
  * read through the role table in docs/v2/decisions.md. Light DOM so each item's own
  * data-channel rebinds the channel roles from the document (FND-26).
  */
+/* W12: the full layer order first; Stencil can insert this sheet before sc.css. */
+@layer sc.reset, sc.tokens, sc.base, sc.components, sc.utilities;
 @layer sc.components {
   :host {
     position: relative;
