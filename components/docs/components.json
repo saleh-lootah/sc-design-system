@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-21T15:28:57",
+  "timestamp": "2026-10-21T15:33:16",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.45.2",
@@ -10410,6 +10410,11 @@
       "docstring": "",
       "path": "src/components/sc-error-summary/sc-error-summary.tsx"
     },
+    "src/components/sc-filter-chips/sc-filter-chips.tsx::FilterChip": {
+      "declaration": "export interface FilterChip {\n  /** What the filter is, sent back in `scRemove`. */\n  value: string;\n  /** What people see: \"Transport and vehicles\". */\n  label: string;\n}",
+      "docstring": "",
+      "path": "src/components/sc-filter-chips/sc-filter-chips.tsx"
+    },
     "src/components/sc-language-switch/sc-language-switch.tsx::LanguageSwitchAppearance": {
       "declaration": "export type LanguageSwitchAppearance = 'inline' | 'header';",
       "docstring": "",
@@ -10544,11 +10549,6 @@
       "declaration": "export type StringsInput = string | Record<string, unknown> | undefined | null;",
       "docstring": "",
       "path": "src/components/sc-date-range/overrides.ts"
-    },
-    "src/components/sc-filter-chips/sc-filter-chips.tsx::FilterChip": {
-      "declaration": "export interface FilterChip {\n  /** What the filter is, sent back in `scRemove`. */\n  value: string;\n  /** What people see: \"Transport and vehicles\". */\n  label: string;\n}",
-      "docstring": "",
-      "path": "src/components/sc-filter-chips/sc-filter-chips.tsx"
     },
     "src/i18n/strings.ts::Channel": {
       "declaration": "\"build\" | \"now\" | \"transport\" | \"visit\" | \"justice\" | \"invest\" | \"trade\"",

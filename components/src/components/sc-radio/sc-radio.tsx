@@ -1,5 +1,8 @@
 import { Component, Element, Host, Prop, h } from '@stencil/core';
-import { describedBy, forwardFocus, nextId } from '../sc-text-input/field';
+
+// Kept local: importing the field helpers would pull the field strings (and so
+// defineStrings) into a closure without the locale controller, which splits a shared chunk.
+let counter = 0;
 
 /**
  * One option in an `sc-radio-group`. Its content is the option's label.
@@ -44,11 +47,12 @@ export class ScRadio {
   /** @internal Set by sc-radio-group: a choice is required. */
   @Prop() groupRequired = false;
 
-  private uid = nextId('sc-radio');
+  private uid = `sc-radio-${++counter}`;
   private input?: HTMLInputElement;
 
   connectedCallback() {
-    forwardFocus(this.el, () => this.input);
+    // Light DOM has no delegatesFocus: focus() on the host reaches the radio.
+    this.el.focus = (options?: FocusOptions) => this.input?.focus(options);
   }
 
   componentDidRender() {
@@ -77,7 +81,7 @@ export class ScRadio {
             checked={this.selected}
             disabled={this.disabled}
             required={this.groupRequired}
-            aria-describedby={describedBy(!!this.hint && `${id}-hint`)}
+            aria-describedby={this.hint ? `${id}-hint` : undefined}
           />
           <span class="sc-choice__mark sc-choice__mark--radio" aria-hidden="true" />
           <label class="sc-choice__label" htmlFor={`${id}-control`}>

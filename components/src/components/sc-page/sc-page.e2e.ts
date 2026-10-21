@@ -51,7 +51,8 @@ describe('sc-page (e2e)', () => {
     expect(await page.evaluate(() => document.activeElement!.id)).toBe('main-content');
     // The next Tab continues inside main (the search field), not back at the top.
     await page.keyboard.press('Tab');
-    expect(await page.evaluate(() => document.activeElement!.localName)).toBe('sc-search');
+    // sc-search is light DOM in v2 (C3): focus lands on its native input.
+    expect(await page.evaluate(() => document.activeElement!.closest('sc-search') !== null)).toBe(true);
   });
 
   it('sets dir from lang, and follows lang changes on itself', async () => {
@@ -62,7 +63,7 @@ describe('sc-page (e2e)', () => {
     await page.waitForChanges();
     expect(await attrs()).toEqual(['ar', 'rtl', 'now']);
     // Components inside take the page's language.
-    const button = await page.evaluate(() => document.querySelector('sc-search')!.shadowRoot!.querySelector('sc-button')!.textContent);
+    const button = await page.evaluate(() => document.querySelector('sc-search')!.querySelector('sc-button')!.textContent);
     expect(button).toBe('بحث');
   });
 

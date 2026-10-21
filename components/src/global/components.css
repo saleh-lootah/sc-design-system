@@ -49,6 +49,8 @@ sc-search[label-hidden]:not(:defined) {
 }
 sc-filter-chips:not(:defined) {
   min-block-size: var(--sc-size-chip);
+}
+
 /* C2 navigation. Shadow components whose items are plain child links: before upgrade the
    links show as a simple list at about their final size. */
 sc-breadcrumbs:not(:defined) {
