@@ -1,29 +1,31 @@
-@import '../sc-text-input/field-v1.css';
+/*
+ * sc-textarea (v2, light DOM). field.css (first in styleUrls) gives the label, hint, error and
+ * box; this adds the multi-line control and the count (component-language.md A8).
+ */
+@layer sc.components {
+  .sc-textarea__frame {
+    min-block-size: auto;
+  }
 
-.frame--area {
-  min-block-size: auto;
-}
+  /* Multi-line text uses body leading; padding 12 block, 16 inline; vertical resize only. */
+  .sc-textarea__control {
+    display: block;
+    min-block-size: var(--sc-size-control-primary);
+    padding-block: var(--sc-space-12);
+    resize: vertical;
+  }
 
-textarea.control {
-  display: block;
-  min-block-size: var(--sc-size-control-l);
-  resize: block;
-}
+  /* The count: body-medium, on-surface-variant; error and Bold once over the limit (the
+     words "too many" carry the meaning, not the colour). */
+  .sc-textarea__count {
+    margin: 0;
+    color: var(--sc-color-on-surface-variant);
+    font: var(--sc-type-body-medium);
+    letter-spacing: var(--sc-type-body-medium-tracking);
+  }
 
-/* The count: hint type, muted; error colour and weight once the limit is passed
-   (the words "too many" carry the meaning, not the colour). */
-.count {
-  margin: 0;
-  color: var(--sc-color-muted);
-  font-family: var(--type-hint-family);
-  font-weight: var(--type-hint-weight);
-  font-size: var(--type-hint-size);
-  line-height: var(--type-hint-leading);
-  letter-spacing: var(--type-hint-tracking);
-}
-
-.count--over {
-  color: var(--sc-color-error);
-  font-family: var(--type-error-family);
-  font-weight: var(--type-error-weight);
+  .sc-textarea__count--over {
+    color: var(--sc-color-error);
+    font-weight: var(--sc-font-weight-bold);
+  }
 }

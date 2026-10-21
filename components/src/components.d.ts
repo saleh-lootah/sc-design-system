@@ -1203,9 +1203,12 @@ export namespace Components {
     }
     /**
      * A longer answer, such as a reason or a description, with an optional character count.
-     * Renders its own label, hint, error, native `<textarea>` and count in one shadow root.
-     * The count is shown as you type, but announced to screen readers politely, once typing
-     * pauses, never on every keystroke. Form-associated and delegates focus, like `sc-text-input`.
+     * v2 renders its label, hint, error, a native `<textarea>` and the count in light DOM
+     * (Stencil `scoped`, decision A2), so the textarea is a real form control. The count is shown
+     * as you type but announced politely only once typing pauses. People can type past the limit:
+     * the count then says how many characters to remove and the textarea reports a custom
+     * validity error, which is easier to fix than text that silently stops.
+     * Rich content: a child with `slot="label"`, `slot="hint"` or `slot="error"` is moved into place once.
      */
     interface ScTextarea {
         /**
@@ -1218,13 +1221,13 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * The error message. Setting it shows the error state (bar, border, icon, "Error:", `aria-invalid`).
+          * The error message. Setting it shows the error state (bar, edge, icon, "Error:", `aria-invalid`).
          */
         "error"?: string;
         /**
           * When set (1–6), the label is also the page heading at this level.
          */
-        "headingLevel"?: HeadingLevel;
+        "headingLevel"?: HeadingLevel1;
         /**
           * Help text below the label.
          */
@@ -1234,7 +1237,7 @@ export namespace Components {
          */
         "label"?: string;
         /**
-          * Shows a character count for this limit: "You have 120 characters remaining". People can type past it (the count then says how many to remove and the field reports `tooLong`), which is easier to fix than text that silently stops.
+          * Shows a character count for this limit: "You have 120 characters remaining". People can type past it; the count then says how many to remove and the field is invalid.
          */
         "maxlength"?: number;
         /**
@@ -1257,7 +1260,7 @@ export namespace Components {
          */
         "required": boolean;
         /**
-          * Visible height in lines.
+          * Visible height in lines (at least 3).
           * @default 5
          */
         "rows": number;
@@ -1919,9 +1922,12 @@ declare global {
     }
     /**
      * A longer answer, such as a reason or a description, with an optional character count.
-     * Renders its own label, hint, error, native `<textarea>` and count in one shadow root.
-     * The count is shown as you type, but announced to screen readers politely, once typing
-     * pauses, never on every keystroke. Form-associated and delegates focus, like `sc-text-input`.
+     * v2 renders its label, hint, error, a native `<textarea>` and the count in light DOM
+     * (Stencil `scoped`, decision A2), so the textarea is a real form control. The count is shown
+     * as you type but announced politely only once typing pauses. People can type past the limit:
+     * the count then says how many characters to remove and the textarea reports a custom
+     * validity error, which is easier to fix than text that silently stops.
+     * Rich content: a child with `slot="label"`, `slot="hint"` or `slot="error"` is moved into place once.
      */
     interface HTMLScTextareaElement extends Components.ScTextarea, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScTextareaElementEventMap>(type: K, listener: (this: HTMLScTextareaElement, ev: ScTextareaCustomEvent<HTMLScTextareaElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3201,9 +3207,12 @@ declare namespace LocalJSX {
     }
     /**
      * A longer answer, such as a reason or a description, with an optional character count.
-     * Renders its own label, hint, error, native `<textarea>` and count in one shadow root.
-     * The count is shown as you type, but announced to screen readers politely, once typing
-     * pauses, never on every keystroke. Form-associated and delegates focus, like `sc-text-input`.
+     * v2 renders its label, hint, error, a native `<textarea>` and the count in light DOM
+     * (Stencil `scoped`, decision A2), so the textarea is a real form control. The count is shown
+     * as you type but announced politely only once typing pauses. People can type past the limit:
+     * the count then says how many characters to remove and the textarea reports a custom
+     * validity error, which is easier to fix than text that silently stops.
+     * Rich content: a child with `slot="label"`, `slot="hint"` or `slot="error"` is moved into place once.
      */
     interface ScTextarea {
         /**
@@ -3216,17 +3225,13 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * The error message. Setting it shows the error state (bar, border, icon, "Error:", `aria-invalid`).
+          * The error message. Setting it shows the error state (bar, edge, icon, "Error:", `aria-invalid`).
          */
         "error"?: string;
         /**
-          * The `id` of a `<form>` element to associate this element with.
-         */
-        "form"?: string;
-        /**
           * When set (1–6), the label is also the page heading at this level.
          */
-        "headingLevel"?: HeadingLevel;
+        "headingLevel"?: HeadingLevel1;
         /**
           * Help text below the label.
          */
@@ -3236,7 +3241,7 @@ declare namespace LocalJSX {
          */
         "label"?: string;
         /**
-          * Shows a character count for this limit: "You have 120 characters remaining". People can type past it (the count then says how many to remove and the field reports `tooLong`), which is easier to fix than text that silently stops.
+          * Shows a character count for this limit: "You have 120 characters remaining". People can type past it; the count then says how many to remove and the field is invalid.
          */
         "maxlength"?: number;
         /**
@@ -3244,11 +3249,11 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Fires when the value is committed with `{ value }`. A native `change` is also dispatched on the host.
+          * Fires when the value is committed with `{ value }`. The native `change` event also bubbles.
          */
         "onScChange"?: (event: ScTextareaCustomEvent<{ value: string }>) => void;
         /**
-          * Fires on every keystroke with `{ value }`.
+          * Fires on every keystroke with `{ value }`. The native `input` event also bubbles.
          */
         "onScInput"?: (event: ScTextareaCustomEvent<{ value: string }>) => void;
         /**
@@ -3267,7 +3272,7 @@ declare namespace LocalJSX {
          */
         "required"?: boolean;
         /**
-          * Visible height in lines.
+          * Visible height in lines (at least 3).
           * @default 5
          */
         "rows"?: number;
@@ -3897,9 +3902,12 @@ declare module "@stencil/core" {
             "sc-text-input": LocalJSX.IntrinsicElements["sc-text-input"] & JSXBase.HTMLAttributes<HTMLScTextInputElement>;
             /**
              * A longer answer, such as a reason or a description, with an optional character count.
-             * Renders its own label, hint, error, native `<textarea>` and count in one shadow root.
-             * The count is shown as you type, but announced to screen readers politely, once typing
-             * pauses, never on every keystroke. Form-associated and delegates focus, like `sc-text-input`.
+             * v2 renders its label, hint, error, a native `<textarea>` and the count in light DOM
+             * (Stencil `scoped`, decision A2), so the textarea is a real form control. The count is shown
+             * as you type but announced politely only once typing pauses. People can type past the limit:
+             * the count then says how many characters to remove and the textarea reports a custom
+             * validity error, which is easier to fix than text that silently stops.
+             * Rich content: a child with `slot="label"`, `slot="hint"` or `slot="error"` is moved into place once.
              */
             "sc-textarea": LocalJSX.IntrinsicElements["sc-textarea"] & JSXBase.HTMLAttributes<HTMLScTextareaElement>;
         }
