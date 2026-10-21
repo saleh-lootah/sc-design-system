@@ -1,0 +1,20 @@
+<h1 class="pg-title sc-type-headline-large" data-ar="شريط الإعلانات">Announcement bar</h1>
+<p class="pg-lede sc-type-body-large" data-ar="إعلان على مستوى الموقع فوق الترويسة: صيانة مجدولة أو تعطل خدمة. منطقة معنونة، وليست تنبيهًا.">
+  A site-wide announcement above the header: planned maintenance or a service outage. A labelled region, not an alert.
+</p>
+<section class="pg-section" aria-labelledby="ab-tones">
+  <h2 id="ab-tones" class="sc-type-headline-small" data-ar="الدرجات">Tones</h2>
+  <div class="pg-frame">
+    <sc-announcement-bar dismissible link-href="#affected" link-text="See affected services"><span data-ar="صيانة مجدولة يوم السبت 25 أكتوبر. لن تتوفر خدمات الدفع من الساعة 2 حتى الساعة 6 صباحًا (بتوقيت دبي).">Planned maintenance on Saturday 25 October. Payment services will be unavailable from 2am to 6am (Dubai time).</span></sc-announcement-bar>
+  </div>
+  <div style="block-size: var(--sc-space-16)"></div>
+  <div class="pg-frame">
+    <sc-announcement-bar tone="info"><span data-ar="يمكنك الآن تجديد رخصة القيادة من التطبيق.">You can now renew your driving licence in the app.</span></sc-announcement-bar>
+  </div>
+  <div style="block-size: var(--sc-space-16)"></div>
+  <div class="pg-frame">
+    <sc-announcement-bar tone="error" dismissible><span data-ar="خدمات الدفع لا تعمل حاليًا. نعمل على إصلاحها.">Payment services are not working at the moment. We are fixing it.</span></sc-announcement-bar>
+  </div>
+  <p class="pg-note" data-ar="الإغلاق يخفي الشريط وينقل التركيز إلى العنصر التالي. مع announcement-id يُحفظ الإغلاق في هذا المتصفح.">Dismissing hides the bar and moves focus to the next element. With announcement-id the dismissal is remembered in this browser.</p>
+</section>
+<style>.pg-frame { overflow: hidden; border-radius: var(--sc-radius-card); border: 1px solid var(--sc-color-outline-variant); }</style>

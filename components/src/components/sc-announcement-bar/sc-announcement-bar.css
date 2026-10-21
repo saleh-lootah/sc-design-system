@@ -1,0 +1,141 @@
+/*
+ * sc-announcement-bar (v2, shadow DOM). Rules: component-language.md B1, read through the
+ * role table in docs/v2/decisions.md: the tone's container, its icon in the tone colour,
+ * text in on-surface, a 1px outline-variant rule beneath.
+ */
+:host {
+  display: block;
+  --_margin: var(--sc-grid-compact-margin);
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+@media (min-width: 600px) {
+  :host {
+    --_margin: var(--sc-grid-medium-margin);
+  }
+}
+@media (min-width: 1024px) {
+  :host {
+    --_margin: var(--sc-grid-expanded-margin);
+  }
+}
+@media (min-width: 1440px) {
+  :host {
+    --_margin: var(--sc-grid-wide-margin);
+  }
+}
+
+.bar {
+  --_fill: var(--sc-color-warning-container);
+  --_icon: var(--sc-color-warning);
+  background-color: var(--_fill);
+  color: var(--sc-color-on-surface);
+  border-block-end: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+}
+
+.bar--info {
+  --_fill: var(--sc-color-info-container);
+  --_icon: var(--sc-color-info);
+}
+
+.bar--error {
+  --_fill: var(--sc-color-error-container);
+  --_icon: var(--sc-color-error);
+}
+
+.inner {
+  box-sizing: content-box;
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-12);
+  max-inline-size: var(--sc-container-max);
+  min-block-size: var(--sc-size-control-secondary);
+  margin-inline: auto;
+  padding-block: var(--sc-space-2);
+  padding-inline: var(--_margin);
+}
+
+.tone-icon {
+  --icon-size: var(--sc-size-icon-m);
+  align-self: flex-start;
+  margin-block-start: calc((var(--sc-size-target-min) - var(--sc-size-icon-m)) / 2);
+  color: var(--_icon);
+}
+
+/* The message and the link; the link wraps to its own line on narrow screens. */
+.body {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: var(--sc-space-24);
+  row-gap: 0;
+  min-inline-size: 0;
+  padding-block: var(--sc-space-12);
+}
+
+.message {
+  flex: 1 1 24rem;
+  margin: 0;
+  font: var(--sc-type-body-medium);
+  font-weight: var(--sc-font-weight-medium);
+  letter-spacing: var(--sc-type-body-medium-tracking);
+}
+
+.link {
+  flex: none;
+  color: var(--sc-color-on-surface);
+  font: var(--sc-type-body-medium);
+  font-weight: var(--sc-font-weight-bold);
+  letter-spacing: var(--sc-type-body-medium-tracking);
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: text-decoration-thickness var(--sc-duration-fast) var(--sc-easing-hover);
+}
+
+.link:lang(ar) {
+  text-underline-offset: 5px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .link:hover {
+    text-decoration-thickness: 2px;
+  }
+}
+
+.dismiss {
+  --icon-size: var(--sc-size-icon-m);
+  --sc-state-color: var(--sc-color-on-surface);
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  inline-size: var(--sc-size-target-min);
+  block-size: var(--sc-size-target-min);
+  margin: 0;
+  margin-inline-end: calc(-1 * var(--sc-space-12));
+  padding: 0;
+  border: 0;
+  border-radius: var(--sc-radius-control);
+  background-color: transparent;
+  color: var(--sc-color-on-surface);
+  cursor: pointer;
+  transition: --sc-layer var(--sc-duration-fast) var(--sc-easing-hover);
+}
+
+@media (forced-colors: active) {
+  .bar {
+    border-block-end-color: CanvasText;
+  }
+  .tone-icon {
+    color: CanvasText;
+  }
+  .link {
+    color: LinkText;
+  }
+}

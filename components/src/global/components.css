@@ -19,6 +19,76 @@ sc-button:not(:defined)[full-width] {
   display: block;
 }
 
+/* Site chrome (C1): sc-page, sc-site-header, sc-app-bar, sc-channel-switcher,
+   sc-channel-network. Hosts keep their final block size before they upgrade. */
+sc-page:not(:defined) {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 100dvh;
+}
+sc-site-header:not(:defined) {
+  display: block;
+  min-block-size: calc(var(--sc-space-80) + var(--sc-size-border-hairline));
+}
+@media (max-width: 1023.98px) {
+  sc-site-header:not(:defined) {
+    min-block-size: calc(var(--sc-space-64) + var(--sc-size-border-hairline));
+  }
+}
+sc-app-bar:not(:defined) {
+  display: block;
+  min-block-size: calc(var(--sc-space-56) + var(--sc-space-4) + var(--sc-size-strip) + var(--sc-size-border-hairline));
+}
+sc-channel-switcher:not(:defined) {
+  display: inline-block;
+  vertical-align: middle;
+  min-block-size: var(--sc-size-control-secondary);
+}
+sc-channel-network:not(:defined) {
+  display: block;
+}
+
+/* sc-footer and sc-utility-bar render everything in shadow DOM, so before upgrade they are
+   empty: reserve the heights measured with the standard links (EN; Arabic is equal or
+   taller), so the footer does not jump in (CLS 0). The docked utility bar (from 1024px) is
+   fixed and takes no space. */
+sc-footer:not(:defined) {
+  display: block;
+  min-block-size: 241px;
+}
+sc-footer:not(:defined)[variant='grouped'] {
+  min-block-size: 964px;
+}
+sc-utility-bar:not(:defined) {
+  display: block;
+  min-block-size: 210px;
+}
+@media (min-width: 600px) {
+  sc-footer:not(:defined) {
+    min-block-size: 137px;
+  }
+  sc-footer:not(:defined)[variant='grouped'] {
+    min-block-size: 754px;
+  }
+}
+@media (min-width: 1024px) {
+  sc-footer:not(:defined) {
+    min-block-size: 109px;
+  }
+  sc-footer:not(:defined)[variant='grouped'] {
+    min-block-size: 388px;
+  }
+  sc-utility-bar:not(:defined) {
+    min-block-size: 0;
+  }
+}
+
+/* A docked sc-utility-bar publishes its height here; focus and #fragments scroll clear of it
+   (CHR-05, WCAG 2.4.11). sc-page pads its end by the same amount. */
+:root {
+  scroll-padding-block-end: var(--sc-utility-bar-block-size, 0px);
+}
+
 /* C2 navigation. Shadow components whose items are plain child links: before upgrade the
    links show as a simple list at about their final size. */
 sc-breadcrumbs:not(:defined) {

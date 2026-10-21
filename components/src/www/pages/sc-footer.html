@@ -1,39 +1,26 @@
-<h1 class="pg-title sc-type-heading-xl" data-ar="التذييل">Footer</h1>
-<p class="pg-lede sc-type-body-m" data-ar="المساعدة والتواصل، وإمكانية الوصول، والخصوصية، والشروط، و«حكومة دبي». يستخدم footer وقائمة روابط.">
-  Help and contact, accessibility, privacy, terms and "Government of Dubai". Uses a footer element and a list of links.
+<h1 class="pg-title sc-type-headline-large" data-ar="التذييل">Footer</h1>
+<p class="pg-lede sc-type-body-large" data-ar="التذييل المجمّع لمواقع القنوات، مع مجموعة القنوات السبع والروابط المطلوبة؛ والتذييل البسيط لصفحات المعاملات.">
+  The grouped footer for channel sites, with the seven channels and every required link; and the simple footer for transaction pages.
 </p>
-
-<section class="pg-section" aria-labelledby="ft-default">
-  <h2 id="ft-default" class="sc-type-heading-m" data-ar="الروابط القياسية">Standard links</h2>
-  <div class="ft-frame">
-    <sc-footer help-href="#help" accessibility-href="#accessibility" privacy-href="#privacy" terms-href="#terms"></sc-footer>
-  </div>
-  <p class="pg-note" data-ar="نصوص الروابط من ملف النصوص، بلغة الصفحة.">Link text comes from strings, in the page language.</p>
-</section>
-
-<section class="pg-section" aria-labelledby="ft-extra">
-  <h2 id="ft-extra" class="sc-type-heading-m" data-ar="مع روابط إضافية ونص مخصص">With extra links and custom end text</h2>
-  <div class="ft-frame">
-    <sc-footer help-href="#help" accessibility-href="#accessibility" privacy-href="#privacy" terms-href="#terms">
-      <a href="#cookies" data-ar="ملفات تعريف الارتباط">Cookies</a>
-      <a href="#feedback" data-ar="شاركنا رأيك">Give feedback</a>
-      <span slot="meta" data-ar="حكومة دبي · محتوى تجريبي لمراجعة التصميم">Government of Dubai · Example content for design review</span>
+<section class="pg-section" aria-labelledby="ft-grouped">
+  <h2 id="ft-grouped" class="sc-type-headline-small" data-ar="مجمّع">Grouped</h2>
+  <div class="pg-frame">
+    <sc-footer variant="grouped" updated="12 October 2026" links='{"now":"#now-{lang}","transport":"#transport-{lang}","visit":"#visit-{lang}","justice":"#justice-{lang}","build":"#build-{lang}","invest":"#invest-{lang}","trade":"#trade-{lang}"}' about-href="#about" help-href="#help" accessibility-href="#accessibility" privacy-href="#privacy" terms-href="#terms" sitemap-href="#sitemap">
+      <p slot="brand" data-ar="الخدمات الحكومية لكل من يعيش في دبي، في مكان واحد.">Government services for everyone who lives in Dubai, in one place.</p>
     </sc-footer>
   </div>
 </section>
-
-<section class="pg-section" aria-labelledby="ft-arabic">
-  <h2 id="ft-arabic" class="sc-type-heading-m" data-ar="بالعربية">In Arabic</h2>
-  <div class="ft-frame" lang="ar" dir="rtl">
-    <sc-footer help-href="#help" accessibility-href="#accessibility" privacy-href="#privacy" terms-href="#terms"></sc-footer>
+<section class="pg-section" aria-labelledby="ft-simple">
+  <h2 id="ft-simple" class="sc-type-headline-small" data-ar="بسيط">Simple</h2>
+  <div class="pg-frame">
+    <sc-footer help-href="#help" accessibility-href="#accessibility" privacy-href="#privacy" cookies-href="#cookies" terms-href="#terms">
+      <a href="#feedback" data-ar="شاركنا رأيك">Give feedback</a>
+    </sc-footer>
   </div>
+  <p class="pg-note" data-ar="نصوص الروابط من ملف النصوص بلغة الصفحة. الروابط الإضافية في الفتحة الافتراضية.">Link text comes from strings, in the page language. Extra links go in the default slot.</p>
 </section>
-
 <style>
-  .ft-frame {
-    overflow: hidden;
-    border-radius: var(--sc-radius-card);
-    background: var(--sc-color-canvas);
-    box-shadow: var(--sc-elevation-1);
-  }
+  .pg-frame { overflow: visible; border: 1px solid var(--sc-color-outline-variant); border-radius: var(--sc-radius-card); background: var(--sc-color-surface); }
+  .pg-lockup { color: inherit; }
+  .pg-lockup svg { display: block; block-size: 40px; inline-size: auto; }
 </style>

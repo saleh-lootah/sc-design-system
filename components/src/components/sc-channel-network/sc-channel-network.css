@@ -1,0 +1,128 @@
+/*
+ * sc-channel-network (v2, light DOM). Rules: component-language.md B21 and Standard CHR-08,
+ * read through the role table in docs/v2/decisions.md (city-action is `primary`; the current
+ * tile's channel-container is `channel-subtle`). Light DOM so each tile's data-channel
+ * rebinds the channel roles from the document (FND-26).
+ */
+@layer sc.components {
+  :host {
+    display: block;
+    container-type: inline-size;
+  }
+
+  :host([hidden]) {
+    display: none;
+  }
+
+  /* Eyebrow: a 24 × 3 rule, then the label, in city indigo. Upper case and tracked in
+     English only. */
+  .sc-channel-network__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: var(--sc-space-12);
+    margin: 0 0 var(--sc-space-24);
+    color: var(--sc-color-primary);
+    font: var(--sc-type-label-small);
+    font-weight: var(--sc-font-weight-bold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .sc-channel-network__eyebrow:lang(ar) {
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .sc-channel-network__eyebrow::before {
+    content: '';
+    flex: none;
+    inline-size: var(--sc-space-24);
+    block-size: var(--sc-size-border-accent);
+    background-color: currentColor;
+  }
+
+  .sc-channel-network__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--sc-space-12);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @container (min-width: 560px) {
+    .sc-channel-network__list {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  @container (min-width: 960px) {
+    .sc-channel-network__list {
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+    }
+  }
+
+  .sc-channel-network__entry {
+    display: flex;
+  }
+
+  /* Tile: 8px corners, a 4px top rule in the tile's own channel-action. */
+  .sc-channel-network__tile {
+    box-sizing: border-box;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--sc-space-6);
+    min-block-size: var(--sc-size-target-min);
+    padding-block: var(--sc-space-20);
+    padding-inline: var(--sc-space-16);
+    border-block-start: var(--sc-size-strip) solid var(--sc-color-channel-action);
+    border-radius: var(--sc-radius-field);
+    background-color: var(--sc-color-surface-container);
+    color: var(--sc-color-on-surface);
+    text-decoration: none;
+  }
+
+  .sc-channel-network__name {
+    font: var(--sc-type-title-small);
+    font-weight: var(--sc-font-weight-bold);
+    letter-spacing: var(--sc-type-title-small-tracking);
+  }
+
+  .sc-channel-network__desc {
+    color: var(--sc-color-on-surface-variant);
+    font: var(--sc-type-body-small);
+    letter-spacing: var(--sc-type-body-small-tracking);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    a.sc-channel-network__tile:hover .sc-channel-network__name {
+      text-decoration-line: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 4px;
+    }
+  }
+
+  /* You are here: the channel's subtle container, the name in channel-action. */
+  .sc-channel-network__tile.is-current {
+    background-color: var(--sc-color-channel-subtle);
+  }
+
+  .is-current .sc-channel-network__name {
+    color: var(--sc-color-channel-action);
+  }
+
+  .is-current .sc-channel-network__desc {
+    font-weight: var(--sc-font-weight-medium);
+  }
+
+  @media (forced-colors: active) {
+    .sc-channel-network__tile {
+      border: var(--sc-size-border-hairline) solid CanvasText;
+      border-block-start: var(--sc-size-strip) solid CanvasText;
+    }
+    .sc-channel-network__tile.is-current {
+      border-color: Highlight;
+    }
+  }
+}

@@ -5,6 +5,7 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { AnnouncementTone } from "./components/sc-announcement-bar/sc-announcement-bar";
 import { AttentionCardHeadingLevel, AttentionCardTint } from "./components/sc-attention-card/sc-attention-card";
 import { ButtonIconPosition, ButtonSize, ButtonType, ButtonVariant } from "./components/sc-button/sc-button";
 import { IconName } from "./icons/index";
@@ -13,15 +14,16 @@ import { CardLandmark, CardPadding, CardVariant } from "./components/sc-card/sc-
 import { Channel } from "./i18n/core";
 import { ChannelChipVariant } from "./components/sc-channel-chip/sc-channel-chip";
 import { ChannelHeroSize } from "./components/sc-channel-hero/sc-channel-hero";
+import { Channel as Channel1, ChannelLinks } from "./utils/channels";
 import { HeadingLevel } from "./components/sc-text-input/field";
 import { Parts } from "./components/sc-date-input/date";
 import { StringsInput } from "./components/sc-table/overrides";
 import { EmptyStateHeadingLevel, EmptyStateVariant } from "./components/sc-empty-state/sc-empty-state";
 import { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
+import { FooterVariant } from "./components/sc-footer/sc-footer";
 import { LanguageSwitchAppearance, LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
 import { ModalCloseReason, ModalHeadingLevel, ModalInitialFocus } from "./components/sc-modal/sc-modal";
 import { ModuleCardHeadingLevel, ModuleCardTint } from "./components/sc-module-card/sc-module-card";
-import { Channel as Channel1 } from "./i18n/strings";
 import { PaginationChangeDetail } from "./components/sc-pagination/sc-pagination";
 import { ScSearchDetail } from "./components/sc-search/sc-search";
 import { ServiceCardHeadingLevel, ServiceCardTint } from "./components/sc-service-card/sc-service-card";
@@ -35,6 +37,7 @@ import { SortDirection } from "./components/sc-table/sc-table";
 import { TextInputType, TextInputWidth } from "./components/sc-text-input/sc-text-input";
 import { TileTint } from "./components/sc-tile/sc-tile";
 import { TimelineOrder } from "./components/sc-timeline/sc-timeline";
+export { AnnouncementTone } from "./components/sc-announcement-bar/sc-announcement-bar";
 export { AttentionCardHeadingLevel, AttentionCardTint } from "./components/sc-attention-card/sc-attention-card";
 export { ButtonIconPosition, ButtonSize, ButtonType, ButtonVariant } from "./components/sc-button/sc-button";
 export { IconName } from "./icons/index";
@@ -43,15 +46,16 @@ export { CardLandmark, CardPadding, CardVariant } from "./components/sc-card/sc-
 export { Channel } from "./i18n/core";
 export { ChannelChipVariant } from "./components/sc-channel-chip/sc-channel-chip";
 export { ChannelHeroSize } from "./components/sc-channel-hero/sc-channel-hero";
+export { Channel as Channel1, ChannelLinks } from "./utils/channels";
 export { HeadingLevel } from "./components/sc-text-input/field";
 export { Parts } from "./components/sc-date-input/date";
 export { StringsInput } from "./components/sc-table/overrides";
 export { EmptyStateHeadingLevel, EmptyStateVariant } from "./components/sc-empty-state/sc-empty-state";
 export { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
+export { FooterVariant } from "./components/sc-footer/sc-footer";
 export { LanguageSwitchAppearance, LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
 export { ModalCloseReason, ModalHeadingLevel, ModalInitialFocus } from "./components/sc-modal/sc-modal";
 export { ModuleCardHeadingLevel, ModuleCardTint } from "./components/sc-module-card/sc-module-card";
-export { Channel as Channel1 } from "./i18n/strings";
 export { PaginationChangeDetail } from "./components/sc-pagination/sc-pagination";
 export { ScSearchDetail } from "./components/sc-search/sc-search";
 export { ServiceCardHeadingLevel, ServiceCardTint } from "./components/sc-service-card/sc-service-card";
@@ -86,6 +90,66 @@ export namespace Components {
         "showAll": boolean;
     }
     /**
+     * The signed-in account control in `sc-site-header` (`slot="account"`; component-language
+     * B3, Standard CHR-01). It replaces "Sign in with UAE PASS" once the user is signed in.
+     * - A notifications button (a link to the notifications page) with the unread count, named
+     *   "Notifications, 3 unread".
+     * - A `<button aria-expanded>` with the user's initials (and name from 1280px) that opens a
+     *   non-modal panel: the name and who they are acting for, links to Profile, Settings and
+     *   representation ("Change who you act for"), and Sign out.
+     * The panel is a disclosure, not an ARIA menu: Tab moves through its links, Escape closes it
+     * and returns focus to the button, a press outside or focus leaving closes it. From a
+     * pointer it grows from the button's corner; from the keyboard it appears instantly.
+     */
+    interface ScAccountMenu {
+        /**
+          * The person or organisation the user is acting for, when it is not themselves.
+         */
+        "actingFor"?: string;
+        /**
+          * Closes the panel.
+         */
+        "close": () => Promise<void>;
+        /**
+          * Overrides the initials taken from `name` ("SM").
+         */
+        "initials"?: string;
+        /**
+          * The signed-in user's name as written ("Sara Al Mansoori").
+          * @default ''
+         */
+        "name": string;
+        /**
+          * The notifications page. Adds the notifications button.
+         */
+        "notificationsHref"?: string;
+        /**
+          * Opens the panel (as from the keyboard: no animation).
+         */
+        "open": () => Promise<void>;
+        /**
+          * The profile page.
+         */
+        "profileHref"?: string;
+        /**
+          * Where the user changes who they act for (representation).
+         */
+        "representationHref"?: string;
+        /**
+          * The account settings page.
+         */
+        "settingsHref"?: string;
+        /**
+          * The sign-out URL. Without it, Sign out is a button that fires `scSignOut`, so the service can post its own sign-out form.
+         */
+        "signOutHref"?: string;
+        /**
+          * Unread notifications. Shown as a badge on the notifications button when above 0.
+          * @default 0
+         */
+        "unread": number;
+    }
+    /**
      * The side navigation of the signed-in account area: Applications, Payments,
      * Notifications, Profile and settings, then a divider and Sign out. It takes 3 of 12
      * columns on wide screens and becomes a horizontal row of 44px items below 600px.
@@ -113,29 +177,70 @@ export namespace Components {
         "label"?: string;
     }
     /**
-     * The top bar of every mobile screen and desktop page: a translucent glass bar with a
-     * start control (usually `sc-back-link`), the channel name, and an end control (usually
-     * `sc-language-switch`).
-     * - `align="center"` (default) is the mobile bar: start, title in the middle, end.
-     * - `align="start"` is the desktop header: title (with a mark) at the start, then the
-     *   default slot (primary navigation), and the end slot pushed to the end.
-     * - `shape="floating"` turns the bar into the inset glass capsule used on desktop.
-     * The glass becomes a solid surface under `prefers-reduced-transparency: reduce` and in
-     * forced colours. The host is a `banner` landmark unless `landmark` is false.
+     * A site-wide announcement above the header: planned maintenance, a service outage, a change
+     * people need to know about (component-language B1). One message, one optional link, and an
+     * optional dismiss button.
+     * A labelled region ("Announcement" / "إعلان"), present when the page loads. It is not a
+     * live region and not an alert. The text carries the severity in words ("Planned
+     * maintenance…"); the tone's icon and container repeat it.
+     * Dismissing it fires `scDismiss` (cancelable) and hides it. With `announcement-id`, the
+     * dismissal is remembered in this browser, so the same announcement does not come back.
+     * Focus moves to the next focusable element after it. From a pointer it fades out over
+     * `duration-exit`; from the keyboard it goes at once. Its height is never animated (MOT-11).
+     */
+    interface ScAnnouncementBar {
+        /**
+          * Remembers a dismissal in this browser (localStorage) under this id, so the announcement stays hidden on later pages. Change the id when the message changes.
+         */
+        "announcementId"?: string;
+        /**
+          * Dismisses the announcement, as the dismiss button does from the keyboard.
+         */
+        "dismiss": () => Promise<void>;
+        /**
+          * Shows the dismiss button.
+          * @default false
+         */
+        "dismissible": boolean;
+        /**
+          * A link with more detail ("See affected services"). Shown with `link-text`.
+         */
+        "linkHref"?: string;
+        /**
+          * The link's text.
+         */
+        "linkText"?: string;
+        /**
+          * `warning` (maintenance; default), `info`, or `error` (a service is down).
+          * @default 'warning'
+         */
+        "tone": AnnouncementTone;
+    }
+    /**
+     * The transaction app bar (component-language A4; Standard TPL-01, LANG-04): the bar at the
+     * top of every step of a journey (E2–E4). Channel pages outside a transaction use
+     * `sc-site-header` instead.
+     * A 4px rule in `channel-action` along the top; a start slot (the back link), the title (a
+     * 10px channel swatch and the channel name, centred) and an end slot (the language switch),
+     * with fixed 96px side slots so the title stays centred; a 1px `outline-variant` rule
+     * beneath. 60px tall on `surface`. Flat: no glass, no shadow.
+     * The host is a `banner` landmark unless `landmark` is false. It is not fixed by default;
+     * with `sticky`, `sc-page sync-document` sets `scroll-padding-top` so focus never slides
+     * under it (WCAG 2.4.11).
      */
     interface ScAppBar {
         /**
-          * `center`: mobile layout with the title in the middle. `start`: desktop layout with the title at the start.
+          * `center` (default): the journey bar, title in the middle. `start`: deprecated (v1's desktop header): the title at the start and the default slot after it. Use `sc-site-header` for channel pages.
           * @default 'center'
          */
         "align": 'center' | 'start';
         /**
-          * Makes the host a `banner` landmark. Set it to false when the page already has a banner (for example a site header around the bar), or when the bar sits inside a dialog.
+          * Makes the host a `banner` landmark. Set it to false when the page already has a banner, or when the bar sits inside a dialog.
           * @default true
          */
         "landmark": boolean;
         /**
-          * `bar`: edge to edge with a hairline at the bottom. `floating`: an inset glass capsule (desktop).
+          * Deprecated and ignored: v2 has no floating glass capsule (ELV-04).
           * @default 'bar'
          */
         "shape": 'bar' | 'floating';
@@ -400,6 +505,62 @@ export namespace Components {
           * @default 'large'
          */
         "size": ChannelHeroSize;
+    }
+    /**
+     * The channel network strip (component-language B21, Standard CHR-08): "One network · seven
+     * channels" and a tile for each of the seven channels, in the Standard 3.1 order, at the end
+     * of every channel home page, before the footer.
+     * City indigo marks it as shared (the eyebrow and its rule). Each tile carries its own
+     * channel's colour only as attribution: a 4px top rule in that channel's `channel-action`.
+     * Each tile sets its own `data-channel` (FND-26), which is why the strip renders into light
+     * DOM (Stencil `scoped`). The current channel's tile is filled with its `channel-subtle`,
+     * says "You are here", carries `aria-current="true"` and is not a link (it would lead to
+     * this site).
+     * A `<nav>` labelled "Government of Dubai channels" with a list of links. Seven tiles in a
+     * row from 1024px (by the strip's own width), four from 600px, two below.
+     */
+    interface ScChannelNetwork {
+        /**
+          * The current channel. Defaults to the closest `data-channel`.
+         */
+        "channel"?: Channel1;
+        /**
+          * Each channel's home page (as `sc-channel-switcher` `links`; `{lang}` becomes `en` or `ar`).
+         */
+        "links"?: ChannelLinks | string;
+    }
+    /**
+     * The channel's logo and the channel switcher, at the inline-end of `sc-site-header`
+     * (Standard CHR-01, CHR-03; component-language B2a).
+     * A disclosure, not an ARIA menu: a `<button aria-expanded>` named "Choose a channel: Dubai
+     * Now" opens a non-modal panel listing all seven channels as links, in the Standard 3.1
+     * order, each with its name, a one-line descriptor in the page language and a swatch in
+     * that channel's own colour. Every item carries its own `data-channel` (FND-26), so the
+     * swatch is that channel's `channel-action`; that is why the component renders into light
+     * DOM (Stencil `scoped`): the document's channel rules must reach the items. The current
+     * channel carries a check and `aria-current="true"`.
+     * Escape and a press outside close the panel; Escape returns focus to the button; the panel
+     * closes when focus leaves it. From a pointer it grows from the trigger's corner over
+     * `duration-base`; from the keyboard it appears instantly (MOT-02). Below 1024px the trigger
+     * shrinks to the logo and chevron and keeps its accessible name (CHR-04).
+     */
+    interface ScChannelSwitcher {
+        /**
+          * The current channel. Defaults to the closest `data-channel` (as set by `sc-page`).
+         */
+        "channel"?: Channel1;
+        /**
+          * Closes the panel.
+         */
+        "close": () => Promise<void>;
+        /**
+          * Each channel's home page, as an object or a JSON attribute: `links='{"now":"https://…/{lang}/","transport":"https://…/{lang}/"}'`. `{lang}` becomes `en` or `ar`, so each link leads to that channel's home in the current language. Give all seven; a channel without a link is listed as text.
+         */
+        "links"?: ChannelLinks | string;
+        /**
+          * Opens the panel (as from the keyboard: no animation).
+         */
+        "open": () => Promise<void>;
     }
     /**
      * A checkbox: one of several choices in an `sc-checkbox-group`, or on its own for a single
@@ -744,30 +905,67 @@ export namespace Components {
         "setFocus": () => Promise<void>;
     }
     /**
-     * The page footer: help and contact, accessibility, privacy and terms links, and
-     * "Government of Dubai". Renders a `<footer>` (the page's `contentinfo` landmark) with a
-     * list of links under a visually hidden "Support links" heading.
-     * The four standard links appear when their `*-href` is set, with text from strings in the
-     * page language. Extra links go in the default slot as plain `<a>` elements; each gets its
-     * own list item (the footer sets their `slot` attribute).
+     * The page footer, a `<footer>` (the page's `contentinfo` landmark). Two variants:
+     * - `simple` (default; transaction pages, component-language A29): one row of underlined
+     *   links and "Government of Dubai", under a 1px rule.
+     * - `grouped` (channel sites, Standard CHR-06, decision Q-footer; B5): the channel's brand
+     *   group (`slot="brand"`: a one-sentence description and app badges); a **Channels** group
+     *   listing all seven channels in the Standard 3.1 order, the current one Bold with
+     *   `aria-current="true"` and no swatch; **Helpful information** (about, help and contact,
+     *   accessibility statement, sitemap); and **Legal** (privacy and cookies, terms). Each group
+     *   has an `<h2>`. Then "Government of Dubai · Last updated …" and "… is run by the
+     *   Government of Dubai".
+     * The standard links appear when their `*-href` is set, with text from strings in the page
+     * language. Every channel sets all of them (TPL-01, LEG-01). Extra links go in the default
+     * slot as plain `<a href>` elements; each gets its own list item (the footer sets their
+     * `slot` attribute). The footer is on `surface`, never a dark band.
      */
     interface ScFooter {
+        /**
+          * About the channel ("About Dubai Now").
+         */
+        "aboutHref"?: string;
         /**
           * The accessibility statement.
          */
         "accessibilityHref"?: string;
         /**
+          * The current channel. Defaults to the closest `data-channel`.
+         */
+        "channel"?: Channel1;
+        /**
+          * A separate cookies page. Splits "Privacy and cookies" into "Privacy" and "Cookies".
+         */
+        "cookiesHref"?: string;
+        /**
           * The help and contact page.
          */
         "helpHref"?: string;
         /**
-          * The privacy notice.
+          * Each channel's home page, for the Channels group (as `sc-channel-switcher` `links`; `{lang}` becomes `en` or `ar`).
+         */
+        "links"?: ChannelLinks | string;
+        /**
+          * The privacy notice. Labelled "Privacy and cookies" unless `cookies-href` is set too.
          */
         "privacyHref"?: string;
         /**
-          * The terms and conditions.
+          * The sitemap.
+         */
+        "sitemapHref"?: string;
+        /**
+          * The terms of use.
          */
         "termsHref"?: string;
+        /**
+          * Grouped: when the site was last updated, as it should read ("12 October 2026").
+         */
+        "updated"?: string;
+        /**
+          * `simple` (one row) or `grouped` (channel sites, with the Channels group).
+          * @default 'simple'
+         */
+        "variant": FooterVariant;
     }
     /**
      * Switches to the same page in the other language. The label is always the other
@@ -965,18 +1163,22 @@ export namespace Components {
         "markAllRead": () => Promise<number>;
     }
     /**
-     * The page frame: header, `<main>` and footer, with the page's language, direction and
-     * channel on its root.
+     * The page shell (Standard TPL-01, 11.1 and 11.9): the header, one `<main>` and the footer,
+     * with the page's language, direction and channel on its root.
      * - Set `lang` on `sc-page` as on any element; the page sets `dir` to match (`rtl` for
      *   Arabic) and re-applies it when `lang` changes.
      * - `channel` sets `data-channel`, which themes every component inside.
      * - `<main>` is rendered in light DOM (the component is scoped, not shadowed) with
-     *   `id="main-content"` and `tabindex="-1"`, so a skip link (`<a href="#main-content">`)
-     *   anywhere on the page can reach it and move focus into it.
-     * - With `sync-document` and a sticky `sc-app-bar` in the header, it sets
-     *   `scroll-padding-block-start` on `<html>` to the bar's height plus `--sc-space-8`, so
-     *   focused elements and `#fragment` targets scroll into view below the bar, not under it
-     *   (WCAG 2.4.11). It follows the bar's size and removes the padding when no longer needed.
+     *   `id="main-content"` and `tabindex="-1"`, so the skip link (`sc-skip-link`, whose default
+     *   `href` is `#main-content`) can reach it and move focus into it. The header slot gives
+     *   the banner landmark, the footer slot the contentinfo landmark.
+     * - With `sync-document` it also sets `lang`, `dir` and `data-channel` on `<html>`, and,
+     *   with a sticky `sc-app-bar` or `sc-site-header` in the header, `scroll-padding-block-start`
+     *   on `<html>` to the bar's height plus `--sc-space-8`, so focused elements are never
+     *   hidden under it (WCAG 2.4.11).
+     * - It reserves the height of a docked `sc-utility-bar` (`padding-block-end` from
+     *   `--sc-utility-bar-block-size`, which the bar publishes), so the bar never covers the end
+     *   of the page; `sc.css` sets the matching `scroll-padding-block-end` (CHR-05).
      */
     interface ScPage {
         /**
@@ -989,7 +1191,7 @@ export namespace Components {
          */
         "mainId": string;
         /**
-          * Also sets `lang`, `dir` and `data-channel` on `<html>`. Use it when `sc-page` is the whole page, so browsers and screen readers get the page language from the document root. With a sticky `sc-app-bar` in the header, it also sets `scroll-padding-block-start` on `<html>` so focus is never hidden under the bar.
+          * Also sets `lang`, `dir` and `data-channel` on `<html>`. Use it when `sc-page` is the whole page, so browsers and screen readers get the page language from the document root. With a sticky header, it also keeps `scroll-padding-block-start` on `<html>` clear of it.
           * @default false
          */
         "syncDocument": boolean;
@@ -1247,6 +1449,52 @@ export namespace Components {
           * Colours the icon tile with a decorative topic tint (foundations §2.7) instead of the channel container: `blue` transport, `violet` residency, `rose` family, `orange` housing, `amber` bills, `green` health. Decorative only. Ignored without an icon.
          */
         "tint"?: ServiceCardTint;
+    }
+    /**
+     * The header of channel pages outside a transaction (Standard CHR-01 to CHR-04;
+     * component-language B2). Transaction pages use `sc-app-bar`.
+     * From the inline-start edge: the Government of Dubai lockup (`slot="lockup"`), the main
+     * navigation (`slot="nav"`), search, the language switch (`slot="language"`), sign in with UAE PASS
+     * (`slot="signin"`) or the account menu once signed in (`slot="account"`), and the
+     * channel's logo and switcher (`slot="switcher"`, an `sc-channel-switcher`). Sign in is the
+     * official UAE PASS button (decision U3a), never a themed `sc-button`: until the official kit
+     * arrives the header renders a marked placeholder (black, white label, fingerprint glyph,
+     * 56px) that `slot="signin"` replaces. The order
+     * mirrors in Arabic. A flat `surface` bar, 80px tall, with a 1px `outline-variant` rule.
+     * Below 1024px the row keeps the menu button, the lockup, the language switch and the
+     * channel switcher (64px). Navigation, search and sign in (or the account menu) move into
+     * the mobile menu: a modal `<dialog>` labelled "Menu", with focus on its close button when
+     * it opens, Escape closing it and returning focus to the menu button, and the page behind
+     * it inert. The same slotted elements move; nothing is duplicated.
+     * The host is a `<header>` banner landmark. It is not fixed by default; with `sticky`,
+     * `sc-page` keeps `scroll-padding-top` clear of it (A11Y-05, F-009).
+     */
+    interface ScSiteHeader {
+        /**
+          * Closes the mobile menu and returns focus to the menu button.
+         */
+        "closeMenu": (pointer?: boolean) => Promise<void>;
+        /**
+          * Opens the mobile menu (compact layout only).
+         */
+        "openMenu": () => Promise<void>;
+        /**
+          * The search page. Adds a search button (an icon link named "Search").
+         */
+        "searchHref"?: string;
+        /**
+          * Where the UAE PASS placeholder button leads. The placeholder shows when this is set and there is neither a `slot="signin"` nor a `slot="account"` child.
+         */
+        "signInHref"?: string;
+        /**
+          * Overrides the placeholder's "Sign in with UAE PASS" (in the page language).
+         */
+        "signInText"?: string;
+        /**
+          * Keeps the header at the top while the page scrolls. `sc-page` then sets `scroll-padding-top`.
+          * @default false
+         */
+        "sticky": boolean;
     }
     /**
      * "Skip to main content": the first focusable element on every page. Hidden until it gets
@@ -1719,6 +1967,50 @@ export namespace Components {
          */
         "order": TimelineOrder;
     }
+    /**
+     * The help and feedback bar of a channel site (decision U4, Standard CHR-05; component-
+     * language B4 as amended by U4): the Happiness Meter, contact and complaints (04), chat and
+     * accessibility options, each an icon with a visible label (labels never collapse to icons).
+     * From 1024px it is a flat bar docked to the bottom of the viewport across the full width,
+     * at `elevation-1`, with a 1px `outline-variant` edge along its top. It publishes its height
+     * as `--sc-utility-bar-block-size` on `<html>`: `sc-page` pads its end by it and `sc.css`
+     * sets `scroll-padding-block-end` from it, so the bar never covers content or the focused
+     * element (WCAG 2.4.11). Below 1024px it folds into the footer: place it straight after
+     * `sc-footer`, and it becomes an in-flow "Help and feedback" group, a 2 × 2 grid of outlined
+     * buttons. It is present when the page loads and does not animate.
+     * A `<nav>` labelled "Help and feedback". Items appear when their `*-href` is set.
+     */
+    interface ScUtilityBar {
+        /**
+          * Accessibility options or the accessibility statement.
+         */
+        "accessibilityHref"?: string;
+        /**
+          * The chat service.
+         */
+        "chatHref"?: string;
+        /**
+          * Contact and complaints: usually `tel:04…` or the contact page.
+         */
+        "contactHref"?: string;
+        /**
+          * The number shown after "Contact and complaints", isolated left to right.
+          * @default '04'
+         */
+        "contactNumber": string;
+        /**
+          * The Happiness Meter survey.
+         */
+        "happinessHref"?: string;
+    }
+}
+export interface ScAccountMenuCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLScAccountMenuElement;
+}
+export interface ScAnnouncementBarCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLScAnnouncementBarElement;
 }
 export interface ScCheckboxCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1791,6 +2083,35 @@ declare global {
         prototype: HTMLScAccordionElement;
         new (): HTMLScAccordionElement;
     };
+    interface HTMLScAccountMenuElementEventMap {
+        "scSignOut": void;
+    }
+    /**
+     * The signed-in account control in `sc-site-header` (`slot="account"`; component-language
+     * B3, Standard CHR-01). It replaces "Sign in with UAE PASS" once the user is signed in.
+     * - A notifications button (a link to the notifications page) with the unread count, named
+     *   "Notifications, 3 unread".
+     * - A `<button aria-expanded>` with the user's initials (and name from 1280px) that opens a
+     *   non-modal panel: the name and who they are acting for, links to Profile, Settings and
+     *   representation ("Change who you act for"), and Sign out.
+     * The panel is a disclosure, not an ARIA menu: Tab moves through its links, Escape closes it
+     * and returns focus to the button, a press outside or focus leaving closes it. From a
+     * pointer it grows from the button's corner; from the keyboard it appears instantly.
+     */
+    interface HTMLScAccountMenuElement extends Components.ScAccountMenu, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLScAccountMenuElementEventMap>(type: K, listener: (this: HTMLScAccountMenuElement, ev: ScAccountMenuCustomEvent<HTMLScAccountMenuElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLScAccountMenuElementEventMap>(type: K, listener: (this: HTMLScAccountMenuElement, ev: ScAccountMenuCustomEvent<HTMLScAccountMenuElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLScAccountMenuElement: {
+        prototype: HTMLScAccountMenuElement;
+        new (): HTMLScAccountMenuElement;
+    };
     /**
      * The side navigation of the signed-in account area: Applications, Payments,
      * Notifications, Profile and settings, then a divider and Sign out. It takes 3 of 12
@@ -1818,16 +2139,46 @@ declare global {
         prototype: HTMLScAccountNavElement;
         new (): HTMLScAccountNavElement;
     };
+    interface HTMLScAnnouncementBarElementEventMap {
+        "scDismiss": { id?: string };
+    }
     /**
-     * The top bar of every mobile screen and desktop page: a translucent glass bar with a
-     * start control (usually `sc-back-link`), the channel name, and an end control (usually
-     * `sc-language-switch`).
-     * - `align="center"` (default) is the mobile bar: start, title in the middle, end.
-     * - `align="start"` is the desktop header: title (with a mark) at the start, then the
-     *   default slot (primary navigation), and the end slot pushed to the end.
-     * - `shape="floating"` turns the bar into the inset glass capsule used on desktop.
-     * The glass becomes a solid surface under `prefers-reduced-transparency: reduce` and in
-     * forced colours. The host is a `banner` landmark unless `landmark` is false.
+     * A site-wide announcement above the header: planned maintenance, a service outage, a change
+     * people need to know about (component-language B1). One message, one optional link, and an
+     * optional dismiss button.
+     * A labelled region ("Announcement" / "إعلان"), present when the page loads. It is not a
+     * live region and not an alert. The text carries the severity in words ("Planned
+     * maintenance…"); the tone's icon and container repeat it.
+     * Dismissing it fires `scDismiss` (cancelable) and hides it. With `announcement-id`, the
+     * dismissal is remembered in this browser, so the same announcement does not come back.
+     * Focus moves to the next focusable element after it. From a pointer it fades out over
+     * `duration-exit`; from the keyboard it goes at once. Its height is never animated (MOT-11).
+     */
+    interface HTMLScAnnouncementBarElement extends Components.ScAnnouncementBar, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLScAnnouncementBarElementEventMap>(type: K, listener: (this: HTMLScAnnouncementBarElement, ev: ScAnnouncementBarCustomEvent<HTMLScAnnouncementBarElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLScAnnouncementBarElementEventMap>(type: K, listener: (this: HTMLScAnnouncementBarElement, ev: ScAnnouncementBarCustomEvent<HTMLScAnnouncementBarElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLScAnnouncementBarElement: {
+        prototype: HTMLScAnnouncementBarElement;
+        new (): HTMLScAnnouncementBarElement;
+    };
+    /**
+     * The transaction app bar (component-language A4; Standard TPL-01, LANG-04): the bar at the
+     * top of every step of a journey (E2–E4). Channel pages outside a transaction use
+     * `sc-site-header` instead.
+     * A 4px rule in `channel-action` along the top; a start slot (the back link), the title (a
+     * 10px channel swatch and the channel name, centred) and an end slot (the language switch),
+     * with fixed 96px side slots so the title stays centred; a 1px `outline-variant` rule
+     * beneath. 60px tall on `surface`. Flat: no glass, no shadow.
+     * The host is a `banner` landmark unless `landmark` is false. It is not fixed by default;
+     * with `sticky`, `sc-page sync-document` sets `scroll-padding-top` so focus never slides
+     * under it (WCAG 2.4.11).
      */
     interface HTMLScAppBarElement extends Components.ScAppBar, HTMLStencilElement {
     }
@@ -1983,6 +2334,46 @@ declare global {
         prototype: HTMLScChannelHeroElement;
         new (): HTMLScChannelHeroElement;
     };
+    /**
+     * The channel network strip (component-language B21, Standard CHR-08): "One network · seven
+     * channels" and a tile for each of the seven channels, in the Standard 3.1 order, at the end
+     * of every channel home page, before the footer.
+     * City indigo marks it as shared (the eyebrow and its rule). Each tile carries its own
+     * channel's colour only as attribution: a 4px top rule in that channel's `channel-action`.
+     * Each tile sets its own `data-channel` (FND-26), which is why the strip renders into light
+     * DOM (Stencil `scoped`). The current channel's tile is filled with its `channel-subtle`,
+     * says "You are here", carries `aria-current="true"` and is not a link (it would lead to
+     * this site).
+     * A `<nav>` labelled "Government of Dubai channels" with a list of links. Seven tiles in a
+     * row from 1024px (by the strip's own width), four from 600px, two below.
+     */
+    interface HTMLScChannelNetworkElement extends Components.ScChannelNetwork, HTMLStencilElement {
+    }
+    var HTMLScChannelNetworkElement: {
+        prototype: HTMLScChannelNetworkElement;
+        new (): HTMLScChannelNetworkElement;
+    };
+    /**
+     * The channel's logo and the channel switcher, at the inline-end of `sc-site-header`
+     * (Standard CHR-01, CHR-03; component-language B2a).
+     * A disclosure, not an ARIA menu: a `<button aria-expanded>` named "Choose a channel: Dubai
+     * Now" opens a non-modal panel listing all seven channels as links, in the Standard 3.1
+     * order, each with its name, a one-line descriptor in the page language and a swatch in
+     * that channel's own colour. Every item carries its own `data-channel` (FND-26), so the
+     * swatch is that channel's `channel-action`; that is why the component renders into light
+     * DOM (Stencil `scoped`): the document's channel rules must reach the items. The current
+     * channel carries a check and `aria-current="true"`.
+     * Escape and a press outside close the panel; Escape returns focus to the button; the panel
+     * closes when focus leaves it. From a pointer it grows from the trigger's corner over
+     * `duration-base`; from the keyboard it appears instantly (MOT-02). Below 1024px the trigger
+     * shrinks to the logo and chevron and keeps its accessible name (CHR-04).
+     */
+    interface HTMLScChannelSwitcherElement extends Components.ScChannelSwitcher, HTMLStencilElement {
+    }
+    var HTMLScChannelSwitcherElement: {
+        prototype: HTMLScChannelSwitcherElement;
+        new (): HTMLScChannelSwitcherElement;
+    };
     interface HTMLScCheckboxElementEventMap {
         "scChange": { checked: boolean; value: string };
     }
@@ -2134,12 +2525,20 @@ declare global {
         new (): HTMLScErrorSummaryElement;
     };
     /**
-     * The page footer: help and contact, accessibility, privacy and terms links, and
-     * "Government of Dubai". Renders a `<footer>` (the page's `contentinfo` landmark) with a
-     * list of links under a visually hidden "Support links" heading.
-     * The four standard links appear when their `*-href` is set, with text from strings in the
-     * page language. Extra links go in the default slot as plain `<a>` elements; each gets its
-     * own list item (the footer sets their `slot` attribute).
+     * The page footer, a `<footer>` (the page's `contentinfo` landmark). Two variants:
+     * - `simple` (default; transaction pages, component-language A29): one row of underlined
+     *   links and "Government of Dubai", under a 1px rule.
+     * - `grouped` (channel sites, Standard CHR-06, decision Q-footer; B5): the channel's brand
+     *   group (`slot="brand"`: a one-sentence description and app badges); a **Channels** group
+     *   listing all seven channels in the Standard 3.1 order, the current one Bold with
+     *   `aria-current="true"` and no swatch; **Helpful information** (about, help and contact,
+     *   accessibility statement, sitemap); and **Legal** (privacy and cookies, terms). Each group
+     *   has an `<h2>`. Then "Government of Dubai · Last updated …" and "… is run by the
+     *   Government of Dubai".
+     * The standard links appear when their `*-href` is set, with text from strings in the page
+     * language. Every channel sets all of them (TPL-01, LEG-01). Extra links go in the default
+     * slot as plain `<a href>` elements; each gets its own list item (the footer sets their
+     * `slot` attribute). The footer is on `surface`, never a dark band.
      */
     interface HTMLScFooterElement extends Components.ScFooter, HTMLStencilElement {
     }
@@ -2282,18 +2681,22 @@ declare global {
         new (): HTMLScNotificationListElement;
     };
     /**
-     * The page frame: header, `<main>` and footer, with the page's language, direction and
-     * channel on its root.
+     * The page shell (Standard TPL-01, 11.1 and 11.9): the header, one `<main>` and the footer,
+     * with the page's language, direction and channel on its root.
      * - Set `lang` on `sc-page` as on any element; the page sets `dir` to match (`rtl` for
      *   Arabic) and re-applies it when `lang` changes.
      * - `channel` sets `data-channel`, which themes every component inside.
      * - `<main>` is rendered in light DOM (the component is scoped, not shadowed) with
-     *   `id="main-content"` and `tabindex="-1"`, so a skip link (`<a href="#main-content">`)
-     *   anywhere on the page can reach it and move focus into it.
-     * - With `sync-document` and a sticky `sc-app-bar` in the header, it sets
-     *   `scroll-padding-block-start` on `<html>` to the bar's height plus `--sc-space-8`, so
-     *   focused elements and `#fragment` targets scroll into view below the bar, not under it
-     *   (WCAG 2.4.11). It follows the bar's size and removes the padding when no longer needed.
+     *   `id="main-content"` and `tabindex="-1"`, so the skip link (`sc-skip-link`, whose default
+     *   `href` is `#main-content`) can reach it and move focus into it. The header slot gives
+     *   the banner landmark, the footer slot the contentinfo landmark.
+     * - With `sync-document` it also sets `lang`, `dir` and `data-channel` on `<html>`, and,
+     *   with a sticky `sc-app-bar` or `sc-site-header` in the header, `scroll-padding-block-start`
+     *   on `<html>` to the bar's height plus `--sc-space-8`, so focused elements are never
+     *   hidden under it (WCAG 2.4.11).
+     * - It reserves the height of a docked `sc-utility-bar` (`padding-block-end` from
+     *   `--sc-utility-bar-block-size`, which the bar publishes), so the bar never covers the end
+     *   of the page; `sc.css` sets the matching `scroll-padding-block-end` (CHR-05).
      */
     interface HTMLScPageElement extends Components.ScPage, HTMLStencilElement {
     }
@@ -2435,6 +2838,31 @@ declare global {
     var HTMLScServiceCardElement: {
         prototype: HTMLScServiceCardElement;
         new (): HTMLScServiceCardElement;
+    };
+    /**
+     * The header of channel pages outside a transaction (Standard CHR-01 to CHR-04;
+     * component-language B2). Transaction pages use `sc-app-bar`.
+     * From the inline-start edge: the Government of Dubai lockup (`slot="lockup"`), the main
+     * navigation (`slot="nav"`), search, the language switch (`slot="language"`), sign in with UAE PASS
+     * (`slot="signin"`) or the account menu once signed in (`slot="account"`), and the
+     * channel's logo and switcher (`slot="switcher"`, an `sc-channel-switcher`). Sign in is the
+     * official UAE PASS button (decision U3a), never a themed `sc-button`: until the official kit
+     * arrives the header renders a marked placeholder (black, white label, fingerprint glyph,
+     * 56px) that `slot="signin"` replaces. The order
+     * mirrors in Arabic. A flat `surface` bar, 80px tall, with a 1px `outline-variant` rule.
+     * Below 1024px the row keeps the menu button, the lockup, the language switch and the
+     * channel switcher (64px). Navigation, search and sign in (or the account menu) move into
+     * the mobile menu: a modal `<dialog>` labelled "Menu", with focus on its close button when
+     * it opens, Escape closing it and returning focus to the menu button, and the page behind
+     * it inert. The same slotted elements move; nothing is duplicated.
+     * The host is a `<header>` banner landmark. It is not fixed by default; with `sticky`,
+     * `sc-page` keeps `scroll-padding-top` clear of it (A11Y-05, F-009).
+     */
+    interface HTMLScSiteHeaderElement extends Components.ScSiteHeader, HTMLStencilElement {
+    }
+    var HTMLScSiteHeaderElement: {
+        prototype: HTMLScSiteHeaderElement;
+        new (): HTMLScSiteHeaderElement;
     };
     /**
      * "Skip to main content": the first focusable element on every page. Hidden until it gets
@@ -2691,9 +3119,30 @@ declare global {
         prototype: HTMLScTimelineElement;
         new (): HTMLScTimelineElement;
     };
+    /**
+     * The help and feedback bar of a channel site (decision U4, Standard CHR-05; component-
+     * language B4 as amended by U4): the Happiness Meter, contact and complaints (04), chat and
+     * accessibility options, each an icon with a visible label (labels never collapse to icons).
+     * From 1024px it is a flat bar docked to the bottom of the viewport across the full width,
+     * at `elevation-1`, with a 1px `outline-variant` edge along its top. It publishes its height
+     * as `--sc-utility-bar-block-size` on `<html>`: `sc-page` pads its end by it and `sc.css`
+     * sets `scroll-padding-block-end` from it, so the bar never covers content or the focused
+     * element (WCAG 2.4.11). Below 1024px it folds into the footer: place it straight after
+     * `sc-footer`, and it becomes an in-flow "Help and feedback" group, a 2 × 2 grid of outlined
+     * buttons. It is present when the page loads and does not animate.
+     * A `<nav>` labelled "Help and feedback". Items appear when their `*-href` is set.
+     */
+    interface HTMLScUtilityBarElement extends Components.ScUtilityBar, HTMLStencilElement {
+    }
+    var HTMLScUtilityBarElement: {
+        prototype: HTMLScUtilityBarElement;
+        new (): HTMLScUtilityBarElement;
+    };
     interface HTMLElementTagNameMap {
         "sc-accordion": HTMLScAccordionElement;
+        "sc-account-menu": HTMLScAccountMenuElement;
         "sc-account-nav": HTMLScAccountNavElement;
+        "sc-announcement-bar": HTMLScAnnouncementBarElement;
         "sc-app-bar": HTMLScAppBarElement;
         "sc-attention-card": HTMLScAttentionCardElement;
         "sc-back-link": HTMLScBackLinkElement;
@@ -2704,6 +3153,8 @@ declare global {
         "sc-card": HTMLScCardElement;
         "sc-channel-chip": HTMLScChannelChipElement;
         "sc-channel-hero": HTMLScChannelHeroElement;
+        "sc-channel-network": HTMLScChannelNetworkElement;
+        "sc-channel-switcher": HTMLScChannelSwitcherElement;
         "sc-checkbox": HTMLScCheckboxElement;
         "sc-checkbox-group": HTMLScCheckboxGroupElement;
         "sc-date-input": HTMLScDateInputElement;
@@ -2723,6 +3174,7 @@ declare global {
         "sc-search": HTMLScSearchElement;
         "sc-select": HTMLScSelectElement;
         "sc-service-card": HTMLScServiceCardElement;
+        "sc-site-header": HTMLScSiteHeaderElement;
         "sc-skip-link": HTMLScSkipLinkElement;
         "sc-spinner": HTMLScSpinnerElement;
         "sc-status-tag": HTMLScStatusTagElement;
@@ -2735,6 +3187,7 @@ declare global {
         "sc-textarea": HTMLScTextareaElement;
         "sc-tile": HTMLScTileElement;
         "sc-timeline": HTMLScTimelineElement;
+        "sc-utility-bar": HTMLScUtilityBarElement;
     }
 }
 declare namespace LocalJSX {
@@ -2758,6 +3211,62 @@ declare namespace LocalJSX {
           * @default false
          */
         "showAll"?: boolean;
+    }
+    /**
+     * The signed-in account control in `sc-site-header` (`slot="account"`; component-language
+     * B3, Standard CHR-01). It replaces "Sign in with UAE PASS" once the user is signed in.
+     * - A notifications button (a link to the notifications page) with the unread count, named
+     *   "Notifications, 3 unread".
+     * - A `<button aria-expanded>` with the user's initials (and name from 1280px) that opens a
+     *   non-modal panel: the name and who they are acting for, links to Profile, Settings and
+     *   representation ("Change who you act for"), and Sign out.
+     * The panel is a disclosure, not an ARIA menu: Tab moves through its links, Escape closes it
+     * and returns focus to the button, a press outside or focus leaving closes it. From a
+     * pointer it grows from the button's corner; from the keyboard it appears instantly.
+     */
+    interface ScAccountMenu {
+        /**
+          * The person or organisation the user is acting for, when it is not themselves.
+         */
+        "actingFor"?: string;
+        /**
+          * Overrides the initials taken from `name` ("SM").
+         */
+        "initials"?: string;
+        /**
+          * The signed-in user's name as written ("Sara Al Mansoori").
+          * @default ''
+         */
+        "name"?: string;
+        /**
+          * The notifications page. Adds the notifications button.
+         */
+        "notificationsHref"?: string;
+        /**
+          * Fired when Sign out is a button (no `sign-out-href`) and the user activates it.
+         */
+        "onScSignOut"?: (event: ScAccountMenuCustomEvent<void>) => void;
+        /**
+          * The profile page.
+         */
+        "profileHref"?: string;
+        /**
+          * Where the user changes who they act for (representation).
+         */
+        "representationHref"?: string;
+        /**
+          * The account settings page.
+         */
+        "settingsHref"?: string;
+        /**
+          * The sign-out URL. Without it, Sign out is a button that fires `scSignOut`, so the service can post its own sign-out form.
+         */
+        "signOutHref"?: string;
+        /**
+          * Unread notifications. Shown as a badge on the notifications button when above 0.
+          * @default 0
+         */
+        "unread"?: number;
     }
     /**
      * The side navigation of the signed-in account area: Applications, Payments,
@@ -2787,29 +3296,70 @@ declare namespace LocalJSX {
         "label"?: string;
     }
     /**
-     * The top bar of every mobile screen and desktop page: a translucent glass bar with a
-     * start control (usually `sc-back-link`), the channel name, and an end control (usually
-     * `sc-language-switch`).
-     * - `align="center"` (default) is the mobile bar: start, title in the middle, end.
-     * - `align="start"` is the desktop header: title (with a mark) at the start, then the
-     *   default slot (primary navigation), and the end slot pushed to the end.
-     * - `shape="floating"` turns the bar into the inset glass capsule used on desktop.
-     * The glass becomes a solid surface under `prefers-reduced-transparency: reduce` and in
-     * forced colours. The host is a `banner` landmark unless `landmark` is false.
+     * A site-wide announcement above the header: planned maintenance, a service outage, a change
+     * people need to know about (component-language B1). One message, one optional link, and an
+     * optional dismiss button.
+     * A labelled region ("Announcement" / "إعلان"), present when the page loads. It is not a
+     * live region and not an alert. The text carries the severity in words ("Planned
+     * maintenance…"); the tone's icon and container repeat it.
+     * Dismissing it fires `scDismiss` (cancelable) and hides it. With `announcement-id`, the
+     * dismissal is remembered in this browser, so the same announcement does not come back.
+     * Focus moves to the next focusable element after it. From a pointer it fades out over
+     * `duration-exit`; from the keyboard it goes at once. Its height is never animated (MOT-11).
+     */
+    interface ScAnnouncementBar {
+        /**
+          * Remembers a dismissal in this browser (localStorage) under this id, so the announcement stays hidden on later pages. Change the id when the message changes.
+         */
+        "announcementId"?: string;
+        /**
+          * Shows the dismiss button.
+          * @default false
+         */
+        "dismissible"?: boolean;
+        /**
+          * A link with more detail ("See affected services"). Shown with `link-text`.
+         */
+        "linkHref"?: string;
+        /**
+          * The link's text.
+         */
+        "linkText"?: string;
+        /**
+          * Fired before the bar hides. Call `preventDefault()` to keep it.
+         */
+        "onScDismiss"?: (event: ScAnnouncementBarCustomEvent<{ id?: string }>) => void;
+        /**
+          * `warning` (maintenance; default), `info`, or `error` (a service is down).
+          * @default 'warning'
+         */
+        "tone"?: AnnouncementTone;
+    }
+    /**
+     * The transaction app bar (component-language A4; Standard TPL-01, LANG-04): the bar at the
+     * top of every step of a journey (E2–E4). Channel pages outside a transaction use
+     * `sc-site-header` instead.
+     * A 4px rule in `channel-action` along the top; a start slot (the back link), the title (a
+     * 10px channel swatch and the channel name, centred) and an end slot (the language switch),
+     * with fixed 96px side slots so the title stays centred; a 1px `outline-variant` rule
+     * beneath. 60px tall on `surface`. Flat: no glass, no shadow.
+     * The host is a `banner` landmark unless `landmark` is false. It is not fixed by default;
+     * with `sticky`, `sc-page sync-document` sets `scroll-padding-top` so focus never slides
+     * under it (WCAG 2.4.11).
      */
     interface ScAppBar {
         /**
-          * `center`: mobile layout with the title in the middle. `start`: desktop layout with the title at the start.
+          * `center` (default): the journey bar, title in the middle. `start`: deprecated (v1's desktop header): the title at the start and the default slot after it. Use `sc-site-header` for channel pages.
           * @default 'center'
          */
         "align"?: 'center' | 'start';
         /**
-          * Makes the host a `banner` landmark. Set it to false when the page already has a banner (for example a site header around the bar), or when the bar sits inside a dialog.
+          * Makes the host a `banner` landmark. Set it to false when the page already has a banner, or when the bar sits inside a dialog.
           * @default true
          */
         "landmark"?: boolean;
         /**
-          * `bar`: edge to edge with a hairline at the bottom. `floating`: an inset glass capsule (desktop).
+          * Deprecated and ignored: v2 has no floating glass capsule (ELV-04).
           * @default 'bar'
          */
         "shape"?: 'bar' | 'floating';
@@ -3074,6 +3624,54 @@ declare namespace LocalJSX {
           * @default 'large'
          */
         "size"?: ChannelHeroSize;
+    }
+    /**
+     * The channel network strip (component-language B21, Standard CHR-08): "One network · seven
+     * channels" and a tile for each of the seven channels, in the Standard 3.1 order, at the end
+     * of every channel home page, before the footer.
+     * City indigo marks it as shared (the eyebrow and its rule). Each tile carries its own
+     * channel's colour only as attribution: a 4px top rule in that channel's `channel-action`.
+     * Each tile sets its own `data-channel` (FND-26), which is why the strip renders into light
+     * DOM (Stencil `scoped`). The current channel's tile is filled with its `channel-subtle`,
+     * says "You are here", carries `aria-current="true"` and is not a link (it would lead to
+     * this site).
+     * A `<nav>` labelled "Government of Dubai channels" with a list of links. Seven tiles in a
+     * row from 1024px (by the strip's own width), four from 600px, two below.
+     */
+    interface ScChannelNetwork {
+        /**
+          * The current channel. Defaults to the closest `data-channel`.
+         */
+        "channel"?: Channel1;
+        /**
+          * Each channel's home page (as `sc-channel-switcher` `links`; `{lang}` becomes `en` or `ar`).
+         */
+        "links"?: ChannelLinks | string;
+    }
+    /**
+     * The channel's logo and the channel switcher, at the inline-end of `sc-site-header`
+     * (Standard CHR-01, CHR-03; component-language B2a).
+     * A disclosure, not an ARIA menu: a `<button aria-expanded>` named "Choose a channel: Dubai
+     * Now" opens a non-modal panel listing all seven channels as links, in the Standard 3.1
+     * order, each with its name, a one-line descriptor in the page language and a swatch in
+     * that channel's own colour. Every item carries its own `data-channel` (FND-26), so the
+     * swatch is that channel's `channel-action`; that is why the component renders into light
+     * DOM (Stencil `scoped`): the document's channel rules must reach the items. The current
+     * channel carries a check and `aria-current="true"`.
+     * Escape and a press outside close the panel; Escape returns focus to the button; the panel
+     * closes when focus leaves it. From a pointer it grows from the trigger's corner over
+     * `duration-base`; from the keyboard it appears instantly (MOT-02). Below 1024px the trigger
+     * shrinks to the logo and chevron and keeps its accessible name (CHR-04).
+     */
+    interface ScChannelSwitcher {
+        /**
+          * The current channel. Defaults to the closest `data-channel` (as set by `sc-page`).
+         */
+        "channel"?: Channel1;
+        /**
+          * Each channel's home page, as an object or a JSON attribute: `links='{"now":"https://…/{lang}/","transport":"https://…/{lang}/"}'`. `{lang}` becomes `en` or `ar`, so each link leads to that channel's home in the current language. Give all seven; a channel without a link is listed as text.
+         */
+        "links"?: ChannelLinks | string;
     }
     /**
      * A checkbox: one of several choices in an `sc-checkbox-group`, or on its own for a single
@@ -3446,30 +4044,67 @@ declare namespace LocalJSX {
         "noAutofocus"?: boolean;
     }
     /**
-     * The page footer: help and contact, accessibility, privacy and terms links, and
-     * "Government of Dubai". Renders a `<footer>` (the page's `contentinfo` landmark) with a
-     * list of links under a visually hidden "Support links" heading.
-     * The four standard links appear when their `*-href` is set, with text from strings in the
-     * page language. Extra links go in the default slot as plain `<a>` elements; each gets its
-     * own list item (the footer sets their `slot` attribute).
+     * The page footer, a `<footer>` (the page's `contentinfo` landmark). Two variants:
+     * - `simple` (default; transaction pages, component-language A29): one row of underlined
+     *   links and "Government of Dubai", under a 1px rule.
+     * - `grouped` (channel sites, Standard CHR-06, decision Q-footer; B5): the channel's brand
+     *   group (`slot="brand"`: a one-sentence description and app badges); a **Channels** group
+     *   listing all seven channels in the Standard 3.1 order, the current one Bold with
+     *   `aria-current="true"` and no swatch; **Helpful information** (about, help and contact,
+     *   accessibility statement, sitemap); and **Legal** (privacy and cookies, terms). Each group
+     *   has an `<h2>`. Then "Government of Dubai · Last updated …" and "… is run by the
+     *   Government of Dubai".
+     * The standard links appear when their `*-href` is set, with text from strings in the page
+     * language. Every channel sets all of them (TPL-01, LEG-01). Extra links go in the default
+     * slot as plain `<a href>` elements; each gets its own list item (the footer sets their
+     * `slot` attribute). The footer is on `surface`, never a dark band.
      */
     interface ScFooter {
+        /**
+          * About the channel ("About Dubai Now").
+         */
+        "aboutHref"?: string;
         /**
           * The accessibility statement.
          */
         "accessibilityHref"?: string;
         /**
+          * The current channel. Defaults to the closest `data-channel`.
+         */
+        "channel"?: Channel1;
+        /**
+          * A separate cookies page. Splits "Privacy and cookies" into "Privacy" and "Cookies".
+         */
+        "cookiesHref"?: string;
+        /**
           * The help and contact page.
          */
         "helpHref"?: string;
         /**
-          * The privacy notice.
+          * Each channel's home page, for the Channels group (as `sc-channel-switcher` `links`; `{lang}` becomes `en` or `ar`).
+         */
+        "links"?: ChannelLinks | string;
+        /**
+          * The privacy notice. Labelled "Privacy and cookies" unless `cookies-href` is set too.
          */
         "privacyHref"?: string;
         /**
-          * The terms and conditions.
+          * The sitemap.
+         */
+        "sitemapHref"?: string;
+        /**
+          * The terms of use.
          */
         "termsHref"?: string;
+        /**
+          * Grouped: when the site was last updated, as it should read ("12 October 2026").
+         */
+        "updated"?: string;
+        /**
+          * `simple` (one row) or `grouped` (channel sites, with the Channels group).
+          * @default 'simple'
+         */
+        "variant"?: FooterVariant;
     }
     /**
      * Switches to the same page in the other language. The label is always the other
@@ -3671,18 +4306,22 @@ declare namespace LocalJSX {
     interface ScNotificationList {
     }
     /**
-     * The page frame: header, `<main>` and footer, with the page's language, direction and
-     * channel on its root.
+     * The page shell (Standard TPL-01, 11.1 and 11.9): the header, one `<main>` and the footer,
+     * with the page's language, direction and channel on its root.
      * - Set `lang` on `sc-page` as on any element; the page sets `dir` to match (`rtl` for
      *   Arabic) and re-applies it when `lang` changes.
      * - `channel` sets `data-channel`, which themes every component inside.
      * - `<main>` is rendered in light DOM (the component is scoped, not shadowed) with
-     *   `id="main-content"` and `tabindex="-1"`, so a skip link (`<a href="#main-content">`)
-     *   anywhere on the page can reach it and move focus into it.
-     * - With `sync-document` and a sticky `sc-app-bar` in the header, it sets
-     *   `scroll-padding-block-start` on `<html>` to the bar's height plus `--sc-space-8`, so
-     *   focused elements and `#fragment` targets scroll into view below the bar, not under it
-     *   (WCAG 2.4.11). It follows the bar's size and removes the padding when no longer needed.
+     *   `id="main-content"` and `tabindex="-1"`, so the skip link (`sc-skip-link`, whose default
+     *   `href` is `#main-content`) can reach it and move focus into it. The header slot gives
+     *   the banner landmark, the footer slot the contentinfo landmark.
+     * - With `sync-document` it also sets `lang`, `dir` and `data-channel` on `<html>`, and,
+     *   with a sticky `sc-app-bar` or `sc-site-header` in the header, `scroll-padding-block-start`
+     *   on `<html>` to the bar's height plus `--sc-space-8`, so focused elements are never
+     *   hidden under it (WCAG 2.4.11).
+     * - It reserves the height of a docked `sc-utility-bar` (`padding-block-end` from
+     *   `--sc-utility-bar-block-size`, which the bar publishes), so the bar never covers the end
+     *   of the page; `sc.css` sets the matching `scroll-padding-block-end` (CHR-05).
      */
     interface ScPage {
         /**
@@ -3695,7 +4334,7 @@ declare namespace LocalJSX {
          */
         "mainId"?: string;
         /**
-          * Also sets `lang`, `dir` and `data-channel` on `<html>`. Use it when `sc-page` is the whole page, so browsers and screen readers get the page language from the document root. With a sticky `sc-app-bar` in the header, it also sets `scroll-padding-block-start` on `<html>` so focus is never hidden under the bar.
+          * Also sets `lang`, `dir` and `data-channel` on `<html>`. Use it when `sc-page` is the whole page, so browsers and screen readers get the page language from the document root. With a sticky header, it also keeps `scroll-padding-block-start` on `<html>` clear of it.
           * @default false
          */
         "syncDocument"?: boolean;
@@ -3973,6 +4612,44 @@ declare namespace LocalJSX {
           * Colours the icon tile with a decorative topic tint (foundations §2.7) instead of the channel container: `blue` transport, `violet` residency, `rose` family, `orange` housing, `amber` bills, `green` health. Decorative only. Ignored without an icon.
          */
         "tint"?: ServiceCardTint;
+    }
+    /**
+     * The header of channel pages outside a transaction (Standard CHR-01 to CHR-04;
+     * component-language B2). Transaction pages use `sc-app-bar`.
+     * From the inline-start edge: the Government of Dubai lockup (`slot="lockup"`), the main
+     * navigation (`slot="nav"`), search, the language switch (`slot="language"`), sign in with UAE PASS
+     * (`slot="signin"`) or the account menu once signed in (`slot="account"`), and the
+     * channel's logo and switcher (`slot="switcher"`, an `sc-channel-switcher`). Sign in is the
+     * official UAE PASS button (decision U3a), never a themed `sc-button`: until the official kit
+     * arrives the header renders a marked placeholder (black, white label, fingerprint glyph,
+     * 56px) that `slot="signin"` replaces. The order
+     * mirrors in Arabic. A flat `surface` bar, 80px tall, with a 1px `outline-variant` rule.
+     * Below 1024px the row keeps the menu button, the lockup, the language switch and the
+     * channel switcher (64px). Navigation, search and sign in (or the account menu) move into
+     * the mobile menu: a modal `<dialog>` labelled "Menu", with focus on its close button when
+     * it opens, Escape closing it and returning focus to the menu button, and the page behind
+     * it inert. The same slotted elements move; nothing is duplicated.
+     * The host is a `<header>` banner landmark. It is not fixed by default; with `sticky`,
+     * `sc-page` keeps `scroll-padding-top` clear of it (A11Y-05, F-009).
+     */
+    interface ScSiteHeader {
+        /**
+          * The search page. Adds a search button (an icon link named "Search").
+         */
+        "searchHref"?: string;
+        /**
+          * Where the UAE PASS placeholder button leads. The placeholder shows when this is set and there is neither a `slot="signin"` nor a `slot="account"` child.
+         */
+        "signInHref"?: string;
+        /**
+          * Overrides the placeholder's "Sign in with UAE PASS" (in the page language).
+         */
+        "signInText"?: string;
+        /**
+          * Keeps the header at the top while the page scrolls. `sc-page` then sets `scroll-padding-top`.
+          * @default false
+         */
+        "sticky"?: boolean;
     }
     /**
      * "Skip to main content": the first focusable element on every page. Hidden until it gets
@@ -4477,12 +5154,66 @@ declare namespace LocalJSX {
          */
         "order"?: TimelineOrder;
     }
+    /**
+     * The help and feedback bar of a channel site (decision U4, Standard CHR-05; component-
+     * language B4 as amended by U4): the Happiness Meter, contact and complaints (04), chat and
+     * accessibility options, each an icon with a visible label (labels never collapse to icons).
+     * From 1024px it is a flat bar docked to the bottom of the viewport across the full width,
+     * at `elevation-1`, with a 1px `outline-variant` edge along its top. It publishes its height
+     * as `--sc-utility-bar-block-size` on `<html>`: `sc-page` pads its end by it and `sc.css`
+     * sets `scroll-padding-block-end` from it, so the bar never covers content or the focused
+     * element (WCAG 2.4.11). Below 1024px it folds into the footer: place it straight after
+     * `sc-footer`, and it becomes an in-flow "Help and feedback" group, a 2 × 2 grid of outlined
+     * buttons. It is present when the page loads and does not animate.
+     * A `<nav>` labelled "Help and feedback". Items appear when their `*-href` is set.
+     */
+    interface ScUtilityBar {
+        /**
+          * Accessibility options or the accessibility statement.
+         */
+        "accessibilityHref"?: string;
+        /**
+          * The chat service.
+         */
+        "chatHref"?: string;
+        /**
+          * Contact and complaints: usually `tel:04…` or the contact page.
+         */
+        "contactHref"?: string;
+        /**
+          * The number shown after "Contact and complaints", isolated left to right.
+          * @default '04'
+         */
+        "contactNumber"?: string;
+        /**
+          * The Happiness Meter survey.
+         */
+        "happinessHref"?: string;
+    }
 
     interface ScAccordionAttributes {
         "showAll": boolean;
     }
+    interface ScAccountMenuAttributes {
+        "name": string;
+        "initials": string;
+        "actingFor": string;
+        "profileHref": string;
+        "settingsHref": string;
+        "representationHref": string;
+        "signOutHref": string;
+        "notificationsHref": string;
+        "unread": number;
+    }
     interface ScAccountNavAttributes {
         "label": string;
+    }
+    interface ScAnnouncementBarAttributes {
+        "tone": AnnouncementTone;
+        "linkHref": string;
+        "linkText": string;
+        "dismissible": boolean;
+        "announcementId": string;
     }
     interface ScAppBarAttributes {
         "sticky": boolean;
@@ -4540,6 +5271,14 @@ declare namespace LocalJSX {
     interface ScChannelHeroAttributes {
         "size": ChannelHeroSize;
         "popularLabel": string;
+    }
+    interface ScChannelNetworkAttributes {
+        "channel": Channel;
+        "links": ChannelLinks | string;
+    }
+    interface ScChannelSwitcherAttributes {
+        "channel": Channel;
+        "links": ChannelLinks | string;
     }
     interface ScCheckboxAttributes {
         "name": string;
@@ -4609,10 +5348,17 @@ declare namespace LocalJSX {
         "noAutofocus": boolean;
     }
     interface ScFooterAttributes {
+        "variant": FooterVariant;
+        "channel": Channel;
+        "links": ChannelLinks | string;
+        "aboutHref": string;
         "helpHref": string;
         "accessibilityHref": string;
         "privacyHref": string;
+        "cookiesHref": string;
         "termsHref": string;
+        "sitemapHref": string;
+        "updated": string;
     }
     interface ScLanguageSwitchAttributes {
         "href": string;
@@ -4702,6 +5448,12 @@ declare namespace LocalJSX {
         "entity": string;
         "tint": ServiceCardTint;
     }
+    interface ScSiteHeaderAttributes {
+        "signInHref": string;
+        "signInText": string;
+        "searchHref": string;
+        "sticky": boolean;
+    }
     interface ScSkipLinkAttributes {
         "href": string;
     }
@@ -4790,10 +5542,19 @@ declare namespace LocalJSX {
         "order": TimelineOrder;
         "divided": boolean;
     }
+    interface ScUtilityBarAttributes {
+        "happinessHref": string;
+        "contactHref": string;
+        "contactNumber": string;
+        "chatHref": string;
+        "accessibilityHref": string;
+    }
 
     interface IntrinsicElements {
         "sc-accordion": Omit<ScAccordion, keyof ScAccordionAttributes> & { [K in keyof ScAccordion & keyof ScAccordionAttributes]?: ScAccordion[K] } & { [K in keyof ScAccordion & keyof ScAccordionAttributes as `attr:${K}`]?: ScAccordionAttributes[K] } & { [K in keyof ScAccordion & keyof ScAccordionAttributes as `prop:${K}`]?: ScAccordion[K] };
+        "sc-account-menu": Omit<ScAccountMenu, keyof ScAccountMenuAttributes> & { [K in keyof ScAccountMenu & keyof ScAccountMenuAttributes]?: ScAccountMenu[K] } & { [K in keyof ScAccountMenu & keyof ScAccountMenuAttributes as `attr:${K}`]?: ScAccountMenuAttributes[K] } & { [K in keyof ScAccountMenu & keyof ScAccountMenuAttributes as `prop:${K}`]?: ScAccountMenu[K] };
         "sc-account-nav": Omit<ScAccountNav, keyof ScAccountNavAttributes> & { [K in keyof ScAccountNav & keyof ScAccountNavAttributes]?: ScAccountNav[K] } & { [K in keyof ScAccountNav & keyof ScAccountNavAttributes as `attr:${K}`]?: ScAccountNavAttributes[K] } & { [K in keyof ScAccountNav & keyof ScAccountNavAttributes as `prop:${K}`]?: ScAccountNav[K] };
+        "sc-announcement-bar": Omit<ScAnnouncementBar, keyof ScAnnouncementBarAttributes> & { [K in keyof ScAnnouncementBar & keyof ScAnnouncementBarAttributes]?: ScAnnouncementBar[K] } & { [K in keyof ScAnnouncementBar & keyof ScAnnouncementBarAttributes as `attr:${K}`]?: ScAnnouncementBarAttributes[K] } & { [K in keyof ScAnnouncementBar & keyof ScAnnouncementBarAttributes as `prop:${K}`]?: ScAnnouncementBar[K] };
         "sc-app-bar": Omit<ScAppBar, keyof ScAppBarAttributes> & { [K in keyof ScAppBar & keyof ScAppBarAttributes]?: ScAppBar[K] } & { [K in keyof ScAppBar & keyof ScAppBarAttributes as `attr:${K}`]?: ScAppBarAttributes[K] } & { [K in keyof ScAppBar & keyof ScAppBarAttributes as `prop:${K}`]?: ScAppBar[K] };
         "sc-attention-card": Omit<ScAttentionCard, keyof ScAttentionCardAttributes> & { [K in keyof ScAttentionCard & keyof ScAttentionCardAttributes]?: ScAttentionCard[K] } & { [K in keyof ScAttentionCard & keyof ScAttentionCardAttributes as `attr:${K}`]?: ScAttentionCardAttributes[K] } & { [K in keyof ScAttentionCard & keyof ScAttentionCardAttributes as `prop:${K}`]?: ScAttentionCard[K] };
         "sc-back-link": Omit<ScBackLink, keyof ScBackLinkAttributes> & { [K in keyof ScBackLink & keyof ScBackLinkAttributes]?: ScBackLink[K] } & { [K in keyof ScBackLink & keyof ScBackLinkAttributes as `attr:${K}`]?: ScBackLinkAttributes[K] } & { [K in keyof ScBackLink & keyof ScBackLinkAttributes as `prop:${K}`]?: ScBackLink[K] };
@@ -4804,6 +5565,8 @@ declare namespace LocalJSX {
         "sc-card": Omit<ScCard, keyof ScCardAttributes> & { [K in keyof ScCard & keyof ScCardAttributes]?: ScCard[K] } & { [K in keyof ScCard & keyof ScCardAttributes as `attr:${K}`]?: ScCardAttributes[K] } & { [K in keyof ScCard & keyof ScCardAttributes as `prop:${K}`]?: ScCard[K] };
         "sc-channel-chip": Omit<ScChannelChip, keyof ScChannelChipAttributes> & { [K in keyof ScChannelChip & keyof ScChannelChipAttributes]?: ScChannelChip[K] } & { [K in keyof ScChannelChip & keyof ScChannelChipAttributes as `attr:${K}`]?: ScChannelChipAttributes[K] } & { [K in keyof ScChannelChip & keyof ScChannelChipAttributes as `prop:${K}`]?: ScChannelChip[K] } & OneOf<"channel", ScChannelChip["channel"], ScChannelChipAttributes["channel"]>;
         "sc-channel-hero": Omit<ScChannelHero, keyof ScChannelHeroAttributes> & { [K in keyof ScChannelHero & keyof ScChannelHeroAttributes]?: ScChannelHero[K] } & { [K in keyof ScChannelHero & keyof ScChannelHeroAttributes as `attr:${K}`]?: ScChannelHeroAttributes[K] } & { [K in keyof ScChannelHero & keyof ScChannelHeroAttributes as `prop:${K}`]?: ScChannelHero[K] };
+        "sc-channel-network": Omit<ScChannelNetwork, keyof ScChannelNetworkAttributes> & { [K in keyof ScChannelNetwork & keyof ScChannelNetworkAttributes]?: ScChannelNetwork[K] } & { [K in keyof ScChannelNetwork & keyof ScChannelNetworkAttributes as `attr:${K}`]?: ScChannelNetworkAttributes[K] } & { [K in keyof ScChannelNetwork & keyof ScChannelNetworkAttributes as `prop:${K}`]?: ScChannelNetwork[K] };
+        "sc-channel-switcher": Omit<ScChannelSwitcher, keyof ScChannelSwitcherAttributes> & { [K in keyof ScChannelSwitcher & keyof ScChannelSwitcherAttributes]?: ScChannelSwitcher[K] } & { [K in keyof ScChannelSwitcher & keyof ScChannelSwitcherAttributes as `attr:${K}`]?: ScChannelSwitcherAttributes[K] } & { [K in keyof ScChannelSwitcher & keyof ScChannelSwitcherAttributes as `prop:${K}`]?: ScChannelSwitcher[K] };
         "sc-checkbox": Omit<ScCheckbox, keyof ScCheckboxAttributes> & { [K in keyof ScCheckbox & keyof ScCheckboxAttributes]?: ScCheckbox[K] } & { [K in keyof ScCheckbox & keyof ScCheckboxAttributes as `attr:${K}`]?: ScCheckboxAttributes[K] } & { [K in keyof ScCheckbox & keyof ScCheckboxAttributes as `prop:${K}`]?: ScCheckbox[K] };
         "sc-checkbox-group": Omit<ScCheckboxGroup, keyof ScCheckboxGroupAttributes> & { [K in keyof ScCheckboxGroup & keyof ScCheckboxGroupAttributes]?: ScCheckboxGroup[K] } & { [K in keyof ScCheckboxGroup & keyof ScCheckboxGroupAttributes as `attr:${K}`]?: ScCheckboxGroupAttributes[K] } & { [K in keyof ScCheckboxGroup & keyof ScCheckboxGroupAttributes as `prop:${K}`]?: ScCheckboxGroup[K] };
         "sc-date-input": Omit<ScDateInput, keyof ScDateInputAttributes> & { [K in keyof ScDateInput & keyof ScDateInputAttributes]?: ScDateInput[K] } & { [K in keyof ScDateInput & keyof ScDateInputAttributes as `attr:${K}`]?: ScDateInputAttributes[K] } & { [K in keyof ScDateInput & keyof ScDateInputAttributes as `prop:${K}`]?: ScDateInput[K] };
@@ -4823,6 +5586,7 @@ declare namespace LocalJSX {
         "sc-search": Omit<ScSearch, keyof ScSearchAttributes> & { [K in keyof ScSearch & keyof ScSearchAttributes]?: ScSearch[K] } & { [K in keyof ScSearch & keyof ScSearchAttributes as `attr:${K}`]?: ScSearchAttributes[K] } & { [K in keyof ScSearch & keyof ScSearchAttributes as `prop:${K}`]?: ScSearch[K] };
         "sc-select": Omit<ScSelect, keyof ScSelectAttributes> & { [K in keyof ScSelect & keyof ScSelectAttributes]?: ScSelect[K] } & { [K in keyof ScSelect & keyof ScSelectAttributes as `attr:${K}`]?: ScSelectAttributes[K] } & { [K in keyof ScSelect & keyof ScSelectAttributes as `prop:${K}`]?: ScSelect[K] };
         "sc-service-card": Omit<ScServiceCard, keyof ScServiceCardAttributes> & { [K in keyof ScServiceCard & keyof ScServiceCardAttributes]?: ScServiceCard[K] } & { [K in keyof ScServiceCard & keyof ScServiceCardAttributes as `attr:${K}`]?: ScServiceCardAttributes[K] } & { [K in keyof ScServiceCard & keyof ScServiceCardAttributes as `prop:${K}`]?: ScServiceCard[K] } & OneOf<"href", ScServiceCard["href"], ScServiceCardAttributes["href"]>;
+        "sc-site-header": Omit<ScSiteHeader, keyof ScSiteHeaderAttributes> & { [K in keyof ScSiteHeader & keyof ScSiteHeaderAttributes]?: ScSiteHeader[K] } & { [K in keyof ScSiteHeader & keyof ScSiteHeaderAttributes as `attr:${K}`]?: ScSiteHeaderAttributes[K] } & { [K in keyof ScSiteHeader & keyof ScSiteHeaderAttributes as `prop:${K}`]?: ScSiteHeader[K] };
         "sc-skip-link": Omit<ScSkipLink, keyof ScSkipLinkAttributes> & { [K in keyof ScSkipLink & keyof ScSkipLinkAttributes]?: ScSkipLink[K] } & { [K in keyof ScSkipLink & keyof ScSkipLinkAttributes as `attr:${K}`]?: ScSkipLinkAttributes[K] } & { [K in keyof ScSkipLink & keyof ScSkipLinkAttributes as `prop:${K}`]?: ScSkipLink[K] };
         "sc-spinner": Omit<ScSpinner, keyof ScSpinnerAttributes> & { [K in keyof ScSpinner & keyof ScSpinnerAttributes]?: ScSpinner[K] } & { [K in keyof ScSpinner & keyof ScSpinnerAttributes as `attr:${K}`]?: ScSpinnerAttributes[K] } & { [K in keyof ScSpinner & keyof ScSpinnerAttributes as `prop:${K}`]?: ScSpinner[K] };
         "sc-status-tag": Omit<ScStatusTag, keyof ScStatusTagAttributes> & { [K in keyof ScStatusTag & keyof ScStatusTagAttributes]?: ScStatusTag[K] } & { [K in keyof ScStatusTag & keyof ScStatusTagAttributes as `attr:${K}`]?: ScStatusTagAttributes[K] } & { [K in keyof ScStatusTag & keyof ScStatusTagAttributes as `prop:${K}`]?: ScStatusTag[K] };
@@ -4835,6 +5599,7 @@ declare namespace LocalJSX {
         "sc-textarea": Omit<ScTextarea, keyof ScTextareaAttributes> & { [K in keyof ScTextarea & keyof ScTextareaAttributes]?: ScTextarea[K] } & { [K in keyof ScTextarea & keyof ScTextareaAttributes as `attr:${K}`]?: ScTextareaAttributes[K] } & { [K in keyof ScTextarea & keyof ScTextareaAttributes as `prop:${K}`]?: ScTextarea[K] };
         "sc-tile": Omit<ScTile, keyof ScTileAttributes> & { [K in keyof ScTile & keyof ScTileAttributes]?: ScTile[K] } & { [K in keyof ScTile & keyof ScTileAttributes as `attr:${K}`]?: ScTileAttributes[K] } & { [K in keyof ScTile & keyof ScTileAttributes as `prop:${K}`]?: ScTile[K] } & OneOf<"href", ScTile["href"], ScTileAttributes["href"]>;
         "sc-timeline": Omit<ScTimeline, keyof ScTimelineAttributes> & { [K in keyof ScTimeline & keyof ScTimelineAttributes]?: ScTimeline[K] } & { [K in keyof ScTimeline & keyof ScTimelineAttributes as `attr:${K}`]?: ScTimelineAttributes[K] } & { [K in keyof ScTimeline & keyof ScTimelineAttributes as `prop:${K}`]?: ScTimeline[K] };
+        "sc-utility-bar": Omit<ScUtilityBar, keyof ScUtilityBarAttributes> & { [K in keyof ScUtilityBar & keyof ScUtilityBarAttributes]?: ScUtilityBar[K] } & { [K in keyof ScUtilityBar & keyof ScUtilityBarAttributes as `attr:${K}`]?: ScUtilityBarAttributes[K] } & { [K in keyof ScUtilityBar & keyof ScUtilityBarAttributes as `prop:${K}`]?: ScUtilityBar[K] };
     }
 }
 export { LocalJSX as JSX };
@@ -4854,6 +5619,19 @@ declare module "@stencil/core" {
              * heading inside it is not announced as one.
              */
             "sc-accordion": LocalJSX.IntrinsicElements["sc-accordion"] & JSXBase.HTMLAttributes<HTMLScAccordionElement>;
+            /**
+             * The signed-in account control in `sc-site-header` (`slot="account"`; component-language
+             * B3, Standard CHR-01). It replaces "Sign in with UAE PASS" once the user is signed in.
+             * - A notifications button (a link to the notifications page) with the unread count, named
+             *   "Notifications, 3 unread".
+             * - A `<button aria-expanded>` with the user's initials (and name from 1280px) that opens a
+             *   non-modal panel: the name and who they are acting for, links to Profile, Settings and
+             *   representation ("Change who you act for"), and Sign out.
+             * The panel is a disclosure, not an ARIA menu: Tab moves through its links, Escape closes it
+             * and returns focus to the button, a press outside or focus leaving closes it. From a
+             * pointer it grows from the button's corner; from the keyboard it appears instantly.
+             */
+            "sc-account-menu": LocalJSX.IntrinsicElements["sc-account-menu"] & JSXBase.HTMLAttributes<HTMLScAccountMenuElement>;
             /**
              * The side navigation of the signed-in account area: Applications, Payments,
              * Notifications, Profile and settings, then a divider and Sign out. It takes 3 of 12
@@ -4877,15 +5655,29 @@ declare module "@stencil/core" {
              */
             "sc-account-nav": LocalJSX.IntrinsicElements["sc-account-nav"] & JSXBase.HTMLAttributes<HTMLScAccountNavElement>;
             /**
-             * The top bar of every mobile screen and desktop page: a translucent glass bar with a
-             * start control (usually `sc-back-link`), the channel name, and an end control (usually
-             * `sc-language-switch`).
-             * - `align="center"` (default) is the mobile bar: start, title in the middle, end.
-             * - `align="start"` is the desktop header: title (with a mark) at the start, then the
-             *   default slot (primary navigation), and the end slot pushed to the end.
-             * - `shape="floating"` turns the bar into the inset glass capsule used on desktop.
-             * The glass becomes a solid surface under `prefers-reduced-transparency: reduce` and in
-             * forced colours. The host is a `banner` landmark unless `landmark` is false.
+             * A site-wide announcement above the header: planned maintenance, a service outage, a change
+             * people need to know about (component-language B1). One message, one optional link, and an
+             * optional dismiss button.
+             * A labelled region ("Announcement" / "إعلان"), present when the page loads. It is not a
+             * live region and not an alert. The text carries the severity in words ("Planned
+             * maintenance…"); the tone's icon and container repeat it.
+             * Dismissing it fires `scDismiss` (cancelable) and hides it. With `announcement-id`, the
+             * dismissal is remembered in this browser, so the same announcement does not come back.
+             * Focus moves to the next focusable element after it. From a pointer it fades out over
+             * `duration-exit`; from the keyboard it goes at once. Its height is never animated (MOT-11).
+             */
+            "sc-announcement-bar": LocalJSX.IntrinsicElements["sc-announcement-bar"] & JSXBase.HTMLAttributes<HTMLScAnnouncementBarElement>;
+            /**
+             * The transaction app bar (component-language A4; Standard TPL-01, LANG-04): the bar at the
+             * top of every step of a journey (E2–E4). Channel pages outside a transaction use
+             * `sc-site-header` instead.
+             * A 4px rule in `channel-action` along the top; a start slot (the back link), the title (a
+             * 10px channel swatch and the channel name, centred) and an end slot (the language switch),
+             * with fixed 96px side slots so the title stays centred; a 1px `outline-variant` rule
+             * beneath. 60px tall on `surface`. Flat: no glass, no shadow.
+             * The host is a `banner` landmark unless `landmark` is false. It is not fixed by default;
+             * with `sticky`, `sc-page sync-document` sets `scroll-padding-top` so focus never slides
+             * under it (WCAG 2.4.11).
              */
             "sc-app-bar": LocalJSX.IntrinsicElements["sc-app-bar"] & JSXBase.HTMLAttributes<HTMLScAppBarElement>;
             /**
@@ -4992,6 +5784,36 @@ declare module "@stencil/core" {
              */
             "sc-channel-hero": LocalJSX.IntrinsicElements["sc-channel-hero"] & JSXBase.HTMLAttributes<HTMLScChannelHeroElement>;
             /**
+             * The channel network strip (component-language B21, Standard CHR-08): "One network · seven
+             * channels" and a tile for each of the seven channels, in the Standard 3.1 order, at the end
+             * of every channel home page, before the footer.
+             * City indigo marks it as shared (the eyebrow and its rule). Each tile carries its own
+             * channel's colour only as attribution: a 4px top rule in that channel's `channel-action`.
+             * Each tile sets its own `data-channel` (FND-26), which is why the strip renders into light
+             * DOM (Stencil `scoped`). The current channel's tile is filled with its `channel-subtle`,
+             * says "You are here", carries `aria-current="true"` and is not a link (it would lead to
+             * this site).
+             * A `<nav>` labelled "Government of Dubai channels" with a list of links. Seven tiles in a
+             * row from 1024px (by the strip's own width), four from 600px, two below.
+             */
+            "sc-channel-network": LocalJSX.IntrinsicElements["sc-channel-network"] & JSXBase.HTMLAttributes<HTMLScChannelNetworkElement>;
+            /**
+             * The channel's logo and the channel switcher, at the inline-end of `sc-site-header`
+             * (Standard CHR-01, CHR-03; component-language B2a).
+             * A disclosure, not an ARIA menu: a `<button aria-expanded>` named "Choose a channel: Dubai
+             * Now" opens a non-modal panel listing all seven channels as links, in the Standard 3.1
+             * order, each with its name, a one-line descriptor in the page language and a swatch in
+             * that channel's own colour. Every item carries its own `data-channel` (FND-26), so the
+             * swatch is that channel's `channel-action`; that is why the component renders into light
+             * DOM (Stencil `scoped`): the document's channel rules must reach the items. The current
+             * channel carries a check and `aria-current="true"`.
+             * Escape and a press outside close the panel; Escape returns focus to the button; the panel
+             * closes when focus leaves it. From a pointer it grows from the trigger's corner over
+             * `duration-base`; from the keyboard it appears instantly (MOT-02). Below 1024px the trigger
+             * shrinks to the logo and chevron and keeps its accessible name (CHR-04).
+             */
+            "sc-channel-switcher": LocalJSX.IntrinsicElements["sc-channel-switcher"] & JSXBase.HTMLAttributes<HTMLScChannelSwitcherElement>;
+            /**
              * A checkbox: one of several choices in an `sc-checkbox-group`, or on its own for a single
              * yes/no statement ("I confirm the vehicle details are correct").
              * Renders a native `<input type="checkbox">`, its `<label>` (the default slot) and hint in
@@ -5065,12 +5887,20 @@ declare module "@stencil/core" {
              */
             "sc-error-summary": LocalJSX.IntrinsicElements["sc-error-summary"] & JSXBase.HTMLAttributes<HTMLScErrorSummaryElement>;
             /**
-             * The page footer: help and contact, accessibility, privacy and terms links, and
-             * "Government of Dubai". Renders a `<footer>` (the page's `contentinfo` landmark) with a
-             * list of links under a visually hidden "Support links" heading.
-             * The four standard links appear when their `*-href` is set, with text from strings in the
-             * page language. Extra links go in the default slot as plain `<a>` elements; each gets its
-             * own list item (the footer sets their `slot` attribute).
+             * The page footer, a `<footer>` (the page's `contentinfo` landmark). Two variants:
+             * - `simple` (default; transaction pages, component-language A29): one row of underlined
+             *   links and "Government of Dubai", under a 1px rule.
+             * - `grouped` (channel sites, Standard CHR-06, decision Q-footer; B5): the channel's brand
+             *   group (`slot="brand"`: a one-sentence description and app badges); a **Channels** group
+             *   listing all seven channels in the Standard 3.1 order, the current one Bold with
+             *   `aria-current="true"` and no swatch; **Helpful information** (about, help and contact,
+             *   accessibility statement, sitemap); and **Legal** (privacy and cookies, terms). Each group
+             *   has an `<h2>`. Then "Government of Dubai · Last updated …" and "… is run by the
+             *   Government of Dubai".
+             * The standard links appear when their `*-href` is set, with text from strings in the page
+             * language. Every channel sets all of them (TPL-01, LEG-01). Extra links go in the default
+             * slot as plain `<a href>` elements; each gets its own list item (the footer sets their
+             * `slot` attribute). The footer is on `surface`, never a dark band.
              */
             "sc-footer": LocalJSX.IntrinsicElements["sc-footer"] & JSXBase.HTMLAttributes<HTMLScFooterElement>;
             /**
@@ -5159,18 +5989,22 @@ declare module "@stencil/core" {
              */
             "sc-notification-list": LocalJSX.IntrinsicElements["sc-notification-list"] & JSXBase.HTMLAttributes<HTMLScNotificationListElement>;
             /**
-             * The page frame: header, `<main>` and footer, with the page's language, direction and
-             * channel on its root.
+             * The page shell (Standard TPL-01, 11.1 and 11.9): the header, one `<main>` and the footer,
+             * with the page's language, direction and channel on its root.
              * - Set `lang` on `sc-page` as on any element; the page sets `dir` to match (`rtl` for
              *   Arabic) and re-applies it when `lang` changes.
              * - `channel` sets `data-channel`, which themes every component inside.
              * - `<main>` is rendered in light DOM (the component is scoped, not shadowed) with
-             *   `id="main-content"` and `tabindex="-1"`, so a skip link (`<a href="#main-content">`)
-             *   anywhere on the page can reach it and move focus into it.
-             * - With `sync-document` and a sticky `sc-app-bar` in the header, it sets
-             *   `scroll-padding-block-start` on `<html>` to the bar's height plus `--sc-space-8`, so
-             *   focused elements and `#fragment` targets scroll into view below the bar, not under it
-             *   (WCAG 2.4.11). It follows the bar's size and removes the padding when no longer needed.
+             *   `id="main-content"` and `tabindex="-1"`, so the skip link (`sc-skip-link`, whose default
+             *   `href` is `#main-content`) can reach it and move focus into it. The header slot gives
+             *   the banner landmark, the footer slot the contentinfo landmark.
+             * - With `sync-document` it also sets `lang`, `dir` and `data-channel` on `<html>`, and,
+             *   with a sticky `sc-app-bar` or `sc-site-header` in the header, `scroll-padding-block-start`
+             *   on `<html>` to the bar's height plus `--sc-space-8`, so focused elements are never
+             *   hidden under it (WCAG 2.4.11).
+             * - It reserves the height of a docked `sc-utility-bar` (`padding-block-end` from
+             *   `--sc-utility-bar-block-size`, which the bar publishes), so the bar never covers the end
+             *   of the page; `sc.css` sets the matching `scroll-padding-block-end` (CHR-05).
              */
             "sc-page": LocalJSX.IntrinsicElements["sc-page"] & JSXBase.HTMLAttributes<HTMLScPageElement>;
             /**
@@ -5234,6 +6068,26 @@ declare module "@stencil/core" {
              * navigation finds every service. A chip that is a link is a separate link.
              */
             "sc-service-card": LocalJSX.IntrinsicElements["sc-service-card"] & JSXBase.HTMLAttributes<HTMLScServiceCardElement>;
+            /**
+             * The header of channel pages outside a transaction (Standard CHR-01 to CHR-04;
+             * component-language B2). Transaction pages use `sc-app-bar`.
+             * From the inline-start edge: the Government of Dubai lockup (`slot="lockup"`), the main
+             * navigation (`slot="nav"`), search, the language switch (`slot="language"`), sign in with UAE PASS
+             * (`slot="signin"`) or the account menu once signed in (`slot="account"`), and the
+             * channel's logo and switcher (`slot="switcher"`, an `sc-channel-switcher`). Sign in is the
+             * official UAE PASS button (decision U3a), never a themed `sc-button`: until the official kit
+             * arrives the header renders a marked placeholder (black, white label, fingerprint glyph,
+             * 56px) that `slot="signin"` replaces. The order
+             * mirrors in Arabic. A flat `surface` bar, 80px tall, with a 1px `outline-variant` rule.
+             * Below 1024px the row keeps the menu button, the lockup, the language switch and the
+             * channel switcher (64px). Navigation, search and sign in (or the account menu) move into
+             * the mobile menu: a modal `<dialog>` labelled "Menu", with focus on its close button when
+             * it opens, Escape closing it and returning focus to the menu button, and the page behind
+             * it inert. The same slotted elements move; nothing is duplicated.
+             * The host is a `<header>` banner landmark. It is not fixed by default; with `sticky`,
+             * `sc-page` keeps `scroll-padding-top` clear of it (A11Y-05, F-009).
+             */
+            "sc-site-header": LocalJSX.IntrinsicElements["sc-site-header"] & JSXBase.HTMLAttributes<HTMLScSiteHeaderElement>;
             /**
              * "Skip to main content": the first focusable element on every page. Hidden until it gets
              * keyboard focus, then shown at the top start corner. Activating it moves focus to the
@@ -5393,6 +6247,20 @@ declare module "@stencil/core" {
              * tabular Latin digits. The marker column moves to the right in Arabic.
              */
             "sc-timeline": LocalJSX.IntrinsicElements["sc-timeline"] & JSXBase.HTMLAttributes<HTMLScTimelineElement>;
+            /**
+             * The help and feedback bar of a channel site (decision U4, Standard CHR-05; component-
+             * language B4 as amended by U4): the Happiness Meter, contact and complaints (04), chat and
+             * accessibility options, each an icon with a visible label (labels never collapse to icons).
+             * From 1024px it is a flat bar docked to the bottom of the viewport across the full width,
+             * at `elevation-1`, with a 1px `outline-variant` edge along its top. It publishes its height
+             * as `--sc-utility-bar-block-size` on `<html>`: `sc-page` pads its end by it and `sc.css`
+             * sets `scroll-padding-block-end` from it, so the bar never covers content or the focused
+             * element (WCAG 2.4.11). Below 1024px it folds into the footer: place it straight after
+             * `sc-footer`, and it becomes an in-flow "Help and feedback" group, a 2 × 2 grid of outlined
+             * buttons. It is present when the page loads and does not animate.
+             * A `<nav>` labelled "Help and feedback". Items appear when their `*-href` is set.
+             */
+            "sc-utility-bar": LocalJSX.IntrinsicElements["sc-utility-bar"] & JSXBase.HTMLAttributes<HTMLScUtilityBarElement>;
         }
     }
 }

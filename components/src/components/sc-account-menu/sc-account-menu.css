@@ -1,0 +1,248 @@
+/*
+ * sc-account-menu (v2, shadow DOM). Rules: component-language.md B3 (and B8 for the count
+ * badge), read through the role table in docs/v2/decisions.md.
+ */
+:host {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.account {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-8);
+}
+
+.menu {
+  position: relative;
+}
+
+/* Notifications: a 44px icon button with a count badge at its block-start, inline-end corner. */
+.notifications {
+  --icon-size: var(--sc-size-icon-l);
+  --sc-state-color: var(--sc-color-on-surface);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--sc-size-target-min);
+  block-size: var(--sc-size-target-min);
+  border-radius: var(--sc-radius-control);
+  color: var(--sc-color-on-surface);
+  transition: --sc-layer var(--sc-duration-fast) var(--sc-easing-hover);
+}
+
+.badge {
+  position: absolute;
+  inset-block-start: var(--sc-space-2);
+  inset-inline-end: 0;
+  box-sizing: border-box;
+  min-inline-size: var(--sc-space-20);
+  block-size: var(--sc-space-20);
+  padding-inline: var(--sc-space-4);
+  border: var(--sc-space-2) solid var(--sc-color-surface);
+  border-radius: var(--sc-radius-full);
+  background-color: var(--sc-color-channel-action);
+  color: var(--sc-color-channel-on-action);
+  font: var(--sc-type-label-small);
+  font-weight: var(--sc-font-weight-bold);
+  letter-spacing: 0;
+  line-height: calc(var(--sc-space-20) - var(--sc-space-4));
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Trigger: the sign-in control's frame, 48 tall, a 1.5px outline edge. */
+.trigger {
+  --sc-state-color: var(--sc-color-on-surface);
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-space-8);
+  min-block-size: var(--sc-size-control-secondary);
+  min-inline-size: var(--sc-size-target-min);
+  margin: 0;
+  padding-block: var(--sc-space-4);
+  padding-inline: var(--sc-space-6) var(--sc-space-8);
+  border: var(--sc-size-border-control) solid var(--sc-color-outline);
+  border-radius: var(--sc-radius-control);
+  background-color: transparent;
+  color: var(--sc-color-on-surface);
+  font: var(--sc-type-label-medium);
+  letter-spacing: var(--sc-type-label-medium-tracking);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    border-color var(--sc-duration-fast) var(--sc-easing-hover),
+    --sc-layer var(--sc-duration-fast) var(--sc-easing-hover);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .trigger:hover {
+    border-color: var(--sc-color-outline-strong);
+  }
+}
+
+.trigger[aria-expanded='true'] {
+  border-color: var(--sc-color-outline-strong);
+}
+
+/* Avatar: a 32px circle, initials in label-small Bold. Initials come from the name as written. */
+.avatar {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--sc-space-32);
+  block-size: var(--sc-space-32);
+  border-radius: var(--sc-radius-full);
+  background-color: var(--sc-color-channel-container);
+  color: var(--sc-color-channel-on-container);
+  font: var(--sc-type-label-small);
+  font-weight: var(--sc-font-weight-bold);
+  letter-spacing: 0;
+}
+
+/* The name shows from 1280px; below it stays in the accessible name. */
+.name {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (min-width: 1280px) {
+  .name {
+    position: static;
+    inline-size: auto;
+    block-size: auto;
+    margin: 0;
+    overflow: visible;
+    clip-path: none;
+  }
+}
+
+.chevron {
+  --icon-size: var(--sc-size-icon-m);
+  transition: transform var(--sc-duration-fast) var(--sc-easing-standard);
+}
+
+.trigger[aria-expanded='true'] .chevron {
+  transform: rotate(180deg);
+}
+
+/* Panel: as the channel switcher's, 320 wide. */
+.panel {
+  position: absolute;
+  inset-block-start: calc(100% + var(--sc-space-8));
+  inset-inline-end: 0;
+  z-index: 20;
+  box-sizing: border-box;
+  inline-size: min(320px, calc(100vw - var(--sc-space-32)));
+  padding: var(--sc-space-8);
+  border: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+  border-radius: var(--sc-radius-card);
+  background-color: var(--sc-color-surface);
+  color: var(--sc-color-on-surface);
+  box-shadow: var(--sc-elevation-2);
+  transform-origin: 100% 0;
+}
+
+.panel:dir(rtl) {
+  transform-origin: 0 0;
+}
+
+.panel[hidden] {
+  display: none;
+}
+
+.who {
+  padding-block: var(--sc-space-8) var(--sc-space-12);
+  padding-inline: var(--sc-space-12);
+}
+
+.who p {
+  margin: 0;
+}
+
+.who-name {
+  font: var(--sc-type-title-small);
+  letter-spacing: var(--sc-type-title-small-tracking);
+}
+
+.who-acting {
+  margin-block-start: var(--sc-space-2);
+  color: var(--sc-color-on-surface-variant);
+  font: var(--sc-type-body-small);
+  letter-spacing: var(--sc-type-body-small-tracking);
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Items: 48 tall, a 24px icon, gap 12, 8px corners. */
+.item {
+  --icon-size: var(--sc-size-icon-l);
+  --sc-state-color: var(--sc-color-on-surface);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-12);
+  inline-size: 100%;
+  min-block-size: var(--sc-size-control-secondary);
+  margin: 0;
+  padding-block: var(--sc-space-8);
+  padding-inline: var(--sc-space-12);
+  border: 0;
+  border-radius: var(--sc-radius-field);
+  background-color: transparent;
+  color: var(--sc-color-on-surface);
+  font: var(--sc-type-label-large);
+  font-weight: var(--sc-font-weight-medium);
+  letter-spacing: var(--sc-type-label-large-tracking);
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+  transition: --sc-layer var(--sc-duration-fast) var(--sc-easing-hover);
+}
+
+.item:lang(ar) {
+  font-weight: var(--sc-font-weight-bold);
+}
+
+.item:focus-visible {
+  outline-offset: calc(-1 * var(--sc-size-focus-ring));
+}
+
+.divider {
+  block-size: var(--sc-size-border-hairline);
+  margin-block: var(--sc-space-8);
+  background-color: var(--sc-color-outline-variant);
+}
+
+@media (forced-colors: active) {
+  .trigger {
+    border-color: ButtonText;
+  }
+  .panel {
+    border-color: CanvasText;
+  }
+  .badge {
+    border-color: Canvas;
+    background-color: CanvasText;
+    color: Canvas;
+  }
+  .divider {
+    background-color: CanvasText;
+  }
+}

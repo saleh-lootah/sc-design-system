@@ -144,6 +144,22 @@ The first 24 components, in four families, plus the components added after Phase
 
 ---
 
+## v2 · Site chrome (C1, Wave 2b)
+
+The v2 specs in `specs/` supersede the Phase 3 entries above for these tags.
+
+- **AppBar** (`sc-app-bar`): the transaction app bar (A4). See `specs/sc-app-bar.md`.
+- **SiteHeader** (`sc-site-header`, new): the channel-site header (CHR-01 to CHR-04), with the lockup slot, main navigation, search, language, UAE PASS sign in (U3a) or the account menu, the channel switcher, and the compact row with a modal menu. See `specs/sc-site-header.md`.
+- **ChannelSwitcher** (`sc-channel-switcher`, new, light DOM): the channel's logo and a disclosure listing the seven channels (CHR-03). See `specs/sc-channel-switcher.md`.
+- **AccountMenu** (`sc-account-menu`, new): notifications with the unread count and the account disclosure. See `specs/sc-account-menu.md`.
+- **AnnouncementBar** (`sc-announcement-bar`, new): a site-wide labelled region above the header, `info`, `warning` or `error`, dismissible. See `specs/sc-announcement-bar.md`.
+- **UtilityBar** (`sc-utility-bar`, new): help and feedback, docked flat at the bottom from 1024px, folded into the footer below (U4, CHR-05). See `specs/sc-utility-bar.md`.
+- **Footer** (`sc-footer`): `simple` and `grouped` with the Channels group (CHR-06). See `specs/sc-footer.md`.
+- **ChannelNetwork** (`sc-channel-network`, new, light DOM): "One network · seven channels" (CHR-08). See `specs/sc-channel-network.md`.
+- **PageShell** (`sc-page`): `main-content`, landmarks, `sync-document`, sticky-header and utility-bar reservations. See `specs/sc-page.md`.
+
+---
+
 ## v2 · Actions and navigation (C2, Wave 2b)
 
 The entries above describe v1. For `sc-link`, `sc-back-link`, `sc-skip-link`, `sc-language-switch` and `sc-channel-chip`, the v2 specs in `specs/<tag>.md` replace them. New in this family:

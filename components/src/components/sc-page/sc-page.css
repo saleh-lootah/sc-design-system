@@ -1,31 +1,35 @@
-:host {
-  display: flex;
-  flex-direction: column;
-  min-block-size: 100dvh;
-  background: var(--sc-color-canvas);
-  color: var(--sc-color-ink);
-}
-
-:host([hidden]) {
-  display: none;
-}
-
 /*
- * A <div slot="header"> that wraps the skip link and the app bar (as in the standard's page
- * shell) takes no box of its own, so a sticky sc-app-bar inside it sticks to the whole page,
- * not just to the wrapper's height.
+ * sc-page (v2, light DOM). The page shell: header, main and footer in a column, the footer at
+ * the bottom of short pages, and the end reserved for a docked sc-utility-bar (CHR-05).
  */
-::slotted(div[slot='header']) {
-  display: contents;
-}
+@layer sc.components {
+  :host {
+    display: flex;
+    flex-direction: column;
+    min-block-size: 100dvh;
+    padding-block-end: var(--sc-utility-bar-block-size, 0px);
+    background-color: var(--sc-color-surface);
+    color: var(--sc-color-on-surface);
+  }
 
-/* The footer sits at the bottom of short pages. */
-.main {
-  display: block;
-  flex: 1 0 auto;
-}
+  :host([hidden]) {
+    display: none;
+  }
 
-/* Focus lands here from the skip link; the ring would outline the whole page. */
-.main:focus {
-  outline: none;
+  /* A <div slot="header"> or <div slot="footer"> that wraps several parts takes no box of its
+     own, so a sticky header inside it sticks to the whole page, not just to the wrapper. */
+  ::slotted(div[slot='header']),
+  ::slotted(div[slot='footer']) {
+    display: contents;
+  }
+
+  .sc-page__main {
+    display: block;
+    flex: 1 0 auto;
+  }
+
+  /* Focus lands here from the skip link; the ring would outline the whole page. */
+  .sc-page__main:focus {
+    outline: none;
+  }
 }

@@ -28,8 +28,8 @@ const globalDir = join(root, 'src', 'global');
 
 /** v1 components not yet rebuilt: allowed the legacy i18n imports and the field.css/choice.css @imports. */
 const V1_PENDING = new Set([
-  'sc-app-bar', 'sc-checkbox', 'sc-checkbox-group', 'sc-date-input', 'sc-date-range', 'sc-footer', 'sc-page',
-  'sc-radio', 'sc-radio-group', 'sc-search', 'sc-select', 'sc-text-input', 'sc-textarea',
+  'sc-checkbox', 'sc-checkbox-group', 'sc-date-input', 'sc-date-range', 'sc-radio', 'sc-radio-group',
+  'sc-search', 'sc-select', 'sc-text-input', 'sc-textarea',
 ]);
 const STRUCTURE = [
   { name: '@import in component CSS (use the shared sheet, sc.css or your own rules)', re: /@import\b/g, ext: '.css', legacyOk: true },
