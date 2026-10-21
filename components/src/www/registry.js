@@ -39,3 +39,8 @@ page('Form fields', 'sc-checkbox-group', 'Checkbox group');
 page('Form fields', 'sc-date-input', 'Date input');
 page('Content and layout', 'sc-table', 'Table');
 page('Form fields', 'sc-date-range', 'Date range');
+page('Content and layout', 'sc-ltr', 'Left to right (sc-ltr)');
+page('Content and layout', 'sc-tile', 'Tile');
+page('Content and layout', 'sc-attention-card', 'Attention card');
+page('Content and layout', 'sc-module-card', 'Module card');
+page('Content and layout', 'sc-accordion', 'Accordion');

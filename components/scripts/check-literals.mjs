@@ -28,11 +28,11 @@ const globalDir = join(root, 'src', 'global');
 
 /** v1 components not yet rebuilt: allowed the legacy i18n imports and the field.css/choice.css @imports. */
 const V1_PENDING = new Set([
-  'sc-app-bar', 'sc-back-link', 'sc-callout', 'sc-card', 'sc-channel-chip', 'sc-channel-hero', 'sc-checkbox',
-  'sc-checkbox-group', 'sc-container', 'sc-date-input', 'sc-date-range', 'sc-error-summary', 'sc-footer', 'sc-grid',
-  'sc-language-switch', 'sc-link', 'sc-ltr', 'sc-page', 'sc-radio', 'sc-radio-group', 'sc-search', 'sc-select',
-  'sc-service-card', 'sc-skip-link', 'sc-spinner', 'sc-status-tag', 'sc-step-progress', 'sc-summary-list',
-  'sc-summary-row', 'sc-table', 'sc-text-input', 'sc-textarea',
+  'sc-app-bar', 'sc-back-link', 'sc-callout', 'sc-channel-chip', 'sc-checkbox',
+  'sc-checkbox-group', 'sc-date-input', 'sc-date-range', 'sc-error-summary', 'sc-footer',
+  'sc-language-switch', 'sc-link', 'sc-page', 'sc-radio', 'sc-radio-group', 'sc-search', 'sc-select',
+  'sc-skip-link', 'sc-spinner', 'sc-status-tag', 'sc-step-progress',
+  'sc-text-input', 'sc-textarea',
 ]);
 const STRUCTURE = [
   { name: '@import in component CSS (use the shared sheet, sc.css or your own rules)', re: /@import\b/g, ext: '.css', legacyOk: true },

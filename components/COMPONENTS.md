@@ -141,3 +141,27 @@ The first 24 components, in four families, plus the components added after Phase
 - States: `loading` (5 skeleton rows), `empty` slot (header hidden), `filtered` (no results, header kept), `error` slot (an `sc-callout tone="error"`), `density="compact"` (44px rows).
 - Below 600px: `responsive="stack"` (rows become cards) or `"scroll"` (a named scroll region with a sticky row header and an edge shadow).
 - Mirrors fully in Arabic through logical properties; digits stay Latin.
+
+### v2 · content and layout (C5, Wave 2b)
+
+These entries replace the v1 descriptions of the same tags above. Specs: `specs/<tag>.md`.
+
+**Container, Grid, LTR** (`sc-container`, `sc-grid`, `sc-ltr`): CSS only in v2. Not registered; `sc.css` styles the tags (`@layer sc.components`). Markup unchanged; `::part()` and the properties are gone.
+
+**Card** (`sc-card`): light DOM. Flat: 12px corners, 1px `outline-variant` edge, no shadow. `variant` `outlined` (default) or `filled` (`surface-container`, totals cards). `landmark`, `padding`, `label` as v1.
+
+**ServiceCard** (`sc-service-card`): shadow. Flat 12px card, 24 padding, at least 184 tall; the title (`title-large`) is the only link; a decorative forward arrow at the top end; optional `slot="icon"` in a 40px tile with an optional decorative `tint`; chip pinned to the bottom.
+
+**ChannelHero** (`sc-channel-hero`): shadow. A flat `channel-subtle` band (Q-hero, no gradient); eyebrow, display heading (`size` `large` or `medium`), lede, search, and `slot="popular"` suggestion chips (40px capsules on 44px targets) after a "Popular now" label; optional breadcrumbs.
+
+**SummaryList** (`sc-summary-list` with `sc-summary-row`): light DOM; one valid `<dl>` with each row inside its value `<dd>`. `layout` `auto`, `stacked` (E3), `columns` or `pairs` (E4, values end-aligned); `variant="total"` on a row.
+
+**Table** (`sc-table`): v1 behaviour and API; v2 look (flat 12px container, `surface-container` header, `channel-subtle` selection, underlined links, U1 ring) in `@layer sc.components`.
+
+**Tile** (`sc-tile`, new): shadow. One link: a tinted 40px icon tile, a `title-small` title and an optional plural-aware count ("14 services", "خدمتان"). Life events, categories, favourite services.
+
+**AttentionCard** (`sc-attention-card`, new): shadow. A due item: a thin topic-tint top strip, icon tile, `slot="status"` tag, heading, fact, meta (amounts isolated) and one `slot="action"` button. Not a link.
+
+**ModuleCard** (`sc-module-card`, new): shadow. A titled module: tinted icon, `heading`, a header link (`action-href`, `action-text`, named with the title), content slot, optional `divided` rules.
+
+**Accordion** (`sc-accordion`, new): light DOM over native `<details>`/`<summary>`. Ruled sections, 56px `title-medium` summaries, a 24px chevron at inline-end that turns over (pointer only), optional `show-all` toggle.

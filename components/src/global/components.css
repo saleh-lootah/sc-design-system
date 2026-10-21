@@ -32,103 +32,103 @@ sc-button:not(:defined)[full-width] {
    width="reading" caps the column at 680px, kept at the start edge so it lines up with the
    page content above and below it. */
 sc-container {
-  --_sc-container-margin: var(--sc-grid-compact-margin);
+  --_cm: var(--sc-grid-compact-margin);
   display: block;
   box-sizing: border-box;
   inline-size: 100%;
-  max-inline-size: calc(var(--sc-container-max) + 2 * var(--_sc-container-margin));
+  max-inline-size: calc(var(--sc-container-max) + 2 * var(--_cm));
   margin-inline: auto;
-  padding-inline: var(--_sc-container-margin);
+  padding-inline: var(--_cm);
 }
 sc-container[width="reading"] {
   /* The end padding takes up whatever is wider than the reading column. 100% is the
      containing block width, which is the host width before max-inline-size clamps it. */
   padding-inline-end: max(
-    var(--_sc-container-margin),
-    min(100%, var(--sc-container-max) + 2 * var(--_sc-container-margin)) - var(--_sc-container-margin) - var(--sc-container-reading)
+    var(--_cm),
+    min(100%, var(--sc-container-max) + 2 * var(--_cm)) - var(--_cm) - var(--sc-container-reading)
   );
 }
 @media (min-width: 600px) {
-  sc-container { --_sc-container-margin: var(--sc-grid-medium-margin); }
+  sc-container { --_cm: var(--sc-grid-medium-margin); }
 }
 @media (min-width: 1024px) {
-  sc-container { --_sc-container-margin: var(--sc-grid-expanded-margin); }
+  sc-container { --_cm: var(--sc-grid-expanded-margin); }
 }
 @media (min-width: 1440px) {
-  sc-container { --_sc-container-margin: var(--sc-grid-wide-margin); }
+  sc-container { --_cm: var(--sc-grid-wide-margin); }
 }
 
 /* sc-grid: 4, 8 or 12 columns with 16, 20 or 24px gutters. span, span-medium and
    span-expanded set every item width (each falls back to the smaller one); a child can
    override with style="--sc-grid-span: 8". Spans are capped at the columns available. */
 sc-grid {
-  --_sc-grid-s: initial;
-  --_sc-grid-m: initial;
-  --_sc-grid-x: initial;
-  --_sc-grid-columns: var(--sc-grid-compact-columns);
-  --_sc-grid-span: var(--_sc-grid-s, 12);
+  --_gs: initial;
+  --_gm: initial;
+  --_gx: initial;
+  --_gc: var(--sc-grid-compact-columns);
+  --_gspan: var(--_gs, 12);
   display: grid;
-  grid-template-columns: repeat(var(--_sc-grid-columns), minmax(0, 1fr));
+  grid-template-columns: repeat(var(--_gc), minmax(0, 1fr));
   gap: var(--sc-grid-compact-gutter);
 }
-sc-grid[span="1"] { --_sc-grid-s: 1; }
-sc-grid[span="2"] { --_sc-grid-s: 2; }
-sc-grid[span="3"] { --_sc-grid-s: 3; }
-sc-grid[span="4"] { --_sc-grid-s: 4; }
-sc-grid[span="5"] { --_sc-grid-s: 5; }
-sc-grid[span="6"] { --_sc-grid-s: 6; }
-sc-grid[span="7"] { --_sc-grid-s: 7; }
-sc-grid[span="8"] { --_sc-grid-s: 8; }
-sc-grid[span="9"] { --_sc-grid-s: 9; }
-sc-grid[span="10"] { --_sc-grid-s: 10; }
-sc-grid[span="11"] { --_sc-grid-s: 11; }
-sc-grid[span="12"] { --_sc-grid-s: 12; }
-sc-grid[span-medium="1"] { --_sc-grid-m: 1; }
-sc-grid[span-medium="2"] { --_sc-grid-m: 2; }
-sc-grid[span-medium="3"] { --_sc-grid-m: 3; }
-sc-grid[span-medium="4"] { --_sc-grid-m: 4; }
-sc-grid[span-medium="5"] { --_sc-grid-m: 5; }
-sc-grid[span-medium="6"] { --_sc-grid-m: 6; }
-sc-grid[span-medium="7"] { --_sc-grid-m: 7; }
-sc-grid[span-medium="8"] { --_sc-grid-m: 8; }
-sc-grid[span-medium="9"] { --_sc-grid-m: 9; }
-sc-grid[span-medium="10"] { --_sc-grid-m: 10; }
-sc-grid[span-medium="11"] { --_sc-grid-m: 11; }
-sc-grid[span-medium="12"] { --_sc-grid-m: 12; }
-sc-grid[span-expanded="1"] { --_sc-grid-x: 1; }
-sc-grid[span-expanded="2"] { --_sc-grid-x: 2; }
-sc-grid[span-expanded="3"] { --_sc-grid-x: 3; }
-sc-grid[span-expanded="4"] { --_sc-grid-x: 4; }
-sc-grid[span-expanded="5"] { --_sc-grid-x: 5; }
-sc-grid[span-expanded="6"] { --_sc-grid-x: 6; }
-sc-grid[span-expanded="7"] { --_sc-grid-x: 7; }
-sc-grid[span-expanded="8"] { --_sc-grid-x: 8; }
-sc-grid[span-expanded="9"] { --_sc-grid-x: 9; }
-sc-grid[span-expanded="10"] { --_sc-grid-x: 10; }
-sc-grid[span-expanded="11"] { --_sc-grid-x: 11; }
-sc-grid[span-expanded="12"] { --_sc-grid-x: 12; }
+sc-grid[span="1"] { --_gs: 1; }
+sc-grid[span="2"] { --_gs: 2; }
+sc-grid[span="3"] { --_gs: 3; }
+sc-grid[span="4"] { --_gs: 4; }
+sc-grid[span="5"] { --_gs: 5; }
+sc-grid[span="6"] { --_gs: 6; }
+sc-grid[span="7"] { --_gs: 7; }
+sc-grid[span="8"] { --_gs: 8; }
+sc-grid[span="9"] { --_gs: 9; }
+sc-grid[span="10"] { --_gs: 10; }
+sc-grid[span="11"] { --_gs: 11; }
+sc-grid[span="12"] { --_gs: 12; }
+sc-grid[span-medium="1"] { --_gm: 1; }
+sc-grid[span-medium="2"] { --_gm: 2; }
+sc-grid[span-medium="3"] { --_gm: 3; }
+sc-grid[span-medium="4"] { --_gm: 4; }
+sc-grid[span-medium="5"] { --_gm: 5; }
+sc-grid[span-medium="6"] { --_gm: 6; }
+sc-grid[span-medium="7"] { --_gm: 7; }
+sc-grid[span-medium="8"] { --_gm: 8; }
+sc-grid[span-medium="9"] { --_gm: 9; }
+sc-grid[span-medium="10"] { --_gm: 10; }
+sc-grid[span-medium="11"] { --_gm: 11; }
+sc-grid[span-medium="12"] { --_gm: 12; }
+sc-grid[span-expanded="1"] { --_gx: 1; }
+sc-grid[span-expanded="2"] { --_gx: 2; }
+sc-grid[span-expanded="3"] { --_gx: 3; }
+sc-grid[span-expanded="4"] { --_gx: 4; }
+sc-grid[span-expanded="5"] { --_gx: 5; }
+sc-grid[span-expanded="6"] { --_gx: 6; }
+sc-grid[span-expanded="7"] { --_gx: 7; }
+sc-grid[span-expanded="8"] { --_gx: 8; }
+sc-grid[span-expanded="9"] { --_gx: 9; }
+sc-grid[span-expanded="10"] { --_gx: 10; }
+sc-grid[span-expanded="11"] { --_gx: 11; }
+sc-grid[span-expanded="12"] { --_gx: 12; }
 @media (min-width: 600px) {
   sc-grid {
-    --_sc-grid-columns: var(--sc-grid-medium-columns);
-    --_sc-grid-span: var(--_sc-grid-m, var(--_sc-grid-s, 12));
+    --_gc: var(--sc-grid-medium-columns);
+    --_gspan: var(--_gm, var(--_gs, 12));
     gap: var(--sc-grid-medium-gutter);
   }
 }
 @media (min-width: 1024px) {
   sc-grid {
-    --_sc-grid-columns: var(--sc-grid-expanded-columns);
-    --_sc-grid-span: var(--_sc-grid-x, var(--_sc-grid-m, var(--_sc-grid-s, 12)));
+    --_gc: var(--sc-grid-expanded-columns);
+    --_gspan: var(--_gx, var(--_gm, var(--_gs, 12)));
     gap: var(--sc-grid-expanded-gutter);
   }
 }
 @media (min-width: 1440px) {
   sc-grid {
-    --_sc-grid-columns: var(--sc-grid-wide-columns);
+    --_gc: var(--sc-grid-wide-columns);
     gap: var(--sc-grid-wide-gutter);
   }
 }
 sc-grid > * {
-  grid-column: span min(var(--sc-grid-span, var(--_sc-grid-span)), var(--_sc-grid-columns));
+  grid-column: span min(var(--sc-grid-span, var(--_gspan)), var(--_gc));
   min-inline-size: 0;
 }
 
@@ -138,4 +138,12 @@ sc-ltr {
   direction: ltr;
   unicode-bidi: isolate;
 }
-sc-container[hidden], sc-grid[hidden], sc-ltr[hidden] { display: none; }
+:is(sc-container, sc-grid, sc-ltr)[hidden] { display: none; }
+
+/* ---------------------------------------------------------------------------------------
+ * C5 content and layout: size reservations before upgrade (architecture §3.1), so each
+ * host already has its final box at first paint.
+ * --------------------------------------------------------------------------------------- */
+:is(sc-card, sc-summary-list, sc-summary-row, sc-table, sc-accordion):not(:defined) {
+  display: block;
+}

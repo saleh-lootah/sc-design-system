@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-21T14:30:33",
+  "timestamp": "2026-10-21T14:39:50",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.45.2",
@@ -10,6 +10,7 @@
       "filePath": "src/components/sc-accordion/sc-accordion.tsx",
       "encapsulation": "scoped",
       "tag": "sc-accordion",
+      "readme": "# sc-accordion\n\n\n",
       "docs": "Sections that open and close, for frequently asked questions and long guidance. Built on\nnative `<details>` and `<summary>`: they open with Enter or Space, expose their expanded\nstate to assistive technology and work before (and without) JavaScript. The component adds\nthe v2 look (ruled sections, a title-medium summary, a chevron at the end that turns over\nwhen open) and an optional \"Show all sections\" toggle.\n\nv2 renders in light DOM (Stencil `scoped`, architecture §3.1): the `<details>` stay your\nown markup, so in-page links and `id`s inside them work as usual.\n\nPut the question in `<summary>` as plain text, optionally followed by a `<small>` summary\nline; put the answer after it. Keep headings out of `<summary>`: it is a button, so a\nheading inside it is not announced as one.",
       "docsTags": [
         {
@@ -291,6 +292,7 @@
       "filePath": "src/components/sc-attention-card/sc-attention-card.tsx",
       "encapsulation": "shadow",
       "tag": "sc-attention-card",
+      "readme": "# sc-attention-card\n\n\n",
       "docs": "One thing that is due (\"Needs your attention\"): a bill to pay, a document to upload, a\nregistration about to expire. A thin topic-tint strip on top, an icon tile, a status tag,\nthe title, the key fact, a meta line (amount and reference) and one action.\n\nThe card is neutral and is not a link: the action is the only thing to press, and its\nlabel names the action and the item (\"Pay AED 412.60\"). Status is never shown by colour:\nthe strip and the icon tile are decorative topic tints, and the urgency is in the status\ntag's words. Put the cards in a list (`<ul>`), most urgent first, under a heading that\ngives the count (\"4 things, most urgent first\").",
       "docsTags": [
         {
@@ -4566,6 +4568,7 @@
       "filePath": "src/components/sc-module-card/sc-module-card.tsx",
       "encapsulation": "shadow",
       "tag": "sc-module-card",
+      "readme": "# sc-module-card\n\n\n",
       "docs": "A titled module on a signed-in home page (\"At a glance\"): Vehicles, Applications, Traffic\nfines. A header row with an optional tinted icon, the title (a heading) and a standalone\nlink at the end (\"Manage\", \"View all\"), then the module's own content.\n\nThe card is not a link (CMP-06). The header link's accessible name includes the title\n(\"View all, Applications\"), so a page with several \"View all\" links still makes sense out\nof context.",
       "docsTags": [
         {
@@ -9019,6 +9022,7 @@
       "filePath": "src/components/sc-tile/sc-tile.tsx",
       "encapsulation": "shadow",
       "tag": "sc-tile",
+      "readme": "# sc-tile\n\n\n",
       "docs": "A compact single-link tile: a tinted icon tile, a title and an optional count. Use it for\nlife events (\"Moving home · 14 services\"), categories (\"Transport and vehicles\") and\nfavourite services (\"Pay a traffic fine\").\n\nThe whole tile is one link, because the title (and the count) is its only content and so\nthe link's whole name: \"Moving home, 14 services\". That does not conflict with CMP-06,\nwhich is about cards that hold more than one thing. Tiles carry no other links or buttons.",
       "docsTags": [
         {
@@ -9216,6 +9220,16 @@
     }
   ],
   "typeLibrary": {
+    "src/components/sc-attention-card/sc-attention-card.tsx::AttentionCardHeadingLevel": {
+      "declaration": "export type AttentionCardHeadingLevel = 2 | 3 | 4 | 5 | 6;",
+      "docstring": "",
+      "path": "src/components/sc-attention-card/sc-attention-card.tsx"
+    },
+    "src/components/sc-attention-card/sc-attention-card.tsx::AttentionCardTint": {
+      "declaration": "export type AttentionCardTint = 'blue' | 'violet' | 'rose' | 'orange' | 'amber' | 'green';",
+      "docstring": "",
+      "path": "src/components/sc-attention-card/sc-attention-card.tsx"
+    },
     "src/components/sc-button/sc-button.tsx::ButtonVariant": {
       "declaration": "export type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'destructive' | 'handoff';",
       "docstring": "",
@@ -9286,6 +9300,16 @@
       "docstring": "",
       "path": "src/components/sc-language-switch/sc-language-switch.tsx"
     },
+    "src/components/sc-module-card/sc-module-card.tsx::ModuleCardHeadingLevel": {
+      "declaration": "export type ModuleCardHeadingLevel = 2 | 3 | 4 | 5 | 6;",
+      "docstring": "",
+      "path": "src/components/sc-module-card/sc-module-card.tsx"
+    },
+    "src/components/sc-module-card/sc-module-card.tsx::ModuleCardTint": {
+      "declaration": "export type ModuleCardTint = 'blue' | 'violet' | 'rose' | 'orange' | 'amber' | 'green';",
+      "docstring": "",
+      "path": "src/components/sc-module-card/sc-module-card.tsx"
+    },
     "src/components/sc-search/sc-search.tsx::ScSearchDetail": {
       "declaration": "export interface ScSearchDetail {\n  /** The query as typed, trimmed. */\n  value: string;\n}",
       "docstring": "",
@@ -9346,15 +9370,10 @@
       "docstring": "",
       "path": "src/components/sc-text-input/field.tsx"
     },
-    "src/components/sc-attention-card/sc-attention-card.tsx::AttentionCardHeadingLevel": {
-      "declaration": "export type AttentionCardHeadingLevel = 2 | 3 | 4 | 5 | 6;",
+    "src/components/sc-tile/sc-tile.tsx::TileTint": {
+      "declaration": "export type TileTint = 'blue' | 'violet' | 'rose' | 'orange' | 'amber' | 'green';",
       "docstring": "",
-      "path": "src/components/sc-attention-card/sc-attention-card.tsx"
-    },
-    "src/components/sc-attention-card/sc-attention-card.tsx::AttentionCardTint": {
-      "declaration": "export type AttentionCardTint = 'blue' | 'violet' | 'rose' | 'orange' | 'amber' | 'green';",
-      "docstring": "",
-      "path": "src/components/sc-attention-card/sc-attention-card.tsx"
+      "path": "src/components/sc-tile/sc-tile.tsx"
     },
     "src/i18n/strings.ts::Channel": {
       "declaration": "\"build\" | \"now\" | \"transport\" | \"visit\" | \"justice\" | \"invest\" | \"trade\"",
@@ -9370,21 +9389,6 @@
       "declaration": "export type StringsInput = string | Record<string, unknown> | undefined | null;",
       "docstring": "",
       "path": "src/components/sc-table/overrides.ts"
-    },
-    "src/components/sc-module-card/sc-module-card.tsx::ModuleCardHeadingLevel": {
-      "declaration": "export type ModuleCardHeadingLevel = 2 | 3 | 4 | 5 | 6;",
-      "docstring": "",
-      "path": "src/components/sc-module-card/sc-module-card.tsx"
-    },
-    "src/components/sc-module-card/sc-module-card.tsx::ModuleCardTint": {
-      "declaration": "export type ModuleCardTint = 'blue' | 'violet' | 'rose' | 'orange' | 'amber' | 'green';",
-      "docstring": "",
-      "path": "src/components/sc-module-card/sc-module-card.tsx"
-    },
-    "src/components/sc-tile/sc-tile.tsx::TileTint": {
-      "declaration": "export type TileTint = 'blue' | 'violet' | 'rose' | 'orange' | 'amber' | 'green';",
-      "docstring": "",
-      "path": "src/components/sc-tile/sc-tile.tsx"
     }
   }
 }

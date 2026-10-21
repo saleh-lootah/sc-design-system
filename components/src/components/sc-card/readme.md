@@ -21,9 +21,11 @@ A surface for grouping related content: a life event and its steps, a task, a se
 
 Nothing to configure: padding and radius are symmetrical and content follows the page direction.
 
+- `variant="filled"` gives a quiet fill with no edge: a totals card, or a group inside an outlined area.
+
 ### Styling hooks
 
-Part: `surface`. The fill, radius and shadow come from tokens and follow light and dark themes; in forced colours the card keeps a visible edge.
+v2 renders in light DOM: the host is the surface (`.sc-card`), and there is no `::part(surface)`. Cards are flat: a 1px edge and 12px corners, no shadow. In forced colours the card keeps a visible edge.
 
 <!-- Auto Generated Below -->
 

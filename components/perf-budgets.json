@@ -1,7 +1,20 @@
 {
   "$comment": "v2 budgets from docs/v2/architecture.md §3.7. Bytes, gzip level 9, per file as the browser downloads it (fonts: file bytes). Checked by npm run check:budget. Component budgets are measured in the custom-elements build (module + import closure, excluding the runtime). Only tags in \"enforce\" (rebuilt for v2) fail the check; family agents add theirs when they finish. Others are reported as pending.",
   "enforce": [
-    "sc-button"
+    "sc-button",
+    "sc-container",
+    "sc-grid",
+    "sc-ltr",
+    "sc-card",
+    "sc-service-card",
+    "sc-summary-list",
+    "sc-summary-row",
+    "sc-table",
+    "sc-channel-hero",
+    "sc-tile",
+    "sc-attention-card",
+    "sc-module-card",
+    "sc-accordion"
   ],
   "coreGzip": 14336,
   "globalCssGzip": 7168,
