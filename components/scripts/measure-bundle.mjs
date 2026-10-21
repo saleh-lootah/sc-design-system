@@ -16,9 +16,11 @@
  *      stylesheet and tokens.css;
  *   4. fonts: every .woff2 with glyph count and how many code points are Latin or Arabic;
  *   5. a typical page (default: page shell, skip link, app bar, hero, search, grid,
- *      6 service cards, footer) in both builds: total first-load bytes.
+ *      6 service cards, footer) in both builds: total first-load bytes, and the font files
+ *      Helium actually downloads for test/perf/typical-page.html in English and Arabic
+ *      (SC_BROWSER overrides the Helium path; --no-browser skips it).
  *
- * No dependencies beyond Node 20. Wave 4 (Q3) and CI re-run this against the budgets in
+ * No dependencies beyond Node 20 and, for the fonts, the puppeteer devDependency. Wave 4 (Q3) and CI re-run this against the budgets in
  * docs/v2/architecture.md.
  */
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
@@ -301,10 +303,23 @@ const woff2Info = (file) => {
 };
 const fontDir = join(root, 'src', 'assets', 'fonts');
 const fonts = existsSync(fontDir) ? readdirSync(fontDir).filter((f) => f.endsWith('.woff2')).map((f) => woff2Info(join(fontDir, f))) : [];
-/** What a page downloads: English, the three Latin weights; Arabic, the Arabic Regular and
-    Bold files (no Arabic role uses Medium, D12) plus nothing Latin unless Latin letters appear. */
-const fontBytes = (re) => fonts.filter((f) => re.test(f.file)).reduce((n, f) => n + f.bytes, 0);
-const pageFonts = { en: fontBytes(/-latin\.woff2$/), ar: fontBytes(/-(400|700)-arabic\.woff2$/) };
+/**
+ * What the typical page really downloads, per language: it is loaded in headless Helium
+ * (scripts/lib/typical-page.mjs) and the woff2 requests are counted, so a stray script file
+ * (an Arabic word on an English page, a Latin label on an Arabic one) shows up. Skipped with
+ * --no-browser or a custom --page; with --budget, a page that cannot be measured fails.
+ */
+let pageFonts = { en: null, ar: null, files: { en: [], ar: [] }, error: null };
+if (flag('--no-browser') || opt('--page')) pageFonts.error = flag('--no-browser') ? 'skipped (--no-browser)' : 'skipped (custom --page)';
+else {
+  try {
+    const { typicalPageFonts } = await import('./lib/typical-page.mjs');
+    const got = await typicalPageFonts(root, process.env.SC_BROWSER || '/Applications/Helium.app/Contents/MacOS/Helium');
+    pageFonts = { en: got.en.bytes, ar: got.ar.bytes, files: { en: got.en.files, ar: got.ar.files }, error: null };
+  } catch (e) {
+    pageFonts.error = `not measured: ${e.message.split('\n')[0]}`;
+  }
+}
 const globalSrc = read(join(LAZY, existsSync(join(LAZY, 'sc.css')) ? 'sc.css' : 'sc-components.css'));
 const fontFace = {
   count: (globalSrc.match(/@font-face/g) ?? []).length,
@@ -330,8 +345,9 @@ const page = {
   lazy: { requests: lazyPageFiles.size + 1, js: filesSize(LAZY, lazyPageFiles), css: lazy.globalCss },
   ce: { modules: cePageFiles.size, js: filesSize(CE, cePageFiles), jsBundled: size(ceConcat), css: lazy.globalCss },
   componentCss: size(uniqueTags.map((t) => ce.components[t]?.cssRaw ?? '').join('')),
-  fonts: pageFonts.en,
-  fontsAr: pageFonts.ar,
+  fonts: pageFonts.en ?? 0,
+  fontsAr: pageFonts.ar ?? 0,
+  fontFiles: pageFonts.files,
 };
 page.lazy.total = add(add(page.lazy.js, page.lazy.css), { raw: page.fonts, gzip: page.fonts, br: page.fonts });
 page.ce.total = add(add(page.ce.jsBundled, page.ce.css), { raw: page.fonts, gzip: page.fonts, br: page.fonts });
@@ -392,8 +408,10 @@ if (budgetFile) {
   } else {
     pending.push(`typical page: ${page.lazy.js.gzip} B JS, ${page.componentCss.gzip} B component CSS (enforced once every tag on it is rebuilt)`);
   }
-  if (b.pageFontsEnBytes != null && pageFonts.en > b.pageFontsEnBytes) failures.push(`fonts on an English page: ${pageFonts.en} B > budget ${b.pageFontsEnBytes} B`);
-  if (b.pageFontsArBytes != null && pageFonts.ar > b.pageFontsArBytes) failures.push(`fonts on an Arabic page: ${pageFonts.ar} B > budget ${b.pageFontsArBytes} B`);
+  if (pageFonts.error && !flag('--no-browser') && !opt('--page')) failures.push(`fonts on the typical page: ${pageFonts.error}`);
+  const list = (l) => pageFonts.files[l].map((f) => `${f.file} ${f.bytes}`).join(', ');
+  if (b.pageFontsEnBytes != null && pageFonts.en > b.pageFontsEnBytes) failures.push(`fonts on an English page: ${pageFonts.en} B > budget ${b.pageFontsEnBytes} B (${list('en')})`);
+  if (b.pageFontsArBytes != null && pageFonts.ar > b.pageFontsArBytes) failures.push(`fonts on an Arabic page: ${pageFonts.ar} B > budget ${b.pageFontsArBytes} B (${list('ar')})`);
   report.budgetPending = pending;
   for (const f of fonts) if (b.fontFileBytes != null && f.bytes > b.fontFileBytes) failures.push(`${f.file}: ${f.bytes} B > budget ${b.fontFileBytes} B per font file`);
 }
@@ -432,7 +450,8 @@ if (flag('--json')) {
   L.push(`- Lazy: ${page.lazy.requests} requests (incl. stylesheet); JS ${fmt(page.lazy.js)}; global CSS ${fmt(page.lazy.css)}`);
   L.push(`- Custom elements: ${page.ce.modules} modules; JS per module ${fmt(page.ce.js)}; as one bundle ${fmt(page.ce.jsBundled)}`);
   L.push(`- Component CSS parsed (once per tag): ${fmt(page.componentCss)}`);
-  L.push(`- Fonts a page downloads (already compressed): English ${kb(page.fonts)} KiB (three Latin weights), Arabic ${kb(page.fontsAr)} KiB (Arabic Regular and Bold)`);
+  if (pageFonts.error) L.push(`- Fonts the page downloads: ${pageFonts.error}`);
+  else for (const l of ['en', 'ar']) L.push(`- Fonts Helium downloads, ${l === 'en' ? 'English' : 'Arabic'}: ${kb(pageFonts[l])} KiB (${pageFonts.files[l].map((f) => `${f.file} ${kb(f.bytes)}`).join(', ')})`);
   L.push(`- First-load total, lazy, gzip: ${kb(page.lazy.total.gzip)} KiB; brotli: ${kb(page.lazy.total.br)} KiB`);
   L.push('', '## www playground', '', `- build JS: ${fmt(www.js.size)} (${www.js.files} files); build CSS: ${fmt(www.css.size)}; playground shell: ${fmt(www.playground.size)} (${www.playground.files} files)`);
   if (budgetFile) {

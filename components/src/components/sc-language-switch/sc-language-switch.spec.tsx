@@ -59,3 +59,22 @@ describe('sc-language-switch (spec)', () => {
     expect(!!control(page.root!).querySelector('[part="icon"] svg')).toBe(header);
   });
 });
+
+describe('sc-language-switch name font', () => {
+  // sc.css gives the name span only "Dubai W23 Name" (scripts/subset-fonts.mjs, NAMES), which
+  // holds just the letters of the two endonyms. A letter outside it would render in the
+  // fallback font, so the strings and the face must stay in step.
+  it('has every letter of both language names in the "Dubai W23 Name" face', async () => {
+    const { readFileSync } = await import('node:fs');
+    const { join } = await import('node:path');
+    const { default: strings } = await import('../../i18n/components/sc-language-switch');
+    const css = readFileSync(join(__dirname, '../../global/fonts.css'), 'utf8');
+    const ranges = [...css.matchAll(/font-family: 'Dubai W23 Name';[^}]*unicode-range: ([^;]+);/g)].flatMap((m) => m[1].split(','));
+    const covered = new Set(ranges.map((r) => parseInt(r.trim().replace('U+', ''), 16)));
+    for (const dict of [strings.en, strings.ar]) {
+      for (const text of [dict.languageSwitchNameEn, dict.languageSwitchNameAr]) {
+        expect([text, [...text].filter((c) => !covered.has(c.codePointAt(0)!))]).toEqual([text, []]);
+      }
+    }
+  });
+});
