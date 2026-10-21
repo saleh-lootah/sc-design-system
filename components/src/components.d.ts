@@ -15,6 +15,7 @@ import { ContainerWidth } from "./components/sc-container/sc-container";
 import { Parts } from "./components/sc-date-input/date";
 import { StringsInput } from "./components/sc-date-range/overrides";
 import { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
+import { FilterChip } from "./components/sc-filter-chips/sc-filter-chips";
 import { LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
 import { ScSearchDetail, SearchSize } from "./components/sc-search/sc-search";
 import { ServiceCardHeadingLevel } from "./components/sc-service-card/sc-service-card";
@@ -33,6 +34,7 @@ export { ContainerWidth } from "./components/sc-container/sc-container";
 export { Parts } from "./components/sc-date-input/date";
 export { StringsInput } from "./components/sc-date-range/overrides";
 export { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
+export { FilterChip } from "./components/sc-filter-chips/sc-filter-chips";
 export { LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
 export { ScSearchDetail, SearchSize } from "./components/sc-search/sc-search";
 export { ServiceCardHeadingLevel } from "./components/sc-service-card/sc-service-card";
@@ -559,6 +561,36 @@ export namespace Components {
           * Moves focus to the summary, e.g. after client-side validation updates `errors`.
          */
         "setFocus": () => Promise<void>;
+    }
+    /**
+     * The filters applied to a list of results, as removable chips beside the result count, with
+     * "Clear all filters" when there are two or more (component-language B18, applied filter).
+     * Each chip is a native `<button>` named "Remove filter: Transport and vehicles". Removing one
+     * takes it away at once (no animation), emits `scRemove`, and moves focus to the next chip,
+     * else the previous one, else the element named by `focus-target` (the results heading).
+     * Every change in the number of filters is announced politely: "2 filters applied".
+     * The page updates its results on `scRemove` / `scClear`; set `filters` to change the chips.
+     * Chips are 32px tall (decision Q-chips) with a 44px target. Light DOM (Stencil `scoped`).
+     */
+    interface ScFilterChips {
+        /**
+          * The applied filters, in order: an array of `{ value, label }`, or the same as JSON in the attribute (`filters='[{"value":"transport","label":"Transport and vehicles"}]'`).
+          * @default []
+         */
+        "filters": FilterChip[] | string;
+        /**
+          * The id of the element that gets focus when the last chip goes, usually the results heading. It is made focusable (`tabindex="-1"`) if it isn't.
+         */
+        "focusTarget"?: string;
+        /**
+          * The group's accessible name. Defaults to "Applied filters" ("عوامل التصفية المطبّقة").
+         */
+        "label"?: string;
+        /**
+          * Hides "Clear all filters".
+          * @default false
+         */
+        "noClear": boolean;
     }
     /**
      * The page footer: help and contact, accessibility, privacy and terms links, and
@@ -1307,6 +1339,10 @@ export interface ScDateRangeCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLScDateRangeElement;
 }
+export interface ScFilterChipsCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLScFilterChipsElement;
+}
 export interface ScLanguageSwitchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLScLanguageSwitchElement;
@@ -1575,6 +1611,34 @@ declare global {
     var HTMLScErrorSummaryElement: {
         prototype: HTMLScErrorSummaryElement;
         new (): HTMLScErrorSummaryElement;
+    };
+    interface HTMLScFilterChipsElementEventMap {
+        "scRemove": FilterChip;
+        "scClear": void;
+    }
+    /**
+     * The filters applied to a list of results, as removable chips beside the result count, with
+     * "Clear all filters" when there are two or more (component-language B18, applied filter).
+     * Each chip is a native `<button>` named "Remove filter: Transport and vehicles". Removing one
+     * takes it away at once (no animation), emits `scRemove`, and moves focus to the next chip,
+     * else the previous one, else the element named by `focus-target` (the results heading).
+     * Every change in the number of filters is announced politely: "2 filters applied".
+     * The page updates its results on `scRemove` / `scClear`; set `filters` to change the chips.
+     * Chips are 32px tall (decision Q-chips) with a 44px target. Light DOM (Stencil `scoped`).
+     */
+    interface HTMLScFilterChipsElement extends Components.ScFilterChips, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLScFilterChipsElementEventMap>(type: K, listener: (this: HTMLScFilterChipsElement, ev: ScFilterChipsCustomEvent<HTMLScFilterChipsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLScFilterChipsElementEventMap>(type: K, listener: (this: HTMLScFilterChipsElement, ev: ScFilterChipsCustomEvent<HTMLScFilterChipsElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLScFilterChipsElement: {
+        prototype: HTMLScFilterChipsElement;
+        new (): HTMLScFilterChipsElement;
     };
     /**
      * The page footer: help and contact, accessibility, privacy and terms links, and
@@ -1982,6 +2046,7 @@ declare global {
         "sc-date-input": HTMLScDateInputElement;
         "sc-date-range": HTMLScDateRangeElement;
         "sc-error-summary": HTMLScErrorSummaryElement;
+        "sc-filter-chips": HTMLScFilterChipsElement;
         "sc-footer": HTMLScFooterElement;
         "sc-grid": HTMLScGridElement;
         "sc-language-switch": HTMLScLanguageSwitchElement;
@@ -2536,6 +2601,44 @@ declare namespace LocalJSX {
           * @default false
          */
         "noAutofocus"?: boolean;
+    }
+    /**
+     * The filters applied to a list of results, as removable chips beside the result count, with
+     * "Clear all filters" when there are two or more (component-language B18, applied filter).
+     * Each chip is a native `<button>` named "Remove filter: Transport and vehicles". Removing one
+     * takes it away at once (no animation), emits `scRemove`, and moves focus to the next chip,
+     * else the previous one, else the element named by `focus-target` (the results heading).
+     * Every change in the number of filters is announced politely: "2 filters applied".
+     * The page updates its results on `scRemove` / `scClear`; set `filters` to change the chips.
+     * Chips are 32px tall (decision Q-chips) with a 44px target. Light DOM (Stencil `scoped`).
+     */
+    interface ScFilterChips {
+        /**
+          * The applied filters, in order: an array of `{ value, label }`, or the same as JSON in the attribute (`filters='[{"value":"transport","label":"Transport and vehicles"}]'`).
+          * @default []
+         */
+        "filters"?: FilterChip[] | string;
+        /**
+          * The id of the element that gets focus when the last chip goes, usually the results heading. It is made focusable (`tabindex="-1"`) if it isn't.
+         */
+        "focusTarget"?: string;
+        /**
+          * The group's accessible name. Defaults to "Applied filters" ("عوامل التصفية المطبّقة").
+         */
+        "label"?: string;
+        /**
+          * Hides "Clear all filters".
+          * @default false
+         */
+        "noClear"?: boolean;
+        /**
+          * Fires when "Clear all filters" is used. Every chip is already gone.
+         */
+        "onScClear"?: (event: ScFilterChipsCustomEvent<void>) => void;
+        /**
+          * Fires when a chip is removed, with `{ value, label }`. The chip is already gone.
+         */
+        "onScRemove"?: (event: ScFilterChipsCustomEvent<FilterChip>) => void;
     }
     /**
      * The page footer: help and contact, accessibility, privacy and terms links, and
@@ -3409,6 +3512,12 @@ declare namespace LocalJSX {
         "headingLevel": ErrorSummaryHeadingLevel;
         "noAutofocus": boolean;
     }
+    interface ScFilterChipsAttributes {
+        "filters": FilterChip[] | string;
+        "label": string;
+        "focusTarget": string;
+        "noClear": boolean;
+    }
     interface ScFooterAttributes {
         "helpHref": string;
         "accessibilityHref": string;
@@ -3575,6 +3684,7 @@ declare namespace LocalJSX {
         "sc-date-input": Omit<ScDateInput, keyof ScDateInputAttributes> & { [K in keyof ScDateInput & keyof ScDateInputAttributes]?: ScDateInput[K] } & { [K in keyof ScDateInput & keyof ScDateInputAttributes as `attr:${K}`]?: ScDateInputAttributes[K] } & { [K in keyof ScDateInput & keyof ScDateInputAttributes as `prop:${K}`]?: ScDateInput[K] };
         "sc-date-range": Omit<ScDateRange, keyof ScDateRangeAttributes> & { [K in keyof ScDateRange & keyof ScDateRangeAttributes]?: ScDateRange[K] } & { [K in keyof ScDateRange & keyof ScDateRangeAttributes as `attr:${K}`]?: ScDateRangeAttributes[K] } & { [K in keyof ScDateRange & keyof ScDateRangeAttributes as `prop:${K}`]?: ScDateRange[K] };
         "sc-error-summary": Omit<ScErrorSummary, keyof ScErrorSummaryAttributes> & { [K in keyof ScErrorSummary & keyof ScErrorSummaryAttributes]?: ScErrorSummary[K] } & { [K in keyof ScErrorSummary & keyof ScErrorSummaryAttributes as `attr:${K}`]?: ScErrorSummaryAttributes[K] } & { [K in keyof ScErrorSummary & keyof ScErrorSummaryAttributes as `prop:${K}`]?: ScErrorSummary[K] };
+        "sc-filter-chips": Omit<ScFilterChips, keyof ScFilterChipsAttributes> & { [K in keyof ScFilterChips & keyof ScFilterChipsAttributes]?: ScFilterChips[K] } & { [K in keyof ScFilterChips & keyof ScFilterChipsAttributes as `attr:${K}`]?: ScFilterChipsAttributes[K] } & { [K in keyof ScFilterChips & keyof ScFilterChipsAttributes as `prop:${K}`]?: ScFilterChips[K] };
         "sc-footer": Omit<ScFooter, keyof ScFooterAttributes> & { [K in keyof ScFooter & keyof ScFooterAttributes]?: ScFooter[K] } & { [K in keyof ScFooter & keyof ScFooterAttributes as `attr:${K}`]?: ScFooterAttributes[K] } & { [K in keyof ScFooter & keyof ScFooterAttributes as `prop:${K}`]?: ScFooter[K] };
         "sc-grid": Omit<ScGrid, keyof ScGridAttributes> & { [K in keyof ScGrid & keyof ScGridAttributes]?: ScGrid[K] } & { [K in keyof ScGrid & keyof ScGridAttributes as `attr:${K}`]?: ScGridAttributes[K] } & { [K in keyof ScGrid & keyof ScGridAttributes as `prop:${K}`]?: ScGrid[K] };
         "sc-language-switch": Omit<ScLanguageSwitch, keyof ScLanguageSwitchAttributes> & { [K in keyof ScLanguageSwitch & keyof ScLanguageSwitchAttributes]?: ScLanguageSwitch[K] } & { [K in keyof ScLanguageSwitch & keyof ScLanguageSwitchAttributes as `attr:${K}`]?: ScLanguageSwitchAttributes[K] } & { [K in keyof ScLanguageSwitch & keyof ScLanguageSwitchAttributes as `prop:${K}`]?: ScLanguageSwitch[K] };
@@ -3729,6 +3839,17 @@ declare module "@stencil/core" {
              * practice). The focused box is a `role="group"` named by its heading.
              */
             "sc-error-summary": LocalJSX.IntrinsicElements["sc-error-summary"] & JSXBase.HTMLAttributes<HTMLScErrorSummaryElement>;
+            /**
+             * The filters applied to a list of results, as removable chips beside the result count, with
+             * "Clear all filters" when there are two or more (component-language B18, applied filter).
+             * Each chip is a native `<button>` named "Remove filter: Transport and vehicles". Removing one
+             * takes it away at once (no animation), emits `scRemove`, and moves focus to the next chip,
+             * else the previous one, else the element named by `focus-target` (the results heading).
+             * Every change in the number of filters is announced politely: "2 filters applied".
+             * The page updates its results on `scRemove` / `scClear`; set `filters` to change the chips.
+             * Chips are 32px tall (decision Q-chips) with a 44px target. Light DOM (Stencil `scoped`).
+             */
+            "sc-filter-chips": LocalJSX.IntrinsicElements["sc-filter-chips"] & JSXBase.HTMLAttributes<HTMLScFilterChipsElement>;
             /**
              * The page footer: help and contact, accessibility, privacy and terms links, and
              * "Government of Dubai". Renders a `<footer>` (the page's `contentinfo` landmark) with a

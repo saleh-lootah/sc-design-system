@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-21T15:07:23",
+  "timestamp": "2026-10-21T15:15:06",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.45.2",
@@ -3446,6 +3446,181 @@
           "docs": "The `<ul>` of error links."
         }
       ],
+      "states": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/sc-filter-chips/sc-filter-chips.tsx",
+      "encapsulation": "scoped",
+      "tag": "sc-filter-chips",
+      "readme": "# sc-filter-chips\n\nThe filters applied to a list of results, as removable chips beside the result count, with \"Clear all filters\" from two filters. New in v2.\n\n## Usage\n\n```html\n<h2 id=\"results\">24 results</h2>\n<sc-filter-chips id=\"applied\" focus-target=\"results\"\n  filters='[{\"value\":\"transport\",\"label\":\"Transport and vehicles\"},{\"value\":\"online\",\"label\":\"Paid online\"}]'></sc-filter-chips>\n<script>\n  const chips = document.getElementById('applied');\n  chips.addEventListener('scRemove', (ev) => refreshResults({ without: ev.detail.value }));\n  chips.addEventListener('scClear', () => refreshResults({ filters: [] }));\n</script>\n```\n\n- Each chip is a native button named \"Remove filter: Transport and vehicles\". Removing one takes it away at once and moves focus to the next chip, else the previous, else `focus-target` (your results heading).\n- Count changes are announced politely: \"Filter removed: Paid online. 1 filter applied\".\n- Chips are 32px tall with a 44px target (decision Q-chips), `channel-subtle` with `channel-action` text.\n- Set `filters` (an array or JSON) when your page adds or changes filters; the component announces the new count.\n- Light DOM: style with `.sc-filter-chips__chip` if you must.\n",
+      "docs": "The filters applied to a list of results, as removable chips beside the result count, with\n\"Clear all filters\" when there are two or more (component-language B18, applied filter).\n\nEach chip is a native `<button>` named \"Remove filter: Transport and vehicles\". Removing one\ntakes it away at once (no animation), emits `scRemove`, and moves focus to the next chip,\nelse the previous one, else the element named by `focus-target` (the results heading).\nEvery change in the number of filters is announced politely: \"2 filters applied\".\nThe page updates its results on `scRemove` / `scClear`; set `filters` to change the chips.\n\nChips are 32px tall (decision Q-chips) with a 44px target. Light DOM (Stencil `scoped`).",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "filters",
+          "type": "FilterChip[] | string",
+          "complexType": {
+            "original": "FilterChip[] | string",
+            "resolved": "FilterChip[] | string",
+            "references": {
+              "FilterChip": {
+                "location": "local",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-forms/components/src/components/sc-filter-chips/sc-filter-chips.tsx",
+                "id": "src/components/sc-filter-chips/sc-filter-chips.tsx::FilterChip"
+              }
+            }
+          },
+          "mutable": true,
+          "attr": "filters",
+          "reflectToAttr": false,
+          "docs": "The applied filters, in order: an array of `{ value, label }`, or the same as JSON in the\nattribute (`filters='[{\"value\":\"transport\",\"label\":\"Transport and vehicles\"}]'`).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "[]"
+            }
+          ],
+          "default": "[]",
+          "values": [
+            {
+              "type": "FilterChip[]"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "focusTarget",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "focus-target",
+          "reflectToAttr": false,
+          "docs": "The id of the element that gets focus when the last chip goes, usually the results heading. It is made focusable (`tabindex=\"-1\"`) if it isn't.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "label",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "label",
+          "reflectToAttr": false,
+          "docs": "The group's accessible name. Defaults to \"Applied filters\" (\"عوامل التصفية المطبّقة\").",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "noClear",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "no-clear",
+          "reflectToAttr": false,
+          "docs": "Hides \"Clear all filters\".",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [
+        {
+          "event": "scClear",
+          "detail": "void",
+          "bubbles": true,
+          "complexType": {
+            "original": "void",
+            "resolved": "void",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Fires when \"Clear all filters\" is used. Every chip is already gone.",
+          "docsTags": []
+        },
+        {
+          "event": "scRemove",
+          "detail": "FilterChip",
+          "bubbles": true,
+          "complexType": {
+            "original": "FilterChip",
+            "resolved": "FilterChip",
+            "references": {
+              "FilterChip": {
+                "location": "local",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-forms/components/src/components/sc-filter-chips/sc-filter-chips.tsx",
+                "id": "src/components/sc-filter-chips/sc-filter-chips.tsx::FilterChip"
+              }
+            }
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Fires when a chip is removed, with `{ value, label }`. The chip is already gone.",
+          "docsTags": []
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
       "states": [],
       "dependents": [],
       "dependencies": [],
@@ -7879,6 +8054,11 @@
       "declaration": "export type ErrorSummaryHeadingLevel = 2 | 3 | 4;",
       "docstring": "",
       "path": "src/components/sc-error-summary/sc-error-summary.tsx"
+    },
+    "src/components/sc-filter-chips/sc-filter-chips.tsx::FilterChip": {
+      "declaration": "export interface FilterChip {\n  /** What the filter is, sent back in `scRemove`. */\n  value: string;\n  /** What people see: \"Transport and vehicles\". */\n  label: string;\n}",
+      "docstring": "",
+      "path": "src/components/sc-filter-chips/sc-filter-chips.tsx"
     },
     "src/components/sc-language-switch/sc-language-switch.tsx::LanguageSwitchDetail": {
       "declaration": "export interface LanguageSwitchDetail {\n  /** The language the user asked for. */\n  lang: Lang;\n}",

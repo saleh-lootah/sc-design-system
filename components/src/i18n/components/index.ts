@@ -16,3 +16,4 @@ export { default as scDateInput } from './sc-date-input';
 export { default as scTable } from './sc-table';
 export { default as scDateRange } from './sc-date-range';
 export { default as scSummaryRow } from './sc-summary-row';
+export { default as scFilterChips } from './sc-filter-chips';

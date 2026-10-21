@@ -11,7 +11,8 @@
     "sc-radio-group",
     "sc-date-input",
     "sc-search",
-    "sc-date-range"
+    "sc-date-range",
+    "sc-filter-chips"
   ],
   "coreGzip": 14336,
   "globalCssGzip": 7168,

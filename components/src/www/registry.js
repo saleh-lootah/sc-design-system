@@ -39,3 +39,4 @@ page('Form fields', 'sc-checkbox-group', 'Checkbox group');
 page('Form fields', 'sc-date-input', 'Date input');
 page('Content and layout', 'sc-table', 'Table');
 page('Form fields', 'sc-date-range', 'Date range');
+page('Form fields', 'sc-filter-chips', 'Filter chips');
