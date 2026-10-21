@@ -1,13 +1,21 @@
-@import '../sc-text-input/field-v1.css';
-@import '../sc-text-input/choice-v1.css';
+/*
+ * sc-radio-group (v2, light DOM). field.css gives the fieldset, legend, hint, error and bar;
+ * each sc-radio brings its own option styles (choice.css).
+ */
+@layer sc.components {
+  .sc-choice-group__options {
+    display: grid;
+    gap: var(--sc-space-8);
+    justify-items: start;
+  }
 
-/* The legend is followed by the hint and error with the same rhythm as single fields. */
-.options {
-  margin-block-start: calc(-1 * var(--sc-space-4));
-}
+  .sc-choice-group__options--inline {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: var(--sc-space-24);
+  }
 
-/* The slotted sc-radio is the label text; it inherits the label's type. */
-::slotted(sc-radio) {
-  font: inherit;
-  color: inherit;
+  .sc-choice-group__options--inline > sc-radio {
+    display: inline-block;
+  }
 }

@@ -707,11 +707,11 @@ export namespace Components {
     }
     /**
      * One option in an `sc-radio-group`. Its content is the option's label.
-     * `sc-radio` holds data and label content only. The parent `sc-radio-group` renders the
-     * native `<input type="radio">` for every option inside its own shadow root and slots
-     * this element into that option's `<label>`, so all the radios share one tree: they form a
-     * real native radio group (one Tab stop, arrow keys move and select, "2 of 3" announced).
-     * Use it only inside `sc-radio-group`.
+     * v2 renders a native `<input type="radio">`, its `<label>` and hint in light DOM (Stencil
+     * `scoped`, decision A2). Every radio in a group shares the group's `name` in one document
+     * tree, so they form a real native radio group: one Tab stop, arrow keys move and select,
+     * "2 of 3" is announced, and the form submits the chosen value. Use it only inside
+     * `sc-radio-group`, which passes down the name, the chosen value and the error state.
      */
     interface ScRadio {
         /**
@@ -725,9 +725,22 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
+          * @default false
+         */
+        "groupInvalid": boolean;
+        "groupName"?: string;
+        /**
+          * @default false
+         */
+        "groupRequired": boolean;
+        /**
           * Help text under this option's label.
          */
         "hint"?: string;
+        /**
+          * @default false
+         */
+        "selected": boolean;
         /**
           * The value submitted when this option is chosen.
          */
@@ -735,18 +748,18 @@ export namespace Components {
     }
     /**
      * One choice from a short list: "Who issued the plate?".
-     * A `<fieldset>` with a `<legend>` (exposed as `role="radiogroup"`, labelled by the legend
-     * and described by the hint and error), and one native `<input type="radio">` per
-     * `sc-radio` child, all inside this element's shadow root. Each `sc-radio` is slotted into
-     * its option's `<label>` (manual slot assignment), so its content names the radio while the
-     * radios themselves stay in one tree: native arrow keys, one Tab stop, position in set.
-     * Form-associated: submits the chosen value under `name`, resets, and reports
-     * `valueMissing` when `required`. Delegates focus, so an error-summary link to the host's
-     * `id` focuses the first radio.
+     * v2 renders a native `<fieldset>` (role `radiogroup`) with its `<legend>`, hint and error in
+     * light DOM (Stencil `scoped`, decision A2), and moves the `sc-radio` children into it. Each
+     * `sc-radio` renders a native radio with the group's `name`, so they form a real native radio
+     * group: one Tab stop, arrow keys move and select, position in set, native submission,
+     * reset and `required`. `disabled` disables the fieldset. `focus()` on the host reaches the
+     * chosen radio, or the first.
+     * Without a `name`, the radios share a generated one (`sc-radio-group-3`), which a form
+     * would submit: give the group a `name` inside a form.
      */
     interface ScRadioGroup {
         /**
-          * Disables every option. Avoid it.
+          * Disables every option (through the fieldset). Avoid it.
           * @default false
          */
         "disabled": boolean;
@@ -755,9 +768,9 @@ export namespace Components {
          */
         "error"?: string;
         /**
-          * When set (1–6), the legend is also the page heading at this level (`<legend><h1>…</h1></legend>`). Use it when the question is the only one on the page.
+          * When set (1–6), the legend is also the page heading at this level (`<legend><h1>…</h1></legend>`).
          */
-        "headingLevel"?: HeadingLevel1;
+        "headingLevel"?: HeadingLevel;
         /**
           * Help text below the legend.
          */
@@ -781,7 +794,7 @@ export namespace Components {
          */
         "optional": boolean;
         /**
-          * Requires a choice (`valueMissing` until one is made). Not shown visually.
+          * Requires a choice (native `valueMissing` until one is made). Not shown visually.
           * @default false
          */
         "required": boolean;
@@ -1658,11 +1671,11 @@ declare global {
     };
     /**
      * One option in an `sc-radio-group`. Its content is the option's label.
-     * `sc-radio` holds data and label content only. The parent `sc-radio-group` renders the
-     * native `<input type="radio">` for every option inside its own shadow root and slots
-     * this element into that option's `<label>`, so all the radios share one tree: they form a
-     * real native radio group (one Tab stop, arrow keys move and select, "2 of 3" announced).
-     * Use it only inside `sc-radio-group`.
+     * v2 renders a native `<input type="radio">`, its `<label>` and hint in light DOM (Stencil
+     * `scoped`, decision A2). Every radio in a group shares the group's `name` in one document
+     * tree, so they form a real native radio group: one Tab stop, arrow keys move and select,
+     * "2 of 3" is announced, and the form submits the chosen value. Use it only inside
+     * `sc-radio-group`, which passes down the name, the chosen value and the error state.
      */
     interface HTMLScRadioElement extends Components.ScRadio, HTMLStencilElement {
     }
@@ -1675,14 +1688,14 @@ declare global {
     }
     /**
      * One choice from a short list: "Who issued the plate?".
-     * A `<fieldset>` with a `<legend>` (exposed as `role="radiogroup"`, labelled by the legend
-     * and described by the hint and error), and one native `<input type="radio">` per
-     * `sc-radio` child, all inside this element's shadow root. Each `sc-radio` is slotted into
-     * its option's `<label>` (manual slot assignment), so its content names the radio while the
-     * radios themselves stay in one tree: native arrow keys, one Tab stop, position in set.
-     * Form-associated: submits the chosen value under `name`, resets, and reports
-     * `valueMissing` when `required`. Delegates focus, so an error-summary link to the host's
-     * `id` focuses the first radio.
+     * v2 renders a native `<fieldset>` (role `radiogroup`) with its `<legend>`, hint and error in
+     * light DOM (Stencil `scoped`, decision A2), and moves the `sc-radio` children into it. Each
+     * `sc-radio` renders a native radio with the group's `name`, so they form a real native radio
+     * group: one Tab stop, arrow keys move and select, position in set, native submission,
+     * reset and `required`. `disabled` disables the fieldset. `focus()` on the host reaches the
+     * chosen radio, or the first.
+     * Without a `name`, the radios share a generated one (`sc-radio-group-3`), which a form
+     * would submit: give the group a `name` inside a form.
      */
     interface HTMLScRadioGroupElement extends Components.ScRadioGroup, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScRadioGroupElementEventMap>(type: K, listener: (this: HTMLScRadioGroupElement, ev: ScRadioGroupCustomEvent<HTMLScRadioGroupElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2668,11 +2681,11 @@ declare namespace LocalJSX {
     }
     /**
      * One option in an `sc-radio-group`. Its content is the option's label.
-     * `sc-radio` holds data and label content only. The parent `sc-radio-group` renders the
-     * native `<input type="radio">` for every option inside its own shadow root and slots
-     * this element into that option's `<label>`, so all the radios share one tree: they form a
-     * real native radio group (one Tab stop, arrow keys move and select, "2 of 3" announced).
-     * Use it only inside `sc-radio-group`.
+     * v2 renders a native `<input type="radio">`, its `<label>` and hint in light DOM (Stencil
+     * `scoped`, decision A2). Every radio in a group shares the group's `name` in one document
+     * tree, so they form a real native radio group: one Tab stop, arrow keys move and select,
+     * "2 of 3" is announced, and the form submits the chosen value. Use it only inside
+     * `sc-radio-group`, which passes down the name, the chosen value and the error state.
      */
     interface ScRadio {
         /**
@@ -2686,9 +2699,22 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
+          * @default false
+         */
+        "groupInvalid"?: boolean;
+        "groupName"?: string;
+        /**
+          * @default false
+         */
+        "groupRequired"?: boolean;
+        /**
           * Help text under this option's label.
          */
         "hint"?: string;
+        /**
+          * @default false
+         */
+        "selected"?: boolean;
         /**
           * The value submitted when this option is chosen.
          */
@@ -2696,18 +2722,18 @@ declare namespace LocalJSX {
     }
     /**
      * One choice from a short list: "Who issued the plate?".
-     * A `<fieldset>` with a `<legend>` (exposed as `role="radiogroup"`, labelled by the legend
-     * and described by the hint and error), and one native `<input type="radio">` per
-     * `sc-radio` child, all inside this element's shadow root. Each `sc-radio` is slotted into
-     * its option's `<label>` (manual slot assignment), so its content names the radio while the
-     * radios themselves stay in one tree: native arrow keys, one Tab stop, position in set.
-     * Form-associated: submits the chosen value under `name`, resets, and reports
-     * `valueMissing` when `required`. Delegates focus, so an error-summary link to the host's
-     * `id` focuses the first radio.
+     * v2 renders a native `<fieldset>` (role `radiogroup`) with its `<legend>`, hint and error in
+     * light DOM (Stencil `scoped`, decision A2), and moves the `sc-radio` children into it. Each
+     * `sc-radio` renders a native radio with the group's `name`, so they form a real native radio
+     * group: one Tab stop, arrow keys move and select, position in set, native submission,
+     * reset and `required`. `disabled` disables the fieldset. `focus()` on the host reaches the
+     * chosen radio, or the first.
+     * Without a `name`, the radios share a generated one (`sc-radio-group-3`), which a form
+     * would submit: give the group a `name` inside a form.
      */
     interface ScRadioGroup {
         /**
-          * Disables every option. Avoid it.
+          * Disables every option (through the fieldset). Avoid it.
           * @default false
          */
         "disabled"?: boolean;
@@ -2716,13 +2742,9 @@ declare namespace LocalJSX {
          */
         "error"?: string;
         /**
-          * The `id` of a `<form>` element to associate this element with.
+          * When set (1–6), the legend is also the page heading at this level (`<legend><h1>…</h1></legend>`).
          */
-        "form"?: string;
-        /**
-          * When set (1–6), the legend is also the page heading at this level (`<legend><h1>…</h1></legend>`). Use it when the question is the only one on the page.
-         */
-        "headingLevel"?: HeadingLevel1;
+        "headingLevel"?: HeadingLevel;
         /**
           * Help text below the legend.
          */
@@ -2741,7 +2763,7 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Fires when the choice changes with `{ value }`. A native `change` is also dispatched on the host.
+          * Fires when the choice changes with `{ value }`. The native `change` event also bubbles from the radio.
          */
         "onScChange"?: (event: ScRadioGroupCustomEvent<{ value: string }>) => void;
         /**
@@ -2750,7 +2772,7 @@ declare namespace LocalJSX {
          */
         "optional"?: boolean;
         /**
-          * Requires a choice (`valueMissing` until one is made). Not shown visually.
+          * Requires a choice (native `valueMissing` until one is made). Not shown visually.
           * @default false
          */
         "required"?: boolean;
@@ -3403,6 +3425,10 @@ declare namespace LocalJSX {
         "hint": string;
         "checked": boolean;
         "disabled": boolean;
+        "groupName": string;
+        "selected": boolean;
+        "groupInvalid": boolean;
+        "groupRequired": boolean;
     }
     interface ScRadioGroupAttributes {
         "label": string;
@@ -3749,23 +3775,23 @@ declare module "@stencil/core" {
             "sc-page": LocalJSX.IntrinsicElements["sc-page"] & JSXBase.HTMLAttributes<HTMLScPageElement>;
             /**
              * One option in an `sc-radio-group`. Its content is the option's label.
-             * `sc-radio` holds data and label content only. The parent `sc-radio-group` renders the
-             * native `<input type="radio">` for every option inside its own shadow root and slots
-             * this element into that option's `<label>`, so all the radios share one tree: they form a
-             * real native radio group (one Tab stop, arrow keys move and select, "2 of 3" announced).
-             * Use it only inside `sc-radio-group`.
+             * v2 renders a native `<input type="radio">`, its `<label>` and hint in light DOM (Stencil
+             * `scoped`, decision A2). Every radio in a group shares the group's `name` in one document
+             * tree, so they form a real native radio group: one Tab stop, arrow keys move and select,
+             * "2 of 3" is announced, and the form submits the chosen value. Use it only inside
+             * `sc-radio-group`, which passes down the name, the chosen value and the error state.
              */
             "sc-radio": LocalJSX.IntrinsicElements["sc-radio"] & JSXBase.HTMLAttributes<HTMLScRadioElement>;
             /**
              * One choice from a short list: "Who issued the plate?".
-             * A `<fieldset>` with a `<legend>` (exposed as `role="radiogroup"`, labelled by the legend
-             * and described by the hint and error), and one native `<input type="radio">` per
-             * `sc-radio` child, all inside this element's shadow root. Each `sc-radio` is slotted into
-             * its option's `<label>` (manual slot assignment), so its content names the radio while the
-             * radios themselves stay in one tree: native arrow keys, one Tab stop, position in set.
-             * Form-associated: submits the chosen value under `name`, resets, and reports
-             * `valueMissing` when `required`. Delegates focus, so an error-summary link to the host's
-             * `id` focuses the first radio.
+             * v2 renders a native `<fieldset>` (role `radiogroup`) with its `<legend>`, hint and error in
+             * light DOM (Stencil `scoped`, decision A2), and moves the `sc-radio` children into it. Each
+             * `sc-radio` renders a native radio with the group's `name`, so they form a real native radio
+             * group: one Tab stop, arrow keys move and select, position in set, native submission,
+             * reset and `required`. `disabled` disables the fieldset. `focus()` on the host reaches the
+             * chosen radio, or the first.
+             * Without a `name`, the radios share a generated one (`sc-radio-group-3`), which a form
+             * would submit: give the group a `name` inside a form.
              */
             "sc-radio-group": LocalJSX.IntrinsicElements["sc-radio-group"] & JSXBase.HTMLAttributes<HTMLScRadioGroupElement>;
             /**

@@ -6,7 +6,9 @@
     "sc-textarea",
     "sc-select",
     "sc-checkbox",
-    "sc-checkbox-group"
+    "sc-checkbox-group",
+    "sc-radio",
+    "sc-radio-group"
   ],
   "coreGzip": 14336,
   "globalCssGzip": 7168,

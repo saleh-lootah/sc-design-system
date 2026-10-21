@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-21T14:32:20",
+  "timestamp": "2026-10-21T14:38:18",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.45.2",
@@ -4466,10 +4466,10 @@
     },
     {
       "filePath": "src/components/sc-radio/sc-radio.tsx",
-      "encapsulation": "shadow",
+      "encapsulation": "scoped",
       "tag": "sc-radio",
-      "readme": "# sc-radio\n\nOne option of an `sc-radio-group`. Use it only inside a group.\n\n## Usage\n\n```html\n<sc-radio-group name=\"issuer\" label=\"Who issued the plate?\">\n  <sc-radio value=\"dubai\">Dubai</sc-radio>\n  <sc-radio value=\"other\" hint=\"Abu Dhabi, Sharjah or another emirate\">Another emirate</sc-radio>\n</sc-radio-group>\n```\n\n- The content is the option's label: short, sentence case, no full stop. Use `<sc-ltr>` around values that must stay left-to-right.\n- `hint` adds a line under the label, linked to the radio with `aria-describedby`.\n- `checked` makes it the initial choice (the group's `value` wins if both are set). `disabled` is supported but avoid it.\n\n`sc-radio` doesn't render a radio itself: the group renders a native radio for each option in its own shadow root and slots this element into that radio's `<label>`, so all the radios form one native group. See `sc-radio-group` for why.\n",
-      "docs": "One option in an `sc-radio-group`. Its content is the option's label.\n\n`sc-radio` holds data and label content only. The parent `sc-radio-group` renders the\nnative `<input type=\"radio\">` for every option inside its own shadow root and slots\nthis element into that option's `<label>`, so all the radios share one tree: they form a\nreal native radio group (one Tab stop, arrow keys move and select, \"2 of 3\" announced).\nUse it only inside `sc-radio-group`.",
+      "readme": "# sc-radio\n\nOne option of an `sc-radio-group`. Use it only inside a group.\n\n## Usage\n\n```html\n<sc-radio-group name=\"issuer\" label=\"Who issued the plate?\">\n  <sc-radio value=\"dubai\">Dubai</sc-radio>\n  <sc-radio value=\"other\" hint=\"Abu Dhabi, Sharjah or another emirate\">Another emirate</sc-radio>\n</sc-radio-group>\n```\n\n- The content is the option's label: short, sentence case, no full stop. Use `<sc-ltr>` around values that must stay left-to-right.\n- `hint` adds a line under the label, linked to the radio with `aria-describedby`.\n- `checked` makes it the initial choice (the group's `value` wins if both are set). `disabled` is supported but avoid it.\n\nv2 renders a native `<input type=\"radio\">`, `<label>` and hint in light DOM (decision A2). The group passes down the shared `name`, the choice, the error state and `required`, so all the radios form one native group. Use it only inside `sc-radio-group`. The dot scales in from 0.5 over 120ms when chosen with a pointer, and appears at once from the keyboard.\n",
+      "docs": "One option in an `sc-radio-group`. Its content is the option's label.\n\nv2 renders a native `<input type=\"radio\">`, its `<label>` and hint in light DOM (Stencil\n`scoped`, decision A2). Every radio in a group shares the group's `name` in one document\ntree, so they form a real native radio group: one Tab stop, arrow keys move and select,\n\"2 of 3\" is announced, and the form submits the chosen value. Use it only inside\n`sc-radio-group`, which passes down the name, the chosen value and the error state.",
       "docsTags": [
         {
           "name": "slot",
@@ -4604,62 +4604,14 @@
     },
     {
       "filePath": "src/components/sc-radio-group/sc-radio-group.tsx",
-      "encapsulation": "shadow",
+      "encapsulation": "scoped",
       "tag": "sc-radio-group",
-      "readme": "# sc-radio-group\n\nOne choice from a short list (about 7 options or fewer): who issued the plate, how to receive the registration card, \"Yes\" or \"No\". Use `sc-checkbox-group` when people can pick more than one, and `sc-select` for long lists.\n\n## Usage\n\n```html\n<sc-radio-group name=\"delivery\" label=\"How do you want to receive your registration card?\" value=\"digital\">\n  <sc-radio value=\"digital\" hint=\"In the Dubai Now app and your digital wallet\">Digital card</sc-radio>\n  <sc-radio value=\"courier\" hint=\"AED 20, delivered in 2 working days\">Courier delivery</sc-radio>\n  <sc-radio value=\"centre\">Collect from a customer service centre</sc-radio>\n</sc-radio-group>\n```\n\n- **Legend:** `label` is the question. When it's the only question on the page, add `heading-level=\"1\"` so the legend is the page heading (`<legend><h1>…</h1></legend>`).\n- **Options:** one `sc-radio` per option, with `value`, an optional `hint`, `checked` for the initial choice (or `value` on the group) and `disabled` (avoid it; leave out options that don't apply).\n- **Inline:** `inline` lays out two short options side by side (\"Yes\" / \"No\"). They wrap on narrow screens.\n- **Error:** `error` on the group (\"Select who issued the plate\") shows the bar, the message with \"Error:\", and an error border on every radio; the group gets `aria-invalid`.\n- 24px radios inside 44px targets: the whole label row is clickable.\n- Order options alphabetically unless there's a reason not to (most common first, or a natural order). Don't pre-select an option people might skip over without reading.\n\n### How it stays accessible across shadow roots\n\nARIA can't point across shadow boundaries, and native radios only form a group (one Tab stop, arrow keys, \"2 of 3\") when they share a tree and a name. So the group, not each option, renders the controls:\n\n1. `sc-radio-group` renders, in **its own shadow root**, a `<fieldset role=\"radiogroup\" aria-labelledby=\"label\">` with the `<legend id=\"label\">`, the hint and error (both in the fieldset's `aria-describedby`), and **one native `<input type=\"radio\" name=\"choice\">` per `sc-radio`**, each with its own `<label for>` and option hint (`aria-describedby`).\n2. Each `sc-radio` element is slotted into its option's `<label>` with **manual slot assignment** (`slotAssignment: 'manual'`, `slot.assign()`), so it doesn't need (or get) a `slot` attribute. Its content is the radio's accessible name: the accessibility tree and label activation follow the flattened tree.\n3. Because every radio is native and in one tree with one name, the browser provides everything: one Tab stop (the checked radio, or the first), Arrow keys move **and select** (and wrap), Space selects, position in set is announced, and clicking the option text selects it. No roving-tabindex script.\n\n`sc-radio` itself only holds data and the label content; it reflects `value`, `hint`, `checked` and `disabled` to attributes, and the group watches them (and added or removed options) with a `MutationObserver`.\n\nThis is tested in `sc-radio-group.e2e.ts` against Chromium's accessibility tree (radiogroup name and description, radio names from slotted content, option hint descriptions), with the keyboard (Tab in, ArrowDown/ArrowUp select, Tab out, Shift+Tab back to the checked radio, the same in Arabic), and with axe in English and Arabic, light and dark, on every channel.\n\n### Forms\n\nForm-associated: submits the chosen value under `name`, resets to the initial choice, follows `<fieldset disabled>`, and with `required` reports `valueMissing` (anchored to the first radio, which `reportValidity()` focuses). The host delegates focus, so an error summary that focuses `#issuer` lands on the first radio. `change` is re-dispatched on the host and `scChange` carries `{ value }`.\n",
-      "docs": "One choice from a short list: \"Who issued the plate?\".\n\nA `<fieldset>` with a `<legend>` (exposed as `role=\"radiogroup\"`, labelled by the legend\nand described by the hint and error), and one native `<input type=\"radio\">` per\n`sc-radio` child, all inside this element's shadow root. Each `sc-radio` is slotted into\nits option's `<label>` (manual slot assignment), so its content names the radio while the\nradios themselves stay in one tree: native arrow keys, one Tab stop, position in set.\n\nForm-associated: submits the chosen value under `name`, resets, and reports\n`valueMissing` when `required`. Delegates focus, so an error-summary link to the host's\n`id` focuses the first radio.",
+      "readme": "# sc-radio-group\n\nOne choice from a short list (about 7 options or fewer): who issued the plate, how to receive the registration card, \"Yes\" or \"No\". Use `sc-checkbox-group` when people can pick more than one, and `sc-select` for long lists.\n\n## Usage\n\n```html\n<sc-radio-group name=\"delivery\" label=\"How do you want to receive your registration card?\" value=\"digital\">\n  <sc-radio value=\"digital\" hint=\"In the Dubai Now app and your digital wallet\">Digital card</sc-radio>\n  <sc-radio value=\"courier\" hint=\"AED 20, delivered in 2 working days\">Courier delivery</sc-radio>\n  <sc-radio value=\"centre\">Collect from a customer service centre</sc-radio>\n</sc-radio-group>\n```\n\n- **Legend:** `label` is the question. When it's the only question on the page, add `heading-level=\"1\"` so the legend is the page heading (`<legend><h1>…</h1></legend>`).\n- **Options:** one `sc-radio` per option, with `value`, an optional `hint`, `checked` for the initial choice (or `value` on the group) and `disabled` (avoid it; leave out options that don't apply).\n- **Inline:** `inline` lays out two short options side by side (\"Yes\" / \"No\"). They wrap on narrow screens.\n- **Error:** `error` on the group (\"Select who issued the plate\") shows the bar, the message with \"Error:\", and an error border on every radio; the group gets `aria-invalid`.\n- 24px radios inside 44px targets: the whole label row is clickable.\n- Order options alphabetically unless there's a reason not to (most common first, or a natural order). Don't pre-select an option people might skip over without reading.\n\n### Structure (v2, light DOM)\n\nNative radios only form a group (one Tab stop, arrow keys, \"2 of 3\") when they share a name in one tree. v2 gets that for free from light DOM (decision A2):\n\n1. `sc-radio-group` renders a native `<fieldset role=\"radiogroup\">` with the `<legend>`, hint and error (in the fieldset's `aria-describedby`), and moves its `sc-radio` children inside it.\n2. Each `sc-radio` renders its own native `<input type=\"radio\">`, `<label for>` and hint. The group passes down its `name` (or a generated one), the chosen value, the error state and `required`.\n3. The browser does the rest: one Tab stop (the checked radio, or the first), Arrow keys move and select (and wrap; in Arabic too), Space selects, position in set, clicking the option text. No roving-tabindex script, and no manual slot assignment (v1 needed both a shadow root and `slot.assign()`).\n\nOptions added later are moved in too.\n\n### Forms\n\nThe radios are native: the chosen value submits under `name`, `form.reset()` restores the initial choice, `disabled` disables the fieldset, and `required` is native `valueMissing` on every radio (`reportValidity()` focuses the first). `focus()` on the host lands on the chosen radio, or the first. Without `name` the radios share a generated name, which a form would submit: name the group inside a form. The native `change` bubbles from the radio; `scChange` carries `{ value }`.\n",
+      "docs": "One choice from a short list: \"Who issued the plate?\".\n\nv2 renders a native `<fieldset>` (role `radiogroup`) with its `<legend>`, hint and error in\nlight DOM (Stencil `scoped`, decision A2), and moves the `sc-radio` children into it. Each\n`sc-radio` renders a native radio with the group's `name`, so they form a real native radio\ngroup: one Tab stop, arrow keys move and select, position in set, native submission,\nreset and `required`. `disabled` disables the fieldset. `focus()` on the host reaches the\nchosen radio, or the first.\n\nWithout a `name`, the radios share a generated one (`sc-radio-group-3`), which a form\nwould submit: give the group a `name` inside a form.",
       "docsTags": [
         {
           "name": "slot",
           "text": "- `sc-radio` elements, one per option."
-        },
-        {
-          "name": "slot",
-          "text": "label - Rich legend content, instead of the `label` prop."
-        },
-        {
-          "name": "slot",
-          "text": "hint - Rich hint content, instead of the `hint` prop."
-        },
-        {
-          "name": "slot",
-          "text": "error - Rich error content, instead of the `error` prop."
-        },
-        {
-          "name": "part",
-          "text": "field - The `<fieldset>` (gets the error bar)."
-        },
-        {
-          "name": "part",
-          "text": "label - The `<legend>`."
-        },
-        {
-          "name": "part",
-          "text": "hint - The hint."
-        },
-        {
-          "name": "part",
-          "text": "error - The error message."
-        },
-        {
-          "name": "part",
-          "text": "options - The wrapper around the options."
-        },
-        {
-          "name": "part",
-          "text": "option - One option row."
-        },
-        {
-          "name": "part",
-          "text": "radio - A native `<input type=\"radio\">`."
-        },
-        {
-          "name": "part",
-          "text": "option-label - An option's `<label>`."
-        },
-        {
-          "name": "part",
-          "text": "option-hint - An option's hint."
         }
       ],
       "usage": {},
@@ -4675,7 +4627,7 @@
           "mutable": false,
           "attr": "disabled",
           "reflectToAttr": true,
-          "docs": "Disables every option. Avoid it.",
+          "docs": "Disables every option (through the fieldset). Avoid it.",
           "docsTags": [
             {
               "name": "default",
@@ -4728,8 +4680,8 @@
             "references": {
               "HeadingLevel": {
                 "location": "import",
-                "path": "../sc-text-input/field-v1",
-                "id": "src/components/sc-text-input/field-v1.tsx::HeadingLevel",
+                "path": "../sc-text-input/field",
+                "id": "src/components/sc-text-input/field.tsx::HeadingLevel",
                 "referenceLocation": "HeadingLevel"
               }
             }
@@ -4737,7 +4689,7 @@
           "mutable": false,
           "attr": "heading-level",
           "reflectToAttr": false,
-          "docs": "When set (1–6), the legend is also the page heading at this level\n(`<legend><h1>…</h1></legend>`). Use it when the question is the only one on the page.",
+          "docs": "When set (1–6), the legend is also the page heading at this level (`<legend><h1>…</h1></legend>`).",
           "docsTags": [],
           "values": [
             {
@@ -4920,7 +4872,7 @@
           "mutable": false,
           "attr": "required",
           "reflectToAttr": false,
-          "docs": "Requires a choice (`valueMissing` until one is made). Not shown visually.",
+          "docs": "Requires a choice (native `valueMissing` until one is made). Not shown visually.",
           "docsTags": [
             {
               "name": "default",
@@ -4978,68 +4930,25 @@
           },
           "cancelable": true,
           "composed": true,
-          "docs": "Fires when the choice changes with `{ value }`. A native `change` is also dispatched on the host.",
+          "docs": "Fires when the choice changes with `{ value }`. The native `change` event also bubbles from the radio.",
           "docsTags": []
         }
       ],
-      "listeners": [],
+      "listeners": [
+        {
+          "event": "change",
+          "capture": false,
+          "passive": false
+        }
+      ],
       "styles": [],
       "slots": [
         {
           "name": "",
           "docs": "`sc-radio` elements, one per option."
-        },
-        {
-          "name": "error",
-          "docs": "Rich error content, instead of the `error` prop."
-        },
-        {
-          "name": "hint",
-          "docs": "Rich hint content, instead of the `hint` prop."
-        },
-        {
-          "name": "label",
-          "docs": "Rich legend content, instead of the `label` prop."
         }
       ],
-      "parts": [
-        {
-          "name": "error",
-          "docs": "The error message."
-        },
-        {
-          "name": "field",
-          "docs": "The `<fieldset>` (gets the error bar)."
-        },
-        {
-          "name": "hint",
-          "docs": "The hint."
-        },
-        {
-          "name": "label",
-          "docs": "The `<legend>`."
-        },
-        {
-          "name": "option",
-          "docs": "One option row."
-        },
-        {
-          "name": "option-hint",
-          "docs": "An option's hint."
-        },
-        {
-          "name": "option-label",
-          "docs": "An option's `<label>`."
-        },
-        {
-          "name": "options",
-          "docs": "The wrapper around the options."
-        },
-        {
-          "name": "radio",
-          "docs": "A native `<input type=\"radio\">`."
-        }
-      ],
+      "parts": [],
       "states": [],
       "dependents": [],
       "dependencies": [],
