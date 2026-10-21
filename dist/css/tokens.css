@@ -1,100 +1,68 @@
-/* Generated — edit tokens/*.json */
+/* Generated — edit tokens/source/*.json or tokens/*.json, then npm run build */
 
+/* Light and dark live in one value: light-dark(<light>, <dark>). The scheme follows the
+   system, and data-theme="light" or "dark" on any element forces it for that subtree. */
 :root {
-  color-scheme: light;
+  color-scheme: light dark;
 
-  /* Colour */
-  --sc-color-canvas: oklab(0.976 0.0004 -0.001); /* App/page background behind cards */
-  --sc-color-grouped: oklab(0.953 0.0007 -0.003); /* Grouped-list background */
-  --sc-color-surface: oklab(1 0 0); /* Cards, sheets, fields */
-  --sc-color-rule: oklab(0.92 0.001 -0.004); /* Decorative dividers (not a control boundary) */
-  --sc-color-control: oklab(0.558 0.003 -0.01); /* Control boundaries and inactive progress, >=3:1 */
-  --sc-color-muted: oklab(0.498 0.002 -0.008); /* Secondary text, >=4.5:1 on surface and canvas */
-  --sc-color-ink: oklab(0.245 0.002 -0.005); /* Primary text */
-  --sc-color-ink-strong: oklab(0.178 0.001 -0.004); /* Headings and display */
-  --sc-color-on-action: oklab(1 0 0); /* Text and icons on channel action colour */
-  --sc-color-glass: oklab(1 0 0 / 0.72); /* Translucent bar fill (Liquid Glass approximation) */
-  --sc-color-glass-edge: oklab(1 0 0 / 0.9); /* Hairline edge on glass */
-  --sc-color-fill-quiet: oklab(0.575 0.003 -0.012 / 0.14); /* Quiet control fill */
-  --sc-color-fill-selected: oklab(0.575 0.003 -0.012 / 0.16); /* Selected nav item fill */
-  --sc-color-error: oklab(0.501 0.144 0.076);
-  --sc-color-error-hover: oklab(0.47 0.138 0.073);
-  --sc-color-error-pressed: oklab(0.44 0.132 0.07);
-  --sc-color-on-error: oklab(1 0 0); /* Text and icons on error fill */
-  --sc-color-error-surface: oklab(0.967 0.015 0.006);
-  --sc-color-success: oklab(0.448 -0.081 0.043);
-  --sc-color-success-surface: oklab(0.965 -0.015 0.008);
-  --sc-color-warning: oklab(0.47 0.026 0.096);
-  --sc-color-warning-surface: oklab(0.97 0.003 0.032);
-  --sc-color-shadow: oklab(0 0 0 / 0.05); /* Base shadow colour; elevation tokens set their own alpha */
+  /* Colour roles */
+  --sc-color-surface: light-dark(oklab(1 0 0), oklab(0.2242 0.0003 -0.004)); /* Page background */
+  --sc-color-surface-card: light-dark(oklab(1 0 0), oklab(0.2415 0.0003 -0.004)); /* Cards, fields, list groups, dialogs and sheets */
+  --sc-color-surface-container: light-dark(oklab(0.9656 0.0003 -0.004), oklab(0.2846 0.0003 -0.004)); /* Bands, panels, table headers, totals rows */
+  --sc-color-surface-container-high: light-dark(oklab(0.9484 0.0003 -0.004), oklab(0.3277 0.0003 -0.004)); /* A container nested in a container; skeletons */
+  --sc-color-on-surface: light-dark(oklab(0.2242 0.0003 -0.004), oklab(1 0 0)); /* Primary text and icons */
+  --sc-color-on-surface-variant: light-dark(oklab(0.4829 0.0003 -0.004), oklab(0.8277 0.0003 -0.004)); /* Secondary text: hints, captions, metadata */
+  --sc-color-outline: light-dark(oklab(0.4829 0.0003 -0.004), oklab(0.6553 0.0003 -0.004)); /* Control boundaries (1.5px) and inactive markers; at least 3:1 */
+  --sc-color-outline-variant: light-dark(oklab(0.9139 0.0003 -0.004), oklab(0.3449 0.0003 -0.004)); /* Dividers and card edges only; never the only edge of a control */
+  --sc-color-inverse-surface: light-dark(oklab(0.3104 0.0003 -0.004), oklab(0.9139 0.0003 -0.004)); /* Tooltips and toasts */
+  --sc-color-inverse-on-surface: light-dark(oklab(0.9656 0.0003 -0.004), oklab(0.2242 0.0003 -0.004)); /* Text on inverse-surface */
+  --sc-color-disabled-container: light-dark(oklab(0.9484 0.0003 -0.004), oklab(0.3104 0.0003 -0.004)); /* Fill of a disabled control */
+  --sc-color-on-disabled: light-dark(oklab(0.5691 0.0003 -0.004), oklab(0.6553 0.0003 -0.004)); /* Text, icons and edges of a disabled control */
+  --sc-color-focus-ring: light-dark(oklab(0.2242 0.0003 -0.004), oklab(1 0 0)); /* The 3px focus ring, drawn outside a 2px gap of surface */
+  --sc-color-primary: light-dark(oklab(0.4037 0.0099 -0.1152), oklab(0.8306 0.0072 -0.0832)); /* City indigo: the network strip, sign-in and Dubai Pay hand-offs */
+  --sc-color-on-primary: light-dark(oklab(1 0 0), oklab(0.2242 0.0003 -0.004)); /* Text and icons on primary */
+  --sc-color-primary-hover: light-dark(oklab(0.3585 0.0077 -0.0896), oklab(0.7882 0.0082 -0.096)); /* Primary fill on pointer hover */
+  --sc-color-primary-pressed: light-dark(oklab(0.3131 0.0049 -0.0576), oklab(0.7459 0.0093 -0.1088)); /* Primary fill while pressed */
+  --sc-color-primary-container: light-dark(oklab(0.9149 0.0033 -0.0384), oklab(0.4037 0.0099 -0.1152)); /* Selected or emphasised indigo container */
+  --sc-color-on-primary-container: light-dark(oklab(0.4037 0.0099 -0.1152), oklab(0.9149 0.0033 -0.0384)); /* Text and icons on primary-container */
+  --sc-color-primary-subtle: light-dark(oklab(0.9574 0.0016 -0.0192), oklab(0.3131 0.0049 -0.0576)); /* Quiet indigo band or tint */
+  --sc-color-error: light-dark(oklab(0.508 0.183 0.098), oklab(0.8375 0.0791 0.0424)); /* Error text, icons, field edges and destructive fills */
+  --sc-color-on-error: light-dark(oklab(1 0 0), oklab(0.2242 0.0003 -0.004)); /* Text and icons on an error fill */
+  --sc-color-error-hover: light-dark(oklab(0.4626 0.1664 0.0891), oklab(0.7975 0.1024 0.0548)); /* Destructive fill on pointer hover */
+  --sc-color-error-pressed: light-dark(oklab(0.4173 0.1504 0.0806), oklab(0.7578 0.1275 0.0683)); /* Destructive fill while pressed */
+  --sc-color-error-container: light-dark(oklab(0.9591 0.0178 0.0096), oklab(0.3213 0.0823 0.0441)); /* Error summary, error chip and callout background */
+  --sc-color-on-error-container: light-dark(oklab(0.4173 0.1504 0.0806), oklab(0.9183 0.0369 0.0198)); /* Strong text on error-container */
+  --sc-color-success: light-dark(oklab(0.4691 -0.11 0.067), oklab(0.8182 -0.0715 0.0436)); /* Success text and icons; completed step markers */
+  --sc-color-on-success: light-dark(oklab(1 0 0), oklab(0.2242 0.0003 -0.004)); /* Text and icons on a success fill */
+  --sc-color-success-container: light-dark(oklab(0.9525 -0.033 0.0201), oklab(0.304 -0.0495 0.0302)); /* Success chip and callout background */
+  --sc-color-on-success-container: light-dark(oklab(0.385 -0.0934 0.0569), oklab(0.9094 -0.033 0.0201)); /* Strong text on success-container */
+  --sc-color-warning: light-dark(oklab(0.4878 0.032 0.099), oklab(0.83 0.0208 0.0643)); /* Warning text and icons */
+  --sc-color-on-warning: light-dark(oklab(1 0 0), oklab(0.2242 0.0003 -0.004)); /* Text and icons on a warning fill */
+  --sc-color-warning-container: light-dark(oklab(0.9578 0.009 0.0277), oklab(0.3123 0.0144 0.0445)); /* Warning chip and callout background */
+  --sc-color-on-warning-container: light-dark(oklab(0.4007 0.0264 0.0816), oklab(0.9147 0.0096 0.0297)); /* Strong text on warning-container */
+  --sc-color-info: light-dark(oklab(0.4856 -0.027 -0.13), oklab(0.8275 -0.0176 -0.0845)); /* Information text and icons */
+  --sc-color-on-info: light-dark(oklab(1 0 0), oklab(0.2242 0.0003 -0.004)); /* Text and icons on an info fill */
+  --sc-color-info-container: light-dark(oklab(0.9567 -0.0041 -0.0195), oklab(0.311 -0.0122 -0.0585)); /* Information chip and callout background */
+  --sc-color-on-info-container: light-dark(oklab(0.3996 -0.0243 -0.117), oklab(0.9135 -0.0081 -0.039)); /* Strong text on info-container */
+  --sc-color-tint-blue: light-dark(oklab(0.9567 -0.0043 -0.0202), oklab(0.3111 -0.013 -0.0617)); /* Decorative tile background */
+  --sc-color-on-tint-blue: light-dark(oklab(0.486 -0.029 -0.137), oklab(0.8275 -0.0179 -0.0845)); /* Icon and short text on the tile */
+  --sc-color-tint-violet: light-dark(oklab(0.9585 0.0105 -0.0181), oklab(0.3163 0.0315 -0.0544)); /* Decorative tile background */
+  --sc-color-on-tint-violet: light-dark(oklab(0.4972 0.07 -0.121), oklab(0.8353 0.0455 -0.0786)); /* Icon and short text on the tile */
+  --sc-color-tint-rose: light-dark(oklab(0.9594 0.0198 0.0042), oklab(0.3182 0.0617 0.013)); /* Decorative tile background */
+  --sc-color-on-tint-rose: light-dark(oklab(0.5005 0.137 0.029), oklab(0.8388 0.0883 0.0187)); /* Icon and short text on the tile */
+  --sc-color-tint-orange: light-dark(oklab(0.9579 0.0093 0.0118), oklab(0.3139 0.0279 0.0355)); /* Decorative tile background */
+  --sc-color-on-tint-orange: light-dark(oklab(0.4912 0.062 0.079), oklab(0.8325 0.0403 0.0513)); /* Icon and short text on the tile */
+  --sc-color-tint-amber: light-dark(oklab(0.957 0.0019 0.0134), oklab(0.3112 0.0058 0.0401)); /* Decorative tile background */
+  --sc-color-on-tint-amber: light-dark(oklab(0.4851 0.013 0.089), oklab(0.8284 0.0084 0.0579)); /* Icon and short text on the tile */
+  --sc-color-tint-green: light-dark(oklab(0.9547 -0.0165 0.0129), oklab(0.3041 -0.0495 0.0387)); /* Decorative tile background */
+  --sc-color-on-tint-green: light-dark(oklab(0.4695 -0.11 0.086), oklab(0.8182 -0.0715 0.0559)); /* Icon and short text on the tile */
+  --sc-color-channel-on-action: light-dark(oklab(1 0 0), oklab(0.2242 0.0003 -0.004)); /* Text and icons on any channel action fill (the same in every channel) */
+  --sc-color-scrim: light-dark(oklab(0 0 0 / 0.5), oklab(0 0 0 / 0.64)); /* Behind modal dialogs and sheets */
+  --sc-color-shadow: oklab(0 0 0); /* Base shadow colour; elevation layers set their own alpha */
 
-  /* Channel signatures */
-  --sc-channel-now-action: oklab(0.537 -0.011 -0.22);
-  --sc-channel-now-action-hover: oklab(0.507 -0.0107 -0.2134);
-  --sc-channel-now-action-pressed: oklab(0.477 -0.0103 -0.2068);
-  --sc-channel-now-wash-start: oklab(0.947 -0.004 -0.025);
-  --sc-channel-now-wash-end: oklab(0.896 -0.003 -0.044);
-  --sc-channel-now-ink: oklab(0.307 0.0004 -0.094);
-  --sc-channel-now-subtle: oklab(0.947 -0.004 -0.025);
-  --sc-channel-now-link-visited: oklab(0.307 0.0004 -0.094);
-  --sc-channel-transport-action: oklab(0.501 0.111 0.1);
-  --sc-channel-transport-action-hover: oklab(0.471 0.1047 0.0943);
-  --sc-channel-transport-action-pressed: oklab(0.441 0.0984 0.0886);
-  --sc-channel-transport-wash-start: oklab(0.948 0.017 0.027);
-  --sc-channel-transport-wash-end: oklab(0.888 0.043 0.049);
-  --sc-channel-transport-ink: oklab(0.379 0.068 0.068);
-  --sc-channel-transport-subtle: oklab(0.948 0.017 0.027);
-  --sc-channel-transport-link-visited: oklab(0.379 0.068 0.068);
-  --sc-channel-visit-action: oklab(0.501 0.176 0.026);
-  --sc-channel-visit-action-hover: oklab(0.471 0.1707 0.0252);
-  --sc-channel-visit-action-pressed: oklab(0.441 0.1654 0.0244);
-  --sc-channel-visit-wash-start: oklab(0.941 0.021 0.009);
-  --sc-channel-visit-wash-end: oklab(0.876 0.042 0.021);
-  --sc-channel-visit-ink: oklab(0.339 0.089 0.024);
-  --sc-channel-visit-subtle: oklab(0.941 0.021 0.009);
-  --sc-channel-visit-link-visited: oklab(0.339 0.089 0.024);
-  --sc-channel-justice-action: oklab(0.495 0.068 -0.187);
-  --sc-channel-justice-action-hover: oklab(0.465 0.066 -0.1814);
-  --sc-channel-justice-action-pressed: oklab(0.435 0.0639 -0.1758);
-  --sc-channel-justice-wash-start: oklab(0.94 0.015 -0.022);
-  --sc-channel-justice-wash-end: oklab(0.876 0.027 -0.043);
-  --sc-channel-justice-ink: oklab(0.339 0.041 -0.092);
-  --sc-channel-justice-subtle: oklab(0.94 0.015 -0.022);
-  --sc-channel-justice-link-visited: oklab(0.339 0.041 -0.092);
-  --sc-channel-build-action: oklab(0.494 0.043 0.1);
-  --sc-channel-build-action-hover: oklab(0.464 0.0401 0.0933);
-  --sc-channel-build-action-pressed: oklab(0.434 0.0373 0.0867);
-  --sc-channel-build-wash-start: oklab(0.962 0.008 0.03);
-  --sc-channel-build-wash-end: oklab(0.913 0.017 0.056);
-  --sc-channel-build-ink: oklab(0.378 0.026 0.065);
-  --sc-channel-build-subtle: oklab(0.962 0.008 0.03);
-  --sc-channel-build-link-visited: oklab(0.378 0.026 0.065);
-  --sc-channel-invest-action: oklab(0.513 -0.101 0.054);
-  --sc-channel-invest-action-hover: oklab(0.483 -0.098 0.0524);
-  --sc-channel-invest-action-pressed: oklab(0.453 -0.0949 0.0508);
-  --sc-channel-invest-wash-start: oklab(0.952 -0.023 0.012);
-  --sc-channel-invest-wash-end: oklab(0.897 -0.04 0.021);
-  --sc-channel-invest-ink: oklab(0.368 -0.058 0.031);
-  --sc-channel-invest-subtle: oklab(0.952 -0.023 0.012);
-  --sc-channel-invest-link-visited: oklab(0.368 -0.058 0.031);
-  --sc-channel-trade-action: oklab(0.44 -0.018 -0.046);
-  --sc-channel-trade-action-hover: oklab(0.41 -0.0175 -0.0446);
-  --sc-channel-trade-action-pressed: oklab(0.38 -0.0169 -0.0432);
-  --sc-channel-trade-wash-start: oklab(0.955 -0.005 -0.011);
-  --sc-channel-trade-wash-end: oklab(0.905 -0.007 -0.021);
-  --sc-channel-trade-ink: oklab(0.321 -0.012 -0.044);
-  --sc-channel-trade-subtle: oklab(0.955 -0.005 -0.011);
-  --sc-channel-trade-link-visited: oklab(0.321 -0.012 -0.044);
-
-  /* Active channel (default: now). Set data-channel on any element to switch. */
-  --sc-channel-action: var(--sc-channel-now-action);
-  --sc-channel-action-hover: var(--sc-channel-now-action-hover);
-  --sc-channel-action-pressed: var(--sc-channel-now-action-pressed);
-  --sc-channel-wash-start: var(--sc-channel-now-wash-start);
-  --sc-channel-wash-end: var(--sc-channel-now-wash-end);
-  --sc-channel-ink: var(--sc-channel-now-ink);
-  --sc-channel-subtle: var(--sc-channel-now-subtle);
-  --sc-channel-link-visited: var(--sc-channel-now-link-visited);
+  /* State layers: color-mix(in oklab, <content colour> var(--sc-opacity-hover), transparent) */
+  --sc-opacity-hover: 8%; /* Hover state layer on quiet controls (outlined and text buttons, rows, chips) */
+  --sc-opacity-pressed: 12%; /* Pressed state layer on quiet controls */
 
   /* Font */
   --sc-font-family-light: "Dubai W23 Light", "Dubai", system-ui, sans-serif;
@@ -105,108 +73,6 @@
   --sc-font-weight-regular: 400;
   --sc-font-weight-medium: 500;
   --sc-font-weight-bold: 700;
-
-  /* Type scale: size, line height (px), letter spacing */
-  --sc-text-latin-display-xl: 80px;
-  --sc-leading-latin-display-xl: 82px;
-  --sc-tracking-latin-display-xl: -0.02em;
-  --sc-text-latin-display-l: 48px;
-  --sc-leading-latin-display-l: 50px;
-  --sc-tracking-latin-display-l: -0.015em;
-  --sc-text-latin-heading-xl: 34px;
-  --sc-leading-latin-heading-xl: 38px;
-  --sc-tracking-latin-heading-xl: -0.01em;
-  --sc-text-latin-heading-l: 30px;
-  --sc-leading-latin-heading-l: 34px;
-  --sc-tracking-latin-heading-l: -0.01em;
-  --sc-text-latin-heading-m: 24px;
-  --sc-leading-latin-heading-m: 28px;
-  --sc-tracking-latin-heading-m: 0em;
-  --sc-text-latin-title-l: 22px;
-  --sc-leading-latin-title-l: 27px;
-  --sc-tracking-latin-title-l: 0em;
-  --sc-text-latin-title-m: 20px;
-  --sc-leading-latin-title-m: 24px;
-  --sc-tracking-latin-title-m: 0em;
-  --sc-text-latin-title-s: 17px;
-  --sc-leading-latin-title-s: 21px;
-  --sc-tracking-latin-title-s: 0em;
-  --sc-text-latin-body-l: 19px;
-  --sc-leading-latin-body-l: 27px;
-  --sc-tracking-latin-body-l: 0em;
-  --sc-text-latin-body-m: 17px;
-  --sc-leading-latin-body-m: 24px;
-  --sc-tracking-latin-body-m: 0em;
-  --sc-text-latin-body-s: 15px;
-  --sc-leading-latin-body-s: 21px;
-  --sc-tracking-latin-body-s: 0em;
-  --sc-text-latin-label-m: 15px;
-  --sc-leading-latin-label-m: 19px;
-  --sc-tracking-latin-label-m: 0em;
-  --sc-text-latin-label-s: 14px;
-  --sc-leading-latin-label-s: 17px;
-  --sc-tracking-latin-label-s: 0em;
-  --sc-text-latin-eyebrow: 14px;
-  --sc-leading-latin-eyebrow: 17px;
-  --sc-tracking-latin-eyebrow: 0em;
-  --sc-text-latin-caption: 14px;
-  --sc-leading-latin-caption: 19px;
-  --sc-tracking-latin-caption: 0em;
-  --sc-text-latin-caption-s: 13px;
-  --sc-leading-latin-caption-s: 16px;
-  --sc-tracking-latin-caption-s: 0em;
-  --sc-text-latin-value: 17px;
-  --sc-leading-latin-value: 22px;
-  --sc-tracking-latin-value: 0em;
-  --sc-text-latin-hint: 15px;
-  --sc-leading-latin-hint: 21px;
-  --sc-tracking-latin-hint: 0em;
-  --sc-text-latin-error: 15px;
-  --sc-leading-latin-error: 21px;
-  --sc-tracking-latin-error: 0em;
-  --sc-text-latin-numeral-l: 34px;
-  --sc-leading-latin-numeral-l: 38px;
-  --sc-tracking-latin-numeral-l: -0.01em;
-  --sc-text-arabic-display-l: 50px;
-  --sc-leading-arabic-display-l: 62px;
-  --sc-text-arabic-heading-l: 30px;
-  --sc-leading-arabic-heading-l: 38px;
-  --sc-text-arabic-heading-m: 26px;
-  --sc-leading-arabic-heading-m: 34px;
-  --sc-text-arabic-title-s: 19px;
-  --sc-leading-arabic-title-s: 25px;
-  --sc-text-arabic-body-l: 20px;
-  --sc-leading-arabic-body-l: 31px;
-  --sc-text-arabic-body-m: 19px;
-  --sc-leading-arabic-body-m: 29px;
-  --sc-text-arabic-body-s: 18px;
-  --sc-leading-arabic-body-s: 28px;
-  --sc-text-arabic-label-m: 18px;
-  --sc-leading-arabic-label-m: 23px;
-  --sc-text-arabic-hint: 17px;
-  --sc-leading-arabic-hint: 26px;
-  --sc-text-arabic-error: 18px;
-  --sc-leading-arabic-error: 27px;
-  --sc-text-arabic-caption: 16px;
-  --sc-leading-arabic-caption: 24px;
-  --sc-text-arabic-display-xl: 84px;
-  --sc-leading-arabic-display-xl: 100px;
-  --sc-text-arabic-heading-xl: 36px;
-  --sc-leading-arabic-heading-xl: 46px;
-  --sc-text-arabic-title-l: 24px;
-  --sc-leading-arabic-title-l: 32px;
-  --sc-text-arabic-title-m: 22px;
-  --sc-leading-arabic-title-m: 29px;
-  --sc-text-arabic-label-s: 16px;
-  --sc-leading-arabic-label-s: 21px;
-  --sc-text-arabic-eyebrow: 16px;
-  --sc-leading-arabic-eyebrow: 21px;
-  --sc-text-arabic-caption-s: 16px;
-  --sc-leading-arabic-caption-s: 24px;
-  --sc-text-arabic-value: 19px;
-  --sc-leading-arabic-value: 26px;
-  --sc-text-arabic-numeral-l: 34px;
-  --sc-leading-arabic-numeral-l: 40px;
 
   /* Space */
   --sc-space-0: 0px;
@@ -228,36 +94,35 @@
   --sc-space-128: 128px;
 
   /* Radius */
-  --sc-radius-xs: 6px;
-  --sc-radius-s: 10px;
-  --sc-radius-field: 14px; /* Inputs and selects */
-  --sc-radius-card: 20px; /* Cards and list groups */
-  --sc-radius-panel: 24px; /* Large panels, hero cards */
-  --sc-radius-sheet: 28px; /* Bottom sheets, dialogs */
-  --sc-radius-control: 22px; /* 44px glass controls */
-  --sc-radius-pill: 999px; /* Buttons, chips, search */
+  --sc-radius-none: 0px; /* Tables, full-bleed bands */
+  --sc-radius-control: 4px; /* Buttons, checkboxes, segmented controls, tags */
+  --sc-radius-chip: 6px; /* Status chips */
+  --sc-radius-field: 8px; /* Text inputs, selects, textareas, callouts */
+  --sc-radius-card: 12px; /* Cards, list groups, panels, dialogs, sheets */
+  --sc-radius-full: 9999px; /* Circular marks and suggestion chips only */
 
   /* Size */
-  --sc-size-target-min: 44px; /* Minimum interactive target */
-  --sc-size-control-m: 44px;
-  --sc-size-control-l: 54px; /* Primary buttons and fields */
-  --sc-size-icon-s: 16px;
-  --sc-size-icon-m: 20px;
-  --sc-size-icon-l: 24px;
-  --sc-size-progress: 8px; /* Step progress track */
-  --sc-size-measure: 680px; /* Max width of running text */
-  --sc-size-focus-ring: 3px;
-  --sc-size-focus-offset: 2px;
-  --sc-size-border-hairline: 1px; /* Dividers */
-  --sc-size-border-control: 1.5px; /* Field and control boundaries */
-  --sc-size-border-strong: 2px; /* Selected and error boundaries */
-  --sc-size-border-accent: 3px; /* Error bar on the start side of a field */
+  --sc-size-target-min: 44px; /* Minimum interactive target, every control */
+  --sc-size-control-primary: 56px; /* Primary buttons and text fields */
+  --sc-size-control-secondary: 48px; /* Secondary and compact buttons, compact fields, selects in tables */
+  --sc-size-chip: 32px; /* Visual height of chips; the target is extended to 44px */
+  --sc-size-stepper-marker: 28px; /* Stepper step marker */
+  --sc-size-icon-s: 16px; /* Icons in chips and inline with small text */
+  --sc-size-icon-m: 20px; /* Icons inline with body text and in fields */
+  --sc-size-icon-l: 24px; /* Standalone icons and icons in buttons */
+  --sc-size-focus-ring: 3px; /* Focus ring width */
+  --sc-size-focus-offset: 2px; /* Gap between the control and the focus ring */
+  --sc-size-border-hairline: 1px; /* Dividers and card edges */
+  --sc-size-border-control: 1.5px; /* Control boundaries */
+  --sc-size-border-strong: 2px; /* Error and selected boundaries, stepper connectors */
+  --sc-size-border-accent: 3px; /* Bar on the start side of an error field group or callout */
+  --sc-size-strip: 4px; /* The network and channel strip at the top of the header */
+  --sc-size-measure: 680px; /* Maximum width of running text */
 
   /* Elevation */
-  --sc-elevation-0: none; /* Flat */
-  --sc-elevation-1: 0px 1px 2px 0px oklab(0 0 0 / 0.04), 0px 8px 24px 0px oklab(0 0 0 / 0.05); /* Cards and list groups */
-  --sc-elevation-2: 0px 6px 18px 0px oklab(0 0 0 / 0.1), 0px 0px 0px 0.5px oklab(0 0 0 / 0.08); /* Glass controls and floating bars */
-  --sc-elevation-3: 0px 2px 6px 0px oklab(0 0 0 / 0.06), 0px 16px 40px 0px oklab(0 0 0 / 0.12); /* Sheets, popovers, dialogs */
+  --sc-elevation-0: none; /* Flat: every surface in the page flow, cards included */
+  --sc-elevation-1: 0px 1px 3px 0px oklab(0 0 0 / 0.08); /* Sticky bars once content scrolls under them */
+  --sc-elevation-2: 0px 2px 6px 0px oklab(0 0 0 / 0.06), 0px 8px 24px 0px oklab(0 0 0 / 0.1); /* Popovers, menus, dialogs, sheets, toasts */
 
   /* Motion */
   --sc-duration-instant: 0ms; /* No animation. Keyboard-initiated actions and anything seen 100+ times a day (emil-design-eng: never animate keyboard-initiated actions) */
@@ -296,246 +161,224 @@
   --sc-container-reading: 680px;
 }
 
-/* Channel theming layer */
-[data-channel="now"] {
-  --sc-channel-action: var(--sc-channel-now-action);
-  --sc-channel-action-hover: var(--sc-channel-now-action-hover);
-  --sc-channel-action-pressed: var(--sc-channel-now-action-pressed);
-  --sc-channel-wash-start: var(--sc-channel-now-wash-start);
-  --sc-channel-wash-end: var(--sc-channel-now-wash-end);
-  --sc-channel-ink: var(--sc-channel-now-ink);
-  --sc-channel-subtle: var(--sc-channel-now-subtle);
-  --sc-channel-link-visited: var(--sc-channel-now-link-visited);
+[data-theme="light"] { color-scheme: light; }
+[data-theme="dark"] { color-scheme: dark; }
+
+/* Channel roles. The default channel applies at the root; data-channel on any element
+   rebinds the roles for that subtree (a whole page, or one attribution chip). */
+:root, [data-channel="now"] {
+  --sc-color-channel-action: light-dark(oklab(0.4874 -0.03 -0.153), oklab(0.8276 -0.0166 -0.0845));
+  --sc-color-channel-action-hover: light-dark(oklab(0.4444 -0.0285 -0.1454), oklab(0.785 -0.021 -0.1072));
+  --sc-color-channel-action-pressed: light-dark(oklab(0.4014 -0.027 -0.1377), oklab(0.7427 -0.0255 -0.13));
+  --sc-color-channel-container: light-dark(oklab(0.9135 -0.008 -0.041), oklab(0.4014 -0.027 -0.1377));
+  --sc-color-channel-on-container: light-dark(oklab(0.4014 -0.027 -0.1377), oklab(0.9135 -0.008 -0.041));
+  --sc-color-channel-subtle: light-dark(oklab(0.9567 -0.004 -0.0202), oklab(0.3115 -0.0135 -0.0689));
 }
 [data-channel="transport"] {
-  --sc-channel-action: var(--sc-channel-transport-action);
-  --sc-channel-action-hover: var(--sc-channel-transport-action-hover);
-  --sc-channel-action-pressed: var(--sc-channel-transport-action-pressed);
-  --sc-channel-wash-start: var(--sc-channel-transport-wash-start);
-  --sc-channel-wash-end: var(--sc-channel-transport-wash-end);
-  --sc-channel-ink: var(--sc-channel-transport-ink);
-  --sc-channel-subtle: var(--sc-channel-transport-subtle);
-  --sc-channel-link-visited: var(--sc-channel-transport-link-visited);
+  --sc-color-channel-action: light-dark(oklab(0.4982 0.111 0.1), oklab(0.8364 0.0705 0.0636));
+  --sc-color-channel-action-hover: light-dark(oklab(0.4539 0.1017 0.0916), oklab(0.7951 0.0832 0.075));
+  --sc-color-channel-action-pressed: light-dark(oklab(0.4094 0.0916 0.0825), oklab(0.7536 0.0943 0.085));
+  --sc-color-channel-container: light-dark(oklab(0.9177 0.033 0.0298), oklab(0.4094 0.0916 0.0825));
+  --sc-color-channel-on-container: light-dark(oklab(0.4094 0.0916 0.0825), oklab(0.9177 0.033 0.0298));
+  --sc-color-channel-subtle: light-dark(oklab(0.9588 0.016 0.0144), oklab(0.317 0.0499 0.045));
 }
 [data-channel="visit"] {
-  --sc-channel-action: var(--sc-channel-visit-action);
-  --sc-channel-action-hover: var(--sc-channel-visit-action-hover);
-  --sc-channel-action-pressed: var(--sc-channel-visit-action-pressed);
-  --sc-channel-wash-start: var(--sc-channel-visit-wash-start);
-  --sc-channel-wash-end: var(--sc-channel-visit-wash-end);
-  --sc-channel-ink: var(--sc-channel-visit-ink);
-  --sc-channel-subtle: var(--sc-channel-visit-subtle);
-  --sc-channel-link-visited: var(--sc-channel-visit-link-visited);
+  --sc-color-channel-action: light-dark(oklab(0.5033 0.155 -0.016), oklab(0.8405 0.0993 -0.0102));
+  --sc-color-channel-action-hover: light-dark(oklab(0.4592 0.1472 -0.0152), oklab(0.7996 0.1163 -0.012));
+  --sc-color-channel-action-pressed: light-dark(oklab(0.4151 0.1395 -0.0144), oklab(0.7586 0.1318 -0.0136));
+  --sc-color-channel-container: light-dark(oklab(0.9198 0.0462 -0.0048), oklab(0.4151 0.1395 -0.0144));
+  --sc-color-channel-on-container: light-dark(oklab(0.4151 0.1395 -0.0144), oklab(0.9198 0.0462 -0.0048));
+  --sc-color-channel-subtle: light-dark(oklab(0.9598 0.0223 -0.0023), oklab(0.3195 0.0698 -0.0072));
 }
 [data-channel="justice"] {
-  --sc-channel-action: var(--sc-channel-justice-action);
-  --sc-channel-action-hover: var(--sc-channel-justice-action-hover);
-  --sc-channel-action-pressed: var(--sc-channel-justice-action-pressed);
-  --sc-channel-wash-start: var(--sc-channel-justice-wash-start);
-  --sc-channel-wash-end: var(--sc-channel-justice-wash-end);
-  --sc-channel-ink: var(--sc-channel-justice-ink);
-  --sc-channel-subtle: var(--sc-channel-justice-subtle);
-  --sc-channel-link-visited: var(--sc-channel-justice-link-visited);
+  --sc-color-channel-action: light-dark(oklab(0.4951 0.059 -0.113), oklab(0.8342 0.0383 -0.0735));
+  --sc-color-channel-action-hover: light-dark(oklab(0.4516 0.056 -0.1074), oklab(0.7923 0.0442 -0.0848));
+  --sc-color-channel-action-pressed: light-dark(oklab(0.408 0.0531 -0.1017), oklab(0.7505 0.0501 -0.0961));
+  --sc-color-channel-container: light-dark(oklab(0.9166 0.0177 -0.0339), oklab(0.408 0.0531 -0.1017));
+  --sc-color-channel-on-container: light-dark(oklab(0.408 0.0531 -0.1017), oklab(0.9166 0.0177 -0.0339));
+  --sc-color-channel-subtle: light-dark(oklab(0.9583 0.0088 -0.017), oklab(0.3154 0.0265 -0.0509));
 }
 [data-channel="build"] {
-  --sc-channel-action: var(--sc-channel-build-action);
-  --sc-channel-action-hover: var(--sc-channel-build-action-hover);
-  --sc-channel-action-pressed: var(--sc-channel-build-action-pressed);
-  --sc-channel-wash-start: var(--sc-channel-build-wash-start);
-  --sc-channel-wash-end: var(--sc-channel-build-wash-end);
-  --sc-channel-ink: var(--sc-channel-build-ink);
-  --sc-channel-subtle: var(--sc-channel-build-subtle);
-  --sc-channel-link-visited: var(--sc-channel-build-link-visited);
+  --sc-color-channel-action: light-dark(oklab(0.4851 0.011 0.099), oklab(0.8304 0.0156 0.1406));
+  --sc-color-channel-action-hover: light-dark(oklab(0.4418 0.01 0.09), oklab(0.7866 0.0132 0.1188));
+  --sc-color-channel-action-pressed: light-dark(oklab(0.3984 0.009 0.0813), oklab(0.7426 0.0094 0.0842));
+  --sc-color-channel-container: light-dark(oklab(0.9149 0.0097 0.0871), oklab(0.3984 0.009 0.0813));
+  --sc-color-channel-on-container: light-dark(oklab(0.3984 0.009 0.0813), oklab(0.9149 0.0097 0.0871));
+  --sc-color-channel-subtle: light-dark(oklab(0.9571 0.0041 0.0366), oklab(0.3111 0.005 0.0446));
 }
 [data-channel="invest"] {
-  --sc-channel-action: var(--sc-channel-invest-action);
-  --sc-channel-action-hover: var(--sc-channel-invest-action-hover);
-  --sc-channel-action-pressed: var(--sc-channel-invest-action-pressed);
-  --sc-channel-wash-start: var(--sc-channel-invest-wash-start);
-  --sc-channel-wash-end: var(--sc-channel-invest-wash-end);
-  --sc-channel-ink: var(--sc-channel-invest-ink);
-  --sc-channel-subtle: var(--sc-channel-invest-subtle);
-  --sc-channel-link-visited: var(--sc-channel-invest-link-visited);
+  --sc-color-channel-action: light-dark(oklab(0.4713 -0.093 0.074), oklab(0.8145 -0.1023 0.0814));
+  --sc-color-channel-action-hover: light-dark(oklab(0.4288 -0.0883 0.0703), oklab(0.772 -0.0976 0.0777));
+  --sc-color-channel-action-pressed: light-dark(oklab(0.3864 -0.0837 0.0666), oklab(0.7312 -0.079 0.0629));
+  --sc-color-channel-container: light-dark(oklab(0.9055 -0.0632 0.0503), oklab(0.3864 -0.0837 0.0666));
+  --sc-color-channel-on-container: light-dark(oklab(0.3864 -0.0837 0.0666), oklab(0.9055 -0.0632 0.0503));
+  --sc-color-channel-subtle: light-dark(oklab(0.9529 -0.0298 0.0237), oklab(0.305 -0.0418 0.0333));
 }
 [data-channel="trade"] {
-  --sc-channel-action: var(--sc-channel-trade-action);
-  --sc-channel-action-hover: var(--sc-channel-trade-action-hover);
-  --sc-channel-action-pressed: var(--sc-channel-trade-action-pressed);
-  --sc-channel-wash-start: var(--sc-channel-trade-wash-start);
-  --sc-channel-wash-end: var(--sc-channel-trade-wash-end);
-  --sc-channel-ink: var(--sc-channel-trade-ink);
-  --sc-channel-subtle: var(--sc-channel-trade-subtle);
-  --sc-channel-link-visited: var(--sc-channel-trade-link-visited);
+  --sc-color-channel-action: light-dark(oklab(0.4386 -0.0171 -0.0437), oklab(0.8263 -0.0169 -0.0432));
+  --sc-color-channel-action-hover: light-dark(oklab(0.3956 -0.0162 -0.0414), oklab(0.7832 -0.0171 -0.0437));
+  --sc-color-channel-action-pressed: light-dark(oklab(0.3526 -0.0126 -0.0322), oklab(0.7402 -0.0153 -0.0391));
+  --sc-color-channel-container: light-dark(oklab(0.9131 -0.0085 -0.0216), oklab(0.3956 -0.0162 -0.0414));
+  --sc-color-channel-on-container: light-dark(oklab(0.3956 -0.0162 -0.0414), oklab(0.9131 -0.0085 -0.0216));
+  --sc-color-channel-subtle: light-dark(oklab(0.9565 -0.0043 -0.011), oklab(0.3098 -0.0081 -0.0207));
 }
 
-/* Dark mode: follows the system unless data-theme="light" is set */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --sc-color-canvas: oklab(0.178 0.001 -0.004);
-    --sc-color-grouped: oklab(0.178 0.001 -0.004);
-    --sc-color-surface: oklab(0.245 0.002 -0.005);
-    --sc-color-rule: oklab(0.323 0.002 -0.008);
-    --sc-color-control: oklab(0.669 0.003 -0.01);
-    --sc-color-muted: oklab(0.8 0.002 -0.007);
-    --sc-color-ink: oklab(1 0 0);
-    --sc-color-ink-strong: oklab(1 0 0);
-    --sc-color-on-action: oklab(0.178 0.001 -0.004);
-    --sc-color-glass: oklab(0.279 0.002 -0.007 / 0.72);
-    --sc-color-glass-edge: oklab(1 0 0 / 0.14);
-    --sc-color-fill-quiet: oklab(1 0 0 / 0.1);
-    --sc-color-fill-selected: oklab(1 0 0 / 0.14);
-    --sc-color-error: oklab(0.834 0.082 0.041);
-    --sc-color-error-hover: oklab(0.8 0.082 0.041);
-    --sc-color-error-pressed: oklab(0.77 0.082 0.041);
-    --sc-color-on-error: oklab(0.178 0.001 -0.004);
-    --sc-color-error-surface: oklab(0.3 0.05 0.025);
-    --sc-color-success: oklab(0.82 -0.09 0.05);
-    --sc-color-success-surface: oklab(0.29 -0.045 0.025);
-    --sc-color-warning: oklab(0.84 0.03 0.12);
-    --sc-color-warning-surface: oklab(0.3 0.02 0.05);
-    --sc-color-shadow: oklab(0 0 0 / 0.35);
-    --sc-channel-now-action: oklab(0.811 0.004 -0.094);
-    --sc-channel-now-action-hover: oklab(0.78 -0.0047 -0.094);
-    --sc-channel-now-action-pressed: oklab(0.75 -0.0047 -0.094);
-    --sc-channel-now-wash-start: oklab(0.3 -0.0017 -0.035);
-    --sc-channel-now-wash-end: oklab(0.355 -0.0022 -0.0449);
-    --sc-channel-now-ink: oklab(0.93 -0.0015 -0.03);
-    --sc-channel-now-subtle: oklab(0.3 -0.0017 -0.035);
-    --sc-channel-now-link-visited: oklab(0.93 -0.0015 -0.03);
-    --sc-channel-transport-action: oklab(0.83 0.068 0.079);
-    --sc-channel-transport-action-hover: oklab(0.78 0.0774 0.0698);
-    --sc-channel-transport-action-pressed: oklab(0.75 0.0774 0.0698);
-    --sc-channel-transport-wash-start: oklab(0.3 0.026 0.0234);
-    --sc-channel-transport-wash-end: oklab(0.355 0.0334 0.0301);
-    --sc-channel-transport-ink: oklab(0.93 0.0223 0.0201);
-    --sc-channel-transport-subtle: oklab(0.3 0.026 0.0234);
-    --sc-channel-transport-link-visited: oklab(0.93 0.0223 0.0201);
-    --sc-channel-visit-action: oklab(0.81 0.088 0.013);
-    --sc-channel-visit-action-hover: oklab(0.78 0.088 0.013);
-    --sc-channel-visit-action-pressed: oklab(0.75 0.088 0.013);
-    --sc-channel-visit-wash-start: oklab(0.3 0.0346 0.0051);
-    --sc-channel-visit-wash-end: oklab(0.355 0.0445 0.0066);
-    --sc-channel-visit-ink: oklab(0.93 0.0297 0.0044);
-    --sc-channel-visit-subtle: oklab(0.3 0.0346 0.0051);
-    --sc-channel-visit-link-visited: oklab(0.93 0.0297 0.0044);
-    --sc-channel-justice-action: oklab(0.81 0.034 -0.0935);
-    --sc-channel-justice-action-hover: oklab(0.78 0.034 -0.0935);
-    --sc-channel-justice-action-pressed: oklab(0.75 0.034 -0.0935);
-    --sc-channel-justice-wash-start: oklab(0.3 0.012 -0.0329);
-    --sc-channel-justice-wash-end: oklab(0.355 0.0154 -0.0423);
-    --sc-channel-justice-ink: oklab(0.93 0.0103 -0.0282);
-    --sc-channel-justice-subtle: oklab(0.3 0.012 -0.0329);
-    --sc-channel-justice-link-visited: oklab(0.93 0.0103 -0.0282);
-    --sc-channel-build-action: oklab(0.81 0.0215 0.05);
-    --sc-channel-build-action-hover: oklab(0.78 0.0215 0.05);
-    --sc-channel-build-action-pressed: oklab(0.75 0.0215 0.05);
-    --sc-channel-build-wash-start: oklab(0.3 0.0138 0.0322);
-    --sc-channel-build-wash-end: oklab(0.355 0.0178 0.0413);
-    --sc-channel-build-ink: oklab(0.93 0.0119 0.0276);
-    --sc-channel-build-subtle: oklab(0.3 0.0138 0.0322);
-    --sc-channel-build-link-visited: oklab(0.93 0.0119 0.0276);
-    --sc-channel-invest-action: oklab(0.81 -0.0505 0.027);
-    --sc-channel-invest-action-hover: oklab(0.78 -0.0505 0.027);
-    --sc-channel-invest-action-pressed: oklab(0.75 -0.0505 0.027);
-    --sc-channel-invest-wash-start: oklab(0.3 -0.0309 0.0165);
-    --sc-channel-invest-wash-end: oklab(0.355 -0.0397 0.0212);
-    --sc-channel-invest-ink: oklab(0.93 -0.0265 0.0141);
-    --sc-channel-invest-subtle: oklab(0.3 -0.0309 0.0165);
-    --sc-channel-invest-link-visited: oklab(0.93 -0.0265 0.0141);
-    --sc-channel-trade-action: oklab(0.779 -0.015 -0.043);
-    --sc-channel-trade-action-hover: oklab(0.78 -0.0166 -0.0424);
-    --sc-channel-trade-action-pressed: oklab(0.75 -0.0166 -0.0424);
-    --sc-channel-trade-wash-start: oklab(0.3 -0.0128 -0.0326);
-    --sc-channel-trade-wash-end: oklab(0.355 -0.0164 -0.0419);
-    --sc-channel-trade-ink: oklab(0.93 -0.0109 -0.0279);
-    --sc-channel-trade-subtle: oklab(0.3 -0.0128 -0.0326);
-    --sc-channel-trade-link-visited: oklab(0.93 -0.0109 -0.0279);
-  }
+/* Type roles. English (and any non-Arabic language) by default; elements with lang="ar"
+   get the Arabic scale, and lang="en" inside Arabic switches back. Components only ever
+   read --sc-type-<role>-*, so they never branch on script. */
+:root, [lang]:not([lang|="ar"]) {
+  --sc-type-display-large-family: var(--sc-font-family-bold);
+  --sc-type-display-large-weight: var(--sc-font-weight-bold);
+  --sc-type-display-large-size: 80px;
+  --sc-type-display-large-leading: 84px;
+  --sc-type-display-large-tracking: -0.02em;
+  --sc-type-display-medium-family: var(--sc-font-family-bold);
+  --sc-type-display-medium-weight: var(--sc-font-weight-bold);
+  --sc-type-display-medium-size: 57px;
+  --sc-type-display-medium-leading: 62px;
+  --sc-type-display-medium-tracking: -0.015em;
+  --sc-type-display-small-family: var(--sc-font-family-bold);
+  --sc-type-display-small-weight: var(--sc-font-weight-bold);
+  --sc-type-display-small-size: 45px;
+  --sc-type-display-small-leading: 50px;
+  --sc-type-display-small-tracking: -0.01em;
+  --sc-type-headline-large-family: var(--sc-font-family-bold);
+  --sc-type-headline-large-weight: var(--sc-font-weight-bold);
+  --sc-type-headline-large-size: 32px;
+  --sc-type-headline-large-leading: 38px;
+  --sc-type-headline-large-tracking: 0;
+  --sc-type-headline-medium-family: var(--sc-font-family-bold);
+  --sc-type-headline-medium-weight: var(--sc-font-weight-bold);
+  --sc-type-headline-medium-size: 28px;
+  --sc-type-headline-medium-leading: 34px;
+  --sc-type-headline-medium-tracking: 0;
+  --sc-type-headline-small-family: var(--sc-font-family-bold);
+  --sc-type-headline-small-weight: var(--sc-font-weight-bold);
+  --sc-type-headline-small-size: 24px;
+  --sc-type-headline-small-leading: 30px;
+  --sc-type-headline-small-tracking: 0;
+  --sc-type-title-large-family: var(--sc-font-family-bold);
+  --sc-type-title-large-weight: var(--sc-font-weight-bold);
+  --sc-type-title-large-size: 22px;
+  --sc-type-title-large-leading: 28px;
+  --sc-type-title-large-tracking: 0;
+  --sc-type-title-medium-family: var(--sc-font-family-bold);
+  --sc-type-title-medium-weight: var(--sc-font-weight-bold);
+  --sc-type-title-medium-size: 18px;
+  --sc-type-title-medium-leading: 24px;
+  --sc-type-title-medium-tracking: 0;
+  --sc-type-title-small-family: var(--sc-font-family-medium);
+  --sc-type-title-small-weight: var(--sc-font-weight-medium);
+  --sc-type-title-small-size: 17px;
+  --sc-type-title-small-leading: 22px;
+  --sc-type-title-small-tracking: 0;
+  --sc-type-body-large-family: var(--sc-font-family-regular);
+  --sc-type-body-large-weight: var(--sc-font-weight-regular);
+  --sc-type-body-large-size: 18px;
+  --sc-type-body-large-leading: 26px;
+  --sc-type-body-large-tracking: 0;
+  --sc-type-body-medium-family: var(--sc-font-family-regular);
+  --sc-type-body-medium-weight: var(--sc-font-weight-regular);
+  --sc-type-body-medium-size: 16px;
+  --sc-type-body-medium-leading: 24px;
+  --sc-type-body-medium-tracking: 0;
+  --sc-type-body-small-family: var(--sc-font-family-regular);
+  --sc-type-body-small-weight: var(--sc-font-weight-regular);
+  --sc-type-body-small-size: 14px;
+  --sc-type-body-small-leading: 20px;
+  --sc-type-body-small-tracking: 0;
+  --sc-type-label-large-family: var(--sc-font-family-bold);
+  --sc-type-label-large-weight: var(--sc-font-weight-bold);
+  --sc-type-label-large-size: 18px;
+  --sc-type-label-large-leading: 22px;
+  --sc-type-label-large-tracking: 0;
+  --sc-type-label-medium-family: var(--sc-font-family-medium);
+  --sc-type-label-medium-weight: var(--sc-font-weight-medium);
+  --sc-type-label-medium-size: 16px;
+  --sc-type-label-medium-leading: 20px;
+  --sc-type-label-medium-tracking: 0;
+  --sc-type-label-small-family: var(--sc-font-family-medium);
+  --sc-type-label-small-weight: var(--sc-font-weight-medium);
+  --sc-type-label-small-size: 14px;
+  --sc-type-label-small-leading: 18px;
+  --sc-type-label-small-tracking: 0;
 }
-
-/* Dark mode: forced */
-:root[data-theme="dark"] {
-  color-scheme: dark;
-  --sc-color-canvas: oklab(0.178 0.001 -0.004);
-  --sc-color-grouped: oklab(0.178 0.001 -0.004);
-  --sc-color-surface: oklab(0.245 0.002 -0.005);
-  --sc-color-rule: oklab(0.323 0.002 -0.008);
-  --sc-color-control: oklab(0.669 0.003 -0.01);
-  --sc-color-muted: oklab(0.8 0.002 -0.007);
-  --sc-color-ink: oklab(1 0 0);
-  --sc-color-ink-strong: oklab(1 0 0);
-  --sc-color-on-action: oklab(0.178 0.001 -0.004);
-  --sc-color-glass: oklab(0.279 0.002 -0.007 / 0.72);
-  --sc-color-glass-edge: oklab(1 0 0 / 0.14);
-  --sc-color-fill-quiet: oklab(1 0 0 / 0.1);
-  --sc-color-fill-selected: oklab(1 0 0 / 0.14);
-  --sc-color-error: oklab(0.834 0.082 0.041);
-  --sc-color-error-hover: oklab(0.8 0.082 0.041);
-  --sc-color-error-pressed: oklab(0.77 0.082 0.041);
-  --sc-color-on-error: oklab(0.178 0.001 -0.004);
-  --sc-color-error-surface: oklab(0.3 0.05 0.025);
-  --sc-color-success: oklab(0.82 -0.09 0.05);
-  --sc-color-success-surface: oklab(0.29 -0.045 0.025);
-  --sc-color-warning: oklab(0.84 0.03 0.12);
-  --sc-color-warning-surface: oklab(0.3 0.02 0.05);
-  --sc-color-shadow: oklab(0 0 0 / 0.35);
-  --sc-channel-now-action: oklab(0.811 0.004 -0.094);
-  --sc-channel-now-action-hover: oklab(0.78 -0.0047 -0.094);
-  --sc-channel-now-action-pressed: oklab(0.75 -0.0047 -0.094);
-  --sc-channel-now-wash-start: oklab(0.3 -0.0017 -0.035);
-  --sc-channel-now-wash-end: oklab(0.355 -0.0022 -0.0449);
-  --sc-channel-now-ink: oklab(0.93 -0.0015 -0.03);
-  --sc-channel-now-subtle: oklab(0.3 -0.0017 -0.035);
-  --sc-channel-now-link-visited: oklab(0.93 -0.0015 -0.03);
-  --sc-channel-transport-action: oklab(0.83 0.068 0.079);
-  --sc-channel-transport-action-hover: oklab(0.78 0.0774 0.0698);
-  --sc-channel-transport-action-pressed: oklab(0.75 0.0774 0.0698);
-  --sc-channel-transport-wash-start: oklab(0.3 0.026 0.0234);
-  --sc-channel-transport-wash-end: oklab(0.355 0.0334 0.0301);
-  --sc-channel-transport-ink: oklab(0.93 0.0223 0.0201);
-  --sc-channel-transport-subtle: oklab(0.3 0.026 0.0234);
-  --sc-channel-transport-link-visited: oklab(0.93 0.0223 0.0201);
-  --sc-channel-visit-action: oklab(0.81 0.088 0.013);
-  --sc-channel-visit-action-hover: oklab(0.78 0.088 0.013);
-  --sc-channel-visit-action-pressed: oklab(0.75 0.088 0.013);
-  --sc-channel-visit-wash-start: oklab(0.3 0.0346 0.0051);
-  --sc-channel-visit-wash-end: oklab(0.355 0.0445 0.0066);
-  --sc-channel-visit-ink: oklab(0.93 0.0297 0.0044);
-  --sc-channel-visit-subtle: oklab(0.3 0.0346 0.0051);
-  --sc-channel-visit-link-visited: oklab(0.93 0.0297 0.0044);
-  --sc-channel-justice-action: oklab(0.81 0.034 -0.0935);
-  --sc-channel-justice-action-hover: oklab(0.78 0.034 -0.0935);
-  --sc-channel-justice-action-pressed: oklab(0.75 0.034 -0.0935);
-  --sc-channel-justice-wash-start: oklab(0.3 0.012 -0.0329);
-  --sc-channel-justice-wash-end: oklab(0.355 0.0154 -0.0423);
-  --sc-channel-justice-ink: oklab(0.93 0.0103 -0.0282);
-  --sc-channel-justice-subtle: oklab(0.3 0.012 -0.0329);
-  --sc-channel-justice-link-visited: oklab(0.93 0.0103 -0.0282);
-  --sc-channel-build-action: oklab(0.81 0.0215 0.05);
-  --sc-channel-build-action-hover: oklab(0.78 0.0215 0.05);
-  --sc-channel-build-action-pressed: oklab(0.75 0.0215 0.05);
-  --sc-channel-build-wash-start: oklab(0.3 0.0138 0.0322);
-  --sc-channel-build-wash-end: oklab(0.355 0.0178 0.0413);
-  --sc-channel-build-ink: oklab(0.93 0.0119 0.0276);
-  --sc-channel-build-subtle: oklab(0.3 0.0138 0.0322);
-  --sc-channel-build-link-visited: oklab(0.93 0.0119 0.0276);
-  --sc-channel-invest-action: oklab(0.81 -0.0505 0.027);
-  --sc-channel-invest-action-hover: oklab(0.78 -0.0505 0.027);
-  --sc-channel-invest-action-pressed: oklab(0.75 -0.0505 0.027);
-  --sc-channel-invest-wash-start: oklab(0.3 -0.0309 0.0165);
-  --sc-channel-invest-wash-end: oklab(0.355 -0.0397 0.0212);
-  --sc-channel-invest-ink: oklab(0.93 -0.0265 0.0141);
-  --sc-channel-invest-subtle: oklab(0.3 -0.0309 0.0165);
-  --sc-channel-invest-link-visited: oklab(0.93 -0.0265 0.0141);
-  --sc-channel-trade-action: oklab(0.779 -0.015 -0.043);
-  --sc-channel-trade-action-hover: oklab(0.78 -0.0166 -0.0424);
-  --sc-channel-trade-action-pressed: oklab(0.75 -0.0166 -0.0424);
-  --sc-channel-trade-wash-start: oklab(0.3 -0.0128 -0.0326);
-  --sc-channel-trade-wash-end: oklab(0.355 -0.0164 -0.0419);
-  --sc-channel-trade-ink: oklab(0.93 -0.0109 -0.0279);
-  --sc-channel-trade-subtle: oklab(0.3 -0.0128 -0.0326);
-  --sc-channel-trade-link-visited: oklab(0.93 -0.0109 -0.0279);
+[lang|="ar"] {
+  --sc-type-display-large-family: var(--sc-font-family-bold);
+  --sc-type-display-large-weight: var(--sc-font-weight-bold);
+  --sc-type-display-large-size: 88px;
+  --sc-type-display-large-leading: 108px;
+  --sc-type-display-large-tracking: 0;
+  --sc-type-display-medium-family: var(--sc-font-family-bold);
+  --sc-type-display-medium-weight: var(--sc-font-weight-bold);
+  --sc-type-display-medium-size: 64px;
+  --sc-type-display-medium-leading: 80px;
+  --sc-type-display-medium-tracking: 0;
+  --sc-type-display-small-family: var(--sc-font-family-bold);
+  --sc-type-display-small-weight: var(--sc-font-weight-bold);
+  --sc-type-display-small-size: 50px;
+  --sc-type-display-small-leading: 64px;
+  --sc-type-display-small-tracking: 0;
+  --sc-type-headline-large-family: var(--sc-font-family-bold);
+  --sc-type-headline-large-weight: var(--sc-font-weight-bold);
+  --sc-type-headline-large-size: 36px;
+  --sc-type-headline-large-leading: 48px;
+  --sc-type-headline-large-tracking: 0;
+  --sc-type-headline-medium-family: var(--sc-font-family-bold);
+  --sc-type-headline-medium-weight: var(--sc-font-weight-bold);
+  --sc-type-headline-medium-size: 32px;
+  --sc-type-headline-medium-leading: 44px;
+  --sc-type-headline-medium-tracking: 0;
+  --sc-type-headline-small-family: var(--sc-font-family-bold);
+  --sc-type-headline-small-weight: var(--sc-font-weight-bold);
+  --sc-type-headline-small-size: 28px;
+  --sc-type-headline-small-leading: 38px;
+  --sc-type-headline-small-tracking: 0;
+  --sc-type-title-large-family: var(--sc-font-family-bold);
+  --sc-type-title-large-weight: var(--sc-font-weight-bold);
+  --sc-type-title-large-size: 24px;
+  --sc-type-title-large-leading: 34px;
+  --sc-type-title-large-tracking: 0;
+  --sc-type-title-medium-family: var(--sc-font-family-bold);
+  --sc-type-title-medium-weight: var(--sc-font-weight-bold);
+  --sc-type-title-medium-size: 20px;
+  --sc-type-title-medium-leading: 30px;
+  --sc-type-title-medium-tracking: 0;
+  --sc-type-title-small-family: var(--sc-font-family-bold);
+  --sc-type-title-small-weight: var(--sc-font-weight-bold);
+  --sc-type-title-small-size: 19px;
+  --sc-type-title-small-leading: 28px;
+  --sc-type-title-small-tracking: 0;
+  --sc-type-body-large-family: var(--sc-font-family-regular);
+  --sc-type-body-large-weight: var(--sc-font-weight-regular);
+  --sc-type-body-large-size: 20px;
+  --sc-type-body-large-leading: 32px;
+  --sc-type-body-large-tracking: 0;
+  --sc-type-body-medium-family: var(--sc-font-family-regular);
+  --sc-type-body-medium-weight: var(--sc-font-weight-regular);
+  --sc-type-body-medium-size: 18px;
+  --sc-type-body-medium-leading: 28px;
+  --sc-type-body-medium-tracking: 0;
+  --sc-type-body-small-family: var(--sc-font-family-regular);
+  --sc-type-body-small-weight: var(--sc-font-weight-regular);
+  --sc-type-body-small-size: 16px;
+  --sc-type-body-small-leading: 24px;
+  --sc-type-body-small-tracking: 0;
+  --sc-type-label-large-family: var(--sc-font-family-bold);
+  --sc-type-label-large-weight: var(--sc-font-weight-bold);
+  --sc-type-label-large-size: 20px;
+  --sc-type-label-large-leading: 28px;
+  --sc-type-label-large-tracking: 0;
+  --sc-type-label-medium-family: var(--sc-font-family-bold);
+  --sc-type-label-medium-weight: var(--sc-font-weight-bold);
+  --sc-type-label-medium-size: 18px;
+  --sc-type-label-medium-leading: 24px;
+  --sc-type-label-medium-tracking: 0;
+  --sc-type-label-small-family: var(--sc-font-family-bold);
+  --sc-type-label-small-weight: var(--sc-font-weight-bold);
+  --sc-type-label-small-size: 16px;
+  --sc-type-label-small-leading: 22px;
+  --sc-type-label-small-tracking: 0;
 }
 
 /* Reduced motion: movement stops (spin, scale); opacity and colour transitions keep their durations */
@@ -547,312 +390,109 @@
   }
 }
 
-/* Typography: Latin */
-.sc-type-display-xl {
-  font-family: var(--sc-font-family-bold);
-  font-weight: var(--sc-font-weight-bold);
-  font-size: var(--sc-text-latin-display-xl);
-  line-height: var(--sc-leading-latin-display-xl);
-  letter-spacing: var(--sc-tracking-latin-display-xl);
+/* Type classes for page markup. Script-aware through the variables above. */
+.sc-type-display-large {
+  font-family: var(--sc-type-display-large-family);
+  font-weight: var(--sc-type-display-large-weight);
+  font-size: var(--sc-type-display-large-size);
+  line-height: var(--sc-type-display-large-leading);
+  letter-spacing: var(--sc-type-display-large-tracking);
 }
-.sc-type-display-l {
-  font-family: var(--sc-font-family-bold);
-  font-weight: var(--sc-font-weight-bold);
-  font-size: var(--sc-text-latin-display-l);
-  line-height: var(--sc-leading-latin-display-l);
-  letter-spacing: var(--sc-tracking-latin-display-l);
+.sc-type-display-medium {
+  font-family: var(--sc-type-display-medium-family);
+  font-weight: var(--sc-type-display-medium-weight);
+  font-size: var(--sc-type-display-medium-size);
+  line-height: var(--sc-type-display-medium-leading);
+  letter-spacing: var(--sc-type-display-medium-tracking);
 }
-.sc-type-heading-xl {
-  font-family: var(--sc-font-family-bold);
-  font-weight: var(--sc-font-weight-bold);
-  font-size: var(--sc-text-latin-heading-xl);
-  line-height: var(--sc-leading-latin-heading-xl);
-  letter-spacing: var(--sc-tracking-latin-heading-xl);
+.sc-type-display-small {
+  font-family: var(--sc-type-display-small-family);
+  font-weight: var(--sc-type-display-small-weight);
+  font-size: var(--sc-type-display-small-size);
+  line-height: var(--sc-type-display-small-leading);
+  letter-spacing: var(--sc-type-display-small-tracking);
 }
-.sc-type-heading-l {
-  font-family: var(--sc-font-family-bold);
-  font-weight: var(--sc-font-weight-bold);
-  font-size: var(--sc-text-latin-heading-l);
-  line-height: var(--sc-leading-latin-heading-l);
-  letter-spacing: var(--sc-tracking-latin-heading-l);
+.sc-type-headline-large {
+  font-family: var(--sc-type-headline-large-family);
+  font-weight: var(--sc-type-headline-large-weight);
+  font-size: var(--sc-type-headline-large-size);
+  line-height: var(--sc-type-headline-large-leading);
+  letter-spacing: var(--sc-type-headline-large-tracking);
 }
-.sc-type-heading-m {
-  font-family: var(--sc-font-family-bold);
-  font-weight: var(--sc-font-weight-bold);
-  font-size: var(--sc-text-latin-heading-m);
-  line-height: var(--sc-leading-latin-heading-m);
-  letter-spacing: var(--sc-tracking-latin-heading-m);
+.sc-type-headline-medium {
+  font-family: var(--sc-type-headline-medium-family);
+  font-weight: var(--sc-type-headline-medium-weight);
+  font-size: var(--sc-type-headline-medium-size);
+  line-height: var(--sc-type-headline-medium-leading);
+  letter-spacing: var(--sc-type-headline-medium-tracking);
 }
-.sc-type-title-l {
-  font-family: var(--sc-font-family-bold);
-  font-weight: var(--sc-font-weight-bold);
-  font-size: var(--sc-text-latin-title-l);
-  line-height: var(--sc-leading-latin-title-l);
-  letter-spacing: var(--sc-tracking-latin-title-l);
+.sc-type-headline-small {
+  font-family: var(--sc-type-headline-small-family);
+  font-weight: var(--sc-type-headline-small-weight);
+  font-size: var(--sc-type-headline-small-size);
+  line-height: var(--sc-type-headline-small-leading);
+  letter-spacing: var(--sc-type-headline-small-tracking);
 }
-.sc-type-title-m {
-  font-family: var(--sc-font-family-bold);
-  font-weight: var(--sc-font-weight-bold);
-  font-size: var(--sc-text-latin-title-m);
-  line-height: var(--sc-leading-latin-title-m);
-  letter-spacing: var(--sc-tracking-latin-title-m);
+.sc-type-title-large {
+  font-family: var(--sc-type-title-large-family);
+  font-weight: var(--sc-type-title-large-weight);
+  font-size: var(--sc-type-title-large-size);
+  line-height: var(--sc-type-title-large-leading);
+  letter-spacing: var(--sc-type-title-large-tracking);
 }
-.sc-type-title-s {
-  font-family: var(--sc-font-family-medium);
-  font-weight: var(--sc-font-weight-medium);
-  font-size: var(--sc-text-latin-title-s);
-  line-height: var(--sc-leading-latin-title-s);
-  letter-spacing: var(--sc-tracking-latin-title-s);
+.sc-type-title-medium {
+  font-family: var(--sc-type-title-medium-family);
+  font-weight: var(--sc-type-title-medium-weight);
+  font-size: var(--sc-type-title-medium-size);
+  line-height: var(--sc-type-title-medium-leading);
+  letter-spacing: var(--sc-type-title-medium-tracking);
 }
-.sc-type-body-l {
-  font-family: var(--sc-font-family-regular);
-  font-weight: var(--sc-font-weight-regular);
-  font-size: var(--sc-text-latin-body-l);
-  line-height: var(--sc-leading-latin-body-l);
-  letter-spacing: var(--sc-tracking-latin-body-l);
+.sc-type-title-small {
+  font-family: var(--sc-type-title-small-family);
+  font-weight: var(--sc-type-title-small-weight);
+  font-size: var(--sc-type-title-small-size);
+  line-height: var(--sc-type-title-small-leading);
+  letter-spacing: var(--sc-type-title-small-tracking);
 }
-.sc-type-body-m {
-  font-family: var(--sc-font-family-regular);
-  font-weight: var(--sc-font-weight-regular);
-  font-size: var(--sc-text-latin-body-m);
-  line-height: var(--sc-leading-latin-body-m);
-  letter-spacing: var(--sc-tracking-latin-body-m);
+.sc-type-body-large {
+  font-family: var(--sc-type-body-large-family);
+  font-weight: var(--sc-type-body-large-weight);
+  font-size: var(--sc-type-body-large-size);
+  line-height: var(--sc-type-body-large-leading);
+  letter-spacing: var(--sc-type-body-large-tracking);
 }
-.sc-type-body-s {
-  font-family: var(--sc-font-family-regular);
-  font-weight: var(--sc-font-weight-regular);
-  font-size: var(--sc-text-latin-body-s);
-  line-height: var(--sc-leading-latin-body-s);
-  letter-spacing: var(--sc-tracking-latin-body-s);
+.sc-type-body-medium {
+  font-family: var(--sc-type-body-medium-family);
+  font-weight: var(--sc-type-body-medium-weight);
+  font-size: var(--sc-type-body-medium-size);
+  line-height: var(--sc-type-body-medium-leading);
+  letter-spacing: var(--sc-type-body-medium-tracking);
 }
-.sc-type-label-m {
-  font-family: var(--sc-font-family-medium);
-  font-weight: var(--sc-font-weight-medium);
-  font-size: var(--sc-text-latin-label-m);
-  line-height: var(--sc-leading-latin-label-m);
-  letter-spacing: var(--sc-tracking-latin-label-m);
+.sc-type-body-small {
+  font-family: var(--sc-type-body-small-family);
+  font-weight: var(--sc-type-body-small-weight);
+  font-size: var(--sc-type-body-small-size);
+  line-height: var(--sc-type-body-small-leading);
+  letter-spacing: var(--sc-type-body-small-tracking);
 }
-.sc-type-label-s {
-  font-family: var(--sc-font-family-medium);
-  font-weight: var(--sc-font-weight-medium);
-  font-size: var(--sc-text-latin-label-s);
-  line-height: var(--sc-leading-latin-label-s);
-  letter-spacing: var(--sc-tracking-latin-label-s);
+.sc-type-label-large {
+  font-family: var(--sc-type-label-large-family);
+  font-weight: var(--sc-type-label-large-weight);
+  font-size: var(--sc-type-label-large-size);
+  line-height: var(--sc-type-label-large-leading);
+  letter-spacing: var(--sc-type-label-large-tracking);
 }
-.sc-type-eyebrow {
-  font-family: var(--sc-font-family-medium);
-  font-weight: var(--sc-font-weight-medium);
-  font-size: var(--sc-text-latin-eyebrow);
-  line-height: var(--sc-leading-latin-eyebrow);
-  letter-spacing: var(--sc-tracking-latin-eyebrow);
+.sc-type-label-medium {
+  font-family: var(--sc-type-label-medium-family);
+  font-weight: var(--sc-type-label-medium-weight);
+  font-size: var(--sc-type-label-medium-size);
+  line-height: var(--sc-type-label-medium-leading);
+  letter-spacing: var(--sc-type-label-medium-tracking);
 }
-.sc-type-caption {
-  font-family: var(--sc-font-family-regular);
-  font-weight: var(--sc-font-weight-regular);
-  font-size: var(--sc-text-latin-caption);
-  line-height: var(--sc-leading-latin-caption);
-  letter-spacing: var(--sc-tracking-latin-caption);
-}
-.sc-type-caption-s {
-  font-family: var(--sc-font-family-regular);
-  font-weight: var(--sc-font-weight-regular);
-  font-size: var(--sc-text-latin-caption-s);
-  line-height: var(--sc-leading-latin-caption-s);
-  letter-spacing: var(--sc-tracking-latin-caption-s);
-}
-.sc-type-value {
-  font-family: var(--sc-font-family-medium);
-  font-weight: var(--sc-font-weight-medium);
-  font-size: var(--sc-text-latin-value);
-  line-height: var(--sc-leading-latin-value);
-  letter-spacing: var(--sc-tracking-latin-value);
-}
-.sc-type-hint {
-  font-family: var(--sc-font-family-regular);
-  font-weight: var(--sc-font-weight-regular);
-  font-size: var(--sc-text-latin-hint);
-  line-height: var(--sc-leading-latin-hint);
-  letter-spacing: var(--sc-tracking-latin-hint);
-}
-.sc-type-error {
-  font-family: var(--sc-font-family-medium);
-  font-weight: var(--sc-font-weight-medium);
-  font-size: var(--sc-text-latin-error);
-  line-height: var(--sc-leading-latin-error);
-  letter-spacing: var(--sc-tracking-latin-error);
-}
-.sc-type-numeral-l {
-  font-family: var(--sc-font-family-bold);
-  font-weight: var(--sc-font-weight-bold);
-  font-size: var(--sc-text-latin-numeral-l);
-  line-height: var(--sc-leading-latin-numeral-l);
-  letter-spacing: var(--sc-tracking-latin-numeral-l);
-}
-
-/* Typography: Arabic. Applies to elements whose own language is Arabic (so lang="en" inside an Arabic page keeps the Latin scale), or with the explicit .sc-type-ar-* class. */
-.sc-type-display-l:lang(ar),
-.sc-type-ar-display-l {
-  font-family: var(--sc-font-family-bold);
-  font-weight: var(--sc-font-weight-bold);
-  font-size: var(--sc-text-arabic-display-l);
-  line-height: var(--sc-leading-arabic-display-l);
-  letter-spacing: 0;
-}
-.sc-type-heading-l:lang(ar),
-.sc-type-ar-heading-l {
-  font-family: var(--sc-font-family-bold);
-  font-weight: var(--sc-font-weight-bold);
-  font-size: var(--sc-text-arabic-heading-l);
-  line-height: var(--sc-leading-arabic-heading-l);
-  letter-spacing: 0;
-}
-.sc-type-heading-m:lang(ar),
-.sc-type-ar-heading-m {
-  font-family: var(--sc-font-family-bold);
-  font-weight: var(--sc-font-weight-bold);
-  font-size: var(--sc-text-arabic-heading-m);
-  line-height: var(--sc-leading-arabic-heading-m);
-  letter-spacing: 0;
-}
-.sc-type-title-s:lang(ar),
-.sc-type-ar-title-s {
-  font-family: var(--sc-font-family-bold);
-  font-weight: var(--sc-font-weight-bold);
-  font-size: var(--sc-text-arabic-title-s);
-  line-height: var(--sc-leading-arabic-title-s);
-  letter-spacing: 0;
-}
-.sc-type-body-l:lang(ar),
-.sc-type-ar-body-l {
-  font-family: var(--sc-font-family-regular);
-  font-weight: var(--sc-font-weight-regular);
-  font-size: var(--sc-text-arabic-body-l);
-  line-height: var(--sc-leading-arabic-body-l);
-  letter-spacing: 0;
-}
-.sc-type-body-m:lang(ar),
-.sc-type-ar-body-m {
-  font-family: var(--sc-font-family-regular);
-  font-weight: var(--sc-font-weight-regular);
-  font-size: var(--sc-text-arabic-body-m);
-  line-height: var(--sc-leading-arabic-body-m);
-  letter-spacing: 0;
-}
-.sc-type-body-s:lang(ar),
-.sc-type-ar-body-s {
-  font-family: var(--sc-font-family-regular);
-  font-weight: var(--sc-font-weight-regular);
-  font-size: var(--sc-text-arabic-body-s);
-  line-height: var(--sc-leading-arabic-body-s);
-  letter-spacing: 0;
-}
-.sc-type-label-m:lang(ar),
-.sc-type-ar-label-m {
-  font-family: var(--sc-font-family-bold);
-  font-weight: var(--sc-font-weight-bold);
-  font-size: var(--sc-text-arabic-label-m);
-  line-height: var(--sc-leading-arabic-label-m);
-  letter-spacing: 0;
-}
-.sc-type-hint:lang(ar),
-.sc-type-ar-hint {
-  font-family: var(--sc-font-family-regular);
-  font-weight: var(--sc-font-weight-regular);
-  font-size: var(--sc-text-arabic-hint);
-  line-height: var(--sc-leading-arabic-hint);
-  letter-spacing: 0;
-}
-.sc-type-error:lang(ar),
-.sc-type-ar-error {
-  font-family: var(--sc-font-family-bold);
-  font-weight: var(--sc-font-weight-bold);
-  font-size: var(--sc-text-arabic-error);
-  line-height: var(--sc-leading-arabic-error);
-  letter-spacing: 0;
-}
-.sc-type-caption:lang(ar),
-.sc-type-ar-caption {
-  font-family: var(--sc-font-family-regular);
-  font-weight: var(--sc-font-weight-regular);
-  font-size: var(--sc-text-arabic-caption);
-  line-height: var(--sc-leading-arabic-caption);
-  letter-spacing: 0;
-}
-.sc-type-display-xl:lang(ar),
-.sc-type-ar-display-xl {
-  font-family: var(--sc-font-family-bold);
-  font-weight: var(--sc-font-weight-bold);
-  font-size: var(--sc-text-arabic-display-xl);
-  line-height: var(--sc-leading-arabic-display-xl);
-  letter-spacing: 0;
-}
-.sc-type-heading-xl:lang(ar),
-.sc-type-ar-heading-xl {
-  font-family: var(--sc-font-family-bold);
-  font-weight: var(--sc-font-weight-bold);
-  font-size: var(--sc-text-arabic-heading-xl);
-  line-height: var(--sc-leading-arabic-heading-xl);
-  letter-spacing: 0;
-}
-.sc-type-title-l:lang(ar),
-.sc-type-ar-title-l {
-  font-family: var(--sc-font-family-bold);
-  font-weight: var(--sc-font-weight-bold);
-  font-size: var(--sc-text-arabic-title-l);
-  line-height: var(--sc-leading-arabic-title-l);
-  letter-spacing: 0;
-}
-.sc-type-title-m:lang(ar),
-.sc-type-ar-title-m {
-  font-family: var(--sc-font-family-bold);
-  font-weight: var(--sc-font-weight-bold);
-  font-size: var(--sc-text-arabic-title-m);
-  line-height: var(--sc-leading-arabic-title-m);
-  letter-spacing: 0;
-}
-.sc-type-label-s:lang(ar),
-.sc-type-ar-label-s {
-  font-family: var(--sc-font-family-bold);
-  font-weight: var(--sc-font-weight-bold);
-  font-size: var(--sc-text-arabic-label-s);
-  line-height: var(--sc-leading-arabic-label-s);
-  letter-spacing: 0;
-}
-.sc-type-eyebrow:lang(ar),
-.sc-type-ar-eyebrow {
-  font-family: var(--sc-font-family-bold);
-  font-weight: var(--sc-font-weight-bold);
-  font-size: var(--sc-text-arabic-eyebrow);
-  line-height: var(--sc-leading-arabic-eyebrow);
-  letter-spacing: 0;
-}
-.sc-type-caption-s:lang(ar),
-.sc-type-ar-caption-s {
-  font-family: var(--sc-font-family-regular);
-  font-weight: var(--sc-font-weight-regular);
-  font-size: var(--sc-text-arabic-caption-s);
-  line-height: var(--sc-leading-arabic-caption-s);
-  letter-spacing: 0;
-}
-.sc-type-value:lang(ar),
-.sc-type-ar-value {
-  font-family: var(--sc-font-family-bold);
-  font-weight: var(--sc-font-weight-bold);
-  font-size: var(--sc-text-arabic-value);
-  line-height: var(--sc-leading-arabic-value);
-  letter-spacing: 0;
-}
-.sc-type-numeral-l:lang(ar),
-.sc-type-ar-numeral-l {
-  font-family: var(--sc-font-family-bold);
-  font-weight: var(--sc-font-weight-bold);
-  font-size: var(--sc-text-arabic-numeral-l);
-  line-height: var(--sc-leading-arabic-numeral-l);
-  letter-spacing: 0;
-}
-
-/* Arabic is never letter-spaced, including Latin-only roles used on Arabic text. */
-[class*="sc-type-"]:lang(ar),
-[class*="sc-type-ar-"] {
-  letter-spacing: 0;
+.sc-type-label-small {
+  font-family: var(--sc-type-label-small-family);
+  font-weight: var(--sc-type-label-small-weight);
+  font-size: var(--sc-type-label-small-size);
+  line-height: var(--sc-type-label-small-leading);
+  letter-spacing: var(--sc-type-label-small-tracking);
 }

@@ -1,0 +1,15 @@
+{
+  "$description": "State layers, Material style: an overlay of the content colour on its container, mixed with color-mix(in oklab, <colour> <opacity>, transparent).",
+  "opacity": {
+    "hover": {
+      "$type": "number",
+      "$value": 0.08,
+      "$description": "Hover state layer on quiet controls (outlined and text buttons, rows, chips)"
+    },
+    "pressed": {
+      "$type": "number",
+      "$value": 0.12,
+      "$description": "Pressed state layer on quiet controls"
+    }
+  }
+}

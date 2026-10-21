@@ -1,5 +1,5 @@
-// Generated — edit tokens/*.json
-// Colours are converted from OKLAB to sRGB with the maths in scripts/oklab.py.
+// Generated — edit tokens/source/*.json or tokens/*.json, then npm run build
+// Colours are converted from OKLAB to sRGB with the maths in scripts/lib/oklab.mjs.
 // The source OKLAB value is in the comment beside each colour.
 
 package sc.designsystem.tokens // TODO: set to your app's package
@@ -12,177 +12,251 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 
-// ---- Colour
+// ---- Colour roles
 
 data class SCColorScheme(
-    val canvas: Color, // App/page background behind cards
-    val grouped: Color, // Grouped-list background
-    val surface: Color, // Cards, sheets, fields
-    val rule: Color, // Decorative dividers (not a control boundary)
-    val control: Color, // Control boundaries and inactive progress, >=3:1
-    val muted: Color, // Secondary text, >=4.5:1 on surface and canvas
-    val ink: Color, // Primary text
-    val inkStrong: Color, // Headings and display
-    val onAction: Color, // Text and icons on channel action colour
-    val glass: Color, // Translucent bar fill (Liquid Glass approximation)
-    val glassEdge: Color, // Hairline edge on glass
-    val fillQuiet: Color, // Quiet control fill
-    val fillSelected: Color, // Selected nav item fill
-    val error: Color,
-    val errorHover: Color,
-    val errorPressed: Color,
-    val onError: Color, // Text and icons on error fill
-    val errorSurface: Color,
-    val success: Color,
-    val successSurface: Color,
-    val warning: Color,
-    val warningSurface: Color,
-    val shadow: Color, // Base shadow colour; elevation tokens set their own alpha
+    val surface: Color, // Page background
+    val surfaceCard: Color, // Cards, fields, list groups, dialogs and sheets
+    val surfaceContainer: Color, // Bands, panels, table headers, totals rows
+    val surfaceContainerHigh: Color, // A container nested in a container; skeletons
+    val onSurface: Color, // Primary text and icons
+    val onSurfaceVariant: Color, // Secondary text: hints, captions, metadata
+    val outline: Color, // Control boundaries (1.5px) and inactive markers; at least 3:1
+    val outlineVariant: Color, // Dividers and card edges only; never the only edge of a control
+    val inverseSurface: Color, // Tooltips and toasts
+    val inverseOnSurface: Color, // Text on inverse-surface
+    val disabledContainer: Color, // Fill of a disabled control
+    val onDisabled: Color, // Text, icons and edges of a disabled control
+    val focusRing: Color, // The 3px focus ring, drawn outside a 2px gap of surface
+    val primary: Color, // City indigo: the network strip, sign-in and Dubai Pay hand-offs
+    val onPrimary: Color, // Text and icons on primary
+    val primaryHover: Color, // Primary fill on pointer hover
+    val primaryPressed: Color, // Primary fill while pressed
+    val primaryContainer: Color, // Selected or emphasised indigo container
+    val onPrimaryContainer: Color, // Text and icons on primary-container
+    val primarySubtle: Color, // Quiet indigo band or tint
+    val error: Color, // Error text, icons, field edges and destructive fills
+    val onError: Color, // Text and icons on an error fill
+    val errorHover: Color, // Destructive fill on pointer hover
+    val errorPressed: Color, // Destructive fill while pressed
+    val errorContainer: Color, // Error summary, error chip and callout background
+    val onErrorContainer: Color, // Strong text on error-container
+    val success: Color, // Success text and icons; completed step markers
+    val onSuccess: Color, // Text and icons on a success fill
+    val successContainer: Color, // Success chip and callout background
+    val onSuccessContainer: Color, // Strong text on success-container
+    val warning: Color, // Warning text and icons
+    val onWarning: Color, // Text and icons on a warning fill
+    val warningContainer: Color, // Warning chip and callout background
+    val onWarningContainer: Color, // Strong text on warning-container
+    val info: Color, // Information text and icons
+    val onInfo: Color, // Text and icons on an info fill
+    val infoContainer: Color, // Information chip and callout background
+    val onInfoContainer: Color, // Strong text on info-container
+    val tintBlue: Color, // Decorative tile background
+    val onTintBlue: Color, // Icon and short text on the tile
+    val tintViolet: Color, // Decorative tile background
+    val onTintViolet: Color, // Icon and short text on the tile
+    val tintRose: Color, // Decorative tile background
+    val onTintRose: Color, // Icon and short text on the tile
+    val tintOrange: Color, // Decorative tile background
+    val onTintOrange: Color, // Icon and short text on the tile
+    val tintAmber: Color, // Decorative tile background
+    val onTintAmber: Color, // Icon and short text on the tile
+    val tintGreen: Color, // Decorative tile background
+    val onTintGreen: Color, // Icon and short text on the tile
+    val channelOnAction: Color, // Text and icons on any channel action fill (the same in every channel)
+    val scrim: Color, // Behind modal dialogs and sheets
+    val shadow: Color, // Base shadow colour; elevation layers set their own alpha
 )
 
 val SCLightColors = SCColorScheme(
-    canvas = Color(red = 0.9684f, green = 0.9681f, blue = 0.9712f, alpha = 1f), // oklab(0.976 0.0004 -0.001)
-    grouped = Color(red = 0.9371f, green = 0.9377f, blue = 0.9467f, alpha = 1f), // oklab(0.953 0.0007 -0.003)
     surface = Color(red = 1f, green = 1f, blue = 1f, alpha = 1f), // oklab(1 0 0)
-    rule = Color(red = 0.894f, green = 0.8946f, blue = 0.9066f, alpha = 1f), // oklab(0.92 0.001 -0.004)
-    control = Color(red = 0.4515f, green = 0.4511f, blue = 0.4779f, alpha = 1f), // oklab(0.558 0.003 -0.01)
-    muted = Color(red = 0.3837f, green = 0.3846f, blue = 0.4052f, alpha = 1f), // oklab(0.498 0.002 -0.008)
-    ink = Color(red = 0.1268f, green = 0.1254f, blue = 0.1366f, alpha = 1f), // oklab(0.245 0.002 -0.005)
-    inkStrong = Color(red = 0.066f, green = 0.0663f, blue = 0.0742f, alpha = 1f), // oklab(0.178 0.001 -0.004)
-    onAction = Color(red = 1f, green = 1f, blue = 1f, alpha = 1f), // oklab(1 0 0)
-    glass = Color(red = 1f, green = 1f, blue = 1f, alpha = 0.72f), // oklab(1 0 0 / 0.72)
-    glassEdge = Color(red = 1f, green = 1f, blue = 1f, alpha = 0.9f), // oklab(1 0 0 / 0.9)
-    fillQuiet = Color(red = 0.4691f, green = 0.4705f, blue = 0.5024f, alpha = 0.14f), // oklab(0.575 0.003 -0.012 / 0.14)
-    fillSelected = Color(red = 0.4691f, green = 0.4705f, blue = 0.5024f, alpha = 0.16f), // oklab(0.575 0.003 -0.012 / 0.16)
-    error = Color(red = 0.679f, green = 0.1884f, blue = 0.161f, alpha = 1f), // oklab(0.501 0.144 0.076)
-    errorHover = Color(red = 0.6275f, green = 0.1618f, blue = 0.1374f, alpha = 1f), // oklab(0.47 0.138 0.073)
-    errorPressed = Color(red = 0.5782f, green = 0.1367f, blue = 0.1152f, alpha = 1f), // oklab(0.44 0.132 0.07)
+    surfaceCard = Color(red = 1f, green = 1f, blue = 1f, alpha = 1f), // oklab(1 0 0)
+    surfaceContainer = Color(red = 0.9515f, green = 0.9545f, blue = 0.9661f, alpha = 1f), // oklab(0.9656 0.0003 -0.004)
+    surfaceContainerHigh = Color(red = 0.929f, green = 0.9321f, blue = 0.9436f, alpha = 1f), // oklab(0.9484 0.0003 -0.004)
+    onSurface = Color(red = 0.1054f, green = 0.1075f, blue = 0.1155f, alpha = 1f), // oklab(0.2242 0.0003 -0.004)
+    onSurfaceVariant = Color(red = 0.3669f, green = 0.3694f, blue = 0.3791f, alpha = 1f), // oklab(0.4829 0.0003 -0.004)
+    outline = Color(red = 0.3669f, green = 0.3694f, blue = 0.3791f, alpha = 1f), // oklab(0.4829 0.0003 -0.004)
+    outlineVariant = Color(red = 0.8844f, green = 0.8874f, blue = 0.8988f, alpha = 1f), // oklab(0.9139 0.0003 -0.004)
+    inverseSurface = Color(red = 0.1869f, green = 0.1892f, blue = 0.1979f, alpha = 1f), // oklab(0.3104 0.0003 -0.004)
+    inverseOnSurface = Color(red = 0.9515f, green = 0.9545f, blue = 0.9661f, alpha = 1f), // oklab(0.9656 0.0003 -0.004)
+    disabledContainer = Color(red = 0.929f, green = 0.9321f, blue = 0.9436f, alpha = 1f), // oklab(0.9484 0.0003 -0.004)
+    onDisabled = Color(red = 0.4635f, green = 0.4662f, blue = 0.4763f, alpha = 1f), // oklab(0.5691 0.0003 -0.004)
+    focusRing = Color(red = 0.1054f, green = 0.1075f, blue = 0.1155f, alpha = 1f), // oklab(0.2242 0.0003 -0.004)
+    primary = Color(red = 0.2191f, green = 0.2515f, blue = 0.5249f, alpha = 1f), // oklab(0.4037 0.0099 -0.1152)
+    onPrimary = Color(red = 1f, green = 1f, blue = 1f, alpha = 1f), // oklab(1 0 0)
+    primaryHover = Color(red = 0.1869f, green = 0.2156f, blue = 0.4201f, alpha = 1f), // oklab(0.3585 0.0077 -0.0896)
+    primaryPressed = Color(red = 0.159f, green = 0.1814f, blue = 0.3068f, alpha = 1f), // oklab(0.3131 0.0049 -0.0576)
+    primaryContainer = Color(red = 0.8584f, green = 0.8845f, blue = 0.9934f, alpha = 1f), // oklab(0.9149 0.0033 -0.0384)
+    onPrimaryContainer = Color(red = 0.2191f, green = 0.2515f, blue = 0.5249f, alpha = 1f), // oklab(0.4037 0.0099 -0.1152)
+    primarySubtle = Color(red = 0.9284f, green = 0.9422f, blue = 0.9975f, alpha = 1f), // oklab(0.9574 0.0016 -0.0192)
+    error = Color(red = 0.7534f, green = 0.0016f, blue = 0.0411f, alpha = 1f), // oklab(0.508 0.183 0.098)
     onError = Color(red = 1f, green = 1f, blue = 1f, alpha = 1f), // oklab(1 0 0)
-    errorSurface = Color(red = 1f, green = 0.9417f, blue = 0.9381f, alpha = 1f), // oklab(0.967 0.015 0.006)
-    success = Color(red = 0.1472f, green = 0.388f, blue = 0.2293f, alpha = 1f), // oklab(0.448 -0.081 0.043)
-    successSurface = Color(red = 0.9237f, green = 0.9685f, blue = 0.9329f, alpha = 1f), // oklab(0.965 -0.015 0.008)
-    warning = Color(red = 0.482f, green = 0.3181f, blue = 0f, alpha = 1f), // oklab(0.47 0.026 0.096)
-    warningSurface = Color(red = 1f, green = 0.9568f, blue = 0.8678f, alpha = 1f), // oklab(0.97 0.003 0.032)
-    shadow = Color(red = 0f, green = 0f, blue = 0f, alpha = 0.05f), // oklab(0 0 0 / 0.05)
+    errorHover = Color(red = 0.6637f, green = 0.0034f, blue = 0.0324f, alpha = 1f), // oklab(0.4626 0.1664 0.0891)
+    errorPressed = Color(red = 0.5774f, green = 0.0002f, blue = 0.0221f, alpha = 1f), // oklab(0.4173 0.1504 0.0806)
+    errorContainer = Color(red = 0.9999f, green = 0.9285f, blue = 0.9173f, alpha = 1f), // oklab(0.9591 0.0178 0.0096)
+    onErrorContainer = Color(red = 0.5774f, green = 0.0002f, blue = 0.0221f, alpha = 1f), // oklab(0.4173 0.1504 0.0806)
+    success = Color(red = 0.0441f, green = 0.4283f, blue = 0.1784f, alpha = 1f), // oklab(0.4691 -0.11 0.067)
+    onSuccess = Color(red = 1f, green = 1f, blue = 1f, alpha = 1f), // oklab(1 0 0)
+    successContainer = Color(red = 0.8725f, green = 0.9688f, blue = 0.8838f, alpha = 1f), // oklab(0.9525 -0.033 0.0201)
+    onSuccessContainer = Color(red = 0.0014f, green = 0.3242f, blue = 0.1209f, alpha = 1f), // oklab(0.385 -0.0934 0.0569)
+    warning = Color(red = 0.5152f, green = 0.3308f, blue = 0.0036f, alpha = 1f), // oklab(0.4878 0.032 0.099)
+    onWarning = Color(red = 1f, green = 1f, blue = 1f, alpha = 1f), // oklab(1 0 0)
+    warningContainer = Color(red = 0.9952f, green = 0.9351f, blue = 0.8642f, alpha = 1f), // oklab(0.9578 0.009 0.0277)
+    onWarningContainer = Color(red = 0.3913f, green = 0.2465f, blue = 0f, alpha = 1f), // oklab(0.4007 0.0264 0.0816)
+    info = Color(red = 0.1659f, green = 0.3662f, blue = 0.6616f, alpha = 1f), // oklab(0.4856 -0.027 -0.13)
+    onInfo = Color(red = 1f, green = 1f, blue = 1f, alpha = 1f), // oklab(1 0 0)
+    infoContainer = Color(red = 0.9124f, green = 0.9468f, blue = 0.998f, alpha = 1f), // oklab(0.9567 -0.0041 -0.0195)
+    onInfoContainer = Color(red = 0.0963f, green = 0.2721f, blue = 0.5271f, alpha = 1f), // oklab(0.3996 -0.0243 -0.117)
+    tintBlue = Color(red = 0.9111f, green = 0.947f, blue = 1f, alpha = 1f), // oklab(0.9567 -0.0043 -0.0202)
+    onTintBlue = Color(red = 0.1479f, green = 0.3649f, blue = 0.6772f, alpha = 1f), // oklab(0.486 -0.029 -0.137)
+    tintViolet = Color(red = 0.9536f, green = 0.935f, blue = 0.995f, alpha = 1f), // oklab(0.9585 0.0105 -0.0181)
+    onTintViolet = Color(red = 0.4382f, green = 0.2964f, blue = 0.6467f, alpha = 1f), // oklab(0.4972 0.07 -0.121)
+    tintRose = Color(red = 0.9998f, green = 0.927f, blue = 0.9328f, alpha = 1f), // oklab(0.9594 0.0198 0.0042)
+    onTintRose = Color(red = 0.6388f, green = 0.2236f, blue = 0.3052f, alpha = 1f), // oklab(0.5005 0.137 0.029)
+    tintOrange = Color(red = 0.98f, green = 0.9355f, blue = 0.9103f, alpha = 1f), // oklab(0.9579 0.0093 0.0118)
+    onTintOrange = Color(red = 0.5515f, green = 0.307f, blue = 0.1436f, alpha = 1f), // oklab(0.4912 0.062 0.079)
+    tintAmber = Color(red = 0.9622f, green = 0.9416f, blue = 0.9053f, alpha = 1f), // oklab(0.957 0.0019 0.0134)
+    onTintAmber = Color(red = 0.4723f, green = 0.3496f, blue = 0.0889f, alpha = 1f), // oklab(0.4851 0.013 0.089)
+    tintGreen = Color(red = 0.9117f, green = 0.9564f, blue = 0.9057f, alpha = 1f), // oklab(0.9547 -0.0165 0.0129)
+    onTintGreen = Color(red = 0.121f, green = 0.4267f, blue = 0.0948f, alpha = 1f), // oklab(0.4695 -0.11 0.086)
+    channelOnAction = Color(red = 1f, green = 1f, blue = 1f, alpha = 1f), // oklab(1 0 0)
+    scrim = Color(red = 0f, green = 0f, blue = 0f, alpha = 0.5f), // oklab(0 0 0 / 0.5)
+    shadow = Color(red = 0f, green = 0f, blue = 0f, alpha = 1f), // oklab(0 0 0)
 )
 
 val SCDarkColors = SCColorScheme(
-    canvas = Color(red = 0.066f, green = 0.0663f, blue = 0.0742f, alpha = 1f), // oklab(0.178 0.001 -0.004)
-    grouped = Color(red = 0.066f, green = 0.0663f, blue = 0.0742f, alpha = 1f), // oklab(0.178 0.001 -0.004)
-    surface = Color(red = 0.1268f, green = 0.1254f, blue = 0.1366f, alpha = 1f), // oklab(0.245 0.002 -0.005)
-    rule = Color(red = 0.1995f, green = 0.2003f, blue = 0.2187f, alpha = 1f), // oklab(0.323 0.002 -0.008)
-    control = Color(red = 0.5809f, green = 0.5805f, blue = 0.6086f, alpha = 1f), // oklab(0.669 0.003 -0.01)
-    muted = Color(red = 0.7412f, green = 0.7413f, blue = 0.7618f, alpha = 1f), // oklab(0.8 0.002 -0.007)
-    ink = Color(red = 1f, green = 1f, blue = 1f, alpha = 1f), // oklab(1 0 0)
-    inkStrong = Color(red = 1f, green = 1f, blue = 1f, alpha = 1f), // oklab(1 0 0)
-    onAction = Color(red = 0.066f, green = 0.0663f, blue = 0.0742f, alpha = 1f), // oklab(0.178 0.001 -0.004)
-    glass = Color(red = 0.1574f, green = 0.1574f, blue = 0.1731f, alpha = 0.72f), // oklab(0.279 0.002 -0.007 / 0.72)
-    glassEdge = Color(red = 1f, green = 1f, blue = 1f, alpha = 0.14f), // oklab(1 0 0 / 0.14)
-    fillQuiet = Color(red = 1f, green = 1f, blue = 1f, alpha = 0.1f), // oklab(1 0 0 / 0.1)
-    fillSelected = Color(red = 1f, green = 1f, blue = 1f, alpha = 0.14f), // oklab(1 0 0 / 0.14)
-    error = Color(red = 0.9997f, green = 0.6975f, blue = 0.6625f, alpha = 1f), // oklab(0.834 0.082 0.041)
-    errorHover = Color(red = 0.954f, green = 0.6553f, blue = 0.6209f, alpha = 1f), // oklab(0.8 0.082 0.041)
-    errorPressed = Color(red = 0.9139f, green = 0.6183f, blue = 0.5847f, alpha = 1f), // oklab(0.77 0.082 0.041)
-    onError = Color(red = 0.066f, green = 0.0663f, blue = 0.0742f, alpha = 1f), // oklab(0.178 0.001 -0.004)
-    errorSurface = Color(red = 0.2742f, green = 0.1327f, blue = 0.1193f, alpha = 1f), // oklab(0.3 0.05 0.025)
-    success = Color(red = 0.5712f, green = 0.845f, blue = 0.635f, alpha = 1f), // oklab(0.82 -0.09 0.05)
-    successSurface = Color(red = 0.086f, green = 0.1981f, blue = 0.1167f, alpha = 1f), // oklab(0.29 -0.045 0.025)
-    warning = Color(red = 0.9754f, green = 0.7493f, blue = 0.4081f, alpha = 1f), // oklab(0.84 0.03 0.12)
-    warningSurface = Color(red = 0.2485f, green = 0.1575f, blue = 0.0466f, alpha = 1f), // oklab(0.3 0.02 0.05)
-    shadow = Color(red = 0f, green = 0f, blue = 0f, alpha = 0.35f), // oklab(0 0 0 / 0.35)
+    surface = Color(red = 0.1054f, green = 0.1075f, blue = 0.1155f, alpha = 1f), // oklab(0.2242 0.0003 -0.004)
+    surfaceCard = Color(red = 0.1212f, green = 0.1234f, blue = 0.1315f, alpha = 1f), // oklab(0.2415 0.0003 -0.004)
+    surfaceContainer = Color(red = 0.1618f, green = 0.1641f, blue = 0.1725f, alpha = 1f), // oklab(0.2846 0.0003 -0.004)
+    surfaceContainerHigh = Color(red = 0.204f, green = 0.2063f, blue = 0.2151f, alpha = 1f), // oklab(0.3277 0.0003 -0.004)
+    onSurface = Color(red = 1f, green = 1f, blue = 1f, alpha = 1f), // oklab(1 0 0)
+    onSurfaceVariant = Color(red = 0.7747f, green = 0.7776f, blue = 0.7887f, alpha = 1f), // oklab(0.8277 0.0003 -0.004)
+    outline = Color(red = 0.564f, green = 0.5667f, blue = 0.5772f, alpha = 1f), // oklab(0.6553 0.0003 -0.004)
+    outlineVariant = Color(red = 0.2212f, green = 0.2236f, blue = 0.2325f, alpha = 1f), // oklab(0.3449 0.0003 -0.004)
+    inverseSurface = Color(red = 0.8844f, green = 0.8874f, blue = 0.8988f, alpha = 1f), // oklab(0.9139 0.0003 -0.004)
+    inverseOnSurface = Color(red = 0.1054f, green = 0.1075f, blue = 0.1155f, alpha = 1f), // oklab(0.2242 0.0003 -0.004)
+    disabledContainer = Color(red = 0.1869f, green = 0.1892f, blue = 0.1979f, alpha = 1f), // oklab(0.3104 0.0003 -0.004)
+    onDisabled = Color(red = 0.564f, green = 0.5667f, blue = 0.5772f, alpha = 1f), // oklab(0.6553 0.0003 -0.004)
+    focusRing = Color(red = 1f, green = 1f, blue = 1f, alpha = 1f), // oklab(1 0 0)
+    primary = Color(red = 0.7183f, green = 0.7681f, blue = 0.9976f, alpha = 1f), // oklab(0.8306 0.0072 -0.0832)
+    onPrimary = Color(red = 0.1054f, green = 0.1075f, blue = 0.1155f, alpha = 1f), // oklab(0.2242 0.0003 -0.004)
+    primaryHover = Color(red = 0.6569f, green = 0.7115f, blue = 0.973f, alpha = 1f), // oklab(0.7882 0.0082 -0.096)
+    primaryPressed = Color(red = 0.5971f, green = 0.655f, blue = 0.9478f, alpha = 1f), // oklab(0.7459 0.0093 -0.1088)
+    primaryContainer = Color(red = 0.2191f, green = 0.2515f, blue = 0.5249f, alpha = 1f), // oklab(0.4037 0.0099 -0.1152)
+    onPrimaryContainer = Color(red = 0.8584f, green = 0.8845f, blue = 0.9934f, alpha = 1f), // oklab(0.9149 0.0033 -0.0384)
+    primarySubtle = Color(red = 0.159f, green = 0.1814f, blue = 0.3068f, alpha = 1f), // oklab(0.3131 0.0049 -0.0576)
+    error = Color(red = 1f, green = 0.7051f, blue = 0.6629f, alpha = 1f), // oklab(0.8375 0.0791 0.0424)
+    onError = Color(red = 0.1054f, green = 0.1075f, blue = 0.1155f, alpha = 1f), // oklab(0.2242 0.0003 -0.004)
+    errorHover = Color(red = 0.9996f, green = 0.6253f, blue = 0.5752f, alpha = 1f), // oklab(0.7975 0.1024 0.0548)
+    errorPressed = Color(red = 0.9994f, green = 0.5399f, blue = 0.484f, alpha = 1f), // oklab(0.7578 0.1275 0.0683)
+    errorContainer = Color(red = 0.3513f, green = 0.1056f, blue = 0.0851f, alpha = 1f), // oklab(0.3213 0.0823 0.0441)
+    onErrorContainer = Color(red = 1f, green = 0.8558f, blue = 0.8337f, alpha = 1f), // oklab(0.9183 0.0369 0.0198)
+    success = Color(red = 0.6203f, green = 0.8279f, blue = 0.6501f, alpha = 1f), // oklab(0.8182 -0.0715 0.0436)
+    onSuccess = Color(red = 0.1054f, green = 0.1075f, blue = 0.1155f, alpha = 1f), // oklab(0.2242 0.0003 -0.004)
+    successContainer = Color(red = 0.0924f, green = 0.2146f, blue = 0.1171f, alpha = 1f), // oklab(0.304 -0.0495 0.0302)
+    onSuccessContainer = Color(red = 0.8173f, green = 0.9126f, blue = 0.8285f, alpha = 1f), // oklab(0.9094 -0.033 0.0201)
+    warning = Color(red = 0.8908f, green = 0.7564f, blue = 0.5932f, alpha = 1f), // oklab(0.83 0.0208 0.0643)
+    onWarning = Color(red = 0.1054f, green = 0.1075f, blue = 0.1155f, alpha = 1f), // oklab(0.2242 0.0003 -0.004)
+    warningContainer = Color(red = 0.2491f, green = 0.1757f, blue = 0.0796f, alpha = 1f), // oklab(0.3123 0.0144 0.0445)
+    onWarningContainer = Color(red = 0.9421f, green = 0.8785f, blue = 0.8032f, alpha = 1f), // oklab(0.9147 0.0096 0.0297)
+    info = Color(red = 0.6437f, green = 0.7864f, blue = 0.9995f, alpha = 1f), // oklab(0.8275 -0.0176 -0.0845)
+    onInfo = Color(red = 0.1054f, green = 0.1075f, blue = 0.1155f, alpha = 1f), // oklab(0.2242 0.0003 -0.004)
+    infoContainer = Color(red = 0.1131f, green = 0.1911f, blue = 0.3078f, alpha = 1f), // oklab(0.311 -0.0122 -0.0585)
+    onInfoContainer = Color(red = 0.8258f, green = 0.8935f, blue = 0.9944f, alpha = 1f), // oklab(0.9135 -0.0081 -0.039)
+    tintBlue = Color(red = 0.1079f, green = 0.1909f, blue = 0.3141f, alpha = 1f), // oklab(0.3111 -0.013 -0.0617)
+    onTintBlue = Color(red = 0.6429f, green = 0.7867f, blue = 0.9995f, alpha = 1f), // oklab(0.8275 -0.0179 -0.0845)
+    tintViolet = Color(red = 0.2155f, green = 0.1641f, blue = 0.3017f, alpha = 1f), // oklab(0.3163 0.0315 -0.0544)
+    onTintViolet = Color(red = 0.8229f, green = 0.7374f, blue = 0.988f, alpha = 1f), // oklab(0.8353 0.0455 -0.0786)
+    tintRose = Color(red = 0.3029f, green = 0.1394f, blue = 0.1638f, alpha = 1f), // oklab(0.3182 0.0617 0.013)
+    onTintRose = Color(red = 0.9997f, green = 0.6984f, blue = 0.7314f, alpha = 1f), // oklab(0.8388 0.0883 0.0187)
+    tintOrange = Color(red = 0.2649f, green = 0.1668f, blue = 0.1069f, alpha = 1f), // oklab(0.3139 0.0279 0.0355)
+    onTintOrange = Color(red = 0.9233f, green = 0.7408f, blue = 0.6341f, alpha = 1f), // oklab(0.8325 0.0403 0.0513)
+    tintAmber = Color(red = 0.2311f, green = 0.1826f, blue = 0.0927f, alpha = 1f), // oklab(0.3112 0.0058 0.0401)
+    onTintAmber = Color(red = 0.8555f, green = 0.7675f, blue = 0.6121f, alpha = 1f), // oklab(0.8284 0.0084 0.0579)
+    tintGreen = Color(red = 0.1048f, green = 0.2141f, blue = 0.0938f, alpha = 1f), // oklab(0.3041 -0.0495 0.0387)
+    onTintGreen = Color(red = 0.6362f, green = 0.8272f, blue = 0.6133f, alpha = 1f), // oklab(0.8182 -0.0715 0.0559)
+    channelOnAction = Color(red = 0.1054f, green = 0.1075f, blue = 0.1155f, alpha = 1f), // oklab(0.2242 0.0003 -0.004)
+    scrim = Color(red = 0f, green = 0f, blue = 0f, alpha = 0.64f), // oklab(0 0 0 / 0.64)
+    shadow = Color(red = 0f, green = 0f, blue = 0f, alpha = 1f), // oklab(0 0 0)
 )
 
-// ---- Channels
+// ---- Channels (text on action is SCColorScheme.channelOnAction)
 
 data class SCChannel(
     val name: String,
     val action: Color,
     val actionHover: Color,
     val actionPressed: Color,
-    val washStart: Color,
-    val washEnd: Color,
-    val ink: Color,
+    val container: Color,
+    val onContainer: Color,
     val subtle: Color,
-    val linkVisited: Color,
 )
 
 object SCLightChannels {
     val now = SCChannel(
         name = "now",
-        action = Color(red = 0.2119f, green = 0.3574f, blue = 0.9211f, alpha = 1f), // oklab(0.537 -0.011 -0.22)
-        actionHover = Color(red = 0.1885f, green = 0.3239f, blue = 0.8657f, alpha = 1f), // oklab(0.507 -0.0107 -0.2134)
-        actionPressed = Color(red = 0.1662f, green = 0.2906f, blue = 0.8108f, alpha = 1f), // oklab(0.477 -0.0103 -0.2068)
-        washStart = Color(red = 0.8943f, green = 0.9339f, blue = 1f, alpha = 1f), // oklab(0.947 -0.004 -0.025)
-        washEnd = Color(red = 0.8121f, green = 0.8657f, blue = 0.9841f, alpha = 1f), // oklab(0.896 -0.003 -0.044)
-        ink = Color(red = 0.1178f, green = 0.165f, blue = 0.3696f, alpha = 1f), // oklab(0.307 0.0004 -0.094)
-        subtle = Color(red = 0.8943f, green = 0.9339f, blue = 1f, alpha = 1f), // oklab(0.947 -0.004 -0.025)
-        linkVisited = Color(red = 0.1178f, green = 0.165f, blue = 0.3696f, alpha = 1f), // oklab(0.307 0.0004 -0.094)
+        action = Color(red = 0.1233f, green = 0.3591f, blue = 0.7131f, alpha = 1f), // oklab(0.4874 -0.03 -0.153)
+        actionHover = Color(red = 0.0883f, green = 0.3115f, blue = 0.6417f, alpha = 1f), // oklab(0.4444 -0.0285 -0.1454)
+        actionPressed = Color(red = 0.0522f, green = 0.265f, blue = 0.5715f, alpha = 1f), // oklab(0.4014 -0.027 -0.1377)
+        container = Color(red = 0.824f, green = 0.8932f, blue = 0.9998f, alpha = 1f), // oklab(0.9135 -0.008 -0.041)
+        onContainer = Color(red = 0.0522f, green = 0.265f, blue = 0.5715f, alpha = 1f), // oklab(0.4014 -0.027 -0.1377)
+        subtle = Color(red = 0.9119f, green = 0.9467f, blue = 0.9999f, alpha = 1f), // oklab(0.9567 -0.004 -0.0202)
     )
     val transport = SCChannel(
         name = "transport",
-        action = Color(red = 0.6499f, green = 0.2401f, blue = 0.0126f, alpha = 1f), // oklab(0.501 0.111 0.1)
-        actionHover = Color(red = 0.5982f, green = 0.2174f, blue = 0.0077f, alpha = 1f), // oklab(0.471 0.1047 0.0943)
-        actionPressed = Color(red = 0.5473f, green = 0.1951f, blue = 0.0037f, alpha = 1f), // oklab(0.441 0.0984 0.0886)
-        washStart = Color(red = 1f, green = 0.9143f, blue = 0.8528f, alpha = 1f), // oklab(0.948 0.017 0.027)
-        washEnd = Color(red = 1f, green = 0.8083f, blue = 0.7093f, alpha = 1f), // oklab(0.888 0.043 0.049)
-        ink = Color(red = 0.4163f, green = 0.18f, blue = 0.0545f, alpha = 1f), // oklab(0.379 0.068 0.068)
-        subtle = Color(red = 1f, green = 0.9143f, blue = 0.8528f, alpha = 1f), // oklab(0.948 0.017 0.027)
-        linkVisited = Color(red = 0.4163f, green = 0.18f, blue = 0.0545f, alpha = 1f), // oklab(0.379 0.068 0.068)
+        action = Color(red = 0.6462f, green = 0.2366f, blue = 0.0064f, alpha = 1f), // oklab(0.4982 0.111 0.1)
+        actionHover = Color(red = 0.5703f, green = 0.2034f, blue = 0.0004f, alpha = 1f), // oklab(0.4539 0.1017 0.0916)
+        actionPressed = Color(red = 0.4943f, green = 0.1724f, blue = 0.0012f, alpha = 1f), // oklab(0.4094 0.0916 0.0825)
+        container = Color(red = 0.9999f, green = 0.8585f, blue = 0.8044f, alpha = 1f), // oklab(0.9177 0.033 0.0298)
+        onContainer = Color(red = 0.4943f, green = 0.1724f, blue = 0.0012f, alpha = 1f), // oklab(0.4094 0.0916 0.0825)
+        subtle = Color(red = 1f, green = 0.9299f, blue = 0.9033f, alpha = 1f), // oklab(0.9588 0.016 0.0144)
     )
     val visit = SCChannel(
         name = "visit",
-        action = Color(red = 0.6903f, green = 0.1318f, blue = 0.3102f, alpha = 1f), // oklab(0.501 0.176 0.026)
-        actionHover = Color(red = 0.6421f, green = 0.0987f, blue = 0.2807f, alpha = 1f), // oklab(0.471 0.1707 0.0252)
-        actionPressed = Color(red = 0.5946f, green = 0.0615f, blue = 0.2517f, alpha = 1f), // oklab(0.441 0.1654 0.0244)
-        washStart = Color(red = 0.9831f, green = 0.9018f, blue = 0.8952f, alpha = 1f), // oklab(0.941 0.021 0.009)
-        washEnd = Color(red = 0.9564f, green = 0.7964f, blue = 0.7761f, alpha = 1f), // oklab(0.876 0.042 0.021)
-        ink = Color(red = 0.369f, green = 0.1212f, blue = 0.1562f, alpha = 1f), // oklab(0.339 0.089 0.024)
-        subtle = Color(red = 0.9831f, green = 0.9018f, blue = 0.8952f, alpha = 1f), // oklab(0.941 0.021 0.009)
-        linkVisited = Color(red = 0.369f, green = 0.1212f, blue = 0.1562f, alpha = 1f), // oklab(0.339 0.089 0.024)
+        action = Color(red = 0.64f, green = 0.2017f, blue = 0.4157f, alpha = 1f), // oklab(0.5033 0.155 -0.016)
+        actionHover = Color(red = 0.5722f, green = 0.1618f, blue = 0.3656f, alpha = 1f), // oklab(0.4592 0.1472 -0.0152)
+        actionPressed = Color(red = 0.5058f, green = 0.1217f, blue = 0.3166f, alpha = 1f), // oklab(0.4151 0.1395 -0.0144)
+        container = Color(red = 0.9999f, green = 0.8487f, blue = 0.9039f, alpha = 1f), // oklab(0.9198 0.0462 -0.0048)
+        onContainer = Color(red = 0.5058f, green = 0.1217f, blue = 0.3166f, alpha = 1f), // oklab(0.4151 0.1395 -0.0144)
+        subtle = Color(red = 0.9999f, green = 0.925f, blue = 0.9514f, alpha = 1f), // oklab(0.9598 0.0223 -0.0023)
     )
     val justice = SCChannel(
         name = "justice",
-        action = Color(red = 0.3995f, green = 0.2505f, blue = 0.7841f, alpha = 1f), // oklab(0.495 0.068 -0.187)
-        actionHover = Color(red = 0.367f, green = 0.2191f, blue = 0.7327f, alpha = 1f), // oklab(0.465 0.066 -0.1814)
-        actionPressed = Color(red = 0.3349f, green = 0.1878f, blue = 0.682f, alpha = 1f), // oklab(0.435 0.0639 -0.1758)
-        washStart = Color(red = 0.9368f, green = 0.9064f, blue = 0.9809f, alpha = 1f), // oklab(0.94 0.015 -0.022)
-        washEnd = Color(red = 0.8631f, green = 0.8113f, blue = 0.9519f, alpha = 1f), // oklab(0.876 0.027 -0.043)
-        ink = Color(red = 0.2343f, green = 0.1651f, blue = 0.3988f, alpha = 1f), // oklab(0.339 0.041 -0.092)
-        subtle = Color(red = 0.9368f, green = 0.9064f, blue = 0.9809f, alpha = 1f), // oklab(0.94 0.015 -0.022)
-        linkVisited = Color(red = 0.2343f, green = 0.1651f, blue = 0.3988f, alpha = 1f), // oklab(0.339 0.041 -0.092)
+        action = Color(red = 0.4199f, green = 0.3093f, blue = 0.6282f, alpha = 1f), // oklab(0.4951 0.059 -0.113)
+        actionHover = Color(red = 0.37f, green = 0.2657f, blue = 0.5628f, alpha = 1f), // oklab(0.4516 0.056 -0.1074)
+        actionPressed = Color(red = 0.3213f, green = 0.2229f, blue = 0.4984f, alpha = 1f), // oklab(0.408 0.0531 -0.1017)
+        container = Color(red = 0.9014f, green = 0.873f, blue = 0.9821f, alpha = 1f), // oklab(0.9166 0.0177 -0.0339)
+        onContainer = Color(red = 0.3213f, green = 0.2229f, blue = 0.4984f, alpha = 1f), // oklab(0.408 0.0531 -0.1017)
+        subtle = Color(red = 0.9502f, green = 0.9364f, blue = 0.9918f, alpha = 1f), // oklab(0.9583 0.0088 -0.017)
     )
     val build = SCChannel(
         name = "build",
-        action = Color(red = 0.541f, green = 0.3255f, blue = 0.0053f, alpha = 1f), // oklab(0.494 0.043 0.1)
-        actionHover = Color(red = 0.4952f, green = 0.2973f, blue = 0.0104f, alpha = 1f), // oklab(0.464 0.0401 0.0933)
-        actionPressed = Color(red = 0.4504f, green = 0.2695f, blue = 0.0132f, alpha = 1f), // oklab(0.434 0.0373 0.0867)
-        washStart = Color(red = 1f, green = 0.9414f, blue = 0.8629f, alpha = 1f), // oklab(0.962 0.008 0.03)
-        washEnd = Color(red = 0.983f, green = 0.8668f, blue = 0.7218f, alpha = 1f), // oklab(0.913 0.017 0.056)
-        ink = Color(red = 0.3528f, green = 0.2274f, blue = 0.0716f, alpha = 1f), // oklab(0.378 0.026 0.065)
-        subtle = Color(red = 1f, green = 0.9414f, blue = 0.8629f, alpha = 1f), // oklab(0.962 0.008 0.03)
-        linkVisited = Color(red = 0.3528f, green = 0.2274f, blue = 0.0716f, alpha = 1f), // oklab(0.378 0.026 0.065)
+        action = Color(red = 0.4771f, green = 0.3489f, blue = 0.0002f, alpha = 1f), // oklab(0.4851 0.011 0.099)
+        actionHover = Color(red = 0.4183f, green = 0.3044f, blue = 0.0015f, alpha = 1f), // oklab(0.4418 0.01 0.09)
+        actionPressed = Color(red = 0.361f, green = 0.2608f, blue = 0.0001f, alpha = 1f), // oklab(0.3984 0.009 0.0813)
+        container = Color(red = 0.9999f, green = 0.8728f, blue = 0.6252f, alpha = 1f), // oklab(0.9149 0.0097 0.0871)
+        onContainer = Color(red = 0.361f, green = 0.2608f, blue = 0.0001f, alpha = 1f), // oklab(0.3984 0.009 0.0813)
+        subtle = Color(red = 0.9915f, green = 0.9386f, blue = 0.8375f, alpha = 1f), // oklab(0.9571 0.0041 0.0366)
     )
     val invest = SCChannel(
         name = "invest",
-        action = Color(red = 0.1505f, green = 0.4748f, blue = 0.2683f, alpha = 1f), // oklab(0.513 -0.101 0.054)
-        actionHover = Color(red = 0.1214f, green = 0.4381f, blue = 0.2404f, alpha = 1f), // oklab(0.483 -0.098 0.0524)
-        actionPressed = Color(red = 0.0918f, green = 0.4018f, blue = 0.2129f, alpha = 1f), // oklab(0.453 -0.0949 0.0508)
-        washStart = Color(red = 0.8899f, green = 0.959f, blue = 0.9054f, alpha = 1f), // oklab(0.952 -0.023 0.012)
-        washEnd = Color(red = 0.7833f, green = 0.9029f, blue = 0.8109f, alpha = 1f), // oklab(0.897 -0.04 0.021)
-        ink = Color(red = 0.1305f, green = 0.2864f, blue = 0.1782f, alpha = 1f), // oklab(0.368 -0.058 0.031)
-        subtle = Color(red = 0.8899f, green = 0.959f, blue = 0.9054f, alpha = 1f), // oklab(0.952 -0.023 0.012)
-        linkVisited = Color(red = 0.1305f, green = 0.2864f, blue = 0.1782f, alpha = 1f), // oklab(0.368 -0.058 0.031)
+        action = Color(red = 0.1827f, green = 0.4195f, blue = 0.153f, alpha = 1f), // oklab(0.4713 -0.093 0.074)
+        actionHover = Color(red = 0.1461f, green = 0.3686f, blue = 0.1179f, alpha = 1f), // oklab(0.4288 -0.0883 0.0703)
+        actionPressed = Color(red = 0.1094f, green = 0.319f, blue = 0.083f, alpha = 1f), // oklab(0.3864 -0.0837 0.0666)
+        container = Color(red = 0.7627f, green = 0.9333f, blue = 0.7376f, alpha = 1f), // oklab(0.9055 -0.0632 0.0503)
+        onContainer = Color(red = 0.1094f, green = 0.319f, blue = 0.083f, alpha = 1f), // oklab(0.3864 -0.0837 0.0666)
+        subtle = Color(red = 0.8858f, green = 0.9663f, blue = 0.8735f, alpha = 1f), // oklab(0.9529 -0.0298 0.0237)
     )
     val trade = SCChannel(
         name = "trade",
-        action = Color(red = 0.2383f, green = 0.3333f, blue = 0.4269f, alpha = 1f), // oklab(0.44 -0.018 -0.046)
-        actionHover = Color(red = 0.2098f, green = 0.3008f, blue = 0.3899f, alpha = 1f), // oklab(0.41 -0.0175 -0.0446)
-        actionPressed = Color(red = 0.1821f, green = 0.2687f, blue = 0.3535f, alpha = 1f), // oklab(0.38 -0.0169 -0.0432)
-        washStart = Color(red = 0.9167f, green = 0.9457f, blue = 0.9723f, alpha = 1f), // oklab(0.955 -0.005 -0.011)
-        washEnd = Color(red = 0.8367f, green = 0.8825f, blue = 0.9346f, alpha = 1f), // oklab(0.905 -0.007 -0.021)
-        ink = Color(red = 0.1363f, green = 0.2043f, blue = 0.2905f, alpha = 1f), // oklab(0.321 -0.012 -0.044)
-        subtle = Color(red = 0.9167f, green = 0.9457f, blue = 0.9723f, alpha = 1f), // oklab(0.955 -0.005 -0.011)
-        linkVisited = Color(red = 0.1363f, green = 0.2043f, blue = 0.2905f, alpha = 1f), // oklab(0.321 -0.012 -0.044)
+        action = Color(red = 0.2416f, green = 0.3315f, blue = 0.4203f, alpha = 1f), // oklab(0.4386 -0.0171 -0.0437)
+        actionHover = Color(red = 0.2017f, green = 0.285f, blue = 0.367f, alpha = 1f), // oklab(0.3956 -0.0162 -0.0414)
+        actionPressed = Color(red = 0.1764f, green = 0.2388f, blue = 0.3007f, alpha = 1f), // oklab(0.3526 -0.0126 -0.0322)
+        container = Color(red = 0.8425f, green = 0.8943f, blue = 0.947f, alpha = 1f), // oklab(0.9131 -0.0085 -0.0216)
+        onContainer = Color(red = 0.2017f, green = 0.285f, blue = 0.367f, alpha = 1f), // oklab(0.3956 -0.0162 -0.0414)
+        subtle = Color(red = 0.9205f, green = 0.947f, blue = 0.9742f, alpha = 1f), // oklab(0.9565 -0.0043 -0.011)
     )
     val all = listOf(now, transport, visit, justice, build, invest, trade)
 }
@@ -190,85 +264,71 @@ object SCLightChannels {
 object SCDarkChannels {
     val now = SCChannel(
         name = "now",
-        action = Color(red = 0.6753f, green = 0.7444f, blue = 0.9989f, alpha = 1f), // oklab(0.811 0.004 -0.094)
-        actionHover = Color(red = 0.6136f, green = 0.7134f, blue = 0.9586f, alpha = 1f), // oklab(0.78 -0.0047 -0.094)
-        actionPressed = Color(red = 0.5776f, green = 0.676f, blue = 0.9189f, alpha = 1f), // oklab(0.75 -0.0047 -0.094)
-        washStart = Color(red = 0.1486f, green = 0.1778f, blue = 0.2498f, alpha = 1f), // oklab(0.3 -0.0017 -0.035)
-        washEnd = Color(red = 0.1931f, green = 0.2319f, blue = 0.3282f, alpha = 1f), // oklab(0.355 -0.0022 -0.0449)
-        ink = Color(red = 0.8738f, green = 0.9091f, blue = 0.9912f, alpha = 1f), // oklab(0.93 -0.0015 -0.03)
-        subtle = Color(red = 0.1486f, green = 0.1778f, blue = 0.2498f, alpha = 1f), // oklab(0.3 -0.0017 -0.035)
-        linkVisited = Color(red = 0.8738f, green = 0.9091f, blue = 0.9912f, alpha = 1f), // oklab(0.93 -0.0015 -0.03)
+        action = Color(red = 0.6468f, green = 0.7857f, blue = 0.9995f, alpha = 1f), // oklab(0.8276 -0.0166 -0.0845)
+        actionHover = Color(red = 0.5576f, green = 0.7311f, blue = 0.9995f, alpha = 1f), // oklab(0.785 -0.021 -0.1072)
+        actionPressed = Color(red = 0.4676f, green = 0.6756f, blue = 0.9984f, alpha = 1f), // oklab(0.7427 -0.0255 -0.13)
+        container = Color(red = 0.0522f, green = 0.265f, blue = 0.5715f, alpha = 1f), // oklab(0.4014 -0.027 -0.1377)
+        onContainer = Color(red = 0.824f, green = 0.8932f, blue = 0.9998f, alpha = 1f), // oklab(0.9135 -0.008 -0.041)
+        subtle = Color(red = 0.1f, green = 0.1895f, blue = 0.3284f, alpha = 1f), // oklab(0.3115 -0.0135 -0.0689)
     )
     val transport = SCChannel(
         name = "transport",
-        action = Color(red = 0.9998f, green = 0.7028f, blue = 0.5419f, alpha = 1f), // oklab(0.83 0.068 0.079)
-        actionHover = Color(red = 0.9425f, green = 0.6314f, blue = 0.5103f, alpha = 1f), // oklab(0.78 0.0774 0.0698)
-        actionPressed = Color(red = 0.9025f, green = 0.5945f, blue = 0.4745f, alpha = 1f), // oklab(0.75 0.0774 0.0698)
-        washStart = Color(red = 0.2393f, green = 0.1568f, blue = 0.1249f, alpha = 1f), // oklab(0.3 0.026 0.0234)
-        washEnd = Color(red = 0.314f, green = 0.2036f, blue = 0.1608f, alpha = 1f), // oklab(0.355 0.0334 0.0301)
-        ink = Color(red = 0.9825f, green = 0.8859f, blue = 0.8492f, alpha = 1f), // oklab(0.93 0.0223 0.0201)
-        subtle = Color(red = 0.2393f, green = 0.1568f, blue = 0.1249f, alpha = 1f), // oklab(0.3 0.026 0.0234)
-        linkVisited = Color(red = 0.9825f, green = 0.8859f, blue = 0.8492f, alpha = 1f), // oklab(0.93 0.0223 0.0201)
+        action = Color(red = 1f, green = 0.7107f, blue = 0.5985f, alpha = 1f), // oklab(0.8364 0.0705 0.0636)
+        actionHover = Color(red = 0.9779f, green = 0.6421f, blue = 0.5113f, alpha = 1f), // oklab(0.7951 0.0832 0.075)
+        actionPressed = Color(red = 0.9498f, green = 0.5748f, blue = 0.4273f, alpha = 1f), // oklab(0.7536 0.0943 0.085)
+        container = Color(red = 0.4943f, green = 0.1724f, blue = 0.0012f, alpha = 1f), // oklab(0.4094 0.0916 0.0825)
+        onContainer = Color(red = 0.9999f, green = 0.8585f, blue = 0.8044f, alpha = 1f), // oklab(0.9177 0.033 0.0298)
+        subtle = Color(red = 0.3054f, green = 0.1451f, blue = 0.0802f, alpha = 1f), // oklab(0.317 0.0499 0.045)
     )
     val visit = SCChannel(
         name = "visit",
-        action = Color(red = 0.9558f, green = 0.6634f, blue = 0.7115f, alpha = 1f), // oklab(0.81 0.088 0.013)
-        actionHover = Color(red = 0.9158f, green = 0.6265f, blue = 0.6746f, alpha = 1f), // oklab(0.78 0.088 0.013)
-        actionPressed = Color(red = 0.876f, green = 0.5899f, blue = 0.638f, alpha = 1f), // oklab(0.75 0.088 0.013)
-        washStart = Color(red = 0.2402f, green = 0.1507f, blue = 0.1657f, alpha = 1f), // oklab(0.3 0.0346 0.0051)
-        washEnd = Color(red = 0.3152f, green = 0.1954f, blue = 0.2158f, alpha = 1f), // oklab(0.355 0.0445 0.0066)
-        ink = Color(red = 0.9845f, green = 0.8788f, blue = 0.8931f, alpha = 1f), // oklab(0.93 0.0297 0.0044)
-        subtle = Color(red = 0.2402f, green = 0.1507f, blue = 0.1657f, alpha = 1f), // oklab(0.3 0.0346 0.0051)
-        linkVisited = Color(red = 0.9845f, green = 0.8788f, blue = 0.8931f, alpha = 1f), // oklab(0.93 0.0297 0.0044)
+        action = Color(red = 0.9997f, green = 0.689f, blue = 0.8115f, alpha = 1f), // oklab(0.8405 0.0993 -0.0102)
+        actionHover = Color(red = 0.9752f, green = 0.6175f, blue = 0.763f, alpha = 1f), // oklab(0.7996 0.1163 -0.012)
+        actionPressed = Color(red = 0.9463f, green = 0.5471f, blue = 0.7145f, alpha = 1f), // oklab(0.7586 0.1318 -0.0136)
+        container = Color(red = 0.5058f, green = 0.1217f, blue = 0.3166f, alpha = 1f), // oklab(0.4151 0.1395 -0.0144)
+        onContainer = Color(red = 0.9999f, green = 0.8487f, blue = 0.9039f, alpha = 1f), // oklab(0.9198 0.0462 -0.0048)
+        subtle = Color(red = 0.3036f, green = 0.1328f, blue = 0.208f, alpha = 1f), // oklab(0.3195 0.0698 -0.0072)
     )
     val justice = SCChannel(
         name = "justice",
-        action = Color(red = 0.7511f, green = 0.7147f, blue = 0.993f, alpha = 1f), // oklab(0.81 0.034 -0.0935)
-        actionHover = Color(red = 0.714f, green = 0.6773f, blue = 0.9531f, alpha = 1f), // oklab(0.78 0.034 -0.0935)
-        actionPressed = Color(red = 0.6773f, green = 0.6403f, blue = 0.9135f, alpha = 1f), // oklab(0.75 0.034 -0.0935)
-        washStart = Color(red = 0.178f, green = 0.1681f, blue = 0.2445f, alpha = 1f), // oklab(0.3 0.012 -0.0329)
-        washEnd = Color(red = 0.2325f, green = 0.2189f, blue = 0.3213f, alpha = 1f), // oklab(0.355 0.0154 -0.0423)
-        ink = Color(red = 0.9059f, green = 0.8978f, blue = 0.9851f, alpha = 1f), // oklab(0.93 0.0103 -0.0282)
-        subtle = Color(red = 0.178f, green = 0.1681f, blue = 0.2445f, alpha = 1f), // oklab(0.3 0.012 -0.0329)
-        linkVisited = Color(red = 0.9059f, green = 0.8978f, blue = 0.9851f, alpha = 1f), // oklab(0.93 0.0103 -0.0282)
+        action = Color(red = 0.8091f, green = 0.744f, blue = 0.9744f, alpha = 1f), // oklab(0.8342 0.0383 -0.0735)
+        actionHover = Color(red = 0.7605f, green = 0.6841f, blue = 0.9467f, alpha = 1f), // oklab(0.7923 0.0442 -0.0848)
+        actionPressed = Color(red = 0.7128f, green = 0.6244f, blue = 0.9187f, alpha = 1f), // oklab(0.7505 0.0501 -0.0961)
+        container = Color(red = 0.3213f, green = 0.2229f, blue = 0.4984f, alpha = 1f), // oklab(0.408 0.0531 -0.1017)
+        onContainer = Color(red = 0.9014f, green = 0.873f, blue = 0.9821f, alpha = 1f), // oklab(0.9166 0.0177 -0.0339)
+        subtle = Color(red = 0.208f, green = 0.1683f, blue = 0.2944f, alpha = 1f), // oklab(0.3154 0.0265 -0.0509)
     )
     val build = SCChannel(
         name = "build",
-        action = Color(red = 0.853f, green = 0.7323f, blue = 0.6123f, alpha = 1f), // oklab(0.81 0.0215 0.05)
-        actionHover = Color(red = 0.8146f, green = 0.695f, blue = 0.576f, alpha = 1f), // oklab(0.78 0.0215 0.05)
-        actionPressed = Color(red = 0.7765f, green = 0.6581f, blue = 0.5401f, alpha = 1f), // oklab(0.75 0.0215 0.05)
-        washStart = Color(red = 0.2267f, green = 0.1662f, blue = 0.1036f, alpha = 1f), // oklab(0.3 0.0138 0.0322)
-        washEnd = Color(red = 0.2974f, green = 0.2162f, blue = 0.1316f, alpha = 1f), // oklab(0.355 0.0178 0.0413)
-        ink = Color(red = 0.9655f, green = 0.8961f, blue = 0.8286f, alpha = 1f), // oklab(0.93 0.0119 0.0276)
-        subtle = Color(red = 0.2267f, green = 0.1662f, blue = 0.1036f, alpha = 1f), // oklab(0.3 0.0138 0.0322)
-        linkVisited = Color(red = 0.9655f, green = 0.8961f, blue = 0.8286f, alpha = 1f), // oklab(0.93 0.0119 0.0276)
+        action = Color(red = 0.9531f, green = 0.7475f, blue = 0.2998f, alpha = 1f), // oklab(0.8304 0.0156 0.1406)
+        actionHover = Color(red = 0.8703f, green = 0.7001f, blue = 0.3458f, alpha = 1f), // oklab(0.7866 0.0132 0.1188)
+        actionPressed = Color(red = 0.7737f, green = 0.6562f, blue = 0.4243f, alpha = 1f), // oklab(0.7426 0.0094 0.0842)
+        container = Color(red = 0.361f, green = 0.2608f, blue = 0.0001f, alpha = 1f), // oklab(0.3984 0.009 0.0813)
+        onContainer = Color(red = 0.9999f, green = 0.8728f, blue = 0.6252f, alpha = 1f), // oklab(0.9149 0.0097 0.0871)
+        subtle = Color(red = 0.2331f, green = 0.1824f, blue = 0.0787f, alpha = 1f), // oklab(0.3111 0.005 0.0446)
     )
     val invest = SCChannel(
         name = "invest",
-        action = Color(red = 0.652f, green = 0.8004f, blue = 0.686f, alpha = 1f), // oklab(0.81 -0.0505 0.027)
-        actionHover = Color(red = 0.6153f, green = 0.7625f, blue = 0.6492f, alpha = 1f), // oklab(0.78 -0.0505 0.027)
-        actionPressed = Color(red = 0.5789f, green = 0.725f, blue = 0.6128f, alpha = 1f), // oklab(0.75 -0.0505 0.027)
-        washStart = Color(red = 0.1265f, green = 0.1999f, blue = 0.1453f, alpha = 1f), // oklab(0.3 -0.0309 0.0165)
-        washEnd = Color(red = 0.1623f, green = 0.2615f, blue = 0.1885f, alpha = 1f), // oklab(0.355 -0.0397 0.0212)
-        ink = Color(red = 0.8545f, green = 0.9335f, blue = 0.8714f, alpha = 1f), // oklab(0.93 -0.0265 0.0141)
-        subtle = Color(red = 0.1265f, green = 0.1999f, blue = 0.1453f, alpha = 1f), // oklab(0.3 -0.0309 0.0165)
-        linkVisited = Color(red = 0.8545f, green = 0.9335f, blue = 0.8714f, alpha = 1f), // oklab(0.93 -0.0265 0.0141)
+        action = Color(red = 0.5684f, green = 0.8455f, blue = 0.5305f, alpha = 1f), // oklab(0.8145 -0.1023 0.0814)
+        actionHover = Color(red = 0.5266f, green = 0.7876f, blue = 0.4908f, alpha = 1f), // oklab(0.772 -0.0976 0.0777)
+        actionPressed = Color(red = 0.5168f, green = 0.7227f, blue = 0.4878f, alpha = 1f), // oklab(0.7312 -0.079 0.0629)
+        container = Color(red = 0.1094f, green = 0.319f, blue = 0.083f, alpha = 1f), // oklab(0.3864 -0.0837 0.0666)
+        onContainer = Color(red = 0.7627f, green = 0.9333f, blue = 0.7376f, alpha = 1f), // oklab(0.9055 -0.0632 0.0503)
+        subtle = Color(red = 0.1214f, green = 0.2107f, blue = 0.1093f, alpha = 1f), // oklab(0.305 -0.0418 0.0333)
     )
     val trade = SCChannel(
         name = "trade",
-        action = Color(red = 0.6354f, green = 0.7287f, blue = 0.8308f, alpha = 1f), // oklab(0.779 -0.015 -0.043)
-        actionHover = Color(red = 0.6328f, green = 0.7314f, blue = 0.8307f, alpha = 1f), // oklab(0.78 -0.0166 -0.0424)
-        actionPressed = Color(red = 0.5965f, green = 0.6942f, blue = 0.7925f, alpha = 1f), // oklab(0.75 -0.0166 -0.0424)
-        washStart = Color(red = 0.1242f, green = 0.1858f, blue = 0.246f, alpha = 1f), // oklab(0.3 -0.0128 -0.0326)
-        washEnd = Color(red = 0.1596f, green = 0.2425f, blue = 0.3234f, alpha = 1f), // oklab(0.355 -0.0164 -0.0419)
-        ink = Color(red = 0.8511f, green = 0.9182f, blue = 0.9866f, alpha = 1f), // oklab(0.93 -0.0109 -0.0279)
-        subtle = Color(red = 0.1242f, green = 0.1858f, blue = 0.246f, alpha = 1f), // oklab(0.3 -0.0128 -0.0326)
-        linkVisited = Color(red = 0.8511f, green = 0.9182f, blue = 0.9866f, alpha = 1f), // oklab(0.93 -0.0109 -0.0279)
+        action = Color(red = 0.688f, green = 0.7897f, blue = 0.8924f, alpha = 1f), // oklab(0.8263 -0.0169 -0.0432)
+        actionHover = Color(red = 0.634f, green = 0.7357f, blue = 0.8382f, alpha = 1f), // oklab(0.7832 -0.0171 -0.0437)
+        actionPressed = Color(red = 0.5917f, green = 0.6813f, blue = 0.7717f, alpha = 1f), // oklab(0.7402 -0.0153 -0.0391)
+        container = Color(red = 0.2017f, green = 0.285f, blue = 0.367f, alpha = 1f), // oklab(0.3956 -0.0162 -0.0414)
+        onContainer = Color(red = 0.8425f, green = 0.8943f, blue = 0.947f, alpha = 1f), // oklab(0.9131 -0.0085 -0.0216)
+        subtle = Color(red = 0.1553f, green = 0.1937f, blue = 0.2322f, alpha = 1f), // oklab(0.3098 -0.0081 -0.0207)
     )
     val all = listOf(now, transport, visit, justice, build, invest, trade)
 }
 
-// ---- Space, radius, size
+// ---- Space, radius, size, opacity
 
 object SCSpace {
     val s0 = 0.dp
@@ -291,345 +351,290 @@ object SCSpace {
 }
 
 object SCRadius {
-    val xs = 6.dp
-    val s = 10.dp
-    val field = 14.dp // Inputs and selects
-    val card = 20.dp // Cards and list groups
-    val panel = 24.dp // Large panels, hero cards
-    val sheet = 28.dp // Bottom sheets, dialogs
-    val control = 22.dp // 44px glass controls
-    val pill = 999.dp // Buttons, chips, search
+    val none = 0.dp // Tables, full-bleed bands
+    val control = 4.dp // Buttons, checkboxes, segmented controls, tags
+    val chip = 6.dp // Status chips
+    val field = 8.dp // Text inputs, selects, textareas, callouts
+    val card = 12.dp // Cards, list groups, panels, dialogs, sheets
+    val full = 9999.dp // Circular marks and suggestion chips only
 }
 
 object SCSize {
-    val targetMin = 44.dp // Minimum interactive target
-    val controlM = 44.dp
-    val controlL = 54.dp // Primary buttons and fields
-    val iconS = 16.dp
-    val iconM = 20.dp
-    val iconL = 24.dp
-    val progress = 8.dp // Step progress track
-    val measure = 680.dp // Max width of running text
-    val focusRing = 3.dp
-    val focusOffset = 2.dp
-    val borderHairline = 1.dp // Dividers
-    val borderControl = 1.5.dp // Field and control boundaries
-    val borderStrong = 2.dp // Selected and error boundaries
-    val borderAccent = 3.dp // Error bar on the start side of a field
+    val targetMin = 44.dp // Minimum interactive target, every control
+    val controlPrimary = 56.dp // Primary buttons and text fields
+    val controlSecondary = 48.dp // Secondary and compact buttons, compact fields, selects in tables
+    val chip = 32.dp // Visual height of chips; the target is extended to 44px
+    val stepperMarker = 28.dp // Stepper step marker
+    val iconS = 16.dp // Icons in chips and inline with small text
+    val iconM = 20.dp // Icons inline with body text and in fields
+    val iconL = 24.dp // Standalone icons and icons in buttons
+    val focusRing = 3.dp // Focus ring width
+    val focusOffset = 2.dp // Gap between the control and the focus ring
+    val borderHairline = 1.dp // Dividers and card edges
+    val borderControl = 1.5.dp // Control boundaries
+    val borderStrong = 2.dp // Error and selected boundaries, stepper connectors
+    val borderAccent = 3.dp // Bar on the start side of an error field group or callout
+    val strip = 4.dp // The network and channel strip at the top of the header
+    val measure = 680.dp // Maximum width of running text
+}
+
+object SCOpacity {
+    const val hover = 0.08f // Hover state layer on quiet controls (outlined and text buttons, rows, chips)
+    const val pressed = 0.12f // Pressed state layer on quiet controls
 }
 
 // ---- Typography
 
 // Placeholder. Wire the Dubai W23 files in res/font, for example:
 // val DubaiFontFamily = FontFamily(
-//     Font(R.font.dubai_w23_light, FontWeight.Light),
 //     Font(R.font.dubai_w23_regular, FontWeight.Normal),
 //     Font(R.font.dubai_w23_medium, FontWeight.Medium),
 //     Font(R.font.dubai_w23_bold, FontWeight.Bold),
 // )
 val DubaiFontFamily: FontFamily = FontFamily.Default
 
-object SCTypeLatin {
-    // Home hero
-    val displayXl = TextStyle(
+object SCTypeEn {
+    // Home hero, from the expanded breakpoint
+    val displayLarge = TextStyle(
         fontFamily = DubaiFontFamily,
         fontWeight = FontWeight(700),
         fontSize = 80.sp,
-        lineHeight = 82.sp,
+        lineHeight = 84.sp,
         letterSpacing = (-0.02).em,
     )
-    val displayL = TextStyle(
+    // Channel hero, from the expanded breakpoint
+    val displayMedium = TextStyle(
         fontFamily = DubaiFontFamily,
         fontWeight = FontWeight(700),
-        fontSize = 48.sp,
-        lineHeight = 50.sp,
+        fontSize = 57.sp,
+        lineHeight = 62.sp,
         letterSpacing = (-0.015).em,
     )
-    val headingXl = TextStyle(
+    // Heroes on compact and medium; page heading on wide marketing pages
+    val displaySmall = TextStyle(
         fontFamily = DubaiFontFamily,
         fontWeight = FontWeight(700),
-        fontSize = 34.sp,
+        fontSize = 45.sp,
+        lineHeight = 50.sp,
+        letterSpacing = (-0.01).em,
+    )
+    // Page heading (h1)
+    val headlineLarge = TextStyle(
+        fontFamily = DubaiFontFamily,
+        fontWeight = FontWeight(700),
+        fontSize = 32.sp,
         lineHeight = 38.sp,
-        letterSpacing = (-0.01).em,
+        letterSpacing = 0.em,
     )
-    val headingL = TextStyle(
+    // Section heading (h2)
+    val headlineMedium = TextStyle(
         fontFamily = DubaiFontFamily,
         fontWeight = FontWeight(700),
-        fontSize = 30.sp,
+        fontSize = 28.sp,
         lineHeight = 34.sp,
-        letterSpacing = (-0.01).em,
+        letterSpacing = 0.em,
     )
-    val headingM = TextStyle(
+    // Subsection heading (h3); totals and amounts
+    val headlineSmall = TextStyle(
         fontFamily = DubaiFontFamily,
         fontWeight = FontWeight(700),
         fontSize = 24.sp,
-        lineHeight = 28.sp,
+        lineHeight = 30.sp,
         letterSpacing = 0.em,
     )
-    val titleL = TextStyle(
+    // Card and panel titles
+    val titleLarge = TextStyle(
         fontFamily = DubaiFontFamily,
         fontWeight = FontWeight(700),
         fontSize = 22.sp,
-        lineHeight = 27.sp,
+        lineHeight = 28.sp,
         letterSpacing = 0.em,
     )
-    val titleM = TextStyle(
+    // Row titles, legend of a question group, emphasised values
+    val titleMedium = TextStyle(
         fontFamily = DubaiFontFamily,
         fontWeight = FontWeight(700),
-        fontSize = 20.sp,
+        fontSize = 18.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.em,
     )
-    // Buttons, links, row titles
-    val titleS = TextStyle(
-        fontFamily = DubaiFontFamily,
-        fontWeight = FontWeight(500),
-        fontSize = 17.sp,
-        lineHeight = 21.sp,
-        letterSpacing = 0.em,
-    )
-    val bodyL = TextStyle(
-        fontFamily = DubaiFontFamily,
-        fontWeight = FontWeight(400),
-        fontSize = 19.sp,
-        lineHeight = 27.sp,
-        letterSpacing = 0.em,
-    )
-    val bodyM = TextStyle(
-        fontFamily = DubaiFontFamily,
-        fontWeight = FontWeight(400),
-        fontSize = 17.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.em,
-    )
-    val bodyS = TextStyle(
-        fontFamily = DubaiFontFamily,
-        fontWeight = FontWeight(400),
-        fontSize = 15.sp,
-        lineHeight = 21.sp,
-        letterSpacing = 0.em,
-    )
-    val labelM = TextStyle(
-        fontFamily = DubaiFontFamily,
-        fontWeight = FontWeight(500),
-        fontSize = 15.sp,
-        lineHeight = 19.sp,
-        letterSpacing = 0.em,
-    )
-    // Tags and chips
-    val labelS = TextStyle(
-        fontFamily = DubaiFontFamily,
-        fontWeight = FontWeight(500),
-        fontSize = 14.sp,
-        lineHeight = 17.sp,
-        letterSpacing = 0.em,
-    )
-    // +1px from D+ (13/16)
-    val eyebrow = TextStyle(
-        fontFamily = DubaiFontFamily,
-        fontWeight = FontWeight(500),
-        fontSize = 14.sp,
-        lineHeight = 17.sp,
-        letterSpacing = 0.em,
-    )
-    // +1px from D+ (13/18)
-    val caption = TextStyle(
-        fontFamily = DubaiFontFamily,
-        fontWeight = FontWeight(400),
-        fontSize = 14.sp,
-        lineHeight = 19.sp,
-        letterSpacing = 0.em,
-    )
-    // +1px from D+ (12/15); smallest allowed
-    val captionS = TextStyle(
-        fontFamily = DubaiFontFamily,
-        fontWeight = FontWeight(400),
-        fontSize = 13.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.em,
-    )
-    // Answers in summary lists
-    val value = TextStyle(
+    // Navigation items, back link, summary-list values, step names
+    val titleSmall = TextStyle(
         fontFamily = DubaiFontFamily,
         fontWeight = FontWeight(500),
         fontSize = 17.sp,
         lineHeight = 22.sp,
         letterSpacing = 0.em,
     )
-    // Field hints
-    val hint = TextStyle(
+    // Body text: the default for running text
+    val bodyLarge = TextStyle(
         fontFamily = DubaiFontFamily,
         fontWeight = FontWeight(400),
-        fontSize = 15.sp,
-        lineHeight = 21.sp,
+        fontSize = 18.sp,
+        lineHeight = 26.sp,
         letterSpacing = 0.em,
     )
-    // Field error messages
-    val error = TextStyle(
+    // Hints, secondary text, table cells
+    val bodyMedium = TextStyle(
         fontFamily = DubaiFontFamily,
-        fontWeight = FontWeight(500),
-        fontSize = 15.sp,
-        lineHeight = 21.sp,
+        fontWeight = FontWeight(400),
+        fontSize = 16.sp,
+        lineHeight = 24.sp,
         letterSpacing = 0.em,
     )
-    // Amounts
-    val numeralL = TextStyle(
+    // Captions and fine print; the smallest text
+    val bodySmall = TextStyle(
+        fontFamily = DubaiFontFamily,
+        fontWeight = FontWeight(400),
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.em,
+    )
+    // Buttons and field labels
+    val labelLarge = TextStyle(
         fontFamily = DubaiFontFamily,
         fontWeight = FontWeight(700),
-        fontSize = 34.sp,
-        lineHeight = 38.sp,
-        letterSpacing = (-0.01).em,
+        fontSize = 18.sp,
+        lineHeight = 22.sp,
+        letterSpacing = 0.em,
+    )
+    // Chips, tabs, 48px buttons, error messages
+    val labelMedium = TextStyle(
+        fontFamily = DubaiFontFamily,
+        fontWeight = FontWeight(500),
+        fontSize = 16.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.em,
+    )
+    // Metadata labels, step counters, badges
+    val labelSmall = TextStyle(
+        fontFamily = DubaiFontFamily,
+        fontWeight = FontWeight(500),
+        fontSize = 14.sp,
+        lineHeight = 18.sp,
+        letterSpacing = 0.em,
     )
 }
 
-object SCTypeArabic {
-    val displayL = TextStyle(
+object SCTypeAr {
+    // Home hero, from the expanded breakpoint
+    val displayLarge = TextStyle(
+        fontFamily = DubaiFontFamily,
+        fontWeight = FontWeight(700),
+        fontSize = 88.sp,
+        lineHeight = 108.sp,
+        letterSpacing = 0.em,
+    )
+    // Channel hero, from the expanded breakpoint
+    val displayMedium = TextStyle(
+        fontFamily = DubaiFontFamily,
+        fontWeight = FontWeight(700),
+        fontSize = 64.sp,
+        lineHeight = 80.sp,
+        letterSpacing = 0.em,
+    )
+    // Heroes on compact and medium; page heading on wide marketing pages
+    val displaySmall = TextStyle(
         fontFamily = DubaiFontFamily,
         fontWeight = FontWeight(700),
         fontSize = 50.sp,
-        lineHeight = 62.sp,
+        lineHeight = 64.sp,
         letterSpacing = 0.em,
     )
-    val headingL = TextStyle(
+    // Page heading (h1)
+    val headlineLarge = TextStyle(
         fontFamily = DubaiFontFamily,
         fontWeight = FontWeight(700),
-        fontSize = 30.sp,
+        fontSize = 36.sp,
+        lineHeight = 48.sp,
+        letterSpacing = 0.em,
+    )
+    // Section heading (h2)
+    val headlineMedium = TextStyle(
+        fontFamily = DubaiFontFamily,
+        fontWeight = FontWeight(700),
+        fontSize = 32.sp,
+        lineHeight = 44.sp,
+        letterSpacing = 0.em,
+    )
+    // Subsection heading (h3); totals and amounts
+    val headlineSmall = TextStyle(
+        fontFamily = DubaiFontFamily,
+        fontWeight = FontWeight(700),
+        fontSize = 28.sp,
         lineHeight = 38.sp,
         letterSpacing = 0.em,
     )
-    val headingM = TextStyle(
+    // Card and panel titles
+    val titleLarge = TextStyle(
         fontFamily = DubaiFontFamily,
         fontWeight = FontWeight(700),
-        fontSize = 26.sp,
+        fontSize = 24.sp,
         lineHeight = 34.sp,
         letterSpacing = 0.em,
     )
-    // Buttons; +1px from D+ (18/24)
-    val titleS = TextStyle(
+    // Row titles, legend of a question group, emphasised values
+    val titleMedium = TextStyle(
+        fontFamily = DubaiFontFamily,
+        fontWeight = FontWeight(700),
+        fontSize = 20.sp,
+        lineHeight = 30.sp,
+        letterSpacing = 0.em,
+    )
+    // Navigation items, back link, summary-list values, step names
+    val titleSmall = TextStyle(
         fontFamily = DubaiFontFamily,
         fontWeight = FontWeight(700),
         fontSize = 19.sp,
-        lineHeight = 25.sp,
+        lineHeight = 28.sp,
         letterSpacing = 0.em,
     )
-    val bodyL = TextStyle(
+    // Body text: the default for running text
+    val bodyLarge = TextStyle(
         fontFamily = DubaiFontFamily,
         fontWeight = FontWeight(400),
         fontSize = 20.sp,
-        lineHeight = 31.sp,
+        lineHeight = 32.sp,
         letterSpacing = 0.em,
     )
-    val bodyM = TextStyle(
-        fontFamily = DubaiFontFamily,
-        fontWeight = FontWeight(400),
-        fontSize = 19.sp,
-        lineHeight = 29.sp,
-        letterSpacing = 0.em,
-    )
-    val bodyS = TextStyle(
+    // Hints, secondary text, table cells
+    val bodyMedium = TextStyle(
         fontFamily = DubaiFontFamily,
         fontWeight = FontWeight(400),
         fontSize = 18.sp,
         lineHeight = 28.sp,
         letterSpacing = 0.em,
     )
-    // Field labels; +1px from D+ (17/22)
-    val labelM = TextStyle(
-        fontFamily = DubaiFontFamily,
-        fontWeight = FontWeight(700),
-        fontSize = 18.sp,
-        lineHeight = 23.sp,
-        letterSpacing = 0.em,
-    )
-    // +1px from D+ (16/24-25)
-    val hint = TextStyle(
-        fontFamily = DubaiFontFamily,
-        fontWeight = FontWeight(400),
-        fontSize = 17.sp,
-        lineHeight = 26.sp,
-        letterSpacing = 0.em,
-    )
-    // +1px from D+ (17/26)
-    val error = TextStyle(
-        fontFamily = DubaiFontFamily,
-        fontWeight = FontWeight(700),
-        fontSize = 18.sp,
-        lineHeight = 27.sp,
-        letterSpacing = 0.em,
-    )
-    // Smallest Arabic size
-    val caption = TextStyle(
+    // Captions and fine print; the smallest text
+    val bodySmall = TextStyle(
         fontFamily = DubaiFontFamily,
         fontWeight = FontWeight(400),
         fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.em,
     )
-    val displayXl = TextStyle(
+    // Buttons and field labels
+    val labelLarge = TextStyle(
         fontFamily = DubaiFontFamily,
         fontWeight = FontWeight(700),
-        fontSize = 84.sp,
-        lineHeight = 100.sp,
+        fontSize = 20.sp,
+        lineHeight = 28.sp,
         letterSpacing = 0.em,
     )
-    val headingXl = TextStyle(
+    // Chips, tabs, 48px buttons, error messages
+    val labelMedium = TextStyle(
         fontFamily = DubaiFontFamily,
         fontWeight = FontWeight(700),
-        fontSize = 36.sp,
-        lineHeight = 46.sp,
-        letterSpacing = 0.em,
-    )
-    val titleL = TextStyle(
-        fontFamily = DubaiFontFamily,
-        fontWeight = FontWeight(700),
-        fontSize = 24.sp,
-        lineHeight = 32.sp,
-        letterSpacing = 0.em,
-    )
-    val titleM = TextStyle(
-        fontFamily = DubaiFontFamily,
-        fontWeight = FontWeight(700),
-        fontSize = 22.sp,
-        lineHeight = 29.sp,
-        letterSpacing = 0.em,
-    )
-    // Tags and chips
-    val labelS = TextStyle(
-        fontFamily = DubaiFontFamily,
-        fontWeight = FontWeight(700),
-        fontSize = 16.sp,
-        lineHeight = 21.sp,
-        letterSpacing = 0.em,
-    )
-    val eyebrow = TextStyle(
-        fontFamily = DubaiFontFamily,
-        fontWeight = FontWeight(700),
-        fontSize = 16.sp,
-        lineHeight = 21.sp,
-        letterSpacing = 0.em,
-    )
-    // Same as caption: Arabic never goes below 16px
-    val captionS = TextStyle(
-        fontFamily = DubaiFontFamily,
-        fontWeight = FontWeight(400),
-        fontSize = 16.sp,
+        fontSize = 18.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.em,
     )
-    // Answers in summary lists
-    val value = TextStyle(
+    // Metadata labels, step counters, badges
+    val labelSmall = TextStyle(
         fontFamily = DubaiFontFamily,
         fontWeight = FontWeight(700),
-        fontSize = 19.sp,
-        lineHeight = 26.sp,
-        letterSpacing = 0.em,
-    )
-    // Amounts; digits stay Latin
-    val numeralL = TextStyle(
-        fontFamily = DubaiFontFamily,
-        fontWeight = FontWeight(700),
-        fontSize = 34.sp,
-        lineHeight = 40.sp,
+        fontSize = 16.sp,
+        lineHeight = 22.sp,
         letterSpacing = 0.em,
     )
 }

@@ -2,17 +2,19 @@
   "name": "sc-design-system-tokens",
   "version": "0.1.0",
   "private": true,
-  "description": "Builds platform outputs from the DTCG design tokens in tokens/. No dependencies.",
+  "description": "Generates the colour palettes and builds platform outputs from the DTCG design tokens in tokens/. No dependencies.",
   "type": "module",
   "engines": {
     "node": ">=20"
   },
   "scripts": {
-    "build": "npm run build:tokens && npm run check",
+    "build": "npm run generate && npm run build:tokens && npm run check",
+    "generate": "node scripts/generate-palettes.mjs",
     "build:tokens": "node scripts/build-tokens.mjs",
     "check": "npm run check:contrast && npm run check:teal && npm run check:no-hex",
     "check:contrast": "node scripts/check-contrast.mjs",
     "check:teal": "node scripts/check-teal.mjs",
-    "check:no-hex": "node scripts/check-no-hex.mjs"
+    "check:no-hex": "node scripts/check-no-hex.mjs",
+    "report:contrast": "node scripts/check-contrast.mjs --markdown"
   }
 }

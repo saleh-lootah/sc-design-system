@@ -1,14 +1,23 @@
 #!/usr/bin/env node
 // Generates every platform output in dist/ from tokens/*.json.
 // Plain Node (ESM), no dependencies. Run: node scripts/build-tokens.mjs
+//
+// Web naming scheme (see docs/v2/foundations.md, "Token naming"):
+//   --sc-color-<role>            colour roles, light and dark in one value via light-dark()
+//   --sc-color-channel-<role>    the active channel's roles, rebound by [data-channel]
+//   --sc-palette-<name>-<tone>   raw tonal palettes, only in dist/css/palette.css
+//   --sc-type-<role>-<prop>      type roles; Arabic values rebound by [lang|="ar"]
+//   --sc-space-<n>, --sc-radius-<name>, --sc-size-<name>, --sc-elevation-<n>,
+//   --sc-opacity-<name>, --sc-duration-<name>, --sc-easing-<name>, --sc-scale-<name>,
+//   --sc-breakpoint-<name>, --sc-grid-<bp>-<prop>, --sc-container-<name>
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
-import { loadTokens, group, CHANNELS, CHANNEL_ROLES, DIST_DIR, ROOT } from './lib/tokens.mjs';
+import { loadTokens, group, CHANNELS, CHANNEL_ROLES, DEFAULT_CHANNEL, DIST_DIR, ROOT } from './lib/tokens.mjs';
 import { toSrgb01, inGamut } from './lib/oklab.mjs';
 
-const HEADER = 'Generated — edit tokens/*.json';
+const HEADER = 'Generated — edit tokens/source/*.json or tokens/*.json, then npm run build';
 const tokens = loadTokens();
-const { light, dark } = tokens;
+const { light } = tokens;
 
 // Real PostScript names, read from the name tables (nameID 6) of
 // ~/Library/Fonts/DubaiW23-*.ttf. Each weight ships as its own family.
@@ -19,17 +28,17 @@ const POSTSCRIPT = {
   'Dubai W23 Bold': 'DubaiW23-Bold',
 };
 
-// ---------------------------------------------------------------- helpers
+// ---------------------------------------------------------------- token groups
 
-const colors = light.filter((t) => t.path[0] === 'color');
-const channelTokens = light.filter((t) => t.path[0] === 'channel');
-const darkColors = dark.filter((t) => t.path[0] === 'color');
-const darkChannels = dark.filter((t) => t.path[0] === 'channel');
-const darkByPath = new Map(dark.map((t) => [t.path.join('.'), t]));
+const palette = light.filter((t) => t.path[0] === 'palette');
+const roles = light.filter((t) => t.path[0] === 'color' && t.path[1] !== 'channel');
+const channelOf = (ch) => light.filter((t) => t.path[0] === 'channel' && t.path[1] === ch);
+const darkOf = (t) => tokens.getDark(t.path.join('.')) ?? t;
 const space = group(light, 'space');
 const radius = group(light, 'radius');
 const size = group(light, 'size');
 const elevation = group(light, 'elevation');
+const opacity = group(light, 'opacity');
 const duration = group(light, 'duration');
 const easing = group(light, 'easing');
 const scale = group(light, 'scale');
@@ -38,11 +47,16 @@ const grid = group(light, 'grid');
 const container = group(light, 'container');
 const families = light.filter((t) => t.path[0] === 'font' && t.path[1] === 'family');
 const weights = light.filter((t) => t.path[0] === 'font' && t.path[1] === 'weight');
-const typeRoles = (script) => light.filter((t) => t.path[0] === 'type' && t.path[1] === script);
-const latin = typeRoles('latin');
-const arabic = typeRoles('arabic');
+const typeOf = (script) => light.filter((t) => t.path[0] === 'type' && t.path[1] === script);
+const en = typeOf('en');
+const ar = typeOf('ar');
+const arOf = (role) => ar.find((t) => t.path[2] === role);
+if (en.length !== ar.length || en.some((t) => !arOf(t.path[2]))) throw new Error('Every English type role needs an Arabic counterpart');
+
+// ---------------------------------------------------------------- helpers
 
 const cssVar = (path) => `--sc-${path.join('-')}`;
+const roleVar = (t) => `--sc-color-${t.path.slice(1).join('-')}`;
 const dim = (v) => `${v.value}${v.unit}`;
 const px = (v) => {
   if (v.unit !== 'px') throw new Error(`Expected px, got ${v.unit}`);
@@ -56,12 +70,14 @@ function oklab(c) {
   const alpha = c.alpha ?? 1;
   return `oklab(${L} ${a} ${b}${alpha < 1 ? ` / ${alpha}` : ''})`;
 }
+const same = (a, b) => oklab(a) === oklab(b);
+/** One CSS value for both modes. */
+const lightDark = (t) => {
+  const d = darkOf(t);
+  return same(t.value, d.value) ? oklab(t.value) : `light-dark(${oklab(t.value)}, ${oklab(d.value)})`;
+};
 
-/**
- * sRGB 0..1 components for native platforms, via the same maths as oklab.py.
- * A few light tints sit a hair outside sRGB; like oklab.py we clamp them, and
- * the contrast checks already use the clamped values.
- */
+/** sRGB 0..1 components for native platforms. Out-of-gamut values are clamped (none are expected). */
 const clamped = new Set();
 function srgb(c) {
   const [L, a, b] = c.components;
@@ -71,15 +87,10 @@ function srgb(c) {
 
 const GENERIC = new Set(['serif', 'sans-serif', 'monospace', 'cursive', 'fantasy', 'system-ui', 'ui-sans-serif', 'ui-serif']);
 const fontStack = (list) => list.map((f) => (GENERIC.has(f) ? f : `"${f}"`)).join(', ');
-
-function shadow(layers) {
-  if (!layers.length) return 'none';
-  return layers
-    .map((s) => `${dim(s.offsetX)} ${dim(s.offsetY)} ${dim(s.blur)} ${dim(s.spread)} ${oklab(s.color)}`)
-    .join(', ');
-}
-
+const shadow = (layers) =>
+  layers.length ? layers.map((s) => `${dim(s.offsetX)} ${dim(s.offsetY)} ${dim(s.blur)} ${dim(s.spread)} ${oklab(s.color)}`).join(', ') : 'none';
 const cubic = (v) => `cubic-bezier(${v.join(', ')})`;
+const pct = (n) => `${Number((n * 100).toFixed(2))}%`;
 const familyKey = (t) => t.ref.fontFamily.replace(/^\{font\.family\.(.+)\}$/, '$1');
 const weightKey = (t) => t.ref.fontWeight.replace(/^\{font\.weight\.(.+)\}$/, '$1');
 const camel = (s) => s.replace(/-([a-z0-9])/g, (_, c) => c.toUpperCase());
@@ -89,38 +100,38 @@ function write(rel, content) {
   const file = join(DIST_DIR, rel);
   mkdirSync(join(file, '..'), { recursive: true });
   writeFileSync(file, content.replace(/[ \t]+$/gm, ''));
-  console.log(`  wrote ${relative(ROOT, file)} (${content.split('\n').length - 1} lines)`);
+  console.log(`  wrote ${relative(ROOT, file)} (${content.split('\n').length - 1} lines, ${(Buffer.byteLength(content) / 1024).toFixed(1)} KB)`);
 }
 
 // ---------------------------------------------------------------- CSS
+
+function typeDecls(t, decl) {
+  const role = t.path[2];
+  decl(`--sc-type-${role}-family`, `var(--sc-font-family-${familyKey(t)})`);
+  decl(`--sc-type-${role}-weight`, `var(--sc-font-weight-${weightKey(t)})`);
+  decl(`--sc-type-${role}-size`, dim(t.value.fontSize));
+  decl(`--sc-type-${role}-leading`, `${t.extensions.lineHeightPx}px`);
+  decl(`--sc-type-${role}-tracking`, t.value.letterSpacing.value === 0 ? '0' : dim(t.value.letterSpacing));
+}
 
 function buildCss() {
   const L = [];
   const decl = (name, value, comment) => L.push(`  ${name}: ${value};${comment ? ` /* ${comment} */` : ''}`);
   const section = (title) => L.push('', `  /* ${title} */`);
 
-  L.push(`/* ${HEADER} */`, '', ':root {', '  color-scheme: light;');
+  L.push(`/* ${HEADER} */`, '');
+  L.push('/* Light and dark live in one value: light-dark(<light>, <dark>). The scheme follows the');
+  L.push('   system, and data-theme="light" or "dark" on any element forces it for that subtree. */');
+  L.push(':root {', '  color-scheme: light dark;');
 
-  section('Colour');
-  for (const t of colors) decl(cssVar(t.path), oklab(t.value), t.description);
-
-  section('Channel signatures');
-  for (const t of channelTokens) decl(cssVar(t.path), oklab(t.value));
-
-  section('Active channel (default: now). Set data-channel on any element to switch.');
-  for (const role of CHANNEL_ROLES) decl(`--sc-channel-${role}`, `var(--sc-channel-now-${role})`);
+  section('Colour roles');
+  for (const t of roles) decl(roleVar(t), lightDark(t), t.description);
+  section('State layers: color-mix(in oklab, <content colour> var(--sc-opacity-hover), transparent)');
+  for (const t of opacity) decl(cssVar(t.path), pct(t.value), t.description);
 
   section('Font');
   for (const t of families) decl(cssVar(t.path), fontStack(t.value));
   for (const t of weights) decl(cssVar(t.path), t.value);
-
-  section('Type scale: size, line height (px), letter spacing');
-  for (const t of [...latin, ...arabic]) {
-    const [, script, role] = t.path;
-    decl(`--sc-text-${script}-${role}`, dim(t.value.fontSize));
-    decl(`--sc-leading-${script}-${role}`, `${t.extensions.lineHeightPx}px`);
-    if (script === 'latin') decl(`--sc-tracking-${script}-${role}`, dim(t.value.letterSpacing));
-  }
 
   section('Space');
   for (const t of space) decl(cssVar(t.path), dim(t.value));
@@ -140,27 +151,27 @@ function buildCss() {
   for (const t of container) decl(cssVar(t.path), dim(t.value), t.description);
   L.push('}', '');
 
-  L.push('/* Channel theming layer */');
+  L.push('[data-theme="light"] { color-scheme: light; }', '[data-theme="dark"] { color-scheme: dark; }', '');
+
+  L.push('/* Channel roles. The default channel applies at the root; data-channel on any element');
+  L.push('   rebinds the roles for that subtree (a whole page, or one attribution chip). */');
   for (const ch of CHANNELS) {
-    L.push(`[data-channel="${ch}"] {`);
-    for (const role of CHANNEL_ROLES) decl(`--sc-channel-${role}`, `var(--sc-channel-${ch}-${role})`);
+    L.push(`${ch === DEFAULT_CHANNEL ? ':root, ' : ''}[data-channel="${ch}"] {`);
+    for (const t of channelOf(ch)) decl(`--sc-color-channel-${t.path[2]}`, lightDark(t));
     L.push('}');
   }
   L.push('');
 
-  // Dark mode: only the tokens color.dark.json overrides. The channel aliases
-  // above are var() references, so they pick up these values automatically.
-  const darkBody = (indent) => {
-    const out = [`${indent}color-scheme: dark;`];
-    for (const t of [...darkColors, ...darkChannels]) out.push(`${indent}${cssVar(t.path)}: ${oklab(t.value)};`);
-    return out;
-  };
-  L.push('/* Dark mode: follows the system unless data-theme="light" is set */');
-  L.push('@media (prefers-color-scheme: dark) {', '  :root:not([data-theme="light"]) {', ...darkBody('    '), '  }', '}', '');
-  L.push('/* Dark mode: forced */', ':root[data-theme="dark"] {', ...darkBody('  '), '}', '');
+  L.push('/* Type roles. English (and any non-Arabic language) by default; elements with lang="ar"');
+  L.push('   get the Arabic scale, and lang="en" inside Arabic switches back. Components only ever');
+  L.push('   read --sc-type-<role>-*, so they never branch on script. */');
+  L.push(':root, [lang]:not([lang|="ar"]) {');
+  for (const t of en) typeDecls(t, decl);
+  L.push('}', '[lang|="ar"] {');
+  for (const t of en) typeDecls(arOf(t.path[2]), decl);
+  L.push('}', '');
 
-  // Reduced motion: movement stops, opacity and colour keep their timing. Only tokens with
-  // $extensions.reducedMotion change (spin, scale); see tokens/motion.json.
+  // Reduced motion: movement stops, opacity and colour keep their timing.
   L.push('/* Reduced motion: movement stops (spin, scale); opacity and colour transitions keep their durations */');
   L.push('@media (prefers-reduced-motion: reduce) {', '  :root {');
   for (const t of [...duration, ...scale]) {
@@ -170,26 +181,24 @@ function buildCss() {
   }
   L.push('  }', '}', '');
 
-  // Typography classes. Line height uses the authored px value ($extensions.lineHeightPx).
-  const typeRule = (selectors, t, script) => {
-    const [, , role] = t.path;
-    L.push(`${selectors.join(',\n')} {`);
-    L.push(`  font-family: var(--sc-font-family-${familyKey(t)});`);
-    L.push(`  font-weight: var(--sc-font-weight-${weightKey(t)});`);
-    L.push(`  font-size: var(--sc-text-${script}-${role});`);
-    L.push(`  line-height: var(--sc-leading-${script}-${role});`);
-    L.push(`  letter-spacing: ${script === 'latin' ? `var(--sc-tracking-latin-${role})` : '0'};`);
-    L.push('}');
-  };
-  L.push('/* Typography: Latin */');
-  for (const t of latin) typeRule([`.sc-type-${t.path[2]}`], t, 'latin');
-  L.push('', '/* Typography: Arabic. Applies to elements whose own language is Arabic (so lang="en" inside an Arabic page keeps the Latin scale), or with the explicit .sc-type-ar-* class. */');
-  for (const t of arabic) {
+  L.push('/* Type classes for page markup. Script-aware through the variables above. */');
+  for (const t of en) {
     const r = t.path[2];
-    typeRule([`.sc-type-${r}:lang(ar)`, `.sc-type-ar-${r}`], t, 'arabic');
+    L.push(`.sc-type-${r} {`);
+    L.push(`  font-family: var(--sc-type-${r}-family);`);
+    L.push(`  font-weight: var(--sc-type-${r}-weight);`);
+    L.push(`  font-size: var(--sc-type-${r}-size);`);
+    L.push(`  line-height: var(--sc-type-${r}-leading);`);
+    L.push(`  letter-spacing: var(--sc-type-${r}-tracking);`);
+    L.push('}');
   }
-  L.push('', '/* Arabic is never letter-spaced, including Latin-only roles used on Arabic text. */');
-  L.push('[class*="sc-type-"]:lang(ar),', '[class*="sc-type-ar-"] {', '  letter-spacing: 0;', '}');
+  return L.join('\n') + '\n';
+}
+
+function buildPaletteCss() {
+  const L = [`/* ${HEADER} */`, '/* Raw tonal palettes, for documentation and tooling only. Components use the roles in tokens.css. */', ':root {'];
+  for (const t of palette) L.push(`  --sc-palette-${t.path[1]}-${t.path[2]}: ${oklab(t.value)};`);
+  L.push('}');
   return L.join('\n') + '\n';
 }
 
@@ -200,15 +209,14 @@ function buildTailwind() {
   const decl = (name, value) => L.push(`  ${name}: ${value};`);
   L.push(`/* ${HEADER} */`);
   L.push('/* Tailwind v4 theme. Values point at the --sc-* custom properties in tokens.css,');
-  L.push('   so dark mode and data-channel switching keep working. "inline" makes utilities');
-  L.push('   use var(--sc-*) directly, so a data-channel on any element is respected. */');
+  L.push('   so dark mode, data-channel and Arabic type keep working. "inline" makes utilities');
+  L.push('   use var(--sc-*) directly. */');
   L.push('@import "../css/tokens.css";', '');
   L.push('@theme inline {');
-  L.push('  /* Only design-system colours: Tailwind\'s default palette is removed. */');
+  L.push("  /* Only design-system colours: Tailwind's default palette is removed. */");
   decl('--color-*', 'initial');
-  for (const t of colors) decl(`--color-${t.path[1]}`, `var(${cssVar(t.path)})`);
-  for (const t of channelTokens) decl(`--color-channel-${t.path[1]}-${t.path[2]}`, `var(${cssVar(t.path)})`);
-  for (const role of CHANNEL_ROLES) decl(`--color-channel-${role}`, `var(--sc-channel-${role})`);
+  for (const t of roles) decl(`--color-${t.path.slice(1).join('-')}`, `var(${roleVar(t)})`);
+  for (const role of CHANNEL_ROLES) decl(`--color-channel-${role}`, `var(--sc-color-channel-${role})`);
   L.push('', '  /* Spacing: 1 unit = 1px, so p-16 is 16px, matching --sc-space-16. */');
   decl('--spacing', '1px');
   for (const t of space) decl(`--spacing-${t.path[1]}`, `var(${cssVar(t.path)})`);
@@ -217,23 +225,19 @@ function buildTailwind() {
   for (const t of radius) decl(`--radius-${t.path[1]}`, `var(${cssVar(t.path)})`);
   L.push('', '  /* Shadows */');
   decl('--shadow-*', 'initial');
-  for (const t of elevation) {
-    // Tailwind joins shadows into one comma list, where "none" is invalid; use an empty shadow.
-    decl(`--shadow-${t.path[1]}`, t.value.length ? `var(${cssVar(t.path)})` : '0 0 transparent');
-  }
+  for (const t of elevation) decl(`--shadow-${t.path[1]}`, t.value.length ? `var(${cssVar(t.path)})` : '0 0 transparent');
   L.push('', '  /* Fonts */');
   decl('--font-sans', 'var(--sc-font-family-regular)');
   for (const t of families) decl(`--font-${t.path[2]}`, `var(${cssVar(t.path)})`);
   for (const t of weights) decl(`--font-weight-${t.path[2]}`, `var(${cssVar(t.path)})`);
-  L.push('', '  /* Text sizes with line-height pairs. Latin: text-<role>. Arabic: text-ar-<role>. */');
+  L.push('', '  /* Type roles: text-<role>. Arabic sizes apply automatically under lang="ar". */');
   decl('--text-*', 'initial');
-  for (const t of [...latin, ...arabic]) {
-    const [, script, role] = t.path;
-    const name = script === 'latin' ? `--text-${role}` : `--text-ar-${role}`;
-    decl(name, `var(--sc-text-${script}-${role})`);
-    decl(`${name}--line-height`, `var(--sc-leading-${script}-${role})`);
-    decl(`${name}--letter-spacing`, script === 'latin' ? `var(--sc-tracking-latin-${role})` : '0');
-    decl(`${name}--font-weight`, `var(--sc-font-weight-${weightKey(t)})`);
+  for (const t of en) {
+    const r = t.path[2];
+    decl(`--text-${r}`, `var(--sc-type-${r}-size)`);
+    decl(`--text-${r}--line-height`, `var(--sc-type-${r}-leading)`);
+    decl(`--text-${r}--letter-spacing`, `var(--sc-type-${r}-tracking)`);
+    decl(`--text-${r}--font-weight`, `var(--sc-type-${r}-weight)`);
   }
   L.push('', '  /* Motion */');
   decl('--ease-*', 'initial');
@@ -252,7 +256,7 @@ function buildTailwind() {
     decl(`--breakpoint-${t.path[1]}`, dim(t.value));
   }
   L.push('}', '');
-  L.push('/* Tailwind\'s duration-* utility does not read a theme namespace; this adds');
+  L.push("/* Tailwind's duration-* utility does not read a theme namespace; this adds");
   L.push('   duration-fast, duration-base, etc. Numeric values (duration-150) still work. */');
   L.push('@utility duration-* {');
   L.push('  --tw-duration: --value(--duration-*);');
@@ -269,15 +273,18 @@ function buildSwift() {
     const [r, g, b, a] = srgb(c);
     return `rgb(${r}, ${g}, ${b}${a < 1 ? `, ${a}` : ''})`;
   };
-  const dynamic = (indent, lightTok, darkTok) => [
-    `scDynamic(`,
-    `${indent}    light: ${uic(lightTok.value)}, // ${oklab(lightTok.value)}`,
-    `${indent}    dark: ${uic((darkTok ?? lightTok).value)} // ${oklab((darkTok ?? lightTok).value)}`,
-    `${indent})`,
-  ].join('\n');
+  const dynamic = (indent, t) => {
+    const d = darkOf(t);
+    return [
+      'scDynamic(',
+      `${indent}    light: ${uic(t.value)}, // ${oklab(t.value)}`,
+      `${indent}    dark: ${uic(d.value)} // ${oklab(d.value)}`,
+      `${indent})`,
+    ].join('\n');
+  };
 
   L.push(`// ${HEADER}`);
-  L.push('// Colours are converted from OKLAB to sRGB with the maths in scripts/oklab.py.');
+  L.push('// Colours are converted from OKLAB to sRGB with the maths in scripts/lib/oklab.mjs.');
   L.push('// The source OKLAB value is in the comment beside each component set.');
   L.push('', 'import SwiftUI', 'import UIKit', '');
   L.push('private func rgb(_ r: CGFloat, _ g: CGFloat, _ b: CGFloat, _ a: CGFloat = 1) -> UIColor {');
@@ -287,10 +294,10 @@ function buildSwift() {
   L.push('    Color(UIColor { traits in traits.userInterfaceStyle == .dark ? dark : light })');
   L.push('}', '');
 
-  L.push('// MARK: - Colour', '', 'public extension Color {');
-  for (const t of colors) {
+  L.push('// MARK: - Colour roles', '', 'public extension Color {');
+  for (const t of roles) {
     if (t.description) L.push(`    /// ${t.description}`);
-    L.push(`    static let sc${pascal(t.path[1])} = ${dynamic('    ', t, darkByPath.get(t.path.join('.')))}`);
+    L.push(`    static let sc${pascal(t.path.slice(1).join('-'))} = ${dynamic('    ', t)}`);
   }
   L.push('}', '');
 
@@ -298,14 +305,13 @@ function buildSwift() {
   L.push('public struct SCChannel: Sendable {');
   L.push('    public let name: String');
   for (const role of CHANNEL_ROLES) L.push(`    public let ${camel(role)}: Color`);
+  L.push('    /// Text and icons on action, the same in every channel.');
+  L.push('    public var onAction: Color { .scChannelOnAction }');
   L.push('}', '', 'public extension SCChannel {');
   for (const ch of CHANNELS) {
     L.push(`    static let ${ch} = SCChannel(`, `        name: "${ch}",`);
-    CHANNEL_ROLES.forEach((role, i) => {
-      const p = `channel.${ch}.${role}`;
-      const sep = i === CHANNEL_ROLES.length - 1 ? '' : ',';
-      L.push(`        ${camel(role)}: ${dynamic('        ', tokens.get(p), darkByPath.get(p))}${sep}`);
-    });
+    const list = channelOf(ch);
+    list.forEach((t, i) => L.push(`        ${camel(t.path[2])}: ${dynamic('        ', t)}${i === list.length - 1 ? '' : ','}`));
     L.push('    )');
   }
   L.push(`    static let all: [SCChannel] = [${CHANNELS.map((c) => `.${c}`).join(', ')}]`);
@@ -319,10 +325,13 @@ function buildSwift() {
     }
     L.push('}', '');
   };
-  L.push('// MARK: - Space, radius, size (points)', '');
+  L.push('// MARK: - Space, radius, size (points), opacity', '');
   cgEnum('SCSpace', space, (t) => `s${t.path[1]}`);
   cgEnum('SCRadius', radius, (t) => camel(t.path[1]));
   cgEnum('SCSize', size, (t) => camel(t.path[1]));
+  L.push('public enum SCOpacity {');
+  for (const t of opacity) L.push(`    /// ${t.description}`, `    public static let ${camel(t.path[1])}: Double = ${t.value}`);
+  L.push('}', '');
 
   L.push('// MARK: - Typography', '');
   L.push('/// A type role. Line height is the authored px value; SwiftUI has no line-height');
@@ -336,28 +345,24 @@ function buildSwift() {
   L.push('    public let relativeTo: Font.TextStyle', '');
   L.push('    public var font: Font { Font.custom(postScriptName, size: size, relativeTo: relativeTo) }');
   L.push('}', '');
-  const relative = (role) =>
-    ({ display: '.largeTitle', heading: '.title', numeral: '.title', title: '.headline', body: '.body', value: '.body', label: '.subheadline', error: '.footnote' })[role.split('-')[0]] ?? '.caption';
-  const styleLine = (t, script) => {
+  const relativeTo = (role) =>
+    ({ display: '.largeTitle', headline: '.title', title: '.headline', body: '.body', label: '.subheadline' })[role.split('-')[0]] ?? '.body';
+  const styleLine = (t) => {
     const v = t.value;
     const ps = POSTSCRIPT[v.fontFamily[0]];
     if (!ps) throw new Error(`No PostScript name for ${v.fontFamily[0]}`);
-    const tracking = script === 'latin' ? Number((v.letterSpacing.value * px(v.fontSize)).toFixed(3)) : 0;
-    return `SCTextStyle(postScriptName: "${ps}", size: ${px(v.fontSize)}, lineHeight: ${t.extensions.lineHeightPx}, tracking: ${tracking}, relativeTo: ${relative(t.path[2])})`;
+    const tracking = Number((v.letterSpacing.value * px(v.fontSize)).toFixed(3));
+    return `SCTextStyle(postScriptName: "${ps}", size: ${px(v.fontSize)}, lineHeight: ${t.extensions.lineHeightPx}, tracking: ${tracking}, relativeTo: ${relativeTo(t.path[2])})`;
   };
   L.push('public enum SCType {');
-  for (const [name, list, script] of [['Latin', latin, 'latin'], ['Arabic', arabic, 'arabic']]) {
+  for (const [name, list] of [['En', en], ['Ar', ar]]) {
     L.push(`    public enum ${name} {`);
     for (const t of list) {
       if (t.description) L.push(`        /// ${t.description}`);
-      L.push(`        public static let ${camel(t.path[2])} = ${styleLine(t, script)}`);
+      L.push(`        public static let ${camel(t.path[2])} = ${styleLine(t)}`);
     }
     L.push('    }');
   }
-  L.push('}', '');
-  L.push('public extension Font {');
-  for (const t of latin) L.push(`    static let sc${pascal(t.path[2])} = SCType.Latin.${camel(t.path[2])}.font`);
-  for (const t of arabic) L.push(`    static let scAr${pascal(t.path[2])} = SCType.Arabic.${camel(t.path[2])}.font`);
   L.push('}', '');
   L.push('public extension View {');
   L.push('    /// Applies font, tracking and an approximation of the authored line height.');
@@ -381,9 +386,9 @@ function buildKotlin() {
     return `Color(red = ${r}f, green = ${g}f, blue = ${b}f, alpha = ${a}f)`;
   };
   L.push(`// ${HEADER}`);
-  L.push('// Colours are converted from OKLAB to sRGB with the maths in scripts/oklab.py.');
+  L.push('// Colours are converted from OKLAB to sRGB with the maths in scripts/lib/oklab.mjs.');
   L.push('// The source OKLAB value is in the comment beside each colour.');
-  L.push('', 'package sc.designsystem.tokens // TODO: set to your app\'s package', '');
+  L.push('', "package sc.designsystem.tokens // TODO: set to your app's package", '');
   for (const imp of [
     'androidx.compose.ui.graphics.Color',
     'androidx.compose.ui.text.TextStyle',
@@ -395,68 +400,66 @@ function buildKotlin() {
   ]) L.push(`import ${imp}`);
   L.push('');
 
-  L.push('// ---- Colour', '');
+  const name = (t) => camel(t.path.slice(1).join('-'));
+  L.push('// ---- Colour roles', '');
   L.push('data class SCColorScheme(');
-  for (const t of colors) L.push(`    val ${camel(t.path[1])}: Color,${t.description ? ` // ${t.description}` : ''}`);
+  for (const t of roles) L.push(`    val ${name(t)}: Color,${t.description ? ` // ${t.description}` : ''}`);
   L.push(')', '');
-  for (const [name, getTok] of [['SCLightColors', (t) => t], ['SCDarkColors', (t) => darkByPath.get(t.path.join('.')) ?? t]]) {
-    L.push(`val ${name} = SCColorScheme(`);
-    for (const t of colors) L.push(`    ${camel(t.path[1])} = ${kc(getTok(t).value)}, // ${oklab(getTok(t).value)}`);
+  for (const [obj, get] of [['SCLightColors', (t) => t], ['SCDarkColors', darkOf]]) {
+    L.push(`val ${obj} = SCColorScheme(`);
+    for (const t of roles) L.push(`    ${name(t)} = ${kc(get(t).value)}, // ${oklab(get(t).value)}`);
     L.push(')', '');
   }
 
-  L.push('// ---- Channels', '');
+  L.push('// ---- Channels (text on action is SCColorScheme.channelOnAction)', '');
   L.push('data class SCChannel(');
   L.push('    val name: String,');
   for (const role of CHANNEL_ROLES) L.push(`    val ${camel(role)}: Color,`);
   L.push(')', '');
-  for (const [obj, mode] of [['SCLightChannels', 'light'], ['SCDarkChannels', 'dark']]) {
+  for (const [obj, get] of [['SCLightChannels', (t) => t], ['SCDarkChannels', darkOf]]) {
     L.push(`object ${obj} {`);
     for (const ch of CHANNELS) {
       L.push(`    val ${ch} = SCChannel(`, `        name = "${ch}",`);
-      for (const role of CHANNEL_ROLES) {
-        const p = `channel.${ch}.${role}`;
-        const tok = mode === 'dark' ? darkByPath.get(p) ?? tokens.get(p) : tokens.get(p);
-        L.push(`        ${camel(role)} = ${kc(tok.value)}, // ${oklab(tok.value)}`);
-      }
+      for (const t of channelOf(ch)) L.push(`        ${camel(t.path[2])} = ${kc(get(t).value)}, // ${oklab(get(t).value)}`);
       L.push('    )');
     }
     L.push(`    val all = listOf(${CHANNELS.join(', ')})`);
     L.push('}', '');
   }
 
-  L.push('// ---- Space, radius, size', '');
-  const dpObj = (name, list, key) => {
-    L.push(`object ${name} {`);
+  L.push('// ---- Space, radius, size, opacity', '');
+  const dpObj = (obj, list, key) => {
+    L.push(`object ${obj} {`);
     for (const t of list) L.push(`    val ${key(t)} = ${px(t.value)}.dp${t.description ? ` // ${t.description}` : ''}`);
     L.push('}', '');
   };
   dpObj('SCSpace', space, (t) => `s${t.path[1]}`);
   dpObj('SCRadius', radius, (t) => camel(t.path[1]));
   dpObj('SCSize', size, (t) => camel(t.path[1]));
+  L.push('object SCOpacity {');
+  for (const t of opacity) L.push(`    const val ${camel(t.path[1])} = ${t.value}f // ${t.description}`);
+  L.push('}', '');
 
   L.push('// ---- Typography', '');
   L.push('// Placeholder. Wire the Dubai W23 files in res/font, for example:');
   L.push('// val DubaiFontFamily = FontFamily(');
-  L.push('//     Font(R.font.dubai_w23_light, FontWeight.Light),');
   L.push('//     Font(R.font.dubai_w23_regular, FontWeight.Normal),');
   L.push('//     Font(R.font.dubai_w23_medium, FontWeight.Medium),');
   L.push('//     Font(R.font.dubai_w23_bold, FontWeight.Bold),');
   L.push('// )');
   L.push('val DubaiFontFamily: FontFamily = FontFamily.Default', '');
   const em = (n) => (n < 0 ? `(${n}).em` : `${n}.em`);
-  for (const [obj, list, script] of [['SCTypeLatin', latin, 'latin'], ['SCTypeArabic', arabic, 'arabic']]) {
+  for (const [obj, list] of [['SCTypeEn', en], ['SCTypeAr', ar]]) {
     L.push(`object ${obj} {`);
     for (const t of list) {
       const v = t.value;
-      const ls = script === 'latin' ? em(v.letterSpacing.value) : '0.em';
       if (t.description) L.push(`    // ${t.description}`);
       L.push(`    val ${camel(t.path[2])} = TextStyle(`);
       L.push('        fontFamily = DubaiFontFamily,');
       L.push(`        fontWeight = FontWeight(${v.fontWeight}),`);
       L.push(`        fontSize = ${px(v.fontSize)}.sp,`);
       L.push(`        lineHeight = ${t.extensions.lineHeightPx}.sp,`);
-      L.push(`        letterSpacing = ${ls},`);
+      L.push(`        letterSpacing = ${em(v.letterSpacing.value)},`);
       L.push('    )');
     }
     L.push('}', '');
@@ -471,20 +474,33 @@ function buildPaper() {
   const add = (type, name, value, description) => out.push(description ? { type, name, value, description } : { type, name, value });
   const bySize = (list) => [...list].sort((a, b) => px(a.value) - px(b.value));
 
-  for (const t of colors) add('color', cssVar(t.path), oklab(t.value), t.description);
-  for (const t of channelTokens) add('color', cssVar(t.path), oklab(t.value));
-  for (const t of darkColors) add('color', `${cssVar(t.path)}-dark`, oklab(t.value), t.description);
-  for (const t of darkChannels) add('color', `${cssVar(t.path)}-dark`, oklab(t.value));
+  // Paper has no modes or data-channel: light roles keep the web name, dark ones get -dark,
+  // and every channel's roles are spelled out as --sc-color-channel-<channel>-<role>.
+  for (const t of roles) add('color', roleVar(t), oklab(t.value), t.description);
+  for (const t of roles) add('color', `${roleVar(t)}-dark`, oklab(darkOf(t).value));
+  for (const ch of CHANNELS) {
+    for (const t of channelOf(ch)) {
+      add('color', `--sc-color-channel-${ch}-${t.path[2]}`, oklab(t.value), t.description);
+      add('color', `--sc-color-channel-${ch}-${t.path[2]}-dark`, oklab(darkOf(t).value));
+    }
+  }
+  for (const t of palette) add('color', `--sc-palette-${t.path[1]}-${t.path[2]}`, oklab(t.value));
+  for (const t of opacity) add('opacity', cssVar(t.path), pct(t.value), t.description);
 
   for (const t of families) add('fontFamily', cssVar(t.path), t.value[0]);
   for (const t of weights) add('fontWeight', cssVar(t.path), t.value);
-  for (const t of [...latin, ...arabic]) {
-    const [, script, role] = t.path;
-    add('fontSize', `--sc-text-${script}-${role}`, `${px(t.value.fontSize)}px`, t.description);
-    add('lineHeight', `--sc-leading-${script}-${role}`, `${t.extensions.lineHeightPx}px`);
-    if (script === 'latin' && t.value.letterSpacing.value !== 0) {
-      add('letterSpacing', `--sc-tracking-${script}-${role}`, dim(t.value.letterSpacing));
+  // Paper wants size tokens smallest first.
+  const typeEntries = { fontSize: [], lineHeight: [], letterSpacing: [] };
+  for (const [list, suffix] of [[en, ''], [ar, '-ar']]) {
+    for (const t of list) {
+      const r = t.path[2];
+      typeEntries.fontSize.push([px(t.value.fontSize), `--sc-type-${r}-size${suffix}`, `${px(t.value.fontSize)}px`, t.description]);
+      typeEntries.lineHeight.push([t.extensions.lineHeightPx, `--sc-type-${r}-leading${suffix}`, `${t.extensions.lineHeightPx}px`]);
+      if (t.value.letterSpacing.value !== 0) typeEntries.letterSpacing.push([t.value.letterSpacing.value, `--sc-type-${r}-tracking${suffix}`, dim(t.value.letterSpacing)]);
     }
+  }
+  for (const [type, list] of Object.entries(typeEntries)) {
+    for (const [, name, value, description] of list.sort((a, b) => a[0] - b[0])) add(type, name, value, description);
   }
   for (const t of bySize(space)) add('spacing', cssVar(t.path), `${px(t.value)}px`);
   for (const t of bySize(size.filter((t) => t.path[1] !== 'measure'))) add('spacing', cssVar(t.path), `${px(t.value)}px`, t.description);
@@ -499,11 +515,12 @@ function buildPaper() {
 
 console.log('Building tokens');
 write('css/tokens.css', buildCss());
+write('css/palette.css', buildPaletteCss());
 write('tailwind/theme.css', buildTailwind());
 write('ios/SCTokens.swift', buildSwift());
 write('android/SCTokens.kt', buildKotlin());
 write('paper/tokens.paper.json', buildPaper());
 if (clamped.size) {
-  console.log(`  note: ${clamped.size} colour(s) slightly outside sRGB were clamped for iOS/Android (as oklab.py does):`);
+  console.log(`  note: ${clamped.size} colour(s) outside sRGB were clamped for iOS/Android:`);
   for (const c of clamped) console.log(`    ${c}`);
 }

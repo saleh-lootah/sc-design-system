@@ -7,8 +7,12 @@ export const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 export const TOKENS_DIR = join(ROOT, 'tokens');
 export const DIST_DIR = join(ROOT, 'dist');
 
-export const CHANNELS = ['now', 'transport', 'visit', 'justice', 'build', 'invest', 'trade'];
-export const CHANNEL_ROLES = ['action', 'action-hover', 'action-pressed', 'wash-start', 'wash-end', 'ink', 'subtle', 'link-visited'];
+const COLOR_SOURCE = JSON.parse(readFileSync(join(TOKENS_DIR, 'source', 'color.source.json'), 'utf8'));
+const own = (o) => Object.keys(o).filter((k) => !k.startsWith('$'));
+/** Channel names and per-channel roles, from tokens/source/color.source.json. */
+export const CHANNELS = own(COLOR_SOURCE.channels);
+export const CHANNEL_ROLES = own(COLOR_SOURCE.channelRoles);
+export const DEFAULT_CHANNEL = COLOR_SOURCE.defaultChannel;
 
 function readJson(name) {
   return JSON.parse(readFileSync(join(TOKENS_DIR, name), 'utf8'));
@@ -50,22 +54,30 @@ export function loadTokens() {
     else light.push(...tokens);
   }
   const byPath = new Map(light.map((t) => [t.path.join('.'), t]));
-  // Resolve "{font.family.bold}" style references against the light set.
-  const resolve = (v) => {
-    if (typeof v === 'string' && /^\{[^}]+\}$/.test(v)) {
-      const target = byPath.get(v.slice(1, -1));
-      if (!target) throw new Error(`Unresolved reference ${v}`);
-      return resolve(target.value);
-    }
-    if (Array.isArray(v)) return v.map(resolve);
-    if (v && typeof v === 'object') return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, resolve(x)]));
-    return v;
+  // Dark aliases resolve against the dark value where one exists, so
+  // {channel.now.action} in color.dark.json means the dark channel colour.
+  const darkByPath = new Map([...byPath, ...dark.map((t) => [t.path.join('.'), t])]);
+  // Resolve "{font.family.bold}" style references.
+  const resolver = (map) => {
+    const resolve = (v) => {
+      if (typeof v === 'string' && /^\{[^}]+\}$/.test(v)) {
+        const target = map.get(v.slice(1, -1));
+        if (!target) throw new Error(`Unresolved reference ${v}`);
+        return resolve(target.ref ?? target.value);
+      }
+      if (Array.isArray(v)) return v.map(resolve);
+      if (v && typeof v === 'object') return Object.fromEntries(Object.entries(v).map(([k, x]) => [k, resolve(x)]));
+      return v;
+    };
+    return resolve;
   };
-  for (const t of [...light, ...dark]) {
-    t.ref = t.value; // keep the unresolved form (used to name font families)
-    t.value = resolve(t.value);
-  }
-  return { light, dark, byPath, get: (p) => byPath.get(p) };
+  const resolveLight = resolver(byPath);
+  const resolveDark = resolver(darkByPath);
+  for (const t of light) t.ref = t.value; // keep the unresolved form (aliases, font family names)
+  for (const t of dark) t.ref = t.value;
+  for (const t of light) t.value = resolveLight(t.ref);
+  for (const t of dark) t.value = resolveDark(t.ref);
+  return { light, dark, byPath, darkByPath, get: (p) => byPath.get(p), getDark: (p) => darkByPath.get(p) };
 }
 
 export const isColor = (t) => t.type === 'color';

@@ -1,64 +1,58 @@
-# Shared Channels design system: foundations
+# Shared Channels design system: foundations (v2)
 
-Phase 2 foundations for the Dubai Shared Channels standard. The visual direction is **Native** (from DubaiNow Next), set in **Dubai Font** with tight leading.
+Foundations for the Dubai Shared Channels standard, v2. The visual language is direction E, **Dubai Design System, evolved**: tonal palettes in the DDS and Material manner, city indigo as the shared primary, seven channel signatures, flat outline-first surfaces and **Dubai Font** for both scripts. The full specification is [`docs/v2/foundations.md`](docs/v2/foundations.md).
 
 ## Source of truth
 
-`tokens/` holds the design tokens in the [W3C Design Tokens (DTCG)](https://www.designtokens.org/) format. Edit these files; everything else is generated from them.
+`tokens/` holds the design tokens in the [W3C Design Tokens (DTCG)](https://www.designtokens.org/) format.
 
 | File | Contents |
 |---|---|
-| `color.json` | Semantic colours and the seven channel signatures, light mode |
-| `color.dark.json` | Dark-mode overrides for the same names |
-| `typography.json` | Dubai Font families and weights; separate Latin and Arabic type scales |
+| `source/color.source.json` | **Edit this for colour.** Palette seeds, tones, chroma curve, and the role map for light and dark |
+| `palette.json` | Generated: every tonal palette (tone = CIELAB L\*) |
+| `color.json`, `color.dark.json` | Generated: colour roles and channel roles as aliases into the palettes |
+| `typography.json` | Dubai Font families and weights; the English and Arabic type roles |
 | `space.json`, `radius.json`, `size.json` | Spacing scale, corner radii, control and icon sizes |
-| `elevation.json` | Shadow levels 0–3 |
-| `motion.json` | Durations and easing curves |
+| `elevation.json`, `opacity.json` | Shadow levels 0–2; state-layer opacities |
+| `motion.json` | Durations, easing curves and scales |
 | `layout.json` | Breakpoints, grid columns, gutters, margins and containers |
 
 ## Rules
 
-- **Every colour is OKLAB.** Colour values use the DTCG colour object with `"colorSpace": "oklab"`. Platform outputs may convert to sRGB where a platform requires it, but the source never contains hex.
+- **Every colour is OKLAB.** The source never contains hex. Only the iOS and Android outputs convert to sRGB.
 - **No teal.** Nothing in OKLCH hue 160–215 with chroma above 0.015.
-- **The channel is the theme.** A page sets one channel (`now`, `transport`, `visit`, `justice`, `build`, `invest`, `trade`). Government entities appear only as attribution text.
-- **Contrast is checked, not assumed.** Text 4.5:1, control boundaries 3:1, in light and dark, for every channel.
-- **Dubai Font, tight leading.** Latin display text uses about 1.0–1.05× leading, headings about 1.15×, and body text about 1.4×. Arabic body text uses 1.5–1.6× and is never letter-spaced.
-
-`scripts/oklab.py` contains the OKLAB-to-sRGB conversion and the WCAG contrast maths used for the checks.
+- **The channel is the theme.** `data-channel` on any element (`now`, `transport`, `visit`, `justice`, `build`, `invest`, `trade`). Entities appear only as attribution text.
+- **Contrast is checked, not assumed.** Every role pair in `docs/v2/foundations.md`, in light and dark, for every channel.
+- **Roles, not tones.** Components use `--sc-color-<role>`; raw tones are for documentation only.
 
 ## Build
-
-The outputs in `dist/` are generated from `tokens/`. Do not edit them by hand.
 
 ```sh
 cd design-system
 npm run build
 ```
 
-This needs Node 20 or later and nothing else: the build is one plain Node script, `scripts/build-tokens.mjs`, with no dependencies. `npm run build` generates every output and then runs the checks. It stops with an error if any check fails. You can also run the steps on their own:
+Node 20 or later, no dependencies. `npm run build` generates the palettes, builds every output and runs the checks, stopping at the first failure.
 
 | Command | What it does |
 |---|---|
+| `npm run generate` | Writes `palette.json`, `color.json` and `color.dark.json` from `tokens/source/color.source.json` |
 | `npm run build:tokens` | Generates `dist/` only |
-| `npm run check:contrast` | Recomputes WCAG contrast for the pairs the colours were designed for, in light and dark, for every channel |
+| `npm run check:contrast` | Recomputes WCAG contrast for every role pair, light and dark, all channels |
 | `npm run check:teal` | Fails if any colour is in OKLCH hue 160–215 with chroma above 0.015 |
 | `npm run check:no-hex` | Fails if the CSS or Tailwind output contains a hex colour |
-
-Without npm, run the same scripts with `node scripts/<name>.mjs`.
+| `npm run report:contrast` | Prints the contrast tables used in `docs/v2/foundations.md` |
 
 ### Outputs
 
 | File | For |
 |---|---|
-| `dist/css/tokens.css` | Websites. Every token as a `--sc-*` custom property, dark mode (system setting, or forced with `data-theme="dark"` / `"light"` on `<html>`), channel theming with `data-channel="<name>"` on any element (default `now`), `.sc-type-*` text classes for Latin and Arabic, and reduced motion |
-| `dist/tailwind/theme.css` | Tailwind v4 projects. Import it after `tailwindcss`. Utilities point at the `--sc-*` properties, so dark mode and channels keep working. Tailwind's default colours and breakpoints are removed. Spacing is 1 unit = 1px, so `p-16` is 16px |
-| `dist/ios/SCTokens.swift` | SwiftUI apps. `Color.sc*` colours that follow light and dark mode, `SCChannel`, `SCSpace`, `SCRadius`, `SCSize`, and `SCType` text styles using the Dubai W23 PostScript names |
-| `dist/android/SCTokens.kt` | Jetpack Compose apps. Light and dark colour schemes, channels, `Dp` spacing and radii, and `TextStyle`s. Replace the `DubaiFontFamily` placeholder with the bundled font files |
-| `dist/paper/tokens.paper.json` | Loading the tokens into Paper with its `create_tokens` API. Dark colours have a `-dark` suffix. Paper has no token type for shadows, motion or grid columns, so those are left out |
-
-### Colour on native platforms
-
-Colours stay OKLAB wherever the platform understands it: the CSS and Tailwind outputs use `oklab()` values, and `check:no-hex` enforces this. iOS and Android need numeric sRGB components, so only those two outputs convert. They use the same maths as `scripts/oklab.py`, and each converted colour has its source OKLAB value in a comment next to it. A few very light tints sit just outside sRGB and are clamped, exactly as `oklab.py` does. The build lists them.
+| `dist/css/tokens.css` | Websites. Colour roles with light and dark in one `light-dark()` value (system setting, or `data-theme` on any element), channel roles rebound by `data-channel`, type roles rebound to the Arabic scale by `lang="ar"`, `.sc-type-*` classes, and reduced motion |
+| `dist/css/palette.css` | Raw tonal palettes as `--sc-palette-<name>-<tone>`, for documentation and tooling |
+| `dist/tailwind/theme.css` | Tailwind v4. Utilities point at the `--sc-*` properties. Default colours and breakpoints are removed; spacing is 1 unit = 1px |
+| `dist/ios/SCTokens.swift` | SwiftUI. `Color.sc*` dynamic colours, `SCChannel`, `SCSpace`, `SCRadius`, `SCSize`, `SCOpacity`, `SCType.En` and `SCType.Ar` |
+| `dist/android/SCTokens.kt` | Jetpack Compose. Light and dark schemes, channels, dimensions and `TextStyle`s. Replace the `DubaiFontFamily` placeholder |
+| `dist/paper/tokens.paper.json` | Paper's `create_tokens` API. Dark colours have a `-dark` suffix, each channel is spelled out, Arabic type has an `-ar` suffix |
 
 ## Keeping secrets out of the repository
 

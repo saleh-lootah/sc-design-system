@@ -1,0 +1,138 @@
+{
+  "$description": "Source for the v2 colour system. scripts/generate-palettes.mjs reads this file and writes tokens/palette.json, tokens/color.json and tokens/color.dark.json. Edit this file, never the generated ones. Seeds are OKLAB [L, a, b]; each palette keeps the seed's OKLCH hue and scales the seed's chroma by the curve below, then every tone is solved for exact luminance (tone = CIELAB L*). See docs/v2/foundations.md.",
+  "tones": {
+    "neutral": [10, 12, 17, 20, 22, 24, 30, 40, 50, 60, 70, 80, 90, 94, 96, 100],
+    "chromatic": [10, 20, 25, 30, 35, 40, 50, 60, 70, 75, 80, 90, 95]
+  },
+  "chromaCurve": {
+    "$description": "Multiplier of the seed chroma at each tone. Light tones carry less chroma so containers stay calm; the curve is the average of direction E's channel ramps.",
+    "10": 0.35, "20": 0.45, "25": 0.7, "30": 0.9, "35": 0.95, "40": 1, "50": 1, "60": 0.95, "70": 0.85, "75": 0.75, "80": 0.65, "90": 0.3, "95": 0.15
+  },
+  "palettes": {
+    "neutral": {
+      "description": "Cool grey with a trace of city indigo (hue 275). Replaces direction E's neutrals, whose trace hue (163-194) sat in the teal band.",
+      "hue": 275,
+      "chroma": 0.004
+    },
+    "indigo": {
+      "description": "City indigo, the shared primary. Seed is direction E's primary-40 exactly (tone 31.9).",
+      "seed": [0.421, 0.011, -0.128]
+    },
+    "now": { "description": "Dubai Now, blue. Seed: E now-40.", "seed": [0.485, -0.030, -0.153] },
+    "transport": { "description": "Dubai Transport, rust. Seed: E transport-40.", "seed": [0.501, 0.111, 0.100] },
+    "visit": { "description": "Visit Dubai, magenta. Seed: E visit-40.", "seed": [0.502, 0.155, -0.016] },
+    "justice": { "description": "Dubai Justice, violet. Seed: E justice-40.", "seed": [0.492, 0.059, -0.113] },
+    "build": {
+      "description": "Build in Dubai, ochre. Seed: E build-40. Light tones keep more chroma, as in E, so 80 and 90 read yellow rather than beige.",
+      "seed": [0.486, 0.011, 0.099],
+      "chromaCurve": { "75": 1.2, "80": 1.42, "90": 0.89, "95": 0.37 }
+    },
+    "invest": {
+      "description": "Invest in Dubai, green. Seed: E invest-40. Light tones keep more chroma, as in E.",
+      "seed": [0.472, -0.093, 0.074],
+      "chromaCurve": { "75": 1.05, "80": 1.1, "90": 0.68, "95": 0.32 }
+    },
+    "trade": {
+      "description": "Dubai Trade, slate. Seed: E trade-40 (tone 35.2). Low-chroma seed, so light tones keep proportionally more chroma.",
+      "seed": [0.44, -0.018, -0.046],
+      "chromaCurve": { "75": 0.95, "80": 0.94, "90": 0.47, "95": 0.24 }
+    },
+    "error": { "description": "Error, red. Seed: E error-40.", "seed": [0.508, 0.183, 0.098] },
+    "success": {
+      "description": "Success, green. Seed: E success-40.",
+      "seed": [0.469, -0.110, 0.067],
+      "chromaCurve": { "95": 0.3 }
+    },
+    "warning": {
+      "description": "Warning, amber-brown. Seed: E warning-40.",
+      "seed": [0.487, 0.032, 0.099],
+      "chromaCurve": { "95": 0.28 }
+    },
+    "info": { "description": "Info, blue. Seed: E info-40.", "seed": [0.484, -0.027, -0.130] },
+    "tint-blue": { "description": "Decorative topic tint: transport, vehicles, travel. Hue from v1 feat/tint-palette.", "seed": [0.47, -0.029, -0.137] },
+    "tint-violet": { "description": "Decorative topic tint: residency, visas, identity.", "seed": [0.47, 0.07, -0.121] },
+    "tint-rose": { "description": "Decorative topic tint: family, social support, people.", "seed": [0.47, 0.137, 0.029] },
+    "tint-orange": { "description": "Decorative topic tint: housing, utilities, home.", "seed": [0.45, 0.062, 0.079] },
+    "tint-amber": { "description": "Decorative topic tint: bills, money, payments due.", "seed": [0.45, 0.013, 0.089] },
+    "tint-green": { "description": "Decorative topic tint: health, environment.", "seed": [0.47, -0.11, 0.086] }
+  },
+  "roles": {
+    "$description": "System roles: [palette, light tone, dark tone, use].",
+    "surface": ["neutral", 100, 10, "Page background"],
+    "surface-card": ["neutral", 100, 12, "Cards, fields, list groups, dialogs and sheets"],
+    "surface-container": ["neutral", 96, 17, "Bands, panels, table headers, totals rows"],
+    "surface-container-high": ["neutral", 94, 22, "A container nested in a container; skeletons"],
+    "on-surface": ["neutral", 10, 100, "Primary text and icons"],
+    "on-surface-variant": ["neutral", 40, 80, "Secondary text: hints, captions, metadata"],
+    "outline": ["neutral", 40, 60, "Control boundaries (1.5px) and inactive markers; at least 3:1"],
+    "outline-variant": ["neutral", 90, 24, "Dividers and card edges only; never the only edge of a control"],
+    "inverse-surface": ["neutral", 20, 90, "Tooltips and toasts"],
+    "inverse-on-surface": ["neutral", 96, 10, "Text on inverse-surface"],
+    "disabled-container": ["neutral", 94, 20, "Fill of a disabled control"],
+    "on-disabled": ["neutral", 50, 60, "Text, icons and edges of a disabled control"],
+    "focus-ring": ["neutral", 10, 100, "The 3px focus ring, drawn outside a 2px gap of surface"],
+    "primary": ["indigo", 30, 80, "City indigo: the network strip, sign-in and Dubai Pay hand-offs"],
+    "on-primary": ["neutral", 100, 10, "Text and icons on primary"],
+    "primary-hover": ["indigo", 25, 75, "Primary fill on pointer hover"],
+    "primary-pressed": ["indigo", 20, 70, "Primary fill while pressed"],
+    "primary-container": ["indigo", 90, 30, "Selected or emphasised indigo container"],
+    "on-primary-container": ["indigo", 30, 90, "Text and icons on primary-container"],
+    "primary-subtle": ["indigo", 95, 20, "Quiet indigo band or tint"],
+    "error": ["error", 40, 80, "Error text, icons, field edges and destructive fills"],
+    "on-error": ["neutral", 100, 10, "Text and icons on an error fill"],
+    "error-hover": ["error", 35, 75, "Destructive fill on pointer hover"],
+    "error-pressed": ["error", 30, 70, "Destructive fill while pressed"],
+    "error-container": ["error", 95, 20, "Error summary, error chip and callout background"],
+    "on-error-container": ["error", 30, 90, "Strong text on error-container"],
+    "success": ["success", 40, 80, "Success text and icons; completed step markers"],
+    "on-success": ["neutral", 100, 10, "Text and icons on a success fill"],
+    "success-container": ["success", 95, 20, "Success chip and callout background"],
+    "on-success-container": ["success", 30, 90, "Strong text on success-container"],
+    "warning": ["warning", 40, 80, "Warning text and icons"],
+    "on-warning": ["neutral", 100, 10, "Text and icons on a warning fill"],
+    "warning-container": ["warning", 95, 20, "Warning chip and callout background"],
+    "on-warning-container": ["warning", 30, 90, "Strong text on warning-container"],
+    "info": ["info", 40, 80, "Information text and icons"],
+    "on-info": ["neutral", 100, 10, "Text and icons on an info fill"],
+    "info-container": ["info", 95, 20, "Information chip and callout background"],
+    "on-info-container": ["info", 30, 90, "Strong text on info-container"],
+    "tint-blue": ["tint-blue", 95, 20, "Decorative tile background"],
+    "on-tint-blue": ["tint-blue", 40, 80, "Icon and short text on the tile"],
+    "tint-violet": ["tint-violet", 95, 20, "Decorative tile background"],
+    "on-tint-violet": ["tint-violet", 40, 80, "Icon and short text on the tile"],
+    "tint-rose": ["tint-rose", 95, 20, "Decorative tile background"],
+    "on-tint-rose": ["tint-rose", 40, 80, "Icon and short text on the tile"],
+    "tint-orange": ["tint-orange", 95, 20, "Decorative tile background"],
+    "on-tint-orange": ["tint-orange", 40, 80, "Icon and short text on the tile"],
+    "tint-amber": ["tint-amber", 95, 20, "Decorative tile background"],
+    "on-tint-amber": ["tint-amber", 40, 80, "Icon and short text on the tile"],
+    "tint-green": ["tint-green", 95, 20, "Decorative tile background"],
+    "on-tint-green": ["tint-green", 40, 80, "Icon and short text on the tile"],
+    "channel-on-action": ["neutral", 100, 10, "Text and icons on any channel action fill (the same in every channel)"]
+  },
+  "alphaRoles": {
+    "$description": "Translucent roles: [OKLAB light, alpha light, OKLAB dark, alpha dark, use].",
+    "scrim": [[0, 0, 0], 0.5, [0, 0, 0], 0.64, "Behind modal dialogs and sheets"],
+    "shadow": [[0, 0, 0], 1, [0, 0, 0], 1, "Base shadow colour; elevation layers set their own alpha"]
+  },
+  "channels": {
+    "$description": "Each channel's palette and the tone of its action colour. Hover and pressed are the action tone minus 5 and minus 10. Trade keeps E's deeper slate (35) because a tone-40 slate reads as grey.",
+    "now": { "palette": "now", "action": 40 },
+    "transport": { "palette": "transport", "action": 40 },
+    "visit": { "palette": "visit", "action": 40 },
+    "justice": { "palette": "justice", "action": 40 },
+    "build": { "palette": "build", "action": 40 },
+    "invest": { "palette": "invest", "action": 40 },
+    "trade": { "palette": "trade", "action": 35 }
+  },
+  "channelRoles": {
+    "$description": "Per-channel roles: [light tone (or offset from the action tone), dark tone, use].",
+    "action": ["action", 80, "Buttons, links, selected states, the current step, progress"],
+    "action-hover": ["action-5", 75, "Action fill on pointer hover"],
+    "action-pressed": ["action-10", 70, "Action fill while pressed"],
+    "container": [90, 30, "Selected navigation item, chips on a tinted card"],
+    "on-container": [30, 90, "Text and icons on container"],
+    "subtle": [95, 20, "Hero band, tinted rows, the halo of the current step"]
+  },
+  "defaultChannel": "now"
+}

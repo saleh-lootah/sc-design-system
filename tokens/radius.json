@@ -1,66 +1,53 @@
 {
+  "$description": "Direction E shape: 4px controls, 6px status chips, 8px fields, 12px cards. Full rounding only for circular marks (radio, stepper marker, avatar, switch) and suggestion chips.",
   "radius": {
-    "xs": {
+    "none": {
       "$type": "dimension",
       "$value": {
-        "value": 6,
-        "unit": "px"
-      }
-    },
-    "s": {
-      "$type": "dimension",
-      "$value": {
-        "value": 10,
-        "unit": "px"
-      }
-    },
-    "field": {
-      "$type": "dimension",
-      "$value": {
-        "value": 14,
+        "value": 0,
         "unit": "px"
       },
-      "$description": "Inputs and selects"
-    },
-    "card": {
-      "$type": "dimension",
-      "$value": {
-        "value": 20,
-        "unit": "px"
-      },
-      "$description": "Cards and list groups"
-    },
-    "panel": {
-      "$type": "dimension",
-      "$value": {
-        "value": 24,
-        "unit": "px"
-      },
-      "$description": "Large panels, hero cards"
-    },
-    "sheet": {
-      "$type": "dimension",
-      "$value": {
-        "value": 28,
-        "unit": "px"
-      },
-      "$description": "Bottom sheets, dialogs"
+      "$description": "Tables, full-bleed bands"
     },
     "control": {
       "$type": "dimension",
       "$value": {
-        "value": 22,
+        "value": 4,
         "unit": "px"
       },
-      "$description": "44px glass controls"
+      "$description": "Buttons, checkboxes, segmented controls, tags"
     },
-    "pill": {
+    "chip": {
       "$type": "dimension",
       "$value": {
-        "value": 999,
+        "value": 6,
         "unit": "px"
       },
-      "$description": "Buttons, chips, search"
+      "$description": "Status chips"
+    },
+    "field": {
+      "$type": "dimension",
+      "$value": {
+        "value": 8,
+        "unit": "px"
+      },
+      "$description": "Text inputs, selects, textareas, callouts"
+    },
+    "card": {
+      "$type": "dimension",
+      "$value": {
+        "value": 12,
+        "unit": "px"
+      },
+      "$description": "Cards, list groups, panels, dialogs, sheets"
+    },
+    "full": {
+      "$type": "dimension",
+      "$value": {
+        "value": 9999,
+        "unit": "px"
+      },
+      "$description": "Circular marks and suggestion chips only"
     }
   }
 }

@@ -1,808 +1,2310 @@
 [
   {
     "type": "color",
-    "name": "--sc-color-canvas",
-    "value": "oklab(0.976 0.0004 -0.001)",
-    "description": "App/page background behind cards"
-  },
-  {
-    "type": "color",
-    "name": "--sc-color-grouped",
-    "value": "oklab(0.953 0.0007 -0.003)",
-    "description": "Grouped-list background"
-  },
-  {
-    "type": "color",
     "name": "--sc-color-surface",
     "value": "oklab(1 0 0)",
-    "description": "Cards, sheets, fields"
+    "description": "Page background"
   },
   {
     "type": "color",
-    "name": "--sc-color-rule",
-    "value": "oklab(0.92 0.001 -0.004)",
-    "description": "Decorative dividers (not a control boundary)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-color-control",
-    "value": "oklab(0.558 0.003 -0.01)",
-    "description": "Control boundaries and inactive progress, >=3:1"
-  },
-  {
-    "type": "color",
-    "name": "--sc-color-muted",
-    "value": "oklab(0.498 0.002 -0.008)",
-    "description": "Secondary text, >=4.5:1 on surface and canvas"
-  },
-  {
-    "type": "color",
-    "name": "--sc-color-ink",
-    "value": "oklab(0.245 0.002 -0.005)",
-    "description": "Primary text"
-  },
-  {
-    "type": "color",
-    "name": "--sc-color-ink-strong",
-    "value": "oklab(0.178 0.001 -0.004)",
-    "description": "Headings and display"
-  },
-  {
-    "type": "color",
-    "name": "--sc-color-on-action",
+    "name": "--sc-color-surface-card",
     "value": "oklab(1 0 0)",
-    "description": "Text and icons on channel action colour"
+    "description": "Cards, fields, list groups, dialogs and sheets"
   },
   {
     "type": "color",
-    "name": "--sc-color-glass",
-    "value": "oklab(1 0 0 / 0.72)",
-    "description": "Translucent bar fill (Liquid Glass approximation)"
+    "name": "--sc-color-surface-container",
+    "value": "oklab(0.9656 0.0003 -0.004)",
+    "description": "Bands, panels, table headers, totals rows"
   },
   {
     "type": "color",
-    "name": "--sc-color-glass-edge",
-    "value": "oklab(1 0 0 / 0.9)",
-    "description": "Hairline edge on glass"
+    "name": "--sc-color-surface-container-high",
+    "value": "oklab(0.9484 0.0003 -0.004)",
+    "description": "A container nested in a container; skeletons"
   },
   {
     "type": "color",
-    "name": "--sc-color-fill-quiet",
-    "value": "oklab(0.575 0.003 -0.012 / 0.14)",
-    "description": "Quiet control fill"
+    "name": "--sc-color-on-surface",
+    "value": "oklab(0.2242 0.0003 -0.004)",
+    "description": "Primary text and icons"
   },
   {
     "type": "color",
-    "name": "--sc-color-fill-selected",
-    "value": "oklab(0.575 0.003 -0.012 / 0.16)",
-    "description": "Selected nav item fill"
+    "name": "--sc-color-on-surface-variant",
+    "value": "oklab(0.4829 0.0003 -0.004)",
+    "description": "Secondary text: hints, captions, metadata"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-outline",
+    "value": "oklab(0.4829 0.0003 -0.004)",
+    "description": "Control boundaries (1.5px) and inactive markers; at least 3:1"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-outline-variant",
+    "value": "oklab(0.9139 0.0003 -0.004)",
+    "description": "Dividers and card edges only; never the only edge of a control"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-inverse-surface",
+    "value": "oklab(0.3104 0.0003 -0.004)",
+    "description": "Tooltips and toasts"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-inverse-on-surface",
+    "value": "oklab(0.9656 0.0003 -0.004)",
+    "description": "Text on inverse-surface"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-disabled-container",
+    "value": "oklab(0.9484 0.0003 -0.004)",
+    "description": "Fill of a disabled control"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-on-disabled",
+    "value": "oklab(0.5691 0.0003 -0.004)",
+    "description": "Text, icons and edges of a disabled control"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-focus-ring",
+    "value": "oklab(0.2242 0.0003 -0.004)",
+    "description": "The 3px focus ring, drawn outside a 2px gap of surface"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-primary",
+    "value": "oklab(0.4037 0.0099 -0.1152)",
+    "description": "City indigo: the network strip, sign-in and Dubai Pay hand-offs"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-on-primary",
+    "value": "oklab(1 0 0)",
+    "description": "Text and icons on primary"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-primary-hover",
+    "value": "oklab(0.3585 0.0077 -0.0896)",
+    "description": "Primary fill on pointer hover"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-primary-pressed",
+    "value": "oklab(0.3131 0.0049 -0.0576)",
+    "description": "Primary fill while pressed"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-primary-container",
+    "value": "oklab(0.9149 0.0033 -0.0384)",
+    "description": "Selected or emphasised indigo container"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-on-primary-container",
+    "value": "oklab(0.4037 0.0099 -0.1152)",
+    "description": "Text and icons on primary-container"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-primary-subtle",
+    "value": "oklab(0.9574 0.0016 -0.0192)",
+    "description": "Quiet indigo band or tint"
   },
   {
     "type": "color",
     "name": "--sc-color-error",
-    "value": "oklab(0.501 0.144 0.076)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-color-error-hover",
-    "value": "oklab(0.47 0.138 0.073)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-color-error-pressed",
-    "value": "oklab(0.44 0.132 0.07)"
+    "value": "oklab(0.508 0.183 0.098)",
+    "description": "Error text, icons, field edges and destructive fills"
   },
   {
     "type": "color",
     "name": "--sc-color-on-error",
     "value": "oklab(1 0 0)",
-    "description": "Text and icons on error fill"
+    "description": "Text and icons on an error fill"
   },
   {
     "type": "color",
-    "name": "--sc-color-error-surface",
-    "value": "oklab(0.967 0.015 0.006)"
+    "name": "--sc-color-error-hover",
+    "value": "oklab(0.4626 0.1664 0.0891)",
+    "description": "Destructive fill on pointer hover"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-error-pressed",
+    "value": "oklab(0.4173 0.1504 0.0806)",
+    "description": "Destructive fill while pressed"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-error-container",
+    "value": "oklab(0.9591 0.0178 0.0096)",
+    "description": "Error summary, error chip and callout background"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-on-error-container",
+    "value": "oklab(0.4173 0.1504 0.0806)",
+    "description": "Strong text on error-container"
   },
   {
     "type": "color",
     "name": "--sc-color-success",
-    "value": "oklab(0.448 -0.081 0.043)"
+    "value": "oklab(0.4691 -0.11 0.067)",
+    "description": "Success text and icons; completed step markers"
   },
   {
     "type": "color",
-    "name": "--sc-color-success-surface",
-    "value": "oklab(0.965 -0.015 0.008)"
+    "name": "--sc-color-on-success",
+    "value": "oklab(1 0 0)",
+    "description": "Text and icons on a success fill"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-success-container",
+    "value": "oklab(0.9525 -0.033 0.0201)",
+    "description": "Success chip and callout background"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-on-success-container",
+    "value": "oklab(0.385 -0.0934 0.0569)",
+    "description": "Strong text on success-container"
   },
   {
     "type": "color",
     "name": "--sc-color-warning",
-    "value": "oklab(0.47 0.026 0.096)"
+    "value": "oklab(0.4878 0.032 0.099)",
+    "description": "Warning text and icons"
   },
   {
     "type": "color",
-    "name": "--sc-color-warning-surface",
-    "value": "oklab(0.97 0.003 0.032)"
+    "name": "--sc-color-on-warning",
+    "value": "oklab(1 0 0)",
+    "description": "Text and icons on a warning fill"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-warning-container",
+    "value": "oklab(0.9578 0.009 0.0277)",
+    "description": "Warning chip and callout background"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-on-warning-container",
+    "value": "oklab(0.4007 0.0264 0.0816)",
+    "description": "Strong text on warning-container"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-info",
+    "value": "oklab(0.4856 -0.027 -0.13)",
+    "description": "Information text and icons"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-on-info",
+    "value": "oklab(1 0 0)",
+    "description": "Text and icons on an info fill"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-info-container",
+    "value": "oklab(0.9567 -0.0041 -0.0195)",
+    "description": "Information chip and callout background"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-on-info-container",
+    "value": "oklab(0.3996 -0.0243 -0.117)",
+    "description": "Strong text on info-container"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-tint-blue",
+    "value": "oklab(0.9567 -0.0043 -0.0202)",
+    "description": "Decorative tile background"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-on-tint-blue",
+    "value": "oklab(0.486 -0.029 -0.137)",
+    "description": "Icon and short text on the tile"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-tint-violet",
+    "value": "oklab(0.9585 0.0105 -0.0181)",
+    "description": "Decorative tile background"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-on-tint-violet",
+    "value": "oklab(0.4972 0.07 -0.121)",
+    "description": "Icon and short text on the tile"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-tint-rose",
+    "value": "oklab(0.9594 0.0198 0.0042)",
+    "description": "Decorative tile background"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-on-tint-rose",
+    "value": "oklab(0.5005 0.137 0.029)",
+    "description": "Icon and short text on the tile"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-tint-orange",
+    "value": "oklab(0.9579 0.0093 0.0118)",
+    "description": "Decorative tile background"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-on-tint-orange",
+    "value": "oklab(0.4912 0.062 0.079)",
+    "description": "Icon and short text on the tile"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-tint-amber",
+    "value": "oklab(0.957 0.0019 0.0134)",
+    "description": "Decorative tile background"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-on-tint-amber",
+    "value": "oklab(0.4851 0.013 0.089)",
+    "description": "Icon and short text on the tile"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-tint-green",
+    "value": "oklab(0.9547 -0.0165 0.0129)",
+    "description": "Decorative tile background"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-on-tint-green",
+    "value": "oklab(0.4695 -0.11 0.086)",
+    "description": "Icon and short text on the tile"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-channel-on-action",
+    "value": "oklab(1 0 0)",
+    "description": "Text and icons on any channel action fill (the same in every channel)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-scrim",
+    "value": "oklab(0 0 0 / 0.5)",
+    "description": "Behind modal dialogs and sheets"
   },
   {
     "type": "color",
     "name": "--sc-color-shadow",
-    "value": "oklab(0 0 0 / 0.05)",
-    "description": "Base shadow colour; elevation tokens set their own alpha"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-now-action",
-    "value": "oklab(0.537 -0.011 -0.22)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-now-action-hover",
-    "value": "oklab(0.507 -0.0107 -0.2134)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-now-action-pressed",
-    "value": "oklab(0.477 -0.0103 -0.2068)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-now-wash-start",
-    "value": "oklab(0.947 -0.004 -0.025)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-now-wash-end",
-    "value": "oklab(0.896 -0.003 -0.044)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-now-ink",
-    "value": "oklab(0.307 0.0004 -0.094)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-now-subtle",
-    "value": "oklab(0.947 -0.004 -0.025)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-now-link-visited",
-    "value": "oklab(0.307 0.0004 -0.094)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-transport-action",
-    "value": "oklab(0.501 0.111 0.1)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-transport-action-hover",
-    "value": "oklab(0.471 0.1047 0.0943)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-transport-action-pressed",
-    "value": "oklab(0.441 0.0984 0.0886)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-transport-wash-start",
-    "value": "oklab(0.948 0.017 0.027)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-transport-wash-end",
-    "value": "oklab(0.888 0.043 0.049)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-transport-ink",
-    "value": "oklab(0.379 0.068 0.068)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-transport-subtle",
-    "value": "oklab(0.948 0.017 0.027)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-transport-link-visited",
-    "value": "oklab(0.379 0.068 0.068)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-visit-action",
-    "value": "oklab(0.501 0.176 0.026)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-visit-action-hover",
-    "value": "oklab(0.471 0.1707 0.0252)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-visit-action-pressed",
-    "value": "oklab(0.441 0.1654 0.0244)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-visit-wash-start",
-    "value": "oklab(0.941 0.021 0.009)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-visit-wash-end",
-    "value": "oklab(0.876 0.042 0.021)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-visit-ink",
-    "value": "oklab(0.339 0.089 0.024)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-visit-subtle",
-    "value": "oklab(0.941 0.021 0.009)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-visit-link-visited",
-    "value": "oklab(0.339 0.089 0.024)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-justice-action",
-    "value": "oklab(0.495 0.068 -0.187)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-justice-action-hover",
-    "value": "oklab(0.465 0.066 -0.1814)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-justice-action-pressed",
-    "value": "oklab(0.435 0.0639 -0.1758)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-justice-wash-start",
-    "value": "oklab(0.94 0.015 -0.022)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-justice-wash-end",
-    "value": "oklab(0.876 0.027 -0.043)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-justice-ink",
-    "value": "oklab(0.339 0.041 -0.092)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-justice-subtle",
-    "value": "oklab(0.94 0.015 -0.022)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-justice-link-visited",
-    "value": "oklab(0.339 0.041 -0.092)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-build-action",
-    "value": "oklab(0.494 0.043 0.1)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-build-action-hover",
-    "value": "oklab(0.464 0.0401 0.0933)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-build-action-pressed",
-    "value": "oklab(0.434 0.0373 0.0867)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-build-wash-start",
-    "value": "oklab(0.962 0.008 0.03)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-build-wash-end",
-    "value": "oklab(0.913 0.017 0.056)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-build-ink",
-    "value": "oklab(0.378 0.026 0.065)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-build-subtle",
-    "value": "oklab(0.962 0.008 0.03)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-build-link-visited",
-    "value": "oklab(0.378 0.026 0.065)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-invest-action",
-    "value": "oklab(0.513 -0.101 0.054)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-invest-action-hover",
-    "value": "oklab(0.483 -0.098 0.0524)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-invest-action-pressed",
-    "value": "oklab(0.453 -0.0949 0.0508)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-invest-wash-start",
-    "value": "oklab(0.952 -0.023 0.012)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-invest-wash-end",
-    "value": "oklab(0.897 -0.04 0.021)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-invest-ink",
-    "value": "oklab(0.368 -0.058 0.031)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-invest-subtle",
-    "value": "oklab(0.952 -0.023 0.012)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-invest-link-visited",
-    "value": "oklab(0.368 -0.058 0.031)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-trade-action",
-    "value": "oklab(0.44 -0.018 -0.046)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-trade-action-hover",
-    "value": "oklab(0.41 -0.0175 -0.0446)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-trade-action-pressed",
-    "value": "oklab(0.38 -0.0169 -0.0432)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-trade-wash-start",
-    "value": "oklab(0.955 -0.005 -0.011)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-trade-wash-end",
-    "value": "oklab(0.905 -0.007 -0.021)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-trade-ink",
-    "value": "oklab(0.321 -0.012 -0.044)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-trade-subtle",
-    "value": "oklab(0.955 -0.005 -0.011)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-channel-trade-link-visited",
-    "value": "oklab(0.321 -0.012 -0.044)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-color-canvas-dark",
-    "value": "oklab(0.178 0.001 -0.004)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-color-grouped-dark",
-    "value": "oklab(0.178 0.001 -0.004)"
+    "value": "oklab(0 0 0)",
+    "description": "Base shadow colour; elevation layers set their own alpha"
   },
   {
     "type": "color",
     "name": "--sc-color-surface-dark",
-    "value": "oklab(0.245 0.002 -0.005)"
+    "value": "oklab(0.2242 0.0003 -0.004)"
   },
   {
     "type": "color",
-    "name": "--sc-color-rule-dark",
-    "value": "oklab(0.323 0.002 -0.008)"
+    "name": "--sc-color-surface-card-dark",
+    "value": "oklab(0.2415 0.0003 -0.004)"
   },
   {
     "type": "color",
-    "name": "--sc-color-control-dark",
-    "value": "oklab(0.669 0.003 -0.01)"
+    "name": "--sc-color-surface-container-dark",
+    "value": "oklab(0.2846 0.0003 -0.004)"
   },
   {
     "type": "color",
-    "name": "--sc-color-muted-dark",
-    "value": "oklab(0.8 0.002 -0.007)"
+    "name": "--sc-color-surface-container-high-dark",
+    "value": "oklab(0.3277 0.0003 -0.004)"
   },
   {
     "type": "color",
-    "name": "--sc-color-ink-dark",
+    "name": "--sc-color-on-surface-dark",
     "value": "oklab(1 0 0)"
   },
   {
     "type": "color",
-    "name": "--sc-color-ink-strong-dark",
+    "name": "--sc-color-on-surface-variant-dark",
+    "value": "oklab(0.8277 0.0003 -0.004)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-outline-dark",
+    "value": "oklab(0.6553 0.0003 -0.004)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-outline-variant-dark",
+    "value": "oklab(0.3449 0.0003 -0.004)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-inverse-surface-dark",
+    "value": "oklab(0.9139 0.0003 -0.004)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-inverse-on-surface-dark",
+    "value": "oklab(0.2242 0.0003 -0.004)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-disabled-container-dark",
+    "value": "oklab(0.3104 0.0003 -0.004)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-on-disabled-dark",
+    "value": "oklab(0.6553 0.0003 -0.004)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-focus-ring-dark",
     "value": "oklab(1 0 0)"
   },
   {
     "type": "color",
-    "name": "--sc-color-on-action-dark",
-    "value": "oklab(0.178 0.001 -0.004)"
+    "name": "--sc-color-primary-dark",
+    "value": "oklab(0.8306 0.0072 -0.0832)"
   },
   {
     "type": "color",
-    "name": "--sc-color-glass-dark",
-    "value": "oklab(0.279 0.002 -0.007 / 0.72)"
+    "name": "--sc-color-on-primary-dark",
+    "value": "oklab(0.2242 0.0003 -0.004)"
   },
   {
     "type": "color",
-    "name": "--sc-color-glass-edge-dark",
-    "value": "oklab(1 0 0 / 0.14)"
+    "name": "--sc-color-primary-hover-dark",
+    "value": "oklab(0.7882 0.0082 -0.096)"
   },
   {
     "type": "color",
-    "name": "--sc-color-fill-quiet-dark",
-    "value": "oklab(1 0 0 / 0.1)"
+    "name": "--sc-color-primary-pressed-dark",
+    "value": "oklab(0.7459 0.0093 -0.1088)"
   },
   {
     "type": "color",
-    "name": "--sc-color-fill-selected-dark",
-    "value": "oklab(1 0 0 / 0.14)"
+    "name": "--sc-color-primary-container-dark",
+    "value": "oklab(0.4037 0.0099 -0.1152)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-on-primary-container-dark",
+    "value": "oklab(0.9149 0.0033 -0.0384)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-primary-subtle-dark",
+    "value": "oklab(0.3131 0.0049 -0.0576)"
   },
   {
     "type": "color",
     "name": "--sc-color-error-dark",
-    "value": "oklab(0.834 0.082 0.041)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-color-error-hover-dark",
-    "value": "oklab(0.8 0.082 0.041)"
-  },
-  {
-    "type": "color",
-    "name": "--sc-color-error-pressed-dark",
-    "value": "oklab(0.77 0.082 0.041)"
+    "value": "oklab(0.8375 0.0791 0.0424)"
   },
   {
     "type": "color",
     "name": "--sc-color-on-error-dark",
-    "value": "oklab(0.178 0.001 -0.004)"
+    "value": "oklab(0.2242 0.0003 -0.004)"
   },
   {
     "type": "color",
-    "name": "--sc-color-error-surface-dark",
-    "value": "oklab(0.3 0.05 0.025)"
+    "name": "--sc-color-error-hover-dark",
+    "value": "oklab(0.7975 0.1024 0.0548)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-error-pressed-dark",
+    "value": "oklab(0.7578 0.1275 0.0683)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-error-container-dark",
+    "value": "oklab(0.3213 0.0823 0.0441)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-on-error-container-dark",
+    "value": "oklab(0.9183 0.0369 0.0198)"
   },
   {
     "type": "color",
     "name": "--sc-color-success-dark",
-    "value": "oklab(0.82 -0.09 0.05)"
+    "value": "oklab(0.8182 -0.0715 0.0436)"
   },
   {
     "type": "color",
-    "name": "--sc-color-success-surface-dark",
-    "value": "oklab(0.29 -0.045 0.025)"
+    "name": "--sc-color-on-success-dark",
+    "value": "oklab(0.2242 0.0003 -0.004)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-success-container-dark",
+    "value": "oklab(0.304 -0.0495 0.0302)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-on-success-container-dark",
+    "value": "oklab(0.9094 -0.033 0.0201)"
   },
   {
     "type": "color",
     "name": "--sc-color-warning-dark",
-    "value": "oklab(0.84 0.03 0.12)"
+    "value": "oklab(0.83 0.0208 0.0643)"
   },
   {
     "type": "color",
-    "name": "--sc-color-warning-surface-dark",
-    "value": "oklab(0.3 0.02 0.05)"
+    "name": "--sc-color-on-warning-dark",
+    "value": "oklab(0.2242 0.0003 -0.004)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-warning-container-dark",
+    "value": "oklab(0.3123 0.0144 0.0445)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-on-warning-container-dark",
+    "value": "oklab(0.9147 0.0096 0.0297)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-info-dark",
+    "value": "oklab(0.8275 -0.0176 -0.0845)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-on-info-dark",
+    "value": "oklab(0.2242 0.0003 -0.004)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-info-container-dark",
+    "value": "oklab(0.311 -0.0122 -0.0585)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-on-info-container-dark",
+    "value": "oklab(0.9135 -0.0081 -0.039)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-tint-blue-dark",
+    "value": "oklab(0.3111 -0.013 -0.0617)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-on-tint-blue-dark",
+    "value": "oklab(0.8275 -0.0179 -0.0845)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-tint-violet-dark",
+    "value": "oklab(0.3163 0.0315 -0.0544)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-on-tint-violet-dark",
+    "value": "oklab(0.8353 0.0455 -0.0786)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-tint-rose-dark",
+    "value": "oklab(0.3182 0.0617 0.013)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-on-tint-rose-dark",
+    "value": "oklab(0.8388 0.0883 0.0187)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-tint-orange-dark",
+    "value": "oklab(0.3139 0.0279 0.0355)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-on-tint-orange-dark",
+    "value": "oklab(0.8325 0.0403 0.0513)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-tint-amber-dark",
+    "value": "oklab(0.3112 0.0058 0.0401)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-on-tint-amber-dark",
+    "value": "oklab(0.8284 0.0084 0.0579)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-tint-green-dark",
+    "value": "oklab(0.3041 -0.0495 0.0387)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-on-tint-green-dark",
+    "value": "oklab(0.8182 -0.0715 0.0559)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-channel-on-action-dark",
+    "value": "oklab(0.2242 0.0003 -0.004)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-scrim-dark",
+    "value": "oklab(0 0 0 / 0.64)"
   },
   {
     "type": "color",
     "name": "--sc-color-shadow-dark",
-    "value": "oklab(0 0 0 / 0.35)"
+    "value": "oklab(0 0 0)"
   },
   {
     "type": "color",
-    "name": "--sc-channel-now-action-dark",
-    "value": "oklab(0.811 0.004 -0.094)"
+    "name": "--sc-color-channel-now-action",
+    "value": "oklab(0.4874 -0.03 -0.153)",
+    "description": "Buttons, links, selected states, the current step, progress"
   },
   {
     "type": "color",
-    "name": "--sc-channel-now-action-hover-dark",
-    "value": "oklab(0.78 -0.0047 -0.094)"
+    "name": "--sc-color-channel-now-action-dark",
+    "value": "oklab(0.8276 -0.0166 -0.0845)"
   },
   {
     "type": "color",
-    "name": "--sc-channel-now-action-pressed-dark",
-    "value": "oklab(0.75 -0.0047 -0.094)"
+    "name": "--sc-color-channel-now-action-hover",
+    "value": "oklab(0.4444 -0.0285 -0.1454)",
+    "description": "Action fill on pointer hover"
   },
   {
     "type": "color",
-    "name": "--sc-channel-now-wash-start-dark",
-    "value": "oklab(0.3 -0.0017 -0.035)"
+    "name": "--sc-color-channel-now-action-hover-dark",
+    "value": "oklab(0.785 -0.021 -0.1072)"
   },
   {
     "type": "color",
-    "name": "--sc-channel-now-wash-end-dark",
-    "value": "oklab(0.355 -0.0022 -0.0449)"
+    "name": "--sc-color-channel-now-action-pressed",
+    "value": "oklab(0.4014 -0.027 -0.1377)",
+    "description": "Action fill while pressed"
   },
   {
     "type": "color",
-    "name": "--sc-channel-now-ink-dark",
-    "value": "oklab(0.93 -0.0015 -0.03)"
+    "name": "--sc-color-channel-now-action-pressed-dark",
+    "value": "oklab(0.7427 -0.0255 -0.13)"
   },
   {
     "type": "color",
-    "name": "--sc-channel-now-subtle-dark",
-    "value": "oklab(0.3 -0.0017 -0.035)"
+    "name": "--sc-color-channel-now-container",
+    "value": "oklab(0.9135 -0.008 -0.041)",
+    "description": "Selected navigation item, chips on a tinted card"
   },
   {
     "type": "color",
-    "name": "--sc-channel-now-link-visited-dark",
-    "value": "oklab(0.93 -0.0015 -0.03)"
+    "name": "--sc-color-channel-now-container-dark",
+    "value": "oklab(0.4014 -0.027 -0.1377)"
   },
   {
     "type": "color",
-    "name": "--sc-channel-transport-action-dark",
-    "value": "oklab(0.83 0.068 0.079)"
+    "name": "--sc-color-channel-now-on-container",
+    "value": "oklab(0.4014 -0.027 -0.1377)",
+    "description": "Text and icons on container"
   },
   {
     "type": "color",
-    "name": "--sc-channel-transport-action-hover-dark",
-    "value": "oklab(0.78 0.0774 0.0698)"
+    "name": "--sc-color-channel-now-on-container-dark",
+    "value": "oklab(0.9135 -0.008 -0.041)"
   },
   {
     "type": "color",
-    "name": "--sc-channel-transport-action-pressed-dark",
-    "value": "oklab(0.75 0.0774 0.0698)"
+    "name": "--sc-color-channel-now-subtle",
+    "value": "oklab(0.9567 -0.004 -0.0202)",
+    "description": "Hero band, tinted rows, the halo of the current step"
   },
   {
     "type": "color",
-    "name": "--sc-channel-transport-wash-start-dark",
-    "value": "oklab(0.3 0.026 0.0234)"
+    "name": "--sc-color-channel-now-subtle-dark",
+    "value": "oklab(0.3115 -0.0135 -0.0689)"
   },
   {
     "type": "color",
-    "name": "--sc-channel-transport-wash-end-dark",
-    "value": "oklab(0.355 0.0334 0.0301)"
+    "name": "--sc-color-channel-transport-action",
+    "value": "oklab(0.4982 0.111 0.1)",
+    "description": "Buttons, links, selected states, the current step, progress"
   },
   {
     "type": "color",
-    "name": "--sc-channel-transport-ink-dark",
-    "value": "oklab(0.93 0.0223 0.0201)"
+    "name": "--sc-color-channel-transport-action-dark",
+    "value": "oklab(0.8364 0.0705 0.0636)"
   },
   {
     "type": "color",
-    "name": "--sc-channel-transport-subtle-dark",
-    "value": "oklab(0.3 0.026 0.0234)"
+    "name": "--sc-color-channel-transport-action-hover",
+    "value": "oklab(0.4539 0.1017 0.0916)",
+    "description": "Action fill on pointer hover"
   },
   {
     "type": "color",
-    "name": "--sc-channel-transport-link-visited-dark",
-    "value": "oklab(0.93 0.0223 0.0201)"
+    "name": "--sc-color-channel-transport-action-hover-dark",
+    "value": "oklab(0.7951 0.0832 0.075)"
   },
   {
     "type": "color",
-    "name": "--sc-channel-visit-action-dark",
-    "value": "oklab(0.81 0.088 0.013)"
+    "name": "--sc-color-channel-transport-action-pressed",
+    "value": "oklab(0.4094 0.0916 0.0825)",
+    "description": "Action fill while pressed"
   },
   {
     "type": "color",
-    "name": "--sc-channel-visit-action-hover-dark",
-    "value": "oklab(0.78 0.088 0.013)"
+    "name": "--sc-color-channel-transport-action-pressed-dark",
+    "value": "oklab(0.7536 0.0943 0.085)"
   },
   {
     "type": "color",
-    "name": "--sc-channel-visit-action-pressed-dark",
-    "value": "oklab(0.75 0.088 0.013)"
+    "name": "--sc-color-channel-transport-container",
+    "value": "oklab(0.9177 0.033 0.0298)",
+    "description": "Selected navigation item, chips on a tinted card"
   },
   {
     "type": "color",
-    "name": "--sc-channel-visit-wash-start-dark",
-    "value": "oklab(0.3 0.0346 0.0051)"
+    "name": "--sc-color-channel-transport-container-dark",
+    "value": "oklab(0.4094 0.0916 0.0825)"
   },
   {
     "type": "color",
-    "name": "--sc-channel-visit-wash-end-dark",
-    "value": "oklab(0.355 0.0445 0.0066)"
+    "name": "--sc-color-channel-transport-on-container",
+    "value": "oklab(0.4094 0.0916 0.0825)",
+    "description": "Text and icons on container"
   },
   {
     "type": "color",
-    "name": "--sc-channel-visit-ink-dark",
-    "value": "oklab(0.93 0.0297 0.0044)"
+    "name": "--sc-color-channel-transport-on-container-dark",
+    "value": "oklab(0.9177 0.033 0.0298)"
   },
   {
     "type": "color",
-    "name": "--sc-channel-visit-subtle-dark",
-    "value": "oklab(0.3 0.0346 0.0051)"
+    "name": "--sc-color-channel-transport-subtle",
+    "value": "oklab(0.9588 0.016 0.0144)",
+    "description": "Hero band, tinted rows, the halo of the current step"
   },
   {
     "type": "color",
-    "name": "--sc-channel-visit-link-visited-dark",
-    "value": "oklab(0.93 0.0297 0.0044)"
+    "name": "--sc-color-channel-transport-subtle-dark",
+    "value": "oklab(0.317 0.0499 0.045)"
   },
   {
     "type": "color",
-    "name": "--sc-channel-justice-action-dark",
-    "value": "oklab(0.81 0.034 -0.0935)"
+    "name": "--sc-color-channel-visit-action",
+    "value": "oklab(0.5033 0.155 -0.016)",
+    "description": "Buttons, links, selected states, the current step, progress"
   },
   {
     "type": "color",
-    "name": "--sc-channel-justice-action-hover-dark",
-    "value": "oklab(0.78 0.034 -0.0935)"
+    "name": "--sc-color-channel-visit-action-dark",
+    "value": "oklab(0.8405 0.0993 -0.0102)"
   },
   {
     "type": "color",
-    "name": "--sc-channel-justice-action-pressed-dark",
-    "value": "oklab(0.75 0.034 -0.0935)"
+    "name": "--sc-color-channel-visit-action-hover",
+    "value": "oklab(0.4592 0.1472 -0.0152)",
+    "description": "Action fill on pointer hover"
   },
   {
     "type": "color",
-    "name": "--sc-channel-justice-wash-start-dark",
-    "value": "oklab(0.3 0.012 -0.0329)"
+    "name": "--sc-color-channel-visit-action-hover-dark",
+    "value": "oklab(0.7996 0.1163 -0.012)"
   },
   {
     "type": "color",
-    "name": "--sc-channel-justice-wash-end-dark",
-    "value": "oklab(0.355 0.0154 -0.0423)"
+    "name": "--sc-color-channel-visit-action-pressed",
+    "value": "oklab(0.4151 0.1395 -0.0144)",
+    "description": "Action fill while pressed"
   },
   {
     "type": "color",
-    "name": "--sc-channel-justice-ink-dark",
-    "value": "oklab(0.93 0.0103 -0.0282)"
+    "name": "--sc-color-channel-visit-action-pressed-dark",
+    "value": "oklab(0.7586 0.1318 -0.0136)"
   },
   {
     "type": "color",
-    "name": "--sc-channel-justice-subtle-dark",
-    "value": "oklab(0.3 0.012 -0.0329)"
+    "name": "--sc-color-channel-visit-container",
+    "value": "oklab(0.9198 0.0462 -0.0048)",
+    "description": "Selected navigation item, chips on a tinted card"
   },
   {
     "type": "color",
-    "name": "--sc-channel-justice-link-visited-dark",
-    "value": "oklab(0.93 0.0103 -0.0282)"
+    "name": "--sc-color-channel-visit-container-dark",
+    "value": "oklab(0.4151 0.1395 -0.0144)"
   },
   {
     "type": "color",
-    "name": "--sc-channel-build-action-dark",
-    "value": "oklab(0.81 0.0215 0.05)"
+    "name": "--sc-color-channel-visit-on-container",
+    "value": "oklab(0.4151 0.1395 -0.0144)",
+    "description": "Text and icons on container"
   },
   {
     "type": "color",
-    "name": "--sc-channel-build-action-hover-dark",
-    "value": "oklab(0.78 0.0215 0.05)"
+    "name": "--sc-color-channel-visit-on-container-dark",
+    "value": "oklab(0.9198 0.0462 -0.0048)"
   },
   {
     "type": "color",
-    "name": "--sc-channel-build-action-pressed-dark",
-    "value": "oklab(0.75 0.0215 0.05)"
+    "name": "--sc-color-channel-visit-subtle",
+    "value": "oklab(0.9598 0.0223 -0.0023)",
+    "description": "Hero band, tinted rows, the halo of the current step"
   },
   {
     "type": "color",
-    "name": "--sc-channel-build-wash-start-dark",
-    "value": "oklab(0.3 0.0138 0.0322)"
+    "name": "--sc-color-channel-visit-subtle-dark",
+    "value": "oklab(0.3195 0.0698 -0.0072)"
   },
   {
     "type": "color",
-    "name": "--sc-channel-build-wash-end-dark",
-    "value": "oklab(0.355 0.0178 0.0413)"
+    "name": "--sc-color-channel-justice-action",
+    "value": "oklab(0.4951 0.059 -0.113)",
+    "description": "Buttons, links, selected states, the current step, progress"
   },
   {
     "type": "color",
-    "name": "--sc-channel-build-ink-dark",
-    "value": "oklab(0.93 0.0119 0.0276)"
+    "name": "--sc-color-channel-justice-action-dark",
+    "value": "oklab(0.8342 0.0383 -0.0735)"
   },
   {
     "type": "color",
-    "name": "--sc-channel-build-subtle-dark",
-    "value": "oklab(0.3 0.0138 0.0322)"
+    "name": "--sc-color-channel-justice-action-hover",
+    "value": "oklab(0.4516 0.056 -0.1074)",
+    "description": "Action fill on pointer hover"
   },
   {
     "type": "color",
-    "name": "--sc-channel-build-link-visited-dark",
-    "value": "oklab(0.93 0.0119 0.0276)"
+    "name": "--sc-color-channel-justice-action-hover-dark",
+    "value": "oklab(0.7923 0.0442 -0.0848)"
   },
   {
     "type": "color",
-    "name": "--sc-channel-invest-action-dark",
-    "value": "oklab(0.81 -0.0505 0.027)"
+    "name": "--sc-color-channel-justice-action-pressed",
+    "value": "oklab(0.408 0.0531 -0.1017)",
+    "description": "Action fill while pressed"
   },
   {
     "type": "color",
-    "name": "--sc-channel-invest-action-hover-dark",
-    "value": "oklab(0.78 -0.0505 0.027)"
+    "name": "--sc-color-channel-justice-action-pressed-dark",
+    "value": "oklab(0.7505 0.0501 -0.0961)"
   },
   {
     "type": "color",
-    "name": "--sc-channel-invest-action-pressed-dark",
-    "value": "oklab(0.75 -0.0505 0.027)"
+    "name": "--sc-color-channel-justice-container",
+    "value": "oklab(0.9166 0.0177 -0.0339)",
+    "description": "Selected navigation item, chips on a tinted card"
   },
   {
     "type": "color",
-    "name": "--sc-channel-invest-wash-start-dark",
-    "value": "oklab(0.3 -0.0309 0.0165)"
+    "name": "--sc-color-channel-justice-container-dark",
+    "value": "oklab(0.408 0.0531 -0.1017)"
   },
   {
     "type": "color",
-    "name": "--sc-channel-invest-wash-end-dark",
-    "value": "oklab(0.355 -0.0397 0.0212)"
+    "name": "--sc-color-channel-justice-on-container",
+    "value": "oklab(0.408 0.0531 -0.1017)",
+    "description": "Text and icons on container"
   },
   {
     "type": "color",
-    "name": "--sc-channel-invest-ink-dark",
-    "value": "oklab(0.93 -0.0265 0.0141)"
+    "name": "--sc-color-channel-justice-on-container-dark",
+    "value": "oklab(0.9166 0.0177 -0.0339)"
   },
   {
     "type": "color",
-    "name": "--sc-channel-invest-subtle-dark",
-    "value": "oklab(0.3 -0.0309 0.0165)"
+    "name": "--sc-color-channel-justice-subtle",
+    "value": "oklab(0.9583 0.0088 -0.017)",
+    "description": "Hero band, tinted rows, the halo of the current step"
   },
   {
     "type": "color",
-    "name": "--sc-channel-invest-link-visited-dark",
-    "value": "oklab(0.93 -0.0265 0.0141)"
+    "name": "--sc-color-channel-justice-subtle-dark",
+    "value": "oklab(0.3154 0.0265 -0.0509)"
   },
   {
     "type": "color",
-    "name": "--sc-channel-trade-action-dark",
-    "value": "oklab(0.779 -0.015 -0.043)"
+    "name": "--sc-color-channel-build-action",
+    "value": "oklab(0.4851 0.011 0.099)",
+    "description": "Buttons, links, selected states, the current step, progress"
   },
   {
     "type": "color",
-    "name": "--sc-channel-trade-action-hover-dark",
-    "value": "oklab(0.78 -0.0166 -0.0424)"
+    "name": "--sc-color-channel-build-action-dark",
+    "value": "oklab(0.8304 0.0156 0.1406)"
   },
   {
     "type": "color",
-    "name": "--sc-channel-trade-action-pressed-dark",
-    "value": "oklab(0.75 -0.0166 -0.0424)"
+    "name": "--sc-color-channel-build-action-hover",
+    "value": "oklab(0.4418 0.01 0.09)",
+    "description": "Action fill on pointer hover"
   },
   {
     "type": "color",
-    "name": "--sc-channel-trade-wash-start-dark",
-    "value": "oklab(0.3 -0.0128 -0.0326)"
+    "name": "--sc-color-channel-build-action-hover-dark",
+    "value": "oklab(0.7866 0.0132 0.1188)"
   },
   {
     "type": "color",
-    "name": "--sc-channel-trade-wash-end-dark",
-    "value": "oklab(0.355 -0.0164 -0.0419)"
+    "name": "--sc-color-channel-build-action-pressed",
+    "value": "oklab(0.3984 0.009 0.0813)",
+    "description": "Action fill while pressed"
   },
   {
     "type": "color",
-    "name": "--sc-channel-trade-ink-dark",
-    "value": "oklab(0.93 -0.0109 -0.0279)"
+    "name": "--sc-color-channel-build-action-pressed-dark",
+    "value": "oklab(0.7426 0.0094 0.0842)"
   },
   {
     "type": "color",
-    "name": "--sc-channel-trade-subtle-dark",
-    "value": "oklab(0.3 -0.0128 -0.0326)"
+    "name": "--sc-color-channel-build-container",
+    "value": "oklab(0.9149 0.0097 0.0871)",
+    "description": "Selected navigation item, chips on a tinted card"
   },
   {
     "type": "color",
-    "name": "--sc-channel-trade-link-visited-dark",
-    "value": "oklab(0.93 -0.0109 -0.0279)"
+    "name": "--sc-color-channel-build-container-dark",
+    "value": "oklab(0.3984 0.009 0.0813)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-channel-build-on-container",
+    "value": "oklab(0.3984 0.009 0.0813)",
+    "description": "Text and icons on container"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-channel-build-on-container-dark",
+    "value": "oklab(0.9149 0.0097 0.0871)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-channel-build-subtle",
+    "value": "oklab(0.9571 0.0041 0.0366)",
+    "description": "Hero band, tinted rows, the halo of the current step"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-channel-build-subtle-dark",
+    "value": "oklab(0.3111 0.005 0.0446)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-channel-invest-action",
+    "value": "oklab(0.4713 -0.093 0.074)",
+    "description": "Buttons, links, selected states, the current step, progress"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-channel-invest-action-dark",
+    "value": "oklab(0.8145 -0.1023 0.0814)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-channel-invest-action-hover",
+    "value": "oklab(0.4288 -0.0883 0.0703)",
+    "description": "Action fill on pointer hover"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-channel-invest-action-hover-dark",
+    "value": "oklab(0.772 -0.0976 0.0777)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-channel-invest-action-pressed",
+    "value": "oklab(0.3864 -0.0837 0.0666)",
+    "description": "Action fill while pressed"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-channel-invest-action-pressed-dark",
+    "value": "oklab(0.7312 -0.079 0.0629)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-channel-invest-container",
+    "value": "oklab(0.9055 -0.0632 0.0503)",
+    "description": "Selected navigation item, chips on a tinted card"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-channel-invest-container-dark",
+    "value": "oklab(0.3864 -0.0837 0.0666)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-channel-invest-on-container",
+    "value": "oklab(0.3864 -0.0837 0.0666)",
+    "description": "Text and icons on container"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-channel-invest-on-container-dark",
+    "value": "oklab(0.9055 -0.0632 0.0503)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-channel-invest-subtle",
+    "value": "oklab(0.9529 -0.0298 0.0237)",
+    "description": "Hero band, tinted rows, the halo of the current step"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-channel-invest-subtle-dark",
+    "value": "oklab(0.305 -0.0418 0.0333)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-channel-trade-action",
+    "value": "oklab(0.4386 -0.0171 -0.0437)",
+    "description": "Buttons, links, selected states, the current step, progress"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-channel-trade-action-dark",
+    "value": "oklab(0.8263 -0.0169 -0.0432)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-channel-trade-action-hover",
+    "value": "oklab(0.3956 -0.0162 -0.0414)",
+    "description": "Action fill on pointer hover"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-channel-trade-action-hover-dark",
+    "value": "oklab(0.7832 -0.0171 -0.0437)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-channel-trade-action-pressed",
+    "value": "oklab(0.3526 -0.0126 -0.0322)",
+    "description": "Action fill while pressed"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-channel-trade-action-pressed-dark",
+    "value": "oklab(0.7402 -0.0153 -0.0391)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-channel-trade-container",
+    "value": "oklab(0.9131 -0.0085 -0.0216)",
+    "description": "Selected navigation item, chips on a tinted card"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-channel-trade-container-dark",
+    "value": "oklab(0.3956 -0.0162 -0.0414)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-channel-trade-on-container",
+    "value": "oklab(0.3956 -0.0162 -0.0414)",
+    "description": "Text and icons on container"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-channel-trade-on-container-dark",
+    "value": "oklab(0.9131 -0.0085 -0.0216)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-channel-trade-subtle",
+    "value": "oklab(0.9565 -0.0043 -0.011)",
+    "description": "Hero band, tinted rows, the halo of the current step"
+  },
+  {
+    "type": "color",
+    "name": "--sc-color-channel-trade-subtle-dark",
+    "value": "oklab(0.3098 -0.0081 -0.0207)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-neutral-10",
+    "value": "oklab(0.2242 0.0003 -0.004)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-neutral-12",
+    "value": "oklab(0.2415 0.0003 -0.004)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-neutral-17",
+    "value": "oklab(0.2846 0.0003 -0.004)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-neutral-20",
+    "value": "oklab(0.3104 0.0003 -0.004)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-neutral-22",
+    "value": "oklab(0.3277 0.0003 -0.004)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-neutral-24",
+    "value": "oklab(0.3449 0.0003 -0.004)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-neutral-30",
+    "value": "oklab(0.3967 0.0003 -0.004)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-neutral-40",
+    "value": "oklab(0.4829 0.0003 -0.004)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-neutral-50",
+    "value": "oklab(0.5691 0.0003 -0.004)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-neutral-60",
+    "value": "oklab(0.6553 0.0003 -0.004)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-neutral-70",
+    "value": "oklab(0.7415 0.0003 -0.004)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-neutral-80",
+    "value": "oklab(0.8277 0.0003 -0.004)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-neutral-90",
+    "value": "oklab(0.9139 0.0003 -0.004)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-neutral-94",
+    "value": "oklab(0.9484 0.0003 -0.004)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-neutral-96",
+    "value": "oklab(0.9656 0.0003 -0.004)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-neutral-100",
+    "value": "oklab(1 0 0)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-indigo-10",
+    "value": "oklab(0.2263 0.0038 -0.0448)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-indigo-20",
+    "value": "oklab(0.3131 0.0049 -0.0576)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-indigo-25",
+    "value": "oklab(0.3585 0.0077 -0.0896)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-indigo-30",
+    "value": "oklab(0.4037 0.0099 -0.1152)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-indigo-35",
+    "value": "oklab(0.447 0.0104 -0.1216)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-indigo-40",
+    "value": "oklab(0.4902 0.011 -0.128)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-indigo-50",
+    "value": "oklab(0.5757 0.011 -0.128)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-indigo-60",
+    "value": "oklab(0.6609 0.0104 -0.1216)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-indigo-70",
+    "value": "oklab(0.7459 0.0093 -0.1088)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-indigo-75",
+    "value": "oklab(0.7882 0.0082 -0.096)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-indigo-80",
+    "value": "oklab(0.8306 0.0072 -0.0832)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-indigo-90",
+    "value": "oklab(0.9149 0.0033 -0.0384)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-indigo-95",
+    "value": "oklab(0.9574 0.0016 -0.0192)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-now-10",
+    "value": "oklab(0.2252 -0.0105 -0.0536)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-now-20",
+    "value": "oklab(0.3115 -0.0135 -0.0689)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-now-25",
+    "value": "oklab(0.3565 -0.021 -0.1071)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-now-30",
+    "value": "oklab(0.4014 -0.027 -0.1377)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-now-35",
+    "value": "oklab(0.4444 -0.0285 -0.1454)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-now-40",
+    "value": "oklab(0.4874 -0.03 -0.153)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-now-50",
+    "value": "oklab(0.5726 -0.03 -0.153)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-now-60",
+    "value": "oklab(0.6576 -0.0285 -0.1454)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-now-70",
+    "value": "oklab(0.7427 -0.0255 -0.13)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-now-75",
+    "value": "oklab(0.785 -0.021 -0.1072)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-now-80",
+    "value": "oklab(0.8276 -0.0166 -0.0845)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-now-90",
+    "value": "oklab(0.9135 -0.008 -0.041)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-now-95",
+    "value": "oklab(0.9567 -0.004 -0.0202)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-transport-10",
+    "value": "oklab(0.2293 0.0388 0.035)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-transport-20",
+    "value": "oklab(0.317 0.0499 0.045)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-transport-25",
+    "value": "oklab(0.3642 0.0777 0.07)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-transport-30",
+    "value": "oklab(0.4094 0.0916 0.0825)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-transport-35",
+    "value": "oklab(0.4539 0.1017 0.0916)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-transport-40",
+    "value": "oklab(0.4982 0.111 0.1)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-transport-50",
+    "value": "oklab(0.5841 0.111 0.1)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-transport-60",
+    "value": "oklab(0.6692 0.1054 0.095)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-transport-70",
+    "value": "oklab(0.7536 0.0943 0.085)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-transport-75",
+    "value": "oklab(0.7951 0.0832 0.075)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-transport-80",
+    "value": "oklab(0.8364 0.0705 0.0636)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-transport-90",
+    "value": "oklab(0.9177 0.033 0.0298)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-transport-95",
+    "value": "oklab(0.9588 0.016 0.0144)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-visit-10",
+    "value": "oklab(0.2313 0.0542 -0.0056)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-visit-20",
+    "value": "oklab(0.3195 0.0698 -0.0072)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-visit-25",
+    "value": "oklab(0.3678 0.1085 -0.0112)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-visit-30",
+    "value": "oklab(0.4151 0.1395 -0.0144)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-visit-35",
+    "value": "oklab(0.4592 0.1472 -0.0152)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-visit-40",
+    "value": "oklab(0.5033 0.155 -0.016)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-visit-50",
+    "value": "oklab(0.5894 0.155 -0.016)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-visit-60",
+    "value": "oklab(0.6745 0.1472 -0.0152)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-visit-70",
+    "value": "oklab(0.7586 0.1318 -0.0136)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-visit-75",
+    "value": "oklab(0.7996 0.1163 -0.012)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-visit-80",
+    "value": "oklab(0.8405 0.0993 -0.0102)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-visit-90",
+    "value": "oklab(0.9198 0.0462 -0.0048)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-visit-95",
+    "value": "oklab(0.9598 0.0223 -0.0023)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-justice-10",
+    "value": "oklab(0.2282 0.0206 -0.0396)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-justice-20",
+    "value": "oklab(0.3154 0.0265 -0.0509)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-justice-25",
+    "value": "oklab(0.362 0.0413 -0.0791)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-justice-30",
+    "value": "oklab(0.408 0.0531 -0.1017)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-justice-35",
+    "value": "oklab(0.4516 0.056 -0.1074)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-justice-40",
+    "value": "oklab(0.4951 0.059 -0.113)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-justice-50",
+    "value": "oklab(0.5808 0.059 -0.113)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-justice-60",
+    "value": "oklab(0.6659 0.056 -0.1074)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-justice-70",
+    "value": "oklab(0.7505 0.0501 -0.0961)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-justice-75",
+    "value": "oklab(0.7923 0.0442 -0.0848)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-justice-80",
+    "value": "oklab(0.8342 0.0383 -0.0735)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-justice-90",
+    "value": "oklab(0.9166 0.0177 -0.0339)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-justice-95",
+    "value": "oklab(0.9583 0.0088 -0.017)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-build-10",
+    "value": "oklab(0.2248 0.0039 0.0347)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-build-20",
+    "value": "oklab(0.3111 0.005 0.0446)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-build-25",
+    "value": "oklab(0.355 0.0077 0.0693)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-build-30",
+    "value": "oklab(0.3984 0.009 0.0813)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-build-35",
+    "value": "oklab(0.4418 0.01 0.09)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-build-40",
+    "value": "oklab(0.4851 0.011 0.099)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-build-50",
+    "value": "oklab(0.571 0.011 0.099)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-build-60",
+    "value": "oklab(0.6568 0.0105 0.0941)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-build-70",
+    "value": "oklab(0.7426 0.0094 0.0842)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-build-75",
+    "value": "oklab(0.7866 0.0132 0.1188)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-build-80",
+    "value": "oklab(0.8304 0.0156 0.1406)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-build-90",
+    "value": "oklab(0.9149 0.0097 0.0871)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-build-95",
+    "value": "oklab(0.9571 0.0041 0.0366)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-invest-10",
+    "value": "oklab(0.22 -0.0325 0.0259)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-invest-20",
+    "value": "oklab(0.305 -0.0418 0.0333)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-invest-25",
+    "value": "oklab(0.3454 -0.0651 0.0518)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-invest-30",
+    "value": "oklab(0.3864 -0.0837 0.0666)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-invest-35",
+    "value": "oklab(0.4288 -0.0883 0.0703)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-invest-40",
+    "value": "oklab(0.4713 -0.093 0.074)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-invest-50",
+    "value": "oklab(0.5573 -0.093 0.074)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-invest-60",
+    "value": "oklab(0.644 -0.0883 0.0703)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-invest-70",
+    "value": "oklab(0.7312 -0.079 0.0629)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-invest-75",
+    "value": "oklab(0.772 -0.0976 0.0777)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-invest-80",
+    "value": "oklab(0.8145 -0.1023 0.0814)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-invest-90",
+    "value": "oklab(0.9055 -0.0632 0.0503)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-invest-95",
+    "value": "oklab(0.9529 -0.0298 0.0237)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-trade-10",
+    "value": "oklab(0.2237 -0.0063 -0.0161)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-trade-20",
+    "value": "oklab(0.3098 -0.0081 -0.0207)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-trade-25",
+    "value": "oklab(0.3526 -0.0126 -0.0322)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-trade-30",
+    "value": "oklab(0.3956 -0.0162 -0.0414)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-trade-35",
+    "value": "oklab(0.4386 -0.0171 -0.0437)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-trade-40",
+    "value": "oklab(0.4816 -0.018 -0.046)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-trade-50",
+    "value": "oklab(0.5677 -0.018 -0.046)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-trade-60",
+    "value": "oklab(0.6539 -0.0171 -0.0437)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-trade-70",
+    "value": "oklab(0.7402 -0.0153 -0.0391)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-trade-75",
+    "value": "oklab(0.7832 -0.0171 -0.0437)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-trade-80",
+    "value": "oklab(0.8263 -0.0169 -0.0432)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-trade-90",
+    "value": "oklab(0.9131 -0.0085 -0.0216)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-trade-95",
+    "value": "oklab(0.9565 -0.0043 -0.011)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-error-10",
+    "value": "oklab(0.2327 0.064 0.0343)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-error-20",
+    "value": "oklab(0.3213 0.0823 0.0441)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-error-25",
+    "value": "oklab(0.371 0.1281 0.0686)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-error-30",
+    "value": "oklab(0.4173 0.1504 0.0806)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-error-35",
+    "value": "oklab(0.4626 0.1664 0.0891)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-error-40",
+    "value": "oklab(0.508 0.183 0.098)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-error-50",
+    "value": "oklab(0.5937 0.183 0.098)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-error-60",
+    "value": "oklab(0.6782 0.1738 0.0931)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-error-70",
+    "value": "oklab(0.7578 0.1275 0.0683)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-error-75",
+    "value": "oklab(0.7975 0.1024 0.0548)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-error-80",
+    "value": "oklab(0.8375 0.0791 0.0424)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-error-90",
+    "value": "oklab(0.9183 0.0369 0.0198)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-error-95",
+    "value": "oklab(0.9591 0.0178 0.0096)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-success-10",
+    "value": "oklab(0.2193 -0.0385 0.0235)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-success-20",
+    "value": "oklab(0.304 -0.0495 0.0302)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-success-25",
+    "value": "oklab(0.3439 -0.077 0.0469)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-success-30",
+    "value": "oklab(0.385 -0.0934 0.0569)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-success-35",
+    "value": "oklab(0.4268 -0.1035 0.0631)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-success-40",
+    "value": "oklab(0.4691 -0.11 0.067)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-success-50",
+    "value": "oklab(0.5551 -0.11 0.067)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-success-60",
+    "value": "oklab(0.6419 -0.1045 0.0637)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-success-70",
+    "value": "oklab(0.7293 -0.0935 0.057)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-success-75",
+    "value": "oklab(0.7738 -0.0825 0.0503)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-success-80",
+    "value": "oklab(0.8182 -0.0715 0.0436)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-success-90",
+    "value": "oklab(0.9094 -0.033 0.0201)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-success-95",
+    "value": "oklab(0.9525 -0.033 0.0201)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-warning-10",
+    "value": "oklab(0.2257 0.0112 0.0346)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-warning-20",
+    "value": "oklab(0.3123 0.0144 0.0445)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-warning-25",
+    "value": "oklab(0.3569 0.0224 0.0693)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-warning-30",
+    "value": "oklab(0.4007 0.0264 0.0816)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-warning-35",
+    "value": "oklab(0.4443 0.0292 0.0903)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-warning-40",
+    "value": "oklab(0.4878 0.032 0.099)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-warning-50",
+    "value": "oklab(0.5737 0.032 0.099)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-warning-60",
+    "value": "oklab(0.6594 0.0304 0.094)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-warning-70",
+    "value": "oklab(0.7449 0.0272 0.0841)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-warning-75",
+    "value": "oklab(0.7874 0.024 0.0742)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-warning-80",
+    "value": "oklab(0.83 0.0208 0.0643)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-warning-90",
+    "value": "oklab(0.9147 0.0096 0.0297)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-warning-95",
+    "value": "oklab(0.9578 0.009 0.0277)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-info-10",
+    "value": "oklab(0.2247 -0.0095 -0.0455)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-info-20",
+    "value": "oklab(0.311 -0.0122 -0.0585)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-info-25",
+    "value": "oklab(0.3553 -0.0189 -0.091)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-info-30",
+    "value": "oklab(0.3996 -0.0243 -0.117)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-info-35",
+    "value": "oklab(0.4426 -0.0257 -0.1235)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-info-40",
+    "value": "oklab(0.4856 -0.027 -0.13)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-info-50",
+    "value": "oklab(0.5711 -0.027 -0.13)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-info-60",
+    "value": "oklab(0.6565 -0.0257 -0.1235)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-info-70",
+    "value": "oklab(0.742 -0.023 -0.1105)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-info-75",
+    "value": "oklab(0.7847 -0.0203 -0.0975)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-info-80",
+    "value": "oklab(0.8275 -0.0176 -0.0845)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-info-90",
+    "value": "oklab(0.9135 -0.0081 -0.039)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-info-95",
+    "value": "oklab(0.9567 -0.0041 -0.0195)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-blue-10",
+    "value": "oklab(0.2248 -0.0101 -0.0479)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-blue-20",
+    "value": "oklab(0.3111 -0.013 -0.0617)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-blue-25",
+    "value": "oklab(0.3555 -0.0203 -0.0959)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-blue-30",
+    "value": "oklab(0.4 -0.0261 -0.1233)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-blue-35",
+    "value": "oklab(0.443 -0.0275 -0.1302)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-blue-40",
+    "value": "oklab(0.486 -0.029 -0.137)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-blue-50",
+    "value": "oklab(0.5714 -0.029 -0.137)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-blue-60",
+    "value": "oklab(0.6567 -0.0275 -0.1302)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-blue-70",
+    "value": "oklab(0.7421 -0.0246 -0.1165)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-blue-75",
+    "value": "oklab(0.7847 -0.0217 -0.1028)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-blue-80",
+    "value": "oklab(0.8275 -0.0179 -0.0845)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-blue-90",
+    "value": "oklab(0.9134 -0.0087 -0.0411)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-blue-95",
+    "value": "oklab(0.9567 -0.0043 -0.0202)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-violet-10",
+    "value": "oklab(0.2288 0.0245 -0.0423)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-violet-20",
+    "value": "oklab(0.3163 0.0315 -0.0544)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-violet-25",
+    "value": "oklab(0.3634 0.049 -0.0847)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-violet-30",
+    "value": "oklab(0.4099 0.063 -0.1089)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-violet-35",
+    "value": "oklab(0.4536 0.0665 -0.1149)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-violet-40",
+    "value": "oklab(0.4972 0.07 -0.121)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-violet-50",
+    "value": "oklab(0.5827 0.07 -0.121)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-violet-60",
+    "value": "oklab(0.6677 0.0665 -0.1149)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-violet-70",
+    "value": "oklab(0.7521 0.0595 -0.1028)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-violet-75",
+    "value": "oklab(0.7936 0.0525 -0.0907)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-violet-80",
+    "value": "oklab(0.8353 0.0455 -0.0786)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-violet-90",
+    "value": "oklab(0.9171 0.021 -0.0363)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-violet-95",
+    "value": "oklab(0.9585 0.0105 -0.0181)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-rose-10",
+    "value": "oklab(0.2303 0.0479 0.0101)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-rose-20",
+    "value": "oklab(0.3182 0.0617 0.013)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-rose-25",
+    "value": "oklab(0.3658 0.0959 0.0203)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-rose-30",
+    "value": "oklab(0.4126 0.1233 0.0261)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-rose-35",
+    "value": "oklab(0.4565 0.1302 0.0275)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-rose-40",
+    "value": "oklab(0.5005 0.137 0.029)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-rose-50",
+    "value": "oklab(0.5866 0.137 0.029)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-rose-60",
+    "value": "oklab(0.6718 0.1302 0.0275)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-rose-70",
+    "value": "oklab(0.7562 0.1165 0.0246)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-rose-75",
+    "value": "oklab(0.7975 0.1028 0.0217)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-rose-80",
+    "value": "oklab(0.8388 0.0883 0.0187)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-rose-90",
+    "value": "oklab(0.9189 0.0411 0.0087)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-rose-95",
+    "value": "oklab(0.9594 0.0198 0.0042)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-orange-10",
+    "value": "oklab(0.227 0.0217 0.0276)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-orange-20",
+    "value": "oklab(0.3139 0.0279 0.0355)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-orange-25",
+    "value": "oklab(0.3593 0.0434 0.0553)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-orange-30",
+    "value": "oklab(0.4043 0.0558 0.0711)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-orange-35",
+    "value": "oklab(0.4477 0.0589 0.075)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-orange-40",
+    "value": "oklab(0.4912 0.062 0.079)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-orange-50",
+    "value": "oklab(0.5772 0.062 0.079)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-orange-60",
+    "value": "oklab(0.6628 0.0589 0.075)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-orange-70",
+    "value": "oklab(0.748 0.0527 0.0671)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-orange-75",
+    "value": "oklab(0.7902 0.0465 0.0592)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-orange-80",
+    "value": "oklab(0.8325 0.0403 0.0513)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-orange-90",
+    "value": "oklab(0.9159 0.0186 0.0237)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-orange-95",
+    "value": "oklab(0.9579 0.0093 0.0118)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-amber-10",
+    "value": "oklab(0.2248 0.0045 0.0312)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-amber-20",
+    "value": "oklab(0.3112 0.0058 0.0401)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-amber-25",
+    "value": "oklab(0.355 0.0091 0.0623)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-amber-30",
+    "value": "oklab(0.3988 0.0117 0.0801)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-amber-35",
+    "value": "oklab(0.4419 0.0123 0.0846)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-amber-40",
+    "value": "oklab(0.4851 0.013 0.089)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-amber-50",
+    "value": "oklab(0.571 0.013 0.089)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-amber-60",
+    "value": "oklab(0.6569 0.0123 0.0846)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-amber-70",
+    "value": "oklab(0.7427 0.011 0.0756)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-amber-75",
+    "value": "oklab(0.7855 0.0097 0.0668)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-amber-80",
+    "value": "oklab(0.8284 0.0084 0.0579)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-amber-90",
+    "value": "oklab(0.914 0.0039 0.0267)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-amber-95",
+    "value": "oklab(0.957 0.0019 0.0134)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-green-10",
+    "value": "oklab(0.2193 -0.0385 0.0301)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-green-20",
+    "value": "oklab(0.3041 -0.0495 0.0387)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-green-25",
+    "value": "oklab(0.3441 -0.077 0.0602)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-green-30",
+    "value": "oklab(0.3847 -0.099 0.0774)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-green-35",
+    "value": "oklab(0.4271 -0.1045 0.0817)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-green-40",
+    "value": "oklab(0.4695 -0.11 0.086)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-green-50",
+    "value": "oklab(0.5554 -0.11 0.086)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-green-60",
+    "value": "oklab(0.6421 -0.1045 0.0817)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-green-70",
+    "value": "oklab(0.7294 -0.0935 0.0731)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-green-75",
+    "value": "oklab(0.7738 -0.0825 0.0645)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-green-80",
+    "value": "oklab(0.8182 -0.0715 0.0559)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-green-90",
+    "value": "oklab(0.9094 -0.033 0.0258)"
+  },
+  {
+    "type": "color",
+    "name": "--sc-palette-tint-green-95",
+    "value": "oklab(0.9547 -0.0165 0.0129)"
+  },
+  {
+    "type": "opacity",
+    "name": "--sc-opacity-hover",
+    "value": "8%",
+    "description": "Hover state layer on quiet controls (outlined and text buttons, rows, chips)"
+  },
+  {
+    "type": "opacity",
+    "name": "--sc-opacity-pressed",
+    "value": "12%",
+    "description": "Pressed state layer on quiet controls"
   },
   {
     "type": "fontFamily",
@@ -846,447 +2348,348 @@
   },
   {
     "type": "fontSize",
-    "name": "--sc-text-latin-display-xl",
-    "value": "80px",
-    "description": "Home hero"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-latin-display-xl",
-    "value": "82px"
-  },
-  {
-    "type": "letterSpacing",
-    "name": "--sc-tracking-latin-display-xl",
-    "value": "-0.02em"
+    "name": "--sc-type-body-small-size",
+    "value": "14px",
+    "description": "Captions and fine print; the smallest text"
   },
   {
     "type": "fontSize",
-    "name": "--sc-text-latin-display-l",
-    "value": "48px"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-latin-display-l",
-    "value": "50px"
-  },
-  {
-    "type": "letterSpacing",
-    "name": "--sc-tracking-latin-display-l",
-    "value": "-0.015em"
+    "name": "--sc-type-label-small-size",
+    "value": "14px",
+    "description": "Metadata labels, step counters, badges"
   },
   {
     "type": "fontSize",
-    "name": "--sc-text-latin-heading-xl",
-    "value": "34px"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-latin-heading-xl",
-    "value": "38px"
-  },
-  {
-    "type": "letterSpacing",
-    "name": "--sc-tracking-latin-heading-xl",
-    "value": "-0.01em"
+    "name": "--sc-type-body-medium-size",
+    "value": "16px",
+    "description": "Hints, secondary text, table cells"
   },
   {
     "type": "fontSize",
-    "name": "--sc-text-latin-heading-l",
-    "value": "30px"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-latin-heading-l",
-    "value": "34px"
-  },
-  {
-    "type": "letterSpacing",
-    "name": "--sc-tracking-latin-heading-l",
-    "value": "-0.01em"
+    "name": "--sc-type-label-medium-size",
+    "value": "16px",
+    "description": "Chips, tabs, 48px buttons, error messages"
   },
   {
     "type": "fontSize",
-    "name": "--sc-text-latin-heading-m",
-    "value": "24px"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-latin-heading-m",
-    "value": "28px"
+    "name": "--sc-type-body-small-size-ar",
+    "value": "16px",
+    "description": "Captions and fine print; the smallest text"
   },
   {
     "type": "fontSize",
-    "name": "--sc-text-latin-title-l",
-    "value": "22px"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-latin-title-l",
-    "value": "27px"
+    "name": "--sc-type-label-small-size-ar",
+    "value": "16px",
+    "description": "Metadata labels, step counters, badges"
   },
   {
     "type": "fontSize",
-    "name": "--sc-text-latin-title-m",
-    "value": "20px"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-latin-title-m",
-    "value": "24px"
-  },
-  {
-    "type": "fontSize",
-    "name": "--sc-text-latin-title-s",
+    "name": "--sc-type-title-small-size",
     "value": "17px",
-    "description": "Buttons, links, row titles"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-latin-title-s",
-    "value": "21px"
+    "description": "Navigation items, back link, summary-list values, step names"
   },
   {
     "type": "fontSize",
-    "name": "--sc-text-latin-body-l",
-    "value": "19px"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-latin-body-l",
-    "value": "27px"
+    "name": "--sc-type-title-medium-size",
+    "value": "18px",
+    "description": "Row titles, legend of a question group, emphasised values"
   },
   {
     "type": "fontSize",
-    "name": "--sc-text-latin-body-m",
-    "value": "17px"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-latin-body-m",
-    "value": "24px"
+    "name": "--sc-type-body-large-size",
+    "value": "18px",
+    "description": "Body text: the default for running text"
   },
   {
     "type": "fontSize",
-    "name": "--sc-text-latin-body-s",
-    "value": "15px"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-latin-body-s",
-    "value": "21px"
+    "name": "--sc-type-label-large-size",
+    "value": "18px",
+    "description": "Buttons and field labels"
   },
   {
     "type": "fontSize",
-    "name": "--sc-text-latin-label-m",
-    "value": "15px"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-latin-label-m",
-    "value": "19px"
+    "name": "--sc-type-body-medium-size-ar",
+    "value": "18px",
+    "description": "Hints, secondary text, table cells"
   },
   {
     "type": "fontSize",
-    "name": "--sc-text-latin-label-s",
-    "value": "14px",
-    "description": "Tags and chips"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-latin-label-s",
-    "value": "17px"
+    "name": "--sc-type-label-medium-size-ar",
+    "value": "18px",
+    "description": "Chips, tabs, 48px buttons, error messages"
   },
   {
     "type": "fontSize",
-    "name": "--sc-text-latin-eyebrow",
-    "value": "14px",
-    "description": "+1px from D+ (13/16)"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-latin-eyebrow",
-    "value": "17px"
-  },
-  {
-    "type": "fontSize",
-    "name": "--sc-text-latin-caption",
-    "value": "14px",
-    "description": "+1px from D+ (13/18)"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-latin-caption",
-    "value": "19px"
-  },
-  {
-    "type": "fontSize",
-    "name": "--sc-text-latin-caption-s",
-    "value": "13px",
-    "description": "+1px from D+ (12/15); smallest allowed"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-latin-caption-s",
-    "value": "16px"
-  },
-  {
-    "type": "fontSize",
-    "name": "--sc-text-latin-value",
-    "value": "17px",
-    "description": "Answers in summary lists"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-latin-value",
-    "value": "22px"
-  },
-  {
-    "type": "fontSize",
-    "name": "--sc-text-latin-hint",
-    "value": "15px",
-    "description": "Field hints"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-latin-hint",
-    "value": "21px"
-  },
-  {
-    "type": "fontSize",
-    "name": "--sc-text-latin-error",
-    "value": "15px",
-    "description": "Field error messages"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-latin-error",
-    "value": "21px"
-  },
-  {
-    "type": "fontSize",
-    "name": "--sc-text-latin-numeral-l",
-    "value": "34px",
-    "description": "Amounts"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-latin-numeral-l",
-    "value": "38px"
-  },
-  {
-    "type": "letterSpacing",
-    "name": "--sc-tracking-latin-numeral-l",
-    "value": "-0.01em"
-  },
-  {
-    "type": "fontSize",
-    "name": "--sc-text-arabic-display-l",
-    "value": "50px"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-arabic-display-l",
-    "value": "62px"
-  },
-  {
-    "type": "fontSize",
-    "name": "--sc-text-arabic-heading-l",
-    "value": "30px"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-arabic-heading-l",
-    "value": "38px"
-  },
-  {
-    "type": "fontSize",
-    "name": "--sc-text-arabic-heading-m",
-    "value": "26px"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-arabic-heading-m",
-    "value": "34px"
-  },
-  {
-    "type": "fontSize",
-    "name": "--sc-text-arabic-title-s",
+    "name": "--sc-type-title-small-size-ar",
     "value": "19px",
-    "description": "Buttons; +1px from D+ (18/24)"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-arabic-title-s",
-    "value": "25px"
+    "description": "Navigation items, back link, summary-list values, step names"
   },
   {
     "type": "fontSize",
-    "name": "--sc-text-arabic-body-l",
-    "value": "20px"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-arabic-body-l",
-    "value": "31px"
+    "name": "--sc-type-title-medium-size-ar",
+    "value": "20px",
+    "description": "Row titles, legend of a question group, emphasised values"
   },
   {
     "type": "fontSize",
-    "name": "--sc-text-arabic-body-m",
-    "value": "19px"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-arabic-body-m",
-    "value": "29px"
+    "name": "--sc-type-body-large-size-ar",
+    "value": "20px",
+    "description": "Body text: the default for running text"
   },
   {
     "type": "fontSize",
-    "name": "--sc-text-arabic-body-s",
+    "name": "--sc-type-label-large-size-ar",
+    "value": "20px",
+    "description": "Buttons and field labels"
+  },
+  {
+    "type": "fontSize",
+    "name": "--sc-type-title-large-size",
+    "value": "22px",
+    "description": "Card and panel titles"
+  },
+  {
+    "type": "fontSize",
+    "name": "--sc-type-headline-small-size",
+    "value": "24px",
+    "description": "Subsection heading (h3); totals and amounts"
+  },
+  {
+    "type": "fontSize",
+    "name": "--sc-type-title-large-size-ar",
+    "value": "24px",
+    "description": "Card and panel titles"
+  },
+  {
+    "type": "fontSize",
+    "name": "--sc-type-headline-medium-size",
+    "value": "28px",
+    "description": "Section heading (h2)"
+  },
+  {
+    "type": "fontSize",
+    "name": "--sc-type-headline-small-size-ar",
+    "value": "28px",
+    "description": "Subsection heading (h3); totals and amounts"
+  },
+  {
+    "type": "fontSize",
+    "name": "--sc-type-headline-large-size",
+    "value": "32px",
+    "description": "Page heading (h1)"
+  },
+  {
+    "type": "fontSize",
+    "name": "--sc-type-headline-medium-size-ar",
+    "value": "32px",
+    "description": "Section heading (h2)"
+  },
+  {
+    "type": "fontSize",
+    "name": "--sc-type-headline-large-size-ar",
+    "value": "36px",
+    "description": "Page heading (h1)"
+  },
+  {
+    "type": "fontSize",
+    "name": "--sc-type-display-small-size",
+    "value": "45px",
+    "description": "Heroes on compact and medium; page heading on wide marketing pages"
+  },
+  {
+    "type": "fontSize",
+    "name": "--sc-type-display-small-size-ar",
+    "value": "50px",
+    "description": "Heroes on compact and medium; page heading on wide marketing pages"
+  },
+  {
+    "type": "fontSize",
+    "name": "--sc-type-display-medium-size",
+    "value": "57px",
+    "description": "Channel hero, from the expanded breakpoint"
+  },
+  {
+    "type": "fontSize",
+    "name": "--sc-type-display-medium-size-ar",
+    "value": "64px",
+    "description": "Channel hero, from the expanded breakpoint"
+  },
+  {
+    "type": "fontSize",
+    "name": "--sc-type-display-large-size",
+    "value": "80px",
+    "description": "Home hero, from the expanded breakpoint"
+  },
+  {
+    "type": "fontSize",
+    "name": "--sc-type-display-large-size-ar",
+    "value": "88px",
+    "description": "Home hero, from the expanded breakpoint"
+  },
+  {
+    "type": "lineHeight",
+    "name": "--sc-type-label-small-leading",
     "value": "18px"
   },
   {
     "type": "lineHeight",
-    "name": "--sc-leading-arabic-body-s",
-    "value": "28px"
-  },
-  {
-    "type": "fontSize",
-    "name": "--sc-text-arabic-label-m",
-    "value": "18px",
-    "description": "Field labels; +1px from D+ (17/22)"
+    "name": "--sc-type-body-small-leading",
+    "value": "20px"
   },
   {
     "type": "lineHeight",
-    "name": "--sc-leading-arabic-label-m",
-    "value": "23px"
-  },
-  {
-    "type": "fontSize",
-    "name": "--sc-text-arabic-hint",
-    "value": "17px",
-    "description": "+1px from D+ (16/24-25)"
+    "name": "--sc-type-label-medium-leading",
+    "value": "20px"
   },
   {
     "type": "lineHeight",
-    "name": "--sc-leading-arabic-hint",
-    "value": "26px"
-  },
-  {
-    "type": "fontSize",
-    "name": "--sc-text-arabic-error",
-    "value": "18px",
-    "description": "+1px from D+ (17/26)"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-arabic-error",
-    "value": "27px"
-  },
-  {
-    "type": "fontSize",
-    "name": "--sc-text-arabic-caption",
-    "value": "16px",
-    "description": "Smallest Arabic size"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-arabic-caption",
-    "value": "24px"
-  },
-  {
-    "type": "fontSize",
-    "name": "--sc-text-arabic-display-xl",
-    "value": "84px"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-arabic-display-xl",
-    "value": "100px"
-  },
-  {
-    "type": "fontSize",
-    "name": "--sc-text-arabic-heading-xl",
-    "value": "36px"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-arabic-heading-xl",
-    "value": "46px"
-  },
-  {
-    "type": "fontSize",
-    "name": "--sc-text-arabic-title-l",
-    "value": "24px"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-arabic-title-l",
-    "value": "32px"
-  },
-  {
-    "type": "fontSize",
-    "name": "--sc-text-arabic-title-m",
+    "name": "--sc-type-title-small-leading",
     "value": "22px"
   },
   {
     "type": "lineHeight",
-    "name": "--sc-leading-arabic-title-m",
-    "value": "29px"
-  },
-  {
-    "type": "fontSize",
-    "name": "--sc-text-arabic-label-s",
-    "value": "16px",
-    "description": "Tags and chips"
+    "name": "--sc-type-label-large-leading",
+    "value": "22px"
   },
   {
     "type": "lineHeight",
-    "name": "--sc-leading-arabic-label-s",
-    "value": "21px"
-  },
-  {
-    "type": "fontSize",
-    "name": "--sc-text-arabic-eyebrow",
-    "value": "16px"
+    "name": "--sc-type-label-small-leading-ar",
+    "value": "22px"
   },
   {
     "type": "lineHeight",
-    "name": "--sc-leading-arabic-eyebrow",
-    "value": "21px"
-  },
-  {
-    "type": "fontSize",
-    "name": "--sc-text-arabic-caption-s",
-    "value": "16px",
-    "description": "Same as caption: Arabic never goes below 16px"
-  },
-  {
-    "type": "lineHeight",
-    "name": "--sc-leading-arabic-caption-s",
+    "name": "--sc-type-title-medium-leading",
     "value": "24px"
   },
   {
-    "type": "fontSize",
-    "name": "--sc-text-arabic-value",
-    "value": "19px",
-    "description": "Answers in summary lists"
+    "type": "lineHeight",
+    "name": "--sc-type-body-medium-leading",
+    "value": "24px"
   },
   {
     "type": "lineHeight",
-    "name": "--sc-leading-arabic-value",
+    "name": "--sc-type-body-small-leading-ar",
+    "value": "24px"
+  },
+  {
+    "type": "lineHeight",
+    "name": "--sc-type-label-medium-leading-ar",
+    "value": "24px"
+  },
+  {
+    "type": "lineHeight",
+    "name": "--sc-type-body-large-leading",
     "value": "26px"
   },
   {
-    "type": "fontSize",
-    "name": "--sc-text-arabic-numeral-l",
-    "value": "34px",
-    "description": "Amounts; digits stay Latin"
+    "type": "lineHeight",
+    "name": "--sc-type-title-large-leading",
+    "value": "28px"
   },
   {
     "type": "lineHeight",
-    "name": "--sc-leading-arabic-numeral-l",
-    "value": "40px"
+    "name": "--sc-type-title-small-leading-ar",
+    "value": "28px"
+  },
+  {
+    "type": "lineHeight",
+    "name": "--sc-type-body-medium-leading-ar",
+    "value": "28px"
+  },
+  {
+    "type": "lineHeight",
+    "name": "--sc-type-label-large-leading-ar",
+    "value": "28px"
+  },
+  {
+    "type": "lineHeight",
+    "name": "--sc-type-headline-small-leading",
+    "value": "30px"
+  },
+  {
+    "type": "lineHeight",
+    "name": "--sc-type-title-medium-leading-ar",
+    "value": "30px"
+  },
+  {
+    "type": "lineHeight",
+    "name": "--sc-type-body-large-leading-ar",
+    "value": "32px"
+  },
+  {
+    "type": "lineHeight",
+    "name": "--sc-type-headline-medium-leading",
+    "value": "34px"
+  },
+  {
+    "type": "lineHeight",
+    "name": "--sc-type-title-large-leading-ar",
+    "value": "34px"
+  },
+  {
+    "type": "lineHeight",
+    "name": "--sc-type-headline-large-leading",
+    "value": "38px"
+  },
+  {
+    "type": "lineHeight",
+    "name": "--sc-type-headline-small-leading-ar",
+    "value": "38px"
+  },
+  {
+    "type": "lineHeight",
+    "name": "--sc-type-headline-medium-leading-ar",
+    "value": "44px"
+  },
+  {
+    "type": "lineHeight",
+    "name": "--sc-type-headline-large-leading-ar",
+    "value": "48px"
+  },
+  {
+    "type": "lineHeight",
+    "name": "--sc-type-display-small-leading",
+    "value": "50px"
+  },
+  {
+    "type": "lineHeight",
+    "name": "--sc-type-display-medium-leading",
+    "value": "62px"
+  },
+  {
+    "type": "lineHeight",
+    "name": "--sc-type-display-small-leading-ar",
+    "value": "64px"
+  },
+  {
+    "type": "lineHeight",
+    "name": "--sc-type-display-medium-leading-ar",
+    "value": "80px"
+  },
+  {
+    "type": "lineHeight",
+    "name": "--sc-type-display-large-leading",
+    "value": "84px"
+  },
+  {
+    "type": "lineHeight",
+    "name": "--sc-type-display-large-leading-ar",
+    "value": "108px"
+  },
+  {
+    "type": "letterSpacing",
+    "name": "--sc-type-display-large-tracking",
+    "value": "-0.02em"
+  },
+  {
+    "type": "letterSpacing",
+    "name": "--sc-type-display-medium-tracking",
+    "value": "-0.015em"
+  },
+  {
+    "type": "letterSpacing",
+    "name": "--sc-type-display-small-tracking",
+    "value": "-0.01em"
   },
   {
     "type": "spacing",
@@ -1377,73 +2780,91 @@
     "type": "spacing",
     "name": "--sc-size-border-hairline",
     "value": "1px",
-    "description": "Dividers"
+    "description": "Dividers and card edges"
   },
   {
     "type": "spacing",
     "name": "--sc-size-border-control",
     "value": "1.5px",
-    "description": "Field and control boundaries"
+    "description": "Control boundaries"
   },
   {
     "type": "spacing",
     "name": "--sc-size-focus-offset",
-    "value": "2px"
+    "value": "2px",
+    "description": "Gap between the control and the focus ring"
   },
   {
     "type": "spacing",
     "name": "--sc-size-border-strong",
     "value": "2px",
-    "description": "Selected and error boundaries"
+    "description": "Error and selected boundaries, stepper connectors"
   },
   {
     "type": "spacing",
     "name": "--sc-size-focus-ring",
-    "value": "3px"
+    "value": "3px",
+    "description": "Focus ring width"
   },
   {
     "type": "spacing",
     "name": "--sc-size-border-accent",
     "value": "3px",
-    "description": "Error bar on the start side of a field"
+    "description": "Bar on the start side of an error field group or callout"
   },
   {
     "type": "spacing",
-    "name": "--sc-size-progress",
-    "value": "8px",
-    "description": "Step progress track"
+    "name": "--sc-size-strip",
+    "value": "4px",
+    "description": "The network and channel strip at the top of the header"
   },
   {
     "type": "spacing",
     "name": "--sc-size-icon-s",
-    "value": "16px"
+    "value": "16px",
+    "description": "Icons in chips and inline with small text"
   },
   {
     "type": "spacing",
     "name": "--sc-size-icon-m",
-    "value": "20px"
+    "value": "20px",
+    "description": "Icons inline with body text and in fields"
   },
   {
     "type": "spacing",
     "name": "--sc-size-icon-l",
-    "value": "24px"
+    "value": "24px",
+    "description": "Standalone icons and icons in buttons"
+  },
+  {
+    "type": "spacing",
+    "name": "--sc-size-stepper-marker",
+    "value": "28px",
+    "description": "Stepper step marker"
+  },
+  {
+    "type": "spacing",
+    "name": "--sc-size-chip",
+    "value": "32px",
+    "description": "Visual height of chips; the target is extended to 44px"
   },
   {
     "type": "spacing",
     "name": "--sc-size-target-min",
     "value": "44px",
-    "description": "Minimum interactive target"
+    "description": "Minimum interactive target, every control"
   },
   {
     "type": "spacing",
-    "name": "--sc-size-control-m",
-    "value": "44px"
+    "name": "--sc-size-control-secondary",
+    "value": "48px",
+    "description": "Secondary and compact buttons, compact fields, selects in tables"
   },
   {
     "type": "spacing",
-    "name": "--sc-size-control-l",
-    "value": "54px",
-    "description": "Primary buttons and fields"
+    "name": "--sc-size-control-primary",
+    "value": "56px",
+    "description": "Primary buttons and text fields"
   },
   {
     "type": "spacing",
@@ -1487,49 +2908,39 @@
   },
   {
     "type": "radius",
-    "name": "--sc-radius-xs",
-    "value": "6px"
-  },
-  {
-    "type": "radius",
-    "name": "--sc-radius-s",
-    "value": "10px"
-  },
-  {
-    "type": "radius",
-    "name": "--sc-radius-field",
-    "value": "14px",
-    "description": "Inputs and selects"
-  },
-  {
-    "type": "radius",
-    "name": "--sc-radius-card",
-    "value": "20px",
-    "description": "Cards and list groups"
+    "name": "--sc-radius-none",
+    "value": "0px",
+    "description": "Tables, full-bleed bands"
   },
   {
     "type": "radius",
     "name": "--sc-radius-control",
-    "value": "22px",
-    "description": "44px glass controls"
+    "value": "4px",
+    "description": "Buttons, checkboxes, segmented controls, tags"
   },
   {
     "type": "radius",
-    "name": "--sc-radius-panel",
-    "value": "24px",
-    "description": "Large panels, hero cards"
+    "name": "--sc-radius-chip",
+    "value": "6px",
+    "description": "Status chips"
   },
   {
     "type": "radius",
-    "name": "--sc-radius-sheet",
-    "value": "28px",
-    "description": "Bottom sheets, dialogs"
+    "name": "--sc-radius-field",
+    "value": "8px",
+    "description": "Text inputs, selects, textareas, callouts"
   },
   {
     "type": "radius",
-    "name": "--sc-radius-pill",
-    "value": "999px",
-    "description": "Buttons, chips, search"
+    "name": "--sc-radius-card",
+    "value": "12px",
+    "description": "Cards, list groups, panels, dialogs, sheets"
+  },
+  {
+    "type": "radius",
+    "name": "--sc-radius-full",
+    "value": "9999px",
+    "description": "Circular marks and suggestion chips only"
   },
   {
     "type": "breakpoint",
@@ -1564,7 +2975,7 @@
     "type": "container",
     "name": "--sc-size-measure",
     "value": "680px",
-    "description": "Max width of running text"
+    "description": "Maximum width of running text"
   },
   {
     "type": "container",

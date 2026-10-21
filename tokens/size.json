@@ -6,73 +6,79 @@
         "value": 44,
         "unit": "px"
       },
-      "$description": "Minimum interactive target"
+      "$description": "Minimum interactive target, every control"
     },
-    "control-m": {
+    "control-primary": {
       "$type": "dimension",
       "$value": {
-        "value": 44,
-        "unit": "px"
-      }
-    },
-    "control-l": {
-      "$type": "dimension",
-      "$value": {
-        "value": 54,
+        "value": 56,
         "unit": "px"
       },
-      "$description": "Primary buttons and fields"
+      "$description": "Primary buttons and text fields"
+    },
+    "control-secondary": {
+      "$type": "dimension",
+      "$value": {
+        "value": 48,
+        "unit": "px"
+      },
+      "$description": "Secondary and compact buttons, compact fields, selects in tables"
+    },
+    "chip": {
+      "$type": "dimension",
+      "$value": {
+        "value": 32,
+        "unit": "px"
+      },
+      "$description": "Visual height of chips; the target is extended to 44px"
+    },
+    "stepper-marker": {
+      "$type": "dimension",
+      "$value": {
+        "value": 28,
+        "unit": "px"
+      },
+      "$description": "Stepper step marker"
     },
     "icon-s": {
       "$type": "dimension",
       "$value": {
         "value": 16,
         "unit": "px"
-      }
+      },
+      "$description": "Icons in chips and inline with small text"
     },
     "icon-m": {
       "$type": "dimension",
       "$value": {
         "value": 20,
         "unit": "px"
-      }
+      },
+      "$description": "Icons inline with body text and in fields"
     },
     "icon-l": {
       "$type": "dimension",
       "$value": {
         "value": 24,
         "unit": "px"
-      }
-    },
-    "progress": {
-      "$type": "dimension",
-      "$value": {
-        "value": 8,
-        "unit": "px"
       },
-      "$description": "Step progress track"
-    },
-    "measure": {
-      "$type": "dimension",
-      "$value": {
-        "value": 680,
-        "unit": "px"
-      },
-      "$description": "Max width of running text"
+      "$description": "Standalone icons and icons in buttons"
     },
     "focus-ring": {
       "$type": "dimension",
       "$value": {
         "value": 3,
         "unit": "px"
-      }
+      },
+      "$description": "Focus ring width"
     },
     "focus-offset": {
       "$type": "dimension",
       "$value": {
         "value": 2,
         "unit": "px"
-      }
+      },
+      "$description": "Gap between the control and the focus ring"
     },
     "border-hairline": {
       "$type": "dimension",
@@ -80,7 +86,7 @@
         "value": 1,
         "unit": "px"
       },
-      "$description": "Dividers"
+      "$description": "Dividers and card edges"
     },
     "border-control": {
       "$type": "dimension",
@@ -88,7 +94,7 @@
         "value": 1.5,
         "unit": "px"
       },
-      "$description": "Field and control boundaries"
+      "$description": "Control boundaries"
     },
     "border-strong": {
       "$type": "dimension",
@@ -96,7 +102,7 @@
         "value": 2,
         "unit": "px"
       },
-      "$description": "Selected and error boundaries"
+      "$description": "Error and selected boundaries, stepper connectors"
     },
     "border-accent": {
       "$type": "dimension",
@@ -104,7 +110,23 @@
         "value": 3,
         "unit": "px"
       },
-      "$description": "Error bar on the start side of a field"
+      "$description": "Bar on the start side of an error field group or callout"
+    },
+    "strip": {
+      "$type": "dimension",
+      "$value": {
+        "value": 4,
+        "unit": "px"
+      },
+      "$description": "The network and channel strip at the top of the header"
+    },
+    "measure": {
+      "$type": "dimension",
+      "$value": {
+        "value": 680,
+        "unit": "px"
+      },
+      "$description": "Maximum width of running text"
     }
   }
 }
