@@ -1,66 +1,35 @@
 /**
- * Destination icons for the signed-in navigation (v2, C2): `sc-account-nav` and
- * `sc-bottom-nav` render them by name from an item's `data-icon`. Same grammar as
- * ./index.tsx (24px grid, 2px strokes, `currentColor`, `aria-hidden`); `logout` is
- * DIRECTIONAL and mirrors in right-to-left. A module of its own, so no other component pays
- * for these paths.
+ * Navigation destination icons by name (`data-icon` on the items of sc-bottom-nav and
+ * sc-account-nav). Material Symbols, weight 400, 24px: Outlined, and Filled (FILL 1) for the
+ * current item, so selection changes shape as well as colour (ICN-02, COL-07). `logout`
+ * mirrors in right-to-left; the others never do.
  *
- * Names: home, apps, history, description, credit-card, notifications, person, logout.
+ * One small chunk for the navigation family: only the components that take a destination
+ * name import it.
  */
 import { FunctionalComponent, h } from '@stencil/core';
+import { IconProps, svg } from './svg';
 
-export interface NavIconProps {
-  /** Extra classes for the <svg>. */
-  class?: string;
-}
+export type { IconProps as NavIconProps };
 
-const Svg: FunctionalComponent<NavIconProps & { directional?: boolean }> = ({ directional, class: extra }, children) => (
-  <svg
-    class={{ 'icon': true, 'icon-directional': !!directional, [extra ?? '']: !!extra }}
-    viewBox="0 0 24 24"
-    width="24"
-    height="24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    aria-hidden="true"
-    focusable="false"
-  >
-    {children}
-  </svg>
-);
-
-const paths: Record<string, (string | [number, number, number, number])[]> = {
-  'home': ['M4 10.5L12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z'],
-  'apps': [
-    [4, 4, 6, 6],
-    [14, 4, 6, 6],
-    [4, 14, 6, 6],
-    [14, 14, 6, 6],
-  ],
-  'history': ['M3.5 12a8.5 8.5 0 1 0 2.5-6', 'M3.5 4.5v4h4', 'M12 8v4.5l3 2'],
-  'description': ['M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z', 'M14 3v5h5', 'M9 13h6', 'M9 17h6'],
-  'credit-card': [[3, 5.5, 18, 13], 'M3 10h18', 'M7 15h4'],
-  'notifications': ['M6 17v-6a6 6 0 0 1 12 0v6l1.5 2h-15z', 'M10 21h4'],
-  'person': ['M12 4a4 4 0 1 0 0 8a4 4 0 1 0 0-8z', 'M4.5 20a7.5 7.5 0 0 1 15 0'],
-  'logout': ['M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4', 'M16 8l4 4-4 4', 'M20 12H10'],
+const paths: Record<string, [outlined: string, filled: string]> = {
+  'home': ['M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z', 'M160-120v-480l320-240 320 240v480H560v-280H400v280H160Z'],
+  'apps': ['M240-160q-33 0-56.5-23.5T160-240q0-33 23.5-56.5T240-320q33 0 56.5 23.5T320-240q0 33-23.5 56.5T240-160Zm240 0q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm240 0q-33 0-56.5-23.5T640-240q0-33 23.5-56.5T720-320q33 0 56.5 23.5T800-240q0 33-23.5 56.5T720-160ZM240-400q-33 0-56.5-23.5T160-480q0-33 23.5-56.5T240-560q33 0 56.5 23.5T320-480q0 33-23.5 56.5T240-400Zm240 0q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm240 0q-33 0-56.5-23.5T640-480q0-33 23.5-56.5T720-560q33 0 56.5 23.5T800-480q0 33-23.5 56.5T720-400ZM240-640q-33 0-56.5-23.5T160-720q0-33 23.5-56.5T240-800q33 0 56.5 23.5T320-720q0 33-23.5 56.5T240-640Zm240 0q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Zm240 0q-33 0-56.5-23.5T640-720q0-33 23.5-56.5T720-800q33 0 56.5 23.5T800-720q0 33-23.5 56.5T720-640Z', 'M240-160q-33 0-56.5-23.5T160-240q0-33 23.5-56.5T240-320q33 0 56.5 23.5T320-240q0 33-23.5 56.5T240-160Zm240 0q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm240 0q-33 0-56.5-23.5T640-240q0-33 23.5-56.5T720-320q33 0 56.5 23.5T800-240q0 33-23.5 56.5T720-160ZM240-400q-33 0-56.5-23.5T160-480q0-33 23.5-56.5T240-560q33 0 56.5 23.5T320-480q0 33-23.5 56.5T240-400Zm240 0q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm240 0q-33 0-56.5-23.5T640-480q0-33 23.5-56.5T720-560q33 0 56.5 23.5T800-480q0 33-23.5 56.5T720-400ZM240-640q-33 0-56.5-23.5T160-720q0-33 23.5-56.5T240-800q33 0 56.5 23.5T320-720q0 33-23.5 56.5T240-640Zm240 0q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Zm240 0q-33 0-56.5-23.5T640-720q0-33 23.5-56.5T720-800q33 0 56.5 23.5T800-720q0 33-23.5 56.5T720-640Z'],
+  'history': ['M480-120q-138 0-240.5-91.5T122-440h82q14 104 92.5 172T480-200q117 0 198.5-81.5T760-480q0-117-81.5-198.5T480-760q-69 0-129 32t-101 88h110v80H120v-240h80v94q51-64 124.5-99T480-840q75 0 140.5 28.5t114 77q48.5 48.5 77 114T840-480q0 75-28.5 140.5t-77 114q-48.5 48.5-114 77T480-120Zm112-192L440-464v-216h80v184l128 128-56 56Z', 'M480-120q-138 0-240.5-91.5T122-440h82q14 104 92.5 172T480-200q117 0 198.5-81.5T760-480q0-117-81.5-198.5T480-760q-69 0-129 32t-101 88h110v80H120v-240h80v94q51-64 124.5-99T480-840q75 0 140.5 28.5t114 77q48.5 48.5 77 114T840-480q0 75-28.5 140.5t-77 114q-48.5 48.5-114 77T480-120Zm112-192L440-464v-216h80v184l128 128-56 56Z'],
+  'description': ['M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z', 'M320-240h320v-80H320v80Zm0-160h320v-80H320v80ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520h200L520-800v200Z'],
+  'credit-card': ['M880-720v480q0 33-23.5 56.5T800-160H160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720Zm-720 80h640v-80H160v80Zm0 160v240h640v-240H160Zm0 240v-480 480Z', 'M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm0-320h640v-160H160v160Z'],
+  'notifications': ['M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z', 'M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160ZM480-80q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80Z'],
+  'person': ['M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T560-640q0-33-23.5-56.5T480-720q-33 0-56.5 23.5T400-640q0 33 23.5 56.5T480-560Zm0-80Zm0 400Z', 'M480-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Z'],
+  'logout': ['M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z', 'M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z'],
 };
 
 /** The icon names navigation items accept (`data-icon`). */
 export type NavIconName = keyof typeof paths;
 
-/** Navigation icons that mirror in right-to-left. */
-const directional = new Set(['logout']);
-
-/** Renders a navigation icon by name; nothing for an unknown name. */
-export const NavIcon: FunctionalComponent<NavIconProps & { name?: string | null }> = ({ name, ...rest }) => {
-  const shapes = name ? paths[name] : undefined;
-  if (!shapes) return null;
-  return (
-    <Svg {...rest} directional={directional.has(name!)}>
-      {shapes.map((s) => (typeof s === 'string' ? <path d={s} /> : <rect x={s[0]} y={s[1]} width={s[2]} height={s[3]} rx="1.5" />))}
-    </Svg>
-  );
+/** Renders a navigation icon by name, Filled when `filled` (the current item); nothing for an unknown name. */
+export const NavIcon: FunctionalComponent<IconProps & { name?: string | null; filled?: boolean }> = ({ name, filled, ...rest }) => {
+  const pair = name ? paths[name] : undefined;
+  if (!pair) return null;
+  const Icon = svg(pair[filled ? 1 : 0], name === 'logout');
+  return <Icon {...rest} />;
 };

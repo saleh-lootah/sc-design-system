@@ -1,7 +1,7 @@
 import { Component, Element, Host, Prop, h } from '@stencil/core';
 import { LocaleController } from '../../i18n/controller';
 import strings from '../../i18n/components/sc-bottom-nav';
-import { NavIcon } from '../../icons/destinations'; // a file import: Stencil only scans file imports for <svg>
+import { NavIcon } from '../../icons/for/sc-bottom-nav';
 import { readNavItems, watchNavItems } from '../../utils/nav-items';
 
 /**
@@ -67,7 +67,7 @@ export class ScBottomNav {
                   lang={item.lang ?? undefined}
                 >
                   <span class="indicator" part="indicator">
-                    <NavIcon name={item.icon} />
+                    <NavIcon name={item.icon} filled={item.current} />
                   </span>
                   <span class="label">{item.text}</span>
                 </a>

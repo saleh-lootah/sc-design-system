@@ -58,10 +58,10 @@
   "coreGzip": 14336,
   "globalCssGzip": 9216,
   "shadowCssGzip": 1536,
-  "componentGzip": 4224,
+  "componentGzip": 4096,
   "$componentsComment": "Overrides of componentGzip. sc-button: 5 KiB, because its closure counts two shared chunks in full (the icon set, 0.9 KiB, and the locale controller, 1.0 KiB) that every component with an icon or strings shares once per page; its own module is 2.7 KiB. See specs/sc-button.md.",
   "components": {
-    "sc-button": 5248,
+    "sc-button": 5120,
     "sc-account-nav": 4608,
     "sc-breadcrumbs": 4224,
     "sc-text-input": 7168,

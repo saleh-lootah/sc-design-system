@@ -1,7 +1,7 @@
 import { Component, Host, Prop, h } from '@stencil/core';
 import { LocaleController } from '../../i18n/controller';
 import strings from '../../i18n/components/sc-link';
-import { ArrowForward, External } from '../../icons/index'; // explicit /index: Stencil only scans file imports for <svg>
+import { ArrowForward, External } from '../../icons/for/sc-link';
 
 /**
  * Goes somewhere. Use it for navigation; use `sc-button` for actions.

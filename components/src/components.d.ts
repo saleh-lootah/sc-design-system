@@ -8,7 +8,7 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { AnnouncementTone } from "./components/sc-announcement-bar/sc-announcement-bar";
 import { AttentionCardHeadingLevel, AttentionCardTint } from "./components/sc-attention-card/sc-attention-card";
 import { ButtonIconPosition, ButtonSize, ButtonType, ButtonVariant } from "./components/sc-button/sc-button";
-import { IconName } from "./icons/index";
+import { ButtonIconName } from "./icons/for/sc-button";
 import { CalloutHeadingLevel, CalloutTone } from "./components/sc-callout/sc-callout";
 import { CardLandmark, CardPadding, CardVariant } from "./components/sc-card/sc-card";
 import { Channel } from "./i18n/core";
@@ -19,6 +19,7 @@ import { HeadingLevel } from "./components/sc-text-input/field";
 import { Parts } from "./components/sc-date-input/date";
 import { StringsInput } from "./components/sc-date-range/overrides";
 import { EmptyStateHeadingLevel, EmptyStateVariant } from "./components/sc-empty-state/sc-empty-state";
+import { EmptyStateIconName } from "./icons/for/sc-empty-state";
 import { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
 import { FilterChip } from "./components/sc-filter-chips/sc-filter-chips";
 import { FooterVariant } from "./components/sc-footer/sc-footer";
@@ -41,7 +42,7 @@ import { TimelineOrder } from "./components/sc-timeline/sc-timeline";
 export { AnnouncementTone } from "./components/sc-announcement-bar/sc-announcement-bar";
 export { AttentionCardHeadingLevel, AttentionCardTint } from "./components/sc-attention-card/sc-attention-card";
 export { ButtonIconPosition, ButtonSize, ButtonType, ButtonVariant } from "./components/sc-button/sc-button";
-export { IconName } from "./icons/index";
+export { ButtonIconName } from "./icons/for/sc-button";
 export { CalloutHeadingLevel, CalloutTone } from "./components/sc-callout/sc-callout";
 export { CardLandmark, CardPadding, CardVariant } from "./components/sc-card/sc-card";
 export { Channel } from "./i18n/core";
@@ -52,6 +53,7 @@ export { HeadingLevel } from "./components/sc-text-input/field";
 export { Parts } from "./components/sc-date-input/date";
 export { StringsInput } from "./components/sc-date-range/overrides";
 export { EmptyStateHeadingLevel, EmptyStateVariant } from "./components/sc-empty-state/sc-empty-state";
+export { EmptyStateIconName } from "./icons/for/sc-empty-state";
 export { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
 export { FilterChip } from "./components/sc-filter-chips/sc-filter-chips";
 export { FooterVariant } from "./components/sc-footer/sc-footer";
@@ -370,9 +372,9 @@ export namespace Components {
          */
         "href"?: string;
         /**
-          * An icon from the library (`src/icons`), e.g. `arrow-forward`. Arrows and chevrons mirror in right-to-left.
+          * An icon by name: `arrow-forward`, `arrow-back`, `chevron-forward`, `chevron-back`, `external`, `search`, `check` or `close` (Material Symbols). Arrows and chevrons mirror in right-to-left. For any other icon, use `slot="icon"`.
          */
-        "icon"?: IconName;
+        "icon"?: ButtonIconName;
         /**
           * Where the icon sits relative to the label.
           * @default 'end'
@@ -875,9 +877,9 @@ export namespace Components {
          */
         "headingLevel"?: EmptyStateHeadingLevel;
         /**
-          * An icon from the library (`inbox`, `search`, `check-circle` …). Leave unset for no icon; `success` defaults to `check-circle`.
+          * An icon by name: `inbox`, `search`, `check-circle`, `info`, `warning`, `alert-circle` or `schedule` (Material Symbols). Leave unset for no icon; `success` defaults to `check-circle`. Any other icon goes in `slot="icon"`.
          */
-        "icon"?: IconName;
+        "icon"?: EmptyStateIconName;
         /**
           * `default`: neutral. `success`: the all-clear, with a check on the success container.
           * @default 'default'
@@ -3618,9 +3620,9 @@ declare namespace LocalJSX {
          */
         "href"?: string;
         /**
-          * An icon from the library (`src/icons`), e.g. `arrow-forward`. Arrows and chevrons mirror in right-to-left.
+          * An icon by name: `arrow-forward`, `arrow-back`, `chevron-forward`, `chevron-back`, `external`, `search`, `check` or `close` (Material Symbols). Arrows and chevrons mirror in right-to-left. For any other icon, use `slot="icon"`.
          */
-        "icon"?: IconName;
+        "icon"?: ButtonIconName;
         /**
           * Where the icon sits relative to the label.
           * @default 'end'
@@ -4131,9 +4133,9 @@ declare namespace LocalJSX {
          */
         "headingLevel"?: EmptyStateHeadingLevel;
         /**
-          * An icon from the library (`inbox`, `search`, `check-circle` …). Leave unset for no icon; `success` defaults to `check-circle`.
+          * An icon by name: `inbox`, `search`, `check-circle`, `info`, `warning`, `alert-circle` or `schedule` (Material Symbols). Leave unset for no icon; `success` defaults to `check-circle`. Any other icon goes in `slot="icon"`.
          */
-        "icon"?: IconName;
+        "icon"?: EmptyStateIconName;
         /**
           * `default`: neutral. `success`: the all-clear, with a check on the success container.
           * @default 'default'
@@ -5437,7 +5439,7 @@ declare namespace LocalJSX {
         "loading": boolean;
         "loadingText": string;
         "fullWidth": boolean;
-        "icon": IconName;
+        "icon": ButtonIconName;
         "iconPosition": ButtonIconPosition;
     }
     interface ScCalloutAttributes {
@@ -5531,7 +5533,7 @@ declare namespace LocalJSX {
     interface ScEmptyStateAttributes {
         "heading": string;
         "headingLevel": EmptyStateHeadingLevel;
-        "icon": IconName;
+        "icon": EmptyStateIconName;
         "variant": EmptyStateVariant;
     }
     interface ScErrorSummaryAttributes {
