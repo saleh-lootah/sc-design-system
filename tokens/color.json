@@ -30,6 +30,10 @@
       "$value": "{palette.neutral.40}",
       "$description": "Control boundaries (1.5px) and inactive markers; at least 3:1"
     },
+    "outline-strong": {
+      "$value": "{palette.neutral.10}",
+      "$description": "Hovered control edges, the sign-in edge and the plate chip; at least 3:1"
+    },
     "outline-variant": {
       "$value": "{palette.neutral.90}",
       "$description": "Dividers and card edges only; never the only edge of a control"
@@ -253,6 +257,10 @@
       "subtle": {
         "$value": "{channel.now.subtle}",
         "$description": "Active channel: Hero band, tinted rows, the halo of the current step"
+      },
+      "outline": {
+        "$value": "{channel.now.outline}",
+        "$description": "Active channel: 1px edges on suggestion chips and outlined channel chips (decorative, no contrast pair)"
       }
     }
   },
@@ -282,6 +290,10 @@
       "subtle": {
         "$value": "{palette.now.95}",
         "$description": "Hero band, tinted rows, the halo of the current step"
+      },
+      "outline": {
+        "$value": "{palette.now.80}",
+        "$description": "1px edges on suggestion chips and outlined channel chips (decorative, no contrast pair)"
       }
     },
     "transport": {
@@ -308,6 +320,10 @@
       "subtle": {
         "$value": "{palette.transport.95}",
         "$description": "Hero band, tinted rows, the halo of the current step"
+      },
+      "outline": {
+        "$value": "{palette.transport.80}",
+        "$description": "1px edges on suggestion chips and outlined channel chips (decorative, no contrast pair)"
       }
     },
     "visit": {
@@ -334,6 +350,10 @@
       "subtle": {
         "$value": "{palette.visit.95}",
         "$description": "Hero band, tinted rows, the halo of the current step"
+      },
+      "outline": {
+        "$value": "{palette.visit.80}",
+        "$description": "1px edges on suggestion chips and outlined channel chips (decorative, no contrast pair)"
       }
     },
     "justice": {
@@ -360,6 +380,10 @@
       "subtle": {
         "$value": "{palette.justice.95}",
         "$description": "Hero band, tinted rows, the halo of the current step"
+      },
+      "outline": {
+        "$value": "{palette.justice.80}",
+        "$description": "1px edges on suggestion chips and outlined channel chips (decorative, no contrast pair)"
       }
     },
     "build": {
@@ -386,6 +410,10 @@
       "subtle": {
         "$value": "{palette.build.95}",
         "$description": "Hero band, tinted rows, the halo of the current step"
+      },
+      "outline": {
+        "$value": "{palette.build.80}",
+        "$description": "1px edges on suggestion chips and outlined channel chips (decorative, no contrast pair)"
       }
     },
     "invest": {
@@ -412,6 +440,10 @@
       "subtle": {
         "$value": "{palette.invest.95}",
         "$description": "Hero band, tinted rows, the halo of the current step"
+      },
+      "outline": {
+        "$value": "{palette.invest.80}",
+        "$description": "1px edges on suggestion chips and outlined channel chips (decorative, no contrast pair)"
       }
     },
     "trade": {
@@ -438,6 +470,10 @@
       "subtle": {
         "$value": "{palette.trade.95}",
         "$description": "Hero band, tinted rows, the halo of the current step"
+      },
+      "outline": {
+        "$value": "{palette.trade.80}",
+        "$description": "1px edges on suggestion chips and outlined channel chips (decorative, no contrast pair)"
       }
     }
   }

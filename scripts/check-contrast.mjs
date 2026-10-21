@@ -59,6 +59,7 @@ function systemPairs() {
   add('Text', 'inverse-on-surface', 'inverse-surface', TEXT, 'Tooltip and toast text');
   add('State layers', 'on-surface', ['surface+hover:on-surface', 'surface+pressed:on-surface', 'surface-container+pressed:on-surface'], TEXT, 'Text on a hovered or pressed quiet control');
   add('Boundaries', 'outline', [...SURFACES, 'primary-subtle'], UI, 'Control edge (1.5px)');
+  add('Boundaries', 'outline-strong', ['surface', 'surface-container'], UI, 'Hovered control edge, sign-in edge, plate chip');
   add('Boundaries', 'on-disabled', 'disabled-container', UI, 'Disabled control (exempt in WCAG; held to 3:1 anyway)');
   add('Focus', 'focus-ring', [...SURFACES, 'primary-subtle', ...STATUSES.map((s) => `${s}-container`)], UI, 'Focus ring against what surrounds it');
   add('Primary', 'on-primary', ['primary', 'primary-hover', 'primary-pressed'], TEXT, 'Text on city indigo fills');

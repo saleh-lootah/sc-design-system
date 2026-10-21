@@ -65,6 +65,7 @@
     "on-surface": ["neutral", 10, 100, "Primary text and icons"],
     "on-surface-variant": ["neutral", 40, 80, "Secondary text: hints, captions, metadata"],
     "outline": ["neutral", 40, 60, "Control boundaries (1.5px) and inactive markers; at least 3:1"],
+    "outline-strong": ["neutral", 10, 90, "Hovered control edges, the sign-in edge and the plate chip; at least 3:1"],
     "outline-variant": ["neutral", 90, 24, "Dividers and card edges only; never the only edge of a control"],
     "inverse-surface": ["neutral", 20, 90, "Tooltips and toasts"],
     "inverse-on-surface": ["neutral", 96, 10, "Text on inverse-surface"],
@@ -132,7 +133,8 @@
     "action-pressed": ["action-10", 70, "Action fill while pressed"],
     "container": [90, 30, "Selected navigation item, chips on a tinted card"],
     "on-container": [30, 90, "Text and icons on container"],
-    "subtle": [95, 20, "Hero band, tinted rows, the halo of the current step"]
+    "subtle": [95, 20, "Hero band, tinted rows, the halo of the current step"],
+    "outline": [80, 40, "1px edges on suggestion chips and outlined channel chips (decorative, no contrast pair)"]
   },
   "defaultChannel": "now"
 }

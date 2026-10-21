@@ -189,6 +189,7 @@ Components use roles, never palette tones. Light and dark values (generated):
 | `--sc-color-on-surface` | neutral-10<br>`oklab(0.2242 0.0003 -0.004)` | neutral-100<br>`oklab(1 0 0)` | Primary text and icons |
 | `--sc-color-on-surface-variant` | neutral-40<br>`oklab(0.4829 0.0003 -0.004)` | neutral-80<br>`oklab(0.8277 0.0003 -0.004)` | Secondary text: hints, captions, metadata |
 | `--sc-color-outline` | neutral-40<br>`oklab(0.4829 0.0003 -0.004)` | neutral-60<br>`oklab(0.6553 0.0003 -0.004)` | Control boundaries (1.5px) and inactive markers; at least 3:1 |
+| `--sc-color-outline-strong` | neutral-10<br>`oklab(0.2242 0.0003 -0.004)` | neutral-90<br>`oklab(0.9139 0.0003 -0.004)` | Hovered control edges, the sign-in edge and the plate chip; at least 3:1 (17.14:1 / 13.27:1 on surface). Added in Wave 2 (C0) |
 | `--sc-color-outline-variant` | neutral-90<br>`oklab(0.9139 0.0003 -0.004)` | neutral-24<br>`oklab(0.3449 0.0003 -0.004)` | Dividers and card edges only; never the only edge of a control |
 | `--sc-color-inverse-surface` | neutral-20<br>`oklab(0.3104 0.0003 -0.004)` | neutral-90<br>`oklab(0.9139 0.0003 -0.004)` | Tooltips and toasts |
 | `--sc-color-inverse-on-surface` | neutral-96<br>`oklab(0.9656 0.0003 -0.004)` | neutral-10<br>`oklab(0.2242 0.0003 -0.004)` | Text on inverse-surface |
@@ -263,6 +264,7 @@ Seven channels, one structure. Each is a tonal palette; the roles take the same 
 | `--sc-color-channel-container` | 90 | 30 | Selected navigation item; emphasised container |
 | `--sc-color-channel-on-container` | 30 | 90 | Text and icons on `channel-container` |
 | `--sc-color-channel-subtle` | 95 | 20 | Hero band, tinted rows, the halo of the current step |
+| `--sc-color-channel-outline` | 80 | 40 | 1px edges on suggestion chips and outlined channel chips. Decorative, so no contrast pair; covered by the teal check. Added in Wave 2 (C0) |
 | `--sc-color-channel-on-action` | neutral-100 | neutral-10 | Text and icons on any action fill. The same in every channel, so it is bound once at `:root`. |
 
 Text on `channel-subtle` is `on-surface` or `on-surface-variant`, or `channel-action` for links and eyebrows; all three are checked.

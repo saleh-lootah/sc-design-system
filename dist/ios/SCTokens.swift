@@ -51,6 +51,11 @@ public extension Color {
         light: rgb(0.3669, 0.3694, 0.3791), // oklab(0.4829 0.0003 -0.004)
         dark: rgb(0.564, 0.5667, 0.5772) // oklab(0.6553 0.0003 -0.004)
     )
+    /// Hovered control edges, the sign-in edge and the plate chip; at least 3:1
+    static let scOutlineStrong = scDynamic(
+        light: rgb(0.1054, 0.1075, 0.1155), // oklab(0.2242 0.0003 -0.004)
+        dark: rgb(0.8844, 0.8874, 0.8988) // oklab(0.9139 0.0003 -0.004)
+    )
     /// Dividers and card edges only; never the only edge of a control
     static let scOutlineVariant = scDynamic(
         light: rgb(0.8844, 0.8874, 0.8988), // oklab(0.9139 0.0003 -0.004)
@@ -293,6 +298,7 @@ public struct SCChannel: Sendable {
     public let container: Color
     public let onContainer: Color
     public let subtle: Color
+    public let outline: Color
     /// Text and icons on action, the same in every channel.
     public var onAction: Color { .scChannelOnAction }
 }
@@ -323,6 +329,10 @@ public extension SCChannel {
         subtle: scDynamic(
             light: rgb(0.9119, 0.9467, 0.9999), // oklab(0.9567 -0.004 -0.0202)
             dark: rgb(0.1, 0.1895, 0.3284) // oklab(0.3115 -0.0135 -0.0689)
+        ),
+        outline: scDynamic(
+            light: rgb(0.6468, 0.7857, 0.9995), // oklab(0.8276 -0.0166 -0.0845)
+            dark: rgb(0.1233, 0.3591, 0.7131) // oklab(0.4874 -0.03 -0.153)
         )
     )
     static let transport = SCChannel(
@@ -350,6 +360,10 @@ public extension SCChannel {
         subtle: scDynamic(
             light: rgb(1, 0.9299, 0.9033), // oklab(0.9588 0.016 0.0144)
             dark: rgb(0.3054, 0.1451, 0.0802) // oklab(0.317 0.0499 0.045)
+        ),
+        outline: scDynamic(
+            light: rgb(1, 0.7107, 0.5985), // oklab(0.8364 0.0705 0.0636)
+            dark: rgb(0.6462, 0.2366, 0.0064) // oklab(0.4982 0.111 0.1)
         )
     )
     static let visit = SCChannel(
@@ -377,6 +391,10 @@ public extension SCChannel {
         subtle: scDynamic(
             light: rgb(0.9999, 0.925, 0.9514), // oklab(0.9598 0.0223 -0.0023)
             dark: rgb(0.3036, 0.1328, 0.208) // oklab(0.3195 0.0698 -0.0072)
+        ),
+        outline: scDynamic(
+            light: rgb(0.9997, 0.689, 0.8115), // oklab(0.8405 0.0993 -0.0102)
+            dark: rgb(0.64, 0.2017, 0.4157) // oklab(0.5033 0.155 -0.016)
         )
     )
     static let justice = SCChannel(
@@ -404,6 +422,10 @@ public extension SCChannel {
         subtle: scDynamic(
             light: rgb(0.9502, 0.9364, 0.9918), // oklab(0.9583 0.0088 -0.017)
             dark: rgb(0.208, 0.1683, 0.2944) // oklab(0.3154 0.0265 -0.0509)
+        ),
+        outline: scDynamic(
+            light: rgb(0.8091, 0.744, 0.9744), // oklab(0.8342 0.0383 -0.0735)
+            dark: rgb(0.4199, 0.3093, 0.6282) // oklab(0.4951 0.059 -0.113)
         )
     )
     static let build = SCChannel(
@@ -431,6 +453,10 @@ public extension SCChannel {
         subtle: scDynamic(
             light: rgb(0.9915, 0.9386, 0.8375), // oklab(0.9571 0.0041 0.0366)
             dark: rgb(0.2331, 0.1824, 0.0787) // oklab(0.3111 0.005 0.0446)
+        ),
+        outline: scDynamic(
+            light: rgb(0.9531, 0.7475, 0.2998), // oklab(0.8304 0.0156 0.1406)
+            dark: rgb(0.4771, 0.3489, 0.0002) // oklab(0.4851 0.011 0.099)
         )
     )
     static let invest = SCChannel(
@@ -458,6 +484,10 @@ public extension SCChannel {
         subtle: scDynamic(
             light: rgb(0.8858, 0.9663, 0.8735), // oklab(0.9529 -0.0298 0.0237)
             dark: rgb(0.1214, 0.2107, 0.1093) // oklab(0.305 -0.0418 0.0333)
+        ),
+        outline: scDynamic(
+            light: rgb(0.5684, 0.8455, 0.5305), // oklab(0.8145 -0.1023 0.0814)
+            dark: rgb(0.1827, 0.4195, 0.153) // oklab(0.4713 -0.093 0.074)
         )
     )
     static let trade = SCChannel(
@@ -485,6 +515,10 @@ public extension SCChannel {
         subtle: scDynamic(
             light: rgb(0.9205, 0.947, 0.9742), // oklab(0.9565 -0.0043 -0.011)
             dark: rgb(0.1553, 0.1937, 0.2322) // oklab(0.3098 -0.0081 -0.0207)
+        ),
+        outline: scDynamic(
+            light: rgb(0.688, 0.7897, 0.8924), // oklab(0.8263 -0.0169 -0.0432)
+            dark: rgb(0.2825, 0.3791, 0.4748) // oklab(0.4816 -0.018 -0.046)
         )
     )
     static let all: [SCChannel] = [.now, .transport, .visit, .justice, .build, .invest, .trade]
