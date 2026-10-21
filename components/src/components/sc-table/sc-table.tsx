@@ -118,6 +118,8 @@ export class ScTable {
   @State() selected: string[] = [];
   @State() announcement = '';
   @State() selectionText = '';
+  /** The bar shows the count (Bold) and the total (Medium) side by side (board 09.05). */
+  private selectionParts: string[] = [];
   @State() empty = false;
   @State() hasError = false;
   @State() hasFooter = false;
@@ -478,17 +480,18 @@ export class ScTable {
       const label = t('tableSelectAll');
       if (all.getAttribute('aria-label') !== label) all.setAttribute('aria-label', label);
     }
-    const text = selected.size ? this.selectionSummary(rows, selected) : '';
+    this.selectionParts = selected.size ? this.selectionSummary(rows, selected) : [];
+    const text = this.selectionParts.join(' · ');
     if (text !== this.selectionText) this.selectionText = text;
   }
 
   /** "2 fines selected · AED 1,700.00". */
-  private selectionSummary(rows: Row[], selected: Set<string>): string {
+  private selectionSummary(rows: Row[], selected: Set<string>): string[] {
     const count = selected.size;
     const template = this.selectionLabel ?? this.t('tableSelected');
     const label = plural(template, count, this.locale.lang).replace(/\{count\}/g, String(count));
     const total = this.selectedTotal(rows, selected);
-    return total ? `${label} · ${total}` : label;
+    return total ? [label, total] : [label];
   }
 
   /** The sum of the amount column over the selected rows, written like the first selected amount. */
@@ -586,7 +589,7 @@ export class ScTable {
         </div>
         <div class={{ 'selection-bar': true, 'selection-bar--open': open }}>
           <p class="selection-text">
-            <bdi>{this.selectionText}</bdi>
+            {this.selectionParts.map((part, i) => (i ? [<span class="selection-sep"> · </span>, <bdi class="selection-total">{part}</bdi>] : <bdi class="selection-count">{part}</bdi>))}
           </p>
           <div class="selection-actions">
             <slot name="actions" />

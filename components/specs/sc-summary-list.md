@@ -12,21 +12,29 @@ The details of one thing, as rows of a key, a value and an optional "Change" act
 
 | # | Part | Notes |
 | --- | --- | --- |
-| 1 | List (`.sc-summary-list__list`) | Card: 1px `outline-variant` edge, radius 12, `surface-card`, `overflow: clip` (the total row's fill follows the corners). Plain: no card, a rule above the first row and below each row. |
-| 2 | Row (`.sc-summary-list__row`) | Padding 12 block (16 in columns), 16 inline (24 from 600px in a card). 1px `outline-variant` rules between rows. |
+| 1 | List (`.sc-summary-list__list`) | Card: 1px `outline-variant` edge, radius 12, `surface-card` (`surface-container` in dark, board 09.04 and E3), `overflow: clip` (the total row's fill follows the corners). Plain: no card, a rule above the first row and below each row. |
+| 2 | Row (`.sc-summary-list__row`) | Padding 14 block, 16 inline in every layout (board 09.04). 1px `outline-variant` rules between rows. |
 | 3 | Key (`dt`) | `body-medium`, `on-surface-variant`. |
 | 4 | Value (`dd`) | `title-small` (17/22 Medium; AR 19/28 Bold), `on-surface`. Holds the row element. |
 | 5 | Action (`dd`, optional) | A link, `label-medium`, `channel-action`, underlined 1px at 4px (5px Arabic), 2px on hover, 44 × 44 target; "Change" plus the key as visually hidden text. |
-| 6 | Total row (`variant="total"`) | `surface-container` fill, key `title-medium`, value `title-large`. |
+| 6 | Total row (`variant="total"`) | `surface-container` fill (`surface-container-high` in dark), key `title-medium`, value `headline-small` (board 09.04). |
 
 ## Layouts
 
 | Layout | Structure |
 | --- | --- |
 | `auto` (default) | `stacked` below 600px of the list's own width, `columns` from there (a container query) |
-| `stacked` (E3) | Key above value (2 apart), the action in a fixed 64px end column, centred. Rows without an action keep the empty column |
-| `columns` | Key, value (1fr : 2fr) and a fixed 96px action column (`--sc-summary-list-action-width`), on a shared baseline |
+| `stacked` (E3) | Key above value (2 apart), the action in a fixed 64px end column (no extra gap), centred. Rows without an action keep the empty column |
+| `columns` | A fixed 200px key column, the value, and a fixed 96px action column (`--sc-summary-list-action-width`), 16 apart, on a shared baseline |
 | `pairs` (E4) | Key in a fixed 104px column (120 in Arabic), value **end-aligned** (`text-align: end`, never `right`; it is left in Arabic). Actions are not rendered |
+
+## Board differences kept in code (board 09.04)
+
+- Value: the board draws `body-large` at Medium; the code keeps `title-small`, the role foundations §3.2 names for summary-list values (W5: type roles only).
+- Action: the board draws `body-medium` at Medium (16/24); the code keeps `label-medium` (16/20 Medium), as the board's own anatomy table says.
+- Total key: the board draws `title-small` size at Bold; the code keeps `title-medium` (Bold in both scripts).
+- Columns rows: the board centres the cells; the code keeps a shared baseline so multi-line values (addresses) read from their first line.
+- Pair values: the board uses `text-align: right`; the code uses `end` (the board's own note says so).
 
 ## Accessibility
 

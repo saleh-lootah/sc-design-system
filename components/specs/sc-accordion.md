@@ -14,9 +14,9 @@ Sections that open and close, for frequently asked questions and long guidance.
 | --- | --- | --- |
 | 1 | Show all (optional) | `show-all`: a `<button>` "Show all sections" / "Hide all sections" with `aria-expanded`, `label-medium` in `channel-action`, underlined, 44px tall. |
 | 2 | Section | A `<details>`. A 1px `outline-variant` rule above each section and below the last. 24 of padding below an open section. |
-| 3 | Summary | The `<summary>`: at least 56 tall, 16 block padding, no inline padding (it aligns with the text column), `title-medium`. A grid with a fixed 24px chevron column at inline-end, 16 apart. An optional `<small>` summary line in `body-medium`, `on-surface-variant`. |
+| 3 | Summary | The `<summary>`: at least 56 tall, 16 block padding, no inline padding (it aligns with the text column), `title-medium`. A grid with a fixed 24px chevron column at inline-end, 16 apart. An optional `<small>` summary line in `body-medium`, `on-surface-variant`, 2 below the title. |
 | 4 | Chevron | `expand_more`, 24px, drawn as a CSS mask in `currentColor`. Turns 180° when open. It sits at inline-end, so it is on the left in Arabic; it turns over vertically, so it never mirrors. |
-| 5 | Answer | The content after `<summary>`: 8 below it, blocks 16 apart. |
+| 5 | Answer | The content after `<summary>`: `body-medium` in `on-surface`, 8 below it, blocks 8 apart, padded 40 at inline-end so it keeps clear of the chevron column (board 09.10). |
 
 ## States
 
@@ -36,6 +36,14 @@ Native disclosure semantics (DDS F-001 fixed by construction): Enter and Space t
 - From a pointer: the chevron turns over `duration-fast` (120ms) with `easing-standard` (in-out, MOT-06), and the answer fades in (opacity only, no height animation, MOT-11).
 - From the keyboard (`summary:focus-visible`): both are instant (MOT-02).
 - component-language proposed 150ms; 120ms is the micro-interaction token (100–150ms).
+- Reduced motion: the chevron turn is dropped; the opacity fade stays (board 09.10).
+
+## Board differences kept in code (board 09.10)
+
+- API: the board proposes `sc-accordion-section` with `heading`, `summary`, `open`, a `heading-level` prop and an `scToggle` event. The code keeps native `<details>`/`<summary>` children (component-language B15 allows them, and they work before JavaScript); `toggle` is the native event.
+- Motion: the board quotes 150ms for the turn and the fade; the code keeps `duration-fast` (120ms), as above.
+- Focus: the board draws the ring at inset 0; the code keeps U1 (3px with a 2px offset).
+- Chevron: the board uses Material Symbols `expand_more` (filled path); the code draws a stroked chevron mask. Left to the icon pass.
 
 ## Code
 
