@@ -17,15 +17,16 @@ import { ChannelHeroSize } from "./components/sc-channel-hero/sc-channel-hero";
 import { Channel as Channel1, ChannelLinks } from "./utils/channels";
 import { HeadingLevel } from "./components/sc-text-input/field";
 import { Parts } from "./components/sc-date-input/date";
-import { StringsInput } from "./components/sc-table/overrides";
+import { StringsInput } from "./components/sc-date-range/overrides";
 import { EmptyStateHeadingLevel, EmptyStateVariant } from "./components/sc-empty-state/sc-empty-state";
 import { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
+import { FilterChip } from "./components/sc-filter-chips/sc-filter-chips";
 import { FooterVariant } from "./components/sc-footer/sc-footer";
 import { LanguageSwitchAppearance, LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
 import { ModalCloseReason, ModalHeadingLevel, ModalInitialFocus } from "./components/sc-modal/sc-modal";
 import { ModuleCardHeadingLevel, ModuleCardTint } from "./components/sc-module-card/sc-module-card";
 import { PaginationChangeDetail } from "./components/sc-pagination/sc-pagination";
-import { ScSearchDetail } from "./components/sc-search/sc-search";
+import { ScSearchDetail, SearchSize } from "./components/sc-search/sc-search";
 import { ServiceCardHeadingLevel, ServiceCardTint } from "./components/sc-service-card/sc-service-card";
 import { SpinnerSize } from "./components/sc-spinner/sc-spinner";
 import { StatusTagTone } from "./components/sc-status-tag/sc-status-tag";
@@ -49,15 +50,16 @@ export { ChannelHeroSize } from "./components/sc-channel-hero/sc-channel-hero";
 export { Channel as Channel1, ChannelLinks } from "./utils/channels";
 export { HeadingLevel } from "./components/sc-text-input/field";
 export { Parts } from "./components/sc-date-input/date";
-export { StringsInput } from "./components/sc-table/overrides";
+export { StringsInput } from "./components/sc-date-range/overrides";
 export { EmptyStateHeadingLevel, EmptyStateVariant } from "./components/sc-empty-state/sc-empty-state";
 export { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
+export { FilterChip } from "./components/sc-filter-chips/sc-filter-chips";
 export { FooterVariant } from "./components/sc-footer/sc-footer";
 export { LanguageSwitchAppearance, LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
 export { ModalCloseReason, ModalHeadingLevel, ModalInitialFocus } from "./components/sc-modal/sc-modal";
 export { ModuleCardHeadingLevel, ModuleCardTint } from "./components/sc-module-card/sc-module-card";
 export { PaginationChangeDetail } from "./components/sc-pagination/sc-pagination";
-export { ScSearchDetail } from "./components/sc-search/sc-search";
+export { ScSearchDetail, SearchSize } from "./components/sc-search/sc-search";
 export { ServiceCardHeadingLevel, ServiceCardTint } from "./components/sc-service-card/sc-service-card";
 export { SpinnerSize } from "./components/sc-spinner/sc-spinner";
 export { StatusTagTone } from "./components/sc-status-tag/sc-status-tag";
@@ -564,11 +566,12 @@ export namespace Components {
     }
     /**
      * A checkbox: one of several choices in an `sc-checkbox-group`, or on its own for a single
-     * yes/no statement ("I confirm the vehicle details are correct").
-     * Renders a native `<input type="checkbox">`, its `<label>` (the default slot) and hint in
-     * its own shadow root. Space toggles it. Form-associated: when checked it submits `value`
-     * under its `name`, or under the group's `name` inside `sc-checkbox-group`. On its own it can
-     * show an error; inside a group the group shows the error and marks every box invalid.
+     * statement ("I confirm the vehicle details are correct").
+     * v2 renders a native `<input type="checkbox">`, its `<label>` (the default slot) and hint in
+     * light DOM (Stencil `scoped`, decision A2). Space toggles it; clicking the label or the 44px
+     * target around the box toggles it. When checked it submits `value` under its `name`, or under
+     * the group's `name` inside `sc-checkbox-group`. On its own it can show an error and use
+     * native `required`; inside a group the group shows the error and marks every box invalid.
      */
     interface ScCheckbox {
         /**
@@ -588,21 +591,23 @@ export namespace Components {
         /**
           * @default false
          */
-        "groupDisabled": boolean;
-        /**
-          * @default false
-         */
         "groupInvalid": boolean;
+        "groupName"?: string;
         /**
           * Help text under the label.
          */
         "hint"?: string;
         /**
+          * Shows the mixed state (a 12 × 2 bar), for a box that controls a set of others ("All channels") when only some are checked. Set by script; cleared when the user toggles it. Exposed natively as `aria-checked="mixed"`.
+          * @default false
+         */
+        "indeterminate": boolean;
+        /**
           * The name submitted with the form. Inside `sc-checkbox-group`, defaults to the group's `name`.
          */
         "name"?: string;
         /**
-          * On its own: must be checked to submit (`valueMissing`). Inside a group, use the group's `required`.
+          * On its own: must be checked to submit (native `valueMissing`). Inside a group, use the group's `required`.
           * @default false
          */
         "required": boolean;
@@ -614,18 +619,15 @@ export namespace Components {
     }
     /**
      * Several choices from a short list: "Which documents do you have?".
-     * A `<fieldset>` with a `<legend>`, hint and error in this element's shadow root, with the
-     * `sc-checkbox` children slotted inside it. Each checkbox keeps its own native input, label
-     * and hint in its own shadow root (so `sc-checkbox` also works on its own); the fieldset
-     * groups them in the accessibility tree, which follows the flattened tree. The group's
-     * hint and error describe the fieldset, and in the error state every box gets
-     * `aria-invalid` and an error border.
-     * Each checked box submits its own value under the group's `name` (or its own). The group is
-     * form-associated only to report `valueMissing` when `required` and nothing is checked.
+     * v2 renders a native `<fieldset>` with its `<legend>`, hint and error in light DOM (Stencil
+     * `scoped`, decision A2), and moves the `sc-checkbox` children into it, so they are grouped
+     * and named by the legend natively. Each checked box submits its own value under the group's
+     * `name`. `disabled` disables the fieldset (and so every box). With `required`, the first box
+     * carries a native validity error until one is checked.
      */
     interface ScCheckboxGroup {
         /**
-          * Disables every checkbox. Avoid it.
+          * Disables every checkbox (through the fieldset). Avoid it.
           * @default false
          */
         "disabled": boolean;
@@ -660,7 +662,7 @@ export namespace Components {
          */
         "optional": boolean;
         /**
-          * Requires at least one box to be checked (`valueMissing`). Not shown visually.
+          * Requires at least one box to be checked. Not shown visually.
           * @default false
          */
         "required": boolean;
@@ -668,13 +670,13 @@ export namespace Components {
     /**
      * A date people know, such as a date of birth or the date on a document: Day, Month and
      * Year boxes (يوم / شهر / سنة) with the numeric keyboard.
-     * A `<fieldset>` and `<legend>` with the hint and error, and three labelled native inputs,
-     * in one shadow root. In Arabic the boxes run right to left (Day on the right). An error can
-     * highlight one part with `error-parts="year"`.
-     * Form-associated: submits the date as an ISO string (`2026-03-07`, or empty while it isn't
-     * a real date) under `name`, plus the raw parts as `name-day`, `name-month` and `name-year`
-     * so a server can re-display what was typed. Reports `valueMissing` and `badInput`.
-     * Delegates focus to the first box.
+     * v2 renders a native `<fieldset>` and `<legend>` with the hint and error, three labelled
+     * native inputs and a hidden input in light DOM (Stencil `scoped`, decision A2). It submits
+     * the date as an ISO string (`2026-03-07`, or empty while it isn't a real date) under `name`,
+     * and the raw parts as `name-day`, `name-month` and `name-year`, so a server can re-display
+     * what was typed. An empty required date and an impossible date are native validity errors
+     * on the first box concerned. In Arabic the boxes run right to left (Day on the right). An
+     * error can mark one box with `error-parts="year"`.
      */
     interface ScDateInput {
         /**
@@ -691,7 +693,7 @@ export namespace Components {
          */
         "error"?: string;
         /**
-          * Which boxes the error is about, space-separated: `"day"`, `"month year"`. Only those get the error border and `aria-invalid`. When empty, an error highlights all three.
+          * Which boxes the error is about, space-separated: `"day"`, `"month year"`. Only those get the error edge and `aria-invalid`. When empty, an error marks all three.
          */
         "errorParts"?: string;
         /**
@@ -716,7 +718,7 @@ export namespace Components {
          */
         "optional": boolean;
         /**
-          * Requires a date (`valueMissing` while every box is empty).
+          * Requires a date (a validity error while every box is empty).
           * @default false
          */
         "required": boolean;
@@ -730,14 +732,18 @@ export namespace Components {
      * A start and an end date that relate to a calendar: filtering payments between two dates,
      * the nights of a hotel stay, how long a permit lasts. For one date people already know
      * (a date of birth), use `sc-date-input`.
-     * Two typed segments (From / To, من / إلى) in one 54px frame, and a calendar button that
+     * Two typed segments (From / To, من / إلى) in one 56px frame, and a calendar button that
      * opens a picker: a popover with one or two months and optional presets on medium and
      * wider screens, a modal bottom sheet below 600px. People can always type instead
      * ("21/9/2026", "21 9 2026", "21-09-2026").
-     * Form-associated: submits `name-start` and `name-end` as ISO dates (empty until each is a
-     * real date). Reports `valueMissing` (with `required`), `badInput`, `rangeUnderflow` and
-     * `rangeOverflow`, and shows its own messages for impossible ranges on blur. Delegates focus
-     * to the start segment.
+     * v2 renders everything in light DOM (Stencil `scoped`, decision A2), with classes prefixed
+     * `.sc-date-range__`. It submits `name-start` and `name-end` as ISO dates through hidden
+     * inputs (empty until each is a real date). The first problem with the range (missing with
+     * `required`, not a real date, end before start, outside `min`/`max`, too long or short) is a
+     * native validity error on the segment concerned; the component shows its own message on
+     * blur or after a failed submit. `focus()` on the host goes to the start segment. One native
+     * `change` is dispatched from the host per committed range.
+     * Rich content: a child with `slot="label"`, `slot="hint"` or `slot="error"` is moved into place once.
      */
     interface ScDateRange {
         /**
@@ -903,6 +909,36 @@ export namespace Components {
           * Moves focus to the summary, e.g. after client-side validation updates `errors`.
          */
         "setFocus": () => Promise<void>;
+    }
+    /**
+     * The filters applied to a list of results, as removable chips beside the result count, with
+     * "Clear all filters" when there are two or more (component-language B18, applied filter).
+     * Each chip is a native `<button>` named "Remove filter: Transport and vehicles". Removing one
+     * takes it away at once (no animation), emits `scRemove`, and moves focus to the next chip,
+     * else the previous one, else the element named by `focus-target` (the results heading).
+     * Every change in the number of filters is announced politely: "2 filters applied".
+     * The page updates its results on `scRemove` / `scClear`; set `filters` to change the chips.
+     * Chips are 32px tall (decision Q-chips) with a 44px target. Light DOM (Stencil `scoped`).
+     */
+    interface ScFilterChips {
+        /**
+          * The applied filters, in order: an array of `{ value, label }`, or the same as JSON in the attribute (`filters='[{"value":"transport","label":"Transport and vehicles"}]'`).
+          * @default []
+         */
+        "filters": FilterChip[] | string;
+        /**
+          * The id of the element that gets focus when the last chip goes, usually the results heading. It is made focusable (`tabindex="-1"`) if it isn't.
+         */
+        "focusTarget"?: string;
+        /**
+          * The group's accessible name. Defaults to "Applied filters" ("عوامل التصفية المطبّقة").
+         */
+        "label"?: string;
+        /**
+          * Hides "Clear all filters".
+          * @default false
+         */
+        "noClear": boolean;
     }
     /**
      * The page footer, a `<footer>` (the page's `contentinfo` landmark). Two variants:
@@ -1242,11 +1278,11 @@ export namespace Components {
     }
     /**
      * One option in an `sc-radio-group`. Its content is the option's label.
-     * `sc-radio` holds data and label content only. The parent `sc-radio-group` renders the
-     * native `<input type="radio">` for every option inside its own shadow root and slots
-     * this element into that option's `<label>`, so all the radios share one tree: they form a
-     * real native radio group (one Tab stop, arrow keys move and select, "2 of 3" announced).
-     * Use it only inside `sc-radio-group`.
+     * v2 renders a native `<input type="radio">`, its `<label>` and hint in light DOM (Stencil
+     * `scoped`, decision A2). Every radio in a group shares the group's `name` in one document
+     * tree, so they form a real native radio group: one Tab stop, arrow keys move and select,
+     * "2 of 3" is announced, and the form submits the chosen value. Use it only inside
+     * `sc-radio-group`, which passes down the name, the chosen value and the error state.
      */
     interface ScRadio {
         /**
@@ -1260,9 +1296,22 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
+          * @default false
+         */
+        "groupInvalid": boolean;
+        "groupName"?: string;
+        /**
+          * @default false
+         */
+        "groupRequired": boolean;
+        /**
           * Help text under this option's label.
          */
         "hint"?: string;
+        /**
+          * @default false
+         */
+        "selected": boolean;
         /**
           * The value submitted when this option is chosen.
          */
@@ -1270,18 +1319,18 @@ export namespace Components {
     }
     /**
      * One choice from a short list: "Who issued the plate?".
-     * A `<fieldset>` with a `<legend>` (exposed as `role="radiogroup"`, labelled by the legend
-     * and described by the hint and error), and one native `<input type="radio">` per
-     * `sc-radio` child, all inside this element's shadow root. Each `sc-radio` is slotted into
-     * its option's `<label>` (manual slot assignment), so its content names the radio while the
-     * radios themselves stay in one tree: native arrow keys, one Tab stop, position in set.
-     * Form-associated: submits the chosen value under `name`, resets, and reports
-     * `valueMissing` when `required`. Delegates focus, so an error-summary link to the host's
-     * `id` focuses the first radio.
+     * v2 renders a native `<fieldset>` (role `radiogroup`) with its `<legend>`, hint and error in
+     * light DOM (Stencil `scoped`, decision A2), and moves the `sc-radio` children into it. Each
+     * `sc-radio` renders a native radio with the group's `name`, so they form a real native radio
+     * group: one Tab stop, arrow keys move and select, position in set, native submission,
+     * reset and `required`. `disabled` disables the fieldset. `focus()` on the host reaches the
+     * chosen radio, or the first.
+     * Without a `name`, the radios share a generated one (`sc-radio-group-3`), which a form
+     * would submit: give the group a `name` inside a form.
      */
     interface ScRadioGroup {
         /**
-          * Disables every option. Avoid it.
+          * Disables every option (through the fieldset). Avoid it.
           * @default false
          */
         "disabled": boolean;
@@ -1290,7 +1339,7 @@ export namespace Components {
          */
         "error"?: string;
         /**
-          * When set (1–6), the legend is also the page heading at this level (`<legend><h1>…</h1></legend>`). Use it when the question is the only one on the page.
+          * When set (1–6), the legend is also the page heading at this level (`<legend><h1>…</h1></legend>`).
          */
         "headingLevel"?: HeadingLevel;
         /**
@@ -1316,7 +1365,7 @@ export namespace Components {
          */
         "optional": boolean;
         /**
-          * Requires a choice (`valueMissing` until one is made). Not shown visually.
+          * Requires a choice (native `valueMissing` until one is made). Not shown visually.
           * @default false
          */
         "required": boolean;
@@ -1326,12 +1375,13 @@ export namespace Components {
         "value"?: string;
     }
     /**
-     * A pill search box: search icon, a labelled field and a primary "Search" button, inside a
-     * `<form role="search">` (a search landmark named by the label).
-     * Submitting (the button, or Enter in the field) emits `scSearch`. With `action`, the form
-     * then goes to that URL with the query as `?<name>=…`, unless a listener calls
-     * `preventDefault()`; without `action`, the page handles `scSearch` itself.
-     * The form is self-contained: don't nest `sc-search` inside another `<form>`.
+     * A search field and its button, inside a `<form role="search">` named by the label (E1: the
+     * field and the primary button are siblings with a 12px gap, not one pill).
+     * v2 renders the form, a native `<input type="search">` and an `sc-button type="submit"` in
+     * light DOM (Stencil `scoped`, decision A2), so Enter in the field submits through the button
+     * natively. Submitting emits `scSearch`. With `action`, the form then goes to that URL with the
+     * query as `?<name>=…`, unless a listener calls `preventDefault()`; without `action`, the page
+     * handles `scSearch` itself. Don't nest `sc-search` inside another `<form>`.
      */
     interface ScSearch {
         /**
@@ -1365,6 +1415,11 @@ export namespace Components {
          */
         "setFocus": () => Promise<void>;
         /**
+          * `m` (default): a 56px field and button. `l`: the 64px hero search (E1).
+          * @default 'm'
+         */
+        "size": SearchSize;
+        /**
           * The query. Updated as the user types.
           * @default ''
          */
@@ -1372,9 +1427,11 @@ export namespace Components {
     }
     /**
      * One choice from a list too long for radios, such as the emirate that issued a plate.
-     * A native `<select>` inside the shadow root, styled like `sc-text-input`, with a chevron.
-     * Write the options as light-DOM `<option>` (and `<optgroup>`) children: they are copied
-     * into the inner select and kept in sync when they change. Form-associated and delegates focus.
+     * v2 renders a native `<select>` in light DOM (Stencil `scoped`, decision A2), styled like
+     * `sc-text-input` with an `expand_more` chevron. Write the options as `<option>` (and
+     * `<optgroup>`) children: they are moved INTO the native select, so they are the real options
+     * (no copies), and options added later are moved in too. The select submits, resets, validates
+     * and follows `<fieldset disabled>` natively; `focus()` on the host reaches it.
      */
     interface ScSelect {
         /**
@@ -1399,7 +1456,7 @@ export namespace Components {
          */
         "hint"?: string;
         /**
-          * The visible label: "Issuing emirate".
+          * The visible label: "Issuing authority".
          */
         "label"?: string;
         /**
@@ -1747,10 +1804,14 @@ export namespace Components {
     }
     /**
      * A single-line answer, such as a plate number, an email address or a phone number.
-     * Renders its own label, hint, error and native `<input>` in one shadow root, so the
-     * label and `aria-describedby` work. The host is form-associated (it submits `value`
-     * under `name`, resets, and reports validity from the inner input) and delegates focus,
-     * so an error-summary link to the host's `id` focuses the input.
+     * v2 renders its label, hint, error and a native `<input>` in light DOM (Stencil `scoped`,
+     * decision A2). The input is a real form control: it submits under `name`, Enter submits the
+     * form through its default button, and validation, reset, autofill and `<fieldset disabled>`
+     * are native. `focus()` on the host reaches the input, so an error-summary link to the host's
+     * `id` works. Styles: the classes `.sc-field`, `.sc-field__label`, `.sc-field__frame`,
+     * `.sc-field__control` (no `::part()`).
+     * Rich content: a child element with `slot="label"`, `slot="hint"`, `slot="error"`,
+     * `slot="prefix"` or `slot="suffix"` is moved into place once, when the component loads.
      */
     interface ScTextInput {
         /**
@@ -1763,7 +1824,7 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * The error message. Setting it shows the error state: a 3px error bar on the start side, an error border on the input, the message with an icon and a visually hidden "Error:", and `aria-invalid`. Say what to do: "Enter numbers only, like 12345".
+          * The error message. Setting it shows the error state: a 4px error bar at inline-start, a 2px error edge on the box, the message with an icon and a visually hidden "Error:", and `aria-invalid`. Say what to do: "Enter numbers only, like 12345".
          */
         "error"?: string;
         /**
@@ -1783,7 +1844,7 @@ export namespace Components {
          */
         "label"?: string;
         /**
-          * Keeps the value left-to-right (plates, phone numbers, emails, references). In Arabic the value still sits at the start (right) of the box. Use this, not `dir` on the host, which would flip the label and hint too.
+          * Keeps the value left-to-right (plates, phone numbers, emails, references). In Arabic the value still sits at the start (right) of the box. Use this, not `dir` on the host.
           * @default false
          */
         "ltr": boolean;
@@ -1809,7 +1870,7 @@ export namespace Components {
          */
         "pattern"?: string;
         /**
-          * Text before the value inside the box, such as "AED". (Named `prefixText` because `prefix` is a reserved DOM property.)
+          * Text before the value inside the box, such as "AED".
          */
         "prefixText"?: string;
         /**
@@ -1844,9 +1905,12 @@ export namespace Components {
     }
     /**
      * A longer answer, such as a reason or a description, with an optional character count.
-     * Renders its own label, hint, error, native `<textarea>` and count in one shadow root.
-     * The count is shown as you type, but announced to screen readers politely, once typing
-     * pauses, never on every keystroke. Form-associated and delegates focus, like `sc-text-input`.
+     * v2 renders its label, hint, error, a native `<textarea>` and the count in light DOM
+     * (Stencil `scoped`, decision A2), so the textarea is a real form control. The count is shown
+     * as you type but announced politely only once typing pauses. People can type past the limit:
+     * the count then says how many characters to remove and the textarea reports a custom
+     * validity error, which is easier to fix than text that silently stops.
+     * Rich content: a child with `slot="label"`, `slot="hint"` or `slot="error"` is moved into place once.
      */
     interface ScTextarea {
         /**
@@ -1859,7 +1923,7 @@ export namespace Components {
          */
         "disabled": boolean;
         /**
-          * The error message. Setting it shows the error state (bar, border, icon, "Error:", `aria-invalid`).
+          * The error message. Setting it shows the error state (bar, edge, icon, "Error:", `aria-invalid`).
          */
         "error"?: string;
         /**
@@ -1875,7 +1939,7 @@ export namespace Components {
          */
         "label"?: string;
         /**
-          * Shows a character count for this limit: "You have 120 characters remaining". People can type past it (the count then says how many to remove and the field reports `tooLong`), which is easier to fix than text that silently stops.
+          * Shows a character count for this limit: "You have 120 characters remaining". People can type past it; the count then says how many to remove and the field is invalid.
          */
         "maxlength"?: number;
         /**
@@ -1898,7 +1962,7 @@ export namespace Components {
          */
         "required": boolean;
         /**
-          * Visible height in lines.
+          * Visible height in lines (at least 3).
           * @default 5
          */
         "rows": number;
@@ -2027,6 +2091,10 @@ export interface ScDateInputCustomEvent<T> extends CustomEvent<T> {
 export interface ScDateRangeCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLScDateRangeElement;
+}
+export interface ScFilterChipsCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLScFilterChipsElement;
 }
 export interface ScLanguageSwitchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2379,11 +2447,12 @@ declare global {
     }
     /**
      * A checkbox: one of several choices in an `sc-checkbox-group`, or on its own for a single
-     * yes/no statement ("I confirm the vehicle details are correct").
-     * Renders a native `<input type="checkbox">`, its `<label>` (the default slot) and hint in
-     * its own shadow root. Space toggles it. Form-associated: when checked it submits `value`
-     * under its `name`, or under the group's `name` inside `sc-checkbox-group`. On its own it can
-     * show an error; inside a group the group shows the error and marks every box invalid.
+     * statement ("I confirm the vehicle details are correct").
+     * v2 renders a native `<input type="checkbox">`, its `<label>` (the default slot) and hint in
+     * light DOM (Stencil `scoped`, decision A2). Space toggles it; clicking the label or the 44px
+     * target around the box toggles it. When checked it submits `value` under its `name`, or under
+     * the group's `name` inside `sc-checkbox-group`. On its own it can show an error and use
+     * native `required`; inside a group the group shows the error and marks every box invalid.
      */
     interface HTMLScCheckboxElement extends Components.ScCheckbox, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScCheckboxElementEventMap>(type: K, listener: (this: HTMLScCheckboxElement, ev: ScCheckboxCustomEvent<HTMLScCheckboxElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2404,14 +2473,11 @@ declare global {
     }
     /**
      * Several choices from a short list: "Which documents do you have?".
-     * A `<fieldset>` with a `<legend>`, hint and error in this element's shadow root, with the
-     * `sc-checkbox` children slotted inside it. Each checkbox keeps its own native input, label
-     * and hint in its own shadow root (so `sc-checkbox` also works on its own); the fieldset
-     * groups them in the accessibility tree, which follows the flattened tree. The group's
-     * hint and error describe the fieldset, and in the error state every box gets
-     * `aria-invalid` and an error border.
-     * Each checked box submits its own value under the group's `name` (or its own). The group is
-     * form-associated only to report `valueMissing` when `required` and nothing is checked.
+     * v2 renders a native `<fieldset>` with its `<legend>`, hint and error in light DOM (Stencil
+     * `scoped`, decision A2), and moves the `sc-checkbox` children into it, so they are grouped
+     * and named by the legend natively. Each checked box submits its own value under the group's
+     * `name`. `disabled` disables the fieldset (and so every box). With `required`, the first box
+     * carries a native validity error until one is checked.
      */
     interface HTMLScCheckboxGroupElement extends Components.ScCheckboxGroup, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScCheckboxGroupElementEventMap>(type: K, listener: (this: HTMLScCheckboxGroupElement, ev: ScCheckboxGroupCustomEvent<HTMLScCheckboxGroupElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2434,13 +2500,13 @@ declare global {
     /**
      * A date people know, such as a date of birth or the date on a document: Day, Month and
      * Year boxes (يوم / شهر / سنة) with the numeric keyboard.
-     * A `<fieldset>` and `<legend>` with the hint and error, and three labelled native inputs,
-     * in one shadow root. In Arabic the boxes run right to left (Day on the right). An error can
-     * highlight one part with `error-parts="year"`.
-     * Form-associated: submits the date as an ISO string (`2026-03-07`, or empty while it isn't
-     * a real date) under `name`, plus the raw parts as `name-day`, `name-month` and `name-year`
-     * so a server can re-display what was typed. Reports `valueMissing` and `badInput`.
-     * Delegates focus to the first box.
+     * v2 renders a native `<fieldset>` and `<legend>` with the hint and error, three labelled
+     * native inputs and a hidden input in light DOM (Stencil `scoped`, decision A2). It submits
+     * the date as an ISO string (`2026-03-07`, or empty while it isn't a real date) under `name`,
+     * and the raw parts as `name-day`, `name-month` and `name-year`, so a server can re-display
+     * what was typed. An empty required date and an impossible date are native validity errors
+     * on the first box concerned. In Arabic the boxes run right to left (Day on the right). An
+     * error can mark one box with `error-parts="year"`.
      */
     interface HTMLScDateInputElement extends Components.ScDateInput, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScDateInputElementEventMap>(type: K, listener: (this: HTMLScDateInputElement, ev: ScDateInputCustomEvent<HTMLScDateInputElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2465,14 +2531,18 @@ declare global {
      * A start and an end date that relate to a calendar: filtering payments between two dates,
      * the nights of a hotel stay, how long a permit lasts. For one date people already know
      * (a date of birth), use `sc-date-input`.
-     * Two typed segments (From / To, من / إلى) in one 54px frame, and a calendar button that
+     * Two typed segments (From / To, من / إلى) in one 56px frame, and a calendar button that
      * opens a picker: a popover with one or two months and optional presets on medium and
      * wider screens, a modal bottom sheet below 600px. People can always type instead
      * ("21/9/2026", "21 9 2026", "21-09-2026").
-     * Form-associated: submits `name-start` and `name-end` as ISO dates (empty until each is a
-     * real date). Reports `valueMissing` (with `required`), `badInput`, `rangeUnderflow` and
-     * `rangeOverflow`, and shows its own messages for impossible ranges on blur. Delegates focus
-     * to the start segment.
+     * v2 renders everything in light DOM (Stencil `scoped`, decision A2), with classes prefixed
+     * `.sc-date-range__`. It submits `name-start` and `name-end` as ISO dates through hidden
+     * inputs (empty until each is a real date). The first problem with the range (missing with
+     * `required`, not a real date, end before start, outside `min`/`max`, too long or short) is a
+     * native validity error on the segment concerned; the component shows its own message on
+     * blur or after a failed submit. `focus()` on the host goes to the start segment. One native
+     * `change` is dispatched from the host per committed range.
+     * Rich content: a child with `slot="label"`, `slot="hint"` or `slot="error"` is moved into place once.
      */
     interface HTMLScDateRangeElement extends Components.ScDateRange, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScDateRangeElementEventMap>(type: K, listener: (this: HTMLScDateRangeElement, ev: ScDateRangeCustomEvent<HTMLScDateRangeElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2523,6 +2593,34 @@ declare global {
     var HTMLScErrorSummaryElement: {
         prototype: HTMLScErrorSummaryElement;
         new (): HTMLScErrorSummaryElement;
+    };
+    interface HTMLScFilterChipsElementEventMap {
+        "scRemove": FilterChip;
+        "scClear": void;
+    }
+    /**
+     * The filters applied to a list of results, as removable chips beside the result count, with
+     * "Clear all filters" when there are two or more (component-language B18, applied filter).
+     * Each chip is a native `<button>` named "Remove filter: Transport and vehicles". Removing one
+     * takes it away at once (no animation), emits `scRemove`, and moves focus to the next chip,
+     * else the previous one, else the element named by `focus-target` (the results heading).
+     * Every change in the number of filters is announced politely: "2 filters applied".
+     * The page updates its results on `scRemove` / `scClear`; set `filters` to change the chips.
+     * Chips are 32px tall (decision Q-chips) with a 44px target. Light DOM (Stencil `scoped`).
+     */
+    interface HTMLScFilterChipsElement extends Components.ScFilterChips, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLScFilterChipsElementEventMap>(type: K, listener: (this: HTMLScFilterChipsElement, ev: ScFilterChipsCustomEvent<HTMLScFilterChipsElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLScFilterChipsElementEventMap>(type: K, listener: (this: HTMLScFilterChipsElement, ev: ScFilterChipsCustomEvent<HTMLScFilterChipsElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLScFilterChipsElement: {
+        prototype: HTMLScFilterChipsElement;
+        new (): HTMLScFilterChipsElement;
     };
     /**
      * The page footer, a `<footer>` (the page's `contentinfo` landmark). Two variants:
@@ -2735,11 +2833,11 @@ declare global {
     };
     /**
      * One option in an `sc-radio-group`. Its content is the option's label.
-     * `sc-radio` holds data and label content only. The parent `sc-radio-group` renders the
-     * native `<input type="radio">` for every option inside its own shadow root and slots
-     * this element into that option's `<label>`, so all the radios share one tree: they form a
-     * real native radio group (one Tab stop, arrow keys move and select, "2 of 3" announced).
-     * Use it only inside `sc-radio-group`.
+     * v2 renders a native `<input type="radio">`, its `<label>` and hint in light DOM (Stencil
+     * `scoped`, decision A2). Every radio in a group shares the group's `name` in one document
+     * tree, so they form a real native radio group: one Tab stop, arrow keys move and select,
+     * "2 of 3" is announced, and the form submits the chosen value. Use it only inside
+     * `sc-radio-group`, which passes down the name, the chosen value and the error state.
      */
     interface HTMLScRadioElement extends Components.ScRadio, HTMLStencilElement {
     }
@@ -2752,14 +2850,14 @@ declare global {
     }
     /**
      * One choice from a short list: "Who issued the plate?".
-     * A `<fieldset>` with a `<legend>` (exposed as `role="radiogroup"`, labelled by the legend
-     * and described by the hint and error), and one native `<input type="radio">` per
-     * `sc-radio` child, all inside this element's shadow root. Each `sc-radio` is slotted into
-     * its option's `<label>` (manual slot assignment), so its content names the radio while the
-     * radios themselves stay in one tree: native arrow keys, one Tab stop, position in set.
-     * Form-associated: submits the chosen value under `name`, resets, and reports
-     * `valueMissing` when `required`. Delegates focus, so an error-summary link to the host's
-     * `id` focuses the first radio.
+     * v2 renders a native `<fieldset>` (role `radiogroup`) with its `<legend>`, hint and error in
+     * light DOM (Stencil `scoped`, decision A2), and moves the `sc-radio` children into it. Each
+     * `sc-radio` renders a native radio with the group's `name`, so they form a real native radio
+     * group: one Tab stop, arrow keys move and select, position in set, native submission,
+     * reset and `required`. `disabled` disables the fieldset. `focus()` on the host reaches the
+     * chosen radio, or the first.
+     * Without a `name`, the radios share a generated one (`sc-radio-group-3`), which a form
+     * would submit: give the group a `name` inside a form.
      */
     interface HTMLScRadioGroupElement extends Components.ScRadioGroup, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScRadioGroupElementEventMap>(type: K, listener: (this: HTMLScRadioGroupElement, ev: ScRadioGroupCustomEvent<HTMLScRadioGroupElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2779,12 +2877,13 @@ declare global {
         "scSearch": ScSearchDetail;
     }
     /**
-     * A pill search box: search icon, a labelled field and a primary "Search" button, inside a
-     * `<form role="search">` (a search landmark named by the label).
-     * Submitting (the button, or Enter in the field) emits `scSearch`. With `action`, the form
-     * then goes to that URL with the query as `?<name>=…`, unless a listener calls
-     * `preventDefault()`; without `action`, the page handles `scSearch` itself.
-     * The form is self-contained: don't nest `sc-search` inside another `<form>`.
+     * A search field and its button, inside a `<form role="search">` named by the label (E1: the
+     * field and the primary button are siblings with a 12px gap, not one pill).
+     * v2 renders the form, a native `<input type="search">` and an `sc-button type="submit"` in
+     * light DOM (Stencil `scoped`, decision A2), so Enter in the field submits through the button
+     * natively. Submitting emits `scSearch`. With `action`, the form then goes to that URL with the
+     * query as `?<name>=…`, unless a listener calls `preventDefault()`; without `action`, the page
+     * handles `scSearch` itself. Don't nest `sc-search` inside another `<form>`.
      */
     interface HTMLScSearchElement extends Components.ScSearch, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScSearchElementEventMap>(type: K, listener: (this: HTMLScSearchElement, ev: ScSearchCustomEvent<HTMLScSearchElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2805,9 +2904,11 @@ declare global {
     }
     /**
      * One choice from a list too long for radios, such as the emirate that issued a plate.
-     * A native `<select>` inside the shadow root, styled like `sc-text-input`, with a chevron.
-     * Write the options as light-DOM `<option>` (and `<optgroup>`) children: they are copied
-     * into the inner select and kept in sync when they change. Form-associated and delegates focus.
+     * v2 renders a native `<select>` in light DOM (Stencil `scoped`, decision A2), styled like
+     * `sc-text-input` with an `expand_more` chevron. Write the options as `<option>` (and
+     * `<optgroup>`) children: they are moved INTO the native select, so they are the real options
+     * (no copies), and options added later are moved in too. The select submits, resets, validates
+     * and follows `<fieldset disabled>` natively; `focus()` on the host reaches it.
      */
     interface HTMLScSelectElement extends Components.ScSelect, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScSelectElementEventMap>(type: K, listener: (this: HTMLScSelectElement, ev: ScSelectCustomEvent<HTMLScSelectElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3035,10 +3136,14 @@ declare global {
     }
     /**
      * A single-line answer, such as a plate number, an email address or a phone number.
-     * Renders its own label, hint, error and native `<input>` in one shadow root, so the
-     * label and `aria-describedby` work. The host is form-associated (it submits `value`
-     * under `name`, resets, and reports validity from the inner input) and delegates focus,
-     * so an error-summary link to the host's `id` focuses the input.
+     * v2 renders its label, hint, error and a native `<input>` in light DOM (Stencil `scoped`,
+     * decision A2). The input is a real form control: it submits under `name`, Enter submits the
+     * form through its default button, and validation, reset, autofill and `<fieldset disabled>`
+     * are native. `focus()` on the host reaches the input, so an error-summary link to the host's
+     * `id` works. Styles: the classes `.sc-field`, `.sc-field__label`, `.sc-field__frame`,
+     * `.sc-field__control` (no `::part()`).
+     * Rich content: a child element with `slot="label"`, `slot="hint"`, `slot="error"`,
+     * `slot="prefix"` or `slot="suffix"` is moved into place once, when the component loads.
      */
     interface HTMLScTextInputElement extends Components.ScTextInput, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScTextInputElementEventMap>(type: K, listener: (this: HTMLScTextInputElement, ev: ScTextInputCustomEvent<HTMLScTextInputElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3060,9 +3165,12 @@ declare global {
     }
     /**
      * A longer answer, such as a reason or a description, with an optional character count.
-     * Renders its own label, hint, error, native `<textarea>` and count in one shadow root.
-     * The count is shown as you type, but announced to screen readers politely, once typing
-     * pauses, never on every keystroke. Form-associated and delegates focus, like `sc-text-input`.
+     * v2 renders its label, hint, error, a native `<textarea>` and the count in light DOM
+     * (Stencil `scoped`, decision A2), so the textarea is a real form control. The count is shown
+     * as you type but announced politely only once typing pauses. People can type past the limit:
+     * the count then says how many characters to remove and the textarea reports a custom
+     * validity error, which is easier to fix than text that silently stops.
+     * Rich content: a child with `slot="label"`, `slot="hint"` or `slot="error"` is moved into place once.
      */
     interface HTMLScTextareaElement extends Components.ScTextarea, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScTextareaElementEventMap>(type: K, listener: (this: HTMLScTextareaElement, ev: ScTextareaCustomEvent<HTMLScTextareaElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -3161,6 +3269,7 @@ declare global {
         "sc-date-range": HTMLScDateRangeElement;
         "sc-empty-state": HTMLScEmptyStateElement;
         "sc-error-summary": HTMLScErrorSummaryElement;
+        "sc-filter-chips": HTMLScFilterChipsElement;
         "sc-footer": HTMLScFooterElement;
         "sc-language-switch": HTMLScLanguageSwitchElement;
         "sc-link": HTMLScLinkElement;
@@ -3675,11 +3784,12 @@ declare namespace LocalJSX {
     }
     /**
      * A checkbox: one of several choices in an `sc-checkbox-group`, or on its own for a single
-     * yes/no statement ("I confirm the vehicle details are correct").
-     * Renders a native `<input type="checkbox">`, its `<label>` (the default slot) and hint in
-     * its own shadow root. Space toggles it. Form-associated: when checked it submits `value`
-     * under its `name`, or under the group's `name` inside `sc-checkbox-group`. On its own it can
-     * show an error; inside a group the group shows the error and marks every box invalid.
+     * statement ("I confirm the vehicle details are correct").
+     * v2 renders a native `<input type="checkbox">`, its `<label>` (the default slot) and hint in
+     * light DOM (Stencil `scoped`, decision A2). Space toggles it; clicking the label or the 44px
+     * target around the box toggles it. When checked it submits `value` under its `name`, or under
+     * the group's `name` inside `sc-checkbox-group`. On its own it can show an error and use
+     * native `required`; inside a group the group shows the error and marks every box invalid.
      */
     interface ScCheckbox {
         /**
@@ -3697,31 +3807,29 @@ declare namespace LocalJSX {
          */
         "error"?: string;
         /**
-          * The `id` of a `<form>` element to associate this element with.
-         */
-        "form"?: string;
-        /**
-          * @default false
-         */
-        "groupDisabled"?: boolean;
-        /**
           * @default false
          */
         "groupInvalid"?: boolean;
+        "groupName"?: string;
         /**
           * Help text under the label.
          */
         "hint"?: string;
         /**
+          * Shows the mixed state (a 12 × 2 bar), for a box that controls a set of others ("All channels") when only some are checked. Set by script; cleared when the user toggles it. Exposed natively as `aria-checked="mixed"`.
+          * @default false
+         */
+        "indeterminate"?: boolean;
+        /**
           * The name submitted with the form. Inside `sc-checkbox-group`, defaults to the group's `name`.
          */
         "name"?: string;
         /**
-          * Fires when the box is toggled with `{ checked, value }`. A native `change` is also dispatched on the host.
+          * Fires when the box is toggled with `{ checked, value }`. The native `change` event also bubbles.
          */
         "onScChange"?: (event: ScCheckboxCustomEvent<{ checked: boolean; value: string }>) => void;
         /**
-          * On its own: must be checked to submit (`valueMissing`). Inside a group, use the group's `required`.
+          * On its own: must be checked to submit (native `valueMissing`). Inside a group, use the group's `required`.
           * @default false
          */
         "required"?: boolean;
@@ -3733,18 +3841,15 @@ declare namespace LocalJSX {
     }
     /**
      * Several choices from a short list: "Which documents do you have?".
-     * A `<fieldset>` with a `<legend>`, hint and error in this element's shadow root, with the
-     * `sc-checkbox` children slotted inside it. Each checkbox keeps its own native input, label
-     * and hint in its own shadow root (so `sc-checkbox` also works on its own); the fieldset
-     * groups them in the accessibility tree, which follows the flattened tree. The group's
-     * hint and error describe the fieldset, and in the error state every box gets
-     * `aria-invalid` and an error border.
-     * Each checked box submits its own value under the group's `name` (or its own). The group is
-     * form-associated only to report `valueMissing` when `required` and nothing is checked.
+     * v2 renders a native `<fieldset>` with its `<legend>`, hint and error in light DOM (Stencil
+     * `scoped`, decision A2), and moves the `sc-checkbox` children into it, so they are grouped
+     * and named by the legend natively. Each checked box submits its own value under the group's
+     * `name`. `disabled` disables the fieldset (and so every box). With `required`, the first box
+     * carries a native validity error until one is checked.
      */
     interface ScCheckboxGroup {
         /**
-          * Disables every checkbox. Avoid it.
+          * Disables every checkbox (through the fieldset). Avoid it.
           * @default false
          */
         "disabled"?: boolean;
@@ -3752,10 +3857,6 @@ declare namespace LocalJSX {
           * The error message. Setting it shows the error state on the group and every box.
          */
         "error"?: string;
-        /**
-          * The `id` of a `<form>` element to associate this element with.
-         */
-        "form"?: string;
         /**
           * When set (1–6), the legend is also the page heading at this level.
          */
@@ -3787,7 +3888,7 @@ declare namespace LocalJSX {
          */
         "optional"?: boolean;
         /**
-          * Requires at least one box to be checked (`valueMissing`). Not shown visually.
+          * Requires at least one box to be checked. Not shown visually.
           * @default false
          */
         "required"?: boolean;
@@ -3795,13 +3896,13 @@ declare namespace LocalJSX {
     /**
      * A date people know, such as a date of birth or the date on a document: Day, Month and
      * Year boxes (يوم / شهر / سنة) with the numeric keyboard.
-     * A `<fieldset>` and `<legend>` with the hint and error, and three labelled native inputs,
-     * in one shadow root. In Arabic the boxes run right to left (Day on the right). An error can
-     * highlight one part with `error-parts="year"`.
-     * Form-associated: submits the date as an ISO string (`2026-03-07`, or empty while it isn't
-     * a real date) under `name`, plus the raw parts as `name-day`, `name-month` and `name-year`
-     * so a server can re-display what was typed. Reports `valueMissing` and `badInput`.
-     * Delegates focus to the first box.
+     * v2 renders a native `<fieldset>` and `<legend>` with the hint and error, three labelled
+     * native inputs and a hidden input in light DOM (Stencil `scoped`, decision A2). It submits
+     * the date as an ISO string (`2026-03-07`, or empty while it isn't a real date) under `name`,
+     * and the raw parts as `name-day`, `name-month` and `name-year`, so a server can re-display
+     * what was typed. An empty required date and an impossible date are native validity errors
+     * on the first box concerned. In Arabic the boxes run right to left (Day on the right). An
+     * error can mark one box with `error-parts="year"`.
      */
     interface ScDateInput {
         /**
@@ -3818,13 +3919,9 @@ declare namespace LocalJSX {
          */
         "error"?: string;
         /**
-          * Which boxes the error is about, space-separated: `"day"`, `"month year"`. Only those get the error border and `aria-invalid`. When empty, an error highlights all three.
+          * Which boxes the error is about, space-separated: `"day"`, `"month year"`. Only those get the error edge and `aria-invalid`. When empty, an error marks all three.
          */
         "errorParts"?: string;
-        /**
-          * The `id` of a `<form>` element to associate this element with.
-         */
-        "form"?: string;
         /**
           * When set (1–6), the legend is also the page heading at this level.
          */
@@ -3842,7 +3939,7 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Fires when a box is committed with `{ value, day, month, year }`. A native `change` is also dispatched on the host.
+          * Fires when a box is committed with `{ value, day, month, year }`. The native `change` also bubbles from the box.
          */
         "onScChange"?: (event: ScDateInputCustomEvent<{ value: string } & Parts>) => void;
         /**
@@ -3855,7 +3952,7 @@ declare namespace LocalJSX {
          */
         "optional"?: boolean;
         /**
-          * Requires a date (`valueMissing` while every box is empty).
+          * Requires a date (a validity error while every box is empty).
           * @default false
          */
         "required"?: boolean;
@@ -3869,14 +3966,18 @@ declare namespace LocalJSX {
      * A start and an end date that relate to a calendar: filtering payments between two dates,
      * the nights of a hotel stay, how long a permit lasts. For one date people already know
      * (a date of birth), use `sc-date-input`.
-     * Two typed segments (From / To, من / إلى) in one 54px frame, and a calendar button that
+     * Two typed segments (From / To, من / إلى) in one 56px frame, and a calendar button that
      * opens a picker: a popover with one or two months and optional presets on medium and
      * wider screens, a modal bottom sheet below 600px. People can always type instead
      * ("21/9/2026", "21 9 2026", "21-09-2026").
-     * Form-associated: submits `name-start` and `name-end` as ISO dates (empty until each is a
-     * real date). Reports `valueMissing` (with `required`), `badInput`, `rangeUnderflow` and
-     * `rangeOverflow`, and shows its own messages for impossible ranges on blur. Delegates focus
-     * to the start segment.
+     * v2 renders everything in light DOM (Stencil `scoped`, decision A2), with classes prefixed
+     * `.sc-date-range__`. It submits `name-start` and `name-end` as ISO dates through hidden
+     * inputs (empty until each is a real date). The first problem with the range (missing with
+     * `required`, not a real date, end before start, outside `min`/`max`, too long or short) is a
+     * native validity error on the segment concerned; the component shows its own message on
+     * blur or after a failed submit. `focus()` on the host goes to the start segment. One native
+     * `change` is dispatched from the host per committed range.
+     * Rich content: a child with `slot="label"`, `slot="hint"` or `slot="error"` is moved into place once.
      */
     interface ScDateRange {
         /**
@@ -3898,10 +3999,6 @@ declare namespace LocalJSX {
           * @default 'both'
          */
         "errorParts"?: 'start' | 'end' | 'both';
-        /**
-          * The `id` of a `<form>` element to associate this element with.
-         */
-        "form"?: string;
         /**
           * When set (1–6), the legend is also the page heading at this level.
          */
@@ -4042,6 +4139,44 @@ declare namespace LocalJSX {
           * @default false
          */
         "noAutofocus"?: boolean;
+    }
+    /**
+     * The filters applied to a list of results, as removable chips beside the result count, with
+     * "Clear all filters" when there are two or more (component-language B18, applied filter).
+     * Each chip is a native `<button>` named "Remove filter: Transport and vehicles". Removing one
+     * takes it away at once (no animation), emits `scRemove`, and moves focus to the next chip,
+     * else the previous one, else the element named by `focus-target` (the results heading).
+     * Every change in the number of filters is announced politely: "2 filters applied".
+     * The page updates its results on `scRemove` / `scClear`; set `filters` to change the chips.
+     * Chips are 32px tall (decision Q-chips) with a 44px target. Light DOM (Stencil `scoped`).
+     */
+    interface ScFilterChips {
+        /**
+          * The applied filters, in order: an array of `{ value, label }`, or the same as JSON in the attribute (`filters='[{"value":"transport","label":"Transport and vehicles"}]'`).
+          * @default []
+         */
+        "filters"?: FilterChip[] | string;
+        /**
+          * The id of the element that gets focus when the last chip goes, usually the results heading. It is made focusable (`tabindex="-1"`) if it isn't.
+         */
+        "focusTarget"?: string;
+        /**
+          * The group's accessible name. Defaults to "Applied filters" ("عوامل التصفية المطبّقة").
+         */
+        "label"?: string;
+        /**
+          * Hides "Clear all filters".
+          * @default false
+         */
+        "noClear"?: boolean;
+        /**
+          * Fires when "Clear all filters" is used. Every chip is already gone.
+         */
+        "onScClear"?: (event: ScFilterChipsCustomEvent<void>) => void;
+        /**
+          * Fires when a chip is removed, with `{ value, label }`. The chip is already gone.
+         */
+        "onScRemove"?: (event: ScFilterChipsCustomEvent<FilterChip>) => void;
     }
     /**
      * The page footer, a `<footer>` (the page's `contentinfo` landmark). Two variants:
@@ -4389,11 +4524,11 @@ declare namespace LocalJSX {
     }
     /**
      * One option in an `sc-radio-group`. Its content is the option's label.
-     * `sc-radio` holds data and label content only. The parent `sc-radio-group` renders the
-     * native `<input type="radio">` for every option inside its own shadow root and slots
-     * this element into that option's `<label>`, so all the radios share one tree: they form a
-     * real native radio group (one Tab stop, arrow keys move and select, "2 of 3" announced).
-     * Use it only inside `sc-radio-group`.
+     * v2 renders a native `<input type="radio">`, its `<label>` and hint in light DOM (Stencil
+     * `scoped`, decision A2). Every radio in a group shares the group's `name` in one document
+     * tree, so they form a real native radio group: one Tab stop, arrow keys move and select,
+     * "2 of 3" is announced, and the form submits the chosen value. Use it only inside
+     * `sc-radio-group`, which passes down the name, the chosen value and the error state.
      */
     interface ScRadio {
         /**
@@ -4407,9 +4542,22 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
+          * @default false
+         */
+        "groupInvalid"?: boolean;
+        "groupName"?: string;
+        /**
+          * @default false
+         */
+        "groupRequired"?: boolean;
+        /**
           * Help text under this option's label.
          */
         "hint"?: string;
+        /**
+          * @default false
+         */
+        "selected"?: boolean;
         /**
           * The value submitted when this option is chosen.
          */
@@ -4417,18 +4565,18 @@ declare namespace LocalJSX {
     }
     /**
      * One choice from a short list: "Who issued the plate?".
-     * A `<fieldset>` with a `<legend>` (exposed as `role="radiogroup"`, labelled by the legend
-     * and described by the hint and error), and one native `<input type="radio">` per
-     * `sc-radio` child, all inside this element's shadow root. Each `sc-radio` is slotted into
-     * its option's `<label>` (manual slot assignment), so its content names the radio while the
-     * radios themselves stay in one tree: native arrow keys, one Tab stop, position in set.
-     * Form-associated: submits the chosen value under `name`, resets, and reports
-     * `valueMissing` when `required`. Delegates focus, so an error-summary link to the host's
-     * `id` focuses the first radio.
+     * v2 renders a native `<fieldset>` (role `radiogroup`) with its `<legend>`, hint and error in
+     * light DOM (Stencil `scoped`, decision A2), and moves the `sc-radio` children into it. Each
+     * `sc-radio` renders a native radio with the group's `name`, so they form a real native radio
+     * group: one Tab stop, arrow keys move and select, position in set, native submission,
+     * reset and `required`. `disabled` disables the fieldset. `focus()` on the host reaches the
+     * chosen radio, or the first.
+     * Without a `name`, the radios share a generated one (`sc-radio-group-3`), which a form
+     * would submit: give the group a `name` inside a form.
      */
     interface ScRadioGroup {
         /**
-          * Disables every option. Avoid it.
+          * Disables every option (through the fieldset). Avoid it.
           * @default false
          */
         "disabled"?: boolean;
@@ -4437,11 +4585,7 @@ declare namespace LocalJSX {
          */
         "error"?: string;
         /**
-          * The `id` of a `<form>` element to associate this element with.
-         */
-        "form"?: string;
-        /**
-          * When set (1–6), the legend is also the page heading at this level (`<legend><h1>…</h1></legend>`). Use it when the question is the only one on the page.
+          * When set (1–6), the legend is also the page heading at this level (`<legend><h1>…</h1></legend>`).
          */
         "headingLevel"?: HeadingLevel;
         /**
@@ -4462,7 +4606,7 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Fires when the choice changes with `{ value }`. A native `change` is also dispatched on the host.
+          * Fires when the choice changes with `{ value }`. The native `change` event also bubbles from the radio.
          */
         "onScChange"?: (event: ScRadioGroupCustomEvent<{ value: string }>) => void;
         /**
@@ -4471,7 +4615,7 @@ declare namespace LocalJSX {
          */
         "optional"?: boolean;
         /**
-          * Requires a choice (`valueMissing` until one is made). Not shown visually.
+          * Requires a choice (native `valueMissing` until one is made). Not shown visually.
           * @default false
          */
         "required"?: boolean;
@@ -4481,12 +4625,13 @@ declare namespace LocalJSX {
         "value"?: string;
     }
     /**
-     * A pill search box: search icon, a labelled field and a primary "Search" button, inside a
-     * `<form role="search">` (a search landmark named by the label).
-     * Submitting (the button, or Enter in the field) emits `scSearch`. With `action`, the form
-     * then goes to that URL with the query as `?<name>=…`, unless a listener calls
-     * `preventDefault()`; without `action`, the page handles `scSearch` itself.
-     * The form is self-contained: don't nest `sc-search` inside another `<form>`.
+     * A search field and its button, inside a `<form role="search">` named by the label (E1: the
+     * field and the primary button are siblings with a 12px gap, not one pill).
+     * v2 renders the form, a native `<input type="search">` and an `sc-button type="submit"` in
+     * light DOM (Stencil `scoped`, decision A2), so Enter in the field submits through the button
+     * natively. Submitting emits `scSearch`. With `action`, the form then goes to that URL with the
+     * query as `?<name>=…`, unless a listener calls `preventDefault()`; without `action`, the page
+     * handles `scSearch` itself. Don't nest `sc-search` inside another `<form>`.
      */
     interface ScSearch {
         /**
@@ -4520,6 +4665,11 @@ declare namespace LocalJSX {
          */
         "placeholder"?: string;
         /**
+          * `m` (default): a 56px field and button. `l`: the 64px hero search (E1).
+          * @default 'm'
+         */
+        "size"?: SearchSize;
+        /**
           * The query. Updated as the user types.
           * @default ''
          */
@@ -4527,9 +4677,11 @@ declare namespace LocalJSX {
     }
     /**
      * One choice from a list too long for radios, such as the emirate that issued a plate.
-     * A native `<select>` inside the shadow root, styled like `sc-text-input`, with a chevron.
-     * Write the options as light-DOM `<option>` (and `<optgroup>`) children: they are copied
-     * into the inner select and kept in sync when they change. Form-associated and delegates focus.
+     * v2 renders a native `<select>` in light DOM (Stencil `scoped`, decision A2), styled like
+     * `sc-text-input` with an `expand_more` chevron. Write the options as `<option>` (and
+     * `<optgroup>`) children: they are moved INTO the native select, so they are the real options
+     * (no copies), and options added later are moved in too. The select submits, resets, validates
+     * and follows `<fieldset disabled>` natively; `focus()` on the host reaches it.
      */
     interface ScSelect {
         /**
@@ -4546,10 +4698,6 @@ declare namespace LocalJSX {
          */
         "error"?: string;
         /**
-          * The `id` of a `<form>` element to associate this element with.
-         */
-        "form"?: string;
-        /**
           * When set (1–6), the label is also the page heading at this level.
          */
         "headingLevel"?: HeadingLevel;
@@ -4558,7 +4706,7 @@ declare namespace LocalJSX {
          */
         "hint"?: string;
         /**
-          * The visible label: "Issuing emirate".
+          * The visible label: "Issuing authority".
          */
         "label"?: string;
         /**
@@ -4566,7 +4714,7 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Fires when the selection changes with `{ value }`. A native `change` (and `input`) also reach the host.
+          * Fires when the selection changes with `{ value }`. The native `change` and `input` events also bubble.
          */
         "onScChange"?: (event: ScSelectCustomEvent<{ value: string }>) => void;
         /**
@@ -4910,10 +5058,14 @@ declare namespace LocalJSX {
     }
     /**
      * A single-line answer, such as a plate number, an email address or a phone number.
-     * Renders its own label, hint, error and native `<input>` in one shadow root, so the
-     * label and `aria-describedby` work. The host is form-associated (it submits `value`
-     * under `name`, resets, and reports validity from the inner input) and delegates focus,
-     * so an error-summary link to the host's `id` focuses the input.
+     * v2 renders its label, hint, error and a native `<input>` in light DOM (Stencil `scoped`,
+     * decision A2). The input is a real form control: it submits under `name`, Enter submits the
+     * form through its default button, and validation, reset, autofill and `<fieldset disabled>`
+     * are native. `focus()` on the host reaches the input, so an error-summary link to the host's
+     * `id` works. Styles: the classes `.sc-field`, `.sc-field__label`, `.sc-field__frame`,
+     * `.sc-field__control` (no `::part()`).
+     * Rich content: a child element with `slot="label"`, `slot="hint"`, `slot="error"`,
+     * `slot="prefix"` or `slot="suffix"` is moved into place once, when the component loads.
      */
     interface ScTextInput {
         /**
@@ -4926,13 +5078,9 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * The error message. Setting it shows the error state: a 3px error bar on the start side, an error border on the input, the message with an icon and a visually hidden "Error:", and `aria-invalid`. Say what to do: "Enter numbers only, like 12345".
+          * The error message. Setting it shows the error state: a 4px error bar at inline-start, a 2px error edge on the box, the message with an icon and a visually hidden "Error:", and `aria-invalid`. Say what to do: "Enter numbers only, like 12345".
          */
         "error"?: string;
-        /**
-          * The `id` of a `<form>` element to associate this element with.
-         */
-        "form"?: string;
         /**
           * When set (1–6), the label is also the page heading at this level (`<h1><label>…</label></h1>`).
          */
@@ -4950,7 +5098,7 @@ declare namespace LocalJSX {
          */
         "label"?: string;
         /**
-          * Keeps the value left-to-right (plates, phone numbers, emails, references). In Arabic the value still sits at the start (right) of the box. Use this, not `dir` on the host, which would flip the label and hint too.
+          * Keeps the value left-to-right (plates, phone numbers, emails, references). In Arabic the value still sits at the start (right) of the box. Use this, not `dir` on the host.
           * @default false
          */
         "ltr"?: boolean;
@@ -4967,11 +5115,11 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Fires when the value is committed (blur after a change) with `{ value }`. A native `change` event is also dispatched on the host.
+          * Fires when the value is committed (blur after a change) with `{ value }`. The native `change` event also bubbles from the input.
          */
         "onScChange"?: (event: ScTextInputCustomEvent<{ value: string }>) => void;
         /**
-          * Fires on every keystroke with `{ value }`. The native `input` event also reaches the host.
+          * Fires on every keystroke with `{ value }`. The native `input` event also bubbles from the input.
          */
         "onScInput"?: (event: ScTextInputCustomEvent<{ value: string }>) => void;
         /**
@@ -4984,7 +5132,7 @@ declare namespace LocalJSX {
          */
         "pattern"?: string;
         /**
-          * Text before the value inside the box, such as "AED". (Named `prefixText` because `prefix` is a reserved DOM property.)
+          * Text before the value inside the box, such as "AED".
          */
         "prefixText"?: string;
         /**
@@ -5019,9 +5167,12 @@ declare namespace LocalJSX {
     }
     /**
      * A longer answer, such as a reason or a description, with an optional character count.
-     * Renders its own label, hint, error, native `<textarea>` and count in one shadow root.
-     * The count is shown as you type, but announced to screen readers politely, once typing
-     * pauses, never on every keystroke. Form-associated and delegates focus, like `sc-text-input`.
+     * v2 renders its label, hint, error, a native `<textarea>` and the count in light DOM
+     * (Stencil `scoped`, decision A2), so the textarea is a real form control. The count is shown
+     * as you type but announced politely only once typing pauses. People can type past the limit:
+     * the count then says how many characters to remove and the textarea reports a custom
+     * validity error, which is easier to fix than text that silently stops.
+     * Rich content: a child with `slot="label"`, `slot="hint"` or `slot="error"` is moved into place once.
      */
     interface ScTextarea {
         /**
@@ -5034,13 +5185,9 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         /**
-          * The error message. Setting it shows the error state (bar, border, icon, "Error:", `aria-invalid`).
+          * The error message. Setting it shows the error state (bar, edge, icon, "Error:", `aria-invalid`).
          */
         "error"?: string;
-        /**
-          * The `id` of a `<form>` element to associate this element with.
-         */
-        "form"?: string;
         /**
           * When set (1–6), the label is also the page heading at this level.
          */
@@ -5054,7 +5201,7 @@ declare namespace LocalJSX {
          */
         "label"?: string;
         /**
-          * Shows a character count for this limit: "You have 120 characters remaining". People can type past it (the count then says how many to remove and the field reports `tooLong`), which is easier to fix than text that silently stops.
+          * Shows a character count for this limit: "You have 120 characters remaining". People can type past it; the count then says how many to remove and the field is invalid.
          */
         "maxlength"?: number;
         /**
@@ -5062,11 +5209,11 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Fires when the value is committed with `{ value }`. A native `change` is also dispatched on the host.
+          * Fires when the value is committed with `{ value }`. The native `change` event also bubbles.
          */
         "onScChange"?: (event: ScTextareaCustomEvent<{ value: string }>) => void;
         /**
-          * Fires on every keystroke with `{ value }`.
+          * Fires on every keystroke with `{ value }`. The native `input` event also bubbles.
          */
         "onScInput"?: (event: ScTextareaCustomEvent<{ value: string }>) => void;
         /**
@@ -5085,7 +5232,7 @@ declare namespace LocalJSX {
          */
         "required"?: boolean;
         /**
-          * Visible height in lines.
+          * Visible height in lines (at least 3).
           * @default 5
          */
         "rows"?: number;
@@ -5284,12 +5431,13 @@ declare namespace LocalJSX {
         "name": string;
         "value": string;
         "checked": boolean;
+        "indeterminate": boolean;
         "hint": string;
         "error": string;
         "required": boolean;
         "disabled": boolean;
+        "groupName": string;
         "groupInvalid": boolean;
-        "groupDisabled": boolean;
     }
     interface ScCheckboxGroupAttributes {
         "label": string;
@@ -5346,6 +5494,12 @@ declare namespace LocalJSX {
         "heading": string;
         "headingLevel": ErrorSummaryHeadingLevel;
         "noAutofocus": boolean;
+    }
+    interface ScFilterChipsAttributes {
+        "filters": FilterChip[] | string;
+        "label": string;
+        "focusTarget": string;
+        "noClear": boolean;
     }
     interface ScFooterAttributes {
         "variant": FooterVariant;
@@ -5408,6 +5562,10 @@ declare namespace LocalJSX {
         "hint": string;
         "checked": boolean;
         "disabled": boolean;
+        "groupName": string;
+        "selected": boolean;
+        "groupInvalid": boolean;
+        "groupRequired": boolean;
     }
     interface ScRadioGroupAttributes {
         "label": string;
@@ -5429,6 +5587,7 @@ declare namespace LocalJSX {
         "name": string;
         "value": string;
         "action": string;
+        "size": SearchSize;
     }
     interface ScSelectAttributes {
         "label": string;
@@ -5573,6 +5732,7 @@ declare namespace LocalJSX {
         "sc-date-range": Omit<ScDateRange, keyof ScDateRangeAttributes> & { [K in keyof ScDateRange & keyof ScDateRangeAttributes]?: ScDateRange[K] } & { [K in keyof ScDateRange & keyof ScDateRangeAttributes as `attr:${K}`]?: ScDateRangeAttributes[K] } & { [K in keyof ScDateRange & keyof ScDateRangeAttributes as `prop:${K}`]?: ScDateRange[K] };
         "sc-empty-state": Omit<ScEmptyState, keyof ScEmptyStateAttributes> & { [K in keyof ScEmptyState & keyof ScEmptyStateAttributes]?: ScEmptyState[K] } & { [K in keyof ScEmptyState & keyof ScEmptyStateAttributes as `attr:${K}`]?: ScEmptyStateAttributes[K] } & { [K in keyof ScEmptyState & keyof ScEmptyStateAttributes as `prop:${K}`]?: ScEmptyState[K] } & OneOf<"heading", ScEmptyState["heading"], ScEmptyStateAttributes["heading"]>;
         "sc-error-summary": Omit<ScErrorSummary, keyof ScErrorSummaryAttributes> & { [K in keyof ScErrorSummary & keyof ScErrorSummaryAttributes]?: ScErrorSummary[K] } & { [K in keyof ScErrorSummary & keyof ScErrorSummaryAttributes as `attr:${K}`]?: ScErrorSummaryAttributes[K] } & { [K in keyof ScErrorSummary & keyof ScErrorSummaryAttributes as `prop:${K}`]?: ScErrorSummary[K] };
+        "sc-filter-chips": Omit<ScFilterChips, keyof ScFilterChipsAttributes> & { [K in keyof ScFilterChips & keyof ScFilterChipsAttributes]?: ScFilterChips[K] } & { [K in keyof ScFilterChips & keyof ScFilterChipsAttributes as `attr:${K}`]?: ScFilterChipsAttributes[K] } & { [K in keyof ScFilterChips & keyof ScFilterChipsAttributes as `prop:${K}`]?: ScFilterChips[K] };
         "sc-footer": Omit<ScFooter, keyof ScFooterAttributes> & { [K in keyof ScFooter & keyof ScFooterAttributes]?: ScFooter[K] } & { [K in keyof ScFooter & keyof ScFooterAttributes as `attr:${K}`]?: ScFooterAttributes[K] } & { [K in keyof ScFooter & keyof ScFooterAttributes as `prop:${K}`]?: ScFooter[K] };
         "sc-language-switch": Omit<ScLanguageSwitch, keyof ScLanguageSwitchAttributes> & { [K in keyof ScLanguageSwitch & keyof ScLanguageSwitchAttributes]?: ScLanguageSwitch[K] } & { [K in keyof ScLanguageSwitch & keyof ScLanguageSwitchAttributes as `attr:${K}`]?: ScLanguageSwitchAttributes[K] } & { [K in keyof ScLanguageSwitch & keyof ScLanguageSwitchAttributes as `prop:${K}`]?: ScLanguageSwitch[K] };
         "sc-link": Omit<ScLink, keyof ScLinkAttributes> & { [K in keyof ScLink & keyof ScLinkAttributes]?: ScLink[K] } & { [K in keyof ScLink & keyof ScLinkAttributes as `attr:${K}`]?: ScLinkAttributes[K] } & { [K in keyof ScLink & keyof ScLinkAttributes as `prop:${K}`]?: ScLink[K] };
@@ -5815,49 +5975,51 @@ declare module "@stencil/core" {
             "sc-channel-switcher": LocalJSX.IntrinsicElements["sc-channel-switcher"] & JSXBase.HTMLAttributes<HTMLScChannelSwitcherElement>;
             /**
              * A checkbox: one of several choices in an `sc-checkbox-group`, or on its own for a single
-             * yes/no statement ("I confirm the vehicle details are correct").
-             * Renders a native `<input type="checkbox">`, its `<label>` (the default slot) and hint in
-             * its own shadow root. Space toggles it. Form-associated: when checked it submits `value`
-             * under its `name`, or under the group's `name` inside `sc-checkbox-group`. On its own it can
-             * show an error; inside a group the group shows the error and marks every box invalid.
+             * statement ("I confirm the vehicle details are correct").
+             * v2 renders a native `<input type="checkbox">`, its `<label>` (the default slot) and hint in
+             * light DOM (Stencil `scoped`, decision A2). Space toggles it; clicking the label or the 44px
+             * target around the box toggles it. When checked it submits `value` under its `name`, or under
+             * the group's `name` inside `sc-checkbox-group`. On its own it can show an error and use
+             * native `required`; inside a group the group shows the error and marks every box invalid.
              */
             "sc-checkbox": LocalJSX.IntrinsicElements["sc-checkbox"] & JSXBase.HTMLAttributes<HTMLScCheckboxElement>;
             /**
              * Several choices from a short list: "Which documents do you have?".
-             * A `<fieldset>` with a `<legend>`, hint and error in this element's shadow root, with the
-             * `sc-checkbox` children slotted inside it. Each checkbox keeps its own native input, label
-             * and hint in its own shadow root (so `sc-checkbox` also works on its own); the fieldset
-             * groups them in the accessibility tree, which follows the flattened tree. The group's
-             * hint and error describe the fieldset, and in the error state every box gets
-             * `aria-invalid` and an error border.
-             * Each checked box submits its own value under the group's `name` (or its own). The group is
-             * form-associated only to report `valueMissing` when `required` and nothing is checked.
+             * v2 renders a native `<fieldset>` with its `<legend>`, hint and error in light DOM (Stencil
+             * `scoped`, decision A2), and moves the `sc-checkbox` children into it, so they are grouped
+             * and named by the legend natively. Each checked box submits its own value under the group's
+             * `name`. `disabled` disables the fieldset (and so every box). With `required`, the first box
+             * carries a native validity error until one is checked.
              */
             "sc-checkbox-group": LocalJSX.IntrinsicElements["sc-checkbox-group"] & JSXBase.HTMLAttributes<HTMLScCheckboxGroupElement>;
             /**
              * A date people know, such as a date of birth or the date on a document: Day, Month and
              * Year boxes (يوم / شهر / سنة) with the numeric keyboard.
-             * A `<fieldset>` and `<legend>` with the hint and error, and three labelled native inputs,
-             * in one shadow root. In Arabic the boxes run right to left (Day on the right). An error can
-             * highlight one part with `error-parts="year"`.
-             * Form-associated: submits the date as an ISO string (`2026-03-07`, or empty while it isn't
-             * a real date) under `name`, plus the raw parts as `name-day`, `name-month` and `name-year`
-             * so a server can re-display what was typed. Reports `valueMissing` and `badInput`.
-             * Delegates focus to the first box.
+             * v2 renders a native `<fieldset>` and `<legend>` with the hint and error, three labelled
+             * native inputs and a hidden input in light DOM (Stencil `scoped`, decision A2). It submits
+             * the date as an ISO string (`2026-03-07`, or empty while it isn't a real date) under `name`,
+             * and the raw parts as `name-day`, `name-month` and `name-year`, so a server can re-display
+             * what was typed. An empty required date and an impossible date are native validity errors
+             * on the first box concerned. In Arabic the boxes run right to left (Day on the right). An
+             * error can mark one box with `error-parts="year"`.
              */
             "sc-date-input": LocalJSX.IntrinsicElements["sc-date-input"] & JSXBase.HTMLAttributes<HTMLScDateInputElement>;
             /**
              * A start and an end date that relate to a calendar: filtering payments between two dates,
              * the nights of a hotel stay, how long a permit lasts. For one date people already know
              * (a date of birth), use `sc-date-input`.
-             * Two typed segments (From / To, من / إلى) in one 54px frame, and a calendar button that
+             * Two typed segments (From / To, من / إلى) in one 56px frame, and a calendar button that
              * opens a picker: a popover with one or two months and optional presets on medium and
              * wider screens, a modal bottom sheet below 600px. People can always type instead
              * ("21/9/2026", "21 9 2026", "21-09-2026").
-             * Form-associated: submits `name-start` and `name-end` as ISO dates (empty until each is a
-             * real date). Reports `valueMissing` (with `required`), `badInput`, `rangeUnderflow` and
-             * `rangeOverflow`, and shows its own messages for impossible ranges on blur. Delegates focus
-             * to the start segment.
+             * v2 renders everything in light DOM (Stencil `scoped`, decision A2), with classes prefixed
+             * `.sc-date-range__`. It submits `name-start` and `name-end` as ISO dates through hidden
+             * inputs (empty until each is a real date). The first problem with the range (missing with
+             * `required`, not a real date, end before start, outside `min`/`max`, too long or short) is a
+             * native validity error on the segment concerned; the component shows its own message on
+             * blur or after a failed submit. `focus()` on the host goes to the start segment. One native
+             * `change` is dispatched from the host per committed range.
+             * Rich content: a child with `slot="label"`, `slot="hint"` or `slot="error"` is moved into place once.
              */
             "sc-date-range": LocalJSX.IntrinsicElements["sc-date-range"] & JSXBase.HTMLAttributes<HTMLScDateRangeElement>;
             /**
@@ -5886,6 +6048,17 @@ declare module "@stencil/core" {
              * field host (whose `focus()` is forwarded to its control).
              */
             "sc-error-summary": LocalJSX.IntrinsicElements["sc-error-summary"] & JSXBase.HTMLAttributes<HTMLScErrorSummaryElement>;
+            /**
+             * The filters applied to a list of results, as removable chips beside the result count, with
+             * "Clear all filters" when there are two or more (component-language B18, applied filter).
+             * Each chip is a native `<button>` named "Remove filter: Transport and vehicles". Removing one
+             * takes it away at once (no animation), emits `scRemove`, and moves focus to the next chip,
+             * else the previous one, else the element named by `focus-target` (the results heading).
+             * Every change in the number of filters is announced politely: "2 filters applied".
+             * The page updates its results on `scRemove` / `scClear`; set `filters` to change the chips.
+             * Chips are 32px tall (decision Q-chips) with a 44px target. Light DOM (Stencil `scoped`).
+             */
+            "sc-filter-chips": LocalJSX.IntrinsicElements["sc-filter-chips"] & JSXBase.HTMLAttributes<HTMLScFilterChipsElement>;
             /**
              * The page footer, a `<footer>` (the page's `contentinfo` landmark). Two variants:
              * - `simple` (default; transaction pages, component-language A29): one row of underlined
@@ -6022,39 +6195,42 @@ declare module "@stencil/core" {
             "sc-pagination": LocalJSX.IntrinsicElements["sc-pagination"] & JSXBase.HTMLAttributes<HTMLScPaginationElement>;
             /**
              * One option in an `sc-radio-group`. Its content is the option's label.
-             * `sc-radio` holds data and label content only. The parent `sc-radio-group` renders the
-             * native `<input type="radio">` for every option inside its own shadow root and slots
-             * this element into that option's `<label>`, so all the radios share one tree: they form a
-             * real native radio group (one Tab stop, arrow keys move and select, "2 of 3" announced).
-             * Use it only inside `sc-radio-group`.
+             * v2 renders a native `<input type="radio">`, its `<label>` and hint in light DOM (Stencil
+             * `scoped`, decision A2). Every radio in a group shares the group's `name` in one document
+             * tree, so they form a real native radio group: one Tab stop, arrow keys move and select,
+             * "2 of 3" is announced, and the form submits the chosen value. Use it only inside
+             * `sc-radio-group`, which passes down the name, the chosen value and the error state.
              */
             "sc-radio": LocalJSX.IntrinsicElements["sc-radio"] & JSXBase.HTMLAttributes<HTMLScRadioElement>;
             /**
              * One choice from a short list: "Who issued the plate?".
-             * A `<fieldset>` with a `<legend>` (exposed as `role="radiogroup"`, labelled by the legend
-             * and described by the hint and error), and one native `<input type="radio">` per
-             * `sc-radio` child, all inside this element's shadow root. Each `sc-radio` is slotted into
-             * its option's `<label>` (manual slot assignment), so its content names the radio while the
-             * radios themselves stay in one tree: native arrow keys, one Tab stop, position in set.
-             * Form-associated: submits the chosen value under `name`, resets, and reports
-             * `valueMissing` when `required`. Delegates focus, so an error-summary link to the host's
-             * `id` focuses the first radio.
+             * v2 renders a native `<fieldset>` (role `radiogroup`) with its `<legend>`, hint and error in
+             * light DOM (Stencil `scoped`, decision A2), and moves the `sc-radio` children into it. Each
+             * `sc-radio` renders a native radio with the group's `name`, so they form a real native radio
+             * group: one Tab stop, arrow keys move and select, position in set, native submission,
+             * reset and `required`. `disabled` disables the fieldset. `focus()` on the host reaches the
+             * chosen radio, or the first.
+             * Without a `name`, the radios share a generated one (`sc-radio-group-3`), which a form
+             * would submit: give the group a `name` inside a form.
              */
             "sc-radio-group": LocalJSX.IntrinsicElements["sc-radio-group"] & JSXBase.HTMLAttributes<HTMLScRadioGroupElement>;
             /**
-             * A pill search box: search icon, a labelled field and a primary "Search" button, inside a
-             * `<form role="search">` (a search landmark named by the label).
-             * Submitting (the button, or Enter in the field) emits `scSearch`. With `action`, the form
-             * then goes to that URL with the query as `?<name>=…`, unless a listener calls
-             * `preventDefault()`; without `action`, the page handles `scSearch` itself.
-             * The form is self-contained: don't nest `sc-search` inside another `<form>`.
+             * A search field and its button, inside a `<form role="search">` named by the label (E1: the
+             * field and the primary button are siblings with a 12px gap, not one pill).
+             * v2 renders the form, a native `<input type="search">` and an `sc-button type="submit"` in
+             * light DOM (Stencil `scoped`, decision A2), so Enter in the field submits through the button
+             * natively. Submitting emits `scSearch`. With `action`, the form then goes to that URL with the
+             * query as `?<name>=…`, unless a listener calls `preventDefault()`; without `action`, the page
+             * handles `scSearch` itself. Don't nest `sc-search` inside another `<form>`.
              */
             "sc-search": LocalJSX.IntrinsicElements["sc-search"] & JSXBase.HTMLAttributes<HTMLScSearchElement>;
             /**
              * One choice from a list too long for radios, such as the emirate that issued a plate.
-             * A native `<select>` inside the shadow root, styled like `sc-text-input`, with a chevron.
-             * Write the options as light-DOM `<option>` (and `<optgroup>`) children: they are copied
-             * into the inner select and kept in sync when they change. Form-associated and delegates focus.
+             * v2 renders a native `<select>` in light DOM (Stencil `scoped`, decision A2), styled like
+             * `sc-text-input` with an `expand_more` chevron. Write the options as `<option>` (and
+             * `<optgroup>`) children: they are moved INTO the native select, so they are the real options
+             * (no copies), and options added later are moved in too. The select submits, resets, validates
+             * and follows `<fieldset disabled>` natively; `focus()` on the host reaches it.
              */
             "sc-select": LocalJSX.IntrinsicElements["sc-select"] & JSXBase.HTMLAttributes<HTMLScSelectElement>;
             /**
@@ -6203,17 +6379,24 @@ declare module "@stencil/core" {
             "sc-table": LocalJSX.IntrinsicElements["sc-table"] & JSXBase.HTMLAttributes<HTMLScTableElement>;
             /**
              * A single-line answer, such as a plate number, an email address or a phone number.
-             * Renders its own label, hint, error and native `<input>` in one shadow root, so the
-             * label and `aria-describedby` work. The host is form-associated (it submits `value`
-             * under `name`, resets, and reports validity from the inner input) and delegates focus,
-             * so an error-summary link to the host's `id` focuses the input.
+             * v2 renders its label, hint, error and a native `<input>` in light DOM (Stencil `scoped`,
+             * decision A2). The input is a real form control: it submits under `name`, Enter submits the
+             * form through its default button, and validation, reset, autofill and `<fieldset disabled>`
+             * are native. `focus()` on the host reaches the input, so an error-summary link to the host's
+             * `id` works. Styles: the classes `.sc-field`, `.sc-field__label`, `.sc-field__frame`,
+             * `.sc-field__control` (no `::part()`).
+             * Rich content: a child element with `slot="label"`, `slot="hint"`, `slot="error"`,
+             * `slot="prefix"` or `slot="suffix"` is moved into place once, when the component loads.
              */
             "sc-text-input": LocalJSX.IntrinsicElements["sc-text-input"] & JSXBase.HTMLAttributes<HTMLScTextInputElement>;
             /**
              * A longer answer, such as a reason or a description, with an optional character count.
-             * Renders its own label, hint, error, native `<textarea>` and count in one shadow root.
-             * The count is shown as you type, but announced to screen readers politely, once typing
-             * pauses, never on every keystroke. Form-associated and delegates focus, like `sc-text-input`.
+             * v2 renders its label, hint, error, a native `<textarea>` and the count in light DOM
+             * (Stencil `scoped`, decision A2), so the textarea is a real form control. The count is shown
+             * as you type but announced politely only once typing pauses. People can type past the limit:
+             * the count then says how many characters to remove and the textarea reports a custom
+             * validity error, which is easier to fix than text that silently stops.
+             * Rich content: a child with `slot="label"`, `slot="hint"` or `slot="error"` is moved into place once.
              */
             "sc-textarea": LocalJSX.IntrinsicElements["sc-textarea"] & JSXBase.HTMLAttributes<HTMLScTextareaElement>;
             /**

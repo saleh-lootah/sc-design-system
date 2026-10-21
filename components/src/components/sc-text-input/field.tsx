@@ -1,28 +1,39 @@
 /**
- * Shared building blocks for the form-field family (sc-text-input, sc-textarea, sc-select,
- * sc-radio-group, sc-checkbox, sc-checkbox-group, sc-date-input). Not a component: plain
- * functional components and helpers imported by each field, with the styles in field.css.
+ * Shared building blocks for the v2 form-field family: sc-text-input, sc-textarea, sc-select,
+ * sc-checkbox, sc-checkbox-group, sc-radio, sc-radio-group, sc-date-input, sc-date-range and
+ * sc-search. Not a component: functional components and helpers each field imports. The
+ * styles are in field.css (label, hint, error, frame, control) and choice.css (radios and
+ * checkboxes), which each field lists in its `styleUrls` (no @import, CONVENTIONS.md).
  *
- * Every field renders its label, hint, error and control in ONE shadow root, because ARIA
- * ID references (for, aria-describedby, aria-labelledby) can't cross a shadow boundary.
- * IDs only need to be unique inside that shadow root, so they are fixed strings.
+ * v2 fields render into LIGHT DOM (Stencil `scoped`, decision A2): the native <label>,
+ * <input>/<textarea>/<select>, hint and error are children of the host. So:
+ *   - IDs are generated per instance (`sc-text-input-3-control`), because they share the document;
+ *   - the browser does the form work: submission, Enter-to-submit through the default button,
+ *     FormData, constraint validation, reset, <fieldset disabled>, autofill;
+ *   - rich label, hint and error content is a child with `slot="label|hint|error"`, which the
+ *     component MOVES into place once (`takeSlotted` + `Moved`), since scoped components only
+ *     relocate the default slot reliably (architecture §3.1).
  */
 import { FunctionalComponent, h } from '@stencil/core';
-import { AlertCircle } from '../../icons/index'; // explicit /index: Stencil only scans file imports for <svg>
+import type { StringPart } from '../../i18n/define';
+import fieldStrings from '../../i18n/components/sc-field';
 
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
-/** IDs used inside every field's shadow root. */
-export const IDS = {
-  control: 'control',
-  label: 'label',
-  hint: 'hint',
-  error: 'error',
-} as const;
+/** A field's strings: the shared "Error:" and "(optional)", plus the component's own. */
+export function withField<E extends Record<string, string>>(part?: StringPart<E>): StringPart<E & typeof fieldStrings.en> {
+  return {
+    en: { ...fieldStrings.en, ...(part?.en ?? {}) },
+    ar: { ...fieldStrings.ar, ...(part?.ar ?? {}) },
+  } as unknown as StringPart<E & typeof fieldStrings.en>;
+}
 
-/** True when the host has a light-DOM child in the named slot. */
-export function hasSlotted(el: HTMLElement, name: string): boolean {
-  return Array.from(el.children).some((child) => child.getAttribute('slot') === name);
+let counter = 0;
+
+/** A document-unique id for one instance: `sc-text-input-3`. */
+export function nextId(tag: string): string {
+  counter += 1;
+  return `${tag}-${counter}`;
 }
 
 /** Joins IDs for aria-describedby; undefined when there are none. */
@@ -37,106 +48,162 @@ export function headingLevel(level: unknown): HeadingLevel | undefined {
   return Number.isInteger(n) && n >= 1 && n <= 6 ? (n as HeadingLevel) : undefined;
 }
 
+export type SlotName = 'label' | 'hint' | 'error' | 'prefix' | 'suffix';
+export type Slotted = Partial<Record<SlotName, Element>>;
+
+/**
+ * Takes the host's direct children marked `slot="label|hint|error|…"` out of the host, before
+ * the first render, and returns them by name; `Moved` puts each where it belongs. Children
+ * already moved (the component was re-attached) are kept from `previous`.
+ */
+export function takeSlotted(host: HTMLElement, names: readonly SlotName[], previous: Slotted = {}): Slotted {
+  const found: Slotted = { ...previous };
+  for (const child of Array.from(host.children)) {
+    const name = child.getAttribute('slot') as SlotName | null;
+    if (name && names.includes(name)) {
+      found[name] = child;
+      child.remove();
+    }
+  }
+  return found;
+}
+
+/** An empty container the vdom never touches, into which a slotted node is moved once. */
+export const Moved: FunctionalComponent<{ node?: Element }> = ({ node }) => (
+  <span
+    class="sc-field__rich"
+    ref={(el) => {
+      if (el && node && node.parentNode !== el) el.append(node);
+    }}
+  />
+);
+
 interface LabelProps {
-  /** Label text (the `label` prop); the `label` slot overrides it. */
+  id: string;
+  /** The control the `<label>` is for (omit for a legend). */
+  htmlFor?: string;
   text?: string;
-  /** Appends the "(optional)" string. */
+  rich?: Element;
   optional?: boolean;
   optionalText: string;
   /** When set, the label is also the page heading at this level. */
   level?: HeadingLevel;
-  /** `label` (for a single control) or `legend` (for a fieldset). */
   as: 'label' | 'legend';
-  htmlFor?: string;
 }
 
 /**
- * The visible label. As a page heading it follows the GOV.UK pattern:
- * `<h1><label>…</label></h1>` for a single control and `<legend><h1>…</h1></legend>` for a group.
+ * The visible label. As the page heading it follows the GOV.UK pattern:
+ * `<h1><label>…</label></h1>` for one control and `<legend><h1>…</h1></legend>` for a group.
  */
-export const FieldLabel: FunctionalComponent<LabelProps> = ({ text, optional, optionalText, level, as, htmlFor }) => {
-  const content = [
-    <slot name="label">{text}</slot>,
-    optional && <span class="optional"> {optionalText}</span>,
-  ];
-  const cls = { 'label': true, 'label--heading': !!level };
+export const FieldLabel: FunctionalComponent<LabelProps> = ({ id, htmlFor, text, rich, optional, optionalText, level, as }) => {
+  const content = [rich ? <Moved node={rich} /> : text, optional && <span class="sc-field__optional"> {optionalText}</span>];
+  const cls = { 'sc-field__label': true, 'sc-field__label--heading': !!level };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const Heading: any = level ? `h${level}` : null;
-
   if (as === 'legend') {
     return (
-      <legend id={IDS.label} class={cls} part="label">
-        {Heading ? <Heading class="heading">{content}</Heading> : content}
+      <legend id={id} class={cls}>
+        {Heading ? <Heading class="sc-field__heading">{content}</Heading> : content}
       </legend>
     );
   }
   const label = (
-    <label id={IDS.label} class={cls} htmlFor={htmlFor} part="label">
+    <label id={id} class={cls} htmlFor={htmlFor}>
       {content}
     </label>
   );
-  return Heading ? <Heading class="heading">{label}</Heading> : label;
+  return Heading ? <Heading class="sc-field__heading">{label}</Heading> : label;
 };
 
 /** The hint, below the label. Hidden (and left out of aria-describedby) when empty. */
-export const FieldHint: FunctionalComponent<{ text?: string; show: boolean }> = ({ text, show }) => (
-  <div id={IDS.hint} class="hint" part="hint" hidden={!show}>
-    <slot name="hint">{text}</slot>
+export const FieldHint: FunctionalComponent<{ id: string; text?: string; rich?: Element; show: boolean }> = ({ id, text, rich, show }) => (
+  <div id={id} class="sc-field__hint" hidden={!show}>
+    {rich ? <Moved node={rich} /> : text}
   </div>
 );
 
 /**
- * The error message: icon, visually hidden "Error:" prefix (from strings) and the message.
- * Hidden when there's no error. The icon is decorative; the words carry the meaning.
+ * The error message: icon, visually hidden "Error:" / "خطأ:" and the message. The icon is
+ * decorative; the words carry the meaning. It appears instantly, never animated.
  */
-export const FieldError: FunctionalComponent<{ text?: string; show: boolean; prefix: string }> = ({ text, show, prefix }) => (
-  <p id={IDS.error} class="error" part="error" hidden={!show}>
-    <AlertCircle class="error-icon" />
-    <span class="error-text">
+export const FieldError: FunctionalComponent<{ id: string; text?: string; rich?: Element; show: boolean; prefix: string }> = ({ id, text, rich, show, prefix }) => (
+  <p id={id} class="sc-field__error" hidden={!show}>
+    <ErrorIcon />
+    <span class="sc-field__error-text">
       <span class="visually-hidden">{prefix} </span>
-      <slot name="error">{text}</slot>
+      {rich ? <Moved node={rich} /> : text}
     </span>
   </p>
 );
 
 /**
- * True where form-associated custom elements work (every supported browser). False in the
- * spec-test DOM, whose ElementInternals is a stub, so components skip form syncing there.
+ * The error icon, drawn here (as the shared set's AlertCircle) so a field doesn't pull the
+ * whole icon module into its bundle.
  */
-export function formSupported(): boolean {
-  return typeof ElementInternals !== 'undefined' && 'setFormValue' in ElementInternals.prototype;
-}
+const ErrorIcon: FunctionalComponent = () => (
+  <svg class="icon sc-field__error-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 7.5v5.5" />
+    <circle cx="12" cy="16.5" r="1.25" fill="currentColor" stroke="none" />
+  </svg>
+);
 
-/** Validity flags that ElementInternals.setValidity accepts, copied from a native control. */
-const FLAGS: (keyof ValidityStateFlags)[] = [
-  'valueMissing',
-  'typeMismatch',
-  'patternMismatch',
-  'tooLong',
-  'tooShort',
-  'rangeUnderflow',
-  'rangeOverflow',
-  'stepMismatch',
-  'badInput',
-  'customError',
-];
+/** The `expand_more` chevron of a select (E2). Points down in both directions; never mirrors. */
+export const ExpandMore: FunctionalComponent<{ class?: string }> = ({ class: extra }) => (
+  <svg class={{ icon: true, [extra ?? '']: !!extra }} viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+    <path d="M6.5 9.25L12 14.75l5.5-5.5" />
+  </svg>
+);
+
+/** A check mark: a symbol, not an arrow, so it never mirrors. */
+export const CheckMark: FunctionalComponent<{ class?: string }> = ({ class: extra }) => (
+  <svg class={{ icon: true, [extra ?? '']: !!extra }} viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+    <path class="sc-check__path" d="M5 12.5l4.5 4.5L19 7.5" pathLength="1" />
+  </svg>
+);
 
 /**
- * Mirrors a native control's validity onto the host, anchored to that control so the
- * browser's validation bubble and `form.reportValidity()` focus it.
+ * Runs `cb` after a form that holds `host` is reset (the reset event fires before the browser
+ * restores the controls, so the callback waits a microtask). Returns the remover.
  */
-export function mirrorValidity(internals: ElementInternals | undefined, control: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement | undefined) {
-  if (!internals?.setValidity || !control?.validity) return;
-  if (control.validity.valid) {
-    internals.setValidity({});
-    return;
-  }
-  const flags: ValidityStateFlags = {};
-  for (const flag of FLAGS) if (control.validity[flag]) flags[flag] = true;
-  internals.setValidity(flags, control.validationMessage || ' ', control);
+export function onFormReset(host: HTMLElement, cb: () => void): () => void {
+  if (typeof document === 'undefined' || !document.addEventListener) return () => undefined;
+  const listener = (ev: Event) => {
+    const form = ev.target as HTMLFormElement;
+    const control = host.querySelector('input, select, textarea') as HTMLInputElement | null;
+    if ((control && form === control.form) || form?.contains?.(host)) queueMicrotask(cb);
+  };
+  document.addEventListener('reset', listener, true);
+  return () => document.removeEventListener('reset', listener, true);
 }
 
-/** Re-dispatches a native `change` from the host: native `change` events are not composed. */
-export function emitNativeChange(host: HTMLElement) {
-  host.dispatchEvent(new Event('change', { bubbles: true }));
+/**
+ * Light DOM has no delegatesFocus: send `focus()` on the host to the control, so an
+ * error-summary link to the host's id, and scripts that focus the host, reach it.
+ */
+export function forwardFocus(host: HTMLElement, target: () => HTMLElement | undefined | null): void {
+  host.focus = (options?: FocusOptions) => target()?.focus(options);
+}
+
+/**
+ * Moves direct children of `host` that match `accept` into `target()` when they are added
+ * after the first render (a scoped component relocates its default slot only then).
+ */
+export function adoptChildren(host: HTMLElement, target: () => Element | undefined, accept: (el: Element) => boolean, after?: () => void): MutationObserver | undefined {
+  if (typeof MutationObserver === 'undefined') return undefined;
+  const observer = new MutationObserver((records) => {
+    let moved = false;
+    for (const r of records) {
+      for (const node of Array.from(r.addedNodes)) {
+        const into = target();
+        if (into && node.parentNode === host && node instanceof Element && accept(node)) {
+          into.append(node);
+          moved = true;
+        }
+      }
+    }
+    if (moved) after?.();
+  });
+  observer.observe(host, { childList: true });
+  return observer;
 }

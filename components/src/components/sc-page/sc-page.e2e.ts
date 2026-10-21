@@ -52,6 +52,8 @@ describe('sc-page (e2e)', () => {
     expect(await page.evaluate(() => document.activeElement!.id)).toBe('main-content');
     await page.keyboard.press('Tab');
     expect(await page.evaluate(() => document.activeElement!.id)).toBe('first');
+    // sc-search is light DOM in v2 (C3): focus lands on its native input.
+    expect(await page.evaluate(() => document.activeElement!.closest('sc-search') !== null)).toBe(true);
   });
 
   it('sets dir from lang, and follows lang changes on itself', async () => {
@@ -64,6 +66,8 @@ describe('sc-page (e2e)', () => {
     // Components inside take the page's language.
     const label = await page.evaluate(() => document.querySelector('sc-footer')!.shadowRoot!.querySelector('#g-channels')!.textContent);
     expect(label).toBe('القنوات');
+    const button = await page.evaluate(() => document.querySelector('sc-search')!.querySelector('sc-button')!.textContent);
+    expect(button).toBe('بحث');
   });
 
   it('themes everything inside by channel', async () => {

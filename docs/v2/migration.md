@@ -170,6 +170,27 @@ Props and slots unchanged. New: the sticky-header scroll padding also follows `s
 
 Channel names in the switcher, footer, network strip and app bar come from `src/i18n/components/common.ts` (Standard 3.1) through `channelStrings()` in `src/i18n/components/channels.ts`, which also holds the one-line descriptors.
 
+## 6. Form fields (C3, Wave 2b)
+
+Every field is light DOM (decision A2): the native `<label>`/`<legend>`, controls, hint and error are children of the host. What changes for a service:
+
+| | v1 | v2 |
+| --- | --- | --- |
+| DOM | a shadow root per field (and per checkbox) | native elements under the host, classes `.sc-field*`, `.sc-choice*`, `.sc-date-range__*`, `.sc-search__*`, `.sc-filter-chips__*` |
+| `::part(field\|label\|hint\|error\|frame\|control\|…)` | supported | **gone**: use the classes, or better, no override |
+| Rich `slot="label\|hint\|error\|prefix\|suffix"` | slotted | **moved once** into place when the component loads; React must render it once and not re-render it |
+| `form.elements`, `FormData` | the host (form-associated) | the native controls. `sc-date-input` adds a hidden input (`name` = ISO) beside `name-day/-month/-year`; `sc-date-range` submits `name-start` and `name-end` through hidden inputs |
+| Validity | `host.matches(':invalid')`, `internals.validity` | on the native control: `input.matches(':invalid')`, `form.checkValidity()`. Group `required` (checkboxes), impossible dates and ranges use `setCustomValidity` on the control concerned; the checkbox group's message is a custom error, not `valueMissing` |
+| `change` event | re-dispatched on the host | the native `change` bubbles from the control (once). `sc-date-range` stops its segments' own and dispatches one per committed range |
+| Enter in a field | never submitted | submits through the form's default button |
+| IDs | fixed (`control`, `hint`, `error`) in each shadow root | per instance: `sc-text-input-<n>-control`, `-label`, `-hint`, `-error` … |
+| `focus()` on the host | `delegatesFocus` | forwarded to the control (the chosen radio, the Day box, the start segment) |
+| `sc-radio-group` without `name` | not submitted | radios share a generated name (`sc-radio-group-<n>`), which a form would submit: give the group a `name` inside a form |
+| `sc-select` options | copied into a shadow select | **moved into** the native select (the real options); options appended to the host later are moved in |
+
+API additions: `sc-search` `size="l"` (64px hero), `sc-checkbox` `indeterminate`, and the new `sc-filter-chips` (`filters`, `label`, `focus-target`, `no-clear`; `scRemove`, `scClear`). `sc-date-range` no longer imports `sc-table/overrides`; its `strings` overrides live in `sc-date-range/overrides.ts`. `sc-textarea` over the limit reports a custom validity error instead of `tooLong`.
+
+Visual: 56px boxes, 8px radius, 1.5px `outline` edge (2px `error`), a 4px error bar (14px gap in Arabic, 16 in English), label-large labels, body-medium hints and errors, body-large values, 24px checkboxes and radios with a 2px edge in 48px rows.
 ## C2 · Actions and navigation (Wave 2b)
 
 All shadow DOM, as architecture §3.1 says for links and chrome. Full detail in each `components/specs/<tag>.md`.

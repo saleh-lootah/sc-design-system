@@ -23,6 +23,7 @@ export { default as scAccountMenu } from './sc-account-menu';
 export { default as scAnnouncementBar } from './sc-announcement-bar';
 export { default as scUtilityBar } from './sc-utility-bar';
 export { default as scChannelNetwork } from './sc-channel-network';
+export { default as scFilterChips } from './sc-filter-chips';
 export { default as scLink } from './sc-link';
 export { default as scBackLink } from './sc-back-link';
 export { default as scChannelChip } from './sc-channel-chip';

@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-21T15:59:40",
+  "timestamp": "2026-10-21T16:06:06",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.45.2",
@@ -3056,46 +3056,14 @@
     },
     {
       "filePath": "src/components/sc-checkbox/sc-checkbox.tsx",
-      "encapsulation": "shadow",
+      "encapsulation": "scoped",
       "tag": "sc-checkbox",
-      "readme": "# sc-checkbox\n\nA checkbox: an option in `sc-checkbox-group`, or one box on its own for a single statement people must confirm, such as \"I confirm the vehicle details are correct\".\n\n## Usage\n\n```html\n<sc-checkbox name=\"confirm\" value=\"yes\" required>I confirm the vehicle details are correct</sc-checkbox>\n```\n\n- The content is the label. Keep it short; put detail in `hint` (or the `hint` slot).\n- 24px box inside a 44px target: the whole label row is clickable. Space toggles it. The tick is a symbol, so it never mirrors in Arabic.\n- **On its own:** `error` shows the error bar, the message with \"Error:\" and `aria-invalid`. `required` reports `valueMissing` until it's checked.\n- **In a group:** the group shows the error and passes it down; the box submits its `value` under the group's `name` unless it has its own `name`.\n- Form-associated: submits `value` (default `on`) when checked, resets to its initial `checked`, follows `<fieldset disabled>`. `change` is re-dispatched on the host and `scChange` carries `{ checked, value }`.\n",
-      "docs": "A checkbox: one of several choices in an `sc-checkbox-group`, or on its own for a single\nyes/no statement (\"I confirm the vehicle details are correct\").\n\nRenders a native `<input type=\"checkbox\">`, its `<label>` (the default slot) and hint in\nits own shadow root. Space toggles it. Form-associated: when checked it submits `value`\nunder its `name`, or under the group's `name` inside `sc-checkbox-group`. On its own it can\nshow an error; inside a group the group shows the error and marks every box invalid.",
+      "readme": "# sc-checkbox\n\nA checkbox: an option in `sc-checkbox-group`, or one box on its own for a single statement people must confirm, such as \"I confirm the vehicle details are correct\".\n\n## Usage\n\n```html\n<sc-checkbox name=\"confirm\" value=\"yes\" required>I confirm the vehicle details are correct</sc-checkbox>\n```\n\n- The content is the label. Keep it short; put detail in `hint` (or a `slot=\"hint\"` child, moved into place once).\n- 24px box inside a 44px target: the whole label row is clickable. Space toggles it. The tick is a symbol, so it never mirrors in Arabic.\n- **On its own:** `error` shows the error bar, the message with \"Error:\" and `aria-invalid`. `required` reports `valueMissing` until it's checked.\n- **In a group:** the group shows the error and passes it down; the box submits its `value` under the group's `name` unless it has its own `name`.\n- v2 renders a native `<input type=\"checkbox\">` in light DOM (decision A2): it submits `value` (default `on`) when checked, resets to its initial `checked`, follows `<fieldset disabled>`, and `required` is native `valueMissing`. The native `change` bubbles; `scChange` carries `{ checked, value }`.\n- The check draws over 120ms when toggled with a pointer and appears at once from the keyboard (MOT-02).\n",
+      "docs": "A checkbox: one of several choices in an `sc-checkbox-group`, or on its own for a single\nstatement (\"I confirm the vehicle details are correct\").\n\nv2 renders a native `<input type=\"checkbox\">`, its `<label>` (the default slot) and hint in\nlight DOM (Stencil `scoped`, decision A2). Space toggles it; clicking the label or the 44px\ntarget around the box toggles it. When checked it submits `value` under its `name`, or under\nthe group's `name` inside `sc-checkbox-group`. On its own it can show an error and use\nnative `required`; inside a group the group shows the error and marks every box invalid.",
       "docsTags": [
         {
           "name": "slot",
-          "text": "- The label: \"Car\". Keep it short; put detail in the hint."
-        },
-        {
-          "name": "slot",
-          "text": "hint - Rich hint content, instead of the `hint` prop."
-        },
-        {
-          "name": "slot",
-          "text": "error - Rich error content, instead of the `error` prop (on its own only)."
-        },
-        {
-          "name": "part",
-          "text": "field - The wrapper (gets the error bar when the checkbox shows its own error)."
-        },
-        {
-          "name": "part",
-          "text": "error - The error message."
-        },
-        {
-          "name": "part",
-          "text": "option - The option row."
-        },
-        {
-          "name": "part",
-          "text": "checkbox - The native `<input type=\"checkbox\">`."
-        },
-        {
-          "name": "part",
-          "text": "label - The `<label>`."
-        },
-        {
-          "name": "part",
-          "text": "hint - The hint."
+          "text": "- The label: \"Valid insurance policy\". Keep it short; put detail in the hint."
         }
       ],
       "usage": {},
@@ -3211,6 +3179,35 @@
           "setter": false
         },
         {
+          "name": "indeterminate",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": true,
+          "attr": "indeterminate",
+          "reflectToAttr": false,
+          "docs": "Shows the mixed state (a 12 × 2 bar), for a box that controls a set of others (\"All\nchannels\") when only some are checked. Set by script; cleared when the user toggles it.\nExposed natively as `aria-checked=\"mixed\"`.",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "name",
           "type": "string | undefined",
           "complexType": {
@@ -3247,7 +3244,7 @@
           "mutable": false,
           "attr": "required",
           "reflectToAttr": false,
-          "docs": "On its own: must be checked to submit (`valueMissing`). Inside a group, use the group's `required`.",
+          "docs": "On its own: must be checked to submit (native `valueMissing`). Inside a group, use the group's `required`.",
           "docsTags": [
             {
               "name": "default",
@@ -3308,7 +3305,7 @@
           },
           "cancelable": true,
           "composed": true,
-          "docs": "Fires when the box is toggled with `{ checked, value }`. A native `change` is also dispatched on the host.",
+          "docs": "Fires when the box is toggled with `{ checked, value }`. The native `change` event also bubbles.",
           "docsTags": []
         }
       ],
@@ -3317,43 +3314,10 @@
       "slots": [
         {
           "name": "",
-          "docs": "The label: \"Car\". Keep it short; put detail in the hint."
-        },
-        {
-          "name": "error",
-          "docs": "Rich error content, instead of the `error` prop (on its own only)."
-        },
-        {
-          "name": "hint",
-          "docs": "Rich hint content, instead of the `hint` prop."
+          "docs": "The label: \"Valid insurance policy\". Keep it short; put detail in the hint."
         }
       ],
-      "parts": [
-        {
-          "name": "checkbox",
-          "docs": "The native `<input type=\"checkbox\">`."
-        },
-        {
-          "name": "error",
-          "docs": "The error message."
-        },
-        {
-          "name": "field",
-          "docs": "The wrapper (gets the error bar when the checkbox shows its own error)."
-        },
-        {
-          "name": "hint",
-          "docs": "The hint."
-        },
-        {
-          "name": "label",
-          "docs": "The `<label>`."
-        },
-        {
-          "name": "option",
-          "docs": "The option row."
-        }
-      ],
+      "parts": [],
       "states": [],
       "dependents": [],
       "dependencies": [],
@@ -3361,46 +3325,14 @@
     },
     {
       "filePath": "src/components/sc-checkbox-group/sc-checkbox-group.tsx",
-      "encapsulation": "shadow",
+      "encapsulation": "scoped",
       "tag": "sc-checkbox-group",
-      "readme": "# sc-checkbox-group\n\nSeveral choices from a short list: \"Which documents do you have?\", \"Send reminders by\". Use `sc-radio-group` when only one answer is allowed. For a single yes/no statement (\"I confirm the vehicle details are correct\") use one `sc-checkbox` on its own.\n\n## Usage\n\n```html\n<sc-checkbox-group name=\"documents\" label=\"Which documents do you have?\" hint=\"Select all that apply\">\n  <sc-checkbox value=\"insurance\">Valid insurance policy</sc-checkbox>\n  <sc-checkbox value=\"inspection\" hint=\"From a centre approved by RTA\">Technical inspection certificate</sc-checkbox>\n  <sc-checkbox value=\"fines\">Receipt for paid fines</sc-checkbox>\n</sc-checkbox-group>\n```\n\n- Legend, hint, `optional`, `error`, `inline`, `heading-level` and `disabled` work as in `sc-radio-group`.\n- Say \"Select all that apply\" in the hint. Order options logically; don't pre-check options for people.\n- **Error:** set `error` on the group. The group shows the bar and message; every box gets the error border and `aria-invalid`. The boxes' own `error` is ignored inside a group.\n\n### How it stays accessible across shadow roots\n\nUnlike radios, checkboxes don't need to share a tree: each one is independent (its own Tab stop, Space toggles it). So each `sc-checkbox` keeps its own native `<input type=\"checkbox\">`, `<label>` and hint in **its own shadow root**, which also lets it work on its own. The group renders the `<fieldset>`, `<legend>`, hint and error in its shadow root and slots the checkboxes inside the fieldset. The accessibility tree follows the flattened tree, so screen readers find the checkboxes inside the group named by the legend and described by the hint and error. The group passes its error and disabled state down to each box.\n\nTested in `sc-checkbox-group.e2e.ts` against Chromium's accessibility tree (group name and description, checkbox names inside the group), with the keyboard (Tab to each box, Space toggles) and axe in English and Arabic, light and dark.\n\n### Forms\n\nEach checked box submits its own `value` under the group's `name` (or its own `name`), so the form data is `documents=insurance&documents=fines`, as with native checkboxes. Reset restores each box. The group is form-associated only to report `valueMissing` when `required` and nothing is checked. `scGroupChange` carries `{ value: string[] }`, the checked values.\n",
-      "docs": "Several choices from a short list: \"Which documents do you have?\".\n\nA `<fieldset>` with a `<legend>`, hint and error in this element's shadow root, with the\n`sc-checkbox` children slotted inside it. Each checkbox keeps its own native input, label\nand hint in its own shadow root (so `sc-checkbox` also works on its own); the fieldset\ngroups them in the accessibility tree, which follows the flattened tree. The group's\nhint and error describe the fieldset, and in the error state every box gets\n`aria-invalid` and an error border.\n\nEach checked box submits its own value under the group's `name` (or its own). The group is\nform-associated only to report `valueMissing` when `required` and nothing is checked.",
+      "readme": "# sc-checkbox-group\n\nSeveral choices from a short list: \"Which documents do you have?\", \"Send reminders by\". Use `sc-radio-group` when only one answer is allowed. For a single yes/no statement (\"I confirm the vehicle details are correct\") use one `sc-checkbox` on its own.\n\n## Usage\n\n```html\n<sc-checkbox-group name=\"documents\" label=\"Which documents do you have?\" hint=\"Select all that apply\">\n  <sc-checkbox value=\"insurance\">Valid insurance policy</sc-checkbox>\n  <sc-checkbox value=\"inspection\" hint=\"From a centre approved by RTA\">Technical inspection certificate</sc-checkbox>\n  <sc-checkbox value=\"fines\">Receipt for paid fines</sc-checkbox>\n</sc-checkbox-group>\n```\n\n- Legend, hint, `optional`, `error`, `inline`, `heading-level` and `disabled` work as in `sc-radio-group`.\n- Say \"Select all that apply\" in the hint. Order options logically; don't pre-check options for people.\n- **Error:** set `error` on the group. The group shows the bar and message; every box gets the error border and `aria-invalid`. The boxes' own `error` is ignored inside a group.\n\n### Structure (v2, light DOM)\n\nThe group renders a native `<fieldset>`, `<legend>`, hint and error in light DOM (decision A2) and moves its `sc-checkbox` children inside the fieldset, so they are grouped and named by the legend natively. Each `sc-checkbox` renders its own native `<input type=\"checkbox\">`, `<label>` and hint, so it also works on its own. `disabled` disables the fieldset, and with it every box. The group passes its `name` and error state to each box. Boxes appended later are moved in too.\n\n### Forms\n\nEach checked box submits its own `value` under the group's `name` (or its own `name`): `documents=insurance&documents=fines`, as native checkboxes do. Reset restores each box. With `required`, the first enabled box carries a native validity error (\"Select at least one option\") until one is checked, so `checkValidity()` and `reportValidity()` work. The native `change` bubbles from each box; `scGroupChange` carries `{ value: string[] }`.\n",
+      "docs": "Several choices from a short list: \"Which documents do you have?\".\n\nv2 renders a native `<fieldset>` with its `<legend>`, hint and error in light DOM (Stencil\n`scoped`, decision A2), and moves the `sc-checkbox` children into it, so they are grouped\nand named by the legend natively. Each checked box submits its own value under the group's\n`name`. `disabled` disables the fieldset (and so every box). With `required`, the first box\ncarries a native validity error until one is checked.",
       "docsTags": [
         {
           "name": "slot",
           "text": "- `sc-checkbox` elements, one per option."
-        },
-        {
-          "name": "slot",
-          "text": "label - Rich legend content, instead of the `label` prop."
-        },
-        {
-          "name": "slot",
-          "text": "hint - Rich hint content, instead of the `hint` prop."
-        },
-        {
-          "name": "slot",
-          "text": "error - Rich error content, instead of the `error` prop."
-        },
-        {
-          "name": "part",
-          "text": "field - The `<fieldset>` (gets the error bar)."
-        },
-        {
-          "name": "part",
-          "text": "label - The `<legend>`."
-        },
-        {
-          "name": "part",
-          "text": "hint - The hint."
-        },
-        {
-          "name": "part",
-          "text": "error - The error message."
-        },
-        {
-          "name": "part",
-          "text": "options - The wrapper around the checkboxes."
         }
       ],
       "usage": {},
@@ -3416,7 +3348,7 @@
           "mutable": false,
           "attr": "disabled",
           "reflectToAttr": true,
-          "docs": "Disables every checkbox. Avoid it.",
+          "docs": "Disables every checkbox (through the fieldset). Avoid it.",
           "docsTags": [
             {
               "name": "default",
@@ -3661,7 +3593,7 @@
           "mutable": false,
           "attr": "required",
           "reflectToAttr": false,
-          "docs": "Requires at least one box to be checked (`valueMissing`). Not shown visually.",
+          "docs": "Requires at least one box to be checked. Not shown visually.",
           "docsTags": [
             {
               "name": "default",
@@ -3699,7 +3631,7 @@
       ],
       "listeners": [
         {
-          "event": "scChange",
+          "event": "change",
           "capture": false,
           "passive": false
         }
@@ -3709,42 +3641,9 @@
         {
           "name": "",
           "docs": "`sc-checkbox` elements, one per option."
-        },
-        {
-          "name": "error",
-          "docs": "Rich error content, instead of the `error` prop."
-        },
-        {
-          "name": "hint",
-          "docs": "Rich hint content, instead of the `hint` prop."
-        },
-        {
-          "name": "label",
-          "docs": "Rich legend content, instead of the `label` prop."
         }
       ],
-      "parts": [
-        {
-          "name": "error",
-          "docs": "The error message."
-        },
-        {
-          "name": "field",
-          "docs": "The `<fieldset>` (gets the error bar)."
-        },
-        {
-          "name": "hint",
-          "docs": "The hint."
-        },
-        {
-          "name": "label",
-          "docs": "The `<legend>`."
-        },
-        {
-          "name": "options",
-          "docs": "The wrapper around the checkboxes."
-        }
-      ],
+      "parts": [],
       "states": [],
       "dependents": [],
       "dependencies": [],
@@ -3752,56 +3651,11 @@
     },
     {
       "filePath": "src/components/sc-date-input/sc-date-input.tsx",
-      "encapsulation": "shadow",
+      "encapsulation": "scoped",
       "tag": "sc-date-input",
-      "readme": "# sc-date-input\n\nA date people know: a date of birth, the start date on an insurance policy, the date a vehicle was exported. Don't use it for a date people need to pick from a calendar (an appointment): that needs a date picker.\n\n## Usage\n\n```html\n<sc-date-input\n  name=\"insuranceStart\"\n  label=\"When does your insurance policy start?\"\n  hint=\"For example, 27 3 2026\"\n></sc-date-input>\n```\n\n- Three labelled boxes, Day, Month and Year (يوم / شهر / سنة), in a `<fieldset>` with the question as the `<legend>`. Each box uses the numeric keyboard (`inputmode=\"numeric\"`).\n- **In Arabic** the boxes run right to left: Day on the right, Year on the left. Digits stay Latin.\n- **Hint:** give an example in the order of the boxes: \"For example, 27 3 2026\".\n- **Error on one part:** set `error` and `error-parts` to the boxes it's about, for example `error-parts=\"year\"` with \"The date your policy starts must include a year\". Only those boxes get the error border and `aria-invalid`. Without `error-parts`, the error highlights all three.\n- **Date of birth:** `autocomplete=\"bday\"` sets `bday-day`, `bday-month`, `bday-year` on the boxes.\n- `optional`, `heading-level` and `disabled` work as in the other fields.\n\n### Value and forms\n\n- `value` is an ISO date (`2026-03-27`). It's empty while the boxes don't make a real date (31 April, a 2-digit year). Setting `value` fills the boxes.\n- The form gets the ISO date under `name`, plus the raw parts as `name-day`, `name-month` and `name-year`, so the server can validate and re-display exactly what was typed.\n- Validity: `valueMissing` when `required` and every box is empty; `badInput` (\"The date must be a real date\") when something is typed but it isn't a real date. Reset restores the initial `value`.\n- `scInput` and `scChange` carry `{ value, day, month, year }`. The host delegates focus to the Day box, so an error summary can focus the field by its `id`.\n",
-      "docs": "A date people know, such as a date of birth or the date on a document: Day, Month and\nYear boxes (يوم / شهر / سنة) with the numeric keyboard.\n\nA `<fieldset>` and `<legend>` with the hint and error, and three labelled native inputs,\nin one shadow root. In Arabic the boxes run right to left (Day on the right). An error can\nhighlight one part with `error-parts=\"year\"`.\n\nForm-associated: submits the date as an ISO string (`2026-03-07`, or empty while it isn't\na real date) under `name`, plus the raw parts as `name-day`, `name-month` and `name-year`\nso a server can re-display what was typed. Reports `valueMissing` and `badInput`.\nDelegates focus to the first box.",
-      "docsTags": [
-        {
-          "name": "slot",
-          "text": "label - Rich legend content, instead of the `label` prop."
-        },
-        {
-          "name": "slot",
-          "text": "hint - Rich hint content, instead of the `hint` prop."
-        },
-        {
-          "name": "slot",
-          "text": "error - Rich error content, instead of the `error` prop."
-        },
-        {
-          "name": "part",
-          "text": "field - The `<fieldset>` (gets the error bar)."
-        },
-        {
-          "name": "part",
-          "text": "label - The `<legend>`."
-        },
-        {
-          "name": "part",
-          "text": "hint - The hint."
-        },
-        {
-          "name": "part",
-          "text": "error - The error message."
-        },
-        {
-          "name": "part",
-          "text": "parts - The row of boxes."
-        },
-        {
-          "name": "part",
-          "text": "part-label - The label above a box."
-        },
-        {
-          "name": "part",
-          "text": "frame - The bordered box around an input."
-        },
-        {
-          "name": "part",
-          "text": "control - A native `<input>`."
-        }
-      ],
+      "readme": "# sc-date-input\n\nA date people know: a date of birth, the start date on an insurance policy, the date a vehicle was exported. Don't use it for a date people need to pick from a calendar (an appointment): that needs a date picker.\n\n## Usage\n\n```html\n<sc-date-input\n  name=\"insuranceStart\"\n  label=\"When does your insurance policy start?\"\n  hint=\"For example, 27 3 2026\"\n></sc-date-input>\n```\n\n- Three labelled boxes, Day, Month and Year (يوم / شهر / سنة), in a `<fieldset>` with the question as the `<legend>`. Each box uses the numeric keyboard (`inputmode=\"numeric\"`).\n- **In Arabic** the boxes run right to left: Day on the right, Year on the left. Digits stay Latin.\n- **Hint:** give an example in the order of the boxes: \"For example, 27 3 2026\".\n- **Error on one part:** set `error` and `error-parts` to the boxes it's about, for example `error-parts=\"year\"` with \"The date your policy starts must include a year\". Only those boxes get the error border and `aria-invalid`. Without `error-parts`, the error highlights all three.\n- **Date of birth:** `autocomplete=\"bday\"` sets `bday-day`, `bday-month`, `bday-year` on the boxes.\n- `optional`, `heading-level` and `disabled` work as in the other fields.\n\n### Value and forms\n\n- `value` is an ISO date (`2026-03-27`). It's empty while the boxes don't make a real date (31 April, a 2-digit year). Setting `value` fills the boxes.\n- The form gets the ISO date under `name`, plus the raw parts as `name-day`, `name-month` and `name-year`, so the server can validate and re-display exactly what was typed.\n- v2 renders a native fieldset, three native inputs (named `name-day`, `name-month`, `name-year`) and a hidden input carrying the ISO date under `name`, in light DOM (decision A2).\n- Validity: a native custom validity error on the Day box (\"Enter a date\") when `required` and every box is empty, and on the first empty box (\"The date must be a real date\") when something is typed but it isn't a real date. `reportValidity()` focuses that box. Reset restores the initial `value`.\n- `scInput` and `scChange` carry `{ value, day, month, year }`. `focus()` on the host is forwarded to the Day box, so an error summary can focus the field by its `id`. The native `change` bubbles from each box.\n",
+      "docs": "A date people know, such as a date of birth or the date on a document: Day, Month and\nYear boxes (يوم / شهر / سنة) with the numeric keyboard.\n\nv2 renders a native `<fieldset>` and `<legend>` with the hint and error, three labelled\nnative inputs and a hidden input in light DOM (Stencil `scoped`, decision A2). It submits\nthe date as an ISO string (`2026-03-07`, or empty while it isn't a real date) under `name`,\nand the raw parts as `name-day`, `name-month` and `name-year`, so a server can re-display\nwhat was typed. An empty required date and an impossible date are native validity errors\non the first box concerned. In Arabic the boxes run right to left (Day on the right). An\nerror can mark one box with `error-parts=\"year\"`.",
+      "docsTags": [],
       "usage": {},
       "props": [
         {
@@ -3896,7 +3750,7 @@
           "mutable": false,
           "attr": "error-parts",
           "reflectToAttr": false,
-          "docs": "Which boxes the error is about, space-separated: `\"day\"`, `\"month year\"`. Only those get\nthe error border and `aria-invalid`. When empty, an error highlights all three.",
+          "docs": "Which boxes the error is about, space-separated: `\"day\"`, `\"month year\"`. Only those get\nthe error edge and `aria-invalid`. When empty, an error marks all three.",
           "docsTags": [],
           "values": [
             {
@@ -4083,7 +3937,7 @@
           "mutable": false,
           "attr": "required",
           "reflectToAttr": false,
-          "docs": "Requires a date (`valueMissing` while every box is empty).",
+          "docs": "Requires a date (a validity error while every box is empty).",
           "docsTags": [
             {
               "name": "default",
@@ -4151,7 +4005,7 @@
           },
           "cancelable": true,
           "composed": true,
-          "docs": "Fires when a box is committed with `{ value, day, month, year }`. A native `change` is also dispatched on the host.",
+          "docs": "Fires when a box is committed with `{ value, day, month, year }`. The native `change` also bubbles from the box.",
           "docsTags": []
         },
         {
@@ -4178,54 +4032,8 @@
       ],
       "listeners": [],
       "styles": [],
-      "slots": [
-        {
-          "name": "error",
-          "docs": "Rich error content, instead of the `error` prop."
-        },
-        {
-          "name": "hint",
-          "docs": "Rich hint content, instead of the `hint` prop."
-        },
-        {
-          "name": "label",
-          "docs": "Rich legend content, instead of the `label` prop."
-        }
-      ],
-      "parts": [
-        {
-          "name": "control",
-          "docs": "A native `<input>`."
-        },
-        {
-          "name": "error",
-          "docs": "The error message."
-        },
-        {
-          "name": "field",
-          "docs": "The `<fieldset>` (gets the error bar)."
-        },
-        {
-          "name": "frame",
-          "docs": "The bordered box around an input."
-        },
-        {
-          "name": "hint",
-          "docs": "The hint."
-        },
-        {
-          "name": "label",
-          "docs": "The `<legend>`."
-        },
-        {
-          "name": "part-label",
-          "docs": "The label above a box."
-        },
-        {
-          "name": "parts",
-          "docs": "The row of boxes."
-        }
-      ],
+      "slots": [],
+      "parts": [],
       "states": [],
       "dependents": [],
       "dependencies": [],
@@ -4233,56 +4041,11 @@
     },
     {
       "filePath": "src/components/sc-date-range/sc-date-range.tsx",
-      "encapsulation": "shadow",
+      "encapsulation": "scoped",
       "tag": "sc-date-range",
-      "readme": "# sc-date-range\n\nA start and an end date that relate to a calendar: filtering payments or fines between two dates, the nights of a stay on Visit Dubai, how long a permit lasts. For a single date people already know (a date of birth, a policy start date), use `sc-date-input`: people type those faster than they find them in a calendar.\n\n## Usage\n\n```html\n<sc-date-range\n  name=\"payments\"\n  label=\"Show payments between\"\n  hint=\"For example, 21 9 2026\"\n  start=\"2026-09-21\"\n  end=\"2026-10-09\"\n  max=\"2026-10-19\"\n  max-days=\"365\"\n  presets\n></sc-date-range>\n```\n\n- **Field:** a `<fieldset>` and `<legend>`, the hint, then one 54px frame with two typed segments, From and To (من / إلى), an arrow between them (→, ← in Arabic) and a calendar button at inline-end. People can always type: \"21/9/2026\", \"21 9 2026\" and \"21-09-2026\" all work, and each segment is formatted on blur (\"21 Sep 2026\").\n- **Picker:** the calendar button opens a popover on medium and wider screens: one or two months (`months`, `auto` shows two from 720px), always 6 weeks, Monday first, and optional presets at inline-start. The first click sets the start, the second the end; a day before the start, or any day after a complete range, starts again. Apply writes both dates, closes the picker and returns focus to the button; Escape or a click outside closes without changes. Below 600px it is a modal bottom sheet with From / To chips, preset chips and a scrolling list of months; it can be dragged down to close.\n- **Presets:** `presets` shows Today, Last 7 days, Last 30 days, This month, Last month and This year (clamped to `min` / `max`). Pass a JSON list to replace them, for a booking calendar: `[{\"label\": \"This weekend\", \"start\": \"2026-10-24\", \"end\": \"2026-10-25\"}]`. A preset applies at once and doesn't close the picker.\n- **Limits:** `min` and `max` disable days outside them (for payment filters, `max` is today); `min-days` and `max-days` disable days that would make the range too short or too long once a start is chosen, and the footer says \"You can choose up to 90 days\".\n- **Keyboard** (ARIA APG date picker): arrows move a day and move visually, so in Arabic Left is the next day; Up and Down move a week; Home and End go to the start and end of the week; Page Up / Page Down change the month and Shift with them the year; Enter or Space chooses the day. Keyboard month changes are instant; pointer ones crossfade.\n- **Errors:** set `error` and `error-parts` (`start`, `end` or `both`) as on the other fields. The component also shows its own message on blur for an impossible range (end before start, a date that isn't real, outside `min`/`max`, too long or too short) and never swaps the dates; \"Enter a start date\" and \"Enter an end date\" wait for a submit.\n- **Forms:** submits `name-start` and `name-end` as ISO dates (empty until each is a real date) and resets to the initial range. Validity: `valueMissing` (with `required`, or a half-filled range), `badInput`, `rangeUnderflow`, `rangeOverflow`. `scChange` carries `{ start, end }`; `scOpen` and `scClose` fire with the picker. Methods: `open()`, `close()`, `setFocus()`.\n- **Today:** the `today` property fixes \"today\" (ISO) when the server's date matters, and in tests.\n- **Arabic:** the whole component mirrors: From is on the right, Monday is the rightmost column, the previous-month button is on the right and presets sit on the right. Month and weekday names are Arabic, digits stay Latin. Gregorian only for now.\n",
-      "docs": "A start and an end date that relate to a calendar: filtering payments between two dates,\nthe nights of a hotel stay, how long a permit lasts. For one date people already know\n(a date of birth), use `sc-date-input`.\n\nTwo typed segments (From / To, من / إلى) in one 54px frame, and a calendar button that\nopens a picker: a popover with one or two months and optional presets on medium and\nwider screens, a modal bottom sheet below 600px. People can always type instead\n(\"21/9/2026\", \"21 9 2026\", \"21-09-2026\").\n\nForm-associated: submits `name-start` and `name-end` as ISO dates (empty until each is a\nreal date). Reports `valueMissing` (with `required`), `badInput`, `rangeUnderflow` and\n`rangeOverflow`, and shows its own messages for impossible ranges on blur. Delegates focus\nto the start segment.",
-      "docsTags": [
-        {
-          "name": "slot",
-          "text": "label - Rich legend content, instead of the `label` prop."
-        },
-        {
-          "name": "slot",
-          "text": "hint - Rich hint content, instead of the `hint` prop."
-        },
-        {
-          "name": "slot",
-          "text": "error - Rich error content, instead of the `error` prop."
-        },
-        {
-          "name": "part",
-          "text": "field - The `<fieldset>` (gets the error bar)."
-        },
-        {
-          "name": "part",
-          "text": "label - The `<legend>`."
-        },
-        {
-          "name": "part",
-          "text": "hint - The hint."
-        },
-        {
-          "name": "part",
-          "text": "error - The error message."
-        },
-        {
-          "name": "part",
-          "text": "frame - The 54px frame around both segments and the calendar button."
-        },
-        {
-          "name": "part",
-          "text": "control - Each native `<input>`."
-        },
-        {
-          "name": "part",
-          "text": "calendar-button - The button that opens the picker."
-        },
-        {
-          "name": "part",
-          "text": "picker - The popover or bottom sheet."
-        }
-      ],
+      "readme": "# sc-date-range\n\nA start and an end date that relate to a calendar: filtering payments or fines between two dates, the nights of a stay on Visit Dubai, how long a permit lasts. For a single date people already know (a date of birth, a policy start date), use `sc-date-input`: people type those faster than they find them in a calendar.\n\n## Usage\n\n```html\n<sc-date-range\n  name=\"payments\"\n  label=\"Show payments between\"\n  hint=\"For example, 21 9 2026\"\n  start=\"2026-09-21\"\n  end=\"2026-10-09\"\n  max=\"2026-10-19\"\n  max-days=\"365\"\n  presets\n></sc-date-range>\n```\n\n- **Field:** a `<fieldset>` and `<legend>`, the hint, then one 56px frame with two typed segments, From and To (من / إلى), an arrow between them (→, ← in Arabic) and a calendar button at inline-end. People can always type: \"21/9/2026\", \"21 9 2026\" and \"21-09-2026\" all work, and each segment is formatted on blur (\"21 Sep 2026\").\n- **Picker:** the calendar button opens a popover on medium and wider screens: one or two months (`months`, `auto` shows two from 720px), always 6 weeks, Monday first, and optional presets at inline-start. The first click sets the start, the second the end; a day before the start, or any day after a complete range, starts again. Apply writes both dates, closes the picker and returns focus to the button; Escape or a click outside closes without changes. Below 600px it is a modal bottom sheet with From / To chips, preset chips and a scrolling list of months; it can be dragged down to close.\n- **Presets:** `presets` shows Today, Last 7 days, Last 30 days, This month, Last month and This year (clamped to `min` / `max`). Pass a JSON list to replace them, for a booking calendar: `[{\"label\": \"This weekend\", \"start\": \"2026-10-24\", \"end\": \"2026-10-25\"}]`. A preset applies at once and doesn't close the picker.\n- **Limits:** `min` and `max` disable days outside them (for payment filters, `max` is today); `min-days` and `max-days` disable days that would make the range too short or too long once a start is chosen, and the footer says \"You can choose up to 90 days\".\n- **Keyboard** (ARIA APG date picker): arrows move a day and move visually, so in Arabic Left is the next day; Up and Down move a week; Home and End go to the start and end of the week; Page Up / Page Down change the month and Shift with them the year; Enter or Space chooses the day. Keyboard month changes are instant; pointer ones crossfade.\n- **Errors:** set `error` and `error-parts` (`start`, `end` or `both`) as on the other fields. The component also shows its own message on blur for an impossible range (end before start, a date that isn't real, outside `min`/`max`, too long or too short) and never swaps the dates; \"Enter a start date\" and \"Enter an end date\" wait for a submit.\n- **Forms:** submits `name-start` and `name-end` as ISO dates (empty until each is a real date) and resets to the initial range. Validity: `valueMissing` (with `required`, or a half-filled range), `badInput`, `rangeUnderflow`, `rangeOverflow`. `scChange` carries `{ start, end }`; `scOpen` and `scClose` fire with the picker. Methods: `open()`, `close()`, `setFocus()`.\n- **Today:** the `today` property fixes \"today\" (ISO) when the server's date matters, and in tests.\n- **Arabic:** the whole component mirrors: From is on the right, Monday is the rightmost column, the previous-month button is on the right and presets sit on the right. Month and weekday names are Arabic, digits stay Latin. Gregorian only for now.\n",
+      "docs": "A start and an end date that relate to a calendar: filtering payments between two dates,\nthe nights of a hotel stay, how long a permit lasts. For one date people already know\n(a date of birth), use `sc-date-input`.\n\nTwo typed segments (From / To, من / إلى) in one 56px frame, and a calendar button that\nopens a picker: a popover with one or two months and optional presets on medium and\nwider screens, a modal bottom sheet below 600px. People can always type instead\n(\"21/9/2026\", \"21 9 2026\", \"21-09-2026\").\n\nv2 renders everything in light DOM (Stencil `scoped`, decision A2), with classes prefixed\n`.sc-date-range__`. It submits `name-start` and `name-end` as ISO dates through hidden\ninputs (empty until each is a real date). The first problem with the range (missing with\n`required`, not a real date, end before start, outside `min`/`max`, too long or short) is a\nnative validity error on the segment concerned; the component shows its own message on\nblur or after a failed submit. `focus()` on the host goes to the start segment. One native\n`change` is dispatched from the host per committed range.\n\nRich content: a child with `slot=\"label\"`, `slot=\"hint\"` or `slot=\"error\"` is moved into place once.",
+      "docsTags": [],
       "usage": {},
       "props": [
         {
@@ -4809,8 +4572,8 @@
             "references": {
               "StringsInput": {
                 "location": "import",
-                "path": "../sc-table/overrides",
-                "id": "src/components/sc-table/overrides.ts::StringsInput",
+                "path": "./overrides",
+                "id": "src/components/sc-date-range/overrides.ts::StringsInput",
                 "referenceLocation": "StringsInput"
               }
             }
@@ -4980,54 +4743,8 @@
       ],
       "listeners": [],
       "styles": [],
-      "slots": [
-        {
-          "name": "error",
-          "docs": "Rich error content, instead of the `error` prop."
-        },
-        {
-          "name": "hint",
-          "docs": "Rich hint content, instead of the `hint` prop."
-        },
-        {
-          "name": "label",
-          "docs": "Rich legend content, instead of the `label` prop."
-        }
-      ],
-      "parts": [
-        {
-          "name": "calendar-button",
-          "docs": "The button that opens the picker."
-        },
-        {
-          "name": "control",
-          "docs": "Each native `<input>`."
-        },
-        {
-          "name": "error",
-          "docs": "The error message."
-        },
-        {
-          "name": "field",
-          "docs": "The `<fieldset>` (gets the error bar)."
-        },
-        {
-          "name": "frame",
-          "docs": "The 54px frame around both segments and the calendar button."
-        },
-        {
-          "name": "hint",
-          "docs": "The hint."
-        },
-        {
-          "name": "label",
-          "docs": "The `<legend>`."
-        },
-        {
-          "name": "picker",
-          "docs": "The popover or bottom sheet."
-        }
-      ],
+      "slots": [],
+      "parts": [],
       "states": [],
       "dependents": [],
       "dependencies": [
@@ -5529,6 +5246,181 @@
           "docs": "The `<ul>` of error links."
         }
       ],
+      "states": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    },
+    {
+      "filePath": "src/components/sc-filter-chips/sc-filter-chips.tsx",
+      "encapsulation": "scoped",
+      "tag": "sc-filter-chips",
+      "readme": "# sc-filter-chips\n\nThe filters applied to a list of results, as removable chips beside the result count, with \"Clear all filters\" from two filters. New in v2.\n\n## Usage\n\n```html\n<h2 id=\"results\">24 results</h2>\n<sc-filter-chips id=\"applied\" focus-target=\"results\"\n  filters='[{\"value\":\"transport\",\"label\":\"Transport and vehicles\"},{\"value\":\"online\",\"label\":\"Paid online\"}]'></sc-filter-chips>\n<script>\n  const chips = document.getElementById('applied');\n  chips.addEventListener('scRemove', (ev) => refreshResults({ without: ev.detail.value }));\n  chips.addEventListener('scClear', () => refreshResults({ filters: [] }));\n</script>\n```\n\n- Each chip is a native button named \"Remove filter: Transport and vehicles\". Removing one takes it away at once and moves focus to the next chip, else the previous, else `focus-target` (your results heading).\n- Count changes are announced politely: \"Filter removed: Paid online. 1 filter applied\".\n- Chips are 32px tall with a 44px target (decision Q-chips), `channel-subtle` with `channel-action` text.\n- Set `filters` (an array or JSON) when your page adds or changes filters; the component announces the new count.\n- Light DOM: style with `.sc-filter-chips__chip` if you must.\n",
+      "docs": "The filters applied to a list of results, as removable chips beside the result count, with\n\"Clear all filters\" when there are two or more (component-language B18, applied filter).\n\nEach chip is a native `<button>` named \"Remove filter: Transport and vehicles\". Removing one\ntakes it away at once (no animation), emits `scRemove`, and moves focus to the next chip,\nelse the previous one, else the element named by `focus-target` (the results heading).\nEvery change in the number of filters is announced politely: \"2 filters applied\".\nThe page updates its results on `scRemove` / `scClear`; set `filters` to change the chips.\n\nChips are 32px tall (decision Q-chips) with a 44px target. Light DOM (Stencil `scoped`).",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "filters",
+          "type": "FilterChip[] | string",
+          "complexType": {
+            "original": "FilterChip[] | string",
+            "resolved": "FilterChip[] | string",
+            "references": {
+              "FilterChip": {
+                "location": "local",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-filter-chips/sc-filter-chips.tsx",
+                "id": "src/components/sc-filter-chips/sc-filter-chips.tsx::FilterChip"
+              }
+            }
+          },
+          "mutable": true,
+          "attr": "filters",
+          "reflectToAttr": false,
+          "docs": "The applied filters, in order: an array of `{ value, label }`, or the same as JSON in the\nattribute (`filters='[{\"value\":\"transport\",\"label\":\"Transport and vehicles\"}]'`).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "[]"
+            }
+          ],
+          "default": "[]",
+          "values": [
+            {
+              "type": "FilterChip[]"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "focusTarget",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "focus-target",
+          "reflectToAttr": false,
+          "docs": "The id of the element that gets focus when the last chip goes, usually the results heading. It is made focusable (`tabindex=\"-1\"`) if it isn't.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "label",
+          "type": "string | undefined",
+          "complexType": {
+            "original": "string",
+            "resolved": "string | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "label",
+          "reflectToAttr": false,
+          "docs": "The group's accessible name. Defaults to \"Applied filters\" (\"عوامل التصفية المطبّقة\").",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
+          "name": "noClear",
+          "type": "boolean",
+          "complexType": {
+            "original": "boolean",
+            "resolved": "boolean",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "no-clear",
+          "reflectToAttr": false,
+          "docs": "Hides \"Clear all filters\".",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "false"
+            }
+          ],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        }
+      ],
+      "methods": [],
+      "events": [
+        {
+          "event": "scClear",
+          "detail": "void",
+          "bubbles": true,
+          "complexType": {
+            "original": "void",
+            "resolved": "void",
+            "references": {}
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Fires when \"Clear all filters\" is used. Every chip is already gone.",
+          "docsTags": []
+        },
+        {
+          "event": "scRemove",
+          "detail": "FilterChip",
+          "bubbles": true,
+          "complexType": {
+            "original": "FilterChip",
+            "resolved": "FilterChip",
+            "references": {
+              "FilterChip": {
+                "location": "local",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-filter-chips/sc-filter-chips.tsx",
+                "id": "src/components/sc-filter-chips/sc-filter-chips.tsx::FilterChip"
+              }
+            }
+          },
+          "cancelable": true,
+          "composed": true,
+          "docs": "Fires when a chip is removed, with `{ value, label }`. The chip is already gone.",
+          "docsTags": []
+        }
+      ],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
       "states": [],
       "dependents": [],
       "dependencies": [],
@@ -7520,10 +7412,10 @@
     },
     {
       "filePath": "src/components/sc-radio/sc-radio.tsx",
-      "encapsulation": "shadow",
+      "encapsulation": "scoped",
       "tag": "sc-radio",
-      "readme": "# sc-radio\n\nOne option of an `sc-radio-group`. Use it only inside a group.\n\n## Usage\n\n```html\n<sc-radio-group name=\"issuer\" label=\"Who issued the plate?\">\n  <sc-radio value=\"dubai\">Dubai</sc-radio>\n  <sc-radio value=\"other\" hint=\"Abu Dhabi, Sharjah or another emirate\">Another emirate</sc-radio>\n</sc-radio-group>\n```\n\n- The content is the option's label: short, sentence case, no full stop. Use `<sc-ltr>` around values that must stay left-to-right.\n- `hint` adds a line under the label, linked to the radio with `aria-describedby`.\n- `checked` makes it the initial choice (the group's `value` wins if both are set). `disabled` is supported but avoid it.\n\n`sc-radio` doesn't render a radio itself: the group renders a native radio for each option in its own shadow root and slots this element into that radio's `<label>`, so all the radios form one native group. See `sc-radio-group` for why.\n",
-      "docs": "One option in an `sc-radio-group`. Its content is the option's label.\n\n`sc-radio` holds data and label content only. The parent `sc-radio-group` renders the\nnative `<input type=\"radio\">` for every option inside its own shadow root and slots\nthis element into that option's `<label>`, so all the radios share one tree: they form a\nreal native radio group (one Tab stop, arrow keys move and select, \"2 of 3\" announced).\nUse it only inside `sc-radio-group`.",
+      "readme": "# sc-radio\n\nOne option of an `sc-radio-group`. Use it only inside a group.\n\n## Usage\n\n```html\n<sc-radio-group name=\"issuer\" label=\"Who issued the plate?\">\n  <sc-radio value=\"dubai\">Dubai</sc-radio>\n  <sc-radio value=\"other\" hint=\"Abu Dhabi, Sharjah or another emirate\">Another emirate</sc-radio>\n</sc-radio-group>\n```\n\n- The content is the option's label: short, sentence case, no full stop. Use `<sc-ltr>` around values that must stay left-to-right.\n- `hint` adds a line under the label, linked to the radio with `aria-describedby`.\n- `checked` makes it the initial choice (the group's `value` wins if both are set). `disabled` is supported but avoid it.\n\nv2 renders a native `<input type=\"radio\">`, `<label>` and hint in light DOM (decision A2). The group passes down the shared `name`, the choice, the error state and `required`, so all the radios form one native group. Use it only inside `sc-radio-group`. The dot scales in from 0.5 over 120ms when chosen with a pointer, and appears at once from the keyboard.\n",
+      "docs": "One option in an `sc-radio-group`. Its content is the option's label.\n\nv2 renders a native `<input type=\"radio\">`, its `<label>` and hint in light DOM (Stencil\n`scoped`, decision A2). Every radio in a group shares the group's `name` in one document\ntree, so they form a real native radio group: one Tab stop, arrow keys move and select,\n\"2 of 3\" is announced, and the form submits the chosen value. Use it only inside\n`sc-radio-group`, which passes down the name, the chosen value and the error state.",
       "docsTags": [
         {
           "name": "slot",
@@ -7658,62 +7550,14 @@
     },
     {
       "filePath": "src/components/sc-radio-group/sc-radio-group.tsx",
-      "encapsulation": "shadow",
+      "encapsulation": "scoped",
       "tag": "sc-radio-group",
-      "readme": "# sc-radio-group\n\nOne choice from a short list (about 7 options or fewer): who issued the plate, how to receive the registration card, \"Yes\" or \"No\". Use `sc-checkbox-group` when people can pick more than one, and `sc-select` for long lists.\n\n## Usage\n\n```html\n<sc-radio-group name=\"delivery\" label=\"How do you want to receive your registration card?\" value=\"digital\">\n  <sc-radio value=\"digital\" hint=\"In the Dubai Now app and your digital wallet\">Digital card</sc-radio>\n  <sc-radio value=\"courier\" hint=\"AED 20, delivered in 2 working days\">Courier delivery</sc-radio>\n  <sc-radio value=\"centre\">Collect from a customer service centre</sc-radio>\n</sc-radio-group>\n```\n\n- **Legend:** `label` is the question. When it's the only question on the page, add `heading-level=\"1\"` so the legend is the page heading (`<legend><h1>…</h1></legend>`).\n- **Options:** one `sc-radio` per option, with `value`, an optional `hint`, `checked` for the initial choice (or `value` on the group) and `disabled` (avoid it; leave out options that don't apply).\n- **Inline:** `inline` lays out two short options side by side (\"Yes\" / \"No\"). They wrap on narrow screens.\n- **Error:** `error` on the group (\"Select who issued the plate\") shows the bar, the message with \"Error:\", and an error border on every radio; the group gets `aria-invalid`.\n- 24px radios inside 44px targets: the whole label row is clickable.\n- Order options alphabetically unless there's a reason not to (most common first, or a natural order). Don't pre-select an option people might skip over without reading.\n\n### How it stays accessible across shadow roots\n\nARIA can't point across shadow boundaries, and native radios only form a group (one Tab stop, arrow keys, \"2 of 3\") when they share a tree and a name. So the group, not each option, renders the controls:\n\n1. `sc-radio-group` renders, in **its own shadow root**, a `<fieldset role=\"radiogroup\" aria-labelledby=\"label\">` with the `<legend id=\"label\">`, the hint and error (both in the fieldset's `aria-describedby`), and **one native `<input type=\"radio\" name=\"choice\">` per `sc-radio`**, each with its own `<label for>` and option hint (`aria-describedby`).\n2. Each `sc-radio` element is slotted into its option's `<label>` with **manual slot assignment** (`slotAssignment: 'manual'`, `slot.assign()`), so it doesn't need (or get) a `slot` attribute. Its content is the radio's accessible name: the accessibility tree and label activation follow the flattened tree.\n3. Because every radio is native and in one tree with one name, the browser provides everything: one Tab stop (the checked radio, or the first), Arrow keys move **and select** (and wrap), Space selects, position in set is announced, and clicking the option text selects it. No roving-tabindex script.\n\n`sc-radio` itself only holds data and the label content; it reflects `value`, `hint`, `checked` and `disabled` to attributes, and the group watches them (and added or removed options) with a `MutationObserver`.\n\nThis is tested in `sc-radio-group.e2e.ts` against Chromium's accessibility tree (radiogroup name and description, radio names from slotted content, option hint descriptions), with the keyboard (Tab in, ArrowDown/ArrowUp select, Tab out, Shift+Tab back to the checked radio, the same in Arabic), and with axe in English and Arabic, light and dark, on every channel.\n\n### Forms\n\nForm-associated: submits the chosen value under `name`, resets to the initial choice, follows `<fieldset disabled>`, and with `required` reports `valueMissing` (anchored to the first radio, which `reportValidity()` focuses). The host delegates focus, so an error summary that focuses `#issuer` lands on the first radio. `change` is re-dispatched on the host and `scChange` carries `{ value }`.\n",
-      "docs": "One choice from a short list: \"Who issued the plate?\".\n\nA `<fieldset>` with a `<legend>` (exposed as `role=\"radiogroup\"`, labelled by the legend\nand described by the hint and error), and one native `<input type=\"radio\">` per\n`sc-radio` child, all inside this element's shadow root. Each `sc-radio` is slotted into\nits option's `<label>` (manual slot assignment), so its content names the radio while the\nradios themselves stay in one tree: native arrow keys, one Tab stop, position in set.\n\nForm-associated: submits the chosen value under `name`, resets, and reports\n`valueMissing` when `required`. Delegates focus, so an error-summary link to the host's\n`id` focuses the first radio.",
+      "readme": "# sc-radio-group\n\nOne choice from a short list (about 7 options or fewer): who issued the plate, how to receive the registration card, \"Yes\" or \"No\". Use `sc-checkbox-group` when people can pick more than one, and `sc-select` for long lists.\n\n## Usage\n\n```html\n<sc-radio-group name=\"delivery\" label=\"How do you want to receive your registration card?\" value=\"digital\">\n  <sc-radio value=\"digital\" hint=\"In the Dubai Now app and your digital wallet\">Digital card</sc-radio>\n  <sc-radio value=\"courier\" hint=\"AED 20, delivered in 2 working days\">Courier delivery</sc-radio>\n  <sc-radio value=\"centre\">Collect from a customer service centre</sc-radio>\n</sc-radio-group>\n```\n\n- **Legend:** `label` is the question. When it's the only question on the page, add `heading-level=\"1\"` so the legend is the page heading (`<legend><h1>…</h1></legend>`).\n- **Options:** one `sc-radio` per option, with `value`, an optional `hint`, `checked` for the initial choice (or `value` on the group) and `disabled` (avoid it; leave out options that don't apply).\n- **Inline:** `inline` lays out two short options side by side (\"Yes\" / \"No\"). They wrap on narrow screens.\n- **Error:** `error` on the group (\"Select who issued the plate\") shows the bar, the message with \"Error:\", and an error border on every radio; the group gets `aria-invalid`.\n- 24px radios inside 44px targets: the whole label row is clickable.\n- Order options alphabetically unless there's a reason not to (most common first, or a natural order). Don't pre-select an option people might skip over without reading.\n\n### Structure (v2, light DOM)\n\nNative radios only form a group (one Tab stop, arrow keys, \"2 of 3\") when they share a name in one tree. v2 gets that for free from light DOM (decision A2):\n\n1. `sc-radio-group` renders a native `<fieldset role=\"radiogroup\">` with the `<legend>`, hint and error (in the fieldset's `aria-describedby`), and moves its `sc-radio` children inside it.\n2. Each `sc-radio` renders its own native `<input type=\"radio\">`, `<label for>` and hint. The group passes down its `name` (or a generated one), the chosen value, the error state and `required`.\n3. The browser does the rest: one Tab stop (the checked radio, or the first), Arrow keys move and select (and wrap; in Arabic too), Space selects, position in set, clicking the option text. No roving-tabindex script, and no manual slot assignment (v1 needed both a shadow root and `slot.assign()`).\n\nOptions added later are moved in too.\n\n### Forms\n\nThe radios are native: the chosen value submits under `name`, `form.reset()` restores the initial choice, `disabled` disables the fieldset, and `required` is native `valueMissing` on every radio (`reportValidity()` focuses the first). `focus()` on the host lands on the chosen radio, or the first. Without `name` the radios share a generated name, which a form would submit: name the group inside a form. The native `change` bubbles from the radio; `scChange` carries `{ value }`.\n",
+      "docs": "One choice from a short list: \"Who issued the plate?\".\n\nv2 renders a native `<fieldset>` (role `radiogroup`) with its `<legend>`, hint and error in\nlight DOM (Stencil `scoped`, decision A2), and moves the `sc-radio` children into it. Each\n`sc-radio` renders a native radio with the group's `name`, so they form a real native radio\ngroup: one Tab stop, arrow keys move and select, position in set, native submission,\nreset and `required`. `disabled` disables the fieldset. `focus()` on the host reaches the\nchosen radio, or the first.\n\nWithout a `name`, the radios share a generated one (`sc-radio-group-3`), which a form\nwould submit: give the group a `name` inside a form.",
       "docsTags": [
         {
           "name": "slot",
           "text": "- `sc-radio` elements, one per option."
-        },
-        {
-          "name": "slot",
-          "text": "label - Rich legend content, instead of the `label` prop."
-        },
-        {
-          "name": "slot",
-          "text": "hint - Rich hint content, instead of the `hint` prop."
-        },
-        {
-          "name": "slot",
-          "text": "error - Rich error content, instead of the `error` prop."
-        },
-        {
-          "name": "part",
-          "text": "field - The `<fieldset>` (gets the error bar)."
-        },
-        {
-          "name": "part",
-          "text": "label - The `<legend>`."
-        },
-        {
-          "name": "part",
-          "text": "hint - The hint."
-        },
-        {
-          "name": "part",
-          "text": "error - The error message."
-        },
-        {
-          "name": "part",
-          "text": "options - The wrapper around the options."
-        },
-        {
-          "name": "part",
-          "text": "option - One option row."
-        },
-        {
-          "name": "part",
-          "text": "radio - A native `<input type=\"radio\">`."
-        },
-        {
-          "name": "part",
-          "text": "option-label - An option's `<label>`."
-        },
-        {
-          "name": "part",
-          "text": "option-hint - An option's hint."
         }
       ],
       "usage": {},
@@ -7729,7 +7573,7 @@
           "mutable": false,
           "attr": "disabled",
           "reflectToAttr": true,
-          "docs": "Disables every option. Avoid it.",
+          "docs": "Disables every option (through the fieldset). Avoid it.",
           "docsTags": [
             {
               "name": "default",
@@ -7791,7 +7635,7 @@
           "mutable": false,
           "attr": "heading-level",
           "reflectToAttr": false,
-          "docs": "When set (1–6), the legend is also the page heading at this level\n(`<legend><h1>…</h1></legend>`). Use it when the question is the only one on the page.",
+          "docs": "When set (1–6), the legend is also the page heading at this level (`<legend><h1>…</h1></legend>`).",
           "docsTags": [],
           "values": [
             {
@@ -7974,7 +7818,7 @@
           "mutable": false,
           "attr": "required",
           "reflectToAttr": false,
-          "docs": "Requires a choice (`valueMissing` until one is made). Not shown visually.",
+          "docs": "Requires a choice (native `valueMissing` until one is made). Not shown visually.",
           "docsTags": [
             {
               "name": "default",
@@ -8032,68 +7876,25 @@
           },
           "cancelable": true,
           "composed": true,
-          "docs": "Fires when the choice changes with `{ value }`. A native `change` is also dispatched on the host.",
+          "docs": "Fires when the choice changes with `{ value }`. The native `change` event also bubbles from the radio.",
           "docsTags": []
         }
       ],
-      "listeners": [],
+      "listeners": [
+        {
+          "event": "change",
+          "capture": false,
+          "passive": false
+        }
+      ],
       "styles": [],
       "slots": [
         {
           "name": "",
           "docs": "`sc-radio` elements, one per option."
-        },
-        {
-          "name": "error",
-          "docs": "Rich error content, instead of the `error` prop."
-        },
-        {
-          "name": "hint",
-          "docs": "Rich hint content, instead of the `hint` prop."
-        },
-        {
-          "name": "label",
-          "docs": "Rich legend content, instead of the `label` prop."
         }
       ],
-      "parts": [
-        {
-          "name": "error",
-          "docs": "The error message."
-        },
-        {
-          "name": "field",
-          "docs": "The `<fieldset>` (gets the error bar)."
-        },
-        {
-          "name": "hint",
-          "docs": "The hint."
-        },
-        {
-          "name": "label",
-          "docs": "The `<legend>`."
-        },
-        {
-          "name": "option",
-          "docs": "One option row."
-        },
-        {
-          "name": "option-hint",
-          "docs": "An option's hint."
-        },
-        {
-          "name": "option-label",
-          "docs": "An option's `<label>`."
-        },
-        {
-          "name": "options",
-          "docs": "The wrapper around the options."
-        },
-        {
-          "name": "radio",
-          "docs": "A native `<input type=\"radio\">`."
-        }
-      ],
+      "parts": [],
       "states": [],
       "dependents": [],
       "dependencies": [],
@@ -8101,24 +7902,11 @@
     },
     {
       "filePath": "src/components/sc-search/sc-search.tsx",
-      "encapsulation": "shadow",
+      "encapsulation": "scoped",
       "tag": "sc-search",
-      "readme": "# sc-search\n\nA search box for a channel or a list of services.\n\n## Usage\n\n```html\n<sc-search label=\"Search Dubai Now services\" placeholder=\"Try “renew car registration” or “school fees”\" action=\"/search\"></sc-search>\n```\n\n```js\ndocument.querySelector('sc-search').addEventListener('scSearch', (ev) => {\n  ev.preventDefault();            // handle it in the page instead of going to `action`\n  showResults(ev.detail.value);\n});\n```\n\n- Give it a specific `label` (\"Search Dubai Now services\"). Hide it visually with `label-hidden` only where the context makes the purpose obvious, such as a hero that asks \"What do you need to do?\"; screen readers still read it.\n- `placeholder` gives example queries. It disappears when typing, so never put instructions there.\n- With `action`, submitting goes to that URL with `?q=…` (`name` changes the parameter) after `scSearch`, unless a listener cancels the event. Without `action`, handle `scSearch`.\n- The button text defaults to \"Search\" (\"بحث\"); change it with `button-text` only for a more specific verb.\n\n### Behaviour\n\nThe component renders `<form role=\"search\">` named by the label, a native `<input type=\"search\">` and a primary `sc-button type=\"submit\"`. Enter in the field and the button both submit; `scSearch` carries the trimmed query. Focus on the host goes to the input (`delegatesFocus`), and the focus ring wraps the whole pill. The form is self-contained: don't put `sc-search` inside another `<form>`.\n\n### Arabic\n\nThe field mirrors: icon on the right, button on the left. The default label and button read \"بحث\". Search terms are typed in either script; the field follows the page direction.\n",
-      "docs": "A pill search box: search icon, a labelled field and a primary \"Search\" button, inside a\n`<form role=\"search\">` (a search landmark named by the label).\n\nSubmitting (the button, or Enter in the field) emits `scSearch`. With `action`, the form\nthen goes to that URL with the query as `?<name>=…`, unless a listener calls\n`preventDefault()`; without `action`, the page handles `scSearch` itself.\n\nThe form is self-contained: don't nest `sc-search` inside another `<form>`.",
-      "docsTags": [
-        {
-          "name": "part",
-          "text": "field - The pill around the icon, input and button."
-        },
-        {
-          "name": "part",
-          "text": "input - The native `<input type=\"search\">`."
-        },
-        {
-          "name": "part",
-          "text": "label - The `<label>`."
-        }
-      ],
+      "readme": "# sc-search\n\nA search box for a channel or a list of services.\n\n## Usage\n\n```html\n<sc-search label=\"Search Dubai Now services\" placeholder=\"Try “renew car registration” or “school fees”\" action=\"/search\"></sc-search>\n```\n\n```js\ndocument.querySelector('sc-search').addEventListener('scSearch', (ev) => {\n  ev.preventDefault();            // handle it in the page instead of going to `action`\n  showResults(ev.detail.value);\n});\n```\n\n- Give it a specific `label` (\"Search Dubai Now services\"). Hide it visually with `label-hidden` only where the context makes the purpose obvious, such as a hero that asks \"What do you need to do?\"; screen readers still read it.\n- `placeholder` gives example queries. It disappears when typing, so never put instructions there.\n- With `action`, submitting goes to that URL with `?q=…` (`name` changes the parameter) after `scSearch`, unless a listener cancels the event. Without `action`, handle `scSearch`.\n- The button text defaults to \"Search\" (\"بحث\"); change it with `button-text` only for a more specific verb.\n\n### Behaviour\n\nv2 renders `<form role=\"search\">` named by the label, a field box (radius 8, 1.5px `outline` edge, search icon at inline-start) holding a native `<input type=\"search\">`, and a separate primary `sc-button type=\"submit\"` 12px away (E1), all in light DOM (decision A2). Enter in the field submits through the button natively; `scSearch` carries the trimmed query. `focus()` on the host goes to the input, and the U1 focus ring wraps the field box. `size=\"l\"` is the 64px hero search; the default `m` is 56px. Arabic-Indic digits typed into the query become Latin digits. The form is self-contained: don't put `sc-search` inside another `<form>`.\n\n### Arabic\n\nThe field mirrors: icon on the right, button on the left. The default label and button read \"بحث\". Search terms are typed in either script; the field follows the page direction.\n",
+      "docs": "A search field and its button, inside a `<form role=\"search\">` named by the label (E1: the\nfield and the primary button are siblings with a 12px gap, not one pill).\n\nv2 renders the form, a native `<input type=\"search\">` and an `sc-button type=\"submit\"` in\nlight DOM (Stencil `scoped`, decision A2), so Enter in the field submits through the button\nnatively. Submitting emits `scSearch`. With `action`, the form then goes to that URL with the\nquery as `?<name>=…`, unless a listener calls `preventDefault()`; without `action`, the page\nhandles `scSearch` itself. Don't nest `sc-search` inside another `<form>`.",
+      "docsTags": [],
       "usage": {},
       "props": [
         {
@@ -8284,6 +8072,46 @@
           "setter": false
         },
         {
+          "name": "size",
+          "type": "\"l\" | \"m\"",
+          "complexType": {
+            "original": "SearchSize",
+            "resolved": "\"l\" | \"m\"",
+            "references": {
+              "SearchSize": {
+                "location": "local",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-search/sc-search.tsx",
+                "id": "src/components/sc-search/sc-search.tsx::SearchSize"
+              }
+            }
+          },
+          "mutable": false,
+          "attr": "size",
+          "reflectToAttr": true,
+          "docs": "`m` (default): a 56px field and button. `l`: the 64px hero search (E1).",
+          "docsTags": [
+            {
+              "name": "default",
+              "text": "'m'"
+            }
+          ],
+          "default": "'m'",
+          "values": [
+            {
+              "value": "l",
+              "type": "string"
+            },
+            {
+              "value": "m",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
+        {
           "name": "value",
           "type": "string",
           "complexType": {
@@ -8362,20 +8190,7 @@
       "listeners": [],
       "styles": [],
       "slots": [],
-      "parts": [
-        {
-          "name": "field",
-          "docs": "The pill around the icon, input and button."
-        },
-        {
-          "name": "input",
-          "docs": "The native `<input type=\"search\">`."
-        },
-        {
-          "name": "label",
-          "docs": "The `<label>`."
-        }
-      ],
+      "parts": [],
       "states": [],
       "dependents": [],
       "dependencies": [
@@ -8389,46 +8204,14 @@
     },
     {
       "filePath": "src/components/sc-select/sc-select.tsx",
-      "encapsulation": "shadow",
+      "encapsulation": "scoped",
       "tag": "sc-select",
-      "readme": "# sc-select\n\nOne choice from a list that's too long for radios, such as the issuing authority of a plate or an inspection centre. Use `sc-radio-group` when there are about 7 options or fewer: radios show every option without opening anything. Avoid selects for answers people know by heart (like a country); a text input with autocomplete is often easier.\n\n## Usage\n\n```html\n<sc-select name=\"emirate\" label=\"Issuing authority\" value=\"dubai\">\n  <option value=\"dubai\">Dubai</option>\n  <option value=\"abu-dhabi\">Abu Dhabi</option>\n  <option value=\"sharjah\">Sharjah</option>\n</sc-select>\n```\n\n- A native `<select>` inside the shadow root, styled like `sc-text-input` (54px, field radius, 1.5px control border) with a chevron at the end that points down in both directions.\n- **Options are light-DOM `<option>` and `<optgroup>` children.** A native select can't render slotted options, so the component copies them into its inner select and keeps them in sync (a `MutationObserver` watches additions, removals, text and `value`/`label`/`disabled`/`selected`). Changing an option's text, for example when the page switches language, updates the list.\n- **Value:** `value` picks the option; otherwise `<option selected>`, else the first option.\n- **Required:** add a first option with `value=\"\"` (\"Select an inspection centre\") and `required`; the field reports `valueMissing` until a real option is chosen. Don't add an empty first option to a select that already has a sensible default.\n- Label, hint, `optional`, `error`, form association and focus delegation work as in `sc-text-input`. `change` is re-dispatched on the host and `scChange` carries `{ value }`.\n",
-      "docs": "One choice from a list too long for radios, such as the emirate that issued a plate.\n\nA native `<select>` inside the shadow root, styled like `sc-text-input`, with a chevron.\nWrite the options as light-DOM `<option>` (and `<optgroup>`) children: they are copied\ninto the inner select and kept in sync when they change. Form-associated and delegates focus.",
+      "readme": "# sc-select\n\nOne choice from a list that's too long for radios, such as the issuing authority of a plate or an inspection centre. Use `sc-radio-group` when there are about 7 options or fewer: radios show every option without opening anything. Avoid selects for answers people know by heart (like a country); a text input with autocomplete is often easier.\n\n## Usage\n\n```html\n<sc-select name=\"emirate\" label=\"Issuing authority\" value=\"dubai\">\n  <option value=\"dubai\">Dubai</option>\n  <option value=\"abu-dhabi\">Abu Dhabi</option>\n  <option value=\"sharjah\">Sharjah</option>\n</sc-select>\n```\n\n- v2 renders a native `<select>` in light DOM (decision A2), styled like `sc-text-input` (56px, 8px radius, 1.5px `outline` edge) with a 26px `expand_more` chevron 16px from the inline end that points down in both directions.\n- **Options are `<option>` and `<optgroup>` children, moved into the native select** on load: they are the real options, not copies. Options appended to the host later are moved in too; changing an option's text or attributes works directly on it.\n- **Value:** `value` picks the option (and becomes what a form reset restores); otherwise `<option selected>`, else the first enabled option.\n- **Required:** add a first option with `value=\"\"` (\"Select an inspection centre\") and `required`; the select reports `valueMissing` natively until a real option is chosen.\n- Label, hint, `optional`, `error`, rich slots and focus forwarding work as in `sc-text-input`. Native `change` and `input` bubble from the select; `scChange` carries `{ value }`.\n",
+      "docs": "One choice from a list too long for radios, such as the emirate that issued a plate.\n\nv2 renders a native `<select>` in light DOM (Stencil `scoped`, decision A2), styled like\n`sc-text-input` with an `expand_more` chevron. Write the options as `<option>` (and\n`<optgroup>`) children: they are moved INTO the native select, so they are the real options\n(no copies), and options added later are moved in too. The select submits, resets, validates\nand follows `<fieldset disabled>` natively; `focus()` on the host reaches it.",
       "docsTags": [
         {
           "name": "slot",
-          "text": "label - Rich label content, instead of the `label` prop."
-        },
-        {
-          "name": "slot",
-          "text": "hint - Rich hint content, instead of the `hint` prop."
-        },
-        {
-          "name": "slot",
-          "text": "error - Rich error content, instead of the `error` prop."
-        },
-        {
-          "name": "part",
-          "text": "field - The field group (gets the error bar)."
-        },
-        {
-          "name": "part",
-          "text": "label - The `<label>`."
-        },
-        {
-          "name": "part",
-          "text": "hint - The hint."
-        },
-        {
-          "name": "part",
-          "text": "error - The error message."
-        },
-        {
-          "name": "part",
-          "text": "frame - The bordered box around the select."
-        },
-        {
-          "name": "part",
-          "text": "control - The native `<select>`."
+          "text": "- `<option>` and `<optgroup>` elements."
         }
       ],
       "usage": {},
@@ -8605,7 +8388,7 @@
           "mutable": false,
           "attr": "label",
           "reflectToAttr": false,
-          "docs": "The visible label: \"Issuing emirate\".",
+          "docs": "The visible label: \"Issuing authority\".",
           "docsTags": [],
           "values": [
             {
@@ -8744,7 +8527,7 @@
           },
           "cancelable": true,
           "composed": true,
-          "docs": "Fires when the selection changes with `{ value }`. A native `change` (and `input`) also reach the host.",
+          "docs": "Fires when the selection changes with `{ value }`. The native `change` and `input` events also bubble.",
           "docsTags": []
         }
       ],
@@ -8752,44 +8535,11 @@
       "styles": [],
       "slots": [
         {
-          "name": "error",
-          "docs": "Rich error content, instead of the `error` prop."
-        },
-        {
-          "name": "hint",
-          "docs": "Rich hint content, instead of the `hint` prop."
-        },
-        {
-          "name": "label",
-          "docs": "Rich label content, instead of the `label` prop."
+          "name": "",
+          "docs": "`<option>` and `<optgroup>` elements."
         }
       ],
-      "parts": [
-        {
-          "name": "control",
-          "docs": "The native `<select>`."
-        },
-        {
-          "name": "error",
-          "docs": "The error message."
-        },
-        {
-          "name": "field",
-          "docs": "The field group (gets the error bar)."
-        },
-        {
-          "name": "frame",
-          "docs": "The bordered box around the select."
-        },
-        {
-          "name": "hint",
-          "docs": "The hint."
-        },
-        {
-          "name": "label",
-          "docs": "The `<label>`."
-        }
-      ],
+      "parts": [],
       "states": [],
       "dependents": [],
       "dependencies": [],
@@ -10582,64 +10332,11 @@
     },
     {
       "filePath": "src/components/sc-text-input/sc-text-input.tsx",
-      "encapsulation": "shadow",
+      "encapsulation": "scoped",
       "tag": "sc-text-input",
-      "readme": "# sc-text-input\n\nA single-line answer: a plate number, an Emirates ID number, an email address, a phone number. For a longer answer use `sc-textarea`; for a choice from a list use `sc-radio-group` (up to about 7 options) or `sc-select`; for a date use `sc-date-input`.\n\n## Usage\n\n```html\n<sc-text-input\n  id=\"plate-number\"\n  name=\"plateNumber\"\n  label=\"Plate number\"\n  hint=\"Up to 5 digits, for example 12345\"\n  width=\"10\"\n  inputmode=\"numeric\"\n  ltr\n></sc-text-input>\n```\n\n### Field behaviour (shared by every field)\n\n- The component renders its own label, hint, error and `<input>` in one shadow root, because `for`, `aria-describedby` and `aria-labelledby` can't point across a shadow boundary. Don't put a separate `<label>` next to it.\n- **Label:** always visible. Write it as the thing to enter (\"Plate number\") or as the question (\"What is your plate number?\"). Latin labels are label-m Medium; Arabic labels are label-m Bold.\n- **Hint:** says what format to use, with a real example. It's linked with `aria-describedby`.\n- **Optional:** `optional` appends \"(optional)\" / \"(اختياري)\". Required fields are not marked; ask only for what you need. `required` turns on native validation (`valueMissing`) but shows nothing.\n- **Error:** set `error` to the message after the server (or your own validation) rejects the answer. The field gets a 3px error bar on its start side, a 2px error border on the box, the message with an icon and a visually hidden \"Error:\" / \"خطأ:\", and `aria-invalid=\"true\"`. Also list the error in `sc-error-summary` at the top of the page, linking to the field's `id`. Say what to do, not what went wrong: \"Enter numbers only, like 12345\", not \"Invalid plate number\".\n- **Rich content:** use the `label`, `hint` and `error` slots for links or emphasis.\n- **Focus from an error summary:** the host delegates focus, so `document.getElementById('plate-number').focus()` lands in the input. Browsers don't move focus to a fragment target that isn't focusable itself, so the error summary must focus the target of its links (as GOV.UK's does).\n- **Page heading:** when the field is the only question on the page, set `heading-level=\"1\"`: the label becomes the page heading (`<h1><label>…</label></h1>`).\n\n### Width\n\nMatch the box to the answer: `width=\"2\"`, `\"3\"`, `\"4\"`, `\"5\"`, `\"10\"` or `\"20\"` characters, or `full` (default). A plate code is `4`, a plate number `10`, an Emirates ID `20`.\n\n### Left-to-right values\n\nPlates, phone numbers, emails, IBANs and references must stay left-to-right in Arabic. Add `ltr`: the input gets `dir=\"ltr\"`, spellcheck and auto-capitalisation are off, and in an Arabic page the value still sits at the start (right) of the box, under the label. Don't put `dir=\"ltr\"` on the host: that flips the label, hint and error too.\n\n### Prefix and suffix\n\n`prefix-text=\"AED\"`, `suffix-text=\"km\"` (or the `prefix`/`suffix` slots) show a quiet box inside the field. They're part of the input's description, so screen readers hear \"Amount, AED\". (The props aren't called `prefix`/`suffix` because `prefix` is a reserved DOM property.)\n\n### Forms\n\nForm-associated: submits `value` under `name`, resets to its initial `value`, follows `<fieldset disabled>`, and mirrors the inner input's native validity (`required`, `type=\"email\"`, `pattern`, `minlength`, `maxlength`) so `form.checkValidity()`, `:invalid` and `reportValidity()` work, with the browser's bubble on the inner input. Native `input` events reach the host; `change` is re-dispatched on the host (native `change` isn't composed). `scInput` and `scChange` carry `{ value }`.\n\nThe `error` prop is presentation only: it never blocks submission, so a server-validated form can always be sent again.\n\n### Content\n\nSentence case, no colon after the label, no placeholder text (it disappears as you type and fails contrast). Use the vehicle registration journey's words: \"Plate number\", \"Plate code\", \"Issuing authority\".\n\n### Arabic\n\nStrings come from the closest `lang`. Arabic uses the Arabic type scale with no letter-spacing; digits stay Latin. The error bar moves to the right.\n",
-      "docs": "A single-line answer, such as a plate number, an email address or a phone number.\n\nRenders its own label, hint, error and native `<input>` in one shadow root, so the\nlabel and `aria-describedby` work. The host is form-associated (it submits `value`\nunder `name`, resets, and reports validity from the inner input) and delegates focus,\nso an error-summary link to the host's `id` focuses the input.",
-      "docsTags": [
-        {
-          "name": "slot",
-          "text": "label - Rich label content, instead of the `label` prop."
-        },
-        {
-          "name": "slot",
-          "text": "hint - Rich hint content (for example with a link), instead of the `hint` prop."
-        },
-        {
-          "name": "slot",
-          "text": "error - Rich error content, instead of the `error` prop."
-        },
-        {
-          "name": "slot",
-          "text": "prefix - Content before the value inside the box, instead of `prefix-text`."
-        },
-        {
-          "name": "slot",
-          "text": "suffix - Content after the value inside the box, instead of `suffix-text`."
-        },
-        {
-          "name": "part",
-          "text": "field - The field group (gets the error bar)."
-        },
-        {
-          "name": "part",
-          "text": "label - The `<label>`."
-        },
-        {
-          "name": "part",
-          "text": "hint - The hint."
-        },
-        {
-          "name": "part",
-          "text": "error - The error message."
-        },
-        {
-          "name": "part",
-          "text": "frame - The bordered box around the input, prefix and suffix."
-        },
-        {
-          "name": "part",
-          "text": "control - The native `<input>`."
-        },
-        {
-          "name": "part",
-          "text": "prefix - The prefix box."
-        },
-        {
-          "name": "part",
-          "text": "suffix - The suffix box."
-        }
-      ],
+      "readme": "# sc-text-input\n\nA single-line answer: a plate number, an Emirates ID number, an email address, a phone number. For a longer answer use `sc-textarea`; for a choice from a list use `sc-radio-group` (up to about 7 options) or `sc-select`; for a date use `sc-date-input`.\n\n## Usage\n\n```html\n<sc-text-input\n  id=\"plate-number\"\n  name=\"plateNumber\"\n  label=\"Plate number\"\n  hint=\"Up to 5 digits, for example 12345\"\n  width=\"10\"\n  inputmode=\"numeric\"\n  ltr\n></sc-text-input>\n```\n\n### Field behaviour (shared by every v2 field)\n\n- **Light DOM (decision A2).** The component renders a native `<label>`, `<input>`, hint and error as its own children, with per-instance IDs (`sc-text-input-3-control`). Don't add a separate `<label>`. There is no `::part()`; if you must restyle, use `.sc-field`, `.sc-field__label`, `.sc-field__hint`, `.sc-field__error`, `.sc-field__frame` and `.sc-field__control` (your unlayered CSS wins over `@layer sc.components`).\n- **Label:** always visible, label-large Bold in both scripts. Write it as the thing to enter (\"Plate number\") or as the question (\"What is your plate number?\").\n- **Hint:** the format with a real example, linked with `aria-describedby`.\n- **Optional:** `optional` appends \"(optional)\" / \"(اختياري)\". Required fields are not marked. `required` turns on native validation (`valueMissing`) but shows nothing.\n- **Error:** set `error` after your validation rejects the answer. The group gets a 4px error bar at inline-start, the box a 2px error edge, and the message an icon and a visually hidden \"Error:\" / \"خطأ:\"; the input gets `aria-invalid=\"true\"`. List the error in `sc-error-summary` too, linking to the field's `id`. Say what to do: \"Enter numbers only, like 12345\".\n- **Rich content:** a child with `slot=\"label\"`, `slot=\"hint\"`, `slot=\"error\"`, `slot=\"prefix\"` or `slot=\"suffix\"` is moved into place once, when the component loads. Frameworks that own children (React) must render it once and not re-render it.\n- **Focus from an error summary:** `focus()` on the host is forwarded to the input, so `document.getElementById('plate-number').focus()` lands in it.\n- **Page heading:** with one question on the page, set `heading-level=\"1\"`: `<h1><label>…</label></h1>`.\n\n### Width\n\n`width=\"2\"`, `\"3\"`, `\"4\"`, `\"5\"`, `\"10\"` or `\"20\"` characters, or `full` (default). A plate code is `4`, a plate number `10`, an Emirates ID `20`.\n\n### Left-to-right values\n\nPlates, phone numbers, emails, IBANs and references: add `ltr`. The input gets `dir=\"ltr\"` with spellcheck and auto-capitalisation off, and in Arabic the value still sits at the start (right) of the box. Don't put `dir` on the host.\n\n### Prefix and suffix\n\n`prefix-text=\"AED\"`, `suffix-text=\"km\"`: a quiet segment inside the box, part of the input's description (\"Amount, AED\").\n\n### Forms\n\nThe input is native: it submits under `name`, **Enter submits the form through its default button** (the first `<sc-button type=\"submit\">`), `form.reset()` restores the initial `value`, `<fieldset disabled>` disables it, and `required`, `type=\"email\"`, `pattern`, `minlength` and `maxlength` drive the browser's own validation (`input.matches(':invalid')`, `reportValidity()`). Native `input` and `change` bubble from the input; `scInput` and `scChange` carry `{ value }`. Digits typed in Arabic-Indic forms become Latin digits as they are typed (LANG-21).\n\nThe `error` prop is presentation only: it never blocks submission.\n\n### Content\n\nSentence case, no colon after the label, no placeholder text. Use the journey's words: \"Plate number\", \"Plate code\", \"Issuing authority\".\n\n### Arabic\n\nStrings follow the closest `lang`; the Arabic type scale applies with no letter-spacing; digits stay Latin; the error bar moves to the right. The box stays 56px.\n",
+      "docs": "A single-line answer, such as a plate number, an email address or a phone number.\n\nv2 renders its label, hint, error and a native `<input>` in light DOM (Stencil `scoped`,\ndecision A2). The input is a real form control: it submits under `name`, Enter submits the\nform through its default button, and validation, reset, autofill and `<fieldset disabled>`\nare native. `focus()` on the host reaches the input, so an error-summary link to the host's\n`id` works. Styles: the classes `.sc-field`, `.sc-field__label`, `.sc-field__frame`,\n`.sc-field__control` (no `::part()`).\n\nRich content: a child element with `slot=\"label\"`, `slot=\"hint\"`, `slot=\"error\"`,\n`slot=\"prefix\"` or `slot=\"suffix\"` is moved into place once, when the component loads.",
+      "docsTags": [],
       "usage": {},
       "props": [
         {
@@ -10708,7 +10405,7 @@
           "mutable": false,
           "attr": "error",
           "reflectToAttr": true,
-          "docs": "The error message. Setting it shows the error state: a 3px error bar on the start side,\nan error border on the input, the message with an icon and a visually hidden \"Error:\",\nand `aria-invalid`. Say what to do: \"Enter numbers only, like 12345\".",
+          "docs": "The error message. Setting it shows the error state: a 4px error bar at inline-start, a\n2px error edge on the box, the message with an icon and a visually hidden \"Error:\", and\n`aria-invalid`. Say what to do: \"Enter numbers only, like 12345\".",
           "docsTags": [],
           "values": [
             {
@@ -10895,7 +10592,7 @@
           "mutable": false,
           "attr": "ltr",
           "reflectToAttr": true,
-          "docs": "Keeps the value left-to-right (plates, phone numbers, emails, references). In Arabic the\nvalue still sits at the start (right) of the box. Use this, not `dir` on the host, which\nwould flip the label and hint too.",
+          "docs": "Keeps the value left-to-right (plates, phone numbers, emails, references). In Arabic the\nvalue still sits at the start (right) of the box. Use this, not `dir` on the host.",
           "docsTags": [
             {
               "name": "default",
@@ -11057,7 +10754,7 @@
           "mutable": false,
           "attr": "prefix-text",
           "reflectToAttr": false,
-          "docs": "Text before the value inside the box, such as \"AED\". (Named `prefixText` because `prefix` is a reserved DOM property.)",
+          "docs": "Text before the value inside the box, such as \"AED\".",
           "docsTags": [],
           "values": [
             {
@@ -11315,7 +11012,7 @@
           },
           "cancelable": true,
           "composed": true,
-          "docs": "Fires when the value is committed (blur after a change) with `{ value }`. A native `change` event is also dispatched on the host.",
+          "docs": "Fires when the value is committed (blur after a change) with `{ value }`. The native `change` event also bubbles from the input.",
           "docsTags": []
         },
         {
@@ -11329,68 +11026,14 @@
           },
           "cancelable": true,
           "composed": true,
-          "docs": "Fires on every keystroke with `{ value }`. The native `input` event also reaches the host.",
+          "docs": "Fires on every keystroke with `{ value }`. The native `input` event also bubbles from the input.",
           "docsTags": []
         }
       ],
       "listeners": [],
       "styles": [],
-      "slots": [
-        {
-          "name": "error",
-          "docs": "Rich error content, instead of the `error` prop."
-        },
-        {
-          "name": "hint",
-          "docs": "Rich hint content (for example with a link), instead of the `hint` prop."
-        },
-        {
-          "name": "label",
-          "docs": "Rich label content, instead of the `label` prop."
-        },
-        {
-          "name": "prefix",
-          "docs": "Content before the value inside the box, instead of `prefix-text`."
-        },
-        {
-          "name": "suffix",
-          "docs": "Content after the value inside the box, instead of `suffix-text`."
-        }
-      ],
-      "parts": [
-        {
-          "name": "control",
-          "docs": "The native `<input>`."
-        },
-        {
-          "name": "error",
-          "docs": "The error message."
-        },
-        {
-          "name": "field",
-          "docs": "The field group (gets the error bar)."
-        },
-        {
-          "name": "frame",
-          "docs": "The bordered box around the input, prefix and suffix."
-        },
-        {
-          "name": "hint",
-          "docs": "The hint."
-        },
-        {
-          "name": "label",
-          "docs": "The `<label>`."
-        },
-        {
-          "name": "prefix",
-          "docs": "The prefix box."
-        },
-        {
-          "name": "suffix",
-          "docs": "The suffix box."
-        }
-      ],
+      "slots": [],
+      "parts": [],
       "states": [],
       "dependents": [],
       "dependencies": [],
@@ -11398,52 +11041,11 @@
     },
     {
       "filePath": "src/components/sc-textarea/sc-textarea.tsx",
-      "encapsulation": "shadow",
+      "encapsulation": "scoped",
       "tag": "sc-textarea",
-      "readme": "# sc-textarea\n\nA longer answer that can run to several sentences: why a registration is being cancelled, a description of damage, a note for the inspector. For one line use `sc-text-input`.\n\n## Usage\n\n```html\n<sc-textarea\n  name=\"reason\"\n  label=\"Why are you cancelling the registration?\"\n  hint=\"For example, the vehicle was sold or exported\"\n  maxlength=\"200\"\n></sc-textarea>\n```\n\nLabel, hint, `optional`, `error`, `required`, `heading-level`, form association and focus delegation work exactly as in `sc-text-input` (see its readme).\n\n### Character count\n\nSet `maxlength` to show a count under the box: \"You have 120 characters remaining\" / \"يتبقى لديك 120 حرفًا\".\n\n- **Typing isn't cut off.** People can type past the limit (no native `maxlength`), then the count says \"You have 6 characters too many\" in the error colour, the box gets the error border and `aria-invalid`, and the field reports `tooLong`, so the form won't pass `checkValidity()`. Editing down is easier than finding out the end of your text was silently dropped.\n- **Announced politely, after a pause.** The visible count changes on every keystroke but is hidden from screen readers. A separate polite live region (`aria-live=\"polite\"`, `aria-atomic`) is updated once typing has paused for one second, so screen reader users hear the count when they stop, not on every key.\n- **Described up front.** \"You can enter up to 200 characters\" is part of the textarea's description, so the limit is heard on focus.\n- **Arabic plurals.** The Arabic count uses the right form for the number (حرف واحد، حرفان، 3 أحرف، 120 حرفًا، 100 حرف), chosen with `Intl.PluralRules('ar')`. Characters are counted as people see them, so an emoji counts as one.\n\nUse a limit only when there is a real one (a system field length). Size the box with `rows` to fit a typical answer.\n",
-      "docs": "A longer answer, such as a reason or a description, with an optional character count.\n\nRenders its own label, hint, error, native `<textarea>` and count in one shadow root.\nThe count is shown as you type, but announced to screen readers politely, once typing\npauses, never on every keystroke. Form-associated and delegates focus, like `sc-text-input`.",
-      "docsTags": [
-        {
-          "name": "slot",
-          "text": "label - Rich label content, instead of the `label` prop."
-        },
-        {
-          "name": "slot",
-          "text": "hint - Rich hint content, instead of the `hint` prop."
-        },
-        {
-          "name": "slot",
-          "text": "error - Rich error content, instead of the `error` prop."
-        },
-        {
-          "name": "part",
-          "text": "field - The field group (gets the error bar)."
-        },
-        {
-          "name": "part",
-          "text": "label - The `<label>`."
-        },
-        {
-          "name": "part",
-          "text": "hint - The hint."
-        },
-        {
-          "name": "part",
-          "text": "error - The error message."
-        },
-        {
-          "name": "part",
-          "text": "frame - The bordered box around the textarea."
-        },
-        {
-          "name": "part",
-          "text": "control - The native `<textarea>`."
-        },
-        {
-          "name": "part",
-          "text": "count - The visible character count."
-        }
-      ],
+      "readme": "# sc-textarea\n\nA longer answer that can run to several sentences: why a registration is being cancelled, a description of damage, a note for the inspector. For one line use `sc-text-input`.\n\n## Usage\n\n```html\n<sc-textarea\n  name=\"reason\"\n  label=\"Why are you cancelling the registration?\"\n  hint=\"For example, the vehicle was sold or exported\"\n  maxlength=\"200\"\n></sc-textarea>\n```\n\nLabel, hint, `optional`, `error`, `required`, `heading-level`, rich slots and focus forwarding work exactly as in `sc-text-input` (see its readme). v2 renders a native `<textarea>` in light DOM (decision A2): it submits under `name`, resets and follows `<fieldset disabled>` natively. Enter adds a new line; it never submits.\n\n### Character count\n\nSet `maxlength` to show a count under the box: \"You have 120 characters remaining\" / \"يتبقى لديك 120 حرفًا\".\n\n- **Typing isn't cut off.** People can type past the limit (no native `maxlength`), then the count says \"You have 6 characters too many\" in the error colour, the box gets the error border and `aria-invalid`, and the textarea reports a custom validity error with the same words (`setCustomValidity`), so the form won't pass `checkValidity()`. Editing down is easier than finding out the end of your text was silently dropped.\n- **Announced politely, after a pause.** The visible count changes on every keystroke but is hidden from screen readers. A separate polite live region (`aria-live=\"polite\"`, `aria-atomic`) is updated once typing has paused for one second, so screen reader users hear the count when they stop, not on every key.\n- **Described up front.** \"You can enter up to 200 characters\" is part of the textarea's description, so the limit is heard on focus.\n- **Arabic plurals.** The Arabic count uses the right form for the number (حرف واحد، حرفان، 3 أحرف، 120 حرفًا، 100 حرف), chosen with `Intl.PluralRules('ar')`. Characters are counted as people see them, so an emoji counts as one.\n\nUse a limit only when there is a real one (a system field length). Size the box with `rows` to fit a typical answer.\n",
+      "docs": "A longer answer, such as a reason or a description, with an optional character count.\n\nv2 renders its label, hint, error, a native `<textarea>` and the count in light DOM\n(Stencil `scoped`, decision A2), so the textarea is a real form control. The count is shown\nas you type but announced politely only once typing pauses. People can type past the limit:\nthe count then says how many characters to remove and the textarea reports a custom\nvalidity error, which is easier to fix than text that silently stops.\n\nRich content: a child with `slot=\"label\"`, `slot=\"hint\"` or `slot=\"error\"` is moved into place once.",
+      "docsTags": [],
       "usage": {},
       "props": [
         {
@@ -11512,7 +11114,7 @@
           "mutable": false,
           "attr": "error",
           "reflectToAttr": true,
-          "docs": "The error message. Setting it shows the error state (bar, border, icon, \"Error:\", `aria-invalid`).",
+          "docs": "The error message. Setting it shows the error state (bar, edge, icon, \"Error:\", `aria-invalid`).",
           "docsTags": [],
           "values": [
             {
@@ -11644,7 +11246,7 @@
           "mutable": false,
           "attr": "maxlength",
           "reflectToAttr": false,
-          "docs": "Shows a character count for this limit: \"You have 120 characters remaining\". People can\ntype past it (the count then says how many to remove and the field reports `tooLong`),\nwhich is easier to fix than text that silently stops.",
+          "docs": "Shows a character count for this limit: \"You have 120 characters remaining\". People can\ntype past it; the count then says how many to remove and the field is invalid.",
           "docsTags": [],
           "values": [
             {
@@ -11783,7 +11385,7 @@
           "mutable": false,
           "attr": "rows",
           "reflectToAttr": false,
-          "docs": "Visible height in lines.",
+          "docs": "Visible height in lines (at least 3).",
           "docsTags": [
             {
               "name": "default",
@@ -11844,7 +11446,7 @@
           },
           "cancelable": true,
           "composed": true,
-          "docs": "Fires when the value is committed with `{ value }`. A native `change` is also dispatched on the host.",
+          "docs": "Fires when the value is committed with `{ value }`. The native `change` event also bubbles.",
           "docsTags": []
         },
         {
@@ -11858,56 +11460,14 @@
           },
           "cancelable": true,
           "composed": true,
-          "docs": "Fires on every keystroke with `{ value }`.",
+          "docs": "Fires on every keystroke with `{ value }`. The native `input` event also bubbles.",
           "docsTags": []
         }
       ],
       "listeners": [],
       "styles": [],
-      "slots": [
-        {
-          "name": "error",
-          "docs": "Rich error content, instead of the `error` prop."
-        },
-        {
-          "name": "hint",
-          "docs": "Rich hint content, instead of the `hint` prop."
-        },
-        {
-          "name": "label",
-          "docs": "Rich label content, instead of the `label` prop."
-        }
-      ],
-      "parts": [
-        {
-          "name": "control",
-          "docs": "The native `<textarea>`."
-        },
-        {
-          "name": "count",
-          "docs": "The visible character count."
-        },
-        {
-          "name": "error",
-          "docs": "The error message."
-        },
-        {
-          "name": "field",
-          "docs": "The field group (gets the error bar)."
-        },
-        {
-          "name": "frame",
-          "docs": "The bordered box around the textarea."
-        },
-        {
-          "name": "hint",
-          "docs": "The hint."
-        },
-        {
-          "name": "label",
-          "docs": "The `<label>`."
-        }
-      ],
+      "slots": [],
+      "parts": [],
       "states": [],
       "dependents": [],
       "dependencies": [],
@@ -12487,6 +12047,11 @@
       "docstring": "",
       "path": "src/components/sc-error-summary/sc-error-summary.tsx"
     },
+    "src/components/sc-filter-chips/sc-filter-chips.tsx::FilterChip": {
+      "declaration": "export interface FilterChip {\n  /** What the filter is, sent back in `scRemove`. */\n  value: string;\n  /** What people see: \"Transport and vehicles\". */\n  label: string;\n}",
+      "docstring": "",
+      "path": "src/components/sc-filter-chips/sc-filter-chips.tsx"
+    },
     "src/components/sc-footer/sc-footer.tsx::FooterVariant": {
       "declaration": "export type FooterVariant = 'simple' | 'grouped';",
       "docstring": "",
@@ -12541,6 +12106,11 @@
       "declaration": "export interface PaginationChangeDetail {\n  /** The page asked for (1-based). */\n  page: number;\n}",
       "docstring": "",
       "path": "src/components/sc-pagination/sc-pagination.tsx"
+    },
+    "src/components/sc-search/sc-search.tsx::SearchSize": {
+      "declaration": "export type SearchSize = 'm' | 'l';",
+      "docstring": "",
+      "path": "src/components/sc-search/sc-search.tsx"
     },
     "src/components/sc-search/sc-search.tsx::ScSearchDetail": {
       "declaration": "export interface ScSearchDetail {\n  /** The query as typed, trimmed. */\n  value: string;\n}",
@@ -12627,10 +12197,10 @@
       "docstring": "",
       "path": "src/components/sc-date-input/date.ts"
     },
-    "src/components/sc-table/overrides.ts::StringsInput": {
+    "src/components/sc-date-range/overrides.ts::StringsInput": {
       "declaration": "export type StringsInput = string | Record<string, unknown> | undefined | null;",
       "docstring": "",
-      "path": "src/components/sc-table/overrides.ts"
+      "path": "src/components/sc-date-range/overrides.ts"
     }
   }
 }

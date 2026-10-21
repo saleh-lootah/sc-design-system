@@ -17,7 +17,7 @@ A start and an end date that relate to a calendar: filtering payments or fines b
 ></sc-date-range>
 ```
 
-- **Field:** a `<fieldset>` and `<legend>`, the hint, then one 54px frame with two typed segments, From and To (من / إلى), an arrow between them (→, ← in Arabic) and a calendar button at inline-end. People can always type: "21/9/2026", "21 9 2026" and "21-09-2026" all work, and each segment is formatted on blur ("21 Sep 2026").
+- **Field:** a `<fieldset>` and `<legend>`, the hint, then one 56px frame with two typed segments, From and To (من / إلى), an arrow between them (→, ← in Arabic) and a calendar button at inline-end. People can always type: "21/9/2026", "21 9 2026" and "21-09-2026" all work, and each segment is formatted on blur ("21 Sep 2026").
 - **Picker:** the calendar button opens a popover on medium and wider screens: one or two months (`months`, `auto` shows two from 720px), always 6 weeks, Monday first, and optional presets at inline-start. The first click sets the start, the second the end; a day before the start, or any day after a complete range, starts again. Apply writes both dates, closes the picker and returns focus to the button; Escape or a click outside closes without changes. Below 600px it is a modal bottom sheet with From / To chips, preset chips and a scrolling list of months; it can be dragged down to close.
 - **Presets:** `presets` shows Today, Last 7 days, Last 30 days, This month, Last month and This year (clamped to `min` / `max`). Pass a JSON list to replace them, for a booking calendar: `[{"label": "This weekend", "start": "2026-10-24", "end": "2026-10-25"}]`. A preset applies at once and doesn't close the picker.
 - **Limits:** `min` and `max` disable days outside them (for payment filters, `max` is today); `min-days` and `max-days` disable days that would make the range too short or too long once a start is chosen, and the footer says "You can choose up to 90 days".
@@ -36,15 +36,20 @@ A start and an end date that relate to a calendar: filtering payments between tw
 the nights of a hotel stay, how long a permit lasts. For one date people already know
 (a date of birth), use `sc-date-input`.
 
-Two typed segments (From / To, من / إلى) in one 54px frame, and a calendar button that
+Two typed segments (From / To, من / إلى) in one 56px frame, and a calendar button that
 opens a picker: a popover with one or two months and optional presets on medium and
 wider screens, a modal bottom sheet below 600px. People can always type instead
 ("21/9/2026", "21 9 2026", "21-09-2026").
 
-Form-associated: submits `name-start` and `name-end` as ISO dates (empty until each is a
-real date). Reports `valueMissing` (with `required`), `badInput`, `rangeUnderflow` and
-`rangeOverflow`, and shows its own messages for impossible ranges on blur. Delegates focus
-to the start segment.
+v2 renders everything in light DOM (Stencil `scoped`, decision A2), with classes prefixed
+`.sc-date-range__`. It submits `name-start` and `name-end` as ISO dates through hidden
+inputs (empty until each is a real date). The first problem with the range (missing with
+`required`, not a real date, end before start, outside `min`/`max`, too long or short) is a
+native validity error on the segment concerned; the component shows its own message on
+blur or after a failed submit. `focus()` on the host goes to the start segment. One native
+`change` is dispatched from the host per committed range.
+
+Rich content: a child with `slot="label"`, `slot="hint"` or `slot="error"` is moved into place once.
 
 ## Properties
 
@@ -111,29 +116,6 @@ Focuses the start segment.
 Type: `Promise<void>`
 
 
-
-
-## Slots
-
-| Slot      | Description                                       |
-| --------- | ------------------------------------------------- |
-| `"error"` | Rich error content, instead of the `error` prop.  |
-| `"hint"`  | Rich hint content, instead of the `hint` prop.    |
-| `"label"` | Rich legend content, instead of the `label` prop. |
-
-
-## Shadow Parts
-
-| Part                | Description                                                  |
-| ------------------- | ------------------------------------------------------------ |
-| `"calendar-button"` | The button that opens the picker.                            |
-| `"control"`         | Each native `<input>`.                                       |
-| `"error"`           | The error message.                                           |
-| `"field"`           | The `<fieldset>` (gets the error bar).                       |
-| `"frame"`           | The 54px frame around both segments and the calendar button. |
-| `"hint"`            | The hint.                                                    |
-| `"label"`           | The `<legend>`.                                              |
-| `"picker"`          | The popover or bottom sheet.                                 |
 
 
 ## Dependencies

@@ -89,6 +89,38 @@ sc-utility-bar:not(:defined) {
   scroll-padding-block-end: var(--sc-utility-bar-block-size, 0px);
 }
 
+/* Form fields (C3): block until upgraded, at least their final label + 56px box, so the box
+   never jumps in. A hint or error adds to this once rendered (they come from props, so the
+   component's own first render already has them). */
+:is(sc-text-input, sc-textarea, sc-select, sc-date-input, sc-date-range, sc-search, sc-checkbox-group, sc-radio-group, sc-checkbox, sc-radio, sc-filter-chips):not(:defined) {
+  display: block;
+}
+:is(sc-text-input, sc-select, sc-date-range):not(:defined) {
+  min-block-size: calc(var(--sc-type-label-large-leading) + var(--sc-space-8) + var(--sc-size-control-primary));
+}
+sc-textarea:not(:defined) {
+  min-block-size: calc(var(--sc-type-label-large-leading) + var(--sc-space-8) + 3 * var(--sc-type-body-large-leading) + 2 * var(--sc-space-12));
+}
+sc-date-input:not(:defined) {
+  min-block-size: calc(var(--sc-type-label-large-leading) + var(--sc-type-label-medium-leading) + 2 * var(--sc-space-8) + var(--sc-size-control-primary));
+}
+sc-search:not(:defined) {
+  --_box: var(--sc-size-control-primary);
+  min-block-size: calc(var(--sc-type-label-large-leading) + var(--sc-space-8) + var(--_box));
+}
+sc-search[size='l']:not(:defined) {
+  --_box: calc(var(--sc-size-control-primary) + var(--sc-space-8));
+}
+sc-search[label-hidden]:not(:defined) {
+  min-block-size: var(--_box);
+}
+:is(sc-checkbox, sc-radio):not(:defined) {
+  min-block-size: var(--sc-size-control-secondary);
+}
+sc-filter-chips:not(:defined) {
+  min-block-size: var(--sc-size-chip);
+}
+
 /* C2 navigation. Shadow components whose items are plain child links: before upgrade the
    links show as a simple list at about their final size. */
 sc-breadcrumbs:not(:defined) {

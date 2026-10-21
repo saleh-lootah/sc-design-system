@@ -1,10 +1,10 @@
-<h1 class="pg-title sc-type-heading-xl" data-ar="أزرار الاختيار">Radio group</h1>
-<p class="pg-lede sc-type-body-m" data-ar="لاختيار واحد من قائمة قصيرة. الأزرار أصلية وفي شجرة واحدة: إيقاف واحد بمفتاح Tab، وتنقّل واختيار بالأسهم.">
+<h1 class="pg-title sc-type-headline-large" data-ar="أزرار الاختيار">Radio group</h1>
+<p class="pg-lede sc-type-body-large" data-ar="لاختيار واحد من قائمة قصيرة. الأزرار أصلية وفي شجرة واحدة: إيقاف واحد بمفتاح Tab، وتنقّل واختيار بالأسهم.">
   One choice from a short list. The radios are native and share one tree: one Tab stop, and the arrow keys move and select.
 </p>
 
 <section class="pg-section" aria-labelledby="rg-default">
-  <h2 id="rg-default" class="sc-type-heading-m" data-ar="الاستخدام">Usage</h2>
+  <h2 id="rg-default" class="sc-type-headline-small" data-ar="الاستخدام">Usage</h2>
   <div class="pg-card">
     <form id="rg-form" novalidate>
       <sc-radio-group name="delivery" label="How do you want to receive your registration card?" data-ar-label="ما الطريقة المفضّلة لاستلام بطاقة الملكية؟" hint="Your digital card is ready straight away" data-ar-hint="تكون البطاقة الرقمية جاهزة فورًا" value="digital">
@@ -22,7 +22,7 @@
 </section>
 
 <section class="pg-section" aria-labelledby="rg-states">
-  <h2 id="rg-states" class="sc-type-heading-m" data-ar="الحالات">States</h2>
+  <h2 id="rg-states" class="sc-type-headline-small" data-ar="الحالات">States</h2>
   <div class="pg-card">
     <div class="pg-grid" style="grid-template-columns: repeat(auto-fill, minmax(340px, 1fr))">
       <div class="pg-cell">
@@ -59,7 +59,7 @@
 </section>
 
 <section class="pg-section" aria-labelledby="rg-arabic">
-  <h2 id="rg-arabic" class="sc-type-heading-m" data-ar="بالعربية">In Arabic</h2>
+  <h2 id="rg-arabic" class="sc-type-headline-small" data-ar="بالعربية">In Arabic</h2>
   <div class="pg-card" lang="ar" dir="rtl">
     <div class="pg-grid" style="grid-template-columns: repeat(auto-fill, minmax(340px, 1fr))">
       <sc-radio-group label="ما الطريقة المفضّلة لاستلام بطاقة الملكية؟" value="digital">
@@ -76,7 +76,7 @@
 </section>
 
 <section class="pg-section" aria-labelledby="rg-a11y">
-  <h2 id="rg-a11y" class="sc-type-heading-m" data-ar="كيف تعمل إمكانية الوصول">How the accessibility works</h2>
+  <h2 id="rg-a11y" class="sc-type-headline-small" data-ar="كيف تعمل إمكانية الوصول">How the accessibility works</h2>
   <div class="pg-card">
     <p class="pg-note" style="margin: 0" data-ar="ترسم المجموعة حقلًا (fieldset) بدور radiogroup، وزر اختيار أصليًا لكل sc-radio، كلها داخل جذر ظل واحد. يوضع كل sc-radio داخل تسمية زره بالإسناد اليدوي للفتحات، فيسمّي محتواه الزر بينما تبقى الأزرار في شجرة واحدة.">
       The group renders a fieldset with role="radiogroup" and one native radio per sc-radio, all in its own shadow root. Each sc-radio is slotted into its radio's label with manual slot assignment, so its content names the radio while the radios stay in one tree.

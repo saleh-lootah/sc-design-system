@@ -1,0 +1,48 @@
+<h1 class="pg-title sc-type-headline-large" data-ar="شرائح التصفية">Filter chips</h1>
+<p class="pg-lede sc-type-body-large" data-ar="عوامل التصفية المطبّقة على النتائج، كشرائح يمكن إزالتها بجانب عدد النتائج.">
+  The filters applied to a list of results, as removable chips beside the result count.
+</p>
+
+<section class="pg-section" aria-labelledby="fc-demo">
+  <h2 id="fc-demo" class="sc-type-headline-small" data-ar="عوامل التصفية المطبّقة">Applied filters</h2>
+  <div class="pg-card">
+    <h3 id="fc-results" class="sc-type-title-large" data-ar="24 نتيجة">24 results</h3>
+    <sc-filter-chips id="fc" focus-target="fc-results"
+      filters='[{"value":"transport","label":"Transport and vehicles"},{"value":"online","label":"Paid online"},{"value":"2026","label":"2026"}]'
+      data-ar-filters='[{"value":"transport","label":"النقل والمركبات"},{"value":"online","label":"مدفوع إلكترونيًا"},{"value":"2026","label":"2026"}]'></sc-filter-chips>
+    <p class="pg-output" id="fc-output" role="status"></p>
+    <p class="pg-note" data-ar="تختفي الشريحة فور إزالتها، وينتقل التركيز إلى الشريحة التالية أو إلى عنوان النتائج، ويُعلن العدد الجديد.">A removed chip goes at once; focus moves to the next chip or to the results heading, and the new count is announced.</p>
+    <p><button type="button" id="fc-reset" class="sc-link" style="background:none;border:0;padding:0;font:inherit;cursor:pointer" data-ar="إعادة عوامل التصفية">Put the filters back</button></p>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="fc-channels">
+  <h2 id="fc-channels" class="sc-type-headline-small" data-ar="بألوان القنوات">On other channels</h2>
+  <div class="pg-card">
+    <sc-filter-chips data-channel="transport" filters='[{"value":"bus","label":"Buses"},{"value":"metro","label":"Metro"}]' data-ar-filters='[{"value":"bus","label":"الحافلات"},{"value":"metro","label":"المترو"}]'></sc-filter-chips>
+    <div style="block-size: var(--sc-space-16)"></div>
+    <sc-filter-chips data-channel="trade" filters='[{"value":"l","label":"Licences"}]' data-ar-filters='[{"value":"l","label":"الرخص"}]'></sc-filter-chips>
+    <p class="pg-note" data-ar="الشرائح بارتفاع 32 بكسل ومساحة لمس 44 بكسل.">Chips are 32px tall with a 44px target (decision Q-chips).</p>
+  </div>
+</section>
+
+<script>
+  {
+    const preview = document.getElementById('preview');
+    const chips = () => [...preview.querySelectorAll('sc-filter-chips[data-ar-filters]')];
+    const apply = () => {
+      const ar = preview.lang === 'ar';
+      for (const el of chips()) {
+        if (!el.dataset.enFilters) el.dataset.enFilters = el.getAttribute('filters');
+        el.filters = ar ? el.dataset.arFilters : el.dataset.enFilters;
+      }
+    };
+    new MutationObserver(apply).observe(preview, { attributes: true, attributeFilter: ['lang'] });
+    apply();
+    const fc = document.getElementById('fc');
+    const out = document.getElementById('fc-output');
+    fc.addEventListener('scRemove', (ev) => (out.textContent = `scRemove: ${ev.detail.value}`));
+    fc.addEventListener('scClear', () => (out.textContent = 'scClear'));
+    document.getElementById('fc-reset').addEventListener('click', apply);
+  }
+</script>
