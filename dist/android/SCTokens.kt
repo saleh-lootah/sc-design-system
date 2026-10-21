@@ -391,8 +391,8 @@ object SCSize {
     val borderHairline = 1.dp // Dividers and card edges
     val borderControl = 1.5.dp // Control boundaries
     val borderStrong = 2.dp // Error and selected boundaries, stepper connectors
-    val borderAccent = 3.dp // Bar on the start side of an error field group or callout
-    val strip = 4.dp // The network and channel strip at the top of the header
+    val borderAccent = 3.dp // Outlines that need a 3px accent. Start bars (field errors, callouts) use size-strip (W20)
+    val strip = 4.dp // The network and channel strip at the top of the header, and the start bar of a field error or callout (W11, W20)
     val measure = 680.dp // Maximum width of running text
 }
 

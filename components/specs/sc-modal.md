@@ -1,6 +1,6 @@
 # sc-modal · specification (v2, new)
 
-Status: new in v2, built by C4 (Wave 2b). Rules: `docs/v2/component-language.md` B19 read through `docs/v2/decisions.md` (shadow-3 is `elevation-2`), FND-19/20, MOT-01 to MOT-15 with the modal and drawer rule (200–300ms, exits about 20% faster), W2 (`duration-slow` 280ms), TIME-01 to TIME-03. Code: `src/components/sc-modal`.
+Status: new in v2, built by C4 (Wave 2b). Rules: `docs/v2/component-language.md` B19 read through `docs/v2/decisions.md` (shadow-3 is `elevation-2`), FND-19/20, MOT-01 to MOT-15 with the modal and drawer rule (200–300ms, exits about 20% faster), W2 (`duration-slow` 280ms), W21 (dialog 200 / 160ms, sheet 280 / 224ms), TIME-01 to TIME-03. Code: `src/components/sc-modal`.
 
 ## Encapsulation
 
@@ -30,11 +30,11 @@ Status: new in v2, built by C4 (Wave 2b). Rules: `docs/v2/component-language.md`
 
 | | Enter | Exit |
 | --- | --- | --- |
-| Dialog | opacity and `scale(--sc-scale-enter)` → 1, from its own centre (MOT-08), `duration-slow` 280ms, `easing-enter` | `calc(duration-slow × 0.8)` 224ms, `easing-exit` |
-| Sheet | `translateY(100%)` → 0, 280ms, `easing-drawer` | 224ms, `easing-drawer`; a drag hands off from where the finger left it |
+| Dialog | opacity and `scale(--sc-scale-enter)` → 1, from its own centre (MOT-08), `duration-base` 200ms, `easing-enter` (W21) | `duration-exit` 160ms, `easing-exit` |
+| Sheet | `translateY(100%)` → 0, `duration-slow` 280ms, `easing-drawer` | `calc(duration-slow × 0.8)` 224ms, `easing-drawer`; a drag hands off from where the finger left it |
 | Scrim | fades with the panel | fades with the panel |
 
-`@starting-style` and `transition-behavior: allow-discrete` on `display` and `overlay`, so transitions retarget (MOT-12). Opened while the trigger is keyboard-focused: instant (MOT-02). Reduced motion: the scale token is 1 and the sheet does not slide; only opacity remains.
+`@starting-style` and `transition-behavior: allow-discrete` on `display` and `overlay`, so transitions retarget (MOT-12). Opened while the trigger is keyboard-focused: instant (MOT-02), for the sheet too. Reduced motion: the scale token is 1 and the sheet does not slide; only opacity remains.
 
 ## RTL
 
@@ -46,4 +46,4 @@ The close button moves to the left; actions keep primary first in reading order.
 
 ## Tests
 
-Spec (labelling, close button, alertdialog, strings), e2e (modal and inert, Tab stays inside, Escape and focus return with the reason, close button, scrim, alert ignores scrim, `initial-focus`, 280 / 224ms and centred 560px, keyboard-instant, sheet geometry, drawer curve and full-width actions, countdown text and checkpoint announcements in EN and AR), axe open in EN/AR × light/dark, visual (dialog and sheet, EN/AR × light/dark).
+Spec (labelling, close button, alertdialog, strings), e2e (modal and inert, Tab stays inside, Escape and focus return with the reason, close button, scrim, alert ignores scrim, `initial-focus`, dialog 200 / 160ms and centred 560px, sheet 280 / 224ms, keyboard-instant (dialog and sheet), sheet geometry, drawer curve and full-width actions, countdown text and checkpoint announcements in EN and AR), axe open in EN/AR × light/dark, visual (dialog and sheet, EN/AR × light/dark).

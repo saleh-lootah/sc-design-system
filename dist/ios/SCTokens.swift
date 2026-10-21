@@ -588,9 +588,9 @@ public enum SCSize {
     public static let borderControl: CGFloat = 1.5
     /// Error and selected boundaries, stepper connectors
     public static let borderStrong: CGFloat = 2
-    /// Bar on the start side of an error field group or callout
+    /// Outlines that need a 3px accent. Start bars (field errors, callouts) use size-strip (W20)
     public static let borderAccent: CGFloat = 3
-    /// The network and channel strip at the top of the header
+    /// The network and channel strip at the top of the header, and the start bar of a field error or callout (W11, W20)
     public static let strip: CGFloat = 4
     /// Maximum width of running text
     public static let measure: CGFloat = 680

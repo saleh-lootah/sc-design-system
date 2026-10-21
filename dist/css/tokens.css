@@ -113,8 +113,8 @@
   --sc-size-border-hairline: 1px; /* Dividers and card edges */
   --sc-size-border-control: 1.5px; /* Control boundaries */
   --sc-size-border-strong: 2px; /* Error and selected boundaries, stepper connectors */
-  --sc-size-border-accent: 3px; /* Bar on the start side of an error field group or callout */
-  --sc-size-strip: 4px; /* The network and channel strip at the top of the header */
+  --sc-size-border-accent: 3px; /* Outlines that need a 3px accent. Start bars (field errors, callouts) use size-strip (W20) */
+  --sc-size-strip: 4px; /* The network and channel strip at the top of the header, and the start bar of a field error or callout (W11, W20) */
   --sc-size-measure: 680px; /* Maximum width of running text */
 
   /* Elevation */
