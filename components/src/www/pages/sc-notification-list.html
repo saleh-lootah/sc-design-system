@@ -1,0 +1,34 @@
+<h1 class="pg-title sc-type-headline-large" data-ar="قائمة الإشعارات">Notification list</h1>
+<p class="pg-lede sc-type-body-large" data-ar="إشعارات الشخص مجمّعة حسب اليوم. كل إشعار رابط. لديك إشعار واحد غير مقروء.">
+  A person's notifications, grouped by day. Each item is a link. You have 1 unread notification.
+</p>
+
+<section class="pg-section" aria-labelledby="n-demo">
+  <h2 id="n-demo" class="sc-type-headline-small" data-ar="الإشعارات">Notifications</h2>
+  <p><sc-button size="m" variant="secondary" id="pg-mark-read"><span data-ar="تحديد الكل كمقروء">Mark all as read</span></sc-button></p>
+  <sc-notification-list id="pg-notifications">
+    <h3 data-ar="اليوم">Today</h3>
+    <ul>
+      <li data-unread><a href="#permit"><strong data-ar="تمت الموافقة على تصريح الوقوف">Parking permit approved</strong><span data-ar="تصريحك في البرشاء جاهز للتنزيل.">Your permit for Al Barsha is ready to download.</span></a><time datetime="2026-10-21T09:40">09:40</time></li>
+      <li><a href="#fine"><strong data-ar="تم دفع المخالفة">Fine paid</strong><span data-ar="تم استلام 600 درهم لمخالفة السرعة.">We received AED 600 for fine F-2026-118204.</span></a><time datetime="2026-10-21T08:12">08:12</time></li>
+    </ul>
+    <h3 data-ar="سابقًا">Earlier</h3>
+    <ul>
+      <li><a href="#renewed"><strong data-ar="تم تجديد التسجيل">Registration renewed</strong><span data-ar="صالح حتى 18 أكتوبر 2027.">Valid until 18 October 2027.</span></a><time datetime="2026-10-12" data-ar="12 أكتوبر">12 Oct</time></li>
+    </ul>
+  </sc-notification-list>
+</section>
+
+<section class="pg-section" aria-labelledby="n-notes">
+  <h2 id="n-notes" class="sc-type-headline-small" data-ar="ملاحظات">Notes</h2>
+  <div class="pg-card">
+    <p class="pg-note" data-ar="غير المقروء: خلفية القناة الفاتحة، ونقطة بلون القناة، وعنوان عريض، وكلمة مخفية «غير مقروء:». تحديد الكل كمقروء يتلاشى خلال 200 مللي ثانية بالمؤشر، وفوريًا من لوحة المفاتيح.">Unread: channel-subtle fill, a channel dot, a Bold title and a hidden "Unread:". Mark all as read fades over 200ms with a pointer and is instant from the keyboard (MOT-02). Under 600px the time wraps under the body.</p>
+  </div>
+</section>
+
+<script>
+{
+  const button = document.getElementById('pg-mark-read');
+  button.addEventListener('click', () => document.getElementById('pg-notifications').markAllRead());
+}
+</script>

@@ -150,3 +150,21 @@ All shadow DOM, as architecture §3.1 says for links and chrome. Full detail in 
 | `sc-pagination` (new) | Replaces hand-built Previous / Next links and the "Showing 1–20 of 1,284" lines in `sc-table` footers. |
 | `sc-account-nav` (new) | Plain child links with `data-icon`, `data-count`, `data-count-label`, `data-sign-out` and `aria-current`. |
 | `sc-bottom-nav` (new) | Plain child links with `data-icon` and `aria-current`. `sc.css` reserves its height below 1024px; remove any page padding you added for a v1 floating capsule. |
+## 6. Feedback and status (C4, Wave 2b)
+
+| Tag | Mode | Changes for services |
+| --- | --- | --- |
+| `sc-callout` | Shadow | Look only (tone-95 container, 3px start accent, 8px radius; `info` is now blue). API, slots and parts unchanged. |
+| `sc-error-summary` | Shadow | Look only (no "!" badge, no shadow; error-container fill, 2px border). Neutral U1 focus ring. Arabic heading "توجد مشكلة" (W1). CMP-05 unchanged: focus, `role="group"`, no `role="alert"`. Item links may target a v2 field's native control or its host. |
+| `sc-status-tag` | Shadow | 6px chip with an **icon** instead of a pill with a dot. New tone `info`. **`tone="channel"` is removed** and renders as `neutral`. Part `dot` → `icon`. |
+| `sc-spinner` | Shadow | New `size` (`m` 20px, `l` 24px). Turns once per 600ms. |
+| `sc-step-progress` | Shadow | The E stepper replaces the segmented track. New: step names as child elements or the `steps` property, `layout` (`auto` \| `compact` \| `full`), part `list`. With names it renders an `<ol>` with `aria-current="step"` from 600px wide. Completed steps are channel-coloured with a check, never green (U2). |
+| `sc-step-list` | Light DOM | New. Write the native `<ol>`; mark another channel's rows with `data-channel`. |
+| `sc-timeline` | Light DOM | New. Write the native `<ol>` of `sc-status-tag`, `<time>`, `<p>`. |
+| `sc-notification-list` | Light DOM | New. Headings plus `<ul>`; each `<li>` is one `<a>` and a `<time>`; `data-unread`; `markAllRead()`. |
+| `sc-empty-state` | Shadow | New. `heading`, `heading-level`, `icon`, `variant="success"`, slots default and `action`. |
+| `sc-modal` | Shadow (native `<dialog>`) | New. `open`/`show()`/`close()`, `heading`, `alert`, `initial-focus`, `countdown`; events `scOpen`, `scClose` (`{ reason }`), `scCountdownEnd`; a bottom sheet under 600px. |
+
+Strings moved to per-component files: `sc-error-summary.ts` (`errorSummaryHeading`), `sc-spinner.ts` (`spinnerLoading`), `sc-step-progress.ts` (`stepProgressCount` and the state words), plus new `sc-step-list.ts`, `sc-notification-list.ts`, `sc-modal.ts`. The shared `common.ts` keys `problem`, `loading` and `step` are no longer used by these components.
+
+Icons added to the shared set: `check`, `schedule`, `hourglass`, `pending`, `inbox`.

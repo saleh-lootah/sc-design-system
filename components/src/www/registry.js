@@ -43,3 +43,8 @@ page('Actions and navigation', 'sc-breadcrumbs', 'Breadcrumbs');
 page('Actions and navigation', 'sc-pagination', 'Pagination');
 page('Actions and navigation', 'sc-account-nav', 'Account navigation');
 page('Actions and navigation', 'sc-bottom-nav', 'Bottom navigation');
+page('Feedback and status', 'sc-step-list', 'Step list');
+page('Feedback and status', 'sc-timeline', 'Timeline');
+page('Feedback and status', 'sc-notification-list', 'Notification list');
+page('Feedback and status', 'sc-empty-state', 'Empty state');
+page('Feedback and status', 'sc-modal', 'Modal');

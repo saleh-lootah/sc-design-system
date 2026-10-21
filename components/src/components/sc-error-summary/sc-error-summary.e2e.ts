@@ -1,6 +1,6 @@
 import { E2EPage } from '@stencil/core/testing';
-import { expectNoAxeViolations } from '../../test/axe';
-import { contexts, newScPage, setPageContext } from '../../test/page';
+import { describeAxe } from '../../test/axe';
+import { newScPage, setPageContext } from '../../test/page';
 
 
 const FORM = `
@@ -86,7 +86,8 @@ describe('sc-error-summary (e2e)', () => {
     expect(await focusPath(page)).toBe('demo-field#plate-number>input#inner');
     const visible = await page.evaluate(() => {
       const r = document.getElementById('plate-number')!.getBoundingClientRect();
-      return r.top >= 0 && r.bottom <= innerHeight;
+      // The field ends the document, so it can only scroll to the bottom edge (allow sub-pixel rounding).
+      return r.top >= 0 && r.bottom <= innerHeight + 1;
     });
     expect(visible).toBe(true);
   });
@@ -135,39 +136,67 @@ describe('sc-error-summary (e2e)', () => {
     expect(texts).toEqual(['First', 'Second']);
   });
 
-  it('re-renders its heading when lang changes, and puts the badge on the right in RTL', async () => {
+  it('re-renders its heading when lang changes ("توجد مشكلة", W1) and aligns to the right in Arabic', async () => {
     const page = await newScPage(`<sc-error-summary no-autofocus><a href="#x">Error</a></sc-error-summary>`, { lang: 'en' });
     const heading = () => page.evaluate(() => document.querySelector('sc-error-summary')!.shadowRoot!.querySelector('h2')!.textContent);
     expect(await heading()).toBe('There is a problem');
     await setPageContext(page, { lang: 'ar' });
     expect(await heading()).toBe('توجد مشكلة');
-    const badgeRight = await page.evaluate(() => {
+    const rightAligned = await page.evaluate(() => {
       const r = document.querySelector('sc-error-summary')!.shadowRoot!;
-      return r.querySelector('.badge')!.getBoundingClientRect().left > r.querySelector('h2')!.getBoundingClientRect().left;
+      const box = r.querySelector('[part=container]')!.getBoundingClientRect();
+      return box.right - r.querySelector('h2')!.getBoundingClientRect().right < 24;
     });
-    expect(badgeRight).toBe(true);
+    expect(rightAligned).toBe(true);
   });
 
-  it('shows a channel-coloured focus ring', async () => {
+  it('is an error-container box with a 2px error border and an 8px radius; links are error, Bold, at least 44px', async () => {
+    const page = await newScPage(`<sc-error-summary no-autofocus><a href="#x">Enter the plate number</a></sc-error-summary>`);
+    const token = (n: string) =>
+      page.evaluate((name: string) => {
+        const i = document.createElement('i');
+        i.style.color = `var(${name})`;
+        document.body.append(i);
+        const c = getComputedStyle(i).color;
+        i.remove();
+        return c;
+      }, n);
+    const box = await page.evaluate(() => {
+      const r = document.querySelector('sc-error-summary')!.shadowRoot!;
+      const s = getComputedStyle(r.querySelector('[part=container]')!);
+      const a = r.querySelector('ul a')!;
+      const as = getComputedStyle(a);
+      return { bg: s.backgroundColor, border: s.borderTopColor, width: s.borderTopWidth, radius: s.borderTopLeftRadius, link: as.color, weight: as.fontWeight, h: a.getBoundingClientRect().height, role: r.querySelector('[part=container]')!.getAttribute('role') };
+    });
+    expect(box.bg).toBe(await token('--sc-color-error-container'));
+    expect(box.border).toBe(await token('--sc-color-error'));
+    expect(box.width).toBe('2px');
+    expect(box.radius).toBe('8px');
+    expect(box.link).toBe(await token('--sc-color-error'));
+    expect(box.weight).toBe('700');
+    expect(box.h).toBeGreaterThanOrEqual(44);
+    expect(box.role).toBe('group');
+  });
+
+  it('shows the neutral U1 focus ring, the same on every channel', async () => {
     const page = await newScPage(`<sc-error-summary no-autofocus><a href="#x">Error</a></sc-error-summary>`, { channel: 'now' });
     await page.keyboard.press('Tab');
-    const ring = () => page.evaluate(() => getComputedStyle(document.querySelector('sc-error-summary')!.shadowRoot!.querySelector('ul a')!).outlineColor);
-    const now = await ring();
-    await setPageContext(page, { channel: 'transport' });
-    expect(await ring()).not.toBe(now);
-  });
-
-  for (const ctx of contexts) {
-    it(`has no axe violations (${ctx.lang}, ${ctx.theme})`, async () => {
-      const page = await newScPage(
-        `<main><h1>Plate number</h1>
-          <sc-error-summary><a href="#plate-code">Enter the plate code</a><a href="#plate-number">Enter the plate number</a></sc-error-summary>
-          <sc-error-summary no-autofocus heading="Check your vehicle details"><p slot="description">We couldn't find a vehicle with these details.</p><a href="#plate-number">Check the plate number</a></sc-error-summary>
-          <label for="plate-code">Plate code</label><input id="plate-code"><label for="plate-number">Plate number</label><input id="plate-number"></main>`,
-        ctx,
-      );
-      await expectNoAxeViolations(page);
+    const ring = () => page.evaluate(() => {
+      const s = getComputedStyle(document.querySelector('sc-error-summary')!.shadowRoot!.querySelector('ul a')!);
+      return [s.outlineStyle, s.outlineWidth, s.outlineColor, s.outlineOffset];
     });
-  }
+    const now = await ring();
+    expect(now.slice(0, 2)).toEqual(['solid', '3px']);
+    expect(now[3]).toBe('2px');
+    await setPageContext(page, { channel: 'transport' });
+    expect(await ring()).toEqual(now);
+  });
 });
 
+describeAxe(
+  'sc-error-summary',
+  `<main><h1>Plate number</h1>
+    <sc-error-summary><a href="#plate-code">Enter the plate code</a><a href="#plate-number">Enter the plate number</a></sc-error-summary>
+    <sc-error-summary no-autofocus heading="Check your vehicle details"><p slot="description">We couldn't find a vehicle with these details.</p><a href="#plate-number">Check the plate number</a></sc-error-summary>
+    <label for="plate-code">Plate code</label><input id="plate-code"><label for="plate-number">Plate number</label><input id="plate-number"></main>`,
+);

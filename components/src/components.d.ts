@@ -15,16 +15,21 @@ import { HeadingLevel } from "./components/sc-text-input/field";
 import { ContainerWidth } from "./components/sc-container/sc-container";
 import { Parts } from "./components/sc-date-input/date";
 import { StringsInput } from "./components/sc-table/overrides";
+import { EmptyStateHeadingLevel, EmptyStateVariant } from "./components/sc-empty-state/sc-empty-state";
 import { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
 import { LanguageSwitchAppearance, LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
+import { ModalCloseReason, ModalHeadingLevel, ModalInitialFocus } from "./components/sc-modal/sc-modal";
 import { Channel as Channel1 } from "./i18n/strings";
 import { PaginationChangeDetail } from "./components/sc-pagination/sc-pagination";
 import { ScSearchDetail } from "./components/sc-search/sc-search";
 import { ServiceCardHeadingLevel } from "./components/sc-service-card/sc-service-card";
+import { SpinnerSize } from "./components/sc-spinner/sc-spinner";
 import { StatusTagTone } from "./components/sc-status-tag/sc-status-tag";
+import { StepProgressLayout } from "./components/sc-step-progress/sc-step-progress";
 import { SummaryListAppearance } from "./components/sc-summary-list/sc-summary-list";
 import { SortDirection } from "./components/sc-table/sc-table";
 import { TextInputType, TextInputWidth } from "./components/sc-text-input/sc-text-input";
+import { TimelineOrder } from "./components/sc-timeline/sc-timeline";
 export { ButtonIconPosition, ButtonSize, ButtonType, ButtonVariant } from "./components/sc-button/sc-button";
 export { IconName } from "./icons/index";
 export { CalloutHeadingLevel, CalloutTone } from "./components/sc-callout/sc-callout";
@@ -35,16 +40,21 @@ export { HeadingLevel } from "./components/sc-text-input/field";
 export { ContainerWidth } from "./components/sc-container/sc-container";
 export { Parts } from "./components/sc-date-input/date";
 export { StringsInput } from "./components/sc-table/overrides";
+export { EmptyStateHeadingLevel, EmptyStateVariant } from "./components/sc-empty-state/sc-empty-state";
 export { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
 export { LanguageSwitchAppearance, LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
+export { ModalCloseReason, ModalHeadingLevel, ModalInitialFocus } from "./components/sc-modal/sc-modal";
 export { Channel as Channel1 } from "./i18n/strings";
 export { PaginationChangeDetail } from "./components/sc-pagination/sc-pagination";
 export { ScSearchDetail } from "./components/sc-search/sc-search";
 export { ServiceCardHeadingLevel } from "./components/sc-service-card/sc-service-card";
+export { SpinnerSize } from "./components/sc-spinner/sc-spinner";
 export { StatusTagTone } from "./components/sc-status-tag/sc-status-tag";
+export { StepProgressLayout } from "./components/sc-step-progress/sc-step-progress";
 export { SummaryListAppearance } from "./components/sc-summary-list/sc-summary-list";
 export { SortDirection } from "./components/sc-table/sc-table";
 export { TextInputType, TextInputWidth } from "./components/sc-text-input/sc-text-input";
+export { TimelineOrder } from "./components/sc-timeline/sc-timeline";
 export namespace Components {
     /**
      * The side navigation of the signed-in account area: Applications, Payments,
@@ -239,8 +249,10 @@ export namespace Components {
      * An important message that sits in the page content: something the user must know
      * before they act ("If your payment is interrupted, don't pay again…"), or the outcome
      * of what they just did.
-     * Each tone has its own fill, icon and a visually hidden word ("Warning:"), so the
-     * meaning never relies on colour alone.
+     * v2: a tone-95 container with an 8px radius, a tone-coloured accent bar at inline-start,
+     * a 24px tone icon and the content in `on-surface`. Each tone also has a visually hidden
+     * word ("Warning:"), so the meaning never relies on colour or the icon alone. Links inside
+     * keep the channel link colour.
      */
     interface ScCallout {
         /**
@@ -252,7 +264,7 @@ export namespace Components {
          */
         "headingLevel"?: CalloutHeadingLevel;
         /**
-          * What kind of message it is. - `info`: neutral fill with an ink icon. Guidance and reassurance. - `success`: something worked ("Payment received"). - `warning`: something the user must know to avoid a problem. - `error`: something went wrong and the user can't continue as planned.
+          * What kind of message it is. - `info`: guidance and reassurance (info blue). - `success`: something worked ("Payment received"). - `warning`: something the user must know to avoid a problem. - `error`: something went wrong and the user can't continue as planned.
           * @default 'info'
          */
         "tone": CalloutTone;
@@ -608,6 +620,35 @@ export namespace Components {
         "today"?: string;
     }
     /**
+     * What a list, table or page shows when there is nothing in it: "You have no fines".
+     * An optional 48px icon in an 80px circle, a heading written as a sentence (never "No
+     * data"), one or two sentences in the default slot, and at most one action (usually an
+     * `sc-button variant="secondary"`) in `slot="action"`. It aligns to the start edge in both
+     * languages, so it scans with the content around it.
+     * `variant="success"` is the all-clear: nothing is left to do ("You have no fines to pay").
+     * The icon becomes a check in the success colour on a success container, and the words
+     * still say it, so the meaning never rests on colour.
+     */
+    interface ScEmptyState {
+        /**
+          * The heading, as a sentence: "You have no notifications".
+         */
+        "heading": string;
+        /**
+          * Renders the heading as `<h2>`–`<h4>`. Leave it unset to render a paragraph at the title role, for an empty state inside a card or table.
+         */
+        "headingLevel"?: EmptyStateHeadingLevel;
+        /**
+          * An icon from the library (`inbox`, `search`, `check-circle` …). Leave unset for no icon; `success` defaults to `check-circle`.
+         */
+        "icon"?: IconName;
+        /**
+          * `default`: neutral. `success`: the all-clear, with a check on the success container.
+          * @default 'default'
+         */
+        "variant": EmptyStateVariant;
+    }
+    /**
      * Lists every error on the page, at the top of the main content, after a form is
      * submitted. Each item links to its field; following a link moves focus to the field.
      * Give it items either as links in the default slot (`<a href="#plate-number">…</a>`,
@@ -615,7 +656,11 @@ export namespace Components {
      * it moves focus to itself (`tabindex="-1"`), so keyboard and screen reader users hear
      * the heading and errors straight away. It has no `role="alert"`: moving focus already
      * announces it, and a live region on top can make screen readers read it twice (GOV.UK
-     * practice). The focused box is a `role="group"` named by its heading.
+     * practice). The focused box is a `role="group"` named by its heading (CMP-05).
+     * v2: an `error-container` box with a 2px `error` border and an 8px radius; the heading in
+     * `on-surface`, the links in `error`, Bold and underlined, each at least 44 × 44. Field
+     * components are light DOM in v2, so a link's `#id` can name the native control or the
+     * field host (whose `focus()` is forwarded to its control).
      */
     interface ScErrorSummary {
         /**
@@ -623,7 +668,7 @@ export namespace Components {
          */
         "errors"?: ErrorSummaryItem[];
         /**
-          * Overrides the heading text (default "There is a problem" / "توجد مشكلة" from strings).
+          * Overrides the heading text (default "There is a problem" / "توجد مشكلة").
          */
         "heading"?: string;
         /**
@@ -767,6 +812,98 @@ export namespace Components {
      * value is isolated even before the component upgrades.
      */
     interface ScLtr {
+    }
+    /**
+     * A modal dialog for a short secondary task or a decision that can't wait, such as the
+     * session-timeout warning (TIME-02). On phones (under 600px) the same component is a bottom
+     * sheet.
+     * It is a native `<dialog>` opened with `showModal()`, so the page behind is inert and focus
+     * can't leave it. On open, focus goes to the heading (or, with `initial-focus="first"`, the
+     * first control). Escape, the close button and a click on the scrim close it (an `alert`
+     * dialog ignores the scrim and has no close button), and focus returns to whatever had it
+     * before. A sheet can also be dragged down or flicked closed, never only that (WCAG 2.5.7).
+     * Motion: the dialog stays centred and enters with opacity and a slight scale over
+     * `--sc-duration-slow` (280ms) with the strong ease-out; the sheet slides up on
+     * `--sc-easing-drawer`. Both exit 20% faster (224ms). The scrim fades with them. Opened
+     * from the keyboard it appears instantly (MOT-02); under reduced motion it only fades.
+     * Session timeout: set `alert` and `countdown` (seconds). The time left shows as text,
+     * updated every second, and is announced politely only once on open, at each whole minute
+     * and at 30 and 10 seconds, never every second. `scCountdownEnd` fires at zero; expiring
+     * never submits anything (TIME-03).
+     */
+    interface ScModal {
+        /**
+          * An alert dialog (`role="alertdialog"`) for something that needs an answer, such as the session timeout: a click on the scrim does not close it, and there is no close button; the actions decide. Escape still closes it (reason `escape`).
+          * @default false
+         */
+        "alert": boolean;
+        /**
+          * Closes the dialog and returns focus to where it was.
+         */
+        "close": () => Promise<void>;
+        /**
+          * Overrides the close button's name ("Close" / "إغلاق").
+         */
+        "closeLabel"?: string;
+        /**
+          * Seconds left, for a countdown such as the session timeout. Shown as "Time left: 1:45" and announced sparingly. Set it again (for example after "Stay signed in") to restart.
+         */
+        "countdown"?: number;
+        /**
+          * The heading, which names the dialog: "You will be signed out soon".
+         */
+        "heading": string;
+        /**
+          * The heading level. 2 for a dialog opened from the page (the default).
+          * @default 2
+         */
+        "headingLevel": ModalHeadingLevel;
+        /**
+          * Where focus goes on open: the `heading` (default), or the `first` control in the body or actions.
+          * @default 'heading'
+         */
+        "initialFocus": ModalInitialFocus;
+        /**
+          * Whether the dialog is open. Set it, or call `show()` and `close()`.
+          * @default false
+         */
+        "open": boolean;
+        /**
+          * Opens the dialog.
+         */
+        "show": () => Promise<void>;
+    }
+    /**
+     * A person's notifications, grouped by day ("Today", "Earlier"). Light DOM (architecture
+     * §3.1): you write the headings and native lists, so each group is a real list under a real
+     * heading and the links are ordinary links.
+     * ```html
+     * <sc-notification-list>
+     *   <h2>Today</h2>
+     *   <ul>
+     *     <li data-unread>
+     *       <a href="/applications/A-2026-0412">
+     *         <strong>Parking permit approved</strong>
+     *         <span>Your permit for Al Barsha is ready to download.</span>
+     *       </a>
+     *       <time datetime="2026-10-21T09:40">09:40</time>
+     *     </li>
+     *   </ul>
+     *   <h2>Earlier</h2>
+     *   <ul>…</ul>
+     * </sc-notification-list>
+     * ```
+     * Each item is a link (its title and body), with the time beside it. An unread item
+     * (`data-unread`) has a `channel-subtle` fill, a dot in the channel colour, a Bold title and
+     * a visually hidden "Unread:" before the link text, so unread is never colour alone; a read
+     * item has no fill or dot and a Medium title. Each group is a card with 1px rules between
+     * rows. Under 600px wide the time wraps under the body.
+     */
+    interface ScNotificationList {
+        /**
+          * Marks every item as read. The fills fade over 200ms when a pointer started it; from the keyboard the change is instant (MOT-02). Returns the number of items changed.
+         */
+        "markAllRead": () => Promise<number>;
     }
     /**
      * The page frame: header, `<main>` and footer, with the page's language, direction and
@@ -1064,10 +1201,12 @@ export namespace Components {
         "href": string;
     }
     /**
-     * Shows that something is loading. Inline, 20px, in the current text colour.
-     * The label ("Loading" by default) is visually hidden and sits in a polite status region.
-     * Under `prefers-reduced-motion` the icon stops spinning and the label becomes visible,
-     * so the state never depends on motion.
+     * Shows that something is loading: a short inline wait, with a label saying what.
+     * v2: 20px (`size="m"`, inline) or 24px (`size="l"`), in `currentColor`, turning once per
+     * `--sc-duration-spin` (600ms, linear: a faster spinner makes loading feel faster). The label
+     * ("Loading" by default) sits in a polite `role="status"` region and is visually hidden.
+     * Under `prefers-reduced-motion` the arc stops and the label shows, so the state never
+     * depends on motion (MOT-15). It never mirrors.
      * Inside a button, use `sc-button loading` instead.
      */
     interface ScSpinner {
@@ -1080,44 +1219,95 @@ export namespace Components {
           * @default false
          */
         "showLabel": boolean;
+        /**
+          * `m` 20px, inline with body text (default); `l` 24px, standalone.
+          * @default 'm'
+         */
+        "size": SpinnerSize;
     }
     /**
-     * The status of a task, application or payment: "Paid", "Action needed", "In review",
-     * "Expires in 15 days". A pill with a status dot and the status words.
-     * The words carry the meaning; the colour and the dot only support them. It isn't
-     * interactive and isn't announced on change (use `sc-callout` or a live region for that).
+     * The status of an application, task or payment, in the words of the status vocabulary
+     * (Standard 9.6): "Paid", "Action needed", "In review", "Expires in 15 days".
+     * v2: a 32px chip with a 6px radius, a tone icon and the words, tone-40 text on a tone-95
+     * container (A11Y-06: never colour alone). It isn't interactive and isn't announced on
+     * change (use `sc-callout` or a live region for that). There is no channel tone: status is
+     * never in a channel's colour.
      */
     interface ScStatusTag {
         /**
-          * - `neutral`: no action needed yet, or a plain state ("Draft", "In review"). - `success`: done ("Paid", "Approved", "Completed"). - `warning`: needs attention soon ("Expires in 15 days"). - `error`: blocked or failed ("Action needed", "Payment failed"). - `channel` (deprecated): highlights something in the current channel's colours. It is not   a status in the standard's vocabulary (9.6) and will be removed in the next major version.
+          * - `neutral`: a plain state ("Draft", "Received", "In review", "Not started"). - `info`: an informational state, where a service needs one (hourglass icon). - `success`: done ("Paid", "Approved", "Completed"). - `warning`: needs attention soon ("Expires in 15 days"). - `error`: blocked or waiting on the user ("Action needed", "Payment failed").  An unknown tone, including v1's removed `channel`, renders as `neutral`.
           * @default 'neutral'
          */
         "tone": StatusTagTone;
     }
     /**
-     * Shows where the user is in a short journey: "Step 2 of 4", with the current step's
-     * name and a segmented track.
-     * The text carries the meaning; the track is decorative (`aria-hidden`). Done and
-     * current segments use the channel action colour, upcoming ones the control colour;
-     * the current segment is half filled. The track fills from the inline start,
-     * so from the right in Arabic. Digits stay Latin in both languages.
+     * A life event as an ordered list of services, possibly across channels (direction E1,
+     * "Moving home"). Light DOM: you write the native `<ol>`, so the list position is the number
+     * screen readers announce.
+     * ```html
+     * <sc-step-list>
+     *   <ol>
+     *     <li><a href="/tenancy">Register your tenancy contract</a><span>Dubai Land Department</span></li>
+     *     <li data-channel="transport"><a href="https://transport…/address">Update the address on your vehicle</a><span>RTA</span></li>
+     *   </ol>
+     * </sc-step-list>
+     * ```
+     * Each row has a 32px numbered marker joined by 2px connectors, the service title (the
+     * link; the row is not a link), the owning entity, and a fixed trailing slot with a
+     * decorative chevron. A row whose `data-channel` differs from the page's channel belongs to
+     * another channel: it takes that channel's `channel-subtle` tint and filled marker, joins
+     * neighbouring rows of the same channel with that channel's colour, and gets an outlined
+     * attribution chip, "On Dubai Transport", which is read as text. The component adds the
+     * marker, chip and chevron to each `<li>` (frameworks that own the list should not
+     * re-render those nodes). The marker column moves to the right in Arabic and the chevron
+     * points left.
+     */
+    interface ScStepList {
+    }
+    /**
+     * The stepper: where the user is in a short linear journey (NAV-02, CMP-09). Direction E's
+     * signature component, replacing v1's segmented track.
+     * Completed and current markers take the channel action colour (decision U2); completed
+     * markers carry a check, the current one an inner dot and a halo, upcoming ones a 2px
+     * `outline` edge. Green is never used: it is reserved for genuine success messages.
+     * Two layouts:
+     * - **compact** (phones; E2–E4): a meta row ("Plate number" … "Step 2 of 4") that carries
+     *   the meaning, over a decorative (`aria-hidden`) row of 24px markers.
+     * - **full** (E0): an `<ol>` with one column per step: a 28px marker, a connector to the next
+     *   step (solid behind, dashed ahead), a state line ("Step 1 · Done") and the step name. The
+     *   current step has `aria-current="step"`, and every step says its state in words.
+     * `layout="auto"` (the default) shows the full stepper when step names are given and the
+     * component is at least 600px wide (a container query), and the compact one otherwise.
+     * Step names come from the `steps` property or from the host's child elements, one per step
+     * (`<span>Vehicle</span><span>Plate number</span>…`): they are read as text and are not
+     * rendered themselves. `current` is 1-based and clamped (DDS F-036). Steps run from the
+     * right in Arabic; digits stay Latin.
      */
     interface ScStepProgress {
         /**
-          * Overrides "Step {current} of {total}" (default from strings). Use `{current}` and `{total}` placeholders to keep the numbers.
+          * Overrides "Step {current} of {total}". Use the `{current}` and `{total}` placeholders.
          */
         "countText"?: string;
         /**
-          * The current step, from 1. Clamped to `total`.
+          * The current step, from 1. Clamped to 1…total.
           * @default 1
          */
         "current": number;
         /**
-          * The current step's name, e.g. "Plate number". Shown at the start of the row.
+          * The current step's name in the compact row, e.g. "Plate number". Defaults to the current step's name.
          */
         "label"?: string;
         /**
-          * How many steps there are. Count only the question pages, not "Check your answers" or the confirmation.
+          * `auto` (default): full from 600px wide when step names are given, else compact. `compact` or `full` force one.
+          * @default 'auto'
+         */
+        "layout": StepProgressLayout;
+        /**
+          * The step names, in order, set as a property from JavaScript. Used instead of child elements.
+         */
+        "steps"?: string[];
+        /**
+          * How many steps there are. Count only the question pages. Ignored when step names are given.
           * @default 1
          */
         "total": number;
@@ -1396,6 +1586,39 @@ export namespace Components {
          */
         "value": string;
     }
+    /**
+     * The status history of an application: each change, with its status, date and a line of
+     * detail. Light DOM (architecture §3.1): you write the native list, so screen readers count
+     * the entries and nothing crosses a shadow boundary.
+     * ```html
+     * <sc-timeline>
+     *   <ol>
+     *     <li>
+     *       <sc-status-tag tone="error">Action needed</sc-status-tag>
+     *       <time datetime="2026-10-20T09:40">20 Oct 2026, 09:40</time>
+     *       <p>Upload a clearer copy of your Emirates ID.</p>
+     *     </li>
+     *     …
+     *   </ol>
+     * </sc-timeline>
+     * ```
+     * The latest entry is the current step: it gets `aria-current="step"`, and its 12px dot
+     * takes the tone of its `sc-status-tag` (the status words are always in the tag). Earlier
+     * dots are `outline`; a 2px `outline-variant` connector joins them. Dates use Dubai W23's
+     * tabular Latin digits. The marker column moves to the right in Arabic.
+     */
+    interface ScTimeline {
+        /**
+          * Draws a 1px `outline-variant` rule between entries, for a timeline inside a card.
+          * @default false
+         */
+        "divided": boolean;
+        /**
+          * Which end of the list is the latest (current) entry.
+          * @default 'newest-first'
+         */
+        "order": TimelineOrder;
+    }
 }
 export interface ScCheckboxCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1416,6 +1639,10 @@ export interface ScDateRangeCustomEvent<T> extends CustomEvent<T> {
 export interface ScLanguageSwitchCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLScLanguageSwitchElement;
+}
+export interface ScModalCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLScModalElement;
 }
 export interface ScPaginationCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -1565,8 +1792,10 @@ declare global {
      * An important message that sits in the page content: something the user must know
      * before they act ("If your payment is interrupted, don't pay again…"), or the outcome
      * of what they just did.
-     * Each tone has its own fill, icon and a visually hidden word ("Warning:"), so the
-     * meaning never relies on colour alone.
+     * v2: a tone-95 container with an 8px radius, a tone-coloured accent bar at inline-start,
+     * a 24px tone icon and the content in `on-surface`. Each tone also has a visually hidden
+     * word ("Warning:"), so the meaning never relies on colour or the icon alone. Links inside
+     * keep the channel link colour.
      */
     interface HTMLScCalloutElement extends Components.ScCallout, HTMLStencilElement {
     }
@@ -1741,6 +1970,22 @@ declare global {
         new (): HTMLScDateRangeElement;
     };
     /**
+     * What a list, table or page shows when there is nothing in it: "You have no fines".
+     * An optional 48px icon in an 80px circle, a heading written as a sentence (never "No
+     * data"), one or two sentences in the default slot, and at most one action (usually an
+     * `sc-button variant="secondary"`) in `slot="action"`. It aligns to the start edge in both
+     * languages, so it scans with the content around it.
+     * `variant="success"` is the all-clear: nothing is left to do ("You have no fines to pay").
+     * The icon becomes a check in the success colour on a success container, and the words
+     * still say it, so the meaning never rests on colour.
+     */
+    interface HTMLScEmptyStateElement extends Components.ScEmptyState, HTMLStencilElement {
+    }
+    var HTMLScEmptyStateElement: {
+        prototype: HTMLScEmptyStateElement;
+        new (): HTMLScEmptyStateElement;
+    };
+    /**
      * Lists every error on the page, at the top of the main content, after a form is
      * submitted. Each item links to its field; following a link moves focus to the field.
      * Give it items either as links in the default slot (`<a href="#plate-number">…</a>`,
@@ -1748,7 +1993,11 @@ declare global {
      * it moves focus to itself (`tabindex="-1"`), so keyboard and screen reader users hear
      * the heading and errors straight away. It has no `role="alert"`: moving focus already
      * announces it, and a live region on top can make screen readers read it twice (GOV.UK
-     * practice). The focused box is a `role="group"` named by its heading.
+     * practice). The focused box is a `role="group"` named by its heading (CMP-05).
+     * v2: an `error-container` box with a 2px `error` border and an 8px radius; the heading in
+     * `on-surface`, the links in `error`, Bold and underlined, each at least 44 × 44. Field
+     * components are light DOM in v2, so a link's `#id` can name the native control or the
+     * field host (whose `focus()` is forwarded to its control).
      */
     interface HTMLScErrorSummaryElement extends Components.ScErrorSummary, HTMLStencilElement {
     }
@@ -1850,6 +2099,75 @@ declare global {
     var HTMLScLtrElement: {
         prototype: HTMLScLtrElement;
         new (): HTMLScLtrElement;
+    };
+    interface HTMLScModalElementEventMap {
+        "scOpen": void;
+        "scClose": { reason: ModalCloseReason };
+        "scCountdownEnd": void;
+    }
+    /**
+     * A modal dialog for a short secondary task or a decision that can't wait, such as the
+     * session-timeout warning (TIME-02). On phones (under 600px) the same component is a bottom
+     * sheet.
+     * It is a native `<dialog>` opened with `showModal()`, so the page behind is inert and focus
+     * can't leave it. On open, focus goes to the heading (or, with `initial-focus="first"`, the
+     * first control). Escape, the close button and a click on the scrim close it (an `alert`
+     * dialog ignores the scrim and has no close button), and focus returns to whatever had it
+     * before. A sheet can also be dragged down or flicked closed, never only that (WCAG 2.5.7).
+     * Motion: the dialog stays centred and enters with opacity and a slight scale over
+     * `--sc-duration-slow` (280ms) with the strong ease-out; the sheet slides up on
+     * `--sc-easing-drawer`. Both exit 20% faster (224ms). The scrim fades with them. Opened
+     * from the keyboard it appears instantly (MOT-02); under reduced motion it only fades.
+     * Session timeout: set `alert` and `countdown` (seconds). The time left shows as text,
+     * updated every second, and is announced politely only once on open, at each whole minute
+     * and at 30 and 10 seconds, never every second. `scCountdownEnd` fires at zero; expiring
+     * never submits anything (TIME-03).
+     */
+    interface HTMLScModalElement extends Components.ScModal, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLScModalElementEventMap>(type: K, listener: (this: HTMLScModalElement, ev: ScModalCustomEvent<HTMLScModalElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLScModalElementEventMap>(type: K, listener: (this: HTMLScModalElement, ev: ScModalCustomEvent<HTMLScModalElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+    }
+    var HTMLScModalElement: {
+        prototype: HTMLScModalElement;
+        new (): HTMLScModalElement;
+    };
+    /**
+     * A person's notifications, grouped by day ("Today", "Earlier"). Light DOM (architecture
+     * §3.1): you write the headings and native lists, so each group is a real list under a real
+     * heading and the links are ordinary links.
+     * ```html
+     * <sc-notification-list>
+     *   <h2>Today</h2>
+     *   <ul>
+     *     <li data-unread>
+     *       <a href="/applications/A-2026-0412">
+     *         <strong>Parking permit approved</strong>
+     *         <span>Your permit for Al Barsha is ready to download.</span>
+     *       </a>
+     *       <time datetime="2026-10-21T09:40">09:40</time>
+     *     </li>
+     *   </ul>
+     *   <h2>Earlier</h2>
+     *   <ul>…</ul>
+     * </sc-notification-list>
+     * ```
+     * Each item is a link (its title and body), with the time beside it. An unread item
+     * (`data-unread`) has a `channel-subtle` fill, a dot in the channel colour, a Bold title and
+     * a visually hidden "Unread:" before the link text, so unread is never colour alone; a read
+     * item has no fill or dot and a Medium title. Each group is a card with 1px rules between
+     * rows. Under 600px wide the time wraps under the body.
+     */
+    interface HTMLScNotificationListElement extends Components.ScNotificationList, HTMLStencilElement {
+    }
+    var HTMLScNotificationListElement: {
+        prototype: HTMLScNotificationListElement;
+        new (): HTMLScNotificationListElement;
     };
     /**
      * The page frame: header, `<main>` and footer, with the page's language, direction and
@@ -2021,10 +2339,12 @@ declare global {
         new (): HTMLScSkipLinkElement;
     };
     /**
-     * Shows that something is loading. Inline, 20px, in the current text colour.
-     * The label ("Loading" by default) is visually hidden and sits in a polite status region.
-     * Under `prefers-reduced-motion` the icon stops spinning and the label becomes visible,
-     * so the state never depends on motion.
+     * Shows that something is loading: a short inline wait, with a label saying what.
+     * v2: 20px (`size="m"`, inline) or 24px (`size="l"`), in `currentColor`, turning once per
+     * `--sc-duration-spin` (600ms, linear: a faster spinner makes loading feel faster). The label
+     * ("Loading" by default) sits in a polite `role="status"` region and is visually hidden.
+     * Under `prefers-reduced-motion` the arc stops and the label shows, so the state never
+     * depends on motion (MOT-15). It never mirrors.
      * Inside a button, use `sc-button loading` instead.
      */
     interface HTMLScSpinnerElement extends Components.ScSpinner, HTMLStencilElement {
@@ -2034,10 +2354,12 @@ declare global {
         new (): HTMLScSpinnerElement;
     };
     /**
-     * The status of a task, application or payment: "Paid", "Action needed", "In review",
-     * "Expires in 15 days". A pill with a status dot and the status words.
-     * The words carry the meaning; the colour and the dot only support them. It isn't
-     * interactive and isn't announced on change (use `sc-callout` or a live region for that).
+     * The status of an application, task or payment, in the words of the status vocabulary
+     * (Standard 9.6): "Paid", "Action needed", "In review", "Expires in 15 days".
+     * v2: a 32px chip with a 6px radius, a tone icon and the words, tone-40 text on a tone-95
+     * container (A11Y-06: never colour alone). It isn't interactive and isn't announced on
+     * change (use `sc-callout` or a live region for that). There is no channel tone: status is
+     * never in a channel's colour.
      */
     interface HTMLScStatusTagElement extends Components.ScStatusTag, HTMLStencilElement {
     }
@@ -2046,12 +2368,51 @@ declare global {
         new (): HTMLScStatusTagElement;
     };
     /**
-     * Shows where the user is in a short journey: "Step 2 of 4", with the current step's
-     * name and a segmented track.
-     * The text carries the meaning; the track is decorative (`aria-hidden`). Done and
-     * current segments use the channel action colour, upcoming ones the control colour;
-     * the current segment is half filled. The track fills from the inline start,
-     * so from the right in Arabic. Digits stay Latin in both languages.
+     * A life event as an ordered list of services, possibly across channels (direction E1,
+     * "Moving home"). Light DOM: you write the native `<ol>`, so the list position is the number
+     * screen readers announce.
+     * ```html
+     * <sc-step-list>
+     *   <ol>
+     *     <li><a href="/tenancy">Register your tenancy contract</a><span>Dubai Land Department</span></li>
+     *     <li data-channel="transport"><a href="https://transport…/address">Update the address on your vehicle</a><span>RTA</span></li>
+     *   </ol>
+     * </sc-step-list>
+     * ```
+     * Each row has a 32px numbered marker joined by 2px connectors, the service title (the
+     * link; the row is not a link), the owning entity, and a fixed trailing slot with a
+     * decorative chevron. A row whose `data-channel` differs from the page's channel belongs to
+     * another channel: it takes that channel's `channel-subtle` tint and filled marker, joins
+     * neighbouring rows of the same channel with that channel's colour, and gets an outlined
+     * attribution chip, "On Dubai Transport", which is read as text. The component adds the
+     * marker, chip and chevron to each `<li>` (frameworks that own the list should not
+     * re-render those nodes). The marker column moves to the right in Arabic and the chevron
+     * points left.
+     */
+    interface HTMLScStepListElement extends Components.ScStepList, HTMLStencilElement {
+    }
+    var HTMLScStepListElement: {
+        prototype: HTMLScStepListElement;
+        new (): HTMLScStepListElement;
+    };
+    /**
+     * The stepper: where the user is in a short linear journey (NAV-02, CMP-09). Direction E's
+     * signature component, replacing v1's segmented track.
+     * Completed and current markers take the channel action colour (decision U2); completed
+     * markers carry a check, the current one an inner dot and a halo, upcoming ones a 2px
+     * `outline` edge. Green is never used: it is reserved for genuine success messages.
+     * Two layouts:
+     * - **compact** (phones; E2–E4): a meta row ("Plate number" … "Step 2 of 4") that carries
+     *   the meaning, over a decorative (`aria-hidden`) row of 24px markers.
+     * - **full** (E0): an `<ol>` with one column per step: a 28px marker, a connector to the next
+     *   step (solid behind, dashed ahead), a state line ("Step 1 · Done") and the step name. The
+     *   current step has `aria-current="step"`, and every step says its state in words.
+     * `layout="auto"` (the default) shows the full stepper when step names are given and the
+     * component is at least 600px wide (a container query), and the compact one otherwise.
+     * Step names come from the `steps` property or from the host's child elements, one per step
+     * (`<span>Vehicle</span><span>Plate number</span>…`): they are read as text and are not
+     * rendered themselves. `current` is 1-based and clamped (DDS F-036). Steps run from the
+     * right in Arabic; digits stay Latin.
      */
     interface HTMLScStepProgressElement extends Components.ScStepProgress, HTMLStencilElement {
     }
@@ -2176,6 +2537,33 @@ declare global {
         prototype: HTMLScTextareaElement;
         new (): HTMLScTextareaElement;
     };
+    /**
+     * The status history of an application: each change, with its status, date and a line of
+     * detail. Light DOM (architecture §3.1): you write the native list, so screen readers count
+     * the entries and nothing crosses a shadow boundary.
+     * ```html
+     * <sc-timeline>
+     *   <ol>
+     *     <li>
+     *       <sc-status-tag tone="error">Action needed</sc-status-tag>
+     *       <time datetime="2026-10-20T09:40">20 Oct 2026, 09:40</time>
+     *       <p>Upload a clearer copy of your Emirates ID.</p>
+     *     </li>
+     *     …
+     *   </ol>
+     * </sc-timeline>
+     * ```
+     * The latest entry is the current step: it gets `aria-current="step"`, and its 12px dot
+     * takes the tone of its `sc-status-tag` (the status words are always in the tag). Earlier
+     * dots are `outline`; a 2px `outline-variant` connector joins them. Dates use Dubai W23's
+     * tabular Latin digits. The marker column moves to the right in Arabic.
+     */
+    interface HTMLScTimelineElement extends Components.ScTimeline, HTMLStencilElement {
+    }
+    var HTMLScTimelineElement: {
+        prototype: HTMLScTimelineElement;
+        new (): HTMLScTimelineElement;
+    };
     interface HTMLElementTagNameMap {
         "sc-account-nav": HTMLScAccountNavElement;
         "sc-app-bar": HTMLScAppBarElement;
@@ -2192,12 +2580,15 @@ declare global {
         "sc-container": HTMLScContainerElement;
         "sc-date-input": HTMLScDateInputElement;
         "sc-date-range": HTMLScDateRangeElement;
+        "sc-empty-state": HTMLScEmptyStateElement;
         "sc-error-summary": HTMLScErrorSummaryElement;
         "sc-footer": HTMLScFooterElement;
         "sc-grid": HTMLScGridElement;
         "sc-language-switch": HTMLScLanguageSwitchElement;
         "sc-link": HTMLScLinkElement;
         "sc-ltr": HTMLScLtrElement;
+        "sc-modal": HTMLScModalElement;
+        "sc-notification-list": HTMLScNotificationListElement;
         "sc-page": HTMLScPageElement;
         "sc-pagination": HTMLScPaginationElement;
         "sc-radio": HTMLScRadioElement;
@@ -2208,12 +2599,14 @@ declare global {
         "sc-skip-link": HTMLScSkipLinkElement;
         "sc-spinner": HTMLScSpinnerElement;
         "sc-status-tag": HTMLScStatusTagElement;
+        "sc-step-list": HTMLScStepListElement;
         "sc-step-progress": HTMLScStepProgressElement;
         "sc-summary-list": HTMLScSummaryListElement;
         "sc-summary-row": HTMLScSummaryRowElement;
         "sc-table": HTMLScTableElement;
         "sc-text-input": HTMLScTextInputElement;
         "sc-textarea": HTMLScTextareaElement;
+        "sc-timeline": HTMLScTimelineElement;
     }
 }
 declare namespace LocalJSX {
@@ -2412,8 +2805,10 @@ declare namespace LocalJSX {
      * An important message that sits in the page content: something the user must know
      * before they act ("If your payment is interrupted, don't pay again…"), or the outcome
      * of what they just did.
-     * Each tone has its own fill, icon and a visually hidden word ("Warning:"), so the
-     * meaning never relies on colour alone.
+     * v2: a tone-95 container with an 8px radius, a tone-coloured accent bar at inline-start,
+     * a 24px tone icon and the content in `on-surface`. Each tone also has a visually hidden
+     * word ("Warning:"), so the meaning never relies on colour or the icon alone. Links inside
+     * keep the channel link colour.
      */
     interface ScCallout {
         /**
@@ -2425,7 +2820,7 @@ declare namespace LocalJSX {
          */
         "headingLevel"?: CalloutHeadingLevel;
         /**
-          * What kind of message it is. - `info`: neutral fill with an ink icon. Guidance and reassurance. - `success`: something worked ("Payment received"). - `warning`: something the user must know to avoid a problem. - `error`: something went wrong and the user can't continue as planned.
+          * What kind of message it is. - `info`: guidance and reassurance (info blue). - `success`: something worked ("Payment received"). - `warning`: something the user must know to avoid a problem. - `error`: something went wrong and the user can't continue as planned.
           * @default 'info'
          */
         "tone"?: CalloutTone;
@@ -2813,6 +3208,35 @@ declare namespace LocalJSX {
         "today"?: string;
     }
     /**
+     * What a list, table or page shows when there is nothing in it: "You have no fines".
+     * An optional 48px icon in an 80px circle, a heading written as a sentence (never "No
+     * data"), one or two sentences in the default slot, and at most one action (usually an
+     * `sc-button variant="secondary"`) in `slot="action"`. It aligns to the start edge in both
+     * languages, so it scans with the content around it.
+     * `variant="success"` is the all-clear: nothing is left to do ("You have no fines to pay").
+     * The icon becomes a check in the success colour on a success container, and the words
+     * still say it, so the meaning never rests on colour.
+     */
+    interface ScEmptyState {
+        /**
+          * The heading, as a sentence: "You have no notifications".
+         */
+        "heading": string;
+        /**
+          * Renders the heading as `<h2>`–`<h4>`. Leave it unset to render a paragraph at the title role, for an empty state inside a card or table.
+         */
+        "headingLevel"?: EmptyStateHeadingLevel;
+        /**
+          * An icon from the library (`inbox`, `search`, `check-circle` …). Leave unset for no icon; `success` defaults to `check-circle`.
+         */
+        "icon"?: IconName;
+        /**
+          * `default`: neutral. `success`: the all-clear, with a check on the success container.
+          * @default 'default'
+         */
+        "variant"?: EmptyStateVariant;
+    }
+    /**
      * Lists every error on the page, at the top of the main content, after a form is
      * submitted. Each item links to its field; following a link moves focus to the field.
      * Give it items either as links in the default slot (`<a href="#plate-number">…</a>`,
@@ -2820,7 +3244,11 @@ declare namespace LocalJSX {
      * it moves focus to itself (`tabindex="-1"`), so keyboard and screen reader users hear
      * the heading and errors straight away. It has no `role="alert"`: moving focus already
      * announces it, and a live region on top can make screen readers read it twice (GOV.UK
-     * practice). The focused box is a `role="group"` named by its heading.
+     * practice). The focused box is a `role="group"` named by its heading (CMP-05).
+     * v2: an `error-container` box with a 2px `error` border and an 8px radius; the heading in
+     * `on-surface`, the links in `error`, Bold and underlined, each at least 44 × 44. Field
+     * components are light DOM in v2, so a link's `#id` can name the native control or the
+     * field host (whose `focus()` is forwarded to its control).
      */
     interface ScErrorSummary {
         /**
@@ -2828,7 +3256,7 @@ declare namespace LocalJSX {
          */
         "errors"?: ErrorSummaryItem[];
         /**
-          * Overrides the heading text (default "There is a problem" / "توجد مشكلة" from strings).
+          * Overrides the heading text (default "There is a problem" / "توجد مشكلة").
          */
         "heading"?: string;
         /**
@@ -2972,6 +3400,98 @@ declare namespace LocalJSX {
      * value is isolated even before the component upgrades.
      */
     interface ScLtr {
+    }
+    /**
+     * A modal dialog for a short secondary task or a decision that can't wait, such as the
+     * session-timeout warning (TIME-02). On phones (under 600px) the same component is a bottom
+     * sheet.
+     * It is a native `<dialog>` opened with `showModal()`, so the page behind is inert and focus
+     * can't leave it. On open, focus goes to the heading (or, with `initial-focus="first"`, the
+     * first control). Escape, the close button and a click on the scrim close it (an `alert`
+     * dialog ignores the scrim and has no close button), and focus returns to whatever had it
+     * before. A sheet can also be dragged down or flicked closed, never only that (WCAG 2.5.7).
+     * Motion: the dialog stays centred and enters with opacity and a slight scale over
+     * `--sc-duration-slow` (280ms) with the strong ease-out; the sheet slides up on
+     * `--sc-easing-drawer`. Both exit 20% faster (224ms). The scrim fades with them. Opened
+     * from the keyboard it appears instantly (MOT-02); under reduced motion it only fades.
+     * Session timeout: set `alert` and `countdown` (seconds). The time left shows as text,
+     * updated every second, and is announced politely only once on open, at each whole minute
+     * and at 30 and 10 seconds, never every second. `scCountdownEnd` fires at zero; expiring
+     * never submits anything (TIME-03).
+     */
+    interface ScModal {
+        /**
+          * An alert dialog (`role="alertdialog"`) for something that needs an answer, such as the session timeout: a click on the scrim does not close it, and there is no close button; the actions decide. Escape still closes it (reason `escape`).
+          * @default false
+         */
+        "alert"?: boolean;
+        /**
+          * Overrides the close button's name ("Close" / "إغلاق").
+         */
+        "closeLabel"?: string;
+        /**
+          * Seconds left, for a countdown such as the session timeout. Shown as "Time left: 1:45" and announced sparingly. Set it again (for example after "Stay signed in") to restart.
+         */
+        "countdown"?: number;
+        /**
+          * The heading, which names the dialog: "You will be signed out soon".
+         */
+        "heading": string;
+        /**
+          * The heading level. 2 for a dialog opened from the page (the default).
+          * @default 2
+         */
+        "headingLevel"?: ModalHeadingLevel;
+        /**
+          * Where focus goes on open: the `heading` (default), or the `first` control in the body or actions.
+          * @default 'heading'
+         */
+        "initialFocus"?: ModalInitialFocus;
+        /**
+          * Fires when the dialog closes, with why: `close-button`, `escape`, `scrim`, `drag` or `method`.
+         */
+        "onScClose"?: (event: ScModalCustomEvent<{ reason: ModalCloseReason }>) => void;
+        /**
+          * Fires when the countdown reaches zero. The dialog stays open; the service decides what happens.
+         */
+        "onScCountdownEnd"?: (event: ScModalCustomEvent<void>) => void;
+        /**
+          * Fires after the dialog opens.
+         */
+        "onScOpen"?: (event: ScModalCustomEvent<void>) => void;
+        /**
+          * Whether the dialog is open. Set it, or call `show()` and `close()`.
+          * @default false
+         */
+        "open"?: boolean;
+    }
+    /**
+     * A person's notifications, grouped by day ("Today", "Earlier"). Light DOM (architecture
+     * §3.1): you write the headings and native lists, so each group is a real list under a real
+     * heading and the links are ordinary links.
+     * ```html
+     * <sc-notification-list>
+     *   <h2>Today</h2>
+     *   <ul>
+     *     <li data-unread>
+     *       <a href="/applications/A-2026-0412">
+     *         <strong>Parking permit approved</strong>
+     *         <span>Your permit for Al Barsha is ready to download.</span>
+     *       </a>
+     *       <time datetime="2026-10-21T09:40">09:40</time>
+     *     </li>
+     *   </ul>
+     *   <h2>Earlier</h2>
+     *   <ul>…</ul>
+     * </sc-notification-list>
+     * ```
+     * Each item is a link (its title and body), with the time beside it. An unread item
+     * (`data-unread`) has a `channel-subtle` fill, a dot in the channel colour, a Bold title and
+     * a visually hidden "Unread:" before the link text, so unread is never colour alone; a read
+     * item has no fill or dot and a Medium title. Each group is a card with 1px rules between
+     * rows. Under 600px wide the time wraps under the body.
+     */
+    interface ScNotificationList {
     }
     /**
      * The page frame: header, `<main>` and footer, with the page's language, direction and
@@ -3289,10 +3809,12 @@ declare namespace LocalJSX {
         "href"?: string;
     }
     /**
-     * Shows that something is loading. Inline, 20px, in the current text colour.
-     * The label ("Loading" by default) is visually hidden and sits in a polite status region.
-     * Under `prefers-reduced-motion` the icon stops spinning and the label becomes visible,
-     * so the state never depends on motion.
+     * Shows that something is loading: a short inline wait, with a label saying what.
+     * v2: 20px (`size="m"`, inline) or 24px (`size="l"`), in `currentColor`, turning once per
+     * `--sc-duration-spin` (600ms, linear: a faster spinner makes loading feel faster). The label
+     * ("Loading" by default) sits in a polite `role="status"` region and is visually hidden.
+     * Under `prefers-reduced-motion` the arc stops and the label shows, so the state never
+     * depends on motion (MOT-15). It never mirrors.
      * Inside a button, use `sc-button loading` instead.
      */
     interface ScSpinner {
@@ -3305,44 +3827,95 @@ declare namespace LocalJSX {
           * @default false
          */
         "showLabel"?: boolean;
+        /**
+          * `m` 20px, inline with body text (default); `l` 24px, standalone.
+          * @default 'm'
+         */
+        "size"?: SpinnerSize;
     }
     /**
-     * The status of a task, application or payment: "Paid", "Action needed", "In review",
-     * "Expires in 15 days". A pill with a status dot and the status words.
-     * The words carry the meaning; the colour and the dot only support them. It isn't
-     * interactive and isn't announced on change (use `sc-callout` or a live region for that).
+     * The status of an application, task or payment, in the words of the status vocabulary
+     * (Standard 9.6): "Paid", "Action needed", "In review", "Expires in 15 days".
+     * v2: a 32px chip with a 6px radius, a tone icon and the words, tone-40 text on a tone-95
+     * container (A11Y-06: never colour alone). It isn't interactive and isn't announced on
+     * change (use `sc-callout` or a live region for that). There is no channel tone: status is
+     * never in a channel's colour.
      */
     interface ScStatusTag {
         /**
-          * - `neutral`: no action needed yet, or a plain state ("Draft", "In review"). - `success`: done ("Paid", "Approved", "Completed"). - `warning`: needs attention soon ("Expires in 15 days"). - `error`: blocked or failed ("Action needed", "Payment failed"). - `channel` (deprecated): highlights something in the current channel's colours. It is not   a status in the standard's vocabulary (9.6) and will be removed in the next major version.
+          * - `neutral`: a plain state ("Draft", "Received", "In review", "Not started"). - `info`: an informational state, where a service needs one (hourglass icon). - `success`: done ("Paid", "Approved", "Completed"). - `warning`: needs attention soon ("Expires in 15 days"). - `error`: blocked or waiting on the user ("Action needed", "Payment failed").  An unknown tone, including v1's removed `channel`, renders as `neutral`.
           * @default 'neutral'
          */
         "tone"?: StatusTagTone;
     }
     /**
-     * Shows where the user is in a short journey: "Step 2 of 4", with the current step's
-     * name and a segmented track.
-     * The text carries the meaning; the track is decorative (`aria-hidden`). Done and
-     * current segments use the channel action colour, upcoming ones the control colour;
-     * the current segment is half filled. The track fills from the inline start,
-     * so from the right in Arabic. Digits stay Latin in both languages.
+     * A life event as an ordered list of services, possibly across channels (direction E1,
+     * "Moving home"). Light DOM: you write the native `<ol>`, so the list position is the number
+     * screen readers announce.
+     * ```html
+     * <sc-step-list>
+     *   <ol>
+     *     <li><a href="/tenancy">Register your tenancy contract</a><span>Dubai Land Department</span></li>
+     *     <li data-channel="transport"><a href="https://transport…/address">Update the address on your vehicle</a><span>RTA</span></li>
+     *   </ol>
+     * </sc-step-list>
+     * ```
+     * Each row has a 32px numbered marker joined by 2px connectors, the service title (the
+     * link; the row is not a link), the owning entity, and a fixed trailing slot with a
+     * decorative chevron. A row whose `data-channel` differs from the page's channel belongs to
+     * another channel: it takes that channel's `channel-subtle` tint and filled marker, joins
+     * neighbouring rows of the same channel with that channel's colour, and gets an outlined
+     * attribution chip, "On Dubai Transport", which is read as text. The component adds the
+     * marker, chip and chevron to each `<li>` (frameworks that own the list should not
+     * re-render those nodes). The marker column moves to the right in Arabic and the chevron
+     * points left.
+     */
+    interface ScStepList {
+    }
+    /**
+     * The stepper: where the user is in a short linear journey (NAV-02, CMP-09). Direction E's
+     * signature component, replacing v1's segmented track.
+     * Completed and current markers take the channel action colour (decision U2); completed
+     * markers carry a check, the current one an inner dot and a halo, upcoming ones a 2px
+     * `outline` edge. Green is never used: it is reserved for genuine success messages.
+     * Two layouts:
+     * - **compact** (phones; E2–E4): a meta row ("Plate number" … "Step 2 of 4") that carries
+     *   the meaning, over a decorative (`aria-hidden`) row of 24px markers.
+     * - **full** (E0): an `<ol>` with one column per step: a 28px marker, a connector to the next
+     *   step (solid behind, dashed ahead), a state line ("Step 1 · Done") and the step name. The
+     *   current step has `aria-current="step"`, and every step says its state in words.
+     * `layout="auto"` (the default) shows the full stepper when step names are given and the
+     * component is at least 600px wide (a container query), and the compact one otherwise.
+     * Step names come from the `steps` property or from the host's child elements, one per step
+     * (`<span>Vehicle</span><span>Plate number</span>…`): they are read as text and are not
+     * rendered themselves. `current` is 1-based and clamped (DDS F-036). Steps run from the
+     * right in Arabic; digits stay Latin.
      */
     interface ScStepProgress {
         /**
-          * Overrides "Step {current} of {total}" (default from strings). Use `{current}` and `{total}` placeholders to keep the numbers.
+          * Overrides "Step {current} of {total}". Use the `{current}` and `{total}` placeholders.
          */
         "countText"?: string;
         /**
-          * The current step, from 1. Clamped to `total`.
+          * The current step, from 1. Clamped to 1…total.
           * @default 1
          */
         "current"?: number;
         /**
-          * The current step's name, e.g. "Plate number". Shown at the start of the row.
+          * The current step's name in the compact row, e.g. "Plate number". Defaults to the current step's name.
          */
         "label"?: string;
         /**
-          * How many steps there are. Count only the question pages, not "Check your answers" or the confirmation.
+          * `auto` (default): full from 600px wide when step names are given, else compact. `compact` or `full` force one.
+          * @default 'auto'
+         */
+        "layout"?: StepProgressLayout;
+        /**
+          * The step names, in order, set as a property from JavaScript. Used instead of child elements.
+         */
+        "steps"?: string[];
+        /**
+          * How many steps there are. Count only the question pages. Ignored when step names are given.
           * @default 1
          */
         "total"?: number;
@@ -3653,6 +4226,39 @@ declare namespace LocalJSX {
          */
         "value"?: string;
     }
+    /**
+     * The status history of an application: each change, with its status, date and a line of
+     * detail. Light DOM (architecture §3.1): you write the native list, so screen readers count
+     * the entries and nothing crosses a shadow boundary.
+     * ```html
+     * <sc-timeline>
+     *   <ol>
+     *     <li>
+     *       <sc-status-tag tone="error">Action needed</sc-status-tag>
+     *       <time datetime="2026-10-20T09:40">20 Oct 2026, 09:40</time>
+     *       <p>Upload a clearer copy of your Emirates ID.</p>
+     *     </li>
+     *     …
+     *   </ol>
+     * </sc-timeline>
+     * ```
+     * The latest entry is the current step: it gets `aria-current="step"`, and its 12px dot
+     * takes the tone of its `sc-status-tag` (the status words are always in the tag). Earlier
+     * dots are `outline`; a 2px `outline-variant` connector joins them. Dates use Dubai W23's
+     * tabular Latin digits. The marker column moves to the right in Arabic.
+     */
+    interface ScTimeline {
+        /**
+          * Draws a 1px `outline-variant` rule between entries, for a timeline inside a card.
+          * @default false
+         */
+        "divided"?: boolean;
+        /**
+          * Which end of the list is the latest (current) entry.
+          * @default 'newest-first'
+         */
+        "order"?: TimelineOrder;
+    }
 
     interface ScAccountNavAttributes {
         "label": string;
@@ -3764,6 +4370,12 @@ declare namespace LocalJSX {
         "strings": StringsInput;
         "today": string;
     }
+    interface ScEmptyStateAttributes {
+        "heading": string;
+        "headingLevel": EmptyStateHeadingLevel;
+        "icon": IconName;
+        "variant": EmptyStateVariant;
+    }
     interface ScErrorSummaryAttributes {
         "heading": string;
         "headingLevel": ErrorSummaryHeadingLevel;
@@ -3791,6 +4403,15 @@ declare namespace LocalJSX {
         "externalText": string;
         "hreflang": string;
         "download": string;
+    }
+    interface ScModalAttributes {
+        "open": boolean;
+        "heading": string;
+        "headingLevel": ModalHeadingLevel;
+        "alert": boolean;
+        "initialFocus": ModalInitialFocus;
+        "closeLabel": string;
+        "countdown": number;
     }
     interface ScPageAttributes {
         "channel": Channel;
@@ -3856,6 +4477,7 @@ declare namespace LocalJSX {
     interface ScSpinnerAttributes {
         "label": string;
         "showLabel": boolean;
+        "size": SpinnerSize;
     }
     interface ScStatusTagAttributes {
         "tone": StatusTagTone;
@@ -3865,6 +4487,7 @@ declare namespace LocalJSX {
         "total": number;
         "label": string;
         "countText": string;
+        "layout": StepProgressLayout;
     }
     interface ScSummaryListAttributes {
         "appearance": SummaryListAppearance;
@@ -3924,6 +4547,10 @@ declare namespace LocalJSX {
         "autocomplete": string;
         "headingLevel": HeadingLevel;
     }
+    interface ScTimelineAttributes {
+        "order": TimelineOrder;
+        "divided": boolean;
+    }
 
     interface IntrinsicElements {
         "sc-account-nav": Omit<ScAccountNav, keyof ScAccountNavAttributes> & { [K in keyof ScAccountNav & keyof ScAccountNavAttributes]?: ScAccountNav[K] } & { [K in keyof ScAccountNav & keyof ScAccountNavAttributes as `attr:${K}`]?: ScAccountNavAttributes[K] } & { [K in keyof ScAccountNav & keyof ScAccountNavAttributes as `prop:${K}`]?: ScAccountNav[K] };
@@ -3941,12 +4568,15 @@ declare namespace LocalJSX {
         "sc-container": Omit<ScContainer, keyof ScContainerAttributes> & { [K in keyof ScContainer & keyof ScContainerAttributes]?: ScContainer[K] } & { [K in keyof ScContainer & keyof ScContainerAttributes as `attr:${K}`]?: ScContainerAttributes[K] } & { [K in keyof ScContainer & keyof ScContainerAttributes as `prop:${K}`]?: ScContainer[K] };
         "sc-date-input": Omit<ScDateInput, keyof ScDateInputAttributes> & { [K in keyof ScDateInput & keyof ScDateInputAttributes]?: ScDateInput[K] } & { [K in keyof ScDateInput & keyof ScDateInputAttributes as `attr:${K}`]?: ScDateInputAttributes[K] } & { [K in keyof ScDateInput & keyof ScDateInputAttributes as `prop:${K}`]?: ScDateInput[K] };
         "sc-date-range": Omit<ScDateRange, keyof ScDateRangeAttributes> & { [K in keyof ScDateRange & keyof ScDateRangeAttributes]?: ScDateRange[K] } & { [K in keyof ScDateRange & keyof ScDateRangeAttributes as `attr:${K}`]?: ScDateRangeAttributes[K] } & { [K in keyof ScDateRange & keyof ScDateRangeAttributes as `prop:${K}`]?: ScDateRange[K] };
+        "sc-empty-state": Omit<ScEmptyState, keyof ScEmptyStateAttributes> & { [K in keyof ScEmptyState & keyof ScEmptyStateAttributes]?: ScEmptyState[K] } & { [K in keyof ScEmptyState & keyof ScEmptyStateAttributes as `attr:${K}`]?: ScEmptyStateAttributes[K] } & { [K in keyof ScEmptyState & keyof ScEmptyStateAttributes as `prop:${K}`]?: ScEmptyState[K] } & OneOf<"heading", ScEmptyState["heading"], ScEmptyStateAttributes["heading"]>;
         "sc-error-summary": Omit<ScErrorSummary, keyof ScErrorSummaryAttributes> & { [K in keyof ScErrorSummary & keyof ScErrorSummaryAttributes]?: ScErrorSummary[K] } & { [K in keyof ScErrorSummary & keyof ScErrorSummaryAttributes as `attr:${K}`]?: ScErrorSummaryAttributes[K] } & { [K in keyof ScErrorSummary & keyof ScErrorSummaryAttributes as `prop:${K}`]?: ScErrorSummary[K] };
         "sc-footer": Omit<ScFooter, keyof ScFooterAttributes> & { [K in keyof ScFooter & keyof ScFooterAttributes]?: ScFooter[K] } & { [K in keyof ScFooter & keyof ScFooterAttributes as `attr:${K}`]?: ScFooterAttributes[K] } & { [K in keyof ScFooter & keyof ScFooterAttributes as `prop:${K}`]?: ScFooter[K] };
         "sc-grid": Omit<ScGrid, keyof ScGridAttributes> & { [K in keyof ScGrid & keyof ScGridAttributes]?: ScGrid[K] } & { [K in keyof ScGrid & keyof ScGridAttributes as `attr:${K}`]?: ScGridAttributes[K] } & { [K in keyof ScGrid & keyof ScGridAttributes as `prop:${K}`]?: ScGrid[K] };
         "sc-language-switch": Omit<ScLanguageSwitch, keyof ScLanguageSwitchAttributes> & { [K in keyof ScLanguageSwitch & keyof ScLanguageSwitchAttributes]?: ScLanguageSwitch[K] } & { [K in keyof ScLanguageSwitch & keyof ScLanguageSwitchAttributes as `attr:${K}`]?: ScLanguageSwitchAttributes[K] } & { [K in keyof ScLanguageSwitch & keyof ScLanguageSwitchAttributes as `prop:${K}`]?: ScLanguageSwitch[K] };
         "sc-link": Omit<ScLink, keyof ScLinkAttributes> & { [K in keyof ScLink & keyof ScLinkAttributes]?: ScLink[K] } & { [K in keyof ScLink & keyof ScLinkAttributes as `attr:${K}`]?: ScLinkAttributes[K] } & { [K in keyof ScLink & keyof ScLinkAttributes as `prop:${K}`]?: ScLink[K] };
         "sc-ltr": ScLtr;
+        "sc-modal": Omit<ScModal, keyof ScModalAttributes> & { [K in keyof ScModal & keyof ScModalAttributes]?: ScModal[K] } & { [K in keyof ScModal & keyof ScModalAttributes as `attr:${K}`]?: ScModalAttributes[K] } & { [K in keyof ScModal & keyof ScModalAttributes as `prop:${K}`]?: ScModal[K] } & OneOf<"heading", ScModal["heading"], ScModalAttributes["heading"]>;
+        "sc-notification-list": ScNotificationList;
         "sc-page": Omit<ScPage, keyof ScPageAttributes> & { [K in keyof ScPage & keyof ScPageAttributes]?: ScPage[K] } & { [K in keyof ScPage & keyof ScPageAttributes as `attr:${K}`]?: ScPageAttributes[K] } & { [K in keyof ScPage & keyof ScPageAttributes as `prop:${K}`]?: ScPage[K] };
         "sc-pagination": Omit<ScPagination, keyof ScPaginationAttributes> & { [K in keyof ScPagination & keyof ScPaginationAttributes]?: ScPagination[K] } & { [K in keyof ScPagination & keyof ScPaginationAttributes as `attr:${K}`]?: ScPaginationAttributes[K] } & { [K in keyof ScPagination & keyof ScPaginationAttributes as `prop:${K}`]?: ScPagination[K] };
         "sc-radio": Omit<ScRadio, keyof ScRadioAttributes> & { [K in keyof ScRadio & keyof ScRadioAttributes]?: ScRadio[K] } & { [K in keyof ScRadio & keyof ScRadioAttributes as `attr:${K}`]?: ScRadioAttributes[K] } & { [K in keyof ScRadio & keyof ScRadioAttributes as `prop:${K}`]?: ScRadio[K] } & OneOf<"value", ScRadio["value"], ScRadioAttributes["value"]>;
@@ -3957,12 +4587,14 @@ declare namespace LocalJSX {
         "sc-skip-link": Omit<ScSkipLink, keyof ScSkipLinkAttributes> & { [K in keyof ScSkipLink & keyof ScSkipLinkAttributes]?: ScSkipLink[K] } & { [K in keyof ScSkipLink & keyof ScSkipLinkAttributes as `attr:${K}`]?: ScSkipLinkAttributes[K] } & { [K in keyof ScSkipLink & keyof ScSkipLinkAttributes as `prop:${K}`]?: ScSkipLink[K] };
         "sc-spinner": Omit<ScSpinner, keyof ScSpinnerAttributes> & { [K in keyof ScSpinner & keyof ScSpinnerAttributes]?: ScSpinner[K] } & { [K in keyof ScSpinner & keyof ScSpinnerAttributes as `attr:${K}`]?: ScSpinnerAttributes[K] } & { [K in keyof ScSpinner & keyof ScSpinnerAttributes as `prop:${K}`]?: ScSpinner[K] };
         "sc-status-tag": Omit<ScStatusTag, keyof ScStatusTagAttributes> & { [K in keyof ScStatusTag & keyof ScStatusTagAttributes]?: ScStatusTag[K] } & { [K in keyof ScStatusTag & keyof ScStatusTagAttributes as `attr:${K}`]?: ScStatusTagAttributes[K] } & { [K in keyof ScStatusTag & keyof ScStatusTagAttributes as `prop:${K}`]?: ScStatusTag[K] };
+        "sc-step-list": ScStepList;
         "sc-step-progress": Omit<ScStepProgress, keyof ScStepProgressAttributes> & { [K in keyof ScStepProgress & keyof ScStepProgressAttributes]?: ScStepProgress[K] } & { [K in keyof ScStepProgress & keyof ScStepProgressAttributes as `attr:${K}`]?: ScStepProgressAttributes[K] } & { [K in keyof ScStepProgress & keyof ScStepProgressAttributes as `prop:${K}`]?: ScStepProgress[K] };
         "sc-summary-list": Omit<ScSummaryList, keyof ScSummaryListAttributes> & { [K in keyof ScSummaryList & keyof ScSummaryListAttributes]?: ScSummaryList[K] } & { [K in keyof ScSummaryList & keyof ScSummaryListAttributes as `attr:${K}`]?: ScSummaryListAttributes[K] } & { [K in keyof ScSummaryList & keyof ScSummaryListAttributes as `prop:${K}`]?: ScSummaryList[K] };
         "sc-summary-row": Omit<ScSummaryRow, keyof ScSummaryRowAttributes> & { [K in keyof ScSummaryRow & keyof ScSummaryRowAttributes]?: ScSummaryRow[K] } & { [K in keyof ScSummaryRow & keyof ScSummaryRowAttributes as `attr:${K}`]?: ScSummaryRowAttributes[K] } & { [K in keyof ScSummaryRow & keyof ScSummaryRowAttributes as `prop:${K}`]?: ScSummaryRow[K] } & OneOf<"label", ScSummaryRow["label"], ScSummaryRowAttributes["label"]>;
         "sc-table": Omit<ScTable, keyof ScTableAttributes> & { [K in keyof ScTable & keyof ScTableAttributes]?: ScTable[K] } & { [K in keyof ScTable & keyof ScTableAttributes as `attr:${K}`]?: ScTableAttributes[K] } & { [K in keyof ScTable & keyof ScTableAttributes as `prop:${K}`]?: ScTable[K] };
         "sc-text-input": Omit<ScTextInput, keyof ScTextInputAttributes> & { [K in keyof ScTextInput & keyof ScTextInputAttributes]?: ScTextInput[K] } & { [K in keyof ScTextInput & keyof ScTextInputAttributes as `attr:${K}`]?: ScTextInputAttributes[K] } & { [K in keyof ScTextInput & keyof ScTextInputAttributes as `prop:${K}`]?: ScTextInput[K] };
         "sc-textarea": Omit<ScTextarea, keyof ScTextareaAttributes> & { [K in keyof ScTextarea & keyof ScTextareaAttributes]?: ScTextarea[K] } & { [K in keyof ScTextarea & keyof ScTextareaAttributes as `attr:${K}`]?: ScTextareaAttributes[K] } & { [K in keyof ScTextarea & keyof ScTextareaAttributes as `prop:${K}`]?: ScTextarea[K] };
+        "sc-timeline": Omit<ScTimeline, keyof ScTimelineAttributes> & { [K in keyof ScTimeline & keyof ScTimelineAttributes]?: ScTimeline[K] } & { [K in keyof ScTimeline & keyof ScTimelineAttributes as `attr:${K}`]?: ScTimelineAttributes[K] } & { [K in keyof ScTimeline & keyof ScTimelineAttributes as `prop:${K}`]?: ScTimeline[K] };
     }
 }
 export { LocalJSX as JSX };
@@ -4058,8 +4690,10 @@ declare module "@stencil/core" {
              * An important message that sits in the page content: something the user must know
              * before they act ("If your payment is interrupted, don't pay again…"), or the outcome
              * of what they just did.
-             * Each tone has its own fill, icon and a visually hidden word ("Warning:"), so the
-             * meaning never relies on colour alone.
+             * v2: a tone-95 container with an 8px radius, a tone-coloured accent bar at inline-start,
+             * a 24px tone icon and the content in `on-surface`. Each tone also has a visually hidden
+             * word ("Warning:"), so the meaning never relies on colour or the icon alone. Links inside
+             * keep the channel link colour.
              */
             "sc-callout": LocalJSX.IntrinsicElements["sc-callout"] & JSXBase.HTMLAttributes<HTMLScCalloutElement>;
             /**
@@ -4142,6 +4776,17 @@ declare module "@stencil/core" {
              */
             "sc-date-range": LocalJSX.IntrinsicElements["sc-date-range"] & JSXBase.HTMLAttributes<HTMLScDateRangeElement>;
             /**
+             * What a list, table or page shows when there is nothing in it: "You have no fines".
+             * An optional 48px icon in an 80px circle, a heading written as a sentence (never "No
+             * data"), one or two sentences in the default slot, and at most one action (usually an
+             * `sc-button variant="secondary"`) in `slot="action"`. It aligns to the start edge in both
+             * languages, so it scans with the content around it.
+             * `variant="success"` is the all-clear: nothing is left to do ("You have no fines to pay").
+             * The icon becomes a check in the success colour on a success container, and the words
+             * still say it, so the meaning never rests on colour.
+             */
+            "sc-empty-state": LocalJSX.IntrinsicElements["sc-empty-state"] & JSXBase.HTMLAttributes<HTMLScEmptyStateElement>;
+            /**
              * Lists every error on the page, at the top of the main content, after a form is
              * submitted. Each item links to its field; following a link moves focus to the field.
              * Give it items either as links in the default slot (`<a href="#plate-number">…</a>`,
@@ -4149,7 +4794,11 @@ declare module "@stencil/core" {
              * it moves focus to itself (`tabindex="-1"`), so keyboard and screen reader users hear
              * the heading and errors straight away. It has no `role="alert"`: moving focus already
              * announces it, and a live region on top can make screen readers read it twice (GOV.UK
-             * practice). The focused box is a `role="group"` named by its heading.
+             * practice). The focused box is a `role="group"` named by its heading (CMP-05).
+             * v2: an `error-container` box with a 2px `error` border and an 8px radius; the heading in
+             * `on-surface`, the links in `error`, Bold and underlined, each at least 44 × 44. Field
+             * components are light DOM in v2, so a link's `#id` can name the native control or the
+             * field host (whose `focus()` is forwarded to its control).
              */
             "sc-error-summary": LocalJSX.IntrinsicElements["sc-error-summary"] & JSXBase.HTMLAttributes<HTMLScErrorSummaryElement>;
             /**
@@ -4211,6 +4860,52 @@ declare module "@stencil/core" {
              * value is isolated even before the component upgrades.
              */
             "sc-ltr": LocalJSX.IntrinsicElements["sc-ltr"] & JSXBase.HTMLAttributes<HTMLScLtrElement>;
+            /**
+             * A modal dialog for a short secondary task or a decision that can't wait, such as the
+             * session-timeout warning (TIME-02). On phones (under 600px) the same component is a bottom
+             * sheet.
+             * It is a native `<dialog>` opened with `showModal()`, so the page behind is inert and focus
+             * can't leave it. On open, focus goes to the heading (or, with `initial-focus="first"`, the
+             * first control). Escape, the close button and a click on the scrim close it (an `alert`
+             * dialog ignores the scrim and has no close button), and focus returns to whatever had it
+             * before. A sheet can also be dragged down or flicked closed, never only that (WCAG 2.5.7).
+             * Motion: the dialog stays centred and enters with opacity and a slight scale over
+             * `--sc-duration-slow` (280ms) with the strong ease-out; the sheet slides up on
+             * `--sc-easing-drawer`. Both exit 20% faster (224ms). The scrim fades with them. Opened
+             * from the keyboard it appears instantly (MOT-02); under reduced motion it only fades.
+             * Session timeout: set `alert` and `countdown` (seconds). The time left shows as text,
+             * updated every second, and is announced politely only once on open, at each whole minute
+             * and at 30 and 10 seconds, never every second. `scCountdownEnd` fires at zero; expiring
+             * never submits anything (TIME-03).
+             */
+            "sc-modal": LocalJSX.IntrinsicElements["sc-modal"] & JSXBase.HTMLAttributes<HTMLScModalElement>;
+            /**
+             * A person's notifications, grouped by day ("Today", "Earlier"). Light DOM (architecture
+             * §3.1): you write the headings and native lists, so each group is a real list under a real
+             * heading and the links are ordinary links.
+             * ```html
+             * <sc-notification-list>
+             *   <h2>Today</h2>
+             *   <ul>
+             *     <li data-unread>
+             *       <a href="/applications/A-2026-0412">
+             *         <strong>Parking permit approved</strong>
+             *         <span>Your permit for Al Barsha is ready to download.</span>
+             *       </a>
+             *       <time datetime="2026-10-21T09:40">09:40</time>
+             *     </li>
+             *   </ul>
+             *   <h2>Earlier</h2>
+             *   <ul>…</ul>
+             * </sc-notification-list>
+             * ```
+             * Each item is a link (its title and body), with the time beside it. An unread item
+             * (`data-unread`) has a `channel-subtle` fill, a dot in the channel colour, a Bold title and
+             * a visually hidden "Unread:" before the link text, so unread is never colour alone; a read
+             * item has no fill or dot and a Medium title. Each group is a card with 1px rules between
+             * rows. Under 600px wide the time wraps under the body.
+             */
+            "sc-notification-list": LocalJSX.IntrinsicElements["sc-notification-list"] & JSXBase.HTMLAttributes<HTMLScNotificationListElement>;
             /**
              * The page frame: header, `<main>` and footer, with the page's language, direction and
              * channel on its root.
@@ -4297,27 +4992,65 @@ declare module "@stencil/core" {
              */
             "sc-skip-link": LocalJSX.IntrinsicElements["sc-skip-link"] & JSXBase.HTMLAttributes<HTMLScSkipLinkElement>;
             /**
-             * Shows that something is loading. Inline, 20px, in the current text colour.
-             * The label ("Loading" by default) is visually hidden and sits in a polite status region.
-             * Under `prefers-reduced-motion` the icon stops spinning and the label becomes visible,
-             * so the state never depends on motion.
+             * Shows that something is loading: a short inline wait, with a label saying what.
+             * v2: 20px (`size="m"`, inline) or 24px (`size="l"`), in `currentColor`, turning once per
+             * `--sc-duration-spin` (600ms, linear: a faster spinner makes loading feel faster). The label
+             * ("Loading" by default) sits in a polite `role="status"` region and is visually hidden.
+             * Under `prefers-reduced-motion` the arc stops and the label shows, so the state never
+             * depends on motion (MOT-15). It never mirrors.
              * Inside a button, use `sc-button loading` instead.
              */
             "sc-spinner": LocalJSX.IntrinsicElements["sc-spinner"] & JSXBase.HTMLAttributes<HTMLScSpinnerElement>;
             /**
-             * The status of a task, application or payment: "Paid", "Action needed", "In review",
-             * "Expires in 15 days". A pill with a status dot and the status words.
-             * The words carry the meaning; the colour and the dot only support them. It isn't
-             * interactive and isn't announced on change (use `sc-callout` or a live region for that).
+             * The status of an application, task or payment, in the words of the status vocabulary
+             * (Standard 9.6): "Paid", "Action needed", "In review", "Expires in 15 days".
+             * v2: a 32px chip with a 6px radius, a tone icon and the words, tone-40 text on a tone-95
+             * container (A11Y-06: never colour alone). It isn't interactive and isn't announced on
+             * change (use `sc-callout` or a live region for that). There is no channel tone: status is
+             * never in a channel's colour.
              */
             "sc-status-tag": LocalJSX.IntrinsicElements["sc-status-tag"] & JSXBase.HTMLAttributes<HTMLScStatusTagElement>;
             /**
-             * Shows where the user is in a short journey: "Step 2 of 4", with the current step's
-             * name and a segmented track.
-             * The text carries the meaning; the track is decorative (`aria-hidden`). Done and
-             * current segments use the channel action colour, upcoming ones the control colour;
-             * the current segment is half filled. The track fills from the inline start,
-             * so from the right in Arabic. Digits stay Latin in both languages.
+             * A life event as an ordered list of services, possibly across channels (direction E1,
+             * "Moving home"). Light DOM: you write the native `<ol>`, so the list position is the number
+             * screen readers announce.
+             * ```html
+             * <sc-step-list>
+             *   <ol>
+             *     <li><a href="/tenancy">Register your tenancy contract</a><span>Dubai Land Department</span></li>
+             *     <li data-channel="transport"><a href="https://transport…/address">Update the address on your vehicle</a><span>RTA</span></li>
+             *   </ol>
+             * </sc-step-list>
+             * ```
+             * Each row has a 32px numbered marker joined by 2px connectors, the service title (the
+             * link; the row is not a link), the owning entity, and a fixed trailing slot with a
+             * decorative chevron. A row whose `data-channel` differs from the page's channel belongs to
+             * another channel: it takes that channel's `channel-subtle` tint and filled marker, joins
+             * neighbouring rows of the same channel with that channel's colour, and gets an outlined
+             * attribution chip, "On Dubai Transport", which is read as text. The component adds the
+             * marker, chip and chevron to each `<li>` (frameworks that own the list should not
+             * re-render those nodes). The marker column moves to the right in Arabic and the chevron
+             * points left.
+             */
+            "sc-step-list": LocalJSX.IntrinsicElements["sc-step-list"] & JSXBase.HTMLAttributes<HTMLScStepListElement>;
+            /**
+             * The stepper: where the user is in a short linear journey (NAV-02, CMP-09). Direction E's
+             * signature component, replacing v1's segmented track.
+             * Completed and current markers take the channel action colour (decision U2); completed
+             * markers carry a check, the current one an inner dot and a halo, upcoming ones a 2px
+             * `outline` edge. Green is never used: it is reserved for genuine success messages.
+             * Two layouts:
+             * - **compact** (phones; E2–E4): a meta row ("Plate number" … "Step 2 of 4") that carries
+             *   the meaning, over a decorative (`aria-hidden`) row of 24px markers.
+             * - **full** (E0): an `<ol>` with one column per step: a 28px marker, a connector to the next
+             *   step (solid behind, dashed ahead), a state line ("Step 1 · Done") and the step name. The
+             *   current step has `aria-current="step"`, and every step says its state in words.
+             * `layout="auto"` (the default) shows the full stepper when step names are given and the
+             * component is at least 600px wide (a container query), and the compact one otherwise.
+             * Step names come from the `steps` property or from the host's child elements, one per step
+             * (`<span>Vehicle</span><span>Plate number</span>…`): they are read as text and are not
+             * rendered themselves. `current` is 1-based and clamped (DDS F-036). Steps run from the
+             * right in Arabic; digits stay Latin.
              */
             "sc-step-progress": LocalJSX.IntrinsicElements["sc-step-progress"] & JSXBase.HTMLAttributes<HTMLScStepProgressElement>;
             /**
@@ -4376,6 +5109,28 @@ declare module "@stencil/core" {
              * pauses, never on every keystroke. Form-associated and delegates focus, like `sc-text-input`.
              */
             "sc-textarea": LocalJSX.IntrinsicElements["sc-textarea"] & JSXBase.HTMLAttributes<HTMLScTextareaElement>;
+            /**
+             * The status history of an application: each change, with its status, date and a line of
+             * detail. Light DOM (architecture §3.1): you write the native list, so screen readers count
+             * the entries and nothing crosses a shadow boundary.
+             * ```html
+             * <sc-timeline>
+             *   <ol>
+             *     <li>
+             *       <sc-status-tag tone="error">Action needed</sc-status-tag>
+             *       <time datetime="2026-10-20T09:40">20 Oct 2026, 09:40</time>
+             *       <p>Upload a clearer copy of your Emirates ID.</p>
+             *     </li>
+             *     …
+             *   </ol>
+             * </sc-timeline>
+             * ```
+             * The latest entry is the current step: it gets `aria-current="step"`, and its 12px dot
+             * takes the tone of its `sc-status-tag` (the status words are always in the tag). Earlier
+             * dots are `outline`; a 2px `outline-variant` connector joins them. Dates use Dubai W23's
+             * tabular Latin digits. The marker column moves to the right in Arabic.
+             */
+            "sc-timeline": LocalJSX.IntrinsicElements["sc-timeline"] & JSXBase.HTMLAttributes<HTMLScTimelineElement>;
         }
     }
 }

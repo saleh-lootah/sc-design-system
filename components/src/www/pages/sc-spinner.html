@@ -1,66 +1,33 @@
-<h1 class="pg-title sc-type-heading-xl" data-ar="مؤشر التحميل">Spinner</h1>
-<p class="pg-lede sc-type-body-m" data-ar="يوضح أن شيئًا ما قيد التحميل. 20 بكسل، بلون النص الحالي. مع تقليل الحركة يتوقف عن الدوران وتظهر التسمية.">
-  Shows that something is loading. 20px, in the current text colour. With reduced motion it stops spinning and shows its label.
+<h1 class="pg-title sc-type-headline-large" data-ar="مؤشر التحميل">Spinner</h1>
+<p class="pg-lede sc-type-body-large" data-ar="انتظار قصير داخل السطر، مع تسمية تقول ما الذي يجري تحميله. داخل زر، يُستخدم sc-button loading.">
+  A short inline wait, with a label saying what is loading. Inside a button, use sc-button loading.
 </p>
 
-<section class="pg-section" aria-labelledby="s-default">
-  <h2 id="s-default" class="sc-type-heading-m" data-ar="الأشكال">Forms</h2>
+<section class="pg-section" aria-labelledby="s-sizes">
+  <h2 id="s-sizes" class="sc-type-headline-small" data-ar="الأحجام">Sizes</h2>
   <div class="pg-card">
     <div class="pg-grid">
-      <div class="pg-cell"><span class="pg-label">default (label hidden)</span><sc-spinner></sc-spinner></div>
-      <div class="pg-cell"><span class="pg-label">show-label</span><sc-spinner show-label></sc-spinner></div>
-      <div class="pg-cell"><span class="pg-label">custom label</span><sc-spinner show-label label="Checking your plate number" data-label-ar="جارٍ التحقق من رقم اللوحة"></sc-spinner></div>
-      <div class="pg-cell"><span class="pg-label">in text</span><p class="sc-type-body-m" style="margin: 0"><sc-spinner></sc-spinner> <span data-ar="جارٍ تحميل مركباتك">Loading your vehicles</span></p></div>
+      <div class="pg-cell"><span class="pg-label">m · 20px</span><sc-spinner></sc-spinner></div>
+      <div class="pg-cell"><span class="pg-label">l · 24px</span><sc-spinner size="l"></sc-spinner></div>
+      <div class="pg-cell"><span class="pg-label">show-label</span><sc-spinner show-label label="Checking your plate number" data-label-ar="جارٍ التحقق من رقم اللوحة"></sc-spinner></div>
+      <div class="pg-cell"><span class="pg-label">currentColor</span><span style="color:var(--sc-color-channel-action)"><sc-spinner show-label></sc-spinner></span></div>
     </div>
-    <p class="pg-note" data-ar="فعّل «تقليل الحركة» في النظام: يتوقف الدوران وتظهر التسمية دائمًا.">Turn on Reduce motion in your system settings: the icon stops and the label is always shown.</p>
   </div>
 </section>
 
-<section class="pg-section" aria-labelledby="s-colour">
-  <h2 id="s-colour" class="sc-type-heading-m" data-ar="بلون النص الحالي">Uses currentColor</h2>
+<section class="pg-section" aria-labelledby="s-motion">
+  <h2 id="s-motion" class="sc-type-headline-small" data-ar="الحركة">Motion</h2>
   <div class="pg-card">
-    <div class="pg-row">
-      <span style="color: var(--sc-color-ink)"><sc-spinner show-label></sc-spinner></span>
-      <span style="color: var(--sc-color-muted)"><sc-spinner show-label></sc-spinner></span>
-      <span style="color: var(--sc-channel-action)"><sc-spinner show-label></sc-spinner></span>
-    </div>
-  </div>
-</section>
-
-<section class="pg-section" aria-labelledby="s-channels">
-  <h2 id="s-channels" class="sc-type-heading-m" data-ar="بلون القناة في القنوات السبع">Channel action colour, all seven channels</h2>
-  <div class="pg-card">
-    <div class="pg-grid">
-      <div class="pg-cell" data-channel="now"><span class="pg-label">now</span><span style="color: var(--sc-channel-action)"><sc-spinner show-label></sc-spinner></span></div>
-      <div class="pg-cell" data-channel="transport"><span class="pg-label">transport</span><span style="color: var(--sc-channel-action)"><sc-spinner show-label></sc-spinner></span></div>
-      <div class="pg-cell" data-channel="visit"><span class="pg-label">visit</span><span style="color: var(--sc-channel-action)"><sc-spinner show-label></sc-spinner></span></div>
-      <div class="pg-cell" data-channel="justice"><span class="pg-label">justice</span><span style="color: var(--sc-channel-action)"><sc-spinner show-label></sc-spinner></span></div>
-      <div class="pg-cell" data-channel="build"><span class="pg-label">build</span><span style="color: var(--sc-channel-action)"><sc-spinner show-label></sc-spinner></span></div>
-      <div class="pg-cell" data-channel="invest"><span class="pg-label">invest</span><span style="color: var(--sc-channel-action)"><sc-spinner show-label></sc-spinner></span></div>
-      <div class="pg-cell" data-channel="trade"><span class="pg-label">trade</span><span style="color: var(--sc-channel-action)"><sc-spinner show-label></sc-spinner></span></div>
-    </div>
-  </div>
-</section>
-
-<section class="pg-section" aria-labelledby="s-arabic">
-  <h2 id="s-arabic" class="sc-type-heading-m" data-ar="بالعربية">In Arabic</h2>
-  <div class="pg-card" lang="ar" dir="rtl">
-    <div class="pg-row">
-      <sc-spinner show-label></sc-spinner>
-      <sc-spinner show-label label="جارٍ التحقق من الدفع"></sc-spinner>
-    </div>
-    <p class="pg-note" lang="en" dir="ltr">This card is always lang="ar" dir="rtl", whatever the toolbar says.</p>
+    <p class="pg-note" data-ar="دورة واحدة كل 600 مللي ثانية، بسرعة ثابتة: المؤشر الأسرع يجعل التحميل يبدو أسرع. عند تقليل الحركة يتوقف القوس وتظهر التسمية. لا ينعكس في العربية.">One turn per 600ms (--sc-duration-spin), linear: a faster spinner makes loading feel faster. Under reduced motion the arc stops and the label shows. It never mirrors.</p>
   </div>
 </section>
 
 <script>
-  {
-    const preview = document.getElementById('preview');
-    for (const el of preview.querySelectorAll('[data-label-ar]')) {
-      const en = el.getAttribute('label');
-      const apply = () => el.setAttribute('label', preview.lang === 'ar' ? el.dataset.labelAr : en);
-      apply();
-      new MutationObserver(apply).observe(preview, { attributes: true, attributeFilter: ['lang'] });
-    }
+{
+  const ar = document.getElementById('preview').lang === 'ar';
+  for (const el of document.querySelectorAll('#preview [data-label-ar]')) {
+    if (!el.dataset.labelEn) el.dataset.labelEn = el.getAttribute('label');
+    el.setAttribute('label', ar ? el.dataset.labelAr : el.dataset.labelEn);
   }
+}
 </script>

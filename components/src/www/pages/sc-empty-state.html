@@ -1,0 +1,38 @@
+<h1 class="pg-title sc-type-headline-large" data-ar="الحالة الفارغة">Empty state</h1>
+<p class="pg-lede sc-type-body-large" data-ar="ما تعرضه قائمة أو جدول أو صفحة عندما لا يوجد فيها شيء. العنوان جملة، وليس «لا توجد بيانات».">
+  What a list, table or page shows when there is nothing in it. The heading is a sentence, never "No data".
+</p>
+
+<section class="pg-section" aria-labelledby="es-default">
+  <h2 id="es-default" class="sc-type-headline-small" data-ar="افتراضي">Default</h2>
+  <div class="pg-card">
+    <sc-empty-state icon="inbox" heading="You have no notifications" data-heading-ar="لا توجد لديك إشعارات" heading-level="3"><span data-ar="عندما تتوفر أخبار من إحدى الخدمات، تظهر هنا.">When a service has news for you, it appears here.</span></sc-empty-state>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="es-success">
+  <h2 id="es-success" class="sc-type-headline-small" data-ar="لا شيء متبقٍ (نجاح)">All clear (success)</h2>
+  <div class="pg-card">
+    <sc-empty-state variant="success" heading="You have no fines to pay" data-heading-ar="لا توجد لديك مخالفات للدفع" heading-level="3">
+      <span data-ar="لا يوجد أي مبلغ مستحق على مركباتك.">Nothing is due on your vehicles.</span>
+      <sc-button slot="action" variant="secondary" size="m"><span data-ar="عرض المخالفات المدفوعة">View paid fines</span></sc-button>
+    </sc-empty-state>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="es-notes">
+  <h2 id="es-notes" class="sc-type-headline-small" data-ar="ملاحظات">Notes</h2>
+  <div class="pg-card">
+    <p class="pg-note" data-ar="محاذاة إلى البداية في اللغتين. أيقونة 48 بكسل في دائرة 80 بكسل. إجراء واحد على الأكثر.">Aligned to the start in both languages. A 48px icon in an 80px circle; at most one action. All clear: a success check on success-container, and the words still say it.</p>
+  </div>
+</section>
+
+<script>
+{
+  const ar = document.getElementById('preview').lang === 'ar';
+  for (const el of document.querySelectorAll('#preview [data-heading-ar]')) {
+    if (!el.dataset.headingEn) el.dataset.headingEn = el.getAttribute('heading');
+    el.setAttribute('heading', ar ? el.dataset.headingAr : el.dataset.headingEn);
+  }
+}
+</script>

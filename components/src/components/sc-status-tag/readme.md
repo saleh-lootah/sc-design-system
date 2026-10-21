@@ -1,84 +1,48 @@
 # sc-status-tag
 
-The status of a task, application or payment, usually in a list or next to a heading: "Paid", "Action needed", "In review", "Expires in 15 days". For a message the user must read, use `sc-callout`.
+The status of an application, task or payment, in the words of the status vocabulary (Standard 9.6). Not interactive, and not announced when it changes.
 
 ## Usage
 
 ```html
-<sc-status-tag tone="error">Action needed</sc-status-tag>
 <sc-status-tag tone="success">Paid</sc-status-tag>
+<sc-status-tag tone="error">Action needed</sc-status-tag>
 <sc-status-tag tone="warning">Expires in 15 days</sc-status-tag>
 <sc-status-tag>In review</sc-status-tag>
 ```
 
-### Which tone
+| Tone | Icon | Use it for |
+|---|---|---|
+| `neutral` (default) | pending | Draft, Received, In review, Not approved, Withdrawn, Cancelled, Not started, In progress |
+| `info` | hourglass | An informational state, where a service needs one. Standard 9.6 maps no status to it yet |
+| `success` | check circle | Approved, Completed, Paid |
+| `warning` | clock | Expires in {n} days |
+| `error` | error | Action needed, Payment failed |
 
-| Tone | Use it for |
-|---|---|
-| `neutral` (default) | A plain state with nothing to do yet: "Draft", "In review". |
-| `success` | Done: "Paid", "Approved", "Completed". |
-| `warning` | Needs attention soon: "Expires in 15 days". |
-| `error` | Blocked or failed: "Action needed", "Payment failed". |
-| `channel` | Deprecated: not a status in the vocabulary below. It logs a console warning and will be removed in the next major version. |
+- v2 is a 32px chip with 6px corners: tone-40 words and icon on a tone-95 container, so status is never colour alone (A11Y-06). Neutral is neutral-40 on neutral-96.
+- There is **no channel tone**: status never takes a channel's colour. v1's `tone="channel"` renders as `neutral`.
+- Two or three words. Use the vocabulary, in both languages ("تم الدفع", "إجراء مطلوب").
 
-### Status words
-
-Services show only the status words in the standard's status vocabulary (chapter 9.6), each with its fixed tone. Arabic forms agree with the noun they describe; task statuses agree with "مهمة".
-
-| Kind | Status | Arabic | Tone |
-|---|---|---|---|
-| Application | Draft | مسودة | `neutral` |
-| Application | Received | تم الاستلام | `neutral` |
-| Application | In review | قيد المراجعة | `neutral` |
-| Application | Action needed | إجراء مطلوب | `error` |
-| Application | Approved | تمت الموافقة | `success` |
-| Application | Not approved | لم تتم الموافقة | `neutral` |
-| Application | Completed | مكتمل | `success` |
-| Application | Withdrawn | تم السحب | `neutral` |
-| Application | Cancelled | تم الإلغاء | `neutral` |
-| Application | Expires in {n} days | ينتهي خلال {n} يومًا | `warning` |
-| Task | Not started | لم تبدأ | `neutral` |
-| Task | In progress | قيد التنفيذ | `neutral` |
-| Task | Completed | مكتملة | `success` |
-| Task | Cannot start yet | غير متاحة بعد | `neutral` |
-| Payment | Not paid | بانتظار الدفع | `warning` |
-| Payment | Checking payment | جارٍ التحقق من الدفع | `neutral` |
-| Payment | Paid | تم الدفع | `success` |
-| Payment | Payment failed | تعذّر الدفع | `error` |
-| Payment | Payment cancelled | تم إلغاء الدفع | `neutral` |
-| Payment | Refund requested | تم طلب الاسترداد | `neutral` |
-| Payment | Refund in progress | الاسترداد قيد التنفيذ | `neutral` |
-| Payment | Refunded | تم الاسترداد | `success` |
-
-"Paid" never stands for "Approved", and "Received" never stands for "Completed".
-
-### Content
-
-- Always write the status in words; the colour and dot only support them. Two or three words, sentence case, no full stop.
-- Use the words in the table below, the same everywhere in a service.
-- Digits stay Latin in Arabic ("ينتهي خلال 15 يومًا").
-- Not interactive and not announced on change. If the status changes while the user is on the page, also announce it (for example with a `role="status"` region).
-
-### Styling hooks
-
-Parts: `tag`, `dot`.
+Part: `tag`, `icon`.
 
 <!-- Auto Generated Below -->
 
 
 ## Overview
 
-The status of a task, application or payment: "Paid", "Action needed", "In review",
-"Expires in 15 days". A pill with a status dot and the status words.
+The status of an application, task or payment, in the words of the status vocabulary
+(Standard 9.6): "Paid", "Action needed", "In review", "Expires in 15 days".
 
-The words carry the meaning; the colour and the dot only support them. It isn't
-interactive and isn't announced on change (use `sc-callout` or a live region for that).
+v2: a 32px chip with a 6px radius, a tone icon and the words, tone-40 text on a tone-95
+container (A11Y-06: never colour alone). It isn't interactive and isn't announced on
+change (use `sc-callout` or a live region for that). There is no channel tone: status is
+never in a channel's colour.
 
 ## Properties
 
-| Property | Attribute | Description                                                                                                                                                                                                                                                                                                                                                                                                                                          | Type                                                          | Default     |
-| -------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- | ----------- |
-| `tone`   | `tone`    | - `neutral`: no action needed yet, or a plain state ("Draft", "In review"). - `success`: done ("Paid", "Approved", "Completed"). - `warning`: needs attention soon ("Expires in 15 days"). - `error`: blocked or failed ("Action needed", "Payment failed"). - `channel` (deprecated): highlights something in the current channel's colours. It is not   a status in the standard's vocabulary (9.6) and will be removed in the next major version. | `"channel" \| "error" \| "neutral" \| "success" \| "warning"` | `'neutral'` |
+| Property | Attribute | Description                                                                                                                                                                                                                                                                                                                                                                                                                         | Type                                                       | Default     |
+| -------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | ----------- |
+| `tone`   | `tone`    | - `neutral`: a plain state ("Draft", "Received", "In review", "Not started"). - `info`: an informational state, where a service needs one (hourglass icon). - `success`: done ("Paid", "Approved", "Completed"). - `warning`: needs attention soon ("Expires in 15 days"). - `error`: blocked or waiting on the user ("Action needed", "Payment failed").  An unknown tone, including v1's removed `channel`, renders as `neutral`. | `"error" \| "info" \| "neutral" \| "success" \| "warning"` | `'neutral'` |
 
 
 ## Slots
@@ -90,10 +54,10 @@ interactive and isn't announced on change (use `sc-callout` or a live region for
 
 ## Shadow Parts
 
-| Part    | Description     |
-| ------- | --------------- |
-| `"dot"` | The status dot. |
-| `"tag"` | The pill.       |
+| Part     | Description                 |
+| -------- | --------------------------- |
+| `"icon"` | The tone icon (decorative). |
+| `"tag"`  | The chip.                   |
 
 
 ----------------------------------------------

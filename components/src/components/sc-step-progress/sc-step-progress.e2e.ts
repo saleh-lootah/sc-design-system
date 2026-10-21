@@ -1,6 +1,6 @@
 import { E2EPage } from '@stencil/core/testing';
-import { expectNoAxeViolations } from '../../test/axe';
-import { contexts, newScPage, setPageContext } from '../../test/page';
+import { describeAxe } from '../../test/axe';
+import { newScPage, setPageContext } from '../../test/page';
 
 function sp(page: E2EPage, selector: string, read: string) {
   return page.evaluate(
@@ -14,57 +14,72 @@ function sp(page: E2EPage, selector: string, read: string) {
   );
 }
 
-const fillEdges = `(() => {
-  const seg = root.querySelector('.segment--current');
-  const s = seg.getBoundingClientRect();
-  const f = getComputedStyle(seg, '::before');
-  return { segLeft: s.left, segWidth: s.width, fillLeft: parseFloat(f.left), fillWidth: parseFloat(f.width) };
-})()`;
+const token = (page: E2EPage, name: string) =>
+  page.evaluate((n: string) => {
+    const i = document.createElement('i');
+    i.style.color = `var(${n})`;
+    document.body.append(i);
+    const c = getComputedStyle(i).color;
+    i.remove();
+    return c;
+  }, name);
 
-/** Emulates Windows High Contrast. Puppeteer's emulateMediaFeatures rejects forced-colors, so use CDP. */
+const NAMES = '<span>Vehicle</span><span>Plate number</span><span>Check answers</span><span>Pay</span>';
+const FULL = `<div style="inline-size: 900px"><sc-step-progress id="full" current="2">${NAMES}</sc-step-progress></div>`;
+const NARROW = `<div style="inline-size: 360px"><sc-step-progress id="narrow" current="2">${NAMES}</sc-step-progress></div>`;
+
 async function forceColors(page: E2EPage) {
   const client = await (page as unknown as { createCDPSession(): Promise<{ send(m: string, p: object): Promise<unknown> }> }).createCDPSession();
   await client.send('Emulation.setEmulatedMedia', { features: [{ name: 'forced-colors', value: 'active' }] });
 }
 
 describe('sc-step-progress (e2e)', () => {
-  it('draws an 8px segmented track: done and current in channel action, upcoming in control', async () => {
-    const page = await newScPage(`<sc-step-progress current="2" total="4" label="Plate number"></sc-step-progress>`);
-    expect(await sp(page, 'sc-step-progress', 'root.querySelector("[part=track]").getBoundingClientRect().height')).toBe(8);
-    const done = await sp(page, 'sc-step-progress', 'getComputedStyle(root.querySelector(".segment--done")).backgroundColor');
-    const upcoming = await sp(page, 'sc-step-progress', 'getComputedStyle(root.querySelector(".segment--upcoming")).backgroundColor');
-    const fill = await sp(page, 'sc-step-progress', 'getComputedStyle(root.querySelector(".segment--current"), "::before").backgroundColor');
-    expect(done).not.toBe(upcoming);
-    expect(fill).toBe(done);
+  it('shows the full stepper from 600px and the compact one below (container query)', async () => {
+    const page = await newScPage(FULL + NARROW);
+    expect(await sp(page, '#full', 'getComputedStyle(root.querySelector("[part=list]")).display')).toBe('flex');
+    expect(await sp(page, '#full', 'getComputedStyle(root.querySelector(".compact")).display')).toBe('none');
+    expect(await sp(page, '#narrow', 'getComputedStyle(root.querySelector("[part=list]")).display')).toBe('none');
+    expect(await sp(page, '#narrow', 'getComputedStyle(root.querySelector(".compact")).display')).toBe('flex');
   });
 
-  it('hides the track from assistive tech and keeps the text', async () => {
-    const page = await newScPage(`<sc-step-progress current="2" total="4" label="Plate number"></sc-step-progress>`);
-    const snapshot = await page.accessibility.snapshot({ interestingOnly: false });
-    const text = JSON.stringify(snapshot);
-    expect(text).toContain('Step 2 of 4');
-    expect(text).toContain('Plate number');
+  it('draws 28px markers (24px compact); done and current in the channel action colour, never green (U2)', async () => {
+    const page = await newScPage(FULL + NARROW);
+    expect(await sp(page, '#full', 'root.querySelector(".full .marker").getBoundingClientRect().width')).toBe(28);
+    expect(await sp(page, '#narrow', 'root.querySelector(".track .marker").getBoundingClientRect().width')).toBe(24);
+    const action = await token(page, '--sc-color-channel-action');
+    expect(await sp(page, '#full', 'getComputedStyle(root.querySelector(".full .marker--done")).backgroundColor')).toBe(action);
+    expect(await sp(page, '#full', 'getComputedStyle(root.querySelector(".full .marker--current")).backgroundColor')).toBe(action);
+    expect(await sp(page, '#full', 'getComputedStyle(root.querySelector(".full .marker--done")).backgroundColor')).not.toBe(await token(page, '--sc-color-success'));
+    expect(await sp(page, '#full', '!!root.querySelector(".full .marker--done svg")')).toBe(true);
+    // The halo: 5px of channel-subtle on desktop.
+    expect(await sp(page, '#full', 'getComputedStyle(root.querySelector(".full .marker--current")).boxShadow')).toContain('5px');
+    expect(await sp(page, '#full', 'getComputedStyle(root.querySelector(".full .marker--upcoming")).borderTopColor')).toBe(await token(page, '--sc-color-outline'));
   });
 
-  it('fills the current segment from the left in English and from the right in Arabic', async () => {
-    const page = await newScPage(`<sc-step-progress current="2" total="4"></sc-step-progress>`, { lang: 'en' });
-    let e = await sp(page, 'sc-step-progress', fillEdges);
-    expect(e.fillLeft).toBe(0);
-    expect(e.fillWidth).toBeCloseTo(e.segWidth / 2, 0);
-    const firstDoneLeftEn = await sp(page, 'sc-step-progress', 'root.querySelector(".segment--done").getBoundingClientRect().left < root.querySelector(".segment--current").getBoundingClientRect().left');
-    expect(firstDoneLeftEn).toBe(true);
+  it('joins done steps with a solid connector and upcoming ones with a dashed connector', async () => {
+    const page = await newScPage(FULL);
+    expect(await sp(page, '#full', 'getComputedStyle(root.querySelector(".full .connector--done")).borderTopStyle')).toBe('solid');
+    expect(await sp(page, '#full', 'getComputedStyle(root.querySelector(".full .connector--current")).borderTopStyle')).toBe('dashed');
+  });
 
-    await setPageContext(page, { lang: 'ar' });
-    e = await sp(page, 'sc-step-progress', fillEdges);
-    expect(e.fillLeft).toBeCloseTo(e.segWidth / 2, 0);
-    const doneOnRight = await sp(page, 'sc-step-progress', 'root.querySelector(".segment--done").getBoundingClientRect().left > root.querySelector(".segment--current").getBoundingClientRect().left');
-    expect(doneOnRight).toBe(true);
-    expect(await sp(page, 'sc-step-progress', 'root.querySelector("[part=count]").textContent')).toBe('الخطوة 2 من 4');
+  it('exposes a list with the current step and every state in words; the compact markers are hidden', async () => {
+    const page = await newScPage(FULL + NARROW);
+    const text = JSON.stringify(await page.accessibility.snapshot({ interestingOnly: false }));
+    expect(text).toContain('Step 1 · Done');
+    expect(text).toContain('Not started');
+    expect(await sp(page, '#full', 'root.querySelector("[aria-current=step]").textContent')).toContain('Plate number');
+    expect(await sp(page, '#narrow', 'root.querySelector("[part=track]").getAttribute("aria-hidden")')).toBe('true');
+  });
+
+  it('runs from the right in Arabic', async () => {
+    const page = await newScPage(FULL, { lang: 'ar' });
+    expect(await sp(page, '#full', 'root.querySelector(".full .marker--done").getBoundingClientRect().left > root.querySelector(".full .marker--current").getBoundingClientRect().left')).toBe(true);
+    expect(await sp(page, '#full', 'root.querySelector("li .state").textContent')).toBe('الخطوة 1 · مكتملة');
   });
 
   it('takes the action colour from the channel', async () => {
-    const page = await newScPage(`<sc-step-progress current="2" total="4"></sc-step-progress>`, { channel: 'now' });
-    const read = () => sp(page, 'sc-step-progress', 'getComputedStyle(root.querySelector(".segment--done")).backgroundColor');
+    const page = await newScPage(FULL, { channel: 'now' });
+    const read = () => sp(page, '#full', 'getComputedStyle(root.querySelector(".marker--done")).backgroundColor');
     const now = await read();
     await setPageContext(page, { channel: 'invest' });
     expect(await read()).not.toBe(now);
@@ -75,24 +90,16 @@ describe('sc-step-progress (e2e)', () => {
     await page.$eval('sc-step-progress', (el) => el.setAttribute('current', '3'));
     await page.waitForChanges();
     expect(await sp(page, 'sc-step-progress', 'root.querySelector("[part=count]").textContent')).toBe('Step 3 of 4');
-    expect(await sp(page, 'sc-step-progress', 'root.querySelectorAll(".segment--done").length')).toBe(2);
+    expect(await sp(page, 'sc-step-progress', 'root.querySelectorAll(".track .marker--done").length')).toBe(2);
   });
 
-  it('keeps done and upcoming segments apart in forced colours', async () => {
-    const page = await newScPage(`<sc-step-progress current="2" total="4"></sc-step-progress>`);
+  it('keeps done, current and upcoming apart in forced colours', async () => {
+    const page = await newScPage(FULL);
     await forceColors(page);
-    const done = await sp(page, 'sc-step-progress', 'getComputedStyle(root.querySelector(".segment--done")).backgroundColor');
-    const upcoming = await sp(page, 'sc-step-progress', 'getComputedStyle(root.querySelector(".segment--upcoming")).backgroundColor');
+    const done = await sp(page, '#full', 'getComputedStyle(root.querySelector(".full .marker--done")).backgroundColor');
+    const upcoming = await sp(page, '#full', 'getComputedStyle(root.querySelector(".full .marker--upcoming")).backgroundColor');
     expect(done).not.toBe(upcoming);
   });
-
-  for (const ctx of contexts) {
-    it(`has no axe violations (${ctx.lang}, ${ctx.theme})`, async () => {
-      const page = await newScPage(
-        `<main><h1>Plate number</h1><sc-step-progress current="2" total="4" label="Plate number"></sc-step-progress><sc-step-progress current="4" total="4"></sc-step-progress></main>`,
-        ctx,
-      );
-      await expectNoAxeViolations(page);
-    });
-  }
 });
+
+describeAxe('sc-step-progress', `<main><h1>Plate number</h1>${FULL}${NARROW}<sc-step-progress current="4" total="4"></sc-step-progress></main>`);

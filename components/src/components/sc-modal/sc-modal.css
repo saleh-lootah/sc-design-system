@@ -1,0 +1,236 @@
+/*
+ * sc-modal (v2, shadow; a native <dialog> in its own root, architecture §3.1). Rules:
+ * component-language.md B19 read through the role table in decisions.md (shadow-3 is
+ * elevation-2), FND-19/20 and MOT-01..15. Dialog: centred, at most 560 wide, radius 12.
+ * Sheet (under 600px): full width, at most 92% of the viewport, top corners 12, a grabber.
+ *
+ * Durations: modals and sheets enter over --sc-duration-slow (280ms) and exit 20% faster
+ * (224ms); the scrim moves with the panel. .is-instant (opened from the keyboard) makes it
+ * instant (MOT-02). Under reduced motion the scale tokens are 1 and the sheet does not slide.
+ */
+:host {
+  --_enter: var(--sc-duration-slow);
+  --_exit: calc(var(--sc-duration-slow) * 0.8);
+  --_ease-in: var(--sc-easing-enter);
+  --_ease-out: var(--sc-easing-exit);
+  --_from: scale(var(--sc-scale-enter));
+  display: contents;
+}
+
+:host(.is-instant) {
+  --_enter: var(--sc-duration-instant);
+  --_exit: var(--sc-duration-instant);
+}
+
+:host(.is-sheet) {
+  --_ease-in: var(--sc-easing-drawer);
+  --_ease-out: var(--sc-easing-drawer);
+  --_from: translateY(100%);
+}
+
+.dialog {
+  box-sizing: border-box;
+  inline-size: min(calc(100% - var(--sc-space-32)), calc(var(--sc-space-80) * 7));
+  max-inline-size: none;
+  max-block-size: calc(100% - var(--sc-space-32));
+  margin: auto;
+  padding: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+  border-radius: var(--sc-radius-card);
+  /* FND-20: in dark mode the panel steps up to surface-container. */
+  background: var(--sc-color-surface-card);
+  background: light-dark(var(--sc-color-surface-card), var(--sc-color-surface-container));
+  box-shadow: var(--sc-elevation-2);
+  color: var(--sc-color-on-surface);
+  /* MOT-08: not anchored to a trigger, so it scales from its own centre and stays centred. */
+  transform-origin: center;
+  opacity: 0;
+  transform: var(--_from);
+  transition:
+    opacity var(--_exit) var(--_ease-out),
+    transform var(--_exit) var(--_ease-out),
+    overlay var(--_exit) allow-discrete,
+    display var(--_exit) allow-discrete;
+}
+
+.dialog[open] {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--_enter) var(--_ease-in),
+    transform var(--_enter) var(--_ease-in),
+    overlay var(--_enter) allow-discrete,
+    display var(--_enter) allow-discrete;
+}
+
+@starting-style {
+  .dialog[open] {
+    opacity: 0;
+    transform: var(--_from);
+  }
+}
+
+.dialog.is-dragging {
+  transition: none;
+}
+
+.dialog::backdrop {
+  background-color: transparent;
+  transition:
+    background-color var(--_exit) var(--_ease-out),
+    overlay var(--_exit) allow-discrete,
+    display var(--_exit) allow-discrete;
+}
+
+.dialog[open]::backdrop {
+  background-color: var(--sc-color-scrim);
+  transition:
+    background-color var(--_enter) var(--_ease-in),
+    overlay var(--_enter) allow-discrete,
+    display var(--_enter) allow-discrete;
+}
+
+@starting-style {
+  .dialog[open]::backdrop {
+    background-color: transparent;
+  }
+}
+
+/* Panel ---------------------------------------------------------------------------------- */
+.panel {
+  display: flex;
+  flex-direction: column;
+  padding: var(--sc-space-32);
+}
+
+.top {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sc-space-16);
+}
+
+.grabber {
+  display: none;
+}
+
+.heading {
+  flex: 1 1 0;
+  min-inline-size: 0;
+  margin: 0;
+  font: var(--sc-type-headline-small);
+  letter-spacing: var(--sc-type-headline-small-tracking);
+  overflow-wrap: anywhere;
+}
+
+/* The heading takes focus by script only (tabindex="-1"): no ring, as on a page heading. */
+.heading:focus {
+  outline: none;
+}
+
+.close {
+  --icon-size: var(--sc-size-icon-l);
+  --sc-state-color: var(--sc-color-on-surface);
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--sc-size-target-min);
+  block-size: var(--sc-size-target-min);
+  margin-block-start: calc(var(--sc-space-8) * -1);
+  margin-inline-end: calc(var(--sc-space-12) * -1);
+  padding: 0;
+  border: 0;
+  border-radius: var(--sc-radius-full);
+  background-color: transparent;
+  color: var(--sc-color-on-surface);
+  cursor: pointer;
+}
+
+.body {
+  margin-block-start: var(--sc-space-12);
+  font: var(--sc-type-body-large);
+  letter-spacing: var(--sc-type-body-large-tracking);
+}
+
+::slotted(p) {
+  margin: 0;
+}
+
+::slotted(p + p) {
+  margin-block-start: var(--sc-space-12);
+}
+
+.countdown {
+  margin: 0 0 var(--sc-space-12);
+  font: var(--sc-type-title-medium);
+  letter-spacing: var(--sc-type-title-medium-tracking);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sc-space-12);
+  margin-block-start: var(--sc-space-32);
+}
+
+.actions--empty {
+  display: none;
+}
+
+@media (max-width: 1023.98px) {
+  .panel {
+    padding: var(--sc-space-24);
+  }
+}
+
+/* Sheet ---------------------------------------------------------------------------------- */
+:host(.is-sheet) .dialog {
+  inline-size: 100%;
+  max-block-size: 92dvh;
+  margin-block: auto 0;
+  margin-inline: 0;
+  border-block-end: 0;
+  border-inline: 0;
+  border-radius: var(--sc-radius-card) var(--sc-radius-card) 0 0;
+}
+
+:host(.is-sheet) .panel {
+  padding-block: var(--sc-space-20) calc(var(--sc-space-24) + env(safe-area-inset-bottom, 0px));
+  padding-inline: var(--sc-space-20);
+}
+
+:host(.is-sheet) .top {
+  position: relative;
+  padding-block-start: var(--sc-space-12);
+  touch-action: none;
+}
+
+:host(.is-sheet) .grabber {
+  position: absolute;
+  inset-block-start: calc(var(--sc-space-12) * -1);
+  inset-inline-start: calc(50% - var(--sc-space-16));
+  display: block;
+  inline-size: var(--sc-space-32);
+  block-size: var(--sc-space-4);
+  border-radius: var(--sc-radius-full);
+  background: var(--sc-color-outline-variant);
+}
+
+:host(.is-sheet) .actions {
+  flex-direction: column;
+  margin-block-start: var(--sc-space-24);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host(.is-sheet) {
+    --_from: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .dialog {
+    border-color: CanvasText;
+  }
+}

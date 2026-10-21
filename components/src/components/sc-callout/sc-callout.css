@@ -1,4 +1,9 @@
-
+/*
+ * sc-callout (v2, shadow). Rules: component-language.md A17 read through the role table in
+ * decisions.md. Fill {tone}-container, accent bar and icon {tone}, text on-surface. The
+ * accent is --sc-size-border-accent (3px, foundations §6 and Standard FND-16), not the 4px
+ * component-language.md proposed.
+ */
 :host {
   display: block;
 }
@@ -8,34 +13,34 @@
 }
 
 .callout {
-  /* Tone roles (set per tone below). Info is the default. */
-  --_fill: var(--sc-color-fill-quiet);
-  --_accent: var(--sc-color-ink);
+  --_fill: var(--sc-color-info-container);
+  --_accent: var(--sc-color-info);
   --icon-size: var(--sc-size-icon-l);
 
-  box-sizing: border-box;
   display: flex;
   align-items: flex-start;
   gap: var(--sc-space-12);
   padding: var(--sc-space-16);
-  border: var(--sc-size-border-hairline) solid color-mix(in oklab, var(--_accent) 18%, transparent);
-  border-radius: var(--sc-radius-card);
+  /* Transparent edges until forced colours repaint them; the start edge is the accent. */
+  border: var(--sc-size-border-hairline) solid transparent;
+  border-inline-start: var(--sc-size-border-accent) solid var(--_accent);
+  border-radius: var(--sc-radius-field);
   background: var(--_fill);
-  color: var(--sc-color-ink);
+  color: var(--sc-color-on-surface);
 }
 
 .callout--success {
-  --_fill: var(--sc-color-success-surface);
+  --_fill: var(--sc-color-success-container);
   --_accent: var(--sc-color-success);
 }
 
 .callout--warning {
-  --_fill: var(--sc-color-warning-surface);
+  --_fill: var(--sc-color-warning-container);
   --_accent: var(--sc-color-warning);
 }
 
 .callout--error {
-  --_fill: var(--sc-color-error-surface);
+  --_fill: var(--sc-color-error-container);
   --_accent: var(--sc-color-error);
 }
 
@@ -43,8 +48,6 @@
   display: inline-flex;
   flex: none;
   color: var(--_accent);
-  /* Centre the 24px icon on the first line of text. */
-  padding-block: var(--sc-space-2);
 }
 
 .body {
@@ -58,9 +61,10 @@
 
 .heading {
   margin: 0;
-  color: var(--sc-color-ink-strong);
-  font-family: var(--sc-font-family-bold);
+  color: var(--sc-color-on-surface);
+  font: var(--sc-type-title-small);
   font-weight: var(--sc-font-weight-bold);
+  letter-spacing: var(--sc-type-title-small-tracking);
 }
 
 .heading--empty {
@@ -68,7 +72,8 @@
 }
 
 .content {
-  color: var(--sc-color-ink);
+  font: var(--sc-type-body-medium);
+  letter-spacing: var(--sc-type-body-medium-tracking);
 }
 
 ::slotted(p) {
@@ -79,9 +84,13 @@
   margin-block-start: var(--sc-space-8);
 }
 
+/* Links stay recognisable as links in every tone (COL-08). Links nested deeper than the
+   slot take the page's own link styles (.sc-link). */
 ::slotted(a) {
-  color: inherit;
-  text-decoration: underline;
+  color: var(--sc-color-channel-action);
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
 }
 
 @media (forced-colors: active) {
