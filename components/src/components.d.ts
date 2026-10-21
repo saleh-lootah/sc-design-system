@@ -200,6 +200,10 @@ export namespace Components {
          */
         "dismiss": () => Promise<void>;
         /**
+          * Overrides the dismiss button's name, "Dismiss announcement" (in the page language).
+         */
+        "dismissLabel"?: string;
+        /**
           * Shows the dismiss button.
           * @default false
          */
@@ -3428,6 +3432,10 @@ declare namespace LocalJSX {
          */
         "announcementId"?: string;
         /**
+          * Overrides the dismiss button's name, "Dismiss announcement" (in the page language).
+         */
+        "dismissLabel"?: string;
+        /**
           * Shows the dismiss button.
           * @default false
          */
@@ -5372,6 +5380,7 @@ declare namespace LocalJSX {
         "linkText": string;
         "dismissible": boolean;
         "announcementId": string;
+        "dismissLabel": string;
     }
     interface ScAppBarAttributes {
         "sticky": boolean;

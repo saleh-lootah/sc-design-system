@@ -71,6 +71,13 @@ describe('sc-announcement-bar (e2e)', () => {
     const [i2, d2] = (await style(page, '[".tone-icon", ".dismiss"].map((s) => root.querySelector(s).getBoundingClientRect().left)')) as number[];
     expect(i2).toBeLessThan(d2);
   });
+
+  it('is 48 tall on one line (plus its 1px rule), with the link in the message type, 12 after it', async () => {
+    const page = await newScPage(`<sc-announcement-bar dismissible link-href="#s" link-text="Read more">Planned maintenance.</sc-announcement-bar>`);
+    await page.setViewport({ width: 1280, height: 800 });
+    const look = await style(page, '(() => { const m = root.querySelector(".message"); const l = root.querySelector(".link"); const ms = getComputedStyle(m); const ls = getComputedStyle(l); return [Math.round(root.querySelector("section").getBoundingClientRect().height), ls.fontWeight === ms.fontWeight, ls.fontSize === ms.fontSize, Math.round(l.getBoundingClientRect().left - m.getBoundingClientRect().right)]; })()');
+    expect(look).toEqual([49, true, true, 12]);
+  });
 });
 
 describeAxe('sc-announcement-bar', `${BAR()}<sc-announcement-bar tone="info">A new way to renew your licence is live.</sc-announcement-bar><sc-announcement-bar tone="error">Payments are not working at the moment.</sc-announcement-bar>`);

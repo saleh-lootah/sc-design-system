@@ -37,6 +37,11 @@ describe('sc-announcement-bar (spec)', () => {
     expect(page.root!.hasAttribute('hidden')).toBe(true);
   });
 
+  it('takes its dismiss name from dismiss-label', async () => {
+    const page = await render(`<sc-announcement-bar dismissible dismiss-label="Close the maintenance notice">x</sc-announcement-bar>`);
+    expect(page.root!.shadowRoot!.querySelector('button .visually-hidden')!.textContent).toBe('Close the maintenance notice');
+  });
+
   it('stays when scDismiss is prevented', async () => {
     const page = await render(`<sc-announcement-bar dismissible>x</sc-announcement-bar>`);
     page.root!.addEventListener('scDismiss', (e) => e.preventDefault());

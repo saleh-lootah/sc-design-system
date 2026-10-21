@@ -96,6 +96,21 @@ describe('sc-account-menu (e2e)', () => {
       await expectNoAxeViolations(page);
     }
   });
+
+  it('paints the initials in channel-action on channel-container, and pads the trigger 6 and 12', async () => {
+    const page = await newScPage(MENU);
+    const look = await inRoot<string[]>(page, '(() => { const a = getComputedStyle(root.querySelector(".avatar")); const t = getComputedStyle(root.querySelector(".trigger")); return [a.color, a.backgroundColor, t.paddingInlineStart, t.paddingInlineEnd]; })()');
+    const colour = (n: string) =>
+      page.evaluate((v: string) => {
+        const i = document.createElement('i');
+        i.style.color = `var(${v})`;
+        document.body.append(i);
+        return getComputedStyle(i).color;
+      }, n);
+    expect(look[0]).toBe(await colour('--sc-color-channel-action'));
+    expect(look[1]).toBe(await colour('--sc-color-channel-container'));
+    expect(look.slice(2)).toEqual(['6px', '12px']);
+  });
 });
 
 describeAxe('sc-account-menu', MENU);

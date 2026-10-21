@@ -13,6 +13,7 @@ A site-wide announcement above the header (after the skip link). Spec: `specs/sc
 
 - `tone`: `warning` (default), `info` or `error`. Say the severity in the words too.
 - It is a labelled region present at load, not an alert. Change `announcement-id` when the message changes.
+- `dismiss-label` overrides the dismiss button's name ("Dismiss announcement" / "إغلاق الإعلان").
 
 <!-- Auto Generated Below -->
 
@@ -37,6 +38,7 @@ Focus moves to the next focusable element after it. From a pointer it fades out 
 | Property         | Attribute         | Description                                                                                                                                                  | Type                             | Default     |
 | ---------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------- | ----------- |
 | `announcementId` | `announcement-id` | Remembers a dismissal in this browser (localStorage) under this id, so the announcement stays hidden on later pages. Change the id when the message changes. | `string \| undefined`            | `undefined` |
+| `dismissLabel`   | `dismiss-label`   | Overrides the dismiss button's name, "Dismiss announcement" (in the page language).                                                                          | `string \| undefined`            | `undefined` |
 | `dismissible`    | `dismissible`     | Shows the dismiss button.                                                                                                                                    | `boolean`                        | `false`     |
 | `linkHref`       | `link-href`       | A link with more detail ("See affected services"). Shown with `link-text`.                                                                                   | `string \| undefined`            | `undefined` |
 | `linkText`       | `link-text`       | The link's text.                                                                                                                                             | `string \| undefined`            | `undefined` |
