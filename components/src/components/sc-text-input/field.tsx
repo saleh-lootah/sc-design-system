@@ -17,7 +17,6 @@
 import { FunctionalComponent, h } from '@stencil/core';
 import type { StringPart } from '../../i18n/define';
 import fieldStrings from '../../i18n/components/sc-field';
-import { AlertCircle } from '../../icons/index'; // explicit /index: Stencil only scans file imports for <svg>
 
 export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
@@ -129,12 +128,24 @@ export const FieldHint: FunctionalComponent<{ id: string; text?: string; rich?: 
  */
 export const FieldError: FunctionalComponent<{ id: string; text?: string; rich?: Element; show: boolean; prefix: string }> = ({ id, text, rich, show, prefix }) => (
   <p id={id} class="sc-field__error" hidden={!show}>
-    <AlertCircle class="sc-field__error-icon" />
+    <ErrorIcon />
     <span class="sc-field__error-text">
       <span class="visually-hidden">{prefix} </span>
       {rich ? <Moved node={rich} /> : text}
     </span>
   </p>
+);
+
+/**
+ * The error icon, drawn here (as the shared set's AlertCircle) so a field doesn't pull the
+ * whole icon module into its bundle.
+ */
+const ErrorIcon: FunctionalComponent = () => (
+  <svg class="icon sc-field__error-icon" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false">
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 7.5v5.5" />
+    <circle cx="12" cy="16.5" r="1.25" fill="currentColor" stroke="none" />
+  </svg>
 );
 
 /** The `expand_more` chevron of a select (E2). Points down in both directions; never mirrors. */

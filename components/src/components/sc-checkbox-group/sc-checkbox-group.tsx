@@ -1,46 +1,29 @@
-import { AttachInternals, Component, Element, Event, EventEmitter, Host, Listen, Prop, State, h } from '@stencil/core';
-import { LocaleController } from '../../i18n/locale';
-import { AlertCircle } from '../../icons/index'; // explicit /index: enables SVG rendering for this component (see CONTRIBUTING)
-import { FieldError, FieldHint, FieldLabel, HeadingLevel, IDS, describedBy, hasSlotted, headingLevel, formSupported } from '../sc-text-input/field-v1';
+import { Component, Element, Event, EventEmitter, Host, Listen, Prop, State, h } from '@stencil/core';
+import { LocaleController } from '../../i18n/controller';
+import groupStrings from '../../i18n/components/sc-checkbox-group';
+import { FieldError, FieldHint, FieldLabel, HeadingLevel, Slotted, adoptChildren, describedBy, forwardFocus, headingLevel, nextId, onFormReset, takeSlotted, withField } from '../sc-text-input/field';
 
-void AlertCircle;
-
-type CheckboxEl = HTMLElement & { checked: boolean; value: string; groupInvalid: boolean; groupDisabled: boolean };
+type CheckboxEl = HTMLElement & { checked: boolean; value: string; groupName?: string; groupInvalid: boolean };
+const strings = withField(groupStrings);
 
 /**
  * Several choices from a short list: "Which documents do you have?".
  *
- * A `<fieldset>` with a `<legend>`, hint and error in this element's shadow root, with the
- * `sc-checkbox` children slotted inside it. Each checkbox keeps its own native input, label
- * and hint in its own shadow root (so `sc-checkbox` also works on its own); the fieldset
- * groups them in the accessibility tree, which follows the flattened tree. The group's
- * hint and error describe the fieldset, and in the error state every box gets
- * `aria-invalid` and an error border.
- *
- * Each checked box submits its own value under the group's `name` (or its own). The group is
- * form-associated only to report `valueMissing` when `required` and nothing is checked.
+ * v2 renders a native `<fieldset>` with its `<legend>`, hint and error in light DOM (Stencil
+ * `scoped`, decision A2), and moves the `sc-checkbox` children into it, so they are grouped
+ * and named by the legend natively. Each checked box submits its own value under the group's
+ * `name`. `disabled` disables the fieldset (and so every box). With `required`, the first box
+ * carries a native validity error until one is checked.
  *
  * @slot - `sc-checkbox` elements, one per option.
- * @slot label - Rich legend content, instead of the `label` prop.
- * @slot hint - Rich hint content, instead of the `hint` prop.
- * @slot error - Rich error content, instead of the `error` prop.
- *
- * @part field - The `<fieldset>` (gets the error bar).
- * @part label - The `<legend>`.
- * @part hint - The hint.
- * @part error - The error message.
- * @part options - The wrapper around the checkboxes.
  */
 @Component({
   tag: 'sc-checkbox-group',
-  styleUrl: 'sc-checkbox-group.css',
-  shadow: { delegatesFocus: true },
-  formAssociated: true,
+  styleUrls: ['../sc-text-input/field.css', 'sc-checkbox-group.css'],
+  scoped: true,
 })
 export class ScCheckboxGroup {
   @Element() el!: HTMLElement;
-
-  @AttachInternals() internals!: ElementInternals;
 
   /** The question, shown as the legend: "Which documents do you have?". */
   @Prop() label?: string;
@@ -57,10 +40,10 @@ export class ScCheckboxGroup {
   /** The name each checked box submits its value under (unless the box has its own `name`). */
   @Prop({ reflect: true }) name?: string;
 
-  /** Requires at least one box to be checked (`valueMissing`). Not shown visually. */
+  /** Requires at least one box to be checked. Not shown visually. */
   @Prop() required = false;
 
-  /** Disables every checkbox. Avoid it. */
+  /** Disables every checkbox (through the fieldset). Avoid it. */
   @Prop({ reflect: true }) disabled = false;
 
   /** Lays short options side by side. They wrap on narrow screens. */
@@ -72,101 +55,72 @@ export class ScCheckboxGroup {
   /** Fires when any box is toggled, with the values of all checked boxes: `{ value: string[] }`. */
   @Event({ bubbles: true, composed: true }) scGroupChange!: EventEmitter<{ value: string[] }>;
 
-  @State() formDisabled = false;
-  @State() slots = { label: false, hint: false, error: false };
+  @State() slotted: Slotted = {};
 
-  private locale = new LocaleController(this);
+  private uid = nextId('sc-checkbox-group');
+  private options?: HTMLElement;
+  private observer?: MutationObserver;
+  private locale = new LocaleController(this, strings);
+  private stopReset?: () => void;
 
   connectedCallback() {
     this.locale.connect();
-    this.readSlots();
-  }
-
-  componentDidLoad() {
-    // slotchange bubbles to the shadow root but not past it.
-    this.el.shadowRoot?.addEventListener('slotchange', this.readSlots);
+    this.slotted = takeSlotted(this.el, ['label', 'hint', 'error'], this.slotted);
+    forwardFocus(this.el, () => this.boxes.find((b) => !b.querySelector('input')?.disabled)?.querySelector('input'));
+    this.stopReset = onFormReset(this.el, () => queueMicrotask(() => this.sync()));
+    this.observer = adoptChildren(this.el, () => this.options, (el) => el.localName === 'sc-checkbox', () => this.sync());
   }
 
   disconnectedCallback() {
     this.locale.disconnect();
+    this.stopReset?.();
+    this.observer?.disconnect();
   }
 
   componentDidRender() {
-    this.syncChildren();
     this.sync();
-  }
-
-  formDisabledCallback(disabled: boolean) {
-    this.formDisabled = disabled;
-    this.syncChildren();
-  }
-
-  formResetCallback() {
-    // Each sc-checkbox resets itself; re-check validity once they have.
-    queueMicrotask(() => this.sync());
-  }
-
-  /** The values of the checked boxes, in order. */
-  private valueList(): string[] {
-    return this.boxes.filter((b) => b.checked).map((b) => b.value);
   }
 
   private get boxes(): CheckboxEl[] {
-    return Array.from(this.el.children).filter((c) => c.localName === 'sc-checkbox') as CheckboxEl[];
+    return Array.from(this.el.querySelectorAll('sc-checkbox')).filter((b) => b.parentElement?.closest('sc-checkbox-group') === this.el) as CheckboxEl[];
   }
 
-  @Listen('scChange')
-  onBoxChange(ev: Event) {
-    if ((ev.target as HTMLElement).parentElement !== this.el) return;
-    this.sync();
-    this.scGroupChange.emit({ value: this.valueList() });
-  }
-
-  /** Passes the error and disabled state down to each checkbox. */
-  private syncChildren() {
-    const invalid = !!this.error || this.slots.error;
-    const disabled = this.disabled || this.formDisabled;
-    for (const box of this.boxes) {
-      box.groupInvalid = invalid;
-      box.groupDisabled = disabled;
-    }
-  }
-
+  /** Passes the name and error state to each box, and sets the "at least one" validity. */
   private sync() {
-    if (!formSupported()) return;
-    this.internals?.setFormValue?.(null);
-    if (!this.internals?.setValidity) return;
+    const invalid = !!this.error || !!this.slotted.error;
     const boxes = this.boxes;
-    const anchor = boxes.find((b) => !b.hasAttribute('disabled'))?.shadowRoot?.querySelector('input') ?? undefined;
-    if (this.required && !boxes.some((b) => b.checked) && anchor) {
-      this.internals.setValidity({ valueMissing: true }, this.locale.t('checkboxGroupRequired'), anchor);
-    } else {
-      this.internals.setValidity({});
+    for (const box of boxes) {
+      if (box.groupName !== this.name) box.groupName = this.name;
+      if (box.groupInvalid !== invalid) box.groupInvalid = invalid;
     }
+    const inputs = boxes.map((b) => b.querySelector('input')).filter(Boolean) as HTMLInputElement[];
+    const missing = this.required && !inputs.some((i) => i.checked);
+    const anchor = inputs.find((i) => !i.disabled);
+    for (const input of inputs) input.setCustomValidity?.(missing && input === anchor ? this.locale.t('checkboxGroupRequired') : '');
   }
 
-  private readSlots = () => {
-    const next = { label: hasSlotted(this.el, 'label'), hint: hasSlotted(this.el, 'hint'), error: hasSlotted(this.el, 'error') };
-    if (JSON.stringify(next) !== JSON.stringify(this.slots)) this.slots = next;
-  };
+  @Listen('change')
+  onBoxChange(ev: Event) {
+    const box = (ev.target as HTMLElement).closest?.('sc-checkbox');
+    if (!box || box.parentElement?.closest('sc-checkbox-group') !== this.el) return;
+    this.sync();
+    this.scGroupChange.emit({ value: this.boxes.filter((b) => b.querySelector('input')?.checked).map((b) => b.value) });
+  }
 
   render() {
     const { t } = this.locale;
-    const hasHint = !!this.hint || this.slots.hint;
-    const hasError = !!this.error || this.slots.error;
+    const id = this.uid;
+    const { slotted } = this;
+    const hasHint = !!this.hint || !!slotted.hint;
+    const hasError = !!this.error || !!slotted.error;
 
     return (
       <Host>
-        <fieldset
-          class={{ 'field': true, 'field--error': hasError }}
-          part="field"
-          aria-describedby={describedBy(hasHint && IDS.hint, hasError && IDS.error)}
-         
-        >
-          <FieldLabel text={this.label} optional={this.optional} optionalText={t('optional')} level={headingLevel(this.headingLevel)} as="legend" />
-          <FieldHint text={this.hint} show={hasHint} />
-          <FieldError text={this.error} show={hasError} prefix={t('errorPrefix')} />
-          <div class={{ 'options': true, 'options--inline': this.inline }} part="options">
+        <fieldset class={{ 'sc-field': true, 'sc-field--error': hasError }} disabled={this.disabled} aria-describedby={describedBy(hasHint && `${id}-hint`, hasError && `${id}-error`)}>
+          <FieldLabel id={`${id}-label`} text={this.label} rich={slotted.label} optional={this.optional} optionalText={t('fieldOptional')} level={headingLevel(this.headingLevel)} as="legend" />
+          <FieldHint id={`${id}-hint`} text={this.hint} rich={slotted.hint} show={hasHint} />
+          <FieldError id={`${id}-error`} text={this.error} rich={slotted.error} show={hasError} prefix={t('fieldErrorPrefix')} />
+          <div ref={(el) => (this.options = el)} class={{ 'sc-choice-group__options': true, 'sc-choice-group__options--inline': this.inline }}>
             <slot />
           </div>
         </fieldset>

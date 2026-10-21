@@ -16,15 +16,13 @@ Several choices from a short list: "Which documents do you have?", "Send reminde
 - Say "Select all that apply" in the hint. Order options logically; don't pre-check options for people.
 - **Error:** set `error` on the group. The group shows the bar and message; every box gets the error border and `aria-invalid`. The boxes' own `error` is ignored inside a group.
 
-### How it stays accessible across shadow roots
+### Structure (v2, light DOM)
 
-Unlike radios, checkboxes don't need to share a tree: each one is independent (its own Tab stop, Space toggles it). So each `sc-checkbox` keeps its own native `<input type="checkbox">`, `<label>` and hint in **its own shadow root**, which also lets it work on its own. The group renders the `<fieldset>`, `<legend>`, hint and error in its shadow root and slots the checkboxes inside the fieldset. The accessibility tree follows the flattened tree, so screen readers find the checkboxes inside the group named by the legend and described by the hint and error. The group passes its error and disabled state down to each box.
-
-Tested in `sc-checkbox-group.e2e.ts` against Chromium's accessibility tree (group name and description, checkbox names inside the group), with the keyboard (Tab to each box, Space toggles) and axe in English and Arabic, light and dark.
+The group renders a native `<fieldset>`, `<legend>`, hint and error in light DOM (decision A2) and moves its `sc-checkbox` children inside the fieldset, so they are grouped and named by the legend natively. Each `sc-checkbox` renders its own native `<input type="checkbox">`, `<label>` and hint, so it also works on its own. `disabled` disables the fieldset, and with it every box. The group passes its `name` and error state to each box. Boxes appended later are moved in too.
 
 ### Forms
 
-Each checked box submits its own `value` under the group's `name` (or its own `name`), so the form data is `documents=insurance&documents=fines`, as with native checkboxes. Reset restores each box. The group is form-associated only to report `valueMissing` when `required` and nothing is checked. `scGroupChange` carries `{ value: string[] }`, the checked values.
+Each checked box submits its own `value` under the group's `name` (or its own `name`): `documents=insurance&documents=fines`, as native checkboxes do. Reset restores each box. With `required`, the first enabled box carries a native validity error ("Select at least one option") until one is checked, so `checkValidity()` and `reportValidity()` work. The native `change` bubbles from each box; `scGroupChange` carries `{ value: string[] }`.
 
 <!-- Auto Generated Below -->
 
@@ -33,21 +31,17 @@ Each checked box submits its own `value` under the group's `name` (or its own `n
 
 Several choices from a short list: "Which documents do you have?".
 
-A `<fieldset>` with a `<legend>`, hint and error in this element's shadow root, with the
-`sc-checkbox` children slotted inside it. Each checkbox keeps its own native input, label
-and hint in its own shadow root (so `sc-checkbox` also works on its own); the fieldset
-groups them in the accessibility tree, which follows the flattened tree. The group's
-hint and error describe the fieldset, and in the error state every box gets
-`aria-invalid` and an error border.
-
-Each checked box submits its own value under the group's `name` (or its own). The group is
-form-associated only to report `valueMissing` when `required` and nothing is checked.
+v2 renders a native `<fieldset>` with its `<legend>`, hint and error in light DOM (Stencil
+`scoped`, decision A2), and moves the `sc-checkbox` children into it, so they are grouped
+and named by the legend natively. Each checked box submits its own value under the group's
+`name`. `disabled` disables the fieldset (and so every box). With `required`, the first box
+carries a native validity error until one is checked.
 
 ## Properties
 
 | Property       | Attribute       | Description                                                                            | Type                                      | Default     |
 | -------------- | --------------- | -------------------------------------------------------------------------------------- | ----------------------------------------- | ----------- |
-| `disabled`     | `disabled`      | Disables every checkbox. Avoid it.                                                     | `boolean`                                 | `false`     |
+| `disabled`     | `disabled`      | Disables every checkbox (through the fieldset). Avoid it.                              | `boolean`                                 | `false`     |
 | `error`        | `error`         | The error message. Setting it shows the error state on the group and every box.        | `string \| undefined`                     | `undefined` |
 | `headingLevel` | `heading-level` | When set (1–6), the legend is also the page heading at this level.                     | `1 \| 2 \| 3 \| 4 \| 5 \| 6 \| undefined` | `undefined` |
 | `hint`         | `hint`          | Help text below the legend: "Select all that apply".                                   | `string \| undefined`                     | `undefined` |
@@ -55,7 +49,7 @@ form-associated only to report `valueMissing` when `required` and nothing is che
 | `label`        | `label`         | The question, shown as the legend: "Which documents do you have?".                     | `string \| undefined`                     | `undefined` |
 | `name`         | `name`          | The name each checked box submits its value under (unless the box has its own `name`). | `string \| undefined`                     | `undefined` |
 | `optional`     | `optional`      | Appends "(optional)" to the legend.                                                    | `boolean`                                 | `false`     |
-| `required`     | `required`      | Requires at least one box to be checked (`valueMissing`). Not shown visually.          | `boolean`                                 | `false`     |
+| `required`     | `required`      | Requires at least one box to be checked. Not shown visually.                           | `boolean`                                 | `false`     |
 
 
 ## Events
@@ -67,23 +61,9 @@ form-associated only to report `valueMissing` when `required` and nothing is che
 
 ## Slots
 
-| Slot      | Description                                       |
-| --------- | ------------------------------------------------- |
-|           | `sc-checkbox` elements, one per option.           |
-| `"error"` | Rich error content, instead of the `error` prop.  |
-| `"hint"`  | Rich hint content, instead of the `hint` prop.    |
-| `"label"` | Rich legend content, instead of the `label` prop. |
-
-
-## Shadow Parts
-
-| Part        | Description                            |
-| ----------- | -------------------------------------- |
-| `"error"`   | The error message.                     |
-| `"field"`   | The `<fieldset>` (gets the error bar). |
-| `"hint"`    | The hint.                              |
-| `"label"`   | The `<legend>`.                        |
-| `"options"` | The wrapper around the checkboxes.     |
+| Slot | Description                             |
+| ---- | --------------------------------------- |
+|      | `sc-checkbox` elements, one per option. |
 
 
 ----------------------------------------------

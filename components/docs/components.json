@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-21T14:23:27",
+  "timestamp": "2026-10-21T14:32:20",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.45.2",
@@ -1473,46 +1473,14 @@
     },
     {
       "filePath": "src/components/sc-checkbox/sc-checkbox.tsx",
-      "encapsulation": "shadow",
+      "encapsulation": "scoped",
       "tag": "sc-checkbox",
-      "readme": "# sc-checkbox\n\nA checkbox: an option in `sc-checkbox-group`, or one box on its own for a single statement people must confirm, such as \"I confirm the vehicle details are correct\".\n\n## Usage\n\n```html\n<sc-checkbox name=\"confirm\" value=\"yes\" required>I confirm the vehicle details are correct</sc-checkbox>\n```\n\n- The content is the label. Keep it short; put detail in `hint` (or the `hint` slot).\n- 24px box inside a 44px target: the whole label row is clickable. Space toggles it. The tick is a symbol, so it never mirrors in Arabic.\n- **On its own:** `error` shows the error bar, the message with \"Error:\" and `aria-invalid`. `required` reports `valueMissing` until it's checked.\n- **In a group:** the group shows the error and passes it down; the box submits its `value` under the group's `name` unless it has its own `name`.\n- Form-associated: submits `value` (default `on`) when checked, resets to its initial `checked`, follows `<fieldset disabled>`. `change` is re-dispatched on the host and `scChange` carries `{ checked, value }`.\n",
-      "docs": "A checkbox: one of several choices in an `sc-checkbox-group`, or on its own for a single\nyes/no statement (\"I confirm the vehicle details are correct\").\n\nRenders a native `<input type=\"checkbox\">`, its `<label>` (the default slot) and hint in\nits own shadow root. Space toggles it. Form-associated: when checked it submits `value`\nunder its `name`, or under the group's `name` inside `sc-checkbox-group`. On its own it can\nshow an error; inside a group the group shows the error and marks every box invalid.",
+      "readme": "# sc-checkbox\n\nA checkbox: an option in `sc-checkbox-group`, or one box on its own for a single statement people must confirm, such as \"I confirm the vehicle details are correct\".\n\n## Usage\n\n```html\n<sc-checkbox name=\"confirm\" value=\"yes\" required>I confirm the vehicle details are correct</sc-checkbox>\n```\n\n- The content is the label. Keep it short; put detail in `hint` (or a `slot=\"hint\"` child, moved into place once).\n- 24px box inside a 44px target: the whole label row is clickable. Space toggles it. The tick is a symbol, so it never mirrors in Arabic.\n- **On its own:** `error` shows the error bar, the message with \"Error:\" and `aria-invalid`. `required` reports `valueMissing` until it's checked.\n- **In a group:** the group shows the error and passes it down; the box submits its `value` under the group's `name` unless it has its own `name`.\n- v2 renders a native `<input type=\"checkbox\">` in light DOM (decision A2): it submits `value` (default `on`) when checked, resets to its initial `checked`, follows `<fieldset disabled>`, and `required` is native `valueMissing`. The native `change` bubbles; `scChange` carries `{ checked, value }`.\n- The check draws over 120ms when toggled with a pointer and appears at once from the keyboard (MOT-02).\n",
+      "docs": "A checkbox: one of several choices in an `sc-checkbox-group`, or on its own for a single\nstatement (\"I confirm the vehicle details are correct\").\n\nv2 renders a native `<input type=\"checkbox\">`, its `<label>` (the default slot) and hint in\nlight DOM (Stencil `scoped`, decision A2). Space toggles it; clicking the label or the 44px\ntarget around the box toggles it. When checked it submits `value` under its `name`, or under\nthe group's `name` inside `sc-checkbox-group`. On its own it can show an error and use\nnative `required`; inside a group the group shows the error and marks every box invalid.",
       "docsTags": [
         {
           "name": "slot",
-          "text": "- The label: \"Car\". Keep it short; put detail in the hint."
-        },
-        {
-          "name": "slot",
-          "text": "hint - Rich hint content, instead of the `hint` prop."
-        },
-        {
-          "name": "slot",
-          "text": "error - Rich error content, instead of the `error` prop (on its own only)."
-        },
-        {
-          "name": "part",
-          "text": "field - The wrapper (gets the error bar when the checkbox shows its own error)."
-        },
-        {
-          "name": "part",
-          "text": "error - The error message."
-        },
-        {
-          "name": "part",
-          "text": "option - The option row."
-        },
-        {
-          "name": "part",
-          "text": "checkbox - The native `<input type=\"checkbox\">`."
-        },
-        {
-          "name": "part",
-          "text": "label - The `<label>`."
-        },
-        {
-          "name": "part",
-          "text": "hint - The hint."
+          "text": "- The label: \"Valid insurance policy\". Keep it short; put detail in the hint."
         }
       ],
       "usage": {},
@@ -1664,7 +1632,7 @@
           "mutable": false,
           "attr": "required",
           "reflectToAttr": false,
-          "docs": "On its own: must be checked to submit (`valueMissing`). Inside a group, use the group's `required`.",
+          "docs": "On its own: must be checked to submit (native `valueMissing`). Inside a group, use the group's `required`.",
           "docsTags": [
             {
               "name": "default",
@@ -1725,7 +1693,7 @@
           },
           "cancelable": true,
           "composed": true,
-          "docs": "Fires when the box is toggled with `{ checked, value }`. A native `change` is also dispatched on the host.",
+          "docs": "Fires when the box is toggled with `{ checked, value }`. The native `change` event also bubbles.",
           "docsTags": []
         }
       ],
@@ -1734,43 +1702,10 @@
       "slots": [
         {
           "name": "",
-          "docs": "The label: \"Car\". Keep it short; put detail in the hint."
-        },
-        {
-          "name": "error",
-          "docs": "Rich error content, instead of the `error` prop (on its own only)."
-        },
-        {
-          "name": "hint",
-          "docs": "Rich hint content, instead of the `hint` prop."
+          "docs": "The label: \"Valid insurance policy\". Keep it short; put detail in the hint."
         }
       ],
-      "parts": [
-        {
-          "name": "checkbox",
-          "docs": "The native `<input type=\"checkbox\">`."
-        },
-        {
-          "name": "error",
-          "docs": "The error message."
-        },
-        {
-          "name": "field",
-          "docs": "The wrapper (gets the error bar when the checkbox shows its own error)."
-        },
-        {
-          "name": "hint",
-          "docs": "The hint."
-        },
-        {
-          "name": "label",
-          "docs": "The `<label>`."
-        },
-        {
-          "name": "option",
-          "docs": "The option row."
-        }
-      ],
+      "parts": [],
       "states": [],
       "dependents": [],
       "dependencies": [],
@@ -1778,46 +1713,14 @@
     },
     {
       "filePath": "src/components/sc-checkbox-group/sc-checkbox-group.tsx",
-      "encapsulation": "shadow",
+      "encapsulation": "scoped",
       "tag": "sc-checkbox-group",
-      "readme": "# sc-checkbox-group\n\nSeveral choices from a short list: \"Which documents do you have?\", \"Send reminders by\". Use `sc-radio-group` when only one answer is allowed. For a single yes/no statement (\"I confirm the vehicle details are correct\") use one `sc-checkbox` on its own.\n\n## Usage\n\n```html\n<sc-checkbox-group name=\"documents\" label=\"Which documents do you have?\" hint=\"Select all that apply\">\n  <sc-checkbox value=\"insurance\">Valid insurance policy</sc-checkbox>\n  <sc-checkbox value=\"inspection\" hint=\"From a centre approved by RTA\">Technical inspection certificate</sc-checkbox>\n  <sc-checkbox value=\"fines\">Receipt for paid fines</sc-checkbox>\n</sc-checkbox-group>\n```\n\n- Legend, hint, `optional`, `error`, `inline`, `heading-level` and `disabled` work as in `sc-radio-group`.\n- Say \"Select all that apply\" in the hint. Order options logically; don't pre-check options for people.\n- **Error:** set `error` on the group. The group shows the bar and message; every box gets the error border and `aria-invalid`. The boxes' own `error` is ignored inside a group.\n\n### How it stays accessible across shadow roots\n\nUnlike radios, checkboxes don't need to share a tree: each one is independent (its own Tab stop, Space toggles it). So each `sc-checkbox` keeps its own native `<input type=\"checkbox\">`, `<label>` and hint in **its own shadow root**, which also lets it work on its own. The group renders the `<fieldset>`, `<legend>`, hint and error in its shadow root and slots the checkboxes inside the fieldset. The accessibility tree follows the flattened tree, so screen readers find the checkboxes inside the group named by the legend and described by the hint and error. The group passes its error and disabled state down to each box.\n\nTested in `sc-checkbox-group.e2e.ts` against Chromium's accessibility tree (group name and description, checkbox names inside the group), with the keyboard (Tab to each box, Space toggles) and axe in English and Arabic, light and dark.\n\n### Forms\n\nEach checked box submits its own `value` under the group's `name` (or its own `name`), so the form data is `documents=insurance&documents=fines`, as with native checkboxes. Reset restores each box. The group is form-associated only to report `valueMissing` when `required` and nothing is checked. `scGroupChange` carries `{ value: string[] }`, the checked values.\n",
-      "docs": "Several choices from a short list: \"Which documents do you have?\".\n\nA `<fieldset>` with a `<legend>`, hint and error in this element's shadow root, with the\n`sc-checkbox` children slotted inside it. Each checkbox keeps its own native input, label\nand hint in its own shadow root (so `sc-checkbox` also works on its own); the fieldset\ngroups them in the accessibility tree, which follows the flattened tree. The group's\nhint and error describe the fieldset, and in the error state every box gets\n`aria-invalid` and an error border.\n\nEach checked box submits its own value under the group's `name` (or its own). The group is\nform-associated only to report `valueMissing` when `required` and nothing is checked.",
+      "readme": "# sc-checkbox-group\n\nSeveral choices from a short list: \"Which documents do you have?\", \"Send reminders by\". Use `sc-radio-group` when only one answer is allowed. For a single yes/no statement (\"I confirm the vehicle details are correct\") use one `sc-checkbox` on its own.\n\n## Usage\n\n```html\n<sc-checkbox-group name=\"documents\" label=\"Which documents do you have?\" hint=\"Select all that apply\">\n  <sc-checkbox value=\"insurance\">Valid insurance policy</sc-checkbox>\n  <sc-checkbox value=\"inspection\" hint=\"From a centre approved by RTA\">Technical inspection certificate</sc-checkbox>\n  <sc-checkbox value=\"fines\">Receipt for paid fines</sc-checkbox>\n</sc-checkbox-group>\n```\n\n- Legend, hint, `optional`, `error`, `inline`, `heading-level` and `disabled` work as in `sc-radio-group`.\n- Say \"Select all that apply\" in the hint. Order options logically; don't pre-check options for people.\n- **Error:** set `error` on the group. The group shows the bar and message; every box gets the error border and `aria-invalid`. The boxes' own `error` is ignored inside a group.\n\n### Structure (v2, light DOM)\n\nThe group renders a native `<fieldset>`, `<legend>`, hint and error in light DOM (decision A2) and moves its `sc-checkbox` children inside the fieldset, so they are grouped and named by the legend natively. Each `sc-checkbox` renders its own native `<input type=\"checkbox\">`, `<label>` and hint, so it also works on its own. `disabled` disables the fieldset, and with it every box. The group passes its `name` and error state to each box. Boxes appended later are moved in too.\n\n### Forms\n\nEach checked box submits its own `value` under the group's `name` (or its own `name`): `documents=insurance&documents=fines`, as native checkboxes do. Reset restores each box. With `required`, the first enabled box carries a native validity error (\"Select at least one option\") until one is checked, so `checkValidity()` and `reportValidity()` work. The native `change` bubbles from each box; `scGroupChange` carries `{ value: string[] }`.\n",
+      "docs": "Several choices from a short list: \"Which documents do you have?\".\n\nv2 renders a native `<fieldset>` with its `<legend>`, hint and error in light DOM (Stencil\n`scoped`, decision A2), and moves the `sc-checkbox` children into it, so they are grouped\nand named by the legend natively. Each checked box submits its own value under the group's\n`name`. `disabled` disables the fieldset (and so every box). With `required`, the first box\ncarries a native validity error until one is checked.",
       "docsTags": [
         {
           "name": "slot",
           "text": "- `sc-checkbox` elements, one per option."
-        },
-        {
-          "name": "slot",
-          "text": "label - Rich legend content, instead of the `label` prop."
-        },
-        {
-          "name": "slot",
-          "text": "hint - Rich hint content, instead of the `hint` prop."
-        },
-        {
-          "name": "slot",
-          "text": "error - Rich error content, instead of the `error` prop."
-        },
-        {
-          "name": "part",
-          "text": "field - The `<fieldset>` (gets the error bar)."
-        },
-        {
-          "name": "part",
-          "text": "label - The `<legend>`."
-        },
-        {
-          "name": "part",
-          "text": "hint - The hint."
-        },
-        {
-          "name": "part",
-          "text": "error - The error message."
-        },
-        {
-          "name": "part",
-          "text": "options - The wrapper around the checkboxes."
         }
       ],
       "usage": {},
@@ -1833,7 +1736,7 @@
           "mutable": false,
           "attr": "disabled",
           "reflectToAttr": true,
-          "docs": "Disables every checkbox. Avoid it.",
+          "docs": "Disables every checkbox (through the fieldset). Avoid it.",
           "docsTags": [
             {
               "name": "default",
@@ -1886,8 +1789,8 @@
             "references": {
               "HeadingLevel": {
                 "location": "import",
-                "path": "../sc-text-input/field-v1",
-                "id": "src/components/sc-text-input/field-v1.tsx::HeadingLevel",
+                "path": "../sc-text-input/field",
+                "id": "src/components/sc-text-input/field.tsx::HeadingLevel",
                 "referenceLocation": "HeadingLevel"
               }
             }
@@ -2078,7 +1981,7 @@
           "mutable": false,
           "attr": "required",
           "reflectToAttr": false,
-          "docs": "Requires at least one box to be checked (`valueMissing`). Not shown visually.",
+          "docs": "Requires at least one box to be checked. Not shown visually.",
           "docsTags": [
             {
               "name": "default",
@@ -2116,7 +2019,7 @@
       ],
       "listeners": [
         {
-          "event": "scChange",
+          "event": "change",
           "capture": false,
           "passive": false
         }
@@ -2126,42 +2029,9 @@
         {
           "name": "",
           "docs": "`sc-checkbox` elements, one per option."
-        },
-        {
-          "name": "error",
-          "docs": "Rich error content, instead of the `error` prop."
-        },
-        {
-          "name": "hint",
-          "docs": "Rich hint content, instead of the `hint` prop."
-        },
-        {
-          "name": "label",
-          "docs": "Rich legend content, instead of the `label` prop."
         }
       ],
-      "parts": [
-        {
-          "name": "error",
-          "docs": "The error message."
-        },
-        {
-          "name": "field",
-          "docs": "The `<fieldset>` (gets the error bar)."
-        },
-        {
-          "name": "hint",
-          "docs": "The hint."
-        },
-        {
-          "name": "label",
-          "docs": "The `<legend>`."
-        },
-        {
-          "name": "options",
-          "docs": "The wrapper around the checkboxes."
-        }
-      ],
+      "parts": [],
       "states": [],
       "dependents": [],
       "dependencies": [],
@@ -5467,7 +5337,7 @@
       "filePath": "src/components/sc-select/sc-select.tsx",
       "encapsulation": "scoped",
       "tag": "sc-select",
-      "readme": "# sc-select\n\nOne choice from a list that's too long for radios, such as the issuing authority of a plate or an inspection centre. Use `sc-radio-group` when there are about 7 options or fewer: radios show every option without opening anything. Avoid selects for answers people know by heart (like a country); a text input with autocomplete is often easier.\n\n## Usage\n\n```html\n<sc-select name=\"emirate\" label=\"Issuing authority\" value=\"dubai\">\n  <option value=\"dubai\">Dubai</option>\n  <option value=\"abu-dhabi\">Abu Dhabi</option>\n  <option value=\"sharjah\">Sharjah</option>\n</sc-select>\n```\n\n- A native `<select>` inside the shadow root, styled like `sc-text-input` (54px, field radius, 1.5px control border) with a chevron at the end that points down in both directions.\n- **Options are light-DOM `<option>` and `<optgroup>` children.** A native select can't render slotted options, so the component copies them into its inner select and keeps them in sync (a `MutationObserver` watches additions, removals, text and `value`/`label`/`disabled`/`selected`). Changing an option's text, for example when the page switches language, updates the list.\n- **Value:** `value` picks the option; otherwise `<option selected>`, else the first option.\n- **Required:** add a first option with `value=\"\"` (\"Select an inspection centre\") and `required`; the field reports `valueMissing` until a real option is chosen. Don't add an empty first option to a select that already has a sensible default.\n- Label, hint, `optional`, `error`, form association and focus delegation work as in `sc-text-input`. `change` is re-dispatched on the host and `scChange` carries `{ value }`.\n",
+      "readme": "# sc-select\n\nOne choice from a list that's too long for radios, such as the issuing authority of a plate or an inspection centre. Use `sc-radio-group` when there are about 7 options or fewer: radios show every option without opening anything. Avoid selects for answers people know by heart (like a country); a text input with autocomplete is often easier.\n\n## Usage\n\n```html\n<sc-select name=\"emirate\" label=\"Issuing authority\" value=\"dubai\">\n  <option value=\"dubai\">Dubai</option>\n  <option value=\"abu-dhabi\">Abu Dhabi</option>\n  <option value=\"sharjah\">Sharjah</option>\n</sc-select>\n```\n\n- v2 renders a native `<select>` in light DOM (decision A2), styled like `sc-text-input` (56px, 8px radius, 1.5px `outline` edge) with a 26px `expand_more` chevron 16px from the inline end that points down in both directions.\n- **Options are `<option>` and `<optgroup>` children, moved into the native select** on load: they are the real options, not copies. Options appended to the host later are moved in too; changing an option's text or attributes works directly on it.\n- **Value:** `value` picks the option (and becomes what a form reset restores); otherwise `<option selected>`, else the first enabled option.\n- **Required:** add a first option with `value=\"\"` (\"Select an inspection centre\") and `required`; the select reports `valueMissing` natively until a real option is chosen.\n- Label, hint, `optional`, `error`, rich slots and focus forwarding work as in `sc-text-input`. Native `change` and `input` bubble from the select; `scChange` carries `{ value }`.\n",
       "docs": "One choice from a list too long for radios, such as the emirate that issued a plate.\n\nv2 renders a native `<select>` in light DOM (Stencil `scoped`, decision A2), styled like\n`sc-text-input` with an `expand_more` chevron. Write the options as `<option>` (and\n`<optgroup>`) children: they are moved INTO the native select, so they are the real options\n(no copies), and options added later are moved in too. The select submits, resets, validates\nand follows `<fieldset disabled>` natively; `focus()` on the host reaches it.",
       "docsTags": [
         {

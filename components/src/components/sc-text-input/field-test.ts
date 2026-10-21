@@ -3,6 +3,7 @@
  * v2 fields are light DOM, so everything is a plain query under the host.
  */
 import type { E2EPage } from '@stencil/core/testing';
+import { settleTransitions } from '../../test/page';
 
 /**
  * Evaluates `expr` in the page with `host` (the element matching `selector`), `input` (its
@@ -51,6 +52,7 @@ export async function forceColors(page: E2EPage): Promise<void> {
   const cdp = await (page as unknown as { createCDPSession: () => Promise<{ send: (m: string, p: object) => Promise<unknown> }> }).createCDPSession();
   await cdp.send('Emulation.setEmulatedMedia', { features: [{ name: 'forced-colors', value: 'active' }] });
   await page.waitForChanges();
+  await settleTransitions(page);
 }
 
 export const CHANNELS = ['now', 'transport', 'visit', 'justice', 'build', 'invest', 'trade'] as const;

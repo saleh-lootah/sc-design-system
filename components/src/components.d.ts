@@ -10,14 +10,14 @@ import { IconName } from "./icons/index";
 import { CalloutHeadingLevel, CalloutTone } from "./components/sc-callout/sc-callout";
 import { CardLandmark, CardPadding } from "./components/sc-card/sc-card";
 import { Channel } from "./i18n/strings";
-import { HeadingLevel } from "./components/sc-text-input/field-v1";
+import { HeadingLevel } from "./components/sc-text-input/field";
 import { ContainerWidth } from "./components/sc-container/sc-container";
+import { HeadingLevel as HeadingLevel1 } from "./components/sc-text-input/field-v1";
 import { Parts } from "./components/sc-date-input/date";
 import { StringsInput } from "./components/sc-table/overrides";
 import { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
 import { LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
 import { ScSearchDetail } from "./components/sc-search/sc-search";
-import { HeadingLevel as HeadingLevel1 } from "./components/sc-text-input/field";
 import { ServiceCardHeadingLevel } from "./components/sc-service-card/sc-service-card";
 import { StatusTagTone } from "./components/sc-status-tag/sc-status-tag";
 import { SummaryListAppearance } from "./components/sc-summary-list/sc-summary-list";
@@ -28,14 +28,14 @@ export { IconName } from "./icons/index";
 export { CalloutHeadingLevel, CalloutTone } from "./components/sc-callout/sc-callout";
 export { CardLandmark, CardPadding } from "./components/sc-card/sc-card";
 export { Channel } from "./i18n/strings";
-export { HeadingLevel } from "./components/sc-text-input/field-v1";
+export { HeadingLevel } from "./components/sc-text-input/field";
 export { ContainerWidth } from "./components/sc-container/sc-container";
+export { HeadingLevel as HeadingLevel1 } from "./components/sc-text-input/field-v1";
 export { Parts } from "./components/sc-date-input/date";
 export { StringsInput } from "./components/sc-table/overrides";
 export { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
 export { LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
 export { ScSearchDetail } from "./components/sc-search/sc-search";
-export { HeadingLevel as HeadingLevel1 } from "./components/sc-text-input/field";
 export { ServiceCardHeadingLevel } from "./components/sc-service-card/sc-service-card";
 export { StatusTagTone } from "./components/sc-status-tag/sc-status-tag";
 export { SummaryListAppearance } from "./components/sc-summary-list/sc-summary-list";
@@ -241,11 +241,12 @@ export namespace Components {
     }
     /**
      * A checkbox: one of several choices in an `sc-checkbox-group`, or on its own for a single
-     * yes/no statement ("I confirm the vehicle details are correct").
-     * Renders a native `<input type="checkbox">`, its `<label>` (the default slot) and hint in
-     * its own shadow root. Space toggles it. Form-associated: when checked it submits `value`
-     * under its `name`, or under the group's `name` inside `sc-checkbox-group`. On its own it can
-     * show an error; inside a group the group shows the error and marks every box invalid.
+     * statement ("I confirm the vehicle details are correct").
+     * v2 renders a native `<input type="checkbox">`, its `<label>` (the default slot) and hint in
+     * light DOM (Stencil `scoped`, decision A2). Space toggles it; clicking the label or the 44px
+     * target around the box toggles it. When checked it submits `value` under its `name`, or under
+     * the group's `name` inside `sc-checkbox-group`. On its own it can show an error and use
+     * native `required`; inside a group the group shows the error and marks every box invalid.
      */
     interface ScCheckbox {
         /**
@@ -265,11 +266,8 @@ export namespace Components {
         /**
           * @default false
          */
-        "groupDisabled": boolean;
-        /**
-          * @default false
-         */
         "groupInvalid": boolean;
+        "groupName"?: string;
         /**
           * Help text under the label.
          */
@@ -279,7 +277,7 @@ export namespace Components {
          */
         "name"?: string;
         /**
-          * On its own: must be checked to submit (`valueMissing`). Inside a group, use the group's `required`.
+          * On its own: must be checked to submit (native `valueMissing`). Inside a group, use the group's `required`.
           * @default false
          */
         "required": boolean;
@@ -291,18 +289,15 @@ export namespace Components {
     }
     /**
      * Several choices from a short list: "Which documents do you have?".
-     * A `<fieldset>` with a `<legend>`, hint and error in this element's shadow root, with the
-     * `sc-checkbox` children slotted inside it. Each checkbox keeps its own native input, label
-     * and hint in its own shadow root (so `sc-checkbox` also works on its own); the fieldset
-     * groups them in the accessibility tree, which follows the flattened tree. The group's
-     * hint and error describe the fieldset, and in the error state every box gets
-     * `aria-invalid` and an error border.
-     * Each checked box submits its own value under the group's `name` (or its own). The group is
-     * form-associated only to report `valueMissing` when `required` and nothing is checked.
+     * v2 renders a native `<fieldset>` with its `<legend>`, hint and error in light DOM (Stencil
+     * `scoped`, decision A2), and moves the `sc-checkbox` children into it, so they are grouped
+     * and named by the legend natively. Each checked box submits its own value under the group's
+     * `name`. `disabled` disables the fieldset (and so every box). With `required`, the first box
+     * carries a native validity error until one is checked.
      */
     interface ScCheckboxGroup {
         /**
-          * Disables every checkbox. Avoid it.
+          * Disables every checkbox (through the fieldset). Avoid it.
           * @default false
          */
         "disabled": boolean;
@@ -337,7 +332,7 @@ export namespace Components {
          */
         "optional": boolean;
         /**
-          * Requires at least one box to be checked (`valueMissing`). Not shown visually.
+          * Requires at least one box to be checked. Not shown visually.
           * @default false
          */
         "required": boolean;
@@ -387,7 +382,7 @@ export namespace Components {
         /**
           * When set (1–6), the legend is also the page heading at this level.
          */
-        "headingLevel"?: HeadingLevel;
+        "headingLevel"?: HeadingLevel1;
         /**
           * Help text below the legend: "For example, 27 3 2026".
          */
@@ -456,7 +451,7 @@ export namespace Components {
         /**
           * When set (1–6), the legend is also the page heading at this level.
          */
-        "headingLevel"?: HeadingLevel;
+        "headingLevel"?: HeadingLevel1;
         /**
           * An example in the typed order: "For example, 21 9 2026".
          */
@@ -762,7 +757,7 @@ export namespace Components {
         /**
           * When set (1–6), the legend is also the page heading at this level (`<legend><h1>…</h1></legend>`). Use it when the question is the only one on the page.
          */
-        "headingLevel"?: HeadingLevel;
+        "headingLevel"?: HeadingLevel1;
         /**
           * Help text below the legend.
          */
@@ -865,7 +860,7 @@ export namespace Components {
         /**
           * When set (1–6), the label is also the page heading at this level.
          */
-        "headingLevel"?: HeadingLevel1;
+        "headingLevel"?: HeadingLevel;
         /**
           * Help text below the label.
          */
@@ -1130,7 +1125,7 @@ export namespace Components {
         /**
           * When set (1–6), the label is also the page heading at this level (`<h1><label>…</label></h1>`).
          */
-        "headingLevel"?: HeadingLevel1;
+        "headingLevel"?: HeadingLevel;
         /**
           * Help text below the label: "Up to 5 digits, for example 12345".
          */
@@ -1229,7 +1224,7 @@ export namespace Components {
         /**
           * When set (1–6), the label is also the page heading at this level.
          */
-        "headingLevel"?: HeadingLevel1;
+        "headingLevel"?: HeadingLevel;
         /**
           * Help text below the label.
          */
@@ -1419,11 +1414,12 @@ declare global {
     }
     /**
      * A checkbox: one of several choices in an `sc-checkbox-group`, or on its own for a single
-     * yes/no statement ("I confirm the vehicle details are correct").
-     * Renders a native `<input type="checkbox">`, its `<label>` (the default slot) and hint in
-     * its own shadow root. Space toggles it. Form-associated: when checked it submits `value`
-     * under its `name`, or under the group's `name` inside `sc-checkbox-group`. On its own it can
-     * show an error; inside a group the group shows the error and marks every box invalid.
+     * statement ("I confirm the vehicle details are correct").
+     * v2 renders a native `<input type="checkbox">`, its `<label>` (the default slot) and hint in
+     * light DOM (Stencil `scoped`, decision A2). Space toggles it; clicking the label or the 44px
+     * target around the box toggles it. When checked it submits `value` under its `name`, or under
+     * the group's `name` inside `sc-checkbox-group`. On its own it can show an error and use
+     * native `required`; inside a group the group shows the error and marks every box invalid.
      */
     interface HTMLScCheckboxElement extends Components.ScCheckbox, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScCheckboxElementEventMap>(type: K, listener: (this: HTMLScCheckboxElement, ev: ScCheckboxCustomEvent<HTMLScCheckboxElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -1444,14 +1440,11 @@ declare global {
     }
     /**
      * Several choices from a short list: "Which documents do you have?".
-     * A `<fieldset>` with a `<legend>`, hint and error in this element's shadow root, with the
-     * `sc-checkbox` children slotted inside it. Each checkbox keeps its own native input, label
-     * and hint in its own shadow root (so `sc-checkbox` also works on its own); the fieldset
-     * groups them in the accessibility tree, which follows the flattened tree. The group's
-     * hint and error describe the fieldset, and in the error state every box gets
-     * `aria-invalid` and an error border.
-     * Each checked box submits its own value under the group's `name` (or its own). The group is
-     * form-associated only to report `valueMissing` when `required` and nothing is checked.
+     * v2 renders a native `<fieldset>` with its `<legend>`, hint and error in light DOM (Stencil
+     * `scoped`, decision A2), and moves the `sc-checkbox` children into it, so they are grouped
+     * and named by the legend natively. Each checked box submits its own value under the group's
+     * `name`. `disabled` disables the fieldset (and so every box). With `required`, the first box
+     * carries a native validity error until one is checked.
      */
     interface HTMLScCheckboxGroupElement extends Components.ScCheckboxGroup, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScCheckboxGroupElementEventMap>(type: K, listener: (this: HTMLScCheckboxGroupElement, ev: ScCheckboxGroupCustomEvent<HTMLScCheckboxGroupElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2185,11 +2178,12 @@ declare namespace LocalJSX {
     }
     /**
      * A checkbox: one of several choices in an `sc-checkbox-group`, or on its own for a single
-     * yes/no statement ("I confirm the vehicle details are correct").
-     * Renders a native `<input type="checkbox">`, its `<label>` (the default slot) and hint in
-     * its own shadow root. Space toggles it. Form-associated: when checked it submits `value`
-     * under its `name`, or under the group's `name` inside `sc-checkbox-group`. On its own it can
-     * show an error; inside a group the group shows the error and marks every box invalid.
+     * statement ("I confirm the vehicle details are correct").
+     * v2 renders a native `<input type="checkbox">`, its `<label>` (the default slot) and hint in
+     * light DOM (Stencil `scoped`, decision A2). Space toggles it; clicking the label or the 44px
+     * target around the box toggles it. When checked it submits `value` under its `name`, or under
+     * the group's `name` inside `sc-checkbox-group`. On its own it can show an error and use
+     * native `required`; inside a group the group shows the error and marks every box invalid.
      */
     interface ScCheckbox {
         /**
@@ -2207,17 +2201,10 @@ declare namespace LocalJSX {
          */
         "error"?: string;
         /**
-          * The `id` of a `<form>` element to associate this element with.
-         */
-        "form"?: string;
-        /**
-          * @default false
-         */
-        "groupDisabled"?: boolean;
-        /**
           * @default false
          */
         "groupInvalid"?: boolean;
+        "groupName"?: string;
         /**
           * Help text under the label.
          */
@@ -2227,11 +2214,11 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Fires when the box is toggled with `{ checked, value }`. A native `change` is also dispatched on the host.
+          * Fires when the box is toggled with `{ checked, value }`. The native `change` event also bubbles.
          */
         "onScChange"?: (event: ScCheckboxCustomEvent<{ checked: boolean; value: string }>) => void;
         /**
-          * On its own: must be checked to submit (`valueMissing`). Inside a group, use the group's `required`.
+          * On its own: must be checked to submit (native `valueMissing`). Inside a group, use the group's `required`.
           * @default false
          */
         "required"?: boolean;
@@ -2243,18 +2230,15 @@ declare namespace LocalJSX {
     }
     /**
      * Several choices from a short list: "Which documents do you have?".
-     * A `<fieldset>` with a `<legend>`, hint and error in this element's shadow root, with the
-     * `sc-checkbox` children slotted inside it. Each checkbox keeps its own native input, label
-     * and hint in its own shadow root (so `sc-checkbox` also works on its own); the fieldset
-     * groups them in the accessibility tree, which follows the flattened tree. The group's
-     * hint and error describe the fieldset, and in the error state every box gets
-     * `aria-invalid` and an error border.
-     * Each checked box submits its own value under the group's `name` (or its own). The group is
-     * form-associated only to report `valueMissing` when `required` and nothing is checked.
+     * v2 renders a native `<fieldset>` with its `<legend>`, hint and error in light DOM (Stencil
+     * `scoped`, decision A2), and moves the `sc-checkbox` children into it, so they are grouped
+     * and named by the legend natively. Each checked box submits its own value under the group's
+     * `name`. `disabled` disables the fieldset (and so every box). With `required`, the first box
+     * carries a native validity error until one is checked.
      */
     interface ScCheckboxGroup {
         /**
-          * Disables every checkbox. Avoid it.
+          * Disables every checkbox (through the fieldset). Avoid it.
           * @default false
          */
         "disabled"?: boolean;
@@ -2262,10 +2246,6 @@ declare namespace LocalJSX {
           * The error message. Setting it shows the error state on the group and every box.
          */
         "error"?: string;
-        /**
-          * The `id` of a `<form>` element to associate this element with.
-         */
-        "form"?: string;
         /**
           * When set (1–6), the legend is also the page heading at this level.
          */
@@ -2297,7 +2277,7 @@ declare namespace LocalJSX {
          */
         "optional"?: boolean;
         /**
-          * Requires at least one box to be checked (`valueMissing`). Not shown visually.
+          * Requires at least one box to be checked. Not shown visually.
           * @default false
          */
         "required"?: boolean;
@@ -2351,7 +2331,7 @@ declare namespace LocalJSX {
         /**
           * When set (1–6), the legend is also the page heading at this level.
          */
-        "headingLevel"?: HeadingLevel;
+        "headingLevel"?: HeadingLevel1;
         /**
           * Help text below the legend: "For example, 27 3 2026".
          */
@@ -2428,7 +2408,7 @@ declare namespace LocalJSX {
         /**
           * When set (1–6), the legend is also the page heading at this level.
          */
-        "headingLevel"?: HeadingLevel;
+        "headingLevel"?: HeadingLevel1;
         /**
           * An example in the typed order: "For example, 21 9 2026".
          */
@@ -2742,7 +2722,7 @@ declare namespace LocalJSX {
         /**
           * When set (1–6), the legend is also the page heading at this level (`<legend><h1>…</h1></legend>`). Use it when the question is the only one on the page.
          */
-        "headingLevel"?: HeadingLevel;
+        "headingLevel"?: HeadingLevel1;
         /**
           * Help text below the legend.
          */
@@ -2849,7 +2829,7 @@ declare namespace LocalJSX {
         /**
           * When set (1–6), the label is also the page heading at this level.
          */
-        "headingLevel"?: HeadingLevel1;
+        "headingLevel"?: HeadingLevel;
         /**
           * Help text below the label.
          */
@@ -3126,7 +3106,7 @@ declare namespace LocalJSX {
         /**
           * When set (1–6), the label is also the page heading at this level (`<h1><label>…</label></h1>`).
          */
-        "headingLevel"?: HeadingLevel1;
+        "headingLevel"?: HeadingLevel;
         /**
           * Help text below the label: "Up to 5 digits, for example 12345".
          */
@@ -3233,7 +3213,7 @@ declare namespace LocalJSX {
         /**
           * When set (1–6), the label is also the page heading at this level.
          */
-        "headingLevel"?: HeadingLevel1;
+        "headingLevel"?: HeadingLevel;
         /**
           * Help text below the label.
          */
@@ -3334,8 +3314,8 @@ declare namespace LocalJSX {
         "error": string;
         "required": boolean;
         "disabled": boolean;
+        "groupName": string;
         "groupInvalid": boolean;
-        "groupDisabled": boolean;
     }
     interface ScCheckboxGroupAttributes {
         "label": string;
@@ -3640,23 +3620,21 @@ declare module "@stencil/core" {
             "sc-channel-hero": LocalJSX.IntrinsicElements["sc-channel-hero"] & JSXBase.HTMLAttributes<HTMLScChannelHeroElement>;
             /**
              * A checkbox: one of several choices in an `sc-checkbox-group`, or on its own for a single
-             * yes/no statement ("I confirm the vehicle details are correct").
-             * Renders a native `<input type="checkbox">`, its `<label>` (the default slot) and hint in
-             * its own shadow root. Space toggles it. Form-associated: when checked it submits `value`
-             * under its `name`, or under the group's `name` inside `sc-checkbox-group`. On its own it can
-             * show an error; inside a group the group shows the error and marks every box invalid.
+             * statement ("I confirm the vehicle details are correct").
+             * v2 renders a native `<input type="checkbox">`, its `<label>` (the default slot) and hint in
+             * light DOM (Stencil `scoped`, decision A2). Space toggles it; clicking the label or the 44px
+             * target around the box toggles it. When checked it submits `value` under its `name`, or under
+             * the group's `name` inside `sc-checkbox-group`. On its own it can show an error and use
+             * native `required`; inside a group the group shows the error and marks every box invalid.
              */
             "sc-checkbox": LocalJSX.IntrinsicElements["sc-checkbox"] & JSXBase.HTMLAttributes<HTMLScCheckboxElement>;
             /**
              * Several choices from a short list: "Which documents do you have?".
-             * A `<fieldset>` with a `<legend>`, hint and error in this element's shadow root, with the
-             * `sc-checkbox` children slotted inside it. Each checkbox keeps its own native input, label
-             * and hint in its own shadow root (so `sc-checkbox` also works on its own); the fieldset
-             * groups them in the accessibility tree, which follows the flattened tree. The group's
-             * hint and error describe the fieldset, and in the error state every box gets
-             * `aria-invalid` and an error border.
-             * Each checked box submits its own value under the group's `name` (or its own). The group is
-             * form-associated only to report `valueMissing` when `required` and nothing is checked.
+             * v2 renders a native `<fieldset>` with its `<legend>`, hint and error in light DOM (Stencil
+             * `scoped`, decision A2), and moves the `sc-checkbox` children into it, so they are grouped
+             * and named by the legend natively. Each checked box submits its own value under the group's
+             * `name`. `disabled` disables the fieldset (and so every box). With `required`, the first box
+             * carries a native validity error until one is checked.
              */
             "sc-checkbox-group": LocalJSX.IntrinsicElements["sc-checkbox-group"] & JSXBase.HTMLAttributes<HTMLScCheckboxGroupElement>;
             /**
