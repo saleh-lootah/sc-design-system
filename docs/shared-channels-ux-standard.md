@@ -4,7 +4,7 @@
 | --- | --- |
 | Version | 2.0 |
 | Status | Draft for review |
-| Date | 21 October 2026 (visual foundations updated to design system v2) |
+| Date | 22 October 2026 (updated to the built design system v2 library) |
 | Replaces | Proposed Standard 1.0 (19 October 2026) |
 | Owner | Shared Channels design system team, on behalf of the issuing authority (see [OQ-14](#open-questions)) |
 
@@ -108,7 +108,7 @@ The standard says what a service must achieve. The design system supplies the me
 | --- | --- | --- |
 | Tokens | `design-system/tokens/*.json` (W3C Design Tokens format) | Colour, type, space, radius, size, elevation, motion, layout |
 | Foundations | `design-system/docs/v2/foundations.md` | Every token value, how the palettes are generated, and the measured contrast of every colour pair |
-| Components | `design-system/components/` (StencilJS web components, `sc-` prefix) | Each component's API, behaviour, states, Arabic behaviour and tests, documented in its `readme.md` |
+| Components | `design-system/components/` (StencilJS web components, `sc-` prefix) | Each component's anatomy, behaviour, states, Arabic behaviour, budget and tests in `components/specs/<tag>.md`, and its API in its `readme.md` |
 | Conventions | `design-system/components/CONVENTIONS.md` | Rules every component follows |
 | Mobile | `design-system/MOBILE.md` | What each kind of mobile team uses, and when |
 
@@ -191,13 +191,13 @@ An entity owns a service and is accountable for its outcome. A channel makes ser
 | Invest in Dubai | استثمر في دبي | `invest` | Founders, investors, company representatives | Apply for a trade licence; renew a trade licence |
 | Dubai Trade | دبي التجارية | `trade` | Importers, exporters, logistics companies | Submit a customs declaration |
 
-The Arabic channel names are the ones in the components' shared strings (`src/i18n/components/common.ts`). Use them as they are; do not translate channel names afresh.
+These are the official Arabic channel names. The components take them from one file (`src/i18n/components/channel-names.ts`), so the app bar, channel switcher, footer and network strip always agree with this table. Use them as they are; do not translate channel names afresh.
 
 <a id="channel-theme"></a>
 
 ### 3.2 The channel is the theme
 
-- **SVC-01** (changed in v2). Every page and app screen MUST set exactly one channel, the channel the user is in, through `data-channel` (on the web, `sc-page channel="…"` sets it on the page root). Components read the channel roles defined in [8.1](#colour); none of them names a channel, except those that point to other channels: `sc-channel-chip`, the channel switcher, the footer's Channels group and the channel network strip ([11.9](#tpl-chrome)).
+- **SVC-01** (changed in v2). Every page and app screen MUST set exactly one channel, the channel the user is in, through `data-channel` (on the web, `sc-page channel="…"` sets it on the page root). Components read the channel roles defined in [8.1](#colour); none of them names a channel, except those that point to other channels: `sc-channel-chip`, the channel switcher (`sc-channel-switcher`), the footer's Channels group, the channel network strip (`sc-channel-network`, [11.9](#tpl-chrome)) and the rows of `sc-step-list` that belong to another channel.
 - **SVC-02.** Government entities MUST NOT supply or override colours, fonts, radii, logos in the header, or any other token. An entity appears only as attribution text, written in full in both languages (for example "Roads and Transport Authority" / "هيئة الطرق والمواصلات"), as `sc-service-card` shows it.
 - **SVC-03** (changed in v2). A page MUST NOT mix channel themes. The only exceptions are the components named in SVC-01, which show another channel's colours to point to that channel, by setting `data-channel` on themselves ([FND-26](#colour)).
 
@@ -242,7 +242,7 @@ The Arabic channel names are the ones in the components' shared strings (`src/i1
 
 ## 4. Legal and policy context
 
-This chapter will list the UAE and Dubai legal instruments and policies that apply to Shared Channels services, and what each requires of a service. It will be written with legal counsel. Until counsel has confirmed them, the standard does not name or interpret any law. The items to confirm are [OQ-5 to OQ-9](#open-questions): data protection, the rights of people of determination and any mandated accessibility level, federal design and digital-experience guidelines, the information security baseline and official terminology.
+This chapter will list the UAE and Dubai legal instruments and policies that apply to Shared Channels services, and what each requires of a service. It will be written with legal counsel. Until counsel has confirmed them, the standard does not interpret any law. It names one instrument, Law No. (1) of 2025, only because the initiative must have the usage manual or approval that law requires before it publishes the Government of Dubai lockup ([CHR-02](#tpl-chrome)). The items to confirm are [OQ-5 to OQ-9](#open-questions): data protection, the rights of people of determination and any mandated accessibility level, federal design and digital-experience guidelines, the information security baseline and official terminology.
 
 Whatever the instruments turn out to be, every service needs the following. These requirements stand on their own:
 
@@ -276,8 +276,8 @@ This chapter holds every rule about language parity, switching, direction, bidir
 
 ### 5.2 Switching language
 
-- **LANG-04.** Every page and screen MUST offer the language switch in the same place: the end slot of `sc-app-bar` (on the left in Arabic, on the right in English). On the web it is `sc-language-switch`.
-- **LANG-05.** The switch is a link to the same page in the other language, labelled with that language's own name in its own script: "العربية" on an English page and "English" on an Arabic page, with the matching `lang` and `hreflang`. It MUST NOT use flags. It is never a button that opens a menu.
+- **LANG-04** (changed in v2). Every page and screen MUST offer the language switch in the same place for its kind of page: the end slot of `sc-app-bar` on transaction pages, and among the end controls of `sc-site-header` on channel pages ([CHR-01](#tpl-chrome)), on the left in Arabic and on the right in English. On the web it is `sc-language-switch`.
+- **LANG-05** (changed in v2). The switch is a link to the same page in the other language, labelled with that language's own name in its own script: "العربية" on an English page and "English" on an Arabic page, with the matching `lang` and `hreflang`. It MUST NOT use flags. It is never a button that opens a menu. A single-page app keeps the link and MAY cancel its navigation to switch in place ([LANG-08](#switching)).
 - **LANG-06.** Switching MUST keep the user on the equivalent page or step. It MUST keep everything the user has entered, uploaded files, selected options, filters, the represented person or organisation, any error messages (re-rendered in the new language) and any transaction in progress. It MUST NOT submit anything.
 - **LANG-07.** Web URLs MUST carry the language as the first path segment, with the rest of the path identical: `/en/renew-vehicle-registration/plate` and `/ar/renew-vehicle-registration/plate`. Each page MUST declare its alternate with `<link rel="alternate" hreflang="ar|en" href="…">`.
 - **LANG-08.** After a full page load in the new language, focus starts at the top of the page as for any page load. When a single-page app switches without a page load, focus MUST move to the page `<h1>`.
@@ -330,7 +330,7 @@ In Arabic the layout mirrors. Some things keep their direction because their mea
 | Directional icons, as listed in [8.6](#icons) (the `sc-` icon set mirrors them automatically) | The icons listed as not mirroring in [8.6](#icons), and the spinner |
 | Back and forward controls, pagination (Previous on the right), disclosure chevrons | Media playback controls (play, pause, skip, the progress bar of a video or audio player) |
 | Progress that represents journey order: the stepper (`sc-step-progress`) runs from the right | Clocks, timers and anything that depicts clockwise time |
-| Form layout: error bar on the right of a field, radio and checkbox on the right of their label | Logos, brand marks, UAE PASS and Dubai Pay assets |
+| Form layout: error bar on the right of a field, radio and checkbox on the right of their label | Logos, brand marks, the Government of Dubai lockup ([CHR-02](#tpl-chrome)), the UAE PASS button and Dubai Pay assets |
 | Tables: first column on the right, amounts aligned left | Photographs, maps and illustrations of real scenes |
 | The arrow between "From" and "To" in `sc-date-range` (points left), and the calendar (Monday in the rightmost column) | Charts: axes keep their orientation (time runs from left to right, values rise upwards); titles, legends and labels are in Arabic and the legend follows the reading direction |
 | Horizontal scroll regions start on the right | Code, URLs and email addresses |
@@ -381,9 +381,9 @@ The Arabic type scale is in [8.2](#typography). These rules apply to all Arabic 
 
 These are deliberate design decisions, stricter than WCAG AA.
 
-- **A11Y-04. Target size** (changed in v2). Every standalone interactive target MUST be at least 44 × 44 CSS px (`--sc-size-target-min`). Primary buttons and form fields are 56px tall (`--sc-size-control-primary`) and secondary controls 48px (`--sc-size-control-secondary`). A control drawn smaller than 44px (a 32px chip, a 28px stepper marker that is a link, an inline icon button) MUST extend its target to 44 × 44 with padding or a pseudo-element, without overlapping another target. Links inside running text are assessed against WCAG 2.5.8 (24 × 24 px or enough spacing) instead. The only other exception is the compact density of `sc-table` (44px rows) in staff tools.
-- **A11Y-05. Focus indicator** (changed in v2). Focus MUST show the shared focus ring on `:focus-visible` only: a 3px ring (`--sc-size-focus-ring`) drawn 2px outside the element's edge (`--sc-size-focus-offset`), following its radius, in `--sc-color-focus-ring`. The ring is neutral, not the channel colour, and the same on every channel: `neutral-10` in light mode and white in dark mode. Inside a filled area the ring takes that area's "on" colour ([8.8](#focus)). In forced-colours mode it uses the system `Highlight` colour. The ring MUST have at least 3:1 contrast against the colours next to it, in light and dark (WCAG 1.4.11); `check:contrast` measures it against every surface, container and channel band. Focus MUST NOT be hidden by sticky headers, app bars, the utility bar or cookie banners (WCAG 2.4.11), and SHOULD NOT be partly hidden either.
-- **A11Y-06. Colour is never the only signal** (changed in v2). Status always has words and an icon as well as colour (`sc-status-tag`, `sc-callout` and field errors do this). A current or selected item also changes shape or weight (a check, a bar, Bold text, a Filled icon). A dot is used only for channel attribution, never for status.
+- **A11Y-04. Target size** (changed in v2). Every standalone interactive target MUST be at least 44 × 44 CSS px (`--sc-size-target-min`). Primary buttons and form fields are 56px tall (`--sc-size-control-primary`) and secondary controls 48px (`--sc-size-control-secondary`). A control drawn smaller than 44px (a 32px chip, a 28px stepper marker that is a link, an inline icon button) MUST extend its target to 44 × 44 with padding or a pseudo-element, without overlapping another target. Links inside running text are assessed against WCAG 2.5.8 (24 × 24 px or enough spacing) instead; a link alone in a table cell is a standalone target. The only other exception is the compact density of `sc-table` (44px rows) in staff tools.
+- **A11Y-05. Focus indicator** (changed in v2). Focus MUST show the shared focus ring on `:focus-visible` only: a 3px ring (`--sc-size-focus-ring`) drawn 2px outside the element's edge (`--sc-size-focus-offset`), following its radius, in `--sc-color-focus-ring`. The ring is neutral, not the channel colour, and the same on every channel: `neutral-10` in light mode and white in dark mode. Inside a filled area the ring takes that area's "on" colour ([8.8](#focus)). Where a ring drawn outside the element would be clipped (an item in a bar docked to a screen edge, such as `sc-bottom-nav`; a full-height link in the header; a row inside a container that clips), the same ring MUST be drawn inside the element's edge instead: an inset ring that stays whole wins over the 2px outside offset. In forced-colours mode it uses the system `Highlight` colour. The ring MUST have at least 3:1 contrast against the colours next to it, in light and dark (WCAG 1.4.11); `check:contrast` measures it against every surface, container and channel band. Focus MUST NOT be hidden by sticky headers, app bars, the utility bar or cookie banners (WCAG 2.4.11), and SHOULD NOT be partly hidden either.
+- **A11Y-06. Colour is never the only signal** (changed in v2). Status always has words and an icon as well as colour (`sc-status-tag`, `sc-callout` and field errors do this). A current or selected item also changes shape or weight (a check, a bar, Bold text, a Filled icon). A dot is used only for channel attribution and, together with a fill, Bold text and a hidden "Unread:" word, for unread notifications; never for status.
 - **A11Y-07. User preferences** (changed in v2). Services MUST respect `prefers-reduced-motion` ([8.7](#motion)) and `forced-colors` (every control stays visible in Windows contrast themes, with borders that exist only as fills given a transparent border so they show), and MUST support `prefers-color-scheme` in both themes ([8.1](#colour)). There is no translucency to reduce ([FND-20](#elevation)).
 - **A11Y-08. No disabled buttons for validation.** Buttons MUST stay enabled while a form is incomplete; the service explains what is missing when the user tries to continue ([13.6](#pat-questions)).
 
@@ -429,7 +429,7 @@ The component conventions (`CONVENTIONS.md`) hold the detailed rules each compon
 ### How we check
 
 - The team shows axe results per template (A11Y-09), the manual test record against the support matrix (A11Y-10) and the Appendix A register with a Pass, Fail or Not applicable result and evidence for each criterion (A11Y-11).
-- The panel tests one full journey with a keyboard and with a screen reader in Arabic, and checks in two channels and both themes that the focus ring is the same neutral ring and is never covered.
+- The panel tests one full journey with a keyboard and with a screen reader in Arabic, and checks in two channels and both themes that the focus ring is the same neutral ring, is never covered, and is never clipped at a screen edge (A11Y-05).
 - The panel compares the accessibility statement with the register; any known failure missing from the statement fails A11Y-13.
 
 ---
@@ -524,8 +524,8 @@ Colours are named by token in this chapter, never by value. Palette tones are wr
 - **FND-06.** Colour MUST NOT be the only way to convey meaning ([A11Y-06](#beyond-wcag)).
 - **FND-07** (changed in v2). `--sc-color-outline-variant` is for dividers and card edges only and MUST NOT be the only boundary of an interactive control. Control boundaries use `--sc-color-outline` at `--sc-size-border-control` (1.5px), which passes 3:1 on every surface.
 - **FND-24** (new in v2). Components and service code MUST use colour roles (`--sc-color-*`), never palette tones. The `--sc-palette-*` properties exist for documentation and tooling only.
-- **FND-25** (new in v2). City indigo (`--sc-color-primary` and its family) MUST be used only for what all channels share: the channel network strip, the sign-in and payment hand-offs ([CMP-10](#component-decisions)) and the "One network" row. A channel's own actions use the channel roles.
-- **FND-26** (new in v2). To show another channel's colour inside a page (the channel switcher, a channel chip, the channel network strip), the element MUST set `data-channel` on itself so the channel roles are rebound for its subtree. Another channel's values MUST NOT be written into service code.
+- **FND-25** (new in v2). City indigo (`--sc-color-primary` and its family) MUST be used only for what all channels share: the "One network · seven channels" eyebrow of the channel network strip, links in that shared network chrome, and the Dubai Pay and other shared hand-off buttons ([CMP-10](#component-decisions)). It MUST NOT be used for UAE PASS, whose button follows its own specification ([CMP-11](#component-decisions)). A channel's own actions use the channel roles.
+- **FND-26** (new in v2). To show another channel's colour inside a page (the channel switcher, a channel chip, a tile of the channel network strip, an `sc-step-list` row on another channel), the element MUST set `data-channel` on itself so the channel roles are rebound for its subtree. Another channel's values MUST NOT be written into service code.
 
 **System roles.** Components use these roles. Light and dark values, and the contrast of every pair, are in `foundations.md` sections 2.4 and 2.8.
 
@@ -640,8 +640,8 @@ Only the three display roles carry tracking, and only in English. Every Arabic r
 | `--sc-size-border-hairline` | 1px | Dividers and card edges |
 | `--sc-size-border-control` | 1.5px | Control edges |
 | `--sc-size-border-strong` | 2px | Error and selected edges; stepper connectors |
-| `--sc-size-border-accent` | 3px | The bar on the start side of a field in error or a callout |
-| `--sc-size-strip` | 4px | The network or channel strip at the top of the header |
+| `--sc-size-border-accent` | 3px | Accents that need a 3px line: the bar under the current item of the header navigation and beside the current item of the account navigation |
+| `--sc-size-strip` | 4px | The one start-bar width: the bar on the start side of a field in error and of a callout. Also the channel rule along the top of `sc-app-bar` and the top rule of each channel network tile |
 | `--sc-size-measure` | 680px | Maximum width of running text |
 
 - **FND-16** (changed in v2). Corner radii MUST use the radius tokens: `--sc-radius-control` 4px (buttons, checkboxes, segmented controls, tags), `--sc-radius-chip` 6px (status chips), `--sc-radius-field` 8px (text inputs, selects, textareas, callouts), `--sc-radius-card` 12px (cards, list groups, panels, popovers, dialogs and the top corners of bottom sheets) and `--sc-radius-none` (tables and full-bleed bands). `--sc-radius-full` is only for shapes whose roundness carries meaning: radio buttons, stepper markers, avatars, switch thumbs and suggestion chips. Buttons and fields MUST NOT be pills.
@@ -673,7 +673,7 @@ Surfaces are flat and outline-first. A shadow means "this floats over the page",
 
 ### 8.6 Icons and imagery
 
-- **FND-21** (changed in v2). Icons come from the shared set (`src/icons/`), drawn from **Material Symbols, Outlined style** (weight 400, grade 0, optical size matched to the rendered size; Apache 2.0 licence). They are inline SVG on a 24px grid, drawn in `currentColor`, never an icon font. The Filled style is used for two things only: status icons, and the selected state of navigation and tab icons, so that selection changes shape as well as colour. Sizes are 16px in chips and beside small text, 20px beside body text and inside fields, and 24px in buttons and standalone. A new icon is requested from the design system team, not drawn locally.
+- **FND-21** (changed in v2). Icons are **Material Symbols, Outlined style** (weight 400, grade 0, optical size matched to the rendered size; Apache 2.0 licence), listed in one manifest (`src/icons/icons.json`) and generated into each component, so a component carries only the icons it uses. They are inline SVG on a 24px grid, drawn in `currentColor`, never an icon font. The Filled style is used for two things only: status icons, and the selected state of navigation and tab icons, so that selection changes shape as well as colour. Sizes are 16px in chips and beside small text, 20px beside body text and inside fields, and 24px in buttons and standalone. A new icon is requested from the design system team, not drawn locally.
 - **FND-22.** Icons are always decorative (`aria-hidden`): the words next to them carry the meaning. An icon-only control MUST have an accessible name. Mirroring follows the table below.
 - **FND-23.** Images MUST NOT contain text. Photographs show real Dubai settings and people, are relevant to the task and have a text alternative unless decorative ([WCAG 1.1.1](#appendix-wcag)).
 
@@ -723,7 +723,7 @@ Motion in a government service has one job: to help people understand what chang
 | Bottom sheets and drawers | `cubic-bezier(0.32, 0.72, 0, 1)` | `--sc-easing-drawer` |
 
 - **MOT-05** (changed in v2). Exits MUST use `--sc-easing-exit`, which is an ease-out curve, with the exit durations in [MOT-07](#motion), or an opacity fade.
-- **MOT-06.** Interface motion SHOULD stay under 300ms. Use this table as the rule of thumb:
+- **MOT-06** (changed in v2). Interface motion SHOULD stay under 300ms. Use this table as the rule of thumb:
 
 | Element | Duration |
 | --- | --- |
@@ -731,8 +731,8 @@ Motion in a government service has one job: to help people understand what chang
 | Standard interface: tooltips, popovers, menus, selects | 150–250ms |
 | Modals, dialogs, drawers and bottom sheets | 200–300ms |
 
-  Larger elements animate more slowly than smaller ones, and duration grows with distance: an element that travels further takes longer. Use the duration tokens: `--sc-duration-fast` (120ms) for hover and colour, `--sc-duration-press` (150ms) for press feedback, `--sc-duration-base` (200ms) for standard entrances and `--sc-duration-slow` (280ms) for modals, drawers and bottom sheets only. `--sc-duration-instant` (0ms) is for keyboard-initiated actions.
-- **MOT-07.** Exits SHOULD be about 20% faster than entrances, not more: a popover that enters over `--sc-duration-base` leaves over `--sc-duration-exit` (160ms), by opacity only, and a sheet leaves over `calc(var(--sc-duration-slow) * 0.8)`. An exit that is much faster than its entrance reads as a cut.
+  Larger elements animate more slowly than smaller ones, and duration grows with distance: an element that travels further takes longer. Use the duration tokens: `--sc-duration-fast` (120ms) for hover and colour, `--sc-duration-press` (150ms) for press feedback, `--sc-duration-base` (200ms) for standard entrances and for centred dialogs, and `--sc-duration-slow` (280ms) for bottom sheets and drawers only, which travel from the screen edge. `--sc-duration-instant` (0ms) is for keyboard-initiated actions.
+- **MOT-07.** Exits SHOULD be about 20% faster than entrances, not more: a popover that enters over `--sc-duration-base` leaves over `--sc-duration-exit` (160ms), by opacity only; a centred dialog enters over 200ms and leaves over 160ms; and a sheet enters over 280ms and leaves over `calc(var(--sc-duration-slow) * 0.8)`, about 224ms. An exit that is much faster than its entrance reads as a cut.
 
 **Physical behaviour**
 
@@ -763,7 +763,10 @@ Motion in a government service has one job: to help people understand what chang
 | `sc-date-range` popover | Enters with opacity and `scale(0.96)` to 1 from the field's top inline-start corner over `--sc-duration-base`; leaves with opacity over `--sc-duration-exit`; opened from the keyboard, it appears instantly |
 | `sc-date-range` bottom sheet | Slides up over `--sc-duration-slow` with `--sc-easing-drawer`; the scrim fades in over `--sc-duration-base` |
 | `sc-date-range` month change | Pointer: crossfade with a 12px shift in the direction of travel (mirrored in Arabic) over `--sc-duration-base`. Keyboard: instant |
-| Channel switcher and account menu ([11.9](#tpl-chrome)) | Pointer: opacity and `scale(0.97)` from the trigger's corner over `--sc-duration-base`; leaves with opacity over `--sc-duration-exit`. Keyboard: instant |
+| Channel switcher and account menu ([11.9](#tpl-chrome)) | Pointer: opacity and `scale(--sc-scale-enter)` from the trigger's corner over `--sc-duration-base`; leaves with opacity over `--sc-duration-exit`. Keyboard: instant |
+| `sc-modal` centred dialog | Enters with opacity and `scale(--sc-scale-enter)` from its own centre over `--sc-duration-base` (200ms); leaves over `--sc-duration-exit` (160ms); the scrim fades with it. Opened from the keyboard: instant |
+| `sc-modal` bottom sheet (below 600px) | Slides up over `--sc-duration-slow` (280ms) with `--sc-easing-drawer`; leaves over about 224ms, from wherever a drag left it |
+| `sc-notification-list` "mark all as read" | The unread fill fades over `--sc-duration-base` when a pointer started it; instant from the keyboard |
 
 <a id="focus"></a>
 
@@ -778,7 +781,7 @@ The requirement is [A11Y-05](#beyond-wcag). It is built from one role and two si
 }
 ```
 
-`outline` follows the element's radius and survives forced-colours mode, and the 2px offset leaves the background showing between the control and the ring. Inside a filled region the region sets `--sc-color-focus-ring` to its own "on" colour for its subtree: `--sc-color-on-primary` on the city indigo strip, `--sc-color-channel-on-action` on a filled channel band and `--sc-color-inverse-on-surface` in a tooltip. These are pairs that `check:contrast` already measures. Focus is never animated ([MOT-02](#motion)).
+`outline` follows the element's radius and survives forced-colours mode, and the 2px offset leaves the background showing between the control and the ring. Inside a filled region the region sets `--sc-color-focus-ring` to its own "on" colour for its subtree: `--sc-color-on-primary` on the city indigo strip, `--sc-color-channel-on-action` on a filled channel band and `--sc-color-inverse-on-surface` in a tooltip. These are pairs that `check:contrast` already measures. Where the outside ring would be clipped ([A11Y-05](#beyond-wcag)), the component draws the same ring inside its edge with a negative `outline-offset`: `sc-bottom-nav` items, full-height navigation links in `sc-site-header` and `sc-notification-list` rows do this. Focus is never animated ([MOT-02](#motion)).
 
 ### How we check
 
@@ -821,7 +824,7 @@ Shared Channels content is plain, direct and calm. It speaks to one person about
 
 - **CNT-09. Register.** Arabic content MUST be written in plain Modern Standard Arabic: short sentences, common words, no legal or bureaucratic formulas where a plain phrase exists. It MUST NOT use a dialect, including Gulf dialect, in service content.
 - **CNT-10. Written, not translated.** Arabic content is written for Arabic readers from the same facts as the English. Sentence order, structure and length may differ from the English; meaning, facts and actions MUST NOT.
-- **CNT-11. Addressing the reader without assuming gender.** Arabic marks gender in verbs, so content MUST be written so that it reads correctly for every reader:
+- **CNT-11. Addressing the reader without assuming gender** (changed in v2). Arabic marks gender in verbs, so content MUST be written so that it reads correctly for every reader. Official names are not content and are kept as they are ([CNT-14](#arabic-style)), even where they contain an imperative or a diacritic, as the channel names "استثمر في دبي" and "ابنِ في دبي" do ([3.1](#seven-channels)):
   - Buttons, links, labels and headings use a verbal noun (masdar), not an imperative: "متابعة" (Continue), "دفع الرسوم" (Pay the fee), "حفظ والمتابعة لاحقًا" (Save and finish later), "إرفاق المستندات" (Upload documents).
   - Instructions and error messages use "يُرجى" with a verbal noun: "يُرجى إدخال رقم اللوحة" (Enter the plate number).
   - Sentences use forms that are not marked for gender in unvocalised text: "يمكنك…" (you can), the possessive suffix "ـك" ("طلبك", "رقم لوحتك") and passive or impersonal constructions ("تم استلام طلبك").
@@ -848,7 +851,7 @@ Shared Channels content is plain, direct and calm. It speaks to one person about
 | Topic | English | Arabic | Rule |
 | --- | --- | --- | --- |
 | Dates | 14 March 2026 | 14 مارس 2026 | Day, month name, year. No ordinals ("14th"), no weekday unless it matters. Abbreviate the month ("14 Mar 2026") only in tables and narrow summaries. Numeric dates ("14/03/2026") only in input hints and typed values |
-| Date ranges | 21 September to 9 October 2026 | من 21 سبتمبر إلى 9 أكتوبر 2026 | Use "to" in sentences. An en dash ("21 Sep – 9 Oct 2026") is for compact summaries only |
+| Date ranges | 21 September to 9 October 2026 | من 21 سبتمبر إلى 9 أكتوبر 2026 | Use "to" in sentences. An en dash ("21 Sep – 9 Oct 2026") is for compact English summaries only. Arabic compact summaries also use words ("من 1 إلى 31 أكتوبر 2026"), because a dash between numbers reverses in right-to-left text ([LANG-22A](#numerals)) |
 | Times | 9:30am, 2pm, midday | 9:30 صباحًا، 2 مساءً، 12 ظهرًا | 12-hour clock in both languages |
 | Time zone | 2pm (Dubai time) | 2 مساءً (بتوقيت دبي) | All times are Dubai time (Gulf Standard Time, UTC+4, no daylight saving). Say "Dubai time" next to every deadline and appointment |
 | Calendar | Gregorian | الميلادي | Gregorian by default. Showing a Hijri date alongside is a service-specific decision ([OQ-11](#open-questions)) |
@@ -959,10 +962,10 @@ The payment states must match the states the Dubai Pay integration actually repo
 
 The Shared Channels component library is a set of web components built with StencilJS, with the tag prefix `sc-`. One build works in plain HTML and JavaScript and in any framework. The components have no runtime dependency other than Stencil, and no dependency on React or any other framework. Generated wrappers for React, Angular and Vue are a later step; they wrap the same components.
 
-Each component's `readme.md` is its specification: when to use it, its properties, events, slots and parts, its states, and its Arabic behaviour. This chapter does not repeat them.
+Each component's specification (`components/specs/<tag>.md`) sets its anatomy, behaviour, states, Arabic behaviour and budget, and its `readme.md` lists its properties, events, slots and parts. This chapter does not repeat them.
 
 - **CMP-01.** Where an `sc-` component exists for a need, services MUST use it. They MUST NOT rebuild it, copy its code into a local version or restyle it beyond its documented parts.
-- **CMP-02** (changed in v2). Services MUST load the library stylesheet (`sc.css`, which holds the tokens, type roles and shared styles) once per page, with a `<link>` in `<head>` and never through `@import`, and set `lang`, `dir`, `data-channel` and (optionally) `data-theme` on an ancestor, normally through `sc-page`. They MUST NOT set colours on individual components. A service's own unlayered CSS overrides the library's cascade layers without `!important`.
+- **CMP-02** (changed in v2). Services MUST load the library stylesheet (`sc.css`, which holds the tokens, type roles and shared styles) once per page, with a `<link>` in `<head>` and never through `@import`, and set `lang`, `dir`, `data-channel` and (optionally) `data-theme` on an ancestor, normally through `sc-page`. They MUST NOT set colours on individual components. A service's own unlayered CSS overrides the library's cascade layers without `!important`. A service that puts its own CSS in cascade layers (a layered framework, for example) MUST declare its layer order before both stylesheets, so that the layers holding its overrides come after the library's `sc` layer (for example `@layer base, sc, components, utilities;`, `docs/v2/migration.md` §1).
 - **CMP-03.** A service that needs something the library does not have MUST first check the backlog ([10.4](#backlog)) and talk to the design system team ([18](#contributing)). Anything built locally in the meantime MUST follow `CONVENTIONS.md` and pass the same tests, and is recorded as an [exception](#exceptions).
 - **CMP-04** (changed in v2). Field components and `sc-button` render native elements into the page (light DOM): each field renders its own `<label>`, control, hint and error and links them. Services MUST NOT add a separate `<label>` next to an `sc-` field. Because the control is a real element in the page, a service's own `aria-describedby`, error summary links and `form.elements` reach it by its ID. These components have no `::part()` styling hooks; their documented classes take that role.
 - **CMP-07** (new in v2). Forms built with `sc-` fields and `sc-button` MUST submit when the user presses Enter in a single-line field, through the form's default (first submit) button, as native forms do. Services MUST NOT block implicit submission. Choosing an option still never submits ([Q-05](#pat-questions)).
@@ -973,12 +976,23 @@ Each component's `readme.md` is its specification: when to use it, its propertie
 
 | Family | Component | Use it for | Do not use it for |
 | --- | --- | --- | --- |
-| Actions and navigation | `sc-button` | Starting an action: "Continue", "Pay with Dubai Pay". One `primary` per page or section; `secondary`, `tertiary`, `destructive` variants; the city indigo hand-off style for UAE PASS and Dubai Pay ([CMP-10](#component-decisions)); `loading` state; `href` for a "Start now" call to action | Going somewhere else: use `sc-link` |
+| Actions and navigation | `sc-button` | Starting an action: "Continue", "Pay with Dubai Pay". One `primary` per page or section; `secondary` (outlined), `tertiary` (link-style) and `destructive` variants; `handoff` (city indigo) for Dubai Pay and other shared hand-offs ([CMP-10](#component-decisions)); `loading` state; `href` for a "Start now" call to action | Going somewhere else: use `sc-link`. Signing in with UAE PASS ([CMP-11](#component-decisions)) |
 | | `sc-link` | Going somewhere: `standalone` (with an arrow and a 44px target) or `external` (new tab, with hidden "(opens in new tab)"). For links in running text, the `.sc-link` class on a native `<a>` ([CMP-08](#component-decisions)) | Actions that submit, save or delete |
 | | `sc-back-link` | "Back" to the previous step, on every step except the first | Going to the start of the service |
-| | `sc-app-bar` | The top bar of transaction pages: back link, channel name and language switch | Channel pages outside a transaction: use `sc-site-header` ([11.9](#tpl-chrome)); the page heading: that is the `<h1>` |
+| | `sc-breadcrumbs` | Where a channel page sits in the channel's hierarchy, in the hero of inner pages ([CHR-07](#tpl-chrome)). The current page is text with `aria-current="page"`; below 600px, one "Back to {parent}" link | Pages inside a journey: use `sc-back-link` |
+| | `sc-pagination` | Pages of a long list outside or inside `sc-table` (in its `footer` slot): "Showing 1 to 20 of 1,284 fines" / "عرض 1 إلى 20 من 1,284 مخالفة" ([LANG-22A](#numerals)) | Moving between question pages |
 | | `sc-language-switch` | Switching to the same page in the other language ([5.2](#switching)) | Choosing between more than two languages |
-| | `sc-skip-link` | "Skip to main content", first in the page | – |
+| | `sc-skip-link` | "Skip to main content" / "الانتقال إلى المحتوى الرئيسي", first in the page; it targets `#main-content`, the `<main>` that `sc-page` renders | – |
+| Site chrome ([11.9](#tpl-chrome)) | `sc-app-bar` | The top bar of transaction pages: a 4px channel rule, the back link, the channel's official name and the language switch | Channel pages outside a transaction: use `sc-site-header`; the page heading: that is the `<h1>` |
+| | `sc-site-header` | The header of channel pages outside a transaction: the lockup slot, main navigation, search, language, sign in with UAE PASS or the account menu, and the channel switcher; a compact row with a modal menu below 1024px ([CHR-01](#tpl-chrome) to [CHR-04](#tpl-chrome)) | Transaction pages |
+| | `sc-channel-switcher` | The channel's logo and the disclosure that lists the seven channels, in the header's `switcher` slot ([CHR-03](#tpl-chrome)) | Labelling content about another channel: use `sc-channel-chip` |
+| | `sc-account-menu` | The signed-in state in `sc-site-header`: notifications with the unread count, and a disclosure with profile, settings, "change who you act for" and sign out | Applications and payments: they are in `sc-account-nav` |
+| | `sc-account-nav` | The side navigation of the signed-in account area, with count badges, the current item and sign out ([CHR-10](#tpl-chrome)) | Navigation outside the account area |
+| | `sc-bottom-nav` | The signed-in primary navigation below 1024px, docked flat to the bottom edge ([CHR-10](#tpl-chrome)) | Signed-out pages; transaction pages |
+| | `sc-announcement-bar` | A site-wide announcement above the header: planned maintenance, an outage, a change people need to know about; `info`, `warning` or `error`; optionally dismissible ([CHR-09](#tpl-chrome)) | A message about one page or one person's task: use `sc-callout` |
+| | `sc-utility-bar` | The docked help and feedback bar on channel sites ([CHR-05](#tpl-chrome)) | Transaction pages; navigation |
+| | `sc-footer` | `simple` on transaction pages: help and contact, accessibility, privacy, cookies and terms links. `grouped` on channel sites, with the Channels group ([CHR-06](#tpl-chrome)) | – |
+| | `sc-channel-network` | The channel network strip on channel home pages ([CHR-08](#tpl-chrome)) | Choosing a channel from the header: use `sc-channel-switcher` |
 | Form fields | `sc-text-input` | One line: plate number, Emirates ID number, email, phone, amount (`prefix-text="AED"`) | Long answers: use `sc-textarea` |
 | | `sc-textarea` | Several sentences, with an optional character count | One-line answers |
 | | `sc-radio-group`, `sc-radio` | One choice from about seven options or fewer | Several choices: use `sc-checkbox-group` |
@@ -986,40 +1000,49 @@ Each component's `readme.md` is its specification: when to use it, its propertie
 | | `sc-select` | One choice from a long list | Up to about seven options: use radios |
 | | `sc-date-input` | A date people know: date of birth, policy start date | Choosing dates from a calendar |
 | | `sc-date-range` | A start and end date related to a calendar: filtering payments, the nights of a stay | One known date |
-| Feedback and status | `sc-error-summary` | Listing every error at the top of the page after a submission ([10.3](#component-decisions)) | Problems not caused by the user's answers: use `sc-callout tone="error"` |
-| | `sc-callout` | An important message in the content: `info`, `success`, `warning` or `error`; at most one per section | Field errors; the status of an item in a list |
-| | `sc-status-tag` | The status of an application, task or payment, from [9.6](#status-vocabulary) | Messages the user must read |
-| | `sc-channel-chip` | Pointing to another channel that offers the service: "Also on Dubai Transport" | The main way forward |
-| | `sc-step-progress` | The stepper: "Step 2 of 4" in a linear journey of 2 to about 7 question pages ([CMP-09](#component-decisions)) | Long or branching journeys where the total is not known |
-| | `sc-spinner` | A short inline wait, with a label saying what is loading | A button's own loading state: use `sc-button loading` |
-| Content and layout | `sc-page` | The page frame: header, `<main id="main-content">` and footer, with language, direction and channel set once | – |
-| | `sc-container` | Page margins; `width="reading"` for question pages and running text | – |
-| | `sc-grid` | 4, 8 and 12-column layouts | Tabular data: use `sc-table` |
-| | `sc-card` | Grouping related content on a surface | A link to a service: use `sc-service-card` |
-| | `sc-service-card` | A link to a service in a listing ([10.3](#component-decisions)) | Content that is not a single link |
-| | `sc-channel-hero` | The top of a channel's home or section page: a flat band with the heading and search ([CHR-07](#tpl-chrome)) | Question pages |
 | | `sc-search` | Searching a channel or a list of services | Filtering a table |
+| | `sc-filter-chips` | The filters applied to a list of results, as removable chips beside the result count, with "Clear all filters". Removal is instant, focus moves to the next chip, and the new count is announced | Choosing filters: that is a form (planned `sc-filter`) |
+| Feedback and status | `sc-error-summary` | Listing every error at the top of the page after a submission ([CMP-05](#component-decisions)) | Problems not caused by the user's answers: use `sc-callout tone="error"` |
+| | `sc-callout` | An important message in the content: `info`, `success`, `warning` or `error`; at most one per section | Field errors; the status of an item in a list |
+| | `sc-status-tag` | The status of an application, task or payment, from [9.6](#status-vocabulary), in a semantic tone ([CMP-12](#component-decisions)) | Messages the user must read; labels about another channel |
+| | `sc-channel-chip` | Pointing to another channel that offers the service: "Also on Dubai Transport" / "متوفر أيضًا في مواصلات دبي" | The main way forward |
+| | `sc-step-progress` | The stepper: "Step 2 of 4" in a linear journey of 2 to about 7 question pages ([CMP-09](#component-decisions)) | Long or branching journeys where the total is not known |
+| | `sc-step-list` | A life event as an ordered list of services, which may span channels: a row on another channel takes that channel's colour and an "On Dubai Transport" / "على مواصلات دبي" chip | The steps of one transaction: use `sc-step-progress` |
+| | `sc-timeline` | The status history of an application; the latest entry is current ([13.14](#pat-track)) | Steps still to come |
+| | `sc-notification-list` | Notifications in the account area, grouped by day. Each notification is one link; unread ones have a fill, a dot, a Bold title and a hidden "Unread:" / "غير مقروء:" | Something the user must act on now: use `sc-attention-card` |
+| | `sc-empty-state` | An empty list or a search with no results: an icon, a heading, one sentence and one action; `variant="success"` for an all-clear | Errors: use `sc-callout tone="error"` |
+| | `sc-modal` | A short secondary task, as a centred dialog from 600px and a bottom sheet below; with `alert` and `countdown`, the session timeout warning ([13.10](#pat-timeout)) | Anything a full page can do; content people need beside the page |
+| | `sc-spinner` | A short inline wait, with a label saying what is loading | A button's own loading state: use `sc-button loading` |
+| Content and layout | `sc-page` | The page frame: header, `<main id="main-content">` and footer, with language, direction and channel set once; it reserves space for a sticky header, the utility bar and the bottom navigation | – |
+| | `sc-container` | Page margins; `width="reading"` for question pages and running text (CSS only) | – |
+| | `sc-grid` | 4, 8 and 12-column layouts (CSS only) | Tabular data: use `sc-table` |
+| | `sc-card` | Grouping related content on a flat surface: `outlined` (default) or `filled` for totals | A link to a service: use `sc-service-card` |
+| | `sc-service-card` | A link to a service in a listing: the title is the only link ([CMP-06](#component-decisions)) | Content that is not a single link |
+| | `sc-tile` | One link to a life event, a category or a favourite service: a tinted icon tile, a title and an optional count ("14 services") | A service with its owning entity: use `sc-service-card` |
+| | `sc-attention-card` | One thing that is due (a bill, a document, an expiring registration): an icon tile in the status tag's tone, the tag, a heading, a fact, a meta line and one action. It has no coloured edge and is not a link | Items with nothing to do |
+| | `sc-module-card` | A titled module on a signed-in page, with a header link named with the title ("View all, Applications") and its content | A single link: use `sc-tile` or `sc-service-card` |
+| | `sc-accordion` | Sections that open and close, for frequently asked questions and long guidance, built on native `<details>` | Questions in a journey; content everyone needs |
+| | `sc-channel-hero` | The top of a channel's home or section page: a flat band with the heading and search ([CHR-07](#tpl-chrome)) | Question pages |
 | | `sc-summary-list`, `sc-summary-row` | Check your answers; the details of one thing | Comparing several things: use `sc-table` |
 | | `sc-table` | Comparing rows of the same kind of thing: fines, payments, applications; sorting, selection, `compact` density for staff tools | Layout; the details of one thing |
-| | `sc-footer` | Help and contact, accessibility, privacy and terms links; on channel sites, the grouped footer with the Channels group ([CHR-06](#tpl-chrome)) | – |
 | | `sc-ltr` | Isolating left-to-right values in page markup ([5.4](#bidi)) | Whole sentences in another language |
 
 <a id="component-decisions"></a>
 
-### 10.3 Decisions that change current components
+### 10.3 Decisions about components
 
-These components behave differently from what this standard requires, or change in the design system v2 rebuild. The standard states the correct rule; the component changes are in progress. Until they ship, services follow the workaround given.
+These rules decide how components behave where version 1.0 or the v1 library did otherwise, or where a service might be tempted to change them. The components follow them, except for the known gaps at the end of this section.
 
 **Error summary.**
 
 - **CMP-05.** When the page loads with errors, or when errors are added after a submission, focus MUST move to the error summary (`tabindex="-1"`), so screen readers read its heading and the list. The summary MUST NOT also carry `role="alert"`: with focus moving to it, the alert role makes some screen readers announce it twice. This follows GOV.UK Design System practice.
-- `sc-error-summary` follows CMP-05: it takes focus and is a `role="group"` named by its heading, with no `role="alert"`.
+- `sc-error-summary` follows CMP-05: it takes focus and is a `role="group"` named by its heading, "There is a problem" / "توجد مشكلة", with no `role="alert"`.
 - The page `<title>` starts with "Error: " / "خطأ: " while errors are shown. Each item links to the field's `id`; the field components delegate focus so the link lands in the control.
 
 **Service card.**
 
 - **CMP-06.** A service card's link is its title, inside the heading. The link's hit area MUST NOT be stretched over the whole card, and the card MUST NOT be wrapped in a link. A channel chip link, if present, is a separate link. Keyboard and screen reader users meet one link per card, named by the service title, and the owning entity is its description.
-- `sc-service-card` currently stretches the title link over the card. Its change to a title-only link is in progress.
+- `sc-service-card` follows CMP-06: the title link's target grows to 44 × 44 without covering the card, and the arrow at its top end is decorative, not a second link.
 - The card shows the service name, the owning entity and, when relevant, a channel chip. Fees, eligibility and timings belong on the service detail page ([11.2](#tpl-start)), not on the card.
 
 **Links.**
@@ -1030,14 +1053,20 @@ These components behave differently from what this standard requires, or change 
 
 - **CMP-09** (new in v2). In `sc-step-progress`, completed and current step markers MUST use the channel action colour, and completed markers MUST carry a check icon, so that completion does not depend on colour. The current step also has a halo and `aria-current="step"`. Green (`--sc-color-success`) is reserved for genuine success messages and MUST NOT mark completed steps.
 
-**Shared hand-offs.**
+**Shared hand-offs and UAE PASS.**
 
-- **CMP-10** (new in v2). Buttons that hand the user to a shared government service (sign in with UAE PASS, pay with Dubai Pay) MUST use city indigo (`--sc-color-primary`, with `--sc-color-on-primary` text) on every channel, so they never look like a channel's own action. Where the provider's brand rules require their own button asset, that asset is used instead ([LEG-03](#legal), [OQ-3](#open-questions), [OQ-4](#open-questions)).
+- **CMP-10** (new in v2). Buttons that hand the user to a shared government service other than UAE PASS (pay with Dubai Pay, for example) MUST use `sc-button variant="handoff"`: city indigo (`--sc-color-primary`, with `--sc-color-on-primary` text) on every channel, so they never look like a channel's own action. If Dubai Pay or another provider mandates its own button, that button is used instead ([LEG-03](#legal), [OQ-4](#open-questions)).
+- **CMP-11** (new in v2). "Sign in with UAE PASS", and any "confirm with UAE PASS", MUST use the official UAE PASS button exactly as the UAE PASS button specification sets it: its colours, fingerprint mark, English and Arabic labels, sizes, variants and dark-mode treatment. It is a brand exception: services MUST NOT restyle it, recolour it to the channel or to city indigo, or replace its mark, and it is never an `sc-button`. Until the official kit is in the library ([OQ-3](#open-questions)), `sc-site-header` shows a clearly marked placeholder (a black button with the white label "Sign in with UAE PASS" and a fingerprint glyph, 56px tall, the same on every channel and in both themes), which the official button replaces through the header's `signin` slot.
+
+**Status tags.**
+
+- **CMP-12** (new in v2). `sc-status-tag` shows a status from [9.6](#status-vocabulary) in a semantic tone: `neutral`, `info`, `success`, `warning` or `error`. Its `channel` tone (`--sc-color-channel-action` text on `--sc-color-channel-subtle`) is a highlight that is not a status, such as a "Life event" label; services MUST NOT use it for a status. A label that refers to another channel uses `sc-channel-chip`, not a status tag.
 
 **Known gaps in current components**
 
-- Some default Arabic strings use the imperative, which [CNT-11](#arabic-style) does not allow: for example the `sc-skip-link` label "انتقل إلى المحتوى الرئيسي" and the `sc-date-range` error messages ("أدخل تاريخ البداية"). They are to be rewritten (for example "الانتقال إلى المحتوى الرئيسي", "يُرجى إدخال تاريخ البداية"). Until then, services override them through the component's slot or `strings` property.
-- `sc-skip-link` points at `#main` by default, while `sc-page` renders `<main id="main-content">`. Set `href="#main-content"` on the skip link when using `sc-page`.
+- Two default Arabic strings use the imperative, which [CNT-11](#arabic-style) does not allow: the call item of `sc-utility-bar` ("اتصل") and the sign-in hint in the `sc-site-header` mobile menu ("سجّل الدخول لعرض مهامك…"). They are to be rewritten in the library (for example "الاتصال" and "يمكنك تسجيل الدخول لعرض مهامك ومدفوعاتك والخدمات المحفوظة."); neither component offers an override.
+- `sc-callout` still draws its start bar at 3px; [FND-15](#spacing) sets the start bar at 4px (`--sc-size-strip`), the same as a field in error.
+- `sc-modal` animates the centred dialog over the sheet's 280ms; [MOT-06](#motion) and [MOT-07](#motion) set 200ms in and 160ms out for a centred dialog.
 
 <a id="backlog"></a>
 
@@ -1047,31 +1076,26 @@ These components do not exist yet. Tag names are proposed. Priority reflects how
 
 | Planned component | Needed for | Priority | Until it exists |
 | --- | --- | --- | --- |
+| `sc-uaepass-button` | Sign in with UAE PASS anywhere in a journey, built from the official kit ([CMP-11](#component-decisions)) | High | The provider's official asset; in the header, its placeholder |
 | `sc-file-upload` | Upload documents ([13.7](#pat-upload)) | High | Native `<input type="file">` with a visible label, following [13.7](#pat-upload) |
 | `sc-combobox` | Nationality, area, business activity and other long lists people type into | High | `sc-select` with the full list |
-| `sc-notification-banner` | Page-level messages, including service interruptions and the result of an action on the next page | High | `sc-callout` at the top of `<main>` |
+| `sc-notification-banner` | Page-level messages, including the result of an action on the next page | High | `sc-callout` at the top of `<main>`. Site-wide interruptions use `sc-announcement-bar` |
 | `sc-panel` | The confirmation panel with the reference number ([11.5](#tpl-confirmation)) | High | `sc-card` with a heading and the reference in `sc-ltr` |
 | `sc-task-list` | Task list pages ([11.6](#tpl-task-list)) | High | A list of links with `sc-status-tag` |
 | `sc-details` | Help text revealed on request | High | Native `<details>` and `<summary>` |
 | `sc-cookie-banner` | Cookie consent ([14.4](#cookies)) | High | A service-built banner meeting [14.4](#cookies) |
-| `sc-timeout-warning` | Session timeout ([13.10](#pat-timeout)) | High | A service-built modal dialog meeting [13.10](#pat-timeout) |
-| `sc-modal` | Short secondary tasks, as a dialog, or a bottom sheet on phones | Medium | A full page |
-| `sc-pagination` | Search results and long lists outside `sc-table` | Medium | Previous and next links |
-| `sc-site-header`, with the channel switcher and mobile menu | The header of channel pages outside a transaction ([CHR-01](#tpl-chrome) to [CHR-04](#tpl-chrome)) | High | `sc-app-bar` with links in its default slot |
-| `sc-account-menu` | The signed-in state in `sc-site-header` | Medium | A link to the account area |
-| `sc-utility-bar` | The docked help and feedback bar on channel sites ([CHR-05](#tpl-chrome)) | Medium | The footer's help links |
-| `sc-channel-network` | The channel network strip on channel home pages ([CHR-08](#tpl-chrome)) | Medium | A list of links to the seven channels |
-| `sc-filter` | Filtering service search results | Medium | A form with checkboxes and a submit button |
+| `sc-plate` | Showing a vehicle plate as a plate | Medium | Page markup with the plate in `sc-ltr` |
+| `sc-filter` | Choosing filters for service search results | Medium | A form with checkboxes and a submit button, with `sc-filter-chips` for the filters applied |
 | `sc-exit-page` | Quick exit for sensitive services ([13.19](#pat-quick-exit)) | Medium | A service-built link meeting [13.19](#pat-quick-exit) |
 | `sc-warning-text`, `sc-inset-text` | Legal warnings and quoted information | Medium | `sc-callout` |
 | `sc-phase-banner` | Showing that a service is in beta | Medium | `sc-callout tone="info"` under the app bar |
-| `sc-breadcrumbs` | Location in a channel's hierarchy, outside transactions | Low | None needed in journeys; omit |
-| `sc-tabs`, `sc-accordion` | Closely related views; long guidance pages | Low | Separate pages; headings |
+| `sc-chip` (suggestion and toggle), `sc-icon-tile` | Suggestion and toggle chips outside the hero; a standalone tinted icon tile | Low | The hero's suggestion chips; the icon slots of `sc-tile` and `sc-service-card` |
+| `sc-tabs` | Closely related views | Low | Separate pages |
 | `sc-progress-bar`, skeleton | Long processes with measurable progress | Low | `sc-spinner` with a label |
 
 Not planned: toasts. Outcomes are shown in the page with `sc-callout` or `sc-notification-banner`, where they persist and can be found again. Inputs for phone numbers, amounts, Emirates ID numbers, plates and one-time codes are configurations of `sc-text-input`, not new components ([12](#ask)).
 
-Whether UAE PASS and Dubai Pay buttons should be wrapped as components depends on the providers' asset rules ([OQ-3](#open-questions), [OQ-4](#open-questions)).
+Whether Dubai Pay needs its own button component depends on whether it mandates one ([OQ-4](#open-questions)).
 
 ### How we check
 
@@ -1079,7 +1103,9 @@ Whether UAE PASS and Dubai Pay buttons should be wrapped as components depends o
 - For each local component, the team shows its exception record and its test results against `CONVENTIONS.md` (keyboard, axe in English and Arabic, light and dark).
 - The panel checks that `sc.css` is loaded once, by `<link>`, and that no component has colours set on it directly (CMP-02).
 - The panel presses Enter in a single-line field on a question page and checks that the form submits (CMP-07).
-- The panel checks that links in running text are underlined (CMP-08), that completed steps are in the channel colour with a check (CMP-09), and that UAE PASS and Dubai Pay buttons are city indigo or the provider's asset on two channels (CMP-10).
+- The panel checks that links in running text are underlined (CMP-08) and that completed steps are in the channel colour with a check (CMP-09).
+- On two channels and in both themes, the panel checks that the Dubai Pay button is city indigo or the provider's asset (CMP-10), and that the UAE PASS button is the official button, or the header's marked placeholder, identical on both channels (CMP-11).
+- The panel checks that every status tag shows a status from [9.6](#status-vocabulary) in a semantic tone (CMP-12).
 
 ---
 
@@ -1105,13 +1131,12 @@ Every page uses one of these templates. Each lists the content it must contain, 
   </div>
   <sc-container width="reading">…</sc-container>
   <sc-footer slot="footer" help-href="/en/help" accessibility-href="/en/accessibility"
-             privacy-href="/en/privacy" terms-href="/en/terms">
-    <a href="/en/cookies">Cookies</a>
+             privacy-href="/en/privacy" cookies-href="/en/cookies" terms-href="/en/terms">
   </sc-footer>
 </sc-page>
 ```
 
-This is the shell of a transaction page. Channel pages outside a transaction use `sc-site-header` and the grouped footer instead ([11.9](#tpl-chrome)).
+This is the shell of a transaction page. `sc-app-bar` shows the channel's official name when its `title` slot is empty. Channel pages outside a transaction use `sc-site-header` and the grouped footer instead ([11.9](#tpl-chrome)). How the page links the stylesheet and preloads its font is in [PERF-10](#performance).
 
 - **TPL-01** (changed in v2). Every page MUST use a page shell: skip link, a header with the channel name and the language switch (`sc-app-bar` on transaction pages, `sc-site-header` on channel pages), one `<main>`, and the footer with all four standard links plus "Cookies". Neither header is fixed by default; a sticky header sets `scroll-padding-top` so it never covers focus ([A11Y-05](#beyond-wcag)).
 - **TPL-02.** The page `<title>` MUST be "{Page heading} – {Service name} – {Channel name}" in the page language, for example "What is your plate number? – Renew vehicle registration – Dubai Transport" / "ما رقم لوحة المركبة؟ – تجديد ترخيص المركبة – مواصلات دبي". It starts with "Error: " / "خطأ: " while errors are shown. Pages outside a service omit the service name.
@@ -1199,30 +1224,35 @@ Channel pages outside a transaction (a channel's home, topic and section pages, 
 
 **Header**
 
-- **CHR-01** (new in v2). The channel-site header (`sc-site-header`, a `<header>` landmark) MUST hold, from the inline-start edge: the Government of Dubai lockup ([CHR-02](#tpl-chrome)); the main navigation, a `<nav>` labelled "Main" / "رئيسية"; search; the language switch ([LANG-04](#switching)); sign in, as a city indigo hand-off ([CMP-10](#component-decisions)), or the account menu once signed in; and the channel's logo and the channel switcher ([CHR-03](#tpl-chrome)) at the inline-end edge. The order mirrors in Arabic. The bar is flat `--sc-color-surface` with a 1px `--sc-color-outline-variant` rule beneath it. The current navigation item is marked by a 3px bar in `--sc-color-channel-action`, Bold text and `aria-current="page"`.
-- **CHR-02** (new in v2). The Government of Dubai lockup MUST appear at the inline-start edge of every channel-site header, identical on every channel. It is the brand owner's artwork used as supplied: it MUST NOT be recoloured with channel colour or mirrored ([8.6](#icons)), and no entity logo may replace it or sit beside it ([SVC-02](#channel-theme)). It has a text alternative in the page language: "Government of Dubai" / "حكومة دبي". The approved artwork and its rules are [OQ-30](#open-questions).
+- **CHR-01** (new in v2). The channel-site header (`sc-site-header`, a `<header>` landmark) MUST hold, from the inline-start edge: the Government of Dubai lockup ([CHR-02](#tpl-chrome)); the main navigation, a `<nav>` labelled "Main" / "رئيسية"; search; the language switch ([LANG-04](#switching)); sign in, with the official UAE PASS button ([CMP-11](#component-decisions)), or the account menu (`sc-account-menu`) once signed in; and the channel's logo and the channel switcher ([CHR-03](#tpl-chrome)) at the inline-end edge. The order mirrors in Arabic. The bar is flat `--sc-color-surface` with a 1px `--sc-color-outline-variant` rule beneath it. The current navigation item is marked by `--sc-color-channel-action` text, a 3px bar in the same colour, Bold text and `aria-current="page"`. The full row MUST NOT wrap or clip: where it does not fit (long Arabic labels at 1024–1279px, for example), the header uses the compact row of [CHR-04](#tpl-chrome) instead.
+- **CHR-02** (new in v2). The Government of Dubai lockup MUST appear at the inline-start edge of every channel-site header, identical on every channel. It is the official artwork from The Executive Council, used exactly as supplied: it MUST NOT be recoloured, cropped, converted or mirrored, including in Arabic ([5.6](#mirroring)), and no entity logo may replace it or sit beside it ([SVC-02](#channel-theme)). The library ships no logo: `sc-site-header` takes the lockup through its `lockup` slot, and public demonstration pages use a neutral placeholder of the same proportions labelled "Government of Dubai lockup". The artwork is not published in the public repository or on public demonstration pages until the initiative has the usage manual or approval that Law No. (1) of 2025 requires ([OQ-30](#open-questions)). The lockup has a text alternative in the page language: "Government of Dubai" / "حكومة دبي". Until the Executive Council's rules are known, it is at least 40px tall in the header, keeps clear space on every side equal to the height of the wordmark's capital "G", and sits on a white plate on dark surfaces.
 - **CHR-03** (new in v2). The channel switcher MUST be a disclosure, not an ARIA menu: a `<button>` with `aria-expanded`, whose accessible name includes the current channel ("Choose a channel: Dubai Transport"), opening a non-modal panel. The panel lists all seven channels as links, in the order of [3.1](#seven-channels), each with its name and a one-line descriptor in the page language and a swatch in that channel's own colour ([FND-26](#colour)). Each link leads to that channel's home page in the current language. The current channel carries a check and `aria-current="true"`. Escape and a click outside close the panel, Escape returns focus to the button, and the panel closes when focus leaves it. Opened from the keyboard it appears instantly ([MOT-02](#motion)).
-- **CHR-04** (new in v2). Below 1024px the header row MUST keep the menu button, the channel's name, the language switch and the channel switcher (which MAY shrink to its swatch, keeping its accessible name). Navigation, search and sign in move into the mobile menu: a modal `<dialog>` labelled by its title, with focus on its close button when it opens, Escape closing it and returning focus to the menu button, and the page behind it inert. The menu button has `aria-expanded`.
+- **CHR-04** (new in v2). Below 1024px the header row MUST keep the menu button, the lockup, the language switch and the channel switcher (which MAY shrink to the channel's logo, keeping its accessible name with the channel's name). Navigation, search and sign in (or the account menu) move into the mobile menu: a modal `<dialog>` labelled by its title, with focus on its close button when it opens, Escape closing it and returning focus to the menu button, and the page behind it inert. The menu button has `aria-expanded`.
 
 **Utility bar**
 
-- **CHR-05** (new in v2). Where a channel site offers a utility bar (help and feedback links such as the Happiness Meter, the call centre, chat and accessibility options), it MUST be a flat bar docked to the bottom edge across the full width, at `--sc-elevation-1`, with a 1px `--sc-color-outline-variant` edge along its top. It is not a floating capsule. It is a `<nav>` labelled "Help and feedback". Every item keeps a visible text label beside its icon; labels MUST NOT collapse to icons. The page reserves the bar's height (`padding-block-end` and `scroll-padding-bottom`), so the bar never covers content or the focused element ([A11Y-05](#beyond-wcag)). Below 1024px it folds into the footer as a "Help and feedback" group. It is present when the page loads and does not animate.
+- **CHR-05** (new in v2). Where a channel site offers a utility bar (`sc-utility-bar`: help and feedback links such as the Happiness Meter / "مؤشر السعادة", the call centre, chat / "المحادثة" and accessibility options), from 1024px it MUST be a flat bar docked to the bottom edge across the full width, at `--sc-elevation-1`, with a 1px `--sc-color-outline-variant` hairline along its top and no upward shadow. It is not a floating capsule. It is a `<nav>` labelled "Help and feedback" / "المساعدة والملاحظات". Every item keeps a visible text label beside its icon; labels MUST NOT collapse to icons. The page reserves the bar's height (`padding-block-end` and `scroll-padding-bottom`), so the bar never covers content or the focused element ([A11Y-05](#beyond-wcag)). Below 1024px it folds into the footer as a "Help and feedback" group. It is present when the page loads and does not animate.
 
 **Footer**
 
-- **CHR-06** (new in v2). Channel-site pages MUST use the grouped footer: the channel's brand group; a Channels group listing all seven channels as links, in the order of [3.1](#seven-channels); and groups for helpful information and legal links, which together carry every required link ([LEG-01](#legal), [TPL-01](#tpl-shell)). Each group has an `<h2>` heading. In the Channels group the current channel is Bold with `aria-current="true"`, without a swatch. Apart from the Channels group, the footer is not a sitemap: it holds only the required links, help and contact, and the channel's own description. The footer sits on `--sc-color-surface`, never on a dark band, and its links are underlined in `--sc-color-on-surface`.
+- **CHR-06** (new in v2). Channel-site pages MUST use the grouped footer: the channel's brand group; a Channels group listing all seven channels as links, in the order of [3.1](#seven-channels); and the "Helpful information" / "معلومات مفيدة" and "Legal" / "المعلومات القانونية" groups, which together carry every required link ([LEG-01](#legal), [TPL-01](#tpl-shell)). Each group has an `<h2>` heading. In the Channels group the current channel is Bold with `aria-current="true"`, without a swatch. Apart from the Channels group, the footer is not a sitemap: it holds only the required links, help and contact, and the channel's own description. The footer sits on `--sc-color-surface`, never on a dark band, and its links are underlined in `--sc-color-on-surface`.
 
 **Hero and network**
 
 - **CHR-07** (new in v2). The hero of a channel's home or section page (`sc-channel-hero`) MUST be a flat `--sc-color-channel-subtle` band: no gradient, wash, shadow or image behind text. It holds, in order: breadcrumbs on inner pages, an optional eyebrow in `--sc-color-channel-action`, the `<h1>` in a display role ([FND-29](#typography)), `sc-search`, and optionally a row of suggestion chips. Services follow the hero directly.
-- **CHR-08** (new in v2). A channel's home page SHOULD end with the channel network strip (`sc-channel-network`), after the last content band and before the footer. It lists all seven channels in the order of [3.1](#seven-channels), in the same place on every channel. City indigo marks it as shared ([FND-25](#colour)); each tile carries its own channel's colour only as attribution ([FND-26](#colour)); the current channel's tile says "You are here" and carries `aria-current="true"`.
+- **CHR-08** (new in v2). A channel's home page SHOULD end with the channel network strip (`sc-channel-network`), after the last content band and before the footer. It lists all seven channels in the order of [3.1](#seven-channels), in the same place on every channel. City indigo marks it as shared ([FND-25](#colour)); each tile carries its own channel's colour only as attribution ([FND-26](#colour)); the current channel's tile is text, not a link, says "You are here" and carries `aria-current="true"`. The strip is a `<nav>` labelled "Government of Dubai channels".
+
+**Announcements and signed-in navigation**
+
+- **CHR-09** (new in v2). A site-wide announcement (planned maintenance, an outage, a change people need to know about) MUST use `sc-announcement-bar`, after the skip link and before the header: a region labelled "Announcement", present when the page loads, and not a live region or an alert. If it can be dismissed, its 44 × 44 dismiss button is named, focus moves to the next element after the bar, and the choice MAY be remembered for later pages. A message about one page or one person's task is not an announcement ([10.2](#component-index)).
+- **CHR-10** (new in v2). The signed-in account area MUST use `sc-account-nav` for its own navigation (a side list, which becomes a row that scrolls sideways below 600px), and below 1024px `sc-bottom-nav` as the primary navigation, with three to five destinations. The bottom navigation is docked flat to the bottom edge with targets of at least 44px, and the page reserves its height, so it never covers content or the focused element ([A11Y-05](#beyond-wcag)). Its current item has a Filled icon, an indicator in `--sc-color-channel-container` and `aria-current="page"` ([A11Y-06](#beyond-wcag)).
 
 ### How we check
 
 - The panel opens each template the service uses and checks content order, the single `<h1>`, the title format and the footer links (TPL-01 to TPL-03).
 - The panel submits the check answers page twice quickly and reloads the confirmation page; neither may create a second submission (TPL-17).
 - The panel requests a non-existent URL in both languages and checks the 404 page and status.
-- On a channel site, the panel checks the header order and the Government of Dubai lockup in both languages (CHR-01, CHR-02); opens the channel switcher and the mobile menu with the keyboard and the pointer, and closes each with Escape (CHR-03, CHR-04); tabs to the last element above the utility bar at 400% zoom to confirm nothing is covered (CHR-05); and checks the footer's Channels group, the flat hero and, on the home page, the network strip (CHR-06 to CHR-08).
+- On a channel site, the panel checks the header order and the Government of Dubai lockup in both languages (CHR-01, CHR-02); opens the channel switcher and the mobile menu with the keyboard and the pointer, and closes each with Escape (CHR-03, CHR-04); tabs to the last element above the utility bar at 400% zoom to confirm nothing is covered (CHR-05); and checks the footer's Channels group, the flat hero and, on the home page, the network strip (CHR-06 to CHR-08). It checks the lockup is the supplied artwork, unmirrored in Arabic and at least 40px tall (CHR-02); dismisses an announcement with the keyboard (CHR-09); and, signed in at 390px, tabs to the last element above the bottom navigation (CHR-10).
 
 ---
 
@@ -1310,7 +1340,7 @@ Each pattern gives when to use it, the flow, the rules, the recovery states the 
 | --- | --- |
 | Search is unavailable | Keep the query, say search is not working, and offer topic browsing |
 
-**Components:** `sc-channel-hero`, `sc-search`, `sc-service-card`, `sc-grid`, `sc-channel-chip`; planned `sc-filter`, `sc-pagination`.
+**Components:** `sc-channel-hero`, `sc-search`, `sc-service-card`, `sc-tile` (categories and life events), `sc-step-list` (the services of a life event), `sc-grid`, `sc-channel-chip`, `sc-filter-chips` (the filters applied, FIND-02), `sc-pagination`, `sc-empty-state` (no results, FIND-03); planned `sc-filter`.
 
 **Example:** Results for "renew car" (2) / نتائج البحث عن «تجديد السيارة» (2).
 
@@ -1360,7 +1390,7 @@ Each pattern gives when to use it, the flow, the rules, the recovery states the 
 **Use when** the task needs a verified identity, protected records, a saved application or a binding submission.
 
 - **ID-01.** Sign-in MUST be deferred until the task needs it. The service detail page and eligibility check never require it.
-- **ID-02** (changed in v2). Services MUST authenticate through the official UAE PASS integration, using the provider's wording in both languages and a city indigo hand-off button ([CMP-10](#component-decisions)), or the provider's own button asset where its brand rules require it ([OQ-3](#open-questions)). They MUST NOT create their own passwords or accounts to replace it, imitate its screens, or collect its credentials.
+- **ID-02** (changed in v2). Services MUST authenticate through the official UAE PASS integration, using the official UAE PASS button, with the provider's own wording in both languages, exactly as its specification sets it ([CMP-11](#component-decisions), [OQ-3](#open-questions)). They MUST NOT create their own passwords or accounts to replace it, imitate its screens, or collect its credentials.
 - **ID-03.** Before the handoff, the page explains why sign-in is needed and what information the service will receive.
 - **ID-04.** The service MUST return the user to the same step, in the same language, with their draft, after success. It MUST validate the response on the server.
 - **ID-05.** Signing in proves who someone is; it does not prove they may act for someone else ([13.5](#pat-represent)) or that they are eligible.
@@ -1374,7 +1404,7 @@ Each pattern gives when to use it, the flow, the rules, the recovery states the 
 | Request expired or refused | Explain which, keep the draft, offer a new request |
 | UAE PASS unavailable or app missing | Say so, keep the draft, offer the routes the integration supports and help. Never bypass identity checks |
 
-**Components:** `sc-button` as a city indigo hand-off ([CMP-10](#component-decisions)) or the provider asset ([OQ-3](#open-questions)), `sc-callout`.
+**Components:** the official UAE PASS button ([CMP-11](#component-decisions); in the header, `sc-site-header`'s `signin` slot; planned `sc-uaepass-button`), `sc-callout`.
 
 **Check:** test success, cancellation, expiry, missing attributes and app absence, in both languages.
 
@@ -1491,7 +1521,7 @@ Each pattern gives when to use it, the flow, the rules, the recovery states the 
 - **TIME-04.** At expiry, protected information is hidden, permitted progress is saved, and the user can sign in again and return to the same step, with authority checked again.
 - **TIME-05.** The default inactivity time and how it relates to the UAE PASS session are set with the security owner ([OQ-18](#open-questions)).
 
-**Components:** planned `sc-timeout-warning`; `sc-button`.
+**Components:** `sc-modal` with `alert` (no close button or scrim dismissal) and `countdown` (the time left as text, announced politely on opening, at each whole minute and at 30 and 10 seconds, never every second; nothing is submitted at zero); `sc-button`.
 
 **Check:** let the warning appear while typing, extend it ten times, then let it expire.
 
@@ -1533,7 +1563,7 @@ The page is defined in [11.4](#tpl-check). In addition:
 | Payment cancelled | Say no money was taken; return to check answers |
 | Return lost, timeout or conflicting results | Keep the reference; show "Checking payment"; reconcile; never charge again while unknown |
 
-**Components:** `sc-summary-list` (breakdown), `sc-button` ("Pay with Dubai Pay", as a city indigo hand-off: [CMP-10](#component-decisions)), `sc-callout`, `sc-status-tag`.
+**Components:** `sc-summary-list` (breakdown), `sc-button variant="handoff"` ("Pay with Dubai Pay", city indigo: [CMP-10](#component-decisions)), `sc-callout`, `sc-status-tag`.
 
 **Example:** We are checking your payment / جارٍ التحقق من عملية الدفع.
 
@@ -1566,6 +1596,8 @@ The page is defined in [11.5](#tpl-confirmation). In addition:
 | --- | --- |
 | Status source unavailable | Show the last known status with its time, labelled as such; offer to refresh and help |
 
+**Components:** `sc-status-tag`, `sc-timeline` (the history, TRACK-05), `sc-attention-card` (an "Action needed" item on the user's signed-in pages), `sc-summary-list`.
+
 **Example:** Action needed: upload a document / إجراء مطلوب: إرفاق مستند.
 
 <a id="pat-notifications"></a>
@@ -1578,6 +1610,8 @@ The page is defined in [11.5](#tpl-confirmation). In addition:
 - **NOTE-04.** Messages are sent in the user's chosen language. Left-to-right values in Arabic messages are isolated with Unicode isolates ([LANG-15](#bidi)).
 - **NOTE-05.** Arabic SMS SHOULD fit in as few segments as possible; the segment length for Arabic SMS is to be confirmed with operators ([OQ-12](#open-questions)).
 - **NOTE-06.** Delivery status is recorded separately from application status.
+
+**Components:** in the account area, `sc-notification-list` (each notification is one link to its page) and the unread count in `sc-account-menu`.
 
 **Example (SMS):** "Dubai Transport: your vehicle registration has been renewed. Reference R-2026-55120. Details: {link}". The Arabic message carries the reference between U+2066 and U+2069.
 
@@ -1740,26 +1774,25 @@ The legal basis for analytics and the retention period of the consent record are
 
 **Design system budgets.** The `sc-` library has its own budgets, which sit inside PERF-02 and PERF-03 so that the library leaves most of a page's budget to the service. The reasoning and the measurements behind them are in `design-system/docs/v2/architecture.md`.
 
-- **PERF-08** (new in v2). Each release of the `sc-` library SHOULD stay within these size budgets, measured gzip -9 per file. `npm run check:budget` (`components/perf-budgets.json`) enforces them in CI. A component over budget records its reason in its specification, or is split.
+- **PERF-08** (new in v2). Each release of the `sc-` library SHOULD stay within these size budgets, measured gzip -9 per file as the browser downloads it (fonts by file size). `npm run check:budget` enforces them in CI from `components/perf-budgets.json`, which is authoritative where it and this table disagree. A component over budget records its reason in its specification, or is split.
 
 | Budget | Limit |
 | --- | --- |
 | Runtime core | 14 KiB |
-| Library stylesheet (`sc.css`: tokens, type roles, shared styles, light DOM component styles) | 7 KiB |
-| Leaf component (its JavaScript, CSS and strings, excluding the core) | 4 KiB |
-| Form field | 7 KiB |
-| `sc-error-summary` | 6 KiB |
-| `sc-table` | 12 KiB |
-| `sc-date-range` | 16 KiB |
+| Library stylesheet (`sc.css`: tokens, fonts, type roles, shared styles, light DOM component styles) | 9 KiB |
+| Helper styles shared into shadow roots | 1.5 KiB |
+| Component (its module and the files it imports, excluding the core) | 4 KiB |
+| Form fields (`sc-text-input`, `sc-textarea`, `sc-select`, `sc-checkbox`, `sc-checkbox-group`, `sc-radio-group`, `sc-date-input`) | 7 KiB each |
+| Recorded overrides | `sc-breadcrumbs` 4,224 B; `sc-button` 5 KiB; `sc-account-nav`, `sc-bottom-nav`, `sc-app-bar` and `sc-channel-network` 4.5 KiB; `sc-utility-bar` 5 KiB; `sc-announcement-bar` 5.5 KiB; `sc-error-summary` and `sc-footer` 6 KiB; `sc-modal` and `sc-account-menu` 7 KiB; `sc-site-header` 7.5 KiB; `sc-search` and `sc-channel-switcher` 8 KiB; `sc-table` 12 KiB; `sc-date-range` 21 KiB |
 | Each font file | 32 KiB |
 
-- **PERF-09** (new in v2). A page built with the `sc-` library SHOULD meet these limits for the library's share of it, on a Slow 4G profile with the CPU slowed four times:
+- **PERF-09** (new in v2). A page built with the `sc-` library SHOULD meet these limits for the library's share of it, on a Slow 4G profile (1.6 Mbps down, 750 Kbps up, 150 ms round trip) with the CPU slowed four times:
 
 | Budget | Limit |
 | --- | --- |
 | Library JavaScript on a typical page (including loader and core) | 30 KiB gzip |
-| Component CSS parsed on a typical page | 3 KiB gzip |
-| Fonts transferred | 75 KiB in English, 100 KiB in Arabic |
+| Component CSS parsed on a typical page | 4 KiB gzip |
+| Fonts downloaded | 75 KiB on an English page, 100 KiB on an Arabic page |
 | Total transferred by the library | 115 KiB in English, 140 KiB in Arabic |
 | All `sc-` content visible | 1.2 s or less |
 | Cumulative Layout Shift from the library | 0 (0.005 or less measured) |
@@ -1767,14 +1800,21 @@ The legal basis for analytics and the retention period of the consent record are
 | Longest task | Under 50 ms |
 | Requests, with the lazy loader | 10 or fewer |
 
-- **PERF-10** (new in v2). Fonts SHOULD load as one family (`Dubai W23`) with a real `font-weight` per face and `font-synthesis: none`; as separate Latin and Arabic subsets declared with `unicode-range`, so a page fetches only the scripts it shows; with only the Regular subset of the page's language preloaded; and with `font-display: swap` and a metric-matched fallback face, so the swap does not move text.
-- **PERF-11** (new in v2). The library stylesheet SHOULD be the only render-blocking resource the library adds. Applications SHOULD import only the components they use from the custom elements build, so their bundler can merge them; plain HTML pages use the lazy loader with a `modulepreload` for its core. Before a component upgrades, its final size is reserved, so nothing is hidden and nothing shifts.
+- **PERF-10** (new in v2). Fonts SHOULD load as one family (`Dubai W23`) with a real `font-weight` per face (400, 500 and 700) and `font-synthesis: none`, subset by script: a Latin and an Arabic file for each weight, declared with `unicode-range`, so a page downloads only the scripts and weights it shows (an Arabic page takes even its spaces, digits and punctuation from the Arabic files). The language switch's name of the other language ("العربية" on an English page, "English" on an Arabic page) is set in its own small face (`Dubai W23 Name`), so one word never pulls in the other script's whole file. Only the Regular file of the page's language is preloaded, before the stylesheet, and every face uses `font-display: swap` with a metric-matched fallback face, so the swap does not move text:
+
+```html
+<link rel="preload" as="font" type="font/woff2" crossorigin href="/sc/assets/fonts/dubai-w23-400-latin.woff2">
+<link rel="stylesheet" href="/sc/sc.css">
+```
+
+  On an Arabic page the preloaded file is `dubai-w23-400-arabic.woff2`. No other weight is preloaded: on Slow 4G, several preloads compete with the stylesheet and scripts.
+- **PERF-11** (new in v2). The library stylesheet SHOULD be the only render-blocking resource the library adds. Applications SHOULD import only the components they use from the custom elements build, so their bundler can merge them; plain HTML pages use the lazy loader and include the `sc-preload.html` that each build generates, which preloads the runtime core and the page-shell bundle. Before a component upgrades, its final size is reserved, so nothing is hidden and nothing shifts.
 
 ### How we check
 
 - The team shows the lab results with the PERF-01 profile before release, and the real-user monitoring report after release.
 - The panel loads the start page with JavaScript off and checks it is usable.
-- The design system team publishes the `check:budget` result and the `measure:runtime` report (Slow 4G, CPU ×4) with each library release (PERF-08, PERF-09). The service team shows the library version it uses; the panel loads one channel page and one question page with the browser's network panel open, in English and Arabic, and checks the fonts transferred, the render-blocking resources and the layout shift (PERF-09 to PERF-11).
+- The design system team publishes the `check:budget` result and the `measure:runtime` report (Slow 4G, CPU ×4) with each library release (PERF-08, PERF-09). `check:budget` loads the typical page in English and in Arabic in a real Chromium-based browser and counts the font files it actually downloads, so the font budgets measure real downloads, not the files on disk. The service team shows the library version it uses; the panel loads one channel page and one question page with the browser's network panel open, in English and Arabic, and checks the fonts transferred, the render-blocking resources and the layout shift (PERF-09 to PERF-11).
 - The team shows its availability objectives, monitoring dashboard and incident runbook at the beta assessment.
 
 ---
@@ -1916,7 +1956,7 @@ The standard does not rely on any of the following until it is confirmed. Each h
 | --- | --- | --- | --- |
 | OQ-1 | The current dated edition of WCAG 2.2. Version 1.0 cited an edition dated 12 December 2024; the date of the original Recommendation (believed to be 5 October 2023) and of any later edition are to be checked. | Accessibility lead | [Appendix E](#appendix-bibliography) |
 | OQ-2 | The current URL and title of the W3C guidance on applying WCAG 2 to non-web ICT (WCAG2ICT). | Accessibility lead | [7.4](#native-parity), [Appendix E](#appendix-bibliography) |
-| OQ-3 | The official styling of "UAE PASS" in English, its official Arabic name, and the provider's mandated button labels in both languages. Whether the provider requires its own button asset in place of the city indigo hand-off button ([CMP-10](#component-decisions)). | Design system team with the UAE PASS provider | [13.4](#pat-sign-in), [10.3](#component-decisions) |
+| OQ-3 | The official UAE PASS button kit: its colours, fingerprint mark, labels in English and Arabic (with the official styling of "UAE PASS" and its Arabic name), sizes, variants and dark-mode treatment. It replaces the header placeholder ([CMP-11](#component-decisions)) and sets the width the header row must fit ([CHR-01](#tpl-chrome)). | Design system team with the UAE PASS provider | [10.3](#component-decisions), [11.9](#tpl-chrome), [13.4](#pat-sign-in) |
 | OQ-4 | The official styling of "Dubai Pay" (or "DubaiPay") in English and Arabic, its integration guidelines, whether it requires its own button asset in place of the city indigo hand-off button ([CMP-10](#component-decisions)), and the payment and refund states it reports, so that [9.6](#status-vocabulary) matches them. | Design system team with the Dubai Pay provider | [9.4](#style-guide), [9.6](#status-vocabulary), [13.12](#pat-pay) |
 | OQ-5 | Which data protection instruments apply to these channels and what they require (version 1.0's review listed the federal Personal Data Protection Law, Dubai Law No. 26 of 2015 (the Dubai Data Law), Digital Dubai policies, and DIFC and ADGM rules as candidates). | Legal counsel | [4](#legal), [14](#privacy) |
 | OQ-6 | Which instruments on the rights of people of determination and on digital accessibility apply, and whether any mandates a WCAG level (candidates: Federal Law No. 29 of 2006 as amended, Dubai Law No. 2 of 2014, Digital Dubai or TDRA accessibility policy, the Dubai Universal Design Code). | Legal counsel | [4](#legal), [6](#accessibility) |
@@ -1936,7 +1976,7 @@ The standard does not rely on any of the following until it is confirmed. Each h
 | OQ-21 | A chart palette in the tokens, checked for contrast and against the teal rule. | Design system team | [8.1](#colour) |
 | OQ-27 | The legal basis for analytics and other optional cookies, and how long a consent choice is kept. | Legal counsel and privacy owners | [14.4](#cookies) |
 | OQ-28 | That `sc-date-range` opens its picker instantly when opened from the keyboard, as [MOT-02](#motion) requires. | Design system team | [8.7](#motion) |
-| OQ-30 | The approved Government of Dubai lockup for the channel-site header, in Arabic and English: the artwork, its clear space and minimum size, whether it links anywhere, and its dark-mode version. | Design system team with the Government of Dubai brand owner | [11.9](#tpl-chrome) |
+| OQ-30 | The usage manual or approval for the Government of Dubai lockup that Law No. (1) of 2025 requires before the lockup is published: its clear space, minimum size, dark-background version and link target, which replace the interim rules in [CHR-02](#tpl-chrome). | Design system team with The Executive Council | [11.9](#tpl-chrome) |
 
 ---
 
@@ -2107,10 +2147,12 @@ Each service publishes this statement in both languages ([A11Y-12](#statement)).
 - `README.md`: tokens, build and checks
 - `MOBILE.md`: building for mobile
 - `components/CONVENTIONS.md`: component conventions
-- `components/COMPONENTS.md`: core component specifications
+- `components/COMPONENTS.md`: the component index
 - `components/CONTRIBUTING.md`: adding a component
-- `components/specs/sc-table.md`, `components/specs/sc-date-range.md`
+- `components/specs/<tag>.md`: each component's specification
 - `components/src/components/<tag>/readme.md`: each component's API and usage
+- `components/perf-budgets.json`: the library's size budgets
+- `docs/v2/decisions.md`, `docs/v2/foundations.md`, `docs/v2/architecture.md`, `docs/v2/migration.md`: design system v2
 - `tokens/*.json`: design tokens
 - `docs/ux-standard-review.md`: review of version 1.0
 - `docs/ux-standard-changes.md`: how version 2.0 resolves that review

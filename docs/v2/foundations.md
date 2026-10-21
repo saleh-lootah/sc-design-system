@@ -516,8 +516,8 @@ Rhythm, measured from E and snapped:
 | `--sc-size-border-hairline` | 1px | Dividers and card edges |
 | `--sc-size-border-control` | 1.5px | Control edges |
 | `--sc-size-border-strong` | 2px | Error and selected edges; stepper connectors; the inactive stepper marker |
-| `--sc-size-border-accent` | 3px | The bar on the start side of an error field group or callout |
-| `--sc-size-strip` | 4px | The network or channel strip at the top of the header |
+| `--sc-size-border-accent` | 3px | Outlines and bars that need a 3px accent, such as the current-item bar in the header navigation (W20) |
+| `--sc-size-strip` | 4px | The one start-bar width: the bar on the start side of an error field group and of a callout (W11, W20); also the channel rule on the app bar and the network tiles' top rule |
 | `--sc-size-measure` | 680px | Maximum width of running text |
 
 - **SIZ-01.** A control whose visual size is below 44px (a chip, a 28px stepper marker that is a link, an inline icon button) extends its target to 44 by 44 with padding or a pseudo-element, without overlapping another target. WCAG 2.5.8 asks for 24px; v2 asks for 44.

@@ -156,7 +156,7 @@ In the standard, a changed requirement is marked "(changed in v2)" and a new one
 | --- | --- |
 | U1 neutral focus ring | A11Y-05, 8.8, system roles table |
 | U2 stepper in channel colour, check on completed steps | CMP-09 |
-| U3 UAE PASS and Dubai Pay in city indigo | FND-25, CMP-10, CHR-01, ID-02, 13.12 |
+| U3 UAE PASS and Dubai Pay in city indigo (superseded for UAE PASS by U3a: see the second update below) | FND-25, CMP-10, CHR-01, ID-02, 13.12 |
 | U4 docked, flat utility bar | CHR-05 |
 | Q-header header structure | CHR-01, CHR-02, CHR-03 |
 | Q-footer Channels group allowed | CHR-06 |
@@ -193,3 +193,79 @@ In the standard, a changed requirement is marked "(changed in v2)" and a new one
 | OQ-30 | New: the approved Government of Dubai lockup (CHR-02) |
 
 Numbers of removed questions are not reused.
+
+### Second update: the built library (22 October 2026)
+
+This update brings the standard in line with the v2 library as built and with every decision recorded after the first update: U3a, U3b, L1 to L4, U5, W1 to W26 and W4a (`docs/v2/decisions.md`). The sources are `decisions.md`, `components/specs/*.md`, `components/perf-budgets.json`, `docs/v2/architecture.md`, `docs/v2/migration.md` and `docs/v2/alignment-report.md`. The same marking rules apply. Requirements first added in v2 keep the "(new in v2)" mark when their text changes; they are listed below as revised.
+
+#### By chapter
+
+| Chapter | Change |
+| --- | --- |
+| Header, 0.4 | Date. Components are specified in `components/specs/<tag>.md`, with the API in each readme |
+| 3.1, 3.2 | The official Arabic channel names are checked against the library's single source (`channel-names.ts`); every occurrence in the standard matches. SVC-01 names `sc-channel-switcher`, `sc-channel-network` and the other-channel rows of `sc-step-list` |
+| 4 | Names Law No. (1) of 2025 only as the reason the lockup is not yet published, without interpreting it |
+| 5.2, 5.6 | LANG-04 places the language switch in `sc-site-header` on channel pages. LANG-05: a single-page app keeps the link and may cancel it to switch in place (library conformance issue 5). The lockup and the UAE PASS button are added to "does not mirror" |
+| 6.2 | A11Y-04: a link alone in a table cell is a standalone target (conformance issue 8). A11Y-05: the focus ring is drawn inside the element wherever an outside ring would be clipped (W19). A11Y-06: the unread dot of `sc-notification-list`, always with a fill, Bold text and a hidden word |
+| 8.1, 8.3, 8.6 | FND-25: city indigo is no longer used for UAE PASS (U3a). FND-26 adds `sc-step-list` rows. FND-15: `--sc-size-strip` (4px) is the one start-bar width, for fields in error and callouts; `--sc-size-border-accent` (3px) is for 3px accents only (W11, W20). FND-21: icons are generated per component from the Material Symbols manifest |
+| 8.7, 8.8 | MOT-06 and MOT-07: a centred dialog enters over 200ms and leaves over 160ms; sheets and drawers use `--sc-duration-slow` (280ms) and leave over about 224ms (W2, W21). The component table adds `sc-modal` and `sc-notification-list`, and the channel switcher's scale is `--sc-scale-enter`. 8.8 describes the inset ring |
+| 9.3, 9.4 | CNT-11: official names, such as the channel names, are kept as they are (conformance issue 3). The date-range rule gives the Arabic compact form in words, consistent with LANG-22A (conformance issue 4) |
+| 10 | 10.1 and CMP-02: specifications in `specs/`; a service that uses cascade layers declares its order so its overrides come after the library's `sc` layer. 10.2 rebuilt from the library: a new "Site chrome" family and every new tag (`sc-breadcrumbs`, `sc-pagination`, `sc-site-header`, `sc-channel-switcher`, `sc-account-menu`, `sc-account-nav`, `sc-bottom-nav`, `sc-announcement-bar`, `sc-utility-bar`, `sc-channel-network`, `sc-filter-chips`, `sc-step-list`, `sc-timeline`, `sc-notification-list`, `sc-empty-state`, `sc-modal`, `sc-tile`, `sc-attention-card`, `sc-module-card`, `sc-accordion`). 10.3: the error summary heading (W1); `sc-service-card` now follows CMP-06; CMP-10 is for Dubai Pay and other hand-offs only (U3b); new CMP-11 for the official UAE PASS button (U3a) and CMP-12 for status tag tones (W4a). The fixed v1 gaps are removed and three current gaps recorded. 10.4 drops the components now built and adds `sc-uaepass-button`, `sc-plate`, `sc-chip` and `sc-icon-tile` (W26) |
+| 11 | The shell example uses `cookies-href`. CHR-01: UAE PASS sign in, current item colour, no wrapping. CHR-02: lockup per L1 to L4. CHR-04: the compact row keeps the lockup. CHR-05: no upward shadow (W23) and the Arabic names (W24). CHR-06: group names, with "المعلومات القانونية" (W24). CHR-08: the current tile is text. New CHR-09 (announcements) and CHR-10 (signed-in navigation). Checks updated |
+| 13 | Components lines for 13.1, 13.4, 13.10 (`sc-modal alert countdown` replaces the planned timeout component), 13.12, 13.14 and 13.15. ID-02 uses the official UAE PASS button |
+| 15 | PERF-08 and PERF-09 match `perf-budgets.json`: `sc.css` 9 KiB (W7), page component CSS 4 KiB (W13), the overrides (W8, W10, W14), `sc-date-range` 21 KiB. PERF-10: subsets by script, the language-name faces, and the preload snippet. PERF-11: `sc-preload.html`. The check measures the fonts a browser actually downloads |
+| 19 | OQ-3 is now the UAE PASS button kit; OQ-30 the lockup's usage manual or approval |
+| Appendix E | Specs, budgets and the v2 documents |
+
+#### Decisions applied
+
+| Decision | Where |
+| --- | --- |
+| U3a UAE PASS official button | FND-25, CMP-11, CHR-01, ID-02, 13.4, 10.4, OQ-3 |
+| U3b Dubai Pay and other hand-offs in city indigo | CMP-10, 13.12 |
+| L1 to L4 Government of Dubai lockup | 4, 5.6, CHR-02, CHR-04, OQ-30 |
+| U5 and W16 attention card without a strip | 10.2 |
+| W1 error summary heading | 10.3 |
+| W2 and W21 modal timing | MOT-06, MOT-07, 8.7 table, 10.3 known gaps |
+| W4 and W4a channel tone as a highlight | CMP-12, 10.2 |
+| W6 `sc-tile` | 10.2, 13.1 |
+| W7, W8, W10, W13, W14, W18 budgets | PERF-08, PERF-09 |
+| W11 and W20 one 4px start bar | FND-15, 10.3 known gaps |
+| W12 cascade layer order | Not added: it binds the library's own stylesheets. Services get the related rule for their own layers in CMP-02 |
+| W17 whole-item notification links | 10.2, 13.15 |
+| W19 inset focus ring at an edge | A11Y-05, 8.8, CHR-10 |
+| W23 no upward shadow | CHR-05 |
+| W24 Arabic wording | CHR-05, CHR-06, LANG-22A example unchanged |
+| W25 account menu items | 10.2 |
+| W26 tags for later | 10.4 |
+| A2 Enter submits | CMP-07, unchanged |
+
+#### Requirement IDs
+
+| | IDs |
+| --- | --- |
+| Added | CMP-11, CMP-12, CHR-09, CHR-10 |
+| Changed in meaning, newly marked | LANG-04, LANG-05, CNT-11, MOT-06 |
+| Revised again (already marked) | A11Y-04, A11Y-05, A11Y-06, FND-15, FND-21, CMP-02, ID-02 |
+| Revised, new in v2 | FND-25, FND-26, CMP-10, CHR-01, CHR-02, CHR-04, CHR-05, CHR-06, CHR-08, PERF-08, PERF-09, PERF-10, PERF-11 |
+| Text updated, meaning unchanged | SVC-01 (component names), MOT-07 (dialog example), CMP-06 bullets |
+| Removed or renamed | None |
+
+#### Open questions
+
+| Question | Outcome |
+| --- | --- |
+| OQ-3 | Changed: whether to use the provider's button is decided (U3a); what remains is the official kit itself |
+| OQ-30 | Changed: the artwork is in hand (L1); what remains is the usage manual or approval, with clear space, minimum size, dark version and link target (L4) |
+| OQ-4 | Unchanged: whether Dubai Pay mandates its own button (U3b) |
+| Others | None answered by these decisions. OQ-28 stays open: no test yet shows the `sc-date-range` popover opening instantly from the keyboard |
+
+Numbers of removed questions are not reused.
+
+#### Not reconciled
+
+- `sc-callout` draws a 3px start bar, its spec and readme say 3px, and `COMPONENTS.md` describes the callout's accent as 3px; W20 sets 4px. The standard follows W20 and lists the gap in 10.3.
+- `sc-modal` (code and spec) animates the centred dialog over 280ms in and 224ms out; W21 sets 200ms and 160ms. The standard follows W21 and lists the gap in 10.3.
+- `sc-utility-bar` ("اتصل") and the `sc-site-header` menu hint ("سجّل الدخول …") use imperatives, against CNT-11. Listed in 10.3.
+- `components/COMPONENTS.md` (v2 StatusTag entry: "no channel tone") and `docs/library-conformance.md` 9.6 ("deprecated") still contradict W4a, as the alignment report notes.
+- `docs/v2/foundations.md` (the city indigo row of the system roles table and COL-11) still lists UAE PASS sign-in as a city indigo use, against U3a. `components/COMPONENTS.md` still gives `sc-attention-card` a top strip (against U5) and pagination as "1–20" (against LANG-22A). These files were outside this update.
