@@ -80,6 +80,25 @@ describe('sc-channel-hero (e2e)', () => {
     }));
   });
 
+  it('matches board 09.06 at 1440: 88 above, 80 below, one 32px gap, a title-medium eyebrow', async () => {
+    const page = await newScPage(MARKUP);
+    await page.setViewport({ width: 1440, height: 900 });
+    expect(await shadow(page, '.band', '[cs.paddingTop, cs.paddingBottom]')).toEqual(['88px', '80px']);
+    const gaps = await page.evaluate(() => {
+      const box = (s: string) => document.querySelector(s)!.getBoundingClientRect();
+      const eyebrow = box('[slot="eyebrow"]');
+      const h1 = box('h1');
+      const lede = box('[slot="lede"]');
+      const search = box('form');
+      return [h1.top - eyebrow.bottom, lede.top - h1.bottom, search.top - lede.bottom].map(Math.round);
+    });
+    expect(gaps).toEqual([32, 32, 32]);
+    expect(await shadow(page, '.eyebrow', '[cs.fontSize, cs.lineHeight]')).toEqual(['18px', '24px']);
+    expect(await shadow(page, '.popular-label', 'cs.color')).toBe(await token(page, '--sc-color-on-surface'));
+    await page.setViewport({ width: 1200, height: 900 });
+    expect(await shadow(page, '.band', 'cs.paddingTop')).toBe('80px');
+  });
+
   it('lines up with the page grid margins, and aligns right in Arabic', async () => {
     for (const [width, margin] of [
       [375, 20],

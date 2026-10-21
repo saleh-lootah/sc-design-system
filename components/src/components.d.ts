@@ -460,7 +460,7 @@ export namespace Components {
          */
         "padding": CardPadding;
         /**
-          * `outlined` (default): white surface with a 1px `outline-variant` edge, for groups on a page or a neutral band. `filled`: a quiet `surface-container` fill with no edge, for a totals card or a group inside an outlined area.
+          * `outlined` (default): white surface with a 1px `outline-variant` edge, for groups on a page or a neutral band. `filled`: a quiet `surface-container` fill (`surface-container-high` in dark mode) with no edge, for a totals card or a group inside an outlined area.
           * @default 'outlined'
          */
         "variant": CardVariant;
@@ -3692,7 +3692,7 @@ declare namespace LocalJSX {
          */
         "padding"?: CardPadding;
         /**
-          * `outlined` (default): white surface with a 1px `outline-variant` edge, for groups on a page or a neutral band. `filled`: a quiet `surface-container` fill with no edge, for a totals card or a group inside an outlined area.
+          * `outlined` (default): white surface with a 1px `outline-variant` edge, for groups on a page or a neutral band. `filled`: a quiet `surface-container` fill (`surface-container-high` in dark mode) with no edge, for a totals card or a group inside an outlined area.
           * @default 'outlined'
          */
         "variant"?: CardVariant;

@@ -20,7 +20,7 @@ A surface that groups related content: a life event and its steps, one section o
 | Variant | Fill | Edge | Use |
 | --- | --- | --- | --- |
 | `outlined` (default) | `surface-card` | 1px `outline-variant` | Groups on a page or on a `surface-container` band |
-| `filled` | `surface-container` | none (transparent, repainted in forced colours) | A totals card (E3), a quiet group inside an outlined area |
+| `filled` | `surface-container` (dark: `surface-container-high`, board 09.02) | none (transparent, repainted in forced colours) | A totals card (E3), a quiet group inside an outlined area |
 
 ## States
 
@@ -64,4 +64,4 @@ No events. Slot: default. **v1 to v2:** the shadow root and `::part(surface)` ar
 
 ## Tests
 
-`sc-card.spec.tsx` (light DOM, classes, defaults, landmarks, label); `sc-card.e2e.ts` (content stays light DOM, landmarks in the accessibility tree, radius/edge/padding/no shadow against the tokens, filled fill, dark mode, child margins, late heading, forced colours, `describeAxe`); `sc-card.visual.e2e.ts` (EN/AR × light/dark).
+`sc-card.spec.tsx` (light DOM, classes, defaults, landmarks, label); `sc-card.e2e.ts` (content stays light DOM, landmarks in the accessibility tree, radius/edge/padding/no shadow against the tokens, filled fill, dark mode (including the filled step-up), child margins, late heading, forced colours, `describeAxe`); `sc-card.visual.e2e.ts` (EN/AR × light/dark).

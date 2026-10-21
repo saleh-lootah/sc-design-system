@@ -1,10 +1,10 @@
 /*
  * sc-card (v2, light DOM). Rules: component-language.md A22, read through the role table in
- * decisions.md. The host is the surface. Everything is in /* W12: the full layer order first; Stencil can insert this sheet before sc.css. */
-@layer sc.reset, sc.tokens, sc.base, sc.components, sc.utilities;
-@layer sc.components, so a
+ * decisions.md. The host is the surface. Everything is in @layer sc.components, so a
  * service's own unlayered CSS wins.
  */
+/* W12: the full layer order first; Stencil can insert this sheet before sc.css. */
+@layer sc.reset, sc.tokens, sc.base, sc.components, sc.utilities;
 @layer sc.components {
   :host {
     display: block;
@@ -29,6 +29,20 @@
   :host(.sc-card--filled) {
     border-color: transparent;
     background: var(--sc-color-surface-container);
+  }
+
+  /* In dark mode a filled card steps up to surface-container-high (A22, board 09.02): the
+     dark surface-container sits too close to the dark page to read as a group. */
+  @supports (color: light-dark(white, black)) {
+    :host(.sc-card--filled) {
+      background: light-dark(var(--sc-color-surface-container), var(--sc-color-surface-container-high));
+    }
+  }
+  /* Browsers without light-dark() (decision A1): the token build's --sc-dk / --sc-lt toggles. */
+  @supports not (color: light-dark(white, black)) {
+    :host(.sc-card--filled) {
+      background: var(--sc-dk, var(--sc-color-surface-container)) var(--sc-lt, var(--sc-color-surface-container-high));
+    }
   }
 
   /* Headings and paragraphs inside a card add no space at its edges. */

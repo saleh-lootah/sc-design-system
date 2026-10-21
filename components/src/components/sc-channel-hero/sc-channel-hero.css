@@ -33,13 +33,14 @@
 .intro {
   display: flex;
   flex-direction: column;
-  gap: var(--sc-space-12);
+  /* One rhythm for every block (board 09.06): 20 on phones, 24 from 600px, 32 from 1024px. */
+  gap: inherit;
 }
 
 .eyebrow {
   color: var(--sc-color-channel-action);
-  font: var(--sc-type-title-small);
-  letter-spacing: var(--sc-type-title-small-tracking);
+  font: var(--sc-type-title-medium);
+  letter-spacing: var(--sc-type-title-medium-tracking);
 }
 
 /* Phones: headline-large. From 600px display-small; from 1024px display-large (home) or
@@ -83,7 +84,7 @@
 
 .popular-label {
   margin-inline-end: var(--sc-space-4);
-  color: var(--sc-color-on-surface-variant);
+  color: var(--sc-color-on-surface);
   font: var(--sc-type-label-medium);
   letter-spacing: var(--sc-type-label-medium-tracking);
 }
@@ -102,7 +103,7 @@
   border-block: var(--sc-space-2) solid transparent;
   border-inline: 0 solid transparent;
   border-radius: var(--sc-radius-full);
-  background-color: var(--sc-color-surface);
+  background-color: var(--sc-color-surface-card);
   background-clip: padding-box;
   box-shadow: inset 0 0 0 var(--sc-size-border-hairline) var(--sc-color-channel-outline);
   color: var(--sc-color-channel-action);
@@ -173,6 +174,10 @@
 @media (min-width: 1440px) {
   :host {
     --_margin: var(--sc-grid-wide-margin);
+  }
+  /* E1 at 1440: 88 above, 80 below. */
+  .band {
+    padding-block-start: calc(var(--sc-space-80) + var(--sc-space-8));
   }
 }
 
