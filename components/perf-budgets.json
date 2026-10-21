@@ -1,0 +1,22 @@
+{
+  "$comment": "v2 budgets from docs/v2/architecture.md, section 'Budgets'. Bytes, gzip level 9, per file as the browser downloads it. Checked by: node scripts/measure-bundle.mjs --budget perf-budgets.json. v1 fails these on purpose.",
+  "coreGzip": 14336,
+  "globalCssGzip": 7168,
+  "componentGzip": 4096,
+  "components": {
+    "sc-text-input": 7168,
+    "sc-textarea": 7168,
+    "sc-select": 7168,
+    "sc-search": 7168,
+    "sc-date-input": 7168,
+    "sc-checkbox": 7168,
+    "sc-checkbox-group": 7168,
+    "sc-radio-group": 7168,
+    "sc-error-summary": 6144,
+    "sc-table": 12288,
+    "sc-date-range": 16384
+  },
+  "pageJsGzip": 30720,
+  "pageComponentCssGzip": 3072,
+  "fontFileBytes": 32768
+}

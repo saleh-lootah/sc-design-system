@@ -1,0 +1,44 @@
+<!doctype html>
+<!--
+  Typical page for scripts/measure-runtime.mjs: page shell, skip link, app bar with language
+  switch, hero with search, six service cards in a grid, footer. 15 sc- instances, 10 tags.
+  The server in measure-runtime.mjs fills {{lang}}, {{dir}} and {{loader}} (lazy or
+  custom-elements). Text is EN or AR from data-ar, swapped server-side, so no script runs first.
+-->
+<html lang="{{lang}}" dir="{{dir}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Typical page</title>
+<link rel="stylesheet" href="/dist/sc-components/sc-components.css">
+{{loader}}
+</head>
+<body>
+<sc-page channel="now" main-id="main">
+  <div slot="header">
+    <sc-skip-link href="#main"></sc-skip-link>
+    <sc-app-bar sticky>
+      <span slot="title" data-ar="دبي الآن">Dubai Now</span>
+      <sc-language-switch slot="end" href="#ar"></sc-language-switch>
+    </sc-app-bar>
+  </div>
+  <sc-channel-hero>
+    <p slot="eyebrow" data-ar="خدمات حكومية لكل من يعيش في دبي">Government services for everyone who lives in Dubai</p>
+    <h1 slot="heading" data-ar="بماذا يمكننا مساعدتك؟">What do you need to do?</h1>
+    <sc-search label-hidden label="Search services" data-ar-label="البحث في الخدمات" placeholder="Try renew car registration"></sc-search>
+  </sc-channel-hero>
+  <sc-container>
+    <h2 class="sc-type-heading-m" data-ar="الخدمات الأكثر استخدامًا">Most used services</h2>
+    <sc-grid span-medium="4" span-expanded="4">
+      <sc-service-card heading-level="3" href="#renew" entity="Roads and Transport Authority"><span data-ar="تجديد تسجيل المركبة">Renew vehicle registration</span></sc-service-card>
+      <sc-service-card heading-level="3" href="#bills" entity="Dubai Electricity and Water Authority"><span data-ar="دفع فواتير الكهرباء والمياه">Pay water and electricity bills</span></sc-service-card>
+      <sc-service-card heading-level="3" href="#tenancy" entity="Dubai Land Department"><span data-ar="تسجيل عقد إيجار">Register a tenancy contract</span></sc-service-card>
+      <sc-service-card heading-level="3" href="#fines" entity="Dubai Police"><span data-ar="دفع المخالفات المرورية">Pay traffic fines</span></sc-service-card>
+      <sc-service-card heading-level="3" href="#fitness" entity="Dubai Health Authority"><span data-ar="حجز فحص اللياقة الطبية">Book a medical fitness test</span></sc-service-card>
+      <sc-service-card heading-level="3" href="#conduct" entity="Dubai Police"><span data-ar="الحصول على شهادة حسن السيرة والسلوك">Get a good conduct certificate</span></sc-service-card>
+    </sc-grid>
+  </sc-container>
+  <sc-footer slot="footer" help-href="#help" accessibility-href="#a11y" privacy-href="#privacy" terms-href="#terms"></sc-footer>
+</sc-page>
+</body>
+</html>

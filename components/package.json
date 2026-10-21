@@ -29,7 +29,10 @@
     "test:spec": "stencil test --spec",
     "test:e2e": "stencil test --e2e -- --max-workers=3",
     "check:literals": "node scripts/check-literals.mjs",
-    "check": "npm run check:literals && npm run build && npm test"
+    "check": "npm run check:literals && npm run build && npm test",
+    "measure:bundle": "node scripts/measure-bundle.mjs",
+    "measure:runtime": "node scripts/measure-runtime.mjs",
+    "check:budget": "node scripts/measure-bundle.mjs --budget perf-budgets.json"
   },
   "devDependencies": {
     "@stencil/core": "4.45.2",
