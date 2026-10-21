@@ -141,3 +141,9 @@ The first 24 components, in four families, plus the components added after Phase
 - States: `loading` (5 skeleton rows), `empty` slot (header hidden), `filtered` (no results, header kept), `error` slot (an `sc-callout tone="error"`), `density="compact"` (44px rows).
 - Below 600px: `responsive="stack"` (rows become cards) or `"scroll"` (a named scroll region with a sticky row header and an edge shadow).
 - Mirrors fully in Arabic through logical properties; digits stay Latin.
+
+## Form fields in v2 (C3)
+
+Every form field is **light DOM** (decision A2): `sc-text-input`, `sc-textarea`, `sc-select`, `sc-checkbox`, `sc-checkbox-group`, `sc-radio`, `sc-radio-group`, `sc-date-input`, `sc-date-range`, `sc-search` and the new `sc-filter-chips` render native controls with per-instance IDs, so Enter submits the form through its default button and validation, reset, autofill and `<fieldset disabled>` are native. The "inside its shadow root" notes above are v1. Rich `slot="label|hint|error"` children are moved into place once. See `docs/v2/migration.md` §6 and each `specs/<tag>.md`.
+
+**FilterChips** (`sc-filter-chips`, new): the filters applied to a list of results, as removable 32px chips (44px targets) beside the result count, with "Clear all filters". Removal is instant, focus moves to the next chip or the results heading, and count changes are announced politely. Spec: `specs/sc-filter-chips.md`.
