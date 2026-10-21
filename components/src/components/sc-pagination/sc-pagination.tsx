@@ -2,22 +2,12 @@ import { Component, Event, EventEmitter, Host, Prop, h } from '@stencil/core';
 import { LocaleController } from '../../i18n/controller';
 import strings from '../../i18n/components/sc-pagination';
 import type { Lang } from '../../i18n/core';
+import { ChevronBack, ChevronForward } from '../../icons/for/sc-pagination';
 
 export interface PaginationChangeDetail {
   /** The page asked for (1-based). */
   page: number;
 }
-
-/**
- * The two chevrons, drawn here rather than imported from the shared icon set: that module
- * carries every icon (0.9 KiB gzip) and these two cost about 0.1 KiB. Same grammar: 24px
- * grid, 2px stroke, `currentColor`, decorative, mirrored in right-to-left.
- */
-const Chevron = ({ d }: { d: string }) => (
-  <svg class="icon icon-directional" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-    <path d={d} />
-  </svg>
-);
 
 /** Latin digits with a comma for thousands, in both languages (LANG-20, LANG-22). */
 const num = (n: number) => n.toLocaleString('en-US');
@@ -166,7 +156,7 @@ export class ScPagination {
             <ul class="list" part="list">
               {page > 1 && (
                 <li class="step">
-                  {this.control(page - 1, 'turn', [<Chevron d="M15 5.5L8.5 12l6.5 6.5" />, <span>{t('paginationPrevious')}</span>], { rel: this.hrefTemplate ? 'prev' : undefined })}
+                  {this.control(page - 1, 'turn', [<ChevronBack />, <span>{t('paginationPrevious')}</span>], { rel: this.hrefTemplate ? 'prev' : undefined })}
                 </li>
               )}
               {pageWindow(page, total).map((p) =>
@@ -186,7 +176,7 @@ export class ScPagination {
               </li>
               {page < total && (
                 <li class="step">
-                  {this.control(page + 1, 'turn', [<span>{t('paginationNext')}</span>, <Chevron d="M9 5.5l6.5 6.5L9 18.5" />], { rel: this.hrefTemplate ? 'next' : undefined })}
+                  {this.control(page + 1, 'turn', [<span>{t('paginationNext')}</span>, <ChevronForward />], { rel: this.hrefTemplate ? 'next' : undefined })}
                 </li>
               )}
             </ul>

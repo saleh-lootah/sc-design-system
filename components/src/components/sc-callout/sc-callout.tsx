@@ -1,7 +1,7 @@
 import { Component, Element, Host, Prop, State, h } from '@stencil/core';
 import { LocaleController } from '../../i18n/controller';
 import strings from '../../i18n/components/sc-callout';
-import { AlertCircle, CheckCircle, Info, Warning } from '../../icons/index'; // explicit /index: see CONTRIBUTING
+import { AlertCircle, CheckCircle, Info, Warning } from '../../icons/for/sc-callout';
 
 export type CalloutTone = 'info' | 'success' | 'warning' | 'error';
 export type CalloutHeadingLevel = 2 | 3 | 4 | 5 | 6;

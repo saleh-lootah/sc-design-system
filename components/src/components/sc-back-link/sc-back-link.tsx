@@ -1,7 +1,7 @@
 import { Component, Host, Prop, h } from '@stencil/core';
 import { LocaleController } from '../../i18n/controller';
 import strings from '../../i18n/components/sc-back-link';
-import { ArrowBack } from '../../icons/nav'; // a file import: Stencil only scans file imports for <svg>
+import { ArrowBack } from '../../icons/for/sc-back-link';
 
 /**
  * The "Back" control at the start of an app bar or above a question: plain text with a

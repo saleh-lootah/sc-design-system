@@ -1,7 +1,7 @@
 import { Component, Element, Host, Prop, h } from '@stencil/core';
 import { LocaleController } from '../../i18n/controller';
 import strings from '../../i18n/components/sc-account-nav';
-import { NavIcon } from '../../icons/destinations'; // a file import: Stencil only scans file imports for <svg>
+import { NavIcon } from '../../icons/for/sc-account-nav';
 import { NavItem, readNavItems, watchNavItems } from '../../utils/nav-items';
 
 /**
@@ -65,7 +65,7 @@ export class ScAccountNav {
         aria-current={item.current ? 'page' : undefined}
         lang={item.lang ?? undefined}
       >
-        <NavIcon name={item.icon} />
+        <NavIcon name={item.icon} filled={item.current} />
         <span class="label">{item.text}</span>
         {item.count !== null && [
           <span class="badge" part="badge" aria-hidden="true">

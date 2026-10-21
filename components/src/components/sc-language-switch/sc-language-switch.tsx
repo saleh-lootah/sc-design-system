@@ -2,7 +2,7 @@ import { Component, Element, Event, EventEmitter, Host, Prop, h } from '@stencil
 import { LocaleController } from '../../i18n/controller';
 import strings from '../../i18n/components/sc-language-switch';
 import type { Lang } from '../../i18n/core';
-import { Language } from '../../icons/nav'; // a file import: Stencil only scans file imports for <svg>
+import { Language } from '../../icons/for/sc-language-switch';
 
 /** Warn once per page about the deprecated button mode, not once per render. */
 let warnedButtonMode = false;
