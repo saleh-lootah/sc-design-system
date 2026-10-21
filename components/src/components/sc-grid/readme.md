@@ -37,44 +37,14 @@ Media queries can't read custom properties, so the breakpoint widths (600, 1024,
 
 Columns run right to left.
 
-<!-- Auto Generated Below -->
+## v2: CSS only
 
+`sc-grid` is not a registered custom element in v2 (architecture §3.1). `sc.css` styles the tag and its children directly, with one rule per `span`, `span-medium` and `span-expanded` value (1 to 12). The markup is unchanged; `::part(grid)` and `componentOnReady()` are gone, and the attributes are read only as attributes (setting `grid.spanMedium = 4` from script does nothing; use `setAttribute`).
 
-## Overview
+| Attribute | Values | Default |
+| --- | --- | --- |
+| `span` | 1 to 12: columns per item on phones (4 columns) | full width |
+| `span-medium` | 1 to 12: from 600px (8 columns) | `span` |
+| `span-expanded` | 1 to 12: from 1024px (12 columns) | `span-medium` |
 
-The layout grid: 4 columns on phones, 8 from 600px and 12 from 1024px, with gutters from
-the layout tokens (16, 20, 24px). Each child is a grid item.
-
-Item widths are set once for all children with `span`, `span-medium` and `span-expanded`
-(each falls back to the smaller one, and is capped at the number of columns), or per
-child with the `--sc-grid-span` custom property, e.g. `style="--sc-grid-span: 8"`.
-
-Service cards three to a row on desktop, two on tablets and one on phones:
-`<sc-grid span-medium="4" span-expanded="4">`.
-
-## Properties
-
-| Property       | Attribute       | Description                                                                  | Type                  | Default     |
-| -------------- | --------------- | ---------------------------------------------------------------------------- | --------------------- | ----------- |
-| `span`         | `span`          | Columns each item spans on phones (4 columns). Defaults to the full width.   | `number \| undefined` | `undefined` |
-| `spanExpanded` | `span-expanded` | Columns each item spans from 1024px (12 columns). Defaults to `span-medium`. | `number \| undefined` | `undefined` |
-| `spanMedium`   | `span-medium`   | Columns each item spans from 600px (8 columns). Defaults to `span`.          | `number \| undefined` | `undefined` |
-
-
-## Slots
-
-| Slot | Description |
-| ---- | ----------- |
-|      | Grid items. |
-
-
-## Shadow Parts
-
-| Part     | Description       |
-| -------- | ----------------- |
-| `"grid"` | The grid element. |
-
-
-----------------------------------------------
-
-
+A child can set its own width with `style="--sc-grid-span: 8"`. Spans are capped at the columns available.

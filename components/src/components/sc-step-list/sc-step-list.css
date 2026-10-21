@@ -1,0 +1,233 @@
+/*
+ * sc-step-list (v2, scoped / light DOM). Rules: component-language.md B20 read through the
+ * role table in decisions.md: another channel's row takes that channel's channel-subtle
+ * (CL "channel-container"), a channel-action marker and connector, and an outlined chip
+ * with a channel-outline edge. The li's own data-channel rebinds the channel roles for its
+ * subtree (sc.css), so nothing names a channel here.
+ *
+ * Stencil rewrites `::slotted(ol) li` to `.sc-sc-step-list-s > ol li`. Blocks open with a
+ * :host rule (Stencil's scoper mangles a block whose first rule is ::slotted).
+ */
+@layer sc.components {
+  :host {
+    --_marker: var(--sc-space-32);
+    --_stub: calc(var(--sc-space-16) + var(--sc-space-2));
+    --_pad: var(--sc-space-24);
+    container: sc-step-list / inline-size;
+    display: block;
+    color: var(--sc-color-on-surface);
+  }
+
+  :host([hidden]) {
+    display: none;
+  }
+
+  ::slotted(ol) {
+    margin: 0;
+    padding-block: var(--sc-space-12);
+    padding-inline: 0;
+    overflow: clip;
+    list-style: none;
+    border: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+    border-radius: var(--sc-radius-card);
+    background: var(--sc-color-surface-card);
+  }
+
+  ::slotted(ol) > li,
+  ::slotted(ol) > li * {
+    box-sizing: border-box;
+  }
+
+  ::slotted(ol) > li {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--_marker) minmax(0, 1fr) calc(var(--sc-space-96) * 2 + var(--sc-space-8));
+    grid-template-rows: auto auto;
+    column-gap: var(--sc-space-20);
+    row-gap: var(--sc-space-2);
+    align-content: start;
+    padding-block: var(--sc-space-20);
+    padding-inline: var(--_pad);
+    background: transparent;
+  }
+
+  ::slotted(ol) > li.sc-step-list__is-other {
+    background: var(--sc-color-channel-subtle);
+  }
+
+  /* Connectors: a stub above the marker, and a line below it to the next row. */
+  ::slotted(ol) > li::before,
+  ::slotted(ol) > li::after {
+    content: '';
+    position: absolute;
+    inset-inline-start: calc(var(--_pad) + (var(--_marker) - var(--sc-size-border-strong)) / 2);
+    inline-size: var(--sc-size-border-strong);
+    background: var(--sc-color-outline-variant);
+  }
+
+  ::slotted(ol) > li::before {
+    inset-block: 0 auto;
+    block-size: var(--_stub);
+  }
+
+  ::slotted(ol) > li::after {
+    inset-block: calc(var(--_stub) + var(--_marker)) 0;
+  }
+
+  ::slotted(ol) > li:first-child::before,
+  ::slotted(ol) > li:last-child::after {
+    content: none;
+  }
+
+  ::slotted(ol) > li.sc-step-list__is-joined-prev::before,
+  ::slotted(ol) > li.sc-step-list__is-joined-next::after {
+    background: var(--sc-color-channel-action);
+  }
+
+  /* The marker: the list position, aria-hidden (the <ol> already announces it). */
+  ::slotted(ol) > li > .sc-step-list__marker {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    align-self: start;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--_marker);
+    block-size: var(--_marker);
+    margin-block-start: calc(var(--_stub) - var(--sc-space-20));
+    border: var(--sc-size-border-control) solid var(--sc-color-channel-action);
+    border-radius: var(--sc-radius-full);
+    background: var(--sc-color-surface-card);
+    color: var(--sc-color-channel-action);
+    font: var(--sc-type-label-small);
+    font-weight: var(--sc-font-weight-bold);
+    letter-spacing: var(--sc-type-label-small-tracking);
+  }
+
+  ::slotted(ol) > li.sc-step-list__is-other > .sc-step-list__marker {
+    background: var(--sc-color-channel-action);
+    color: var(--sc-color-channel-on-action);
+  }
+
+  /* The title is the link (CMP-06 thinking: the row is not a link). E draws it in on-surface,
+     underlined on hover; its hit area grows to 44px without moving the text (A11Y-04). */
+  ::slotted(ol) > li > a {
+    grid-column: 2;
+    grid-row: 1;
+    position: relative;
+    justify-self: start;
+    border-radius: var(--sc-radius-control);
+    color: var(--sc-color-on-surface);
+    font: var(--sc-type-title-medium);
+    letter-spacing: var(--sc-type-title-medium-tracking);
+    text-decoration-line: none;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+  }
+
+  ::slotted(ol) > li > a::after {
+    content: '';
+    position: absolute;
+    inset-block: calc((100% - var(--sc-size-target-min)) / 2);
+    inset-inline: 0;
+  }
+
+  ::slotted(ol) > li > :not(a, [class^='sc-step-list__']) {
+    grid-column: 2;
+    grid-row: 2;
+    color: var(--sc-color-on-surface-variant);
+    font: var(--sc-type-body-medium);
+    letter-spacing: var(--sc-type-body-medium-tracking);
+  }
+
+  ::slotted(ol) > li > .sc-step-list__end {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--sc-space-12);
+  }
+
+  ::slotted(ol) > li .sc-step-list__chevron {
+    --icon-size: var(--sc-size-icon-l);
+    display: inline-flex;
+    flex: none;
+    color: var(--sc-color-on-surface-variant);
+  }
+
+  /* The outlined channel chip (A19 outlined): surface, 1px channel-outline, dot and Bold text
+     in the row's channel action. */
+  ::slotted(ol) > li .sc-step-list__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--sc-space-6);
+    min-block-size: calc(var(--sc-size-chip) - var(--sc-space-2));
+    padding-inline: calc(var(--sc-space-8) + var(--sc-space-2));
+    border: var(--sc-size-border-hairline) solid var(--sc-color-channel-outline);
+    border-radius: var(--sc-radius-chip);
+    background: var(--sc-color-surface-card);
+    color: var(--sc-color-channel-action);
+    font: var(--sc-type-label-small);
+    font-weight: var(--sc-font-weight-bold);
+    letter-spacing: var(--sc-type-label-small-tracking);
+    white-space: nowrap;
+  }
+
+  ::slotted(ol) > li .sc-step-list__chip-dot {
+    flex: none;
+    inline-size: var(--sc-space-8);
+    block-size: var(--sc-space-8);
+    border-radius: var(--sc-radius-full);
+    background: currentColor;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    :host {
+      --_hv: 1;
+    }
+    ::slotted(ol) > li > a:hover {
+      text-decoration-line: underline;
+    }
+  }
+
+  /* Compact: the chip moves under the entity; the chevron keeps its own column. */
+  @container sc-step-list (max-width: 599.98px) {
+    :host {
+      --_pad: var(--sc-space-16);
+    }
+    ::slotted(ol) > li {
+      grid-template-columns: var(--_marker) minmax(0, 1fr) auto;
+      grid-template-rows: auto auto auto;
+      column-gap: var(--sc-space-16);
+    }
+    ::slotted(ol) > li > .sc-step-list__end {
+      display: contents;
+    }
+    ::slotted(ol) > li .sc-step-list__chip {
+      grid-column: 2;
+      grid-row: 3;
+      justify-self: start;
+      margin-block-start: var(--sc-space-8);
+    }
+    ::slotted(ol) > li .sc-step-list__chevron {
+      grid-column: 3;
+      grid-row: 1 / span 2;
+      align-self: center;
+    }
+  }
+
+  @media (forced-colors: active) {
+    :host {
+      --_fc: 1;
+    }
+    ::slotted(ol) > li::before,
+    ::slotted(ol) > li::after {
+      forced-color-adjust: none;
+      background: GrayText;
+    }
+    ::slotted(ol) > li .sc-step-list__chip {
+      border-color: CanvasText;
+    }
+  }
+}

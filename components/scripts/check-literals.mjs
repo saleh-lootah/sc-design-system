@@ -28,11 +28,7 @@ const globalDir = join(root, 'src', 'global');
 
 /** v1 components not yet rebuilt: allowed the legacy i18n imports and the field.css/choice.css @imports. */
 const V1_PENDING = new Set([
-  'sc-app-bar', 'sc-back-link', 'sc-callout', 'sc-card', 'sc-channel-chip', 'sc-channel-hero',
-  'sc-container', 'sc-error-summary', 'sc-footer', 'sc-grid',
-  'sc-language-switch', 'sc-link', 'sc-ltr', 'sc-page',
-  'sc-service-card', 'sc-skip-link', 'sc-spinner', 'sc-status-tag', 'sc-step-progress', 'sc-summary-list',
-  'sc-summary-row', 'sc-table',
+  'sc-app-bar', 'sc-footer', 'sc-page',
 ]);
 const STRUCTURE = [
   { name: '@import in component CSS (use the shared sheet, sc.css or your own rules)', re: /@import\b/g, ext: '.css', legacyOk: true },

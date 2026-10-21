@@ -1,0 +1,163 @@
+/*
+ * sc-notification-list (v2, scoped / light DOM). Rules: component-language.md B17 read
+ * through the role table in decisions.md (unread fill: channel-subtle), with the item as a
+ * link (the coordinator's brief). Stencil rewrites `::slotted(ul) li` to
+ * `.sc-sc-notification-list-s > ul li`. Blocks open with a :host rule (scoper bug).
+ */
+@layer sc.components {
+  :host {
+    /* Queried for the compact layout under 600px (--sc-breakpoint-medium). */
+    container: sc-notification-list / inline-size;
+    display: block;
+    color: var(--sc-color-on-surface);
+  }
+
+  :host([hidden]) {
+    display: none;
+  }
+
+  ::slotted(h2),
+  ::slotted(h3),
+  ::slotted(h4) {
+    margin-block: var(--sc-space-32) var(--sc-space-12);
+    font: var(--sc-type-title-small);
+    font-weight: var(--sc-font-weight-bold);
+    letter-spacing: var(--sc-type-title-small-tracking);
+  }
+
+  ::slotted(:first-child) {
+    margin-block-start: 0;
+  }
+
+  ::slotted(ul) {
+    margin: 0;
+    padding: 0;
+    overflow: clip;
+    list-style: none;
+    border: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+    border-radius: var(--sc-radius-card);
+    background: var(--sc-color-surface-card);
+  }
+
+  ::slotted(ul) > li {
+    display: grid;
+    grid-template-columns: var(--sc-space-16) minmax(0, 1fr) calc(var(--sc-space-96));
+    align-items: start;
+    column-gap: var(--sc-space-16);
+    row-gap: var(--sc-space-4);
+    padding-block: var(--sc-space-20);
+    padding-inline: var(--sc-space-24);
+    background-color: transparent;
+    transition: background-color var(--sc-duration-base) var(--sc-easing-hover);
+  }
+
+  :host(.is-instant) ::slotted(ul) > li {
+    transition: none;
+  }
+
+  ::slotted(ul) > li + li {
+    border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+  }
+
+  /* The unread dot, in the fixed 16px start column. */
+  ::slotted(ul) > li::before {
+    content: '';
+    grid-column: 1;
+    grid-row: 1;
+    align-self: start;
+    justify-self: center;
+    inline-size: var(--sc-space-8);
+    block-size: var(--sc-space-8);
+    margin-block-start: var(--sc-space-8);
+    border-radius: var(--sc-radius-full);
+    background: transparent;
+  }
+
+  ::slotted(ul) > li[data-unread] {
+    background-color: var(--sc-color-channel-subtle);
+  }
+
+  ::slotted(ul) > li[data-unread]::before {
+    background: var(--sc-color-channel-action);
+  }
+
+  /* The link: title and body. Its focus ring is the native one from sc.css (U1); the
+     ring is drawn inside the clipped card, so the link keeps a 4px inner gap. */
+  ::slotted(ul) > li > a {
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sc-space-4);
+    min-block-size: var(--sc-size-target-min);
+    border-radius: var(--sc-radius-control);
+    color: inherit;
+    text-decoration: none;
+    outline-offset: calc(var(--sc-space-2) * -1);
+  }
+
+  ::slotted(ul) > li > a > :first-child:not(.sc-notification-list__unread),
+  ::slotted(ul) > li > a > .sc-notification-list__unread + * {
+    color: var(--sc-color-channel-action);
+    font: var(--sc-type-title-small);
+    letter-spacing: var(--sc-type-title-small-tracking);
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+  }
+
+  ::slotted(ul) > li[data-unread] > a > .sc-notification-list__unread + * {
+    font-weight: var(--sc-font-weight-bold);
+  }
+
+  ::slotted(ul) > li > a > :not(:first-child, .sc-notification-list__unread + *) {
+    color: var(--sc-color-on-surface-variant);
+    font: var(--sc-type-body-medium);
+    letter-spacing: var(--sc-type-body-medium-tracking);
+  }
+
+  ::slotted(ul) > li > time {
+    grid-column: 3;
+    grid-row: 1;
+    color: var(--sc-color-on-surface-variant);
+    font: var(--sc-type-body-small);
+    letter-spacing: var(--sc-type-body-small-tracking);
+    text-align: end;
+  }
+
+
+  @media (hover: hover) and (pointer: fine) {
+    :host {
+      --_hv: 1;
+    }
+    ::slotted(ul) > li > a:hover > :first-child:not(.sc-notification-list__unread),
+    ::slotted(ul) > li > a:hover > .sc-notification-list__unread + * {
+      text-decoration-thickness: 2px;
+    }
+  }
+
+  @container sc-notification-list (max-width: 599.98px) {
+    :host {
+      --_cq: 1;
+    }
+    ::slotted(ul) > li {
+      grid-template-columns: var(--sc-space-16) minmax(0, 1fr);
+      padding-inline: var(--sc-space-16);
+    }
+    ::slotted(ul) > li > time {
+      grid-column: 2;
+      grid-row: 2;
+      text-align: start;
+    }
+  }
+
+  @media (forced-colors: active) {
+    :host {
+      --_fc: 1;
+    }
+    ::slotted(ul) > li[data-unread]::before {
+      forced-color-adjust: none;
+      background: CanvasText;
+    }
+  }
+}

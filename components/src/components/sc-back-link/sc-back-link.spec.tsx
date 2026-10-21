@@ -9,7 +9,7 @@ describe('sc-back-link (spec)', () => {
     const el = control(page.root!);
     expect(el.tagName).toBe('A');
     expect(el.getAttribute('href')).toBe('/renew/vehicle');
-    expect(el).toHaveClasses(['control', 'focus-ring', 'type-label-m']);
+    expect(el).toHaveClasses(['control', 'focus-ring']);
   });
 
   it('renders a button without href', async () => {
@@ -19,7 +19,7 @@ describe('sc-back-link (spec)', () => {
     expect(el.getAttribute('type')).toBe('button');
   });
 
-  it('defaults its label to "Back", with a directional chevron before it', async () => {
+  it('defaults its label to "Back", with a directional arrow before it', async () => {
     const page = await newSpecPage({ components: [ScBackLink], html: `<sc-back-link></sc-back-link>` });
     const el = control(page.root!);
     expect(el.querySelector('[part="label"] slot')!.textContent).toBe('Back');
@@ -32,8 +32,8 @@ describe('sc-back-link (spec)', () => {
     expect(control(page.body.querySelector('sc-back-link')!).querySelector('slot')!.textContent).toBe('رجوع');
   });
 
-  it('supports the plain appearance', async () => {
-    const page = await newSpecPage({ components: [ScBackLink], html: `<sc-back-link appearance="plain"></sc-back-link>` });
-    expect(control(page.root!)).toHaveClass('control--plain');
+  it('still renders v1 markup with appearance, which v2 ignores', async () => {
+    const page = await newSpecPage({ components: [ScBackLink], html: `<sc-back-link appearance="glass" href="/p"></sc-back-link>` });
+    expect(control(page.root!).className).toBe('control focus-ring');
   });
 });

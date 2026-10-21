@@ -1,4 +1,8 @@
-
+/*
+ * sc-language-switch (v2, shadow DOM). Rules: docs/v2/component-language.md A5 and LANG-05.
+ * The name is a slotted light-DOM <span lang>, so the type role below resolves in the
+ * name's own script (the --sc-type-* properties switch by lang in the document).
+ */
 :host {
   display: inline-block;
   vertical-align: middle;
@@ -9,123 +13,74 @@
 }
 
 .control {
-  --_bg: var(--sc-color-glass);
-  --_tint: transparent;
+  --icon-size: var(--sc-size-icon-m);
 
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-block-size: var(--sc-size-control-m);
+  gap: var(--sc-space-6);
+  min-block-size: var(--sc-size-target-min);
   min-inline-size: var(--sc-size-target-min);
   margin: 0;
   padding-block: 0;
-  padding-inline: var(--sc-space-16);
-  border: var(--sc-size-border-hairline) solid var(--sc-color-glass-edge);
+  padding-inline: var(--sc-space-4);
+  border: 0;
   border-radius: var(--sc-radius-control);
-  position: relative;
-  isolation: isolate;
-  background: var(--_bg);
-  box-shadow: var(--sc-elevation-2);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  backdrop-filter: blur(24px) saturate(180%);
-  color: var(--sc-color-ink);
-  text-decoration: none;
+  background: none;
+  color: var(--sc-color-channel-action);
   white-space: nowrap;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
-  transition: transform var(--sc-duration-press) var(--sc-easing-enter);
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: text-decoration-thickness var(--sc-duration-fast) var(--sc-easing-hover);
 }
 
-/* The tint layer gives hover and pressed states without losing the glass underneath. It is a
-   pseudo-element so its background-color can transition (a gradient layer cannot). */
-.control::before {
-  content: '';
-  position: absolute;
-  /* Out to the border edge, where the old background layer reached. */
-  inset: calc(var(--sc-size-border-hairline) * -1);
-  z-index: -1;
-  border-radius: inherit;
-  background-color: var(--_tint);
-  pointer-events: none;
-  transition: background-color var(--sc-duration-fast) var(--sc-easing-hover);
+.label ::slotted(*) {
+  font: var(--sc-type-label-medium);
+  letter-spacing: var(--sc-type-label-medium-tracking);
 }
 
-.control--plain {
-  --_bg: transparent;
-  border-color: transparent;
-  box-shadow: none;
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
+/* The name's own script: Arabic underlines sit lower, clear of the descenders. */
+.control:lang(ar) {
+  text-underline-offset: 5px;
+}
+
+.icon-box {
+  display: inline-flex;
+  flex: none;
+}
+
+/* Header: globe and name in on-surface, label-large in Medium (Bold in Arabic, D12). */
+.control--header {
+  color: var(--sc-color-on-surface);
+  text-decoration-line: none;
+}
+
+.control--header .label ::slotted(*) {
+  font: var(--sc-type-label-large);
+  font-weight: var(--sc-type-label-medium-weight);
+  letter-spacing: var(--sc-type-label-large-tracking);
 }
 
 @media (hover: hover) and (pointer: fine) {
   .control:hover {
-    --_tint: var(--sc-color-fill-quiet);
+    text-decoration-thickness: 2px;
   }
-}
-
-.control:active {
-  --_tint: var(--sc-color-fill-selected);
-}
-
-/* Press feedback for pointer and touch. Keyboard presses change state instantly. */
-.control:active:not(:focus-visible) {
-  transform: scale(var(--sc-scale-press));
-}
-
-.control:focus-visible,
-.control:focus-visible::before {
-  transition: none;
-}
-
-/*
- * The label is in the OTHER language, so it can't use the host's type role (which follows
- * the page language). It takes label-m in its own script from the tokens directly.
- */
-.label:lang(en) {
-  font-family: var(--sc-font-family-medium);
-  font-weight: var(--sc-font-weight-medium);
-  font-size: var(--sc-text-latin-label-m);
-  line-height: var(--sc-leading-latin-label-m);
-  letter-spacing: var(--sc-tracking-latin-label-m);
-}
-
-.label:lang(ar) {
-  font-family: var(--sc-font-family-bold);
-  font-weight: var(--sc-font-weight-bold);
-  font-size: var(--sc-text-arabic-label-m);
-  line-height: var(--sc-leading-arabic-label-m);
-  letter-spacing: 0;
-}
-
-@media (prefers-reduced-transparency: reduce) {
-  .control {
-    --_bg: var(--sc-color-surface);
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
-  }
-  .control--plain {
-    --_bg: transparent;
+  .control--header:hover {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
   }
 }
 
 @media (forced-colors: active) {
-  .control::before {
-    display: none;
-  }
   .control {
-    border-color: ButtonText;
-    background: ButtonFace;
-    color: ButtonText;
-    box-shadow: none;
-  }
-  a.control {
-    border-color: LinkText;
     color: LinkText;
   }
-  .control--plain {
-    border-color: transparent;
+  button.control {
+    color: ButtonText;
   }
 }

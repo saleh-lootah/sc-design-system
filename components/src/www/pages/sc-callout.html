@@ -1,85 +1,36 @@
-<h1 class="pg-title sc-type-heading-xl" data-ar="رسالة تنبيهية">Callout</h1>
-<p class="pg-lede sc-type-body-m" data-ar="رسالة مهمة داخل المحتوى. لكل نوع لون وأيقونة وكلمة مخفية بصريًا، فلا يعتمد المعنى على اللون وحده.">
-  An important message in the page content. Each tone has its own fill, an icon and a visually hidden word, so meaning never relies on colour alone.
+<h1 class="pg-title sc-type-headline-large" data-ar="التنبيه">Callout</h1>
+<p class="pg-lede sc-type-body-large" data-ar="رسالة مهمة داخل المحتوى. لكل نوع لونه وأيقونته وكلمة مخفية تُقرأ قبل الرسالة، فلا يعتمد المعنى على اللون وحده.">
+  An important message in the content. Each tone has its own colour, icon and a hidden word read before the message, so the meaning never rests on colour.
 </p>
 
-<section class="pg-section" aria-labelledby="c-reassure">
-  <h2 id="c-reassure" class="sc-type-heading-m" data-ar="طمأنة قبل الدفع">Reassurance before payment</h2>
-  <div class="pg-card pg-narrow" style="max-inline-size: 420px">
-    <sc-callout tone="warning" data-ar="إذا انقطعت عملية الدفع، فيُرجى عدم الدفع مرة أخرى قبل التحقق من حالة الدفع في «مهامي».">If your payment is interrupted, don't pay again. Check the payment status in My tasks first.</sc-callout>
-    <p class="pg-note" data-ar="من صفحة الدفع في D+. يُقرأ «تنبيه:» قبل الرسالة.">From the D+ payment page. Screen readers hear "Warning:" before the message.</p>
-  </div>
-</section>
-
 <section class="pg-section" aria-labelledby="c-tones">
-  <h2 id="c-tones" class="sc-type-heading-m" data-ar="الأنواع">Tones</h2>
+  <h2 id="c-tones" class="sc-type-headline-small" data-ar="الأنواع">Tones</h2>
+  <div class="pg-card" style="display:flex;flex-direction:column;gap:16px">
+    <span class="pg-label">info</span>
+    <sc-callout><span data-ar="ستحتاج إلى رقم اللوحة ورقم الهوية الإماراتية.">You'll need your plate number and Emirates ID number.</span></sc-callout>
+    <span class="pg-label">success · heading</span>
+    <sc-callout tone="success" heading="Registration renewed" data-heading-ar="تم تجديد التسجيل"><span data-ar="تسجيل مركبتك صالح حتى 18 أكتوبر 2027.">Your vehicle registration is valid until 18 October 2027.</span></sc-callout>
+    <span class="pg-label">warning · link</span>
+    <sc-callout tone="warning"><span data-ar="إذا انقطعت عملية الدفع، فلا داعي للدفع مرة أخرى.">If your payment is interrupted, don't pay again.</span> <a href="#status" data-ar="التحقق من حالة الدفع">Check the payment status</a></sc-callout>
+    <span class="pg-label">error · heading-level 2</span>
+    <sc-callout tone="error" heading="Payment failed" heading-level="2" data-heading-ar="تعذّر الدفع"><span data-ar="لم يتم خصم أي مبلغ.">No money has been taken.</span></sc-callout>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="c-notes">
+  <h2 id="c-notes" class="sc-type-headline-small" data-ar="ملاحظات">Notes</h2>
   <div class="pg-card">
-    <div class="pg-grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr))">
-      <div class="pg-cell" style="justify-items: stretch">
-        <span class="pg-label">info</span>
-        <sc-callout tone="info" data-ar="ستحتاج إلى رقم اللوحة ورقم الهوية الإماراتية.">You'll need your plate number and Emirates ID number.</sc-callout>
-      </div>
-      <div class="pg-cell" style="justify-items: stretch">
-        <span class="pg-label">success</span>
-        <sc-callout tone="success" data-ar="أرسلنا الإيصال إلى بريدك الإلكتروني.">We've sent the receipt to your email.</sc-callout>
-      </div>
-      <div class="pg-cell" style="justify-items: stretch">
-        <span class="pg-label">warning</span>
-        <sc-callout tone="warning" data-ar="ينتهي تأمين مركبتك خلال 15 يومًا. جدّده قبل التجديد.">Your vehicle insurance expires in 15 days. Renew it before you renew the registration.</sc-callout>
-      </div>
-      <div class="pg-cell" style="justify-items: stretch">
-        <span class="pg-label">error</span>
-        <sc-callout tone="error" data-ar="لم تنجح عملية الدفع. لم يُخصم أي مبلغ من حسابك.">Your payment didn't go through. No money has been taken.</sc-callout>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="pg-section" aria-labelledby="c-heading">
-  <h2 id="c-heading" class="sc-type-heading-m" data-ar="مع عنوان">With a heading</h2>
-  <div class="pg-card">
-    <div class="pg-grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr))">
-      <sc-callout tone="info" heading="Before you start" data-heading-ar="قبل أن تبدأ">
-        <p data-ar="يستغرق التجديد نحو 5 دقائق.">Renewing takes about 5 minutes.</p>
-        <p data-ar="يمكنك الحفظ والإكمال لاحقًا.">You can save and finish later.</p>
-      </sc-callout>
-      <sc-callout tone="success" heading="Registration renewed" data-heading-ar="تم تجديد التسجيل" heading-level="2" data-ar="تسجيل مركبتك ساري حتى 18 أكتوبر 2027.">Your vehicle registration is valid until 18 October 2027.</sc-callout>
-      <sc-callout tone="warning" heading="Fines to pay" data-heading-ar="مخالفات مستحقة" data-ar="عليك دفع مخالفتين قبل التجديد.">You have 2 fines to pay before you can renew.</sc-callout>
-      <sc-callout tone="error" heading="Payment failed" data-heading-ar="تعذّر الدفع" data-ar="لم يتم خصم أي مبلغ. يمكنك المحاولة مرة أخرى أو استخدام بطاقة أخرى.">No money has been taken. Try again or use another card.</sc-callout>
-    </div>
-    <p class="pg-note" data-ar="العنوان نص عريض افتراضيًا، أو عنوان h2–h6 مع heading-level.">The heading is bold text by default, or an h2–h6 with heading-level.</p>
-  </div>
-</section>
-
-<section class="pg-section" aria-labelledby="c-surfaces">
-  <h2 id="c-surfaces" class="sc-type-heading-m" data-ar="على الخلفية">On the canvas</h2>
-  <div class="pg-grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr))">
-    <sc-callout tone="info" data-ar="خدمة العملاء متاحة على مدار الساعة على 800 9090.">Customer service is open 24 hours a day on 800 9090.</sc-callout>
-    <sc-callout tone="warning" data-ar="انقطعت عملية الدفع؟ يُرجى عدم الدفع مرة أخرى.">Payment interrupted? Don't pay again.</sc-callout>
-  </div>
-</section>
-
-<section class="pg-section" aria-labelledby="c-arabic">
-  <h2 id="c-arabic" class="sc-type-heading-m" data-ar="بالعربية">In Arabic</h2>
-  <div class="pg-card" lang="ar" dir="rtl">
-    <div class="pg-grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr))">
-      <sc-callout tone="warning">إذا انقطعت عملية الدفع، فيُرجى عدم الدفع مرة أخرى قبل التحقق من حالة الدفع في «مهامي».</sc-callout>
-      <sc-callout tone="success" heading="تم تجديد التسجيل">تسجيل مركبتك ساري حتى <bdi dir="ltr">18/10/2027</bdi>.</sc-callout>
-      <sc-callout tone="info">ستحتاج إلى رقم اللوحة ورقم الهوية الإماراتية.</sc-callout>
-      <sc-callout tone="error" heading="تعذّر الدفع">لم يتم خصم أي مبلغ. يمكنك المحاولة مرة أخرى.</sc-callout>
-    </div>
-    <p class="pg-note" lang="en" dir="ltr">This card is always lang="ar" dir="rtl", whatever the toolbar says.</p>
+    <p class="pg-note" data-ar="الحاوية بدرجة 95 للنوع، والشريط في بداية السطر والأيقونة بدرجة 40، والنص بلون السطح. في الوضع الداكن: الحاوية بدرجة 20 والشريط والأيقونة بدرجة 80.">Tone-95 container, accent bar and icon in tone 40, text in on-surface. Dark: tone-20 container, accent and icon in tone 80.</p>
+    <p class="pg-note" data-ar="الشريط في بداية السطر، فينتقل إلى اليمين في العربية. لا حركة: تنبيه يُضاف بعد التحميل يوضع داخل منطقة role=status.">The accent sits at inline-start, so it moves to the right in Arabic. No motion: a callout added after load goes inside a role="status" region.</p>
   </div>
 </section>
 
 <script>
-  {
-    const preview = document.getElementById('preview');
-    for (const el of preview.querySelectorAll('[data-heading-ar]')) {
-      const en = el.getAttribute('heading');
-      const apply = () => el.setAttribute('heading', preview.lang === 'ar' ? el.dataset.headingAr : en);
-      apply();
-      new MutationObserver(apply).observe(preview, { attributes: true, attributeFilter: ['lang'] });
-    }
+{
+  const ar = document.getElementById('preview').lang === 'ar';
+  for (const el of document.querySelectorAll('#preview [data-heading-ar]')) {
+    if (!el.dataset.headingEn) el.dataset.headingEn = el.getAttribute('heading');
+    el.setAttribute('heading', ar ? el.dataset.headingAr : el.dataset.headingEn);
   }
+}
 </script>

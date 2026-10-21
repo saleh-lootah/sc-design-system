@@ -156,3 +156,55 @@ Every field is light DOM (decision A2): the native `<label>`/`<legend>`, control
 API additions: `sc-search` `size="l"` (64px hero), `sc-checkbox` `indeterminate`, and the new `sc-filter-chips` (`filters`, `label`, `focus-target`, `no-clear`; `scRemove`, `scClear`). `sc-date-range` no longer imports `sc-table/overrides`; its `strings` overrides live in `sc-date-range/overrides.ts`. `sc-textarea` over the limit reports a custom validity error instead of `tooLong`.
 
 Visual: 56px boxes, 8px radius, 1.5px `outline` edge (2px `error`), a 4px error bar (14px gap in Arabic, 16 in English), label-large labels, body-medium hints and errors, body-large values, 24px checkboxes and radios with a 2px edge in 48px rows.
+## C2 · Actions and navigation (Wave 2b)
+
+All shadow DOM, as architecture §3.1 says for links and chrome. Full detail in each `components/specs/<tag>.md`.
+
+| Tag | Change from v1 |
+| --- | --- |
+| `sc-link` | `standalone` is label-large Bold with an `arrow-forward` icon (was label-m with a chevron). No visited colour (D8) and no colour change on hover: the underline goes from 1px to 2px. New `--sc-link-color` hook for the footer and error summary. For links in running text, use `<a class="sc-link">` (A4). |
+| `sc-back-link` | Plain text and a 24px `arrow-back` icon on a 44px target; the glass pill is gone. `appearance` is deprecated and ignored. |
+| `sc-skip-link` | A 48px `inverse-surface` block with 4px corners. API unchanged; `href` defaults to `#main-content`. |
+| `sc-language-switch` | `appearance` is `inline` (default, app bar) or `header` (site header, with a globe). `glass` maps to `inline` and `plain` to `header`. The language name is now a light-DOM `<span lang>` child written by the component and slotted, so it takes its own script's type role; tests that read `shadowRoot` text should read the accessible name or `[data-sc-language-name]`. New part `icon`. |
+| `sc-channel-chip` | New `variant`: `subtle` (default) or `outlined`. 32px tall with 6px corners and a 44px hit area on links; no hover fill or press scale. |
+| `sc-breadcrumbs` (new) | Write the trail as plain children (`<a>` per ancestor, then the current page as text). |
+| `sc-pagination` (new) | Replaces hand-built Previous / Next links and the "Showing 1–20 of 1,284" lines in `sc-table` footers. |
+| `sc-account-nav` (new) | Plain child links with `data-icon`, `data-count`, `data-count-label`, `data-sign-out` and `aria-current`. |
+| `sc-bottom-nav` (new) | Plain child links with `data-icon` and `aria-current`. `sc.css` reserves its height below 1024px; remove any page padding you added for a v1 floating capsule. |
+## 6. Feedback and status (C4, Wave 2b)
+
+| Tag | Mode | Changes for services |
+| --- | --- | --- |
+| `sc-callout` | Shadow | Look only (tone-95 container, 3px start accent, 8px radius; `info` is now blue). API, slots and parts unchanged. |
+| `sc-error-summary` | Shadow | Look only (no "!" badge, no shadow; error-container fill, 2px border). Neutral U1 focus ring. Arabic heading "توجد مشكلة" (W1). CMP-05 unchanged: focus, `role="group"`, no `role="alert"`. Item links may target a v2 field's native control or its host. |
+| `sc-status-tag` | Shadow | 6px chip with an **icon** instead of a pill with a dot. New tone `info`. **`tone="channel"` is removed** and renders as `neutral`. Part `dot` → `icon`. |
+| `sc-spinner` | Shadow | New `size` (`m` 20px, `l` 24px). Turns once per 600ms. |
+| `sc-step-progress` | Shadow | The E stepper replaces the segmented track. New: step names as child elements or the `steps` property, `layout` (`auto` \| `compact` \| `full`), part `list`. With names it renders an `<ol>` with `aria-current="step"` from 600px wide. Completed steps are channel-coloured with a check, never green (U2). |
+| `sc-step-list` | Light DOM | New. Write the native `<ol>`; mark another channel's rows with `data-channel`. |
+| `sc-timeline` | Light DOM | New. Write the native `<ol>` of `sc-status-tag`, `<time>`, `<p>`. |
+| `sc-notification-list` | Light DOM | New. Headings plus `<ul>`; each `<li>` is one `<a>` and a `<time>`; `data-unread`; `markAllRead()`. |
+| `sc-empty-state` | Shadow | New. `heading`, `heading-level`, `icon`, `variant="success"`, slots default and `action`. |
+| `sc-modal` | Shadow (native `<dialog>`) | New. `open`/`show()`/`close()`, `heading`, `alert`, `initial-focus`, `countdown`; events `scOpen`, `scClose` (`{ reason }`), `scCountdownEnd`; a bottom sheet under 600px. |
+
+Strings moved to per-component files: `sc-error-summary.ts` (`errorSummaryHeading`), `sc-spinner.ts` (`spinnerLoading`), `sc-step-progress.ts` (`stepProgressCount` and the state words), plus new `sc-step-list.ts`, `sc-notification-list.ts`, `sc-modal.ts`. The shared `common.ts` keys `problem`, `loading` and `step` are no longer used by these components.
+
+Icons added to the shared set: `check`, `schedule`, `hourglass`, `pending`, `inbox`.
+## 6. Content and layout (C5, Wave 2b)
+
+| Tag | Encapsulation | API changes from v1 |
+| --- | --- | --- |
+| `sc-container` | CSS only (not registered) | Markup unchanged. `::part(inner)`, the `width` property (use the attribute) and `componentOnReady()` are gone. Works in page markup only: it cannot be used inside another component's shadow root. |
+| `sc-grid` | CSS only (not registered) | Markup unchanged. `::part(grid)` and the `span`, `spanMedium`, `spanExpanded` properties are gone: set the attributes. |
+| `sc-ltr` | CSS only (not registered) | Markup unchanged; no shadow root. |
+| `sc-card` | Light DOM (`scoped`) | `::part(surface)` is gone: the host is the surface (`.sc-card`). New `variant` (`outlined`, `filled`). Flat (no elevation), radius 12. |
+| `sc-service-card` | Shadow | No breaking change. New `tint`, `slot="icon"`, parts `icon` and `arrow`. Decorative arrow at the top end; no press scale. |
+| `sc-channel-hero` | Shadow | `::part(wash)` is now `::part(band)`; no gradient. The internal `sc-container` is gone. New `size`, `popular-label`, and the `breadcrumbs` and `popular` slots. |
+| `sc-summary-list` | Light DOM (`scoped`) | Parts `list`, `row`, `key`, `value`, `action` are gone: classes `.sc-summary-list__list`, `__row`, `__key`, `__value`, `__action`, `__link`. Rows get a generated `slot` attribute and are moved into their value `<dd>`. New `layout` (`auto`, `stacked`, `columns`, `pairs`). |
+| `sc-summary-row` | Light DOM (`scoped`) | The internal `sc-summary-row-update` event is gone. `action-text` and `action-hidden-text` now reflect. New `variant="total"`. |
+| `sc-table` | Light DOM (`scoped`), as v1 | No API changes. Styles now in `@layer sc.components`. Strings through the v2 controller; `overrides.ts` stays only for `sc-date-range`. |
+| `sc-tile` | Shadow | New. |
+| `sc-attention-card` | Shadow | New. |
+| `sc-module-card` | Shadow | New. |
+| `sc-accordion` | Light DOM (`scoped`) | New. |
+
+For test authors: `newScPage` now ignores unregistered `sc-` tags when it waits for hydration, so pages using the CSS-only primitives load.

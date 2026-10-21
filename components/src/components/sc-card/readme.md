@@ -21,29 +21,37 @@ A surface for grouping related content: a life event and its steps, a task, a se
 
 Nothing to configure: padding and radius are symmetrical and content follows the page direction.
 
+- `variant="filled"` gives a quiet fill with no edge: a totals card, or a group inside an outlined area.
+
 ### Styling hooks
 
-Part: `surface`. The fill, radius and shadow come from tokens and follow light and dark themes; in forced colours the card keeps a visible edge.
+v2 renders in light DOM: the host is the surface (`.sc-card`), and there is no `::part(surface)`. Cards are flat: a 1px edge and 12px corners, no shadow. In forced colours the card keeps a visible edge.
 
 <!-- Auto Generated Below -->
 
 
 ## Overview
 
-A surface container: surface fill, card radius, elevation 1. Groups related content,
-such as a life event and its steps, or the answers in one section of "Check your answers".
+A surface that groups related content: a life event and its steps, the answers in one
+section of "Check your answers", a totals card. Flat and outline-first (ELV-01): 12px
+corners, a 1px `outline-variant` edge, no shadow. Cards are never links (CMP-06): put the
+link on a heading or a button inside.
+
+v2 renders in light DOM (Stencil `scoped`, architecture §3.1): the host is the surface and
+your content stays its direct children, so `aria-labelledby` points at your own heading
+with an ordinary id. There is no `::part(surface)`; style the host (`.sc-card`) if you must.
 
 With `landmark`, the card becomes a named region (`section`) or an `article`, labelled by
-the first heading inside it. The role and `aria-labelledby` go on the host, in light DOM,
-so the reference to the slotted heading resolves.
+the first heading inside it, or by `label`.
 
 ## Properties
 
-| Property   | Attribute  | Description                                                                                                                                                                                                                                                             | Type                                  | Default     |
-| ---------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- | ----------- |
-| `label`    | `label`    | Names the landmark when the card has no heading of its own. Ignored without `landmark`.                                                                                                                                                                                 | `string \| undefined`                 | `undefined` |
-| `landmark` | `landmark` | Makes the card a landmark. `section` exposes a region (use it for a part of a page a user would want to jump to); `article` is for self-contained content. Both are named by the first heading (`h1`–`h6`) inside the card, or by `label`. Leave unset for a plain box. | `"article" \| "section" \| undefined` | `undefined` |
-| `padding`  | `padding`  | Inner padding: `m` is 16px, `l` is 24px (default).                                                                                                                                                                                                                      | `"l" \| "m"`                          | `'l'`       |
+| Property   | Attribute  | Description                                                                                                                                                                                                                                                  | Type                                  | Default      |
+| ---------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------- | ------------ |
+| `label`    | `label`    | Names the landmark when the card has no heading of its own. Ignored without `landmark`.                                                                                                                                                                      | `string \| undefined`                 | `undefined`  |
+| `landmark` | `landmark` | Makes the card a landmark. `section` exposes a region (a part of a page a user would want to jump to); `article` is for self-contained content. Both are named by the first heading (`h1`–`h6`) inside the card, or by `label`. Leave unset for a plain box. | `"article" \| "section" \| undefined` | `undefined`  |
+| `padding`  | `padding`  | Inner padding: `l` is 24px (default), `m` is 16px.                                                                                                                                                                                                           | `"l" \| "m"`                          | `'l'`        |
+| `variant`  | `variant`  | `outlined` (default): white surface with a 1px `outline-variant` edge, for groups on a page or a neutral band. `filled`: a quiet `surface-container` fill with no edge, for a totals card or a group inside an outlined area.                                | `"filled" \| "outlined"`              | `'outlined'` |
 
 
 ## Slots
@@ -51,13 +59,6 @@ so the reference to the slotted heading resolves.
 | Slot | Description                                                           |
 | ---- | --------------------------------------------------------------------- |
 |      | The card's content. Start with a heading when the card is a landmark. |
-
-
-## Shadow Parts
-
-| Part        | Description                                        |
-| ----------- | -------------------------------------------------- |
-| `"surface"` | The inner surface (fill, radius, shadow, padding). |
 
 
 ----------------------------------------------

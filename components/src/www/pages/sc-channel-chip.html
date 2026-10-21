@@ -1,12 +1,12 @@
-<h1 class="pg-title sc-type-heading-xl" data-ar="شارة القناة">Channel chip</h1>
-<p class="pg-lede sc-type-body-m" data-ar="تشير إلى قناة أخرى تقدّم الخدمة نفسها. تضبط data-channel على نفسها فتظهر بألوان تلك القناة أيًا كانت قناة الصفحة.">
-  Points to another channel that also offers the service. It sets data-channel on itself, so it shows that channel's colours whatever the page's channel.
+<h1 class="pg-title sc-type-headline-large" data-ar="شارة القناة">Channel chip</h1>
+<p class="pg-lede sc-type-body-large" data-ar="يشير إلى قناة أخرى تقدّم الخدمة نفسها، بألوان تلك القناة.">
+  Points to another channel that also offers the service, in that channel's colours.
 </p>
 
-<section class="pg-section" aria-labelledby="ch-all">
-  <h2 id="ch-all" class="sc-type-heading-m" data-ar="القنوات السبع">All seven channels</h2>
+<section class="pg-section" aria-labelledby="cc-subtle">
+  <h2 id="cc-subtle" class="sc-type-headline-small" data-ar="خفيفة (افتراضي)">Subtle (default)</h2>
   <div class="pg-card">
-    <div class="pg-row">
+    <div class="pg-row" style="flex-wrap: wrap">
       <sc-channel-chip channel="now"></sc-channel-chip>
       <sc-channel-chip channel="transport"></sc-channel-chip>
       <sc-channel-chip channel="visit"></sc-channel-chip>
@@ -15,72 +15,31 @@
       <sc-channel-chip channel="invest"></sc-channel-chip>
       <sc-channel-chip channel="trade"></sc-channel-chip>
     </div>
-    <p class="pg-note" data-ar="النص من الترجمات: «متوفر أيضًا في {القناة}».">Text comes from strings: "Also on {channel}".</p>
-  </div>
-</section>
-
-<section class="pg-section" aria-labelledby="ch-link">
-  <h2 id="ch-link" class="sc-type-heading-m" data-ar="كرابط">As a link</h2>
-  <div class="pg-card">
     <div class="pg-row">
-      <sc-channel-chip channel="now" href="#now"></sc-channel-chip>
+      <span class="pg-label">link</span>
       <sc-channel-chip channel="transport" href="#transport"></sc-channel-chip>
-      <sc-channel-chip channel="visit" href="#visit"></sc-channel-chip>
-      <sc-channel-chip channel="justice" href="#justice"></sc-channel-chip>
-      <sc-channel-chip channel="build" href="#build"></sc-channel-chip>
-      <sc-channel-chip channel="invest" href="#invest"></sc-channel-chip>
-      <sc-channel-chip channel="trade" href="#trade"></sc-channel-chip>
-    </div>
-    <div class="pg-row">
-      <sc-channel-chip channel="transport" href="#transport" data-demo-focus></sc-channel-chip>
-      <span class="pg-note" style="margin: 0" data-ar="التركيز: حلقة بلون القناة المشار إليها. منطقة النقر 44 بكسل.">Focus: ring in the target channel's colour. The hit area is 44px tall.</span>
+      <sc-channel-chip channel="visit" href="#visit" data-demo-focus></sc-channel-chip>
     </div>
   </div>
 </section>
 
-<section class="pg-section" aria-labelledby="ch-card">
-  <h2 id="ch-card" class="sc-type-heading-m" data-ar="في بطاقة خدمة">In a service card</h2>
-  <div class="pg-card" style="max-inline-size: 420px">
-    <p class="sc-type-title-s" style="margin: 0" data-ar="تجديد تسجيل المركبة">Renew vehicle registration</p>
-    <p class="sc-type-body-s" style="margin: var(--sc-space-4) 0 var(--sc-space-12); color: var(--sc-color-muted)" data-ar="هيئة الطرق والمواصلات">Roads and Transport Authority</p>
-    <sc-channel-chip channel="transport" href="#transport"></sc-channel-chip>
-  </div>
-</section>
-
-<section class="pg-section" aria-labelledby="ch-custom">
-  <h2 id="ch-custom" class="sc-type-heading-m" data-ar="نص مخصص">Custom text</h2>
-  <div class="pg-card">
-    <div class="pg-row">
-      <sc-channel-chip channel="justice" data-ar="دفع المخالفات في عدالة دبي">Pay fines on Dubai Justice</sc-channel-chip>
-      <sc-channel-chip channel="invest" label="Start on Invest in Dubai" data-label-ar="البدء في استثمر في دبي"></sc-channel-chip>
+<section class="pg-section" aria-labelledby="cc-outlined">
+  <h2 id="cc-outlined" class="sc-type-headline-small" data-ar="محددة (على خلفية القناة)">Outlined (on a channel tint)</h2>
+  <div class="pg-card" style="background: var(--sc-color-channel-subtle)">
+    <div class="pg-row" style="flex-wrap: wrap">
+      <sc-channel-chip channel="transport" variant="outlined" label="On Dubai Transport"></sc-channel-chip>
+      <sc-channel-chip channel="justice" variant="outlined" href="#justice"></sc-channel-chip>
     </div>
   </div>
 </section>
 
-<section class="pg-section" aria-labelledby="ch-arabic">
-  <h2 id="ch-arabic" class="sc-type-heading-m" data-ar="بالعربية">In Arabic</h2>
+<section class="pg-section" aria-labelledby="cc-arabic">
+  <h2 id="cc-arabic" class="sc-type-headline-small" data-ar="بالعربية">In Arabic</h2>
   <div class="pg-card" lang="ar" dir="rtl">
-    <div class="pg-row">
-      <sc-channel-chip channel="now" href="#now"></sc-channel-chip>
-      <sc-channel-chip channel="transport" href="#transport"></sc-channel-chip>
-      <sc-channel-chip channel="visit" href="#visit"></sc-channel-chip>
-      <sc-channel-chip channel="justice" href="#justice"></sc-channel-chip>
-      <sc-channel-chip channel="build" href="#build"></sc-channel-chip>
-      <sc-channel-chip channel="invest" href="#invest"></sc-channel-chip>
-      <sc-channel-chip channel="trade" href="#trade"></sc-channel-chip>
+    <div class="pg-row" style="flex-wrap: wrap">
+      <sc-channel-chip channel="transport"></sc-channel-chip>
+      <sc-channel-chip channel="visit" href="#v"></sc-channel-chip>
     </div>
-    <p class="pg-note" lang="en" dir="ltr">This card is always lang="ar" dir="rtl", whatever the toolbar says.</p>
+    <p class="pg-note" lang="en" dir="ltr">Always lang="ar" dir="rtl": 16px label, the dot at the right, the chevron mirrored.</p>
   </div>
 </section>
-
-<script>
-  {
-    const preview = document.getElementById('preview');
-    for (const el of preview.querySelectorAll('[data-label-ar]')) {
-      const en = el.getAttribute('label');
-      const apply = () => el.setAttribute('label', preview.lang === 'ar' ? el.dataset.labelAr : en);
-      apply();
-      new MutationObserver(apply).observe(preview, { attributes: true, attributeFilter: ['lang'] });
-    }
-  }
-</script>

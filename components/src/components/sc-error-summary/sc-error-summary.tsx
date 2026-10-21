@@ -1,5 +1,6 @@
 import { Component, Element, Host, Method, Prop, State, h } from '@stencil/core';
-import { LocaleController } from '../../i18n/locale';
+import { LocaleController } from '../../i18n/controller';
+import strings from '../../i18n/components/sc-error-summary';
 
 /** One error in the summary: a link to the field with the problem and the message to show. */
 export interface ErrorSummaryItem {
@@ -20,7 +21,12 @@ export type ErrorSummaryHeadingLevel = 2 | 3 | 4;
  * it moves focus to itself (`tabindex="-1"`), so keyboard and screen reader users hear
  * the heading and errors straight away. It has no `role="alert"`: moving focus already
  * announces it, and a live region on top can make screen readers read it twice (GOV.UK
- * practice). The focused box is a `role="group"` named by its heading.
+ * practice). The focused box is a `role="group"` named by its heading (CMP-05).
+ *
+ * v2: an `error-container` box with a 2px `error` border and an 8px radius; the heading in
+ * `on-surface`, the links in `error`, Bold and underlined, each at least 44 × 44. Field
+ * components are light DOM in v2, so a link's `#id` can name the native control or the
+ * field host (whose `focus()` is forwarded to its control).
  *
  * @slot - Error links: `<a href="#field-id">Message</a>`, one per error. They are read
  *   from the light DOM and rendered as a list inside the component.
@@ -44,7 +50,7 @@ export class ScErrorSummary {
    */
   @Prop() errors?: ErrorSummaryItem[];
 
-  /** Overrides the heading text (default "There is a problem" / "توجد مشكلة" from strings). */
+  /** Overrides the heading text (default "There is a problem" / "توجد مشكلة"). */
   @Prop() heading?: string;
 
   /** The heading level. Use 2 when the summary sits under the page's `<h1>` (the usual case). */
@@ -62,7 +68,7 @@ export class ScErrorSummary {
   /** True when content is slotted into `description`. */
   @State() hasDescription = false;
 
-  private locale = new LocaleController(this);
+  private locale = new LocaleController(this, strings);
   private observer?: MutationObserver;
   private container?: HTMLElement;
   private hadItems = false;
@@ -175,26 +181,21 @@ export class ScErrorSummary {
           aria-labelledby="heading"
           ref={(el) => (this.container = el)}
         >
-          <span class="badge type-title-s" aria-hidden="true">
-            !
-          </span>
-          <div class="body">
-            <Heading id="heading" class="heading type-title-m" part="heading">
-              {this.heading || t('problem')}
-            </Heading>
-            <div class={{ 'description': true, 'type-body-m': true, 'description--empty': !this.hasDescription }}>
-              <slot name="description" />
-            </div>
-            <ul class="list" part="list">
-              {items.map((item) => (
-                <li>
-                  <a class="link type-title-s focus-ring" href={item.href} onClick={(ev) => this.onItemClick(ev, item.href)}>
-                    {item.text}
-                  </a>
-                </li>
-              ))}
-            </ul>
+          <Heading id="heading" class="heading" part="heading">
+            {this.heading || t('errorSummaryHeading')}
+          </Heading>
+          <div class={{ 'description': true, 'description--empty': !this.hasDescription }}>
+            <slot name="description" />
           </div>
+          <ul class="list" part="list">
+            {items.map((item) => (
+              <li>
+                <a class="link focus-ring" href={item.href} onClick={(ev) => this.onItemClick(ev, item.href)}>
+                  {item.text}
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       </Host>
     );

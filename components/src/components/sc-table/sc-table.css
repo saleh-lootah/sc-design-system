@@ -1,7 +1,12 @@
 /*
- * sc-table is scoped (light DOM): it styles the author's native <table>. Stencil rewrites
- * `::slotted(table) x` to `.sc-table-s > table x`, which reaches every descendant of the
- * slotted table, including the cells, checkboxes and skeleton rows the component injects.
+ * sc-table (v2, light DOM: Stencil `scoped`). It styles the author's native <table>.
+ * Rules: specs/sc-table.md and component-language.md A28, read through the role table in
+ * decisions.md. Everything sits in @layer sc.components, so a service's own unlayered CSS
+ * wins without !important.
+ *
+ * Stencil rewrites `::slotted(table) x` to `.sc-table-s > table x`, which reaches every
+ * descendant of the slotted table, including the cells, checkboxes and skeleton rows the
+ * component injects.
  *
  * Stencil 4.45's scoper mangles an @media or @container block whose FIRST rule is a
  * `::slotted(…)` rule, so such blocks open with a `:host { --_at: 1; }` anchor rule.
@@ -9,7 +14,7 @@
  * Column types come from `data-type` on each cell (copied from its header):
  *   text · reference · date · amount · status · action
  */
-
+@layer sc.components {
 :host {
   /* Queried below for the stacked and scrolling layouts under 600px (--sc-breakpoint-medium). */
   container: sc-table / inline-size;
@@ -18,8 +23,9 @@
      (otherwise it collapses inside flex and grid items that shrink to fit). */
   inline-size: 100%;
   min-inline-size: 0;
-  color: var(--sc-color-ink);
-  font-family: var(--type-body-s-family);
+  color: var(--sc-color-on-surface);
+  font: var(--sc-type-body-medium);
+  letter-spacing: var(--sc-type-body-medium-tracking);
   --_pad-block: var(--sc-space-16);
   --_pad-inline: var(--sc-space-16);
   --_edge: var(--sc-space-8);
@@ -41,11 +47,9 @@
 
 .container {
   position: relative;
-  /* Transparent until forced colours repaint it. */
-  border: var(--sc-size-border-hairline) solid transparent;
+  border: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
   border-radius: var(--sc-radius-card);
-  background: var(--sc-color-surface);
-  box-shadow: var(--sc-elevation-1);
+  background: var(--sc-color-surface-card);
   overflow: clip;
 }
 
@@ -56,7 +60,7 @@
 }
 
 .scroller:focus-visible {
-  outline: var(--sc-size-focus-ring) solid var(--sc-channel-action);
+  outline: var(--sc-size-focus-ring) solid var(--sc-color-focus-ring);
   outline-offset: calc(-1 * var(--sc-size-focus-ring));
 }
 
@@ -78,12 +82,9 @@
   padding-inline: calc(var(--_pad-inline) + var(--_edge));
   caption-side: top;
   text-align: start;
-  color: var(--sc-color-ink-strong);
-  font-family: var(--type-title-s-family);
-  font-weight: var(--type-title-s-weight);
-  font-size: var(--type-title-s-size);
-  line-height: var(--type-title-s-leading);
-  letter-spacing: var(--type-title-s-tracking);
+  color: var(--sc-color-on-surface);
+  font: var(--sc-type-title-small);
+  letter-spacing: var(--sc-type-title-small-tracking);
 }
 
 ::slotted(table) caption.sc-table__caption--hidden,
@@ -106,12 +107,9 @@
   padding-inline: var(--_pad-inline);
   text-align: start;
   vertical-align: middle;
-  font-family: var(--type-body-s-family);
-  font-weight: var(--type-body-s-weight);
-  font-size: var(--type-body-s-size);
-  line-height: var(--type-body-s-leading);
-  letter-spacing: var(--type-body-s-tracking);
-  color: var(--sc-color-ink);
+  font: var(--sc-type-body-medium);
+  letter-spacing: var(--sc-type-body-medium-tracking);
+  color: var(--sc-color-on-surface);
   overflow-wrap: break-word;
 }
 
@@ -127,20 +125,12 @@
 ::slotted(table) thead th,
 ::slotted(table) thead td {
   padding-block: var(--sc-space-12);
-  border-block-end: var(--sc-size-border-hairline) solid var(--sc-color-rule);
+  border-block-end: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
   white-space: nowrap;
-  color: var(--sc-color-muted);
-  font-family: var(--sc-font-family-medium);
-  font-weight: var(--sc-font-weight-medium);
-  font-size: var(--type-label-s-size);
-  line-height: var(--type-label-s-leading);
-  letter-spacing: var(--type-label-s-tracking);
-}
-
-:host(:lang(ar)) ::slotted(table) thead th,
-:host(:lang(ar)) ::slotted(table) thead td {
-  font-family: var(--type-label-s-family);
-  font-weight: var(--type-label-s-weight);
+  background: var(--sc-color-surface-container);
+  color: var(--sc-color-on-surface);
+  font: var(--sc-type-label-medium);
+  letter-spacing: var(--sc-type-label-medium-tracking);
 }
 
 /* Body rows: at least 56 (compact 44), a hairline rule between rows, no zebra, no vertical rules. */
@@ -150,25 +140,27 @@
 }
 
 ::slotted(table) tbody tr + tr > * {
-  border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-rule);
+  border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
 }
 
 /* Row header: title-s in ink-strong; it carries the row's link. */
 ::slotted(table) tbody th,
 ::slotted(table) tfoot th,
 ::slotted(table) tfoot td {
-  color: var(--sc-color-ink-strong);
-  font-family: var(--type-title-s-family);
-  font-weight: var(--type-title-s-weight);
-  font-size: var(--type-title-s-size);
-  line-height: var(--type-title-s-leading);
-  letter-spacing: var(--type-title-s-tracking);
+  color: var(--sc-color-on-surface);
+  font: var(--sc-type-title-small);
+  letter-spacing: var(--sc-type-title-small-tracking);
 }
 
 ::slotted(table) a {
-  color: var(--sc-channel-action);
-  text-decoration: none;
-  text-underline-offset: 0.2em;
+  color: var(--sc-color-channel-action);
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+:host(:lang(ar)) ::slotted(table) a {
+  text-underline-offset: 5px;
 }
 
 ::slotted(table) tbody th a {
@@ -176,9 +168,10 @@
 }
 
 ::slotted(table) a:focus-visible {
-  outline: var(--sc-size-focus-ring) solid var(--sc-channel-action);
+  outline: var(--sc-size-focus-ring) solid var(--sc-color-focus-ring);
+  transition: none;
   outline-offset: var(--sc-size-focus-offset);
-  border-radius: var(--sc-radius-xs);
+  border-radius: var(--sc-radius-control);
 }
 
 /*
@@ -210,23 +203,23 @@
   }
 
   ::slotted(table) a:hover {
-    text-decoration: underline;
-    text-decoration-thickness: var(--sc-size-border-control);
+    text-decoration-thickness: 2px;
   }
   ::slotted(table) tbody tr:not([data-selected]):hover {
-    background: var(--sc-color-fill-quiet);
+    background: color-mix(in oklab, var(--sc-color-on-surface) var(--sc-opacity-hover), transparent);
   }
 }
 
 /* Totals row: a 1px control rule above it. */
 ::slotted(table) tfoot tr > * {
-  border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-control);
+  border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-outline);
 }
 
-/* Compact density uses body-s everywhere in the body (the default already does). */
-:host([density='compact']) ::slotted(table) tbody th {
-  font-size: var(--type-body-s-size);
-  line-height: var(--type-body-s-leading);
+/* Compact density (staff tools) uses body-small everywhere in the body. */
+:host([density='compact']) ::slotted(table) tbody th,
+:host([density='compact']) ::slotted(table) tbody td {
+  font: var(--sc-type-body-small);
+  letter-spacing: var(--sc-type-body-small-tracking);
 }
 
 /* Column types ---------------------------------------------------------------------------- */
@@ -235,8 +228,7 @@
 ::slotted(table) [data-type='date'],
 ::slotted(table) [data-type='amount'] {
   white-space: nowrap;
-  font-variant-numeric: tabular-nums;
-}
+  }
 
 ::slotted(table) [data-type='reference'] {
   unicode-bidi: isolate;
@@ -258,14 +250,12 @@
 }
 
 ::slotted(table) td[data-type='action'] a {
-  font-family: var(--type-label-m-family);
-  font-weight: var(--type-label-m-weight);
-  font-size: var(--type-label-m-size);
-  line-height: var(--type-label-m-leading);
+  font: var(--sc-type-label-medium);
+  letter-spacing: var(--sc-type-label-medium-tracking);
 }
 
 ::slotted(table) .sc-table__none {
-  color: var(--sc-color-muted);
+  color: var(--sc-color-on-surface-variant);
 }
 
 /* Sorting --------------------------------------------------------------------------------- */
@@ -309,7 +299,7 @@
 }
 
 ::slotted(table) .sc-table__sort:focus-visible {
-  outline: var(--sc-size-focus-ring) solid var(--sc-channel-action);
+  outline: var(--sc-size-focus-ring) solid var(--sc-color-focus-ring);
   outline-offset: calc(-1 * var(--sc-size-focus-ring));
 }
 
@@ -319,19 +309,24 @@
   }
 
   ::slotted(table) .sc-table__sort:hover {
-    color: var(--sc-color-ink-strong);
+    background: color-mix(in oklab, var(--sc-color-on-surface) var(--sc-opacity-hover), transparent);
   }
 }
 
 ::slotted(table) th[aria-sort='ascending'],
 ::slotted(table) th[aria-sort='descending'] {
-  color: var(--sc-color-ink-strong);
+  color: var(--sc-color-on-surface);
 }
 
 ::slotted(table) .sc-table__sort-glyph {
   flex: none;
-  inline-size: var(--sc-size-icon-s);
-  block-size: var(--sc-size-icon-s);
+  inline-size: var(--sc-size-icon-m);
+  block-size: var(--sc-size-icon-m);
+  color: var(--sc-color-on-surface-variant);
+}
+
+::slotted(table) th[aria-sort] .sc-table__sort-glyph {
+  color: var(--sc-color-on-surface);
 }
 
 ::slotted(table) .sc-table__glyph-ascending,
@@ -340,7 +335,7 @@
 }
 
 ::slotted(table) .sc-table__glyph-none {
-  opacity: 0.4;
+  opacity: 0.6;
 }
 
 ::slotted(table) th[aria-sort='ascending'] .sc-table__glyph-none,
@@ -381,9 +376,9 @@
   inline-size: var(--sc-size-icon-l);
   block-size: var(--sc-size-icon-l);
   margin: 0;
-  border: var(--sc-size-border-strong) solid var(--sc-color-control);
-  border-radius: var(--sc-radius-xs);
-  background: var(--sc-color-surface);
+  border: var(--sc-size-border-strong) solid var(--sc-color-outline);
+  border-radius: var(--sc-radius-control);
+  background: var(--sc-color-surface-card);
   appearance: none;
   cursor: pointer;
   transition:
@@ -392,9 +387,9 @@
 }
 
 ::slotted(table) .sc-table__box:focus-visible {
-  outline: var(--sc-size-focus-ring) solid var(--sc-channel-action);
+  outline: var(--sc-size-focus-ring) solid var(--sc-color-focus-ring);
   outline-offset: var(--sc-size-focus-offset);
-  box-shadow: 0 0 0 var(--sc-size-focus-offset) var(--sc-color-surface);
+  box-shadow: 0 0 0 var(--sc-size-focus-offset) var(--sc-color-surface-card);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -403,7 +398,7 @@
   }
 
   ::slotted(table) .sc-table__check:hover .sc-table__box {
-    border-color: var(--sc-color-ink);
+    border-color: var(--sc-color-outline-strong);
   }
 }
 
@@ -411,8 +406,8 @@
 ::slotted(table) .sc-table__box:indeterminate,
 ::slotted(table) .sc-table__check:hover .sc-table__box:checked,
 ::slotted(table) .sc-table__check:hover .sc-table__box:indeterminate {
-  border-color: var(--sc-channel-action);
-  background: var(--sc-channel-action);
+  border-color: var(--sc-color-channel-action);
+  background: var(--sc-color-channel-action);
 }
 
 /* A tick is a symbol, not an arrow: it never mirrors, so it is drawn in LTR. */
@@ -423,8 +418,8 @@
   inline-size: var(--sc-space-8);
   block-size: var(--sc-space-12);
   margin-block-start: calc(-1 * var(--sc-space-2));
-  border-block-end: var(--sc-size-border-strong) solid var(--sc-color-on-action);
-  border-inline-end: var(--sc-size-border-strong) solid var(--sc-color-on-action);
+  border-block-end: var(--sc-size-border-strong) solid var(--sc-color-channel-on-action);
+  border-inline-end: var(--sc-size-border-strong) solid var(--sc-color-channel-on-action);
   transform: rotate(45deg);
   pointer-events: none;
   opacity: 0;
@@ -445,7 +440,7 @@
 }
 
 ::slotted(table) tbody tr[data-selected] {
-  background: var(--sc-color-fill-selected);
+  background: var(--sc-color-channel-subtle);
 }
 
 /* The selection bar: below the table, one primary action. */
@@ -456,12 +451,12 @@
   flex-wrap: wrap;
   gap: var(--sc-space-12) var(--sc-space-16);
   margin-block-start: var(--sc-space-12);
-  padding-block: var(--sc-space-16);
-  padding-inline: var(--sc-space-24) var(--sc-space-16);
+  padding-block: var(--sc-space-12);
+  padding-inline: var(--sc-space-16);
+  /* Transparent until forced colours repaint it. */
   border: var(--sc-size-border-hairline) solid transparent;
-  border-radius: var(--sc-radius-card);
-  background: var(--sc-color-surface);
-  box-shadow: var(--sc-elevation-1);
+  border-radius: var(--sc-radius-field);
+  background: var(--sc-color-channel-subtle);
   opacity: 0;
   /* Exit: opacity only, about 20% faster than the entrance. */
   transition:
@@ -493,14 +488,10 @@
 
 .selection-text {
   margin: 0;
-  color: var(--sc-color-ink-strong);
-  font-family: var(--type-title-s-family);
-  font-weight: var(--type-title-s-weight);
-  font-size: var(--type-title-s-size);
-  line-height: var(--type-title-s-leading);
-  letter-spacing: var(--type-title-s-tracking);
-  font-variant-numeric: tabular-nums;
-}
+  color: var(--sc-color-on-surface);
+  font: var(--sc-type-label-large);
+  letter-spacing: var(--sc-type-label-large-tracking);
+  }
 
 .selection-actions {
   display: flex;
@@ -520,8 +511,8 @@
   vertical-align: middle;
   inline-size: 70%;
   block-size: var(--sc-space-12);
-  border-radius: var(--sc-radius-xs);
-  background: var(--sc-color-fill-quiet);
+  border-radius: var(--sc-radius-control);
+  background: var(--sc-color-surface-container-high);
   animation: sc-table-pulse 1.2s ease-in-out infinite alternate;
 }
 
@@ -533,7 +524,7 @@
 ::slotted(table) .sc-table__bar--status {
   inline-size: var(--sc-space-64);
   block-size: var(--sc-space-24);
-  border-radius: var(--sc-radius-pill);
+  border-radius: var(--sc-radius-chip);
 }
 
 @keyframes sc-table-pulse {
@@ -572,21 +563,15 @@
 
 ::slotted([slot='empty']) > * {
   margin: 0;
-  color: var(--sc-color-ink);
-  font-family: var(--type-body-s-family);
-  font-weight: var(--type-body-s-weight);
-  font-size: var(--type-body-s-size);
-  line-height: var(--type-body-s-leading);
-  letter-spacing: var(--type-body-s-tracking);
+  color: var(--sc-color-on-surface);
+  font: var(--sc-type-body-medium);
+  letter-spacing: var(--sc-type-body-medium-tracking);
 }
 
 ::slotted([slot='empty']) > :first-child {
-  color: var(--sc-color-ink-strong);
-  font-family: var(--type-title-s-family);
-  font-weight: var(--type-title-s-weight);
-  font-size: var(--type-title-s-size);
-  line-height: var(--type-title-s-leading);
-  letter-spacing: var(--type-title-s-tracking);
+  color: var(--sc-color-on-surface);
+  font: var(--sc-type-title-small);
+  letter-spacing: var(--sc-type-title-small-tracking);
 }
 
 ::slotted([slot='empty']) > * + * {
@@ -594,7 +579,7 @@
 }
 
 ::slotted([slot='empty']) a {
-  color: var(--sc-channel-action);
+  color: var(--sc-color-channel-action);
 }
 
 /* Footer: count and pagination. */
@@ -606,15 +591,11 @@
   gap: var(--sc-space-12);
   padding-block: var(--sc-space-16);
   padding-inline: calc(var(--_pad-inline) + var(--_edge));
-  border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-rule);
-  color: var(--sc-color-muted);
-  font-family: var(--type-body-s-family);
-  font-weight: var(--type-body-s-weight);
-  font-size: var(--type-body-s-size);
-  line-height: var(--type-body-s-leading);
-  letter-spacing: var(--type-body-s-tracking);
-  font-variant-numeric: tabular-nums;
-}
+  border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+  color: var(--sc-color-on-surface-variant);
+  font: var(--sc-type-body-medium);
+  letter-spacing: var(--sc-type-body-medium-tracking);
+  }
 
 :host(.sc-table--empty) .footer,
 :host(.sc-table--error) .footer {
@@ -711,11 +692,10 @@
     block-size: auto;
     padding-block: var(--sc-space-16);
     padding-inline: var(--sc-space-16);
-    border: var(--sc-size-border-hairline) solid transparent;
+    border: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
     border-radius: var(--sc-radius-card);
-    background: var(--sc-color-surface);
-    box-shadow: var(--sc-elevation-1);
-  }
+    background: var(--sc-color-surface-card);
+    }
 
   :host([responsive='stack']) ::slotted(table) tbody tr + tr,
   :host([responsive='stack']) ::slotted(table) tfoot tr {
@@ -723,8 +703,8 @@
   }
 
   :host([responsive='stack']) ::slotted(table) tbody tr[data-selected] {
-    background: color-mix(in oklab, var(--sc-color-surface), var(--sc-color-fill-selected));
-    box-shadow: var(--sc-elevation-1), inset 0 0 0 var(--sc-size-border-strong) var(--sc-channel-action);
+    background: var(--sc-color-channel-subtle);
+    box-shadow: inset 0 0 0 var(--sc-size-border-strong) var(--sc-color-channel-action);
   }
 
   :host([responsive='stack']) ::slotted(table) tbody tr > *,
@@ -767,12 +747,9 @@
     content: attr(data-label);
     display: block;
     margin-block-end: var(--sc-space-2);
-    color: var(--sc-color-muted);
-    font-family: var(--type-label-s-family);
-    font-weight: var(--type-label-s-weight);
-    font-size: var(--type-label-s-size);
-    line-height: var(--type-label-s-leading);
-    letter-spacing: var(--type-label-s-tracking);
+    color: var(--sc-color-on-surface-variant);
+    font: var(--sc-type-label-medium);
+    letter-spacing: var(--sc-type-label-medium-tracking);
   }
 
   /* The amount is the last line, end-aligned, in title-m. */
@@ -780,19 +757,16 @@
   :host([responsive='stack']) ::slotted(table) tfoot tr > [data-type='amount'] {
     order: 98;
     text-align: end;
-    color: var(--sc-color-ink-strong);
-    font-family: var(--type-title-m-family);
-    font-weight: var(--type-title-m-weight);
-    font-size: var(--type-title-m-size);
-    line-height: var(--type-title-m-leading);
-    letter-spacing: var(--type-title-m-tracking);
+    color: var(--sc-color-on-surface);
+    font: var(--sc-type-title-medium);
+    letter-spacing: var(--sc-type-title-medium-tracking);
   }
 
   /* The action becomes a full-width link row at the bottom. */
   :host([responsive='stack']) ::slotted(table) tbody tr > [data-type='action'] {
     order: 99;
     padding-block-start: var(--sc-space-12);
-    border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-rule);
+    border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
     text-align: start;
   }
 
@@ -801,7 +775,6 @@
     align-items: center;
     min-block-size: var(--sc-size-target-min);
     margin-block: calc(-1 * var(--sc-space-8));
-    text-decoration: none;
   }
 
   :host([responsive='stack']) ::slotted(table) tfoot tr > :empty {
@@ -812,11 +785,10 @@
   :host([responsive='stack']) .footer {
     margin-block-start: var(--sc-space-12);
     padding-inline: var(--sc-space-16);
-    border: 0;
+    border: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
     border-radius: var(--sc-radius-card);
-    background: var(--sc-color-surface);
-    box-shadow: var(--sc-elevation-1);
-  }
+    background: var(--sc-color-surface-card);
+    }
 
   /* Below 600px: scroll ------------------------------------------------------------------- */
 
@@ -842,7 +814,7 @@
     position: sticky;
     inset-inline-start: 0;
     z-index: 1;
-    background: var(--sc-color-surface);
+    background: var(--sc-color-surface-card);
   }
 
   :host([responsive='scroll']) ::slotted(table) tr > .sc-table__select ~ th[scope='row'] {
@@ -906,4 +878,5 @@
   .scroller:focus-visible {
     outline-color: Highlight;
   }
+}
 }

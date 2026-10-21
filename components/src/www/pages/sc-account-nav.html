@@ -1,0 +1,47 @@
+<h1 class="pg-title sc-type-headline-large" data-ar="تنقل الحساب">Account navigation</h1>
+<p class="pg-lede sc-type-body-large" data-ar="التنقل الجانبي في منطقة الحساب بعد تسجيل الدخول، مع الأعداد والعنصر الحالي.">
+  The side navigation of the signed-in account area, with counts and the current item.
+</p>
+
+<section class="pg-section" aria-labelledby="an-demo">
+  <h2 id="an-demo" class="sc-type-headline-small" data-ar="عمود جانبي">Side column</h2>
+  <div class="pg-card">
+    <div style="max-inline-size: 320px">
+      <sc-account-nav>
+        <a href="#applications" data-icon="description" data-ar="الطلبات">Applications</a>
+        <a href="#payments" data-icon="credit-card" aria-current="page" data-ar="المدفوعات">Payments</a>
+        <a href="#notifications" data-icon="notifications" data-count="3" data-ar="الإشعارات">Notifications</a>
+        <a href="#profile" data-icon="person" data-ar="الملف الشخصي والإعدادات">Profile and settings</a>
+        <a href="#sign-out" data-icon="logout" data-sign-out data-ar="تسجيل الخروج">Sign out</a>
+      </sc-account-nav>
+    </div>
+    <p class="pg-note" data-ar="أقل من 600 بكسل يصبح صفًا أفقيًا قابلًا للتمرير.">Below 600px it becomes one row that scrolls sideways.</p>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="an-arabic">
+  <h2 id="an-arabic" class="sc-type-headline-small" data-ar="بالعربية">In Arabic</h2>
+  <div class="pg-card" lang="ar" dir="rtl">
+    <div style="max-inline-size: 320px">
+      <sc-account-nav>
+        <a href="#a" data-icon="description">الطلبات</a>
+        <a href="#p" data-icon="credit-card">المدفوعات</a>
+        <a href="#n" data-icon="notifications" data-count="12" aria-current="page">الإشعارات</a>
+        <a href="#o" data-icon="logout" data-sign-out>تسجيل الخروج</a>
+      </sc-account-nav>
+    </div>
+    <p class="pg-note" lang="en" dir="ltr">Always lang="ar" dir="rtl": the bar and icons sit on the right; the sign-out icon mirrors.</p>
+  </div>
+</section>
+
+<section class="pg-section" aria-labelledby="an-use">
+  <h2 id="an-use" class="sc-type-headline-small" data-ar="الاستخدام">Usage</h2>
+  <div class="pg-card">
+    <code class="pg-code" dir="ltr" style="display: block; text-align: start; white-space: pre">&lt;sc-account-nav&gt;
+  &lt;a href="/en/account/applications" data-icon="description"&gt;Applications&lt;/a&gt;
+  &lt;a href="/en/account/payments" data-icon="credit-card" aria-current="page"&gt;Payments&lt;/a&gt;
+  &lt;a href="/en/account/notifications" data-icon="notifications" data-count="3" data-count-label="3 unread"&gt;Notifications&lt;/a&gt;
+  &lt;a href="/en/sign-out" data-icon="logout" data-sign-out&gt;Sign out&lt;/a&gt;
+&lt;/sc-account-nav&gt;</code>
+  </div>
+</section>

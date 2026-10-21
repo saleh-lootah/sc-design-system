@@ -43,7 +43,7 @@ const NETWORKS = {
 /* Static server with gzip, plus the generated page ---------------------------------------- */
 const TYPES = { '.js': 'text/javascript', '.css': 'text/css', '.html': 'text/html', '.woff2': 'font/woff2', '.json': 'application/json', '.map': 'application/json' };
 const template = readFileSync(join(root, 'test', 'perf', 'typical-page.html'), 'utf8');
-const CE_TAGS = ['sc-page', 'sc-skip-link', 'sc-app-bar', 'sc-language-switch', 'sc-channel-hero', 'sc-search', 'sc-container', 'sc-grid', 'sc-service-card', 'sc-footer'];
+const CE_TAGS = ['sc-page', 'sc-skip-link', 'sc-app-bar', 'sc-language-switch', 'sc-channel-hero', 'sc-search', 'sc-service-card', 'sc-footer'];
 const pageHtml = (lang, build) => {
   let html = template.replace(/<!--[\s\S]*?-->\n?/, '');
   if (lang === 'ar') {
@@ -113,10 +113,11 @@ const PROBE = () => {
   };
   document.addEventListener('DOMContentLoaded', async () => {
     const wait = async () => {
-      const els = all();
+      // CSS-only tags (sc-container, sc-grid, sc-ltr) are never defined: skip them.
+      const els = all().filter((el) => !['sc-container', 'sc-grid', 'sc-ltr'].includes(el.localName));
       await Promise.all(els.map((el) => customElements.whenDefined(el.localName).then(() => (el.componentOnReady ? el.componentOnReady() : null))));
       // Children rendered inside shadow roots may have appeared meanwhile.
-      if (all().length !== els.length) return wait();
+      if (all().filter((el) => !['sc-container', 'sc-grid', 'sc-ltr'].includes(el.localName)).length !== els.length) return wait();
       return els;
     };
     const els = await wait();

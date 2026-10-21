@@ -1,21 +1,32 @@
 import { E2EPage } from '@stencil/core/testing';
-import { expectNoAxeViolations } from '../../test/axe';
-import { contexts, newScPage, setPageContext } from '../../test/page';
+import { describeAxe, expectNoAxeViolations } from '../../test/axe';
+import { newScPage, setPageContext } from '../../test/page';
 
-function inner(page: E2EPage, selector: string, read: string) {
+function inner<T = unknown>(page: E2EPage, selector: string, read: string): Promise<T> {
   return page.evaluate(
     (sel: string, expr: string) => {
       const host = document.querySelector(sel)!;
       const control = host.shadowRoot!.querySelector('[part="control"]') as HTMLElement;
+      const label = host.shadowRoot!.querySelector('[part="label"]') as HTMLElement;
       // eslint-disable-next-line no-new-func
-      return new Function('host', 'control', `return (${expr});`)(host, control);
+      return new Function('host', 'control', 'label', `return (${expr});`)(host, control, label);
     },
     selector,
     read,
-  );
+  ) as Promise<T>;
 }
 
-const ALL_STATES = `
+const token = (page: E2EPage, name: string) =>
+  page.evaluate((n: string) => {
+    const probe = document.createElement('i');
+    probe.style.color = `var(${n})`;
+    document.body.append(probe);
+    const v = getComputedStyle(probe).color;
+    probe.remove();
+    return v;
+  }, name);
+
+export const ALL_STATES = `
   <main style="padding: 16px">
     <h1>What is your plate number?</h1>
     <sc-back-link href="#previous"></sc-back-link>
@@ -25,17 +36,31 @@ const ALL_STATES = `
   </main>`;
 
 describe('sc-back-link (e2e)', () => {
-  it('is a 44px glass pill', async () => {
+  it('is plain text and a 24px arrow in on-surface, on a 44px target with no fill', async () => {
     const page = await newScPage(`<sc-back-link href="#p"></sc-back-link>`);
     expect(Math.round(await inner(page, 'sc-back-link', 'control.getBoundingClientRect().height'))).toBe(44);
-    expect(await inner(page, 'sc-back-link', 'getComputedStyle(control).borderTopLeftRadius')).toBe('22px');
-    expect(await inner(page, 'sc-back-link', 'getComputedStyle(control).backdropFilter')).toContain('blur');
+    expect(await inner(page, 'sc-back-link', 'getComputedStyle(control).backgroundColor')).toBe('rgba(0, 0, 0, 0)');
+    expect(await inner(page, 'sc-back-link', 'getComputedStyle(control).color')).toBe(await token(page, '--sc-color-on-surface'));
+    expect(await inner(page, 'sc-back-link', 'control.querySelector("svg").getBoundingClientRect().width')).toBe(24);
+    expect(await inner(page, 'sc-back-link', 'getComputedStyle(control).fontSize')).toBe('16px');
+    expect(await inner(page, 'sc-back-link', 'getComputedStyle(control).fontWeight')).toBe('500');
+    expect(await inner(page, 'sc-back-link', 'getComputedStyle(label).textDecorationLine')).toBe('none');
+    await setPageContext(page, { lang: 'ar' });
+    expect(await inner(page, 'sc-back-link', 'getComputedStyle(control).fontSize')).toBe('18px');
+    expect(await inner(page, 'sc-back-link', 'getComputedStyle(control).fontWeight')).toBe('700');
   });
 
-  it('follows its href with Enter', async () => {
+  it('underlines the label on hover', async () => {
+    const page = await newScPage(`<sc-back-link href="#p"></sc-back-link>`);
+    await page.hover('sc-back-link');
+    expect(await inner(page, 'sc-back-link', 'getComputedStyle(label).textDecorationLine')).toBe('underline');
+  });
+
+  it('follows its href with Enter, with the U1 ring', async () => {
     const page = await newScPage(`<sc-back-link href="#previous"></sc-back-link>`);
     await page.keyboard.press('Tab');
     expect(await inner(page, 'sc-back-link', 'host.shadowRoot.activeElement === control')).toBe(true);
+    expect(await inner(page, 'sc-back-link', 'getComputedStyle(control).outlineWidth')).toBe('3px');
     await page.keyboard.press('Enter');
     await page.waitForChanges();
     expect(await page.evaluate(() => location.hash)).toBe('#previous');
@@ -63,32 +88,17 @@ describe('sc-back-link (e2e)', () => {
     expect(await name()).toBe('رجوع');
   });
 
-  it('mirrors the chevron in RTL and keeps it at the start', async () => {
+  it('mirrors the arrow in RTL and keeps it at the start', async () => {
     const page = await newScPage(`<sc-back-link></sc-back-link>`);
     expect(await inner(page, 'sc-back-link', 'getComputedStyle(control.querySelector("svg")).transform')).toBe('none');
     await setPageContext(page, { lang: 'ar' });
     expect(await inner(page, 'sc-back-link', 'getComputedStyle(control.querySelector("svg")).transform')).toBe('matrix(-1, 0, 0, 1, 0, 0)');
-    const chevronRight = await inner(page, 'sc-back-link', 'control.querySelector("svg").getBoundingClientRect().left > control.querySelector(".label").getBoundingClientRect().left');
-    expect(chevronRight).toBe(true);
+    expect(await inner(page, 'sc-back-link', 'control.querySelector("svg").getBoundingClientRect().left > label.getBoundingClientRect().left')).toBe(true);
   });
 
-  it('uses a solid surface under prefers-reduced-transparency', async () => {
-    const page = await newScPage(`<sc-back-link></sc-back-link>`);
-    // Puppeteer's emulateMediaFeatures rejects this feature name; the DevTools protocol accepts it.
-    const cdp = await (page as unknown as import('puppeteer').Page).createCDPSession();
-    await cdp.send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-transparency', value: 'reduce' }] });
-    expect(await page.evaluate(() => matchMedia('(prefers-reduced-transparency: reduce)').matches)).toBe(true);
-    expect(await inner(page, 'sc-back-link', 'getComputedStyle(control).backdropFilter')).toBe('none');
-  });
+  describeAxe('sc-back-link', ALL_STATES);
 
-  for (const ctx of contexts) {
-    it(`has no axe violations (${ctx.lang}, ${ctx.theme})`, async () => {
-      const page = await newScPage(ALL_STATES, ctx);
-      await expectNoAxeViolations(page);
-    });
-  }
-
-  it('has no axe violations on every channel', async () => {
+  it('has no axe violations with focus on every channel', async () => {
     const page = await newScPage(ALL_STATES);
     await page.keyboard.press('Tab');
     for (const channel of ['now', 'transport', 'visit', 'justice', 'build', 'invest', 'trade'] as const) {

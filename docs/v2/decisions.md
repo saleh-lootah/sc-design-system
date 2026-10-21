@@ -41,7 +41,7 @@ Where this file disagrees with `foundations.md` or `component-language.md`, this
 | Q-hero | Hero | **Flat channel-subtle (tone 95).** No gradient wash. |
 | Q-names | Component names | Keep v1 tag names where the role is unchanged. New components use the names in component-language.md part B. `sc-step-list` and `sc-channel-network` are approved. |
 | Q-conformance | library-conformance.md | It is at `docs/library-conformance.md` on the `v2` branch. |
-| Q-standard | Stale motion notes in Standard 2.0 §8.7 | S1 updates them to the current tokens (`duration-slow` 300ms; exit easing is ease-out). |
+| Q-standard | Stale motion notes in Standard 2.0 §8.7 | S1 updates them to the current tokens (`duration-slow` is **280ms**, which is inside the 200–300ms rule; exit easing is ease-out). |
 
 ## Architecture (F3) · decided by the coordinator
 
@@ -91,3 +91,27 @@ Where this file disagrees with `foundations.md` or `component-language.md`, this
 | L2 | The library ships **no logo**. `sc-site-header` takes the lockup through a `lockup` slot. Public playground pages use a neutral placeholder of the same proportions (680.84 × 274.11, emblem at the inline-end of the wordmark), labelled "Government of Dubai lockup". |
 | L3 | Paper boards may place the real lockup, since the Paper files aren't public. Use it as supplied: no recolouring, mirroring, cropping or colour conversion. Its own fills are exempt from the OKLAB rule. The lockup is not mirrored in Arabic. |
 | L4 | Still to get from the Executive Council: clear space, minimum size, the dark-background version and the link target. Until then: minimum height 40px in the header, clear space equal to the height of the wordmark's cap "G", and on dark surfaces the lockup sits on a white plate. |
+
+## Wave 2b clarifications
+
+| # | Decision |
+| --- | --- |
+| W1 | The `sc-error-summary` Arabic heading is **"توجد مشكلة"** ("There is a problem", GOV.UK wording), not "يوجد خطأ". |
+| W2 | `--sc-duration-slow` is 280ms everywhere. Paper boards and specs quote 280ms. |
+| W3 | `outline-strong` and `channel-outline` (per channel, with `-dark`) are now in the v2 Paper file. Replace any `--sc-palette-<ch>-80` stand-ins with `--sc-color-channel-<ch>-outline`. |
+| W4 | Status tags in channel colour use `channel-subtle` (95) as the fill and `channel-action` as the text. Tags that need more weight (for example, on a subtle background) use `channel-container` (90). |
+
+## UAE PASS button (supersedes U3 for UAE PASS)
+
+| # | Decision |
+| --- | --- |
+| U3a | **UAE PASS has its own standard button specification, and we follow it exactly.** "Sign in with UAE PASS" (and any "confirm with UAE PASS") uses the official UAE PASS button: its colours, fingerprint mark, label in English and Arabic, sizes, variants and dark-mode treatment. It is a brand exception: we don't restyle it, recolour it to the channel or to city indigo, or swap in our own icon. The user is supplying the official component set (DubaiNow Next has an adapted version, exception X-07, which is not the source). Until the specification arrives, components and boards use a clearly labelled placeholder: black fill, white label "Sign in with UAE PASS", a fingerprint glyph, 56px tall. It is a separate `sc-uaepass-button` (or a `uaepass` variant of `sc-button` that can't be themed), with the exact geometry to be set from the kit. |
+| U3b | **Dubai Pay and other shared hand-offs** keep U3: `sc-button` variant `handoff` in city indigo, unless Dubai Pay also has a mandated button. Ask before building one. |
+
+## Wave 2b clarifications, continued
+
+| # | Decision |
+| --- | --- |
+| W5 | Where `component-language.md` quotes a type size or leading that differs from the type role tokens (for example title-large 22/28, display-large 80/84, body-large 18/26), **the tokens win**. Components use type roles only. `component-language.md` sizes are indicative. |
+| W6 | The life-event, category and favourite tile is **`sc-tile`**, not `sc-service-tile`. Paper board 09.07 is renamed in Wave 4 (Q4). |
+| W7 | The `sc.css` budget is **9 KiB gzip** (raised from 7 KiB). The `:not(:defined)` pre-upgrade size reservations stay for every component, because CLS 0 on the typical page matters more than 2 KiB. |

@@ -1,0 +1,99 @@
+/*
+ * sc-breadcrumbs (v2, shadow DOM). Rules: docs/v2/component-language.md B6, read through
+ * the role table in docs/v2/decisions.md.
+ */
+:host {
+  display: block;
+}
+
+:host([hidden]) {
+  display: none;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 var(--sc-space-8);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font: var(--sc-type-label-medium);
+  letter-spacing: var(--sc-type-label-medium-tracking);
+  color: var(--sc-color-on-surface);
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-space-8);
+  min-inline-size: 0;
+}
+
+/* The chevron between items: 20px, decorative, mirrored in right-to-left (icon-directional). */
+.sep {
+  --icon-size: var(--sc-size-icon-m);
+  margin-inline: var(--sc-space-4);
+  color: var(--sc-color-on-surface-variant);
+}
+
+/* 10px of block padding gives each link a target taller than 24px (WCAG 2.5.8). */
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-space-4);
+  padding-block: calc(var(--sc-space-8) + var(--sc-space-2));
+  border-radius: var(--sc-radius-control);
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: text-decoration-thickness var(--sc-duration-fast) var(--sc-easing-hover);
+}
+
+.link:lang(ar) {
+  text-underline-offset: 5px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .link:hover {
+    text-decoration-thickness: 2px;
+  }
+}
+
+.current {
+  padding-block: calc(var(--sc-space-8) + var(--sc-space-2));
+  font-weight: var(--sc-font-weight-bold);
+}
+
+.back,
+.compact {
+  display: none;
+}
+
+/* Compact screens: one "Back to {parent}" link with a back chevron (mirrored in Arabic). */
+@media (width < 600px) {
+  .item:not(.item--parent) {
+    display: none;
+  }
+  .item--parent .sep,
+  .full {
+    display: none;
+  }
+  .back {
+    --icon-size: var(--sc-size-icon-m);
+    display: block;
+  }
+  .compact {
+    display: inline;
+  }
+}
+
+@media (forced-colors: active) {
+  .link {
+    color: LinkText;
+  }
+  .sep {
+    color: CanvasText;
+  }
+}

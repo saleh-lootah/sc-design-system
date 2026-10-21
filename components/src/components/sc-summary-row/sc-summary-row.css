@@ -1,14 +1,9 @@
-/* The row sits inside the value <dd> of its sc-summary-list, which sets the type. */
-:host {
-  display: block;
-  min-inline-size: 0;
-  overflow-wrap: anywhere;
-}
-
-:host([hidden]) {
-  display: none;
-}
-
-::slotted(p) {
-  margin-block: 0;
+/* sc-summary-row (v2, light DOM): the value. Layout and type come from sc-summary-list. */
+@layer sc.components {
+  :host {
+    display: block;
+  }
+  :host([hidden]) {
+    display: none;
+  }
 }

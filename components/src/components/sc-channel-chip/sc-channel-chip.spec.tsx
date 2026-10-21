@@ -48,3 +48,11 @@ describe('sc-channel-chip (spec)', () => {
     expect(chip(custom).textContent).toBe('Start on Invest in Dubai');
   });
 });
+
+describe('sc-channel-chip variants (spec)', () => {
+  it('is subtle by default and outlined on request', async () => {
+    const page = await newSpecPage({ components: [ScChannelChip], html: `<sc-channel-chip channel="visit"></sc-channel-chip><sc-channel-chip id="o" channel="visit" variant="outlined"></sc-channel-chip>` });
+    expect(chip(page.body.querySelector('sc-channel-chip')!)).not.toHaveClass('chip--outlined');
+    expect(chip(page.body.querySelector('#o')!)).toHaveClass('chip--outlined');
+  });
+});
