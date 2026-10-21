@@ -169,3 +169,19 @@ Props and slots unchanged. New: the sticky-header scroll padding also follows `s
 ### Strings
 
 Channel names in the switcher, footer, network strip and app bar come from `src/i18n/components/common.ts` (Standard 3.1) through `channelStrings()` in `src/i18n/components/channels.ts`, which also holds the one-line descriptors.
+
+## C2 · Actions and navigation (Wave 2b)
+
+All shadow DOM, as architecture §3.1 says for links and chrome. Full detail in each `components/specs/<tag>.md`.
+
+| Tag | Change from v1 |
+| --- | --- |
+| `sc-link` | `standalone` is label-large Bold with an `arrow-forward` icon (was label-m with a chevron). No visited colour (D8) and no colour change on hover: the underline goes from 1px to 2px. New `--sc-link-color` hook for the footer and error summary. For links in running text, use `<a class="sc-link">` (A4). |
+| `sc-back-link` | Plain text and a 24px `arrow-back` icon on a 44px target; the glass pill is gone. `appearance` is deprecated and ignored. |
+| `sc-skip-link` | A 48px `inverse-surface` block with 4px corners. API unchanged; `href` defaults to `#main-content`. |
+| `sc-language-switch` | `appearance` is `inline` (default, app bar) or `header` (site header, with a globe). `glass` maps to `inline` and `plain` to `header`. The language name is now a light-DOM `<span lang>` child written by the component and slotted, so it takes its own script's type role; tests that read `shadowRoot` text should read the accessible name or `[data-sc-language-name]`. New part `icon`. |
+| `sc-channel-chip` | New `variant`: `subtle` (default) or `outlined`. 32px tall with 6px corners and a 44px hit area on links; no hover fill or press scale. |
+| `sc-breadcrumbs` (new) | Write the trail as plain children (`<a>` per ancestor, then the current page as text). |
+| `sc-pagination` (new) | Replaces hand-built Previous / Next links and the "Showing 1–20 of 1,284" lines in `sc-table` footers. |
+| `sc-account-nav` (new) | Plain child links with `data-icon`, `data-count`, `data-count-label`, `data-sign-out` and `aria-current`. |
+| `sc-bottom-nav` (new) | Plain child links with `data-icon` and `aria-current`. `sc.css` reserves its height below 1024px; remove any page padding you added for a v1 floating capsule. |

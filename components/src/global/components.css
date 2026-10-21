@@ -87,6 +87,8 @@ sc-utility-bar:not(:defined) {
    (CHR-05, WCAG 2.4.11). sc-page pads its end by the same amount. */
 :root {
   scroll-padding-block-end: var(--sc-utility-bar-block-size, 0px);
+}
+
 /* C2 navigation. Shadow components whose items are plain child links: before upgrade the
    links show as a simple list at about their final size. */
 sc-breadcrumbs:not(:defined) {
