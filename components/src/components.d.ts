@@ -17,12 +17,12 @@ import { StringsInput } from "./components/sc-table/overrides";
 import { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
 import { LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
 import { ScSearchDetail } from "./components/sc-search/sc-search";
+import { HeadingLevel as HeadingLevel1 } from "./components/sc-text-input/field";
 import { ServiceCardHeadingLevel } from "./components/sc-service-card/sc-service-card";
 import { StatusTagTone } from "./components/sc-status-tag/sc-status-tag";
 import { SummaryListAppearance } from "./components/sc-summary-list/sc-summary-list";
 import { SortDirection } from "./components/sc-table/sc-table";
 import { TextInputType, TextInputWidth } from "./components/sc-text-input/sc-text-input";
-import { HeadingLevel as HeadingLevel1 } from "./components/sc-text-input/field";
 export { ButtonIconPosition, ButtonSize, ButtonType, ButtonVariant } from "./components/sc-button/sc-button";
 export { IconName } from "./icons/index";
 export { CalloutHeadingLevel, CalloutTone } from "./components/sc-callout/sc-callout";
@@ -35,12 +35,12 @@ export { StringsInput } from "./components/sc-table/overrides";
 export { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
 export { LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
 export { ScSearchDetail } from "./components/sc-search/sc-search";
+export { HeadingLevel as HeadingLevel1 } from "./components/sc-text-input/field";
 export { ServiceCardHeadingLevel } from "./components/sc-service-card/sc-service-card";
 export { StatusTagTone } from "./components/sc-status-tag/sc-status-tag";
 export { SummaryListAppearance } from "./components/sc-summary-list/sc-summary-list";
 export { SortDirection } from "./components/sc-table/sc-table";
 export { TextInputType, TextInputWidth } from "./components/sc-text-input/sc-text-input";
-export { HeadingLevel as HeadingLevel1 } from "./components/sc-text-input/field";
 export namespace Components {
     /**
      * The top bar of every mobile screen and desktop page: a translucent glass bar with a
@@ -842,9 +842,11 @@ export namespace Components {
     }
     /**
      * One choice from a list too long for radios, such as the emirate that issued a plate.
-     * A native `<select>` inside the shadow root, styled like `sc-text-input`, with a chevron.
-     * Write the options as light-DOM `<option>` (and `<optgroup>`) children: they are copied
-     * into the inner select and kept in sync when they change. Form-associated and delegates focus.
+     * v2 renders a native `<select>` in light DOM (Stencil `scoped`, decision A2), styled like
+     * `sc-text-input` with an `expand_more` chevron. Write the options as `<option>` (and
+     * `<optgroup>`) children: they are moved INTO the native select, so they are the real options
+     * (no copies), and options added later are moved in too. The select submits, resets, validates
+     * and follows `<fieldset disabled>` natively; `focus()` on the host reaches it.
      */
     interface ScSelect {
         /**
@@ -863,13 +865,13 @@ export namespace Components {
         /**
           * When set (1–6), the label is also the page heading at this level.
          */
-        "headingLevel"?: HeadingLevel;
+        "headingLevel"?: HeadingLevel1;
         /**
           * Help text below the label.
          */
         "hint"?: string;
         /**
-          * The visible label: "Issuing emirate".
+          * The visible label: "Issuing authority".
          */
         "label"?: string;
         /**
@@ -1733,9 +1735,11 @@ declare global {
     }
     /**
      * One choice from a list too long for radios, such as the emirate that issued a plate.
-     * A native `<select>` inside the shadow root, styled like `sc-text-input`, with a chevron.
-     * Write the options as light-DOM `<option>` (and `<optgroup>`) children: they are copied
-     * into the inner select and kept in sync when they change. Form-associated and delegates focus.
+     * v2 renders a native `<select>` in light DOM (Stencil `scoped`, decision A2), styled like
+     * `sc-text-input` with an `expand_more` chevron. Write the options as `<option>` (and
+     * `<optgroup>`) children: they are moved INTO the native select, so they are the real options
+     * (no copies), and options added later are moved in too. The select submits, resets, validates
+     * and follows `<fieldset disabled>` natively; `focus()` on the host reaches it.
      */
     interface HTMLScSelectElement extends Components.ScSelect, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScSelectElementEventMap>(type: K, listener: (this: HTMLScSelectElement, ev: ScSelectCustomEvent<HTMLScSelectElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -2822,9 +2826,11 @@ declare namespace LocalJSX {
     }
     /**
      * One choice from a list too long for radios, such as the emirate that issued a plate.
-     * A native `<select>` inside the shadow root, styled like `sc-text-input`, with a chevron.
-     * Write the options as light-DOM `<option>` (and `<optgroup>`) children: they are copied
-     * into the inner select and kept in sync when they change. Form-associated and delegates focus.
+     * v2 renders a native `<select>` in light DOM (Stencil `scoped`, decision A2), styled like
+     * `sc-text-input` with an `expand_more` chevron. Write the options as `<option>` (and
+     * `<optgroup>`) children: they are moved INTO the native select, so they are the real options
+     * (no copies), and options added later are moved in too. The select submits, resets, validates
+     * and follows `<fieldset disabled>` natively; `focus()` on the host reaches it.
      */
     interface ScSelect {
         /**
@@ -2841,19 +2847,15 @@ declare namespace LocalJSX {
          */
         "error"?: string;
         /**
-          * The `id` of a `<form>` element to associate this element with.
-         */
-        "form"?: string;
-        /**
           * When set (1–6), the label is also the page heading at this level.
          */
-        "headingLevel"?: HeadingLevel;
+        "headingLevel"?: HeadingLevel1;
         /**
           * Help text below the label.
          */
         "hint"?: string;
         /**
-          * The visible label: "Issuing emirate".
+          * The visible label: "Issuing authority".
          */
         "label"?: string;
         /**
@@ -2861,7 +2863,7 @@ declare namespace LocalJSX {
          */
         "name"?: string;
         /**
-          * Fires when the selection changes with `{ value }`. A native `change` (and `input`) also reach the host.
+          * Fires when the selection changes with `{ value }`. The native `change` and `input` events also bubble.
          */
         "onScChange"?: (event: ScSelectCustomEvent<{ value: string }>) => void;
         /**
@@ -3799,9 +3801,11 @@ declare module "@stencil/core" {
             "sc-search": LocalJSX.IntrinsicElements["sc-search"] & JSXBase.HTMLAttributes<HTMLScSearchElement>;
             /**
              * One choice from a list too long for radios, such as the emirate that issued a plate.
-             * A native `<select>` inside the shadow root, styled like `sc-text-input`, with a chevron.
-             * Write the options as light-DOM `<option>` (and `<optgroup>`) children: they are copied
-             * into the inner select and kept in sync when they change. Form-associated and delegates focus.
+             * v2 renders a native `<select>` in light DOM (Stencil `scoped`, decision A2), styled like
+             * `sc-text-input` with an `expand_more` chevron. Write the options as `<option>` (and
+             * `<optgroup>`) children: they are moved INTO the native select, so they are the real options
+             * (no copies), and options added later are moved in too. The select submits, resets, validates
+             * and follows `<fieldset disabled>` natively; `focus()` on the host reaches it.
              */
             "sc-select": LocalJSX.IntrinsicElements["sc-select"] & JSXBase.HTMLAttributes<HTMLScSelectElement>;
             /**

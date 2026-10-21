@@ -1,61 +1,30 @@
-import { AttachInternals, Component, Element, Event, EventEmitter, Host, Prop, State, Watch, forceUpdate, h } from '@stencil/core';
-import { LocaleController } from '../../i18n/locale';
-import { ChevronForward } from '../../icons/index'; // explicit /index: enables SVG rendering for this component (see CONTRIBUTING)
-import { FieldError, FieldHint, FieldLabel, HeadingLevel, IDS, describedBy, emitNativeChange, hasSlotted, headingLevel, mirrorValidity, formSupported } from '../sc-text-input/field-v1';
+import { Component, Element, Event, EventEmitter, Host, Prop, State, Watch, h } from '@stencil/core';
+import { LocaleController } from '../../i18n/controller';
+import { ExpandMore, FieldError, FieldHint, FieldLabel, HeadingLevel, Slotted, adoptChildren, describedBy, forwardFocus, headingLevel, nextId, onFormReset, takeSlotted, withField } from '../sc-text-input/field';
 
-interface OptionData {
-  value: string;
-  text: string;
-  disabled: boolean;
-  selected: boolean;
-}
-
-interface GroupData {
-  label: string;
-  disabled: boolean;
-  options: OptionData[];
-}
-
-function readOption(o: Element): OptionData {
-  const text = (o.textContent ?? '').replace(/\s+/g, ' ').trim();
-  return {
-    value: o.hasAttribute('value') ? o.getAttribute('value')! : text,
-    text: o.getAttribute('label') ?? text,
-    disabled: o.hasAttribute('disabled'),
-    selected: o.hasAttribute('selected'),
-  };
-}
+const strings = withField();
+const isOption = (el: Element) => el.localName === 'option' || el.localName === 'optgroup';
 
 /**
  * One choice from a list too long for radios, such as the emirate that issued a plate.
  *
- * A native `<select>` inside the shadow root, styled like `sc-text-input`, with a chevron.
- * Write the options as light-DOM `<option>` (and `<optgroup>`) children: they are copied
- * into the inner select and kept in sync when they change. Form-associated and delegates focus.
+ * v2 renders a native `<select>` in light DOM (Stencil `scoped`, decision A2), styled like
+ * `sc-text-input` with an `expand_more` chevron. Write the options as `<option>` (and
+ * `<optgroup>`) children: they are moved INTO the native select, so they are the real options
+ * (no copies), and options added later are moved in too. The select submits, resets, validates
+ * and follows `<fieldset disabled>` natively; `focus()` on the host reaches it.
  *
- * @slot label - Rich label content, instead of the `label` prop.
- * @slot hint - Rich hint content, instead of the `hint` prop.
- * @slot error - Rich error content, instead of the `error` prop.
- *
- * @part field - The field group (gets the error bar).
- * @part label - The `<label>`.
- * @part hint - The hint.
- * @part error - The error message.
- * @part frame - The bordered box around the select.
- * @part control - The native `<select>`.
+ * @slot - `<option>` and `<optgroup>` elements.
  */
 @Component({
   tag: 'sc-select',
-  styleUrl: 'sc-select.css',
-  shadow: { delegatesFocus: true },
-  formAssociated: true,
+  styleUrls: ['../sc-text-input/field.css', 'sc-select.css'],
+  scoped: true,
 })
 export class ScSelect {
   @Element() el!: HTMLElement;
 
-  @AttachInternals() internals!: ElementInternals;
-
-  /** The visible label: "Issuing emirate". */
+  /** The visible label: "Issuing authority". */
   @Prop() label?: string;
 
   /** Help text below the label. */
@@ -85,152 +54,94 @@ export class ScSelect {
   /** When set (1–6), the label is also the page heading at this level. */
   @Prop() headingLevel?: HeadingLevel;
 
-  /** Fires when the selection changes with `{ value }`. A native `change` (and `input`) also reach the host. */
+  /** Fires when the selection changes with `{ value }`. The native `change` and `input` events also bubble. */
   @Event({ bubbles: true, composed: true }) scChange!: EventEmitter<{ value: string }>;
 
-  @State() formDisabled = false;
-  @State() slots = { label: false, hint: false, error: false };
+  @State() slotted: Slotted = {};
 
+  private uid = nextId('sc-select');
   private select?: HTMLSelectElement;
-  private defaultValue = '';
   private observer?: MutationObserver;
-  private locale = new LocaleController(this);
+  private locale = new LocaleController(this, strings);
+  private stopReset?: () => void;
 
   connectedCallback() {
     this.locale.connect();
-    this.readSlots();
-    if (typeof MutationObserver !== 'undefined') {
-      this.observer = new MutationObserver(() => {
-        this.readSlots();
-        forceUpdate(this);
-      });
-      this.observer.observe(this.el, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['value', 'label', 'disabled', 'selected'] });
-    }
-  }
-
-  componentDidLoad() {
-    // slotchange bubbles to the shadow root but not past it.
-    this.el.shadowRoot?.addEventListener('slotchange', this.readSlots);
+    this.slotted = takeSlotted(this.el, ['label', 'hint', 'error'], this.slotted);
+    forwardFocus(this.el, () => this.select);
+    this.stopReset = onFormReset(this.el, () => (this.value = this.select?.value ?? ''));
+    this.observer = adoptChildren(this.el, () => this.select, isOption, () => this.syncValue());
   }
 
   disconnectedCallback() {
     this.locale.disconnect();
+    this.stopReset?.();
     this.observer?.disconnect();
   }
 
-  componentWillLoad() {
-    if (this.value == null) {
-      const options = this.options();
-      this.value = (options.find((o) => o.selected) ?? options[0])?.value ?? '';
+  componentDidLoad() {
+    const select = this.select;
+    if (!select?.options) return; // the spec-test DOM has no HTMLSelectElement API
+    // Moving the options in can leave the last one selected; choose as the parser would:
+    // the option with `selected`, else the first enabled one.
+    const options = Array.from(select.options);
+    const initial = options.find((o) => o.defaultSelected) ?? options.find((o) => !o.disabled);
+    if (initial) initial.selected = true;
+    if (this.value != null) {
+      // A `value` set on the host chooses the option and becomes what a reset restores.
+      const match = Array.from(select.options).find((o) => o.value === this.value);
+      if (match && !Array.from(select.options).some((o) => o.defaultSelected)) match.defaultSelected = true;
     }
-    this.defaultValue = this.value;
-  }
-
-  componentDidRender() {
-    // Set after the options exist, so the inner select always shows `value`.
-    if (this.select && this.select.value !== this.value) this.select.value = this.value ?? '';
-    if (!formSupported()) return;
-    this.internals?.setFormValue?.(this.value ?? '');
-    mirrorValidity(this.internals, this.select);
+    this.syncValue();
   }
 
   @Watch('value')
   onValueChange() {
-    if (this.select && this.select.value !== (this.value ?? '')) this.select.value = this.value ?? '';
+    this.syncValue();
   }
 
-  formDisabledCallback(disabled: boolean) {
-    this.formDisabled = disabled;
+  /** Shows `value` in the select, or adopts the select's own choice when `value` is unset. */
+  private syncValue() {
+    const select = this.select;
+    if (!select?.options) return;
+    if (this.value == null) this.value = select.value;
+    else if (select.value !== this.value) select.value = this.value;
   }
-
-  formResetCallback() {
-    this.value = this.defaultValue;
-  }
-
-  formStateRestoreCallback(state: string | null) {
-    if (typeof state === 'string') this.value = state;
-  }
-
-  /** Light-DOM options in order, flattened. */
-  private options(): OptionData[] {
-    return this.groups().flatMap((g) => g.options);
-  }
-
-  /** Light-DOM `<option>` and `<optgroup>` children. Loose options get a group with no label. */
-  private groups(): GroupData[] {
-    const groups: GroupData[] = [];
-    for (const child of Array.from(this.el.children)) {
-      const tag = child.localName;
-      if (tag === 'option') {
-        const last = groups[groups.length - 1];
-        if (last && !last.label) last.options.push(readOption(child));
-        else groups.push({ label: '', disabled: false, options: [readOption(child)] });
-      } else if (tag === 'optgroup') {
-        groups.push({
-          label: child.getAttribute('label') ?? '',
-          disabled: child.hasAttribute('disabled'),
-          options: Array.from(child.children).filter((o) => o.localName === 'option').map(readOption),
-        });
-      }
-    }
-    return groups;
-  }
-
-  private readSlots = () => {
-    const next = { label: hasSlotted(this.el, 'label'), hint: hasSlotted(this.el, 'hint'), error: hasSlotted(this.el, 'error') };
-    if (JSON.stringify(next) !== JSON.stringify(this.slots)) this.slots = next;
-  };
 
   private onChange = (ev: Event) => {
     this.value = (ev.target as HTMLSelectElement).value;
     this.scChange.emit({ value: this.value });
-    emitNativeChange(this.el);
   };
-
-  private renderOption = (o: OptionData) => (
-    <option value={o.value} disabled={o.disabled} selected={o.value === this.value}>
-      {o.text}
-    </option>
-  );
 
   render() {
     const { t } = this.locale;
-    const hasHint = !!this.hint || this.slots.hint;
-    const hasError = !!this.error || this.slots.error;
-    const disabled = this.disabled || this.formDisabled;
+    const id = this.uid;
+    const { slotted } = this;
+    const hasHint = !!this.hint || !!slotted.hint;
+    const hasError = !!this.error || !!slotted.error;
 
     return (
       <Host>
-        <div class={{ 'field': true, 'field--error': hasError }} part="field">
-          <FieldLabel text={this.label} optional={this.optional} optionalText={t('optional')} level={headingLevel(this.headingLevel)} as="label" htmlFor={IDS.control} />
-          <FieldHint text={this.hint} show={hasHint} />
-          <FieldError text={this.error} show={hasError} prefix={t('errorPrefix')} />
-          <div class={{ 'frame': true, 'frame--select': true, 'frame--error': hasError, 'frame--disabled': disabled }} part="frame">
+        <div class={{ 'sc-field': true, 'sc-field--error': hasError }}>
+          <FieldLabel id={`${id}-label`} htmlFor={`${id}-control`} text={this.label} rich={slotted.label} optional={this.optional} optionalText={t('fieldOptional')} level={headingLevel(this.headingLevel)} as="label" />
+          <FieldHint id={`${id}-hint`} text={this.hint} rich={slotted.hint} show={hasHint} />
+          <FieldError id={`${id}-error`} text={this.error} rich={slotted.error} show={hasError} prefix={t('fieldErrorPrefix')} />
+          <div class={{ 'sc-field__frame': true, 'sc-select__frame': true, 'sc-field__frame--error': hasError }}>
             <select
               ref={(el) => (this.select = el)}
-              id={IDS.control}
-              class="control"
-              part="control"
+              id={`${id}-control`}
+              class="sc-field__control sc-select__control"
+              name={this.name}
               required={this.required}
-              disabled={disabled}
+              disabled={this.disabled}
               autoComplete={this.autocomplete}
-              aria-describedby={describedBy(hasHint && IDS.hint, hasError && IDS.error)}
+              aria-describedby={describedBy(hasHint && `${id}-hint`, hasError && `${id}-error`)}
               aria-invalid={hasError ? 'true' : undefined}
               onChange={this.onChange}
             >
-              {this.groups().map((g) =>
-                g.label ? (
-                  <optgroup label={g.label} disabled={g.disabled}>
-                    {g.options.map(this.renderOption)}
-                  </optgroup>
-                ) : (
-                  g.options.map(this.renderOption)
-                ),
-              )}
+              <slot />
             </select>
-            <span class="chevron" aria-hidden="true">
-              <ChevronForward />
-            </span>
+            <ExpandMore class="sc-select__chevron" />
           </div>
         </div>
       </Host>

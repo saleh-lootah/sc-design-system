@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-21T14:22:39",
+  "timestamp": "2026-10-21T14:23:27",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.45.2",
@@ -5465,46 +5465,14 @@
     },
     {
       "filePath": "src/components/sc-select/sc-select.tsx",
-      "encapsulation": "shadow",
+      "encapsulation": "scoped",
       "tag": "sc-select",
       "readme": "# sc-select\n\nOne choice from a list that's too long for radios, such as the issuing authority of a plate or an inspection centre. Use `sc-radio-group` when there are about 7 options or fewer: radios show every option without opening anything. Avoid selects for answers people know by heart (like a country); a text input with autocomplete is often easier.\n\n## Usage\n\n```html\n<sc-select name=\"emirate\" label=\"Issuing authority\" value=\"dubai\">\n  <option value=\"dubai\">Dubai</option>\n  <option value=\"abu-dhabi\">Abu Dhabi</option>\n  <option value=\"sharjah\">Sharjah</option>\n</sc-select>\n```\n\n- A native `<select>` inside the shadow root, styled like `sc-text-input` (54px, field radius, 1.5px control border) with a chevron at the end that points down in both directions.\n- **Options are light-DOM `<option>` and `<optgroup>` children.** A native select can't render slotted options, so the component copies them into its inner select and keeps them in sync (a `MutationObserver` watches additions, removals, text and `value`/`label`/`disabled`/`selected`). Changing an option's text, for example when the page switches language, updates the list.\n- **Value:** `value` picks the option; otherwise `<option selected>`, else the first option.\n- **Required:** add a first option with `value=\"\"` (\"Select an inspection centre\") and `required`; the field reports `valueMissing` until a real option is chosen. Don't add an empty first option to a select that already has a sensible default.\n- Label, hint, `optional`, `error`, form association and focus delegation work as in `sc-text-input`. `change` is re-dispatched on the host and `scChange` carries `{ value }`.\n",
-      "docs": "One choice from a list too long for radios, such as the emirate that issued a plate.\n\nA native `<select>` inside the shadow root, styled like `sc-text-input`, with a chevron.\nWrite the options as light-DOM `<option>` (and `<optgroup>`) children: they are copied\ninto the inner select and kept in sync when they change. Form-associated and delegates focus.",
+      "docs": "One choice from a list too long for radios, such as the emirate that issued a plate.\n\nv2 renders a native `<select>` in light DOM (Stencil `scoped`, decision A2), styled like\n`sc-text-input` with an `expand_more` chevron. Write the options as `<option>` (and\n`<optgroup>`) children: they are moved INTO the native select, so they are the real options\n(no copies), and options added later are moved in too. The select submits, resets, validates\nand follows `<fieldset disabled>` natively; `focus()` on the host reaches it.",
       "docsTags": [
         {
           "name": "slot",
-          "text": "label - Rich label content, instead of the `label` prop."
-        },
-        {
-          "name": "slot",
-          "text": "hint - Rich hint content, instead of the `hint` prop."
-        },
-        {
-          "name": "slot",
-          "text": "error - Rich error content, instead of the `error` prop."
-        },
-        {
-          "name": "part",
-          "text": "field - The field group (gets the error bar)."
-        },
-        {
-          "name": "part",
-          "text": "label - The `<label>`."
-        },
-        {
-          "name": "part",
-          "text": "hint - The hint."
-        },
-        {
-          "name": "part",
-          "text": "error - The error message."
-        },
-        {
-          "name": "part",
-          "text": "frame - The bordered box around the select."
-        },
-        {
-          "name": "part",
-          "text": "control - The native `<select>`."
+          "text": "- `<option>` and `<optgroup>` elements."
         }
       ],
       "usage": {},
@@ -5599,8 +5567,8 @@
             "references": {
               "HeadingLevel": {
                 "location": "import",
-                "path": "../sc-text-input/field-v1",
-                "id": "src/components/sc-text-input/field-v1.tsx::HeadingLevel",
+                "path": "../sc-text-input/field",
+                "id": "src/components/sc-text-input/field.tsx::HeadingLevel",
                 "referenceLocation": "HeadingLevel"
               }
             }
@@ -5681,7 +5649,7 @@
           "mutable": false,
           "attr": "label",
           "reflectToAttr": false,
-          "docs": "The visible label: \"Issuing emirate\".",
+          "docs": "The visible label: \"Issuing authority\".",
           "docsTags": [],
           "values": [
             {
@@ -5820,7 +5788,7 @@
           },
           "cancelable": true,
           "composed": true,
-          "docs": "Fires when the selection changes with `{ value }`. A native `change` (and `input`) also reach the host.",
+          "docs": "Fires when the selection changes with `{ value }`. The native `change` and `input` events also bubble.",
           "docsTags": []
         }
       ],
@@ -5828,44 +5796,11 @@
       "styles": [],
       "slots": [
         {
-          "name": "error",
-          "docs": "Rich error content, instead of the `error` prop."
-        },
-        {
-          "name": "hint",
-          "docs": "Rich hint content, instead of the `hint` prop."
-        },
-        {
-          "name": "label",
-          "docs": "Rich label content, instead of the `label` prop."
+          "name": "",
+          "docs": "`<option>` and `<optgroup>` elements."
         }
       ],
-      "parts": [
-        {
-          "name": "control",
-          "docs": "The native `<select>`."
-        },
-        {
-          "name": "error",
-          "docs": "The error message."
-        },
-        {
-          "name": "field",
-          "docs": "The field group (gets the error bar)."
-        },
-        {
-          "name": "frame",
-          "docs": "The bordered box around the select."
-        },
-        {
-          "name": "hint",
-          "docs": "The hint."
-        },
-        {
-          "name": "label",
-          "docs": "The `<label>`."
-        }
-      ],
+      "parts": [],
       "states": [],
       "dependents": [],
       "dependencies": [],

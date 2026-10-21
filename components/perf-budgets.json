@@ -3,7 +3,8 @@
   "enforce": [
     "sc-button",
     "sc-text-input",
-    "sc-textarea"
+    "sc-textarea",
+    "sc-select"
   ],
   "coreGzip": 14336,
   "globalCssGzip": 7168,

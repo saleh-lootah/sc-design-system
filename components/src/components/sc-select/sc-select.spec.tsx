@@ -1,46 +1,32 @@
 import { newSpecPage } from '@stencil/core/testing';
 import { ScSelect } from './sc-select';
 
-const root = (el: Element) => el.shadowRoot!;
+const render = (html: string) => newSpecPage({ components: [ScSelect], html });
+const q = (page: { body: HTMLElement }, css: string) => page.body.querySelector(`sc-select ${css}`) as HTMLElement;
 
 describe('sc-select (spec)', () => {
-  it('copies light-DOM options into a native select inside the shadow root', async () => {
-    const page = await newSpecPage({
-      components: [ScSelect],
-      html: `<sc-select label="Issuing authority" value="sharjah"><option value="dubai">Dubai</option><option value="sharjah">Sharjah</option></sc-select>`,
-    });
-    const r = root(page.root!);
-    const options = Array.from(r.querySelectorAll('select option'));
-    expect(options.map((o) => o.textContent)).toEqual(['Dubai', 'Sharjah']);
-    expect(options.map((o) => o.getAttribute('value'))).toEqual(['dubai', 'sharjah']);
-    expect(options[1].hasAttribute('selected')).toBe(true);
-    expect(r.querySelector('label')!.getAttribute('for')).toBe('control');
-    expect(r.querySelector('select')!.id).toBe('control');
+  it('renders a labelled native select in light DOM with the chevron', async () => {
+    const page = await render(`<sc-select label="Issuing authority" name="emirate"><option value="dubai">Dubai</option></sc-select>`);
+    expect(page.root!.shadowRoot).toBeNull();
+    const select = q(page, 'select');
+    expect(q(page, 'label').getAttribute('for')).toBe(select.id);
+    expect(select.getAttribute('name')).toBe('emirate');
+    expect(q(page, '.sc-select__chevron')).not.toBeNull();
+    expect(q(page, '.sc-select__chevron').getAttribute('aria-hidden')).toBe('true');
   });
 
-  it('defaults to the selected option, else the first', async () => {
-    const first = await newSpecPage({ components: [ScSelect], html: `<sc-select label="A"><option value="a">A</option><option value="b">B</option></sc-select>` });
-    expect((first.root as HTMLElement & { value: string }).value).toBe('a');
-    const selected = await newSpecPage({ components: [ScSelect], html: `<sc-select label="A"><option value="a">A</option><option value="b" selected>B</option></sc-select>` });
-    expect((selected.root as HTMLElement & { value: string }).value).toBe('b');
+  it('wires hint and error and marks the error', async () => {
+    const page = await render(`<sc-select label="Centre" hint="Nearest to you" error="Select a centre" required><option value="">Select</option></sc-select>`);
+    const select = q(page, 'select');
+    expect(select.getAttribute('aria-describedby')).toBe(`${q(page, '.sc-field__hint').id} ${q(page, '.sc-field__error').id}`);
+    expect(select.getAttribute('aria-invalid')).toBe('true');
+    expect(select.hasAttribute('required')).toBe(true);
+    expect(q(page, '.sc-field__frame')).toHaveClass('sc-field__frame--error');
   });
 
-  it('keeps optgroups', async () => {
-    const page = await newSpecPage({
-      components: [ScSelect],
-      html: `<sc-select label="Centre"><option value="">Select a centre</option><optgroup label="Dubai"><option value="al-quoz">Al Quoz</option></optgroup></sc-select>`,
-    });
-    const group = root(page.root!).querySelector('optgroup')!;
-    expect(group.getAttribute('label')).toBe('Dubai');
-    expect(group.querySelector('option')!.textContent).toBe('Al Quoz');
-  });
-
-  it('shows the error state and a chevron', async () => {
-    const page = await newSpecPage({ components: [ScSelect], html: `<sc-select label="Centre" error="Select an inspection centre"><option value="">Select</option></sc-select>` });
-    const r = root(page.root!);
-    expect(r.querySelector('select')!.getAttribute('aria-invalid')).toBe('true');
-    expect(r.querySelector('select')!.getAttribute('aria-describedby')).toBe('error');
-    expect(r.querySelector('.chevron svg')).not.toBeNull();
-    expect(r.querySelector('.chevron')!.getAttribute('aria-hidden')).toBe('true');
+  it('uses the Arabic strings', async () => {
+    const page = await render(`<div lang="ar"><sc-select label="جهة الإصدار" optional error="يُرجى اختيار جهة الإصدار"><option>دبي</option></sc-select></div>`);
+    expect(q(page, '.sc-field__optional').textContent).toBe(' (اختياري)');
+    expect(q(page, '.sc-field__error .visually-hidden').textContent).toBe('خطأ: ');
   });
 });
