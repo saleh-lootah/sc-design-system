@@ -82,3 +82,12 @@ Where this file disagrees with `foundations.md` or `component-language.md`, this
 | `{tone}`, `on-{tone}`, `{tone}-container` | The same names | Error, success, warning, info |
 | `{tone}-outline-variant` | `outline-variant` | |
 | `shadow-2` (popovers, menus) / `shadow-3` (modals, sheets) | `elevation-2` | Sticky bars and the utility bar use `elevation-1` (U4) |
+
+## Government of Dubai lockup
+
+| # | Decision |
+| --- | --- |
+| L1 | The official lockup comes from The Executive Council website and is stored **outside the repository**, at `/Users/saleh/Developer/Claude Workspace/sc-ux-standards/brand/government-of-dubai-lockup.svg` (see that folder's README). It is never committed to the public repo or published on GitHub Pages until the initiative has the usage manual or approval required by Law No. (1) of 2025. |
+| L2 | The library ships **no logo**. `sc-site-header` takes the lockup through a `lockup` slot. Public playground pages use a neutral placeholder of the same proportions (680.84 × 274.11, emblem at the inline-end of the wordmark), labelled "Government of Dubai lockup". |
+| L3 | Paper boards may place the real lockup, since the Paper files aren't public. Use it as supplied: no recolouring, mirroring, cropping or colour conversion. Its own fills are exempt from the OKLAB rule. The lockup is not mirrored in Arabic. |
+| L4 | Still to get from the Executive Council: clear space, minimum size, the dark-background version and the link target. Until then: minimum height 40px in the header, clear space equal to the height of the wordmark's cap "G", and on dark surfaces the lockup sits on a white plate. |
