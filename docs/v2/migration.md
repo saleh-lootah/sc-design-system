@@ -10,7 +10,7 @@ Sources: `foundations.md` §12 (full token map), `architecture.md` §4, `decisio
 | --- | --- | --- |
 | Stylesheet | `dist/sc-components/sc-components.css` (tokens, fonts, body) | **`dist/sc-components/sc.css`**: tokens, fonts, base, light-DOM component styles and helpers, in cascade layers |
 | Script | `dist/sc-components/sc-components.esm.js` | the same (lazy loader), or per-tag imports from `dist/components/` (the primary build for applications) |
-| Fonts | 4 full files, 63–64 KiB each, as 4 families | 6 subset files, 21–30 KiB each, one family `Dubai W23` |
+| Fonts | 4 full files, 63–64 KiB each, as 4 families | 6 subset files, 21–30 KiB each, one family `Dubai W23`, plus two 3–6 KiB faces that hold only the language switch's "العربية" and "English" |
 
 `sc-components.css` still exists, but in v2 it holds only the shared helpers that Stencil adopts into shadow roots. A page that links only that file gets no tokens. Link `sc.css` instead:
 

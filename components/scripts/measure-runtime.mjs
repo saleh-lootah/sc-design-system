@@ -13,12 +13,10 @@
  *
  * The browser is Helium (Chromium); never Chrome. Override with SC_BROWSER=/path/to/chromium.
  */
-import { createServer } from 'node:http';
-import { readFileSync, existsSync, statSync } from 'node:fs';
-import { join, dirname, extname, normalize } from 'node:path';
+import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { gzipSync } from 'node:zlib';
 import puppeteer from 'puppeteer';
+import { serveTypicalPage } from './lib/typical-page.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, '..');
@@ -40,53 +38,8 @@ const NETWORKS = {
   fast3g: { offline: false, latency: 562.5, downloadThroughput: (1.44 * 1024 * 1024) / 8, uploadThroughput: (675 * 1024) / 8 },
 };
 
-/* Static server with gzip, plus the generated page ---------------------------------------- */
-const TYPES = { '.js': 'text/javascript', '.css': 'text/css', '.html': 'text/html', '.woff2': 'font/woff2', '.json': 'application/json', '.map': 'application/json' };
-const template = readFileSync(join(root, 'test', 'perf', 'typical-page.html'), 'utf8');
-const CE_TAGS = ['sc-page', 'sc-skip-link', 'sc-app-bar', 'sc-language-switch', 'sc-channel-hero', 'sc-search', 'sc-service-card', 'sc-footer'];
-// The documented page snippet: modulepreload for the runtime core and the page-shell bundle
-// (scripts/build-preload.mjs writes the list after each build).
-const preloadFile = join(root, 'dist', 'sc-components', 'sc-preload.json');
-const lazyPreload = existsSync(preloadFile)
-  ? (({ core, page }) => [core, ...page].map((f) => `<link rel="modulepreload" href="/dist/sc-components/${f}">`).join(''))(JSON.parse(readFileSync(preloadFile, 'utf8')))
-  : '';
-const pageHtml = (lang, build) => {
-  let html = template.replace(/<!--[\s\S]*?-->\n?/, '');
-  if (lang === 'ar') {
-    html = html.replace(/(<([a-z0-9-]+)\b[^>]*?data-ar="([^"]*)"[^>]*>)[^<]*(<\/\2>)/g, (_, open, _t, ar, close) => `${open}${ar}${close}`);
-    html = html.replace(/label="[^"]*" data-ar-label="([^"]*)"/g, 'label="$1"');
-  }
-  const loader =
-    build === 'lazy'
-      ? `${lazyPreload}<script type="module" src="/dist/sc-components/sc-components.esm.js"></script>`
-      : `<script type="module">\n${CE_TAGS.map((t) => `import '/dist/components/${t}.js';`).join('\n')}\n</script>`;
-  return html.replace('{{lang}}', lang).replace('{{dir}}', lang === 'ar' ? 'rtl' : 'ltr').replace('{{loader}}', loader);
-};
-const gzCache = new Map();
-const server = createServer((req, res) => {
-  const url = new URL(req.url, 'http://x');
-  if (url.pathname === '/perf') {
-    res.writeHead(200, { 'content-type': 'text/html', 'cache-control': 'no-store' });
-    return res.end(pageHtml(url.searchParams.get('lang') || 'en', url.searchParams.get('build') || 'lazy'));
-  }
-  const file = normalize(join(root, decodeURIComponent(url.pathname)));
-  if (!file.startsWith(root) || !existsSync(file) || statSync(file).isDirectory()) {
-    res.writeHead(404);
-    return res.end();
-  }
-  const type = TYPES[extname(file)] || 'application/octet-stream';
-  let body = readFileSync(file);
-  const headers = { 'content-type': type, 'cache-control': 'no-store' };
-  if (/gzip/.test(req.headers['accept-encoding'] || '') && /text|json/.test(type)) {
-    if (!gzCache.has(file)) gzCache.set(file, gzipSync(body, { level: 9 }));
-    body = gzCache.get(file);
-    headers['content-encoding'] = 'gzip';
-  }
-  res.writeHead(200, headers);
-  res.end(body);
-});
-await new Promise((r) => server.listen(0, '127.0.0.1', r));
-const origin = `http://127.0.0.1:${server.address().port}`;
+/* Static server with gzip, plus the generated page (scripts/lib/typical-page.mjs) ---------- */
+const { origin, close: closeServer } = await serveTypicalPage(root);
 
 /* In-page probes, installed before any script runs ----------------------------------------- */
 const PROBE = () => {
@@ -190,6 +143,7 @@ const collect = () => {
     longest: Math.max(0, ...m.longtasks.map((t) => t.d)),
     requests: res.length,
     byType,
+    fontFiles: res.filter((r) => /\.woff2(\?|$)/.test(r.name)).map((r) => `${r.name.split('/').pop()} ${r.decodedBodySize} B`),
     fonts: [...document.fonts].filter((f) => f.status === 'loaded').map((f) => f.family.replace(/"/g, '')),
   };
 };
@@ -251,6 +205,7 @@ for (const [build, lang] of variants) {
     documentRules: runs[0].documentRules,
     byType: runs[0].byType,
     fonts: runs[0].fonts,
+    fontFiles: runs[0].fontFiles,
     shiftSources: [...new Set(runs.flatMap((r) => r.shifts.flatMap((s) => s.sources)))],
     scriptMs: median(runs.map((r) => (r.cdp.ScriptDuration || 0) * 1000)),
     layoutMs: median(runs.map((r) => (r.cdp.LayoutDuration || 0) * 1000)),
@@ -259,7 +214,7 @@ for (const [build, lang] of variants) {
   };
 }
 await browser.close();
-server.close();
+closeServer();
 
 const out = { generated: new Date().toISOString(), browser: browserPath, runs: RUNS, cpu: CPU, net: NET, viewport: '412x915', results };
 if (JSON_OUT) console.log(JSON.stringify(out, null, 2));
@@ -271,6 +226,8 @@ else {
     L.push(`| ${k} | ${ms(r.fcp)} | ${ms(r.lcp)} | ${ms(r.readyAt)} | ${ms(r.load)} | ${r.cls.toFixed(3)} (${r.clsMax.toFixed(3)}) | ${ms(r.tbt)} | ${ms(r.longest)} | ${ms(r.scriptMs)} | ${ms(r.styleMs)} | ${ms(r.layoutMs)} | ${r.requests} |`);
   L.push('', '| Variant | sc- elements | Shadow roots | Sheet adoptions (same sheet twice in one root) | Unique sheets | Rules in shadow sheets | Rules in document | Fonts loaded | Shift sources |', '|---|---|---|---|---|---|---|---|---|');
   for (const [k, r] of Object.entries(results)) L.push(`| ${k} | ${r.elements} | ${r.shadowRoots} | ${r.adoptions} (${r.dupAdoptions}) | ${r.uniqueSheets} | ${r.shadowRules} | ${r.documentRules} | ${r.fonts.join(', ')} | ${r.shiftSources.join(', ') || 'none'} |`);
+  L.push('', 'Font files downloaded (first run):', '');
+  for (const [k, r] of Object.entries(results)) L.push(`- ${k}: ${r.fontFiles.join(', ') || 'none'}`);
   L.push('', 'Requests by type (first run):', '');
   for (const [k, r] of Object.entries(results)) L.push(`- ${k}: ${Object.entries(r.byType).map(([t, v]) => `${t} ${v.n} (${(v.transfer / 1024).toFixed(1)} KiB transferred)`).join(', ')}`);
   console.log(L.join('\n'));

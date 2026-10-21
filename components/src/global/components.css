@@ -5,6 +5,18 @@
  * field styles. Each family agent adds its own block here.
  */
 
+/* sc-language-switch: the language name is always the other language's endonym ("العربية" or
+   "English") in one weight. "Dubai W23 Name" (fonts.css) holds just those letters, so a page
+   in the other language doesn't download a whole script file for one word. The full web
+   families are left out of the stack on purpose: while a face loads, Chromium also fetches
+   the next web family in the list for the same text, which would download the whole file
+   anyway. The metric-matched local fallback covers the swap, as it does everywhere. The name
+   text is set by the component from its own strings, so it never holds other letters; if
+   the strings change, update NAMES in scripts/subset-fonts.mjs (the strings spec checks it). */
+sc-language-switch > [data-sc-language-name] {
+  --sc-font-family: "Dubai W23 Name", "Dubai W23 Fallback", system-ui, sans-serif;
+}
+
 /* sc-button: inline until upgraded, at its final height (56px; 48px for secondary and
    tertiary, and for size="m"). */
 sc-button:not(:defined) {
