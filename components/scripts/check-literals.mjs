@@ -88,6 +88,18 @@ for (const tsx of files.filter((f) => f.endsWith('.tsx'))) {
   const css = join(scanDir, tag, `${tag}.css`);
   const body = stripComments(readFileSync(css, 'utf8')).trim();
   if (!body.startsWith(LAYER_ORDER)) problems.push(`${relative(root, css)}:1:1  missing cascade layer order (W12): start the file with ${LAYER_ORDER}`);
+
+}
+
+// A `*/` left after removing comments means a comment was closed early (for example by text
+// inserted into it): what follows is not CSS, and the browser drops the rules after it.
+for (const css of files.filter((f) => f.endsWith('.css'))) {
+  stripComments(readFileSync(css, 'utf8'))
+    .split('\n')
+    .forEach((line, i) => {
+      const at = line.indexOf('*/');
+      if (at >= 0) problems.push(`${relative(root, css)}:${i + 1}:${at + 1}  stray */ (a comment closed early; the rules after it are lost)`);
+    });
 }
 
 for (const file of files) {
