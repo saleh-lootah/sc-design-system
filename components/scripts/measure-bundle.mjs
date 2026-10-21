@@ -115,6 +115,10 @@ const cssLiterals = (src) => {
 const loaderFile = 'sc-components.esm.js';
 const loaderSrc = read(join(LAZY, loaderFile));
 const coreFile = staticImports(loaderSrc)[0];
+if (!coreFile) {
+  console.error('dist/ is not a production build (`stencil test` overwrites it with a dev build). Run `npm run build` first.');
+  process.exit(2);
+}
 /** bundle id -> tags, parsed from the bootstrapLazy() table in the loader. */
 const lazyBundles = {};
 // Each bundle starts with ["p-<hash>",[[flags,"sc-tag",…; a bundle may hold several tags.
