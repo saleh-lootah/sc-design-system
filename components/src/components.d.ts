@@ -19,7 +19,8 @@ import { LanguageSwitchDetail } from "./components/sc-language-switch/sc-languag
 import { ScSearchDetail } from "./components/sc-search/sc-search";
 import { ServiceCardHeadingLevel, ServiceCardTint } from "./components/sc-service-card/sc-service-card";
 import { StatusTagTone } from "./components/sc-status-tag/sc-status-tag";
-import { SummaryListAppearance } from "./components/sc-summary-list/sc-summary-list";
+import { SummaryListAppearance, SummaryListLayout } from "./components/sc-summary-list/sc-summary-list";
+import { SummaryRowVariant } from "./components/sc-summary-row/sc-summary-row";
 import { SortDirection } from "./components/sc-table/sc-table";
 import { TextInputType, TextInputWidth } from "./components/sc-text-input/sc-text-input";
 export { ButtonIconPosition, ButtonSize, ButtonType, ButtonVariant } from "./components/sc-button/sc-button";
@@ -36,7 +37,8 @@ export { LanguageSwitchDetail } from "./components/sc-language-switch/sc-languag
 export { ScSearchDetail } from "./components/sc-search/sc-search";
 export { ServiceCardHeadingLevel, ServiceCardTint } from "./components/sc-service-card/sc-service-card";
 export { StatusTagTone } from "./components/sc-status-tag/sc-status-tag";
-export { SummaryListAppearance } from "./components/sc-summary-list/sc-summary-list";
+export { SummaryListAppearance, SummaryListLayout } from "./components/sc-summary-list/sc-summary-list";
+export { SummaryRowVariant } from "./components/sc-summary-row/sc-summary-row";
 export { SortDirection } from "./components/sc-table/sc-table";
 export { TextInputType, TextInputWidth } from "./components/sc-text-input/sc-text-input";
 export namespace Components {
@@ -965,31 +967,37 @@ export namespace Components {
         "total": number;
     }
     /**
-     * The "Check your answers" pattern: rows of a key, a value and an optional "Change" action,
-     * as one `<dl>`.
-     * Description lists can't span shadow roots (a `<dl>` must directly contain `<dt>`/`<dd>`
-     * or `<div>` groups), so this component renders the whole `<dl>` in its own shadow root:
-     * one `<div>` per row holding the `<dt>` (from the row's `label`), the value `<dd>` and the
-     * action `<dd>`. Each `sc-summary-row` child is assigned to a named slot inside its value
-     * `<dd>`, so rich values (addresses, `<sc-ltr>` plates) stay in light DOM.
-     * Wide containers show three columns (key, value, a fixed-width action column, so rows
-     * align). Below 600px of container width the key sits above the value, with the action at
-     * the end.
+     * The "Check your answers" pattern (E3) and the payment summary (E4): rows of a key, a value
+     * and an optional "Change" action, as one `<dl>`.
+     * v2 renders in light DOM (Stencil `scoped`, architecture §3.1). The list renders the
+     * `<dl>` itself: one `<div>` per row holding the `<dt>` (the row's `label`), the value `<dd>`
+     * and the action `<dd>`. Each `sc-summary-row` child is moved into its value `<dd>`, so the
+     * description list is valid HTML (a `<dl>` may only contain `<div>`, `<dt>` and `<dd>`) and
+     * rich values (addresses, `<sc-ltr>` plates) stay the service's own markup.
+     * Layouts: `stacked` puts the key above the value with the action in a fixed 64px end column
+     * (E3); `columns` shows key, value and a fixed 96px action column; `pairs` puts the key in a
+     * fixed column and end-aligns the value, with no actions (E4); `auto` (default) is `stacked`
+     * below 600px of the list's own width and `columns` from there.
      */
     interface ScSummaryList {
         /**
-          * `card` (default) sits the rows on a surface card, as in D+; `plain` draws only the row dividers, for use inside another card.
+          * `card` (default) draws the rows on a 12px card with a 1px edge; `plain` draws only the row dividers, for use inside another card.
           * @default 'card'
          */
         "appearance": SummaryListAppearance;
+        /**
+          * `auto` (default), `stacked`, `columns` or `pairs`. See the component description.
+          * @default 'auto'
+         */
+        "layout": SummaryListLayout;
     }
     /**
      * One answer in a `sc-summary-list`: a key (`label`), a value (the default slot) and an
      * optional "Change" action.
-     * The row only carries data and its value. The parent `sc-summary-list` renders the
-     * `<dt>`, `<dd>` and action inside its own `<dl>`, and slots this element into the value
-     * `<dd>`, so the description list stays valid across shadow roots. Use it only as a direct
-     * child of `sc-summary-list`; the list sets its `slot` attribute.
+     * v2 renders in light DOM (Stencil `scoped`). The row carries the data and its value; the
+     * parent `sc-summary-list` renders the `<dt>`, the value `<dd>` and the action inside its own
+     * `<dl>`, and moves this element into the value `<dd>`. Use it only as a direct child of
+     * `sc-summary-list`; the list sets its `slot` attribute.
      */
     interface ScSummaryRow {
         /**
@@ -997,7 +1005,7 @@ export namespace Components {
          */
         "actionHiddenText"?: string;
         /**
-          * Where the action goes, e.g. back to the question with `#plate-number` or a page URL. Without it the row has no action (the action column stays, so values still align).
+          * Where the action goes, e.g. back to the question with `#plate-number` or a page URL. Without it the row has no action (the action column stays, so values still align). Ignored in the `pairs` layout.
          */
         "actionHref"?: string;
         /**
@@ -1009,9 +1017,14 @@ export namespace Components {
          */
         "label": string;
         /**
-          * A plain-text value, used when the default slot is empty. With neither, the row shows "Not provided".
+          * A plain-text value, used when the row has no content. With neither, the row shows "Not provided".
          */
         "value"?: string;
+        /**
+          * `total` marks the amount row of a payment summary (E4): a quiet fill and Bold key and value.
+          * @default 'default'
+         */
+        "variant": SummaryRowVariant;
     }
     /**
      * A table compares rows of the same kind of thing across a few attributes: fines, payments,
@@ -1752,16 +1765,17 @@ declare global {
         new (): HTMLScStepProgressElement;
     };
     /**
-     * The "Check your answers" pattern: rows of a key, a value and an optional "Change" action,
-     * as one `<dl>`.
-     * Description lists can't span shadow roots (a `<dl>` must directly contain `<dt>`/`<dd>`
-     * or `<div>` groups), so this component renders the whole `<dl>` in its own shadow root:
-     * one `<div>` per row holding the `<dt>` (from the row's `label`), the value `<dd>` and the
-     * action `<dd>`. Each `sc-summary-row` child is assigned to a named slot inside its value
-     * `<dd>`, so rich values (addresses, `<sc-ltr>` plates) stay in light DOM.
-     * Wide containers show three columns (key, value, a fixed-width action column, so rows
-     * align). Below 600px of container width the key sits above the value, with the action at
-     * the end.
+     * The "Check your answers" pattern (E3) and the payment summary (E4): rows of a key, a value
+     * and an optional "Change" action, as one `<dl>`.
+     * v2 renders in light DOM (Stencil `scoped`, architecture §3.1). The list renders the
+     * `<dl>` itself: one `<div>` per row holding the `<dt>` (the row's `label`), the value `<dd>`
+     * and the action `<dd>`. Each `sc-summary-row` child is moved into its value `<dd>`, so the
+     * description list is valid HTML (a `<dl>` may only contain `<div>`, `<dt>` and `<dd>`) and
+     * rich values (addresses, `<sc-ltr>` plates) stay the service's own markup.
+     * Layouts: `stacked` puts the key above the value with the action in a fixed 64px end column
+     * (E3); `columns` shows key, value and a fixed 96px action column; `pairs` puts the key in a
+     * fixed column and end-aligns the value, with no actions (E4); `auto` (default) is `stacked`
+     * below 600px of the list's own width and `columns` from there.
      */
     interface HTMLScSummaryListElement extends Components.ScSummaryList, HTMLStencilElement {
     }
@@ -1772,10 +1786,10 @@ declare global {
     /**
      * One answer in a `sc-summary-list`: a key (`label`), a value (the default slot) and an
      * optional "Change" action.
-     * The row only carries data and its value. The parent `sc-summary-list` renders the
-     * `<dt>`, `<dd>` and action inside its own `<dl>`, and slots this element into the value
-     * `<dd>`, so the description list stays valid across shadow roots. Use it only as a direct
-     * child of `sc-summary-list`; the list sets its `slot` attribute.
+     * v2 renders in light DOM (Stencil `scoped`). The row carries the data and its value; the
+     * parent `sc-summary-list` renders the `<dt>`, the value `<dd>` and the action inside its own
+     * `<dl>`, and moves this element into the value `<dd>`. Use it only as a direct child of
+     * `sc-summary-list`; the list sets its `slot` attribute.
      */
     interface HTMLScSummaryRowElement extends Components.ScSummaryRow, HTMLStencilElement {
     }
@@ -2877,31 +2891,37 @@ declare namespace LocalJSX {
         "total"?: number;
     }
     /**
-     * The "Check your answers" pattern: rows of a key, a value and an optional "Change" action,
-     * as one `<dl>`.
-     * Description lists can't span shadow roots (a `<dl>` must directly contain `<dt>`/`<dd>`
-     * or `<div>` groups), so this component renders the whole `<dl>` in its own shadow root:
-     * one `<div>` per row holding the `<dt>` (from the row's `label`), the value `<dd>` and the
-     * action `<dd>`. Each `sc-summary-row` child is assigned to a named slot inside its value
-     * `<dd>`, so rich values (addresses, `<sc-ltr>` plates) stay in light DOM.
-     * Wide containers show three columns (key, value, a fixed-width action column, so rows
-     * align). Below 600px of container width the key sits above the value, with the action at
-     * the end.
+     * The "Check your answers" pattern (E3) and the payment summary (E4): rows of a key, a value
+     * and an optional "Change" action, as one `<dl>`.
+     * v2 renders in light DOM (Stencil `scoped`, architecture §3.1). The list renders the
+     * `<dl>` itself: one `<div>` per row holding the `<dt>` (the row's `label`), the value `<dd>`
+     * and the action `<dd>`. Each `sc-summary-row` child is moved into its value `<dd>`, so the
+     * description list is valid HTML (a `<dl>` may only contain `<div>`, `<dt>` and `<dd>`) and
+     * rich values (addresses, `<sc-ltr>` plates) stay the service's own markup.
+     * Layouts: `stacked` puts the key above the value with the action in a fixed 64px end column
+     * (E3); `columns` shows key, value and a fixed 96px action column; `pairs` puts the key in a
+     * fixed column and end-aligns the value, with no actions (E4); `auto` (default) is `stacked`
+     * below 600px of the list's own width and `columns` from there.
      */
     interface ScSummaryList {
         /**
-          * `card` (default) sits the rows on a surface card, as in D+; `plain` draws only the row dividers, for use inside another card.
+          * `card` (default) draws the rows on a 12px card with a 1px edge; `plain` draws only the row dividers, for use inside another card.
           * @default 'card'
          */
         "appearance"?: SummaryListAppearance;
+        /**
+          * `auto` (default), `stacked`, `columns` or `pairs`. See the component description.
+          * @default 'auto'
+         */
+        "layout"?: SummaryListLayout;
     }
     /**
      * One answer in a `sc-summary-list`: a key (`label`), a value (the default slot) and an
      * optional "Change" action.
-     * The row only carries data and its value. The parent `sc-summary-list` renders the
-     * `<dt>`, `<dd>` and action inside its own `<dl>`, and slots this element into the value
-     * `<dd>`, so the description list stays valid across shadow roots. Use it only as a direct
-     * child of `sc-summary-list`; the list sets its `slot` attribute.
+     * v2 renders in light DOM (Stencil `scoped`). The row carries the data and its value; the
+     * parent `sc-summary-list` renders the `<dt>`, the value `<dd>` and the action inside its own
+     * `<dl>`, and moves this element into the value `<dd>`. Use it only as a direct child of
+     * `sc-summary-list`; the list sets its `slot` attribute.
      */
     interface ScSummaryRow {
         /**
@@ -2909,7 +2929,7 @@ declare namespace LocalJSX {
          */
         "actionHiddenText"?: string;
         /**
-          * Where the action goes, e.g. back to the question with `#plate-number` or a page URL. Without it the row has no action (the action column stays, so values still align).
+          * Where the action goes, e.g. back to the question with `#plate-number` or a page URL. Without it the row has no action (the action column stays, so values still align). Ignored in the `pairs` layout.
          */
         "actionHref"?: string;
         /**
@@ -2921,9 +2941,14 @@ declare namespace LocalJSX {
          */
         "label": string;
         /**
-          * A plain-text value, used when the default slot is empty. With neither, the row shows "Not provided".
+          * A plain-text value, used when the row has no content. With neither, the row shows "Not provided".
          */
         "value"?: string;
+        /**
+          * `total` marks the amount row of a payment summary (E4): a quiet fill and Bold key and value.
+          * @default 'default'
+         */
+        "variant"?: SummaryRowVariant;
     }
     /**
      * A table compares rows of the same kind of thing across a few attributes: fines, payments,
@@ -3376,6 +3401,7 @@ declare namespace LocalJSX {
     }
     interface ScSummaryListAttributes {
         "appearance": SummaryListAppearance;
+        "layout": SummaryListLayout;
     }
     interface ScSummaryRowAttributes {
         "label": string;
@@ -3383,6 +3409,7 @@ declare namespace LocalJSX {
         "actionHref": string;
         "actionText": string;
         "actionHiddenText": string;
+        "variant": SummaryRowVariant;
     }
     interface ScTableAttributes {
         "caption": string;
@@ -3722,25 +3749,26 @@ declare module "@stencil/core" {
              */
             "sc-step-progress": LocalJSX.IntrinsicElements["sc-step-progress"] & JSXBase.HTMLAttributes<HTMLScStepProgressElement>;
             /**
-             * The "Check your answers" pattern: rows of a key, a value and an optional "Change" action,
-             * as one `<dl>`.
-             * Description lists can't span shadow roots (a `<dl>` must directly contain `<dt>`/`<dd>`
-             * or `<div>` groups), so this component renders the whole `<dl>` in its own shadow root:
-             * one `<div>` per row holding the `<dt>` (from the row's `label`), the value `<dd>` and the
-             * action `<dd>`. Each `sc-summary-row` child is assigned to a named slot inside its value
-             * `<dd>`, so rich values (addresses, `<sc-ltr>` plates) stay in light DOM.
-             * Wide containers show three columns (key, value, a fixed-width action column, so rows
-             * align). Below 600px of container width the key sits above the value, with the action at
-             * the end.
+             * The "Check your answers" pattern (E3) and the payment summary (E4): rows of a key, a value
+             * and an optional "Change" action, as one `<dl>`.
+             * v2 renders in light DOM (Stencil `scoped`, architecture §3.1). The list renders the
+             * `<dl>` itself: one `<div>` per row holding the `<dt>` (the row's `label`), the value `<dd>`
+             * and the action `<dd>`. Each `sc-summary-row` child is moved into its value `<dd>`, so the
+             * description list is valid HTML (a `<dl>` may only contain `<div>`, `<dt>` and `<dd>`) and
+             * rich values (addresses, `<sc-ltr>` plates) stay the service's own markup.
+             * Layouts: `stacked` puts the key above the value with the action in a fixed 64px end column
+             * (E3); `columns` shows key, value and a fixed 96px action column; `pairs` puts the key in a
+             * fixed column and end-aligns the value, with no actions (E4); `auto` (default) is `stacked`
+             * below 600px of the list's own width and `columns` from there.
              */
             "sc-summary-list": LocalJSX.IntrinsicElements["sc-summary-list"] & JSXBase.HTMLAttributes<HTMLScSummaryListElement>;
             /**
              * One answer in a `sc-summary-list`: a key (`label`), a value (the default slot) and an
              * optional "Change" action.
-             * The row only carries data and its value. The parent `sc-summary-list` renders the
-             * `<dt>`, `<dd>` and action inside its own `<dl>`, and slots this element into the value
-             * `<dd>`, so the description list stays valid across shadow roots. Use it only as a direct
-             * child of `sc-summary-list`; the list sets its `slot` attribute.
+             * v2 renders in light DOM (Stencil `scoped`). The row carries the data and its value; the
+             * parent `sc-summary-list` renders the `<dt>`, the value `<dd>` and the action inside its own
+             * `<dl>`, and moves this element into the value `<dd>`. Use it only as a direct child of
+             * `sc-summary-list`; the list sets its `slot` attribute.
              */
             "sc-summary-row": LocalJSX.IntrinsicElements["sc-summary-row"] & JSXBase.HTMLAttributes<HTMLScSummaryRowElement>;
             /**
