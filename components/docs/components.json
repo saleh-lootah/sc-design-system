@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-21T15:43:16",
+  "timestamp": "2026-10-21T14:52:09",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.45.2",
@@ -794,7 +794,7 @@
             "references": {
               "ButtonIconPosition": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-b/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonIconPosition"
               }
             }
@@ -915,7 +915,7 @@
             "references": {
               "ButtonSize": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-b/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonSize"
               }
             }
@@ -956,7 +956,7 @@
             "references": {
               "ButtonType": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-b/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonType"
               }
             }
@@ -1026,7 +1026,7 @@
             "references": {
               "ButtonVariant": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-b/components/src/components/sc-button/sc-button.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonVariant"
               }
             }
@@ -1175,7 +1175,7 @@
             "references": {
               "CalloutHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-b/components/src/components/sc-callout/sc-callout.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-callout/sc-callout.tsx",
                 "id": "src/components/sc-callout/sc-callout.tsx::CalloutHeadingLevel"
               }
             }
@@ -1224,7 +1224,7 @@
             "references": {
               "CalloutTone": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-b/components/src/components/sc-callout/sc-callout.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-callout/sc-callout.tsx",
                 "id": "src/components/sc-callout/sc-callout.tsx::CalloutTone"
               }
             }
@@ -1380,7 +1380,7 @@
             "references": {
               "CardLandmark": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-b/components/src/components/sc-card/sc-card.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-card/sc-card.tsx",
                 "id": "src/components/sc-card/sc-card.tsx::CardLandmark"
               }
             }
@@ -1417,7 +1417,7 @@
             "references": {
               "CardPadding": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-b/components/src/components/sc-card/sc-card.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-card/sc-card.tsx",
                 "id": "src/components/sc-card/sc-card.tsx::CardPadding"
               }
             }
@@ -1612,7 +1612,7 @@
             "references": {
               "ChannelChipVariant": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-b/components/src/components/sc-channel-chip/sc-channel-chip.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-channel-chip/sc-channel-chip.tsx",
                 "id": "src/components/sc-channel-chip/sc-channel-chip.tsx::ChannelChipVariant"
               }
             }
@@ -2473,7 +2473,7 @@
             "references": {
               "ContainerWidth": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-b/components/src/components/sc-container/sc-container.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-container/sc-container.tsx",
                 "id": "src/components/sc-container/sc-container.tsx::ContainerWidth"
               }
             }
@@ -3829,16 +3829,12 @@
       "filePath": "src/components/sc-empty-state/sc-empty-state.tsx",
       "encapsulation": "shadow",
       "tag": "sc-empty-state",
-      "readme": "# sc-empty-state\n\nWhat a list, table or page shows when there is nothing in it.\n\n## Usage\n\n```html\n<sc-empty-state icon=\"inbox\" heading=\"You have no notifications\" heading-level=\"2\">\n  When a service has news for you, it appears here.\n</sc-empty-state>\n\n<!-- The all-clear -->\n<sc-empty-state variant=\"success\" heading=\"You have no fines to pay\">\n  Nothing is due on your vehicles.\n  <sc-button slot=\"action\" variant=\"secondary\">View paid fines</sc-button>\n</sc-empty-state>\n```\n\n- Write the heading as a sentence (\"You have no fines\"), never \"No data\".\n- An optional 48px icon in an 80px circle (a library name in `icon`, or your own `<svg slot=\"icon\" aria-hidden=\"true\">`); one or two sentences, at most 520 wide; at most one action, usually a secondary button.\n- `variant=\"success\"` is the all-clear: a check on the success container. The words still say it.\n- Aligned to the start in both languages. Without `heading-level` the heading is a paragraph at the title role (right inside a card or table).\n\nParts: `container`, `icon`, `heading`, `body`, `action`.\n",
+      "readme": "# sc-empty-state\n\nWhat a list, table or page shows when there is nothing in it.\n\n## Usage\n\n```html\n<sc-empty-state icon=\"inbox\" heading=\"You have no notifications\" heading-level=\"2\">\n  When a service has news for you, it appears here.\n</sc-empty-state>\n\n<!-- The all-clear -->\n<sc-empty-state variant=\"success\" heading=\"You have no fines to pay\">\n  Nothing is due on your vehicles.\n  <sc-button slot=\"action\" variant=\"secondary\">View paid fines</sc-button>\n</sc-empty-state>\n```\n\n- Write the heading as a sentence (\"You have no fines\"), never \"No data\".\n- An optional 48px icon in an 80px circle; one or two sentences; at most one action, usually a secondary button.\n- `variant=\"success\"` is the all-clear: a check on the success container. The words still say it.\n- Aligned to the start in both languages. Without `heading-level` the heading is a paragraph at the title role (right inside a card or table).\n\nParts: `container`, `icon`, `heading`, `body`, `action`.\n",
       "docs": "What a list, table or page shows when there is nothing in it: \"You have no fines\".\n\nAn optional 48px icon in an 80px circle, a heading written as a sentence (never \"No\ndata\"), one or two sentences in the default slot, and at most one action (usually an\n`sc-button variant=\"secondary\"`) in `slot=\"action\"`. It aligns to the start edge in both\nlanguages, so it scans with the content around it.\n\n`variant=\"success\"` is the all-clear: nothing is left to do (\"You have no fines to pay\").\nThe icon becomes a check in the success colour on a success container, and the words\nstill say it, so the meaning never rests on colour.",
       "docsTags": [
         {
           "name": "slot",
           "text": "- One or two sentences: what this means and what the user can do."
-        },
-        {
-          "name": "slot",
-          "text": "icon - Optional, your own 48px decorative icon (an inline `<svg>`), shown in the 80px circle. Overrides `icon`."
         },
         {
           "name": "slot",
@@ -3892,14 +3888,14 @@
         },
         {
           "name": "headingLevel",
-          "type": "2 | 3 | 4 | 5 | 6 | undefined",
+          "type": "2 | 3 | 4 | undefined",
           "complexType": {
             "original": "EmptyStateHeadingLevel",
-            "resolved": "2 | 3 | 4 | 5 | 6 | undefined",
+            "resolved": "2 | 3 | 4 | undefined",
             "references": {
               "EmptyStateHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-b/components/src/components/sc-empty-state/sc-empty-state.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-empty-state/sc-empty-state.tsx",
                 "id": "src/components/sc-empty-state/sc-empty-state.tsx::EmptyStateHeadingLevel"
               }
             }
@@ -3907,7 +3903,7 @@
           "mutable": false,
           "attr": "heading-level",
           "reflectToAttr": false,
-          "docs": "Renders the heading as `<h2>`–`<h6>`. Leave it unset to render a paragraph at the title role, for an empty state inside a card or table.",
+          "docs": "Renders the heading as `<h2>`–`<h4>`. Leave it unset to render a paragraph at the title role, for an empty state inside a card or table.",
           "docsTags": [],
           "values": [
             {
@@ -3920,14 +3916,6 @@
             },
             {
               "value": "4",
-              "type": "number"
-            },
-            {
-              "value": "5",
-              "type": "number"
-            },
-            {
-              "value": "6",
               "type": "number"
             },
             {
@@ -4042,7 +4030,7 @@
             "references": {
               "EmptyStateVariant": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-b/components/src/components/sc-empty-state/sc-empty-state.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-empty-state/sc-empty-state.tsx",
                 "id": "src/components/sc-empty-state/sc-empty-state.tsx::EmptyStateVariant"
               }
             }
@@ -4086,10 +4074,6 @@
         {
           "name": "action",
           "docs": "Optional, a single action: `<sc-button slot=\"action\" variant=\"secondary\">`."
-        },
-        {
-          "name": "icon",
-          "docs": "Optional, your own 48px decorative icon (an inline `<svg>`), shown in the 80px circle. Overrides `icon`."
         }
       ],
       "parts": [
@@ -4158,7 +4142,7 @@
             "references": {
               "ErrorSummaryItem": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-b/components/src/components/sc-error-summary/sc-error-summary.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-error-summary/sc-error-summary.tsx",
                 "id": "src/components/sc-error-summary/sc-error-summary.tsx::ErrorSummaryItem"
               }
             }
@@ -4215,7 +4199,7 @@
             "references": {
               "ErrorSummaryHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-b/components/src/components/sc-error-summary/sc-error-summary.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-error-summary/sc-error-summary.tsx",
                 "id": "src/components/sc-error-summary/sc-error-summary.tsx::ErrorSummaryHeadingLevel"
               }
             }
@@ -4667,7 +4651,7 @@
             "references": {
               "LanguageSwitchAppearance": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-b/components/src/components/sc-language-switch/sc-language-switch.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-language-switch/sc-language-switch.tsx",
                 "id": "src/components/sc-language-switch/sc-language-switch.tsx::LanguageSwitchAppearance"
               }
             }
@@ -4745,7 +4729,7 @@
             "references": {
               "LanguageSwitchDetail": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-b/components/src/components/sc-language-switch/sc-language-switch.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-language-switch/sc-language-switch.tsx",
                 "id": "src/components/sc-language-switch/sc-language-switch.tsx::LanguageSwitchDetail"
               }
             }
@@ -5186,7 +5170,7 @@
             "references": {
               "ModalHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-b/components/src/components/sc-modal/sc-modal.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-modal/sc-modal.tsx",
                 "id": "src/components/sc-modal/sc-modal.tsx::ModalHeadingLevel"
               }
             }
@@ -5226,7 +5210,7 @@
             "references": {
               "ModalInitialFocus": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-b/components/src/components/sc-modal/sc-modal.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-modal/sc-modal.tsx",
                 "id": "src/components/sc-modal/sc-modal.tsx::ModalInitialFocus"
               }
             }
@@ -5344,7 +5328,7 @@
             "references": {
               "ModalCloseReason": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-b/components/src/components/sc-modal/sc-modal.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-modal/sc-modal.tsx",
                 "id": "src/components/sc-modal/sc-modal.tsx::ModalCloseReason"
               }
             }
@@ -5865,7 +5849,7 @@
             "references": {
               "PaginationChangeDetail": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-b/components/src/components/sc-pagination/sc-pagination.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-pagination/sc-pagination.tsx",
                 "id": "src/components/sc-pagination/sc-pagination.tsx::PaginationChangeDetail"
               }
             }
@@ -6728,7 +6712,7 @@
             "references": {
               "ScSearchDetail": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-b/components/src/components/sc-search/sc-search.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-search/sc-search.tsx",
                 "id": "src/components/sc-search/sc-search.tsx::ScSearchDetail"
               }
             }
@@ -7248,7 +7232,7 @@
             "references": {
               "ServiceCardHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-b/components/src/components/sc-service-card/sc-service-card.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-service-card/sc-service-card.tsx",
                 "id": "src/components/sc-service-card/sc-service-card.tsx::ServiceCardHeadingLevel"
               }
             }
@@ -7507,7 +7491,7 @@
             "references": {
               "SpinnerSize": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-b/components/src/components/sc-spinner/sc-spinner.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-spinner/sc-spinner.tsx",
                 "id": "src/components/sc-spinner/sc-spinner.tsx::SpinnerSize"
               }
             }
@@ -7590,7 +7574,7 @@
             "references": {
               "StatusTagTone": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-b/components/src/components/sc-status-tag/sc-status-tag.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-status-tag/sc-status-tag.tsx",
                 "id": "src/components/sc-status-tag/sc-status-tag.tsx::StatusTagTone"
               }
             }
@@ -7809,7 +7793,7 @@
             "references": {
               "StepProgressLayout": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-b/components/src/components/sc-step-progress/sc-step-progress.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-step-progress/sc-step-progress.tsx",
                 "id": "src/components/sc-step-progress/sc-step-progress.tsx::StepProgressLayout"
               }
             }
@@ -7974,7 +7958,7 @@
             "references": {
               "SummaryListAppearance": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-b/components/src/components/sc-summary-list/sc-summary-list.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-summary-list/sc-summary-list.tsx",
                 "id": "src/components/sc-summary-list/sc-summary-list.tsx::SummaryListAppearance"
               }
             }
@@ -8539,7 +8523,7 @@
             "references": {
               "SortDirection": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-b/components/src/components/sc-table/sc-table.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-table/sc-table.tsx",
                 "id": "src/components/sc-table/sc-table.tsx::SortDirection"
               }
             }
@@ -9165,7 +9149,7 @@
             "references": {
               "TextInputType": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-b/components/src/components/sc-text-input/sc-text-input.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-text-input/sc-text-input.tsx",
                 "id": "src/components/sc-text-input/sc-text-input.tsx::TextInputType"
               }
             }
@@ -9250,7 +9234,7 @@
             "references": {
               "TextInputWidth": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-b/components/src/components/sc-text-input/sc-text-input.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-text-input/sc-text-input.tsx",
                 "id": "src/components/sc-text-input/sc-text-input.tsx::TextInputWidth"
               }
             }
@@ -9965,7 +9949,7 @@
             "references": {
               "TimelineOrder": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-align-feedback-b/components/src/components/sc-timeline/sc-timeline.tsx",
+                "path": "/Users/saleh/Developer/Claude Workspace/sc-integrate-wt/components/src/components/sc-timeline/sc-timeline.tsx",
                 "id": "src/components/sc-timeline/sc-timeline.tsx::TimelineOrder"
               }
             }
@@ -10076,7 +10060,7 @@
       "path": "src/components/sc-container/sc-container.tsx"
     },
     "src/components/sc-empty-state/sc-empty-state.tsx::EmptyStateHeadingLevel": {
-      "declaration": "export type EmptyStateHeadingLevel = 2 | 3 | 4 | 5 | 6;",
+      "declaration": "export type EmptyStateHeadingLevel = 2 | 3 | 4;",
       "docstring": "",
       "path": "src/components/sc-empty-state/sc-empty-state.tsx"
     },
