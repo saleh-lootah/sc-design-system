@@ -46,7 +46,9 @@ describe('sc-language-switch (e2e)', () => {
     // The Arabic name takes the Arabic label-medium values on an English page (18/24 Bold).
     expect(await inner(page, 'sc-language-switch', 'getComputedStyle(name).fontSize')).toBe('18px');
     expect(await inner(page, 'sc-language-switch', 'getComputedStyle(name).fontWeight')).toBe('700');
-    expect(await inner(page, 'sc-language-switch', 'getComputedStyle(name).fontFamily')).toMatch(/^"Dubai W23 Arabic"/);
+    // In Dubai W23's own face for the two names (fonts.css, "Dubai W23 Name": the same Bold
+    // Arabic glyphs, just these letters), so an English page never fetches the Arabic file.
+    expect(await inner(page, 'sc-language-switch', 'getComputedStyle(name).fontFamily')).toMatch(/^"Dubai W23 Name"/);
 
     await setPageContext(page, { lang: 'ar' });
     expect(await accessibleName(page)).toBe('English');

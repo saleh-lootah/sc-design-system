@@ -15,7 +15,7 @@ export default defineStrings({
     headerNav: 'رئيسية',
     headerSearch: 'بحث',
     headerSignIn: 'تسجيل الدخول باستخدام الهوية الرقمية',
-    headerSignInHint: 'سجّل الدخول لعرض مهامك ومدفوعاتك والخدمات المحفوظة.',
+    headerSignInHint: 'تسجيل الدخول يتيح عرض مهامك ومدفوعاتك والخدمات المحفوظة.',
     headerMenu: 'القائمة',
     headerOpenMenu: 'القائمة',
     headerCloseMenu: 'إغلاق القائمة',

@@ -54,6 +54,24 @@ const ARABIC = 'U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0898-08E1,U+08
 const ARABIC_COMMON = 'U+0020-0040,U+005B-0060,U+007B-007E,U+00A0,U+00AB,U+00BB,U+00D7,U+00F7,U+2013-2014,U+2018-2019,U+201C-201D,U+2022,U+2026,U+2212';
 
 /**
+ * The language switch's label is always the other language's endonym (src/i18n/components/
+ * sc-language-switch.ts), in one weight per script (label-medium/-large: Bold in Arabic,
+ * Medium in English). Without these faces an English page downloaded the whole Arabic Bold
+ * file (30 KiB) for the seven letters of "العربية", and an Arabic page the Latin Medium file
+ * (21 KiB) for "English". Each name gets a face of its own holding just its letters (the
+ * subset keeps every contextual form and feature they shape with, so the word shapes exactly
+ * as in the full file), and sc.css puts the "Dubai W23 Name" family first only on the
+ * switch's name span (src/global/components.css).
+ */
+const NAMES = [
+  { lang: 'ar', weight: 700, text: 'العربية' },
+  { lang: 'en', weight: 500, text: 'English' },
+];
+const nameFile = (n) => `dubai-w23-${n.weight}-name-${n.lang}.woff2`;
+const codepoints = (text) => [...new Set([...text].map((c) => c.codePointAt(0)))].sort((a, b) => a - b);
+const nameRange = (n) => codepoints(n.text).map((c) => `U+${c.toString(16).toUpperCase().padStart(4, '0')}`).join(',');
+
+/**
  * Metric-matched fallback faces, so the swap from the local font to Dubai W23 does not move
  * text (CLS 0). size-adjust is the ratio of Dubai W23's average advance to the local font's
  * over a sample of real UI text, measured in Helium by scripts/measure-font-fallback.mjs.
@@ -102,6 +120,14 @@ function build() {
         writeFileSync(join(outDir, fileName(weight, name)), woff2);
         sizes.push(`${fileName(weight, name)}  ${woff2.length} B (${(woff2.length / 1024).toFixed(1)} KiB)`);
       }
+    }
+    for (const n of NAMES) {
+      const { file } = WEIGHTS.find((w) => w.weight === n.weight);
+      const out = join(tmp, `name-${n.lang}.ttf`);
+      subset(join(src, file), nameRange(n), out);
+      const woff2 = sfntToWoff2(readFileSync(out));
+      writeFileSync(join(outDir, nameFile(n)), woff2);
+      sizes.push(`${nameFile(n)}  ${woff2.length} B (${(woff2.length / 1024).toFixed(1)} KiB)`);
     }
   } finally {
     rmSync(tmp, { recursive: true, force: true });
@@ -155,6 +181,8 @@ function fontsCss() {
   for (const { weight } of WEIGHTS) L.push(face('Dubai W23', weight, fileName(weight, 'latin'), LATIN));
   for (const { weight } of WEIGHTS) L.push(face('Dubai W23', weight, fileName(weight, 'arabic'), ARABIC));
   for (const { weight } of WEIGHTS) L.push(face('Dubai W23 Arabic', weight, fileName(weight, 'arabic'), `${ARABIC},${ARABIC_COMMON}`));
+  L.push('/* The language switch\'s endonyms only ("العربية", "English"): see NAMES in scripts/subset-fonts.mjs. */');
+  for (const n of NAMES) L.push(face('Dubai W23 Name', n.weight, nameFile(n), nameRange(n)));
   L.push('/* Metric-matched local fallbacks: the text keeps its size and lines while Dubai W23 loads. */');
   for (const w of [400, 700]) L.push(fallbackFace('latin', w, LATIN));
   for (const w of [400, 700]) L.push(fallbackFace('arabic', w, ARABIC));

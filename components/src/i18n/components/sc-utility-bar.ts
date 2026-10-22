@@ -13,7 +13,7 @@ export default defineStrings({
   ar: {
     utilityLabel: 'المساعدة والملاحظات',
     utilityHappiness: 'مؤشر السعادة',
-    utilityContact: 'اتصل',
+    utilityContact: 'الاتصال',
     utilityServices: 'الخدمات',
     utilityChat: 'المحادثة',
     utilityAccessibility: 'إمكانية الوصول',
