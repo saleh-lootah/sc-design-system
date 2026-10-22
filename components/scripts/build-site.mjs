@@ -422,7 +422,7 @@ function layout(page, lang, { head = '', body, headings = [], bodyLang, extraHea
   const otherHref = rel(from, langPath(other, page.path));
   const crumbs = page.kind === 'home' ? '' : crumbsFor(page);
   const crumbHtml = crumbs
-    ? `<sc-breadcrumbs>${crumbs.map((c) => `<a href="${rel(from, langPath(lang, c.path))}"${en(c.title[lang], lang)}>${esc(c.title[lang])}</a>`).join('')}<span${en(page.title[lang], lang)}>${esc(page.title[lang])}</span></sc-breadcrumbs>`
+    ? `<sc-breadcrumbs><nav aria-label="${esc(t.breadcrumb)}"><ol>${crumbs.map((c) => `<li><a href="${rel(from, langPath(lang, c.path))}"${en(c.title[lang], lang)}>${esc(c.title[lang])}</a></li>`).join('')}<li aria-current="page"${en(page.title[lang], lang)}>${esc(page.title[lang])}</li></ol></nav></sc-breadcrumbs>`
     : '';
   // The header's main navigation: home and the four sections (sc-site-header takes four or five).
   const current = (path) => (page.path === path ? ' aria-current="page"' : page.section && SECTION_HOME[page.section] === path ? ' aria-current="true"' : '');
@@ -455,6 +455,7 @@ ${head}</head>
 <sc-skip-link href="#main-content"></sc-skip-link>
 <noscript><a class="site-skip" href="#main-content">${esc(t.skip)}</a></noscript>
 <sc-site-header search-href="${rel(from, langPath(lang, 'search/'))}">
+  <a slot="name" href="${rel(from, langPath(lang, ''))}">${esc(t.siteName)}</a>
   ${navLinks}
   <sc-language-switch slot="language" appearance="plain" href="${otherHref}"><a slot="fallback" href="${otherHref}" hreflang="${other}" lang="${other}">${esc(t.langOther)}</a></sc-language-switch>
 </sc-site-header>
@@ -466,11 +467,10 @@ ${internal}${notice}${body}
 ${page.kind === 'home' || page.kind === 'search' ? '' : pager(page, lang)}
 </main>
 </div>
-<sc-footer variant="simple">
-  ${footerLinks.map(([h, l]) => `<a href="${h}">${esc(l)}</a>`).join('\n  ')}
-  <span slot="meta">${esc(t.footerMeta)}</span>
-  <nav slot="fallback" aria-label="${esc(t.footerNav)}"><ul>${footerLinks.map(([h, l]) => `<li><a href="${h}">${esc(l)}</a></li>`).join('')}</ul><p>${esc(t.footerMeta)}</p></nav>
-</sc-footer>
+<sc-footer><footer>
+  <nav aria-label="${esc(t.footerNav)}"><ul>${footerLinks.map(([h, l]) => `<li><a href="${h}">${esc(l)}</a></li>`).join('')}</ul></nav>
+  <p>${esc(t.footerMeta)}</p>
+</footer></sc-footer>
 </body>
 </html>
 `;
@@ -572,9 +572,9 @@ function renderComponentPage(page, lang) {
     frag = frag.replace(/<script>([\s\S]*?)<\/script>/g, (all, js) => (scripts.push(js), ''));
     for (const m of frag.matchAll(/<h2[^>]*\sid="([^"]+)"[^>]*>([\s\S]*?)<\/h2>/g)) headings.push({ id: m[1], text: m[2].replace(/<[^>]+>/g, '').trim(), level: 2 });
     // The channel switcher re-themes the examples: its links reload the page with ?channel=,
-    // and site.js applies the channel in place without the reload.
+    // and site.js handles its scChannelChange event to apply the channel without the reload.
     const links = JSON.stringify(Object.fromEntries(CHANNELS.map((c) => [c, `?channel=${c}#examples`])));
-    const bar = `<div class="examples-bar" id="examples"><p class="examples-bar__label">${esc(t.examplesIn)}</p><sc-channel-switcher channel="now" links='${links}'></sc-channel-switcher></div>`;
+    const bar = `<div class="examples-bar" id="examples"><p class="examples-bar__label">${esc(t.examplesIn)}</p><sc-channel-switcher value="now" links='${links}'></sc-channel-switcher></div>`;
     demo = `${bar}<div id="preview" class="demo" data-channel="now">${frag}${scripts.map((s) => `<script>${s}</script>`).join('')}</div>`;
   }
   let spec = '';
@@ -635,15 +635,14 @@ function renderHome(page, lang) {
     ['ar', 'rtl', t.heroAr],
   ];
   if (lang === 'ar') heads.reverse();
-  const tile = (path, icon, text) => `<li><sc-tile href="${href(path)}">${tileIcon(icon)}${esc(text)}</sc-tile><a class="route__fallback" href="${href(path)}">${esc(text)}</a></li>`;
+  const tile = (path, icon, text) => `<li><sc-tile>${tileIcon(icon)}<a href="${href(path)}">${esc(text)}</a></sc-tile></li>`;
   const route = (id, title, text, tiles, lead) =>
     `<section class="route${lead ? ' route--lead' : ''}" aria-labelledby="${id}"><h3 id="${id}">${esc(title)}</h3><p>${esc(text)}</p><ul class="route__tiles">${tiles.join('')}</ul></section>`;
   const body = `<div class="home-hero">
 <h1 id="top" class="home-title">${heads.map(([l, d, x]) => `<span lang="${l}" dir="${d}">${esc(x)}</span>`).join(' ')}</h1>
 <p class="home-lede">${esc(t.heroLede)}</p>
 <sc-callout class="home-draft"><span slot="heading">${esc(t.draftHeading)}</span><span>${esc(t.draftText)}</span></sc-callout>
-<sc-channel-network class="home-network" channel="none" eyebrow="${esc(t.networkEyebrow)}"></sc-channel-network>
-<noscript><ul class="home-network-fallback" aria-label="${esc(t.networkEyebrow)}">${CHANNEL_NAMES[lang].map((n) => `<li>${esc(n)}</li>`).join('')}</ul></noscript>
+<sc-channel-network class="home-network" channel="none" eyebrow="${esc(t.networkEyebrow)}"><nav slot="fallback" aria-label="${esc(t.networkLabel)}"><ul>${CHANNEL_NAMES[lang].map((n) => `<li><span>${esc(n)}</span></li>`).join('')}</ul></nav></sc-channel-network>
 </div>
 <h2 id="routes" class="home-h2">${esc(t.routesHeading)}</h2>
 <div class="routes">

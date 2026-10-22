@@ -270,3 +270,74 @@ No breaking changes; additions services should adopt.
 | `sc-utility-bar` | Docked only when the viewport is at least 600px tall; below that it is static at the end of the page and publishes no `--sc-utility-bar-block-size`, so `sc-page` reserves nothing (R11). |
 | `sc-channel-network` | New value `channel="none"` for a page that belongs to no channel: no tile says "You are here" or carries `aria-current`. Without the attribute the current channel is still the closest `data-channel`, else Dubai Now. |
 | `sc-announcement-bar` | `announcement-id` now remembers a dismissal in `sessionStorage` only (R8, PRV-12), so a dismissed announcement comes back in a new session. Dismissals stored in `localStorage` by earlier builds are ignored. Links written in the message are underlined (R6). |
+
+## Library gaps from the documentation site (v2-lib-gaps)
+
+Two breaking changes (`sc-footer`, `sc-breadcrumbs`) and additions. Found while building the documentation site from the library's own components.
+
+### `sc-footer` and `sc-breadcrumbs` are CSS only (breaking)
+
+Like `sc-container` and `sc-grid`, they are no longer registered custom elements. `sc.css` styles the tag and the plain markup inside it, so they need no JavaScript, are at their final size at first paint and work with scripting off (PERF-04, review B1). On a page with a header, footer and breadcrumbs this saves the footer's and the breadcrumbs' JavaScript (see `perf-budgets.json` R21). Every visual and behaviour is kept: 44px targets (B2), the current-page cue (B7, R10), underlines in every state (R6), right-to-left, wrapping trails and the compact "Back to …" link.
+
+The page now writes the text the component used to generate, in the page language: link labels, group headings, channel names, "Government of Dubai".
+
+`sc-footer`: the markup that was its `slot="fallback"` content, inside a `<footer>`:
+
+```html
+<!-- simple (transaction pages) -->
+<sc-footer>
+  <footer>
+    <nav aria-label="Support links"><ul>
+      <li><a href="/en/help">Help and contact</a></li>
+      <li><a href="/en/accessibility">Accessibility statement</a></li>
+      <li><a href="/en/privacy">Privacy and cookies</a></li>
+      <li><a href="/en/terms">Terms of use</a></li>
+    </ul></nav>
+    <p>Government of Dubai</p>
+  </footer>
+</sc-footer>
+
+<!-- grouped (channel sites) -->
+<sc-footer variant="grouped">
+  <footer>
+    <div class="sc-footer__brand"><p>Dubai Now</p><p>Government services for everyone who lives in Dubai, in one place.</p></div>
+    <section class="sc-footer__channels" aria-labelledby="footer-channels">
+      <h2 id="footer-channels">Channels</h2>
+      <ul><li><a href="/en/" aria-current="true">Dubai Now</a></li><li><a href="https://…">Dubai Transport</a></li>…</ul>
+    </section>
+    <section aria-labelledby="footer-helpful"><h2 id="footer-helpful">Helpful information</h2><ul>…</ul></section>
+    <section aria-labelledby="footer-legal"><h2 id="footer-legal">Legal</h2><ul>…</ul></section>
+    <div class="sc-footer__lower"><p>Government of Dubai · Last updated 12 October 2026</p><p>Dubai Now is run by the Government of Dubai</p></div>
+  </footer>
+</sc-footer>
+```
+
+- Gone: every prop (`channel`, `links`, `about-href`, `help-href`, `accessibility-href`, `privacy-href`, `cookies-href`, `terms-href`, `sitemap-href`, `updated`), the slots (`brand`, `meta`, `fallback`, extra links in the default slot) and the parts. Write the links as list items; the current channel is the item with `aria-current="true"` (no `data-channel` lookup). `variant="grouped"` stays.
+- The footer no longer reserves a measured height before upgrade: it has its final height at first paint.
+
+`sc-breadcrumbs`: a `<nav>` with an `<ol>` of links, the current page last as text with `aria-current="page"`:
+
+```html
+<sc-breadcrumbs>
+  <nav aria-label="Breadcrumb">
+    <ol>
+      <li><a href="/en">Home</a></li>
+      <li><a href="/en/vehicles">Vehicles</a></li>
+      <li aria-current="page">Renew your vehicle registration</li>
+    </ol>
+  </nav>
+</sc-breadcrumbs>
+```
+
+- `label` becomes the `<nav>`'s `aria-label` ("Breadcrumb" / "مسار التنقل"). `compact-label` becomes the custom property `--sc-breadcrumbs-back` (default `"Back to "` / `"رجوع إلى "`), placed before the parent's name below 600px; its `{parent}` placeholder is gone.
+- Parts `nav`, `list`, `link`, `current` are gone: style the elements themselves. Router click handlers on the links now work, since the links are the page's own.
+
+### Additions
+
+| Tag | Change |
+| --- | --- |
+| `sc-site-header` | New `slot="search"` for an `sc-search` (with `label-hidden`): inline in the row on wide screens, at the top of the mobile menu on compact ones. `search-href` stays the fallback when the slot is empty. New `slot="name"` for the site's name or wordmark after the lockup (never the Government of Dubai lockup). Before upgrade and without JavaScript, `sc.css` shows the light-DOM lockup, name and navigation links as one row, the current link underlined in the channel colour; with JavaScript the host keeps its final height meanwhile. |
+| `sc-channel-switcher` | New cancellable `scChannelChange` event (`detail.channel`), emitted before the chosen channel's link is followed. `preventDefault()` keeps the page where it is, sets the new reflected `value` prop to the channel and closes the panel. `value` wins over `channel` as the current channel. Pages that don't listen behave as before. |
+| `sc-channel-network` | The English eyebrow is no longer forced to capitals (CNT-07): write it in sentence case. New `slot="fallback"` (B1): a `<nav aria-label>` with a `<ul>` of channel links, shown before upgrade and without JavaScript, hidden once the strip has rendered. Before upgrade the host reserves the strip's measured height for its own width. |
+| `sc-tile` | Write the title as a light-DOM `<a href>`: `<sc-tile><svg slot="icon">…</svg><a href="/en/moving-home">Moving home</a></sc-tile>`. It is a working tile before upgrade and without JavaScript (the whole box is the link); once upgraded the tile takes its `href` and text. `href` on the host with a text title still works but shows no link until upgrade. |
+| `sc-callout`, `sc-status-tag` | `sc.css` draws their box before upgrade (padding, icon room, start bar and tone fill; the 32px chip), so they no longer change size as they upgrade. A callout heading given by the `heading` prop still appears only on upgrade: use `slot="heading"` to hold its line too. |

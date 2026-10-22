@@ -1,6 +1,6 @@
 import { E2EPage } from '@stencil/core/testing';
 import { describeAxe } from '../../test/axe';
-import { newScPage, setPageContext } from '../../test/page';
+import { loadFonts, newScPage, noScriptPage, setPageContext } from '../../test/page';
 
 /**
  * WCAG 2.5.2 (MOT-09): press gives visual feedback only; activation is the native click on
@@ -49,7 +49,7 @@ export const MARKUP = `
     <ul style="display:grid;grid-template-columns:repeat(3,180px);gap:16px;list-style:none;padding:0">
       <li><sc-tile id="moving" href="#moving" tint="orange" count="14">${ICON}Moving home</sc-tile></li>
       <li><sc-tile id="baby" href="#baby" tint="rose" count="1">${ICON}Having a baby</sc-tile></li>
-      <li><sc-tile id="fine" href="#fine">${ICON}Pay a traffic fine</sc-tile></li>
+      <li><sc-tile id="fine">${ICON}<a href="#fine">Pay a traffic fine</a></sc-tile></li>
     </ul>
   </main>`;
 
@@ -139,6 +139,31 @@ describe('sc-tile (e2e)', () => {
     expect(r.pressed[1]).toMatch(/^linear-gradient/);
     expect(r.cancelled).toEqual({ log: { clicks: 0, submits: 0, hashes: 0, hash: '' }, look: r.rest });
     expect(r.clicked).toEqual({ clicks: 1, submits: 0, hashes: 1, hash: '#baby' });
+  });
+});
+
+describe('sc-tile before it upgrades and without JavaScript (PERF-04)', () => {
+  it.each(['en', 'ar'] as const)('the light-DOM link is the tile: the whole box follows it, at the final size (%s)', async (lang) => {
+    const page = await noScriptPage(`<div style="inline-size:180px">${MARKUP.match(/<sc-tile id="fine">[\s\S]*?<\/sc-tile>/)![0]}</div>`, lang);
+    const r = await page.evaluate(() => {
+      const tile = document.querySelector('sc-tile')!.getBoundingClientRect();
+      const corner = document.elementFromPoint(tile.left + 4, tile.bottom - 4);
+      const icon = document.querySelector('sc-tile > svg')!.getBoundingClientRect();
+      return { h: Math.round(tile.height), w: Math.round(tile.width), corner: corner?.closest('a')?.getAttribute('href'), icon: Math.round(icon.height) };
+    });
+    // The 24px icon in its 40px tile, and the height the upgraded tile has.
+    const up = await newScPage(`<div style="inline-size:180px">${MARKUP.match(/<sc-tile id="fine">[\s\S]*?<\/sc-tile>/)![0]}</div>`, { lang });
+    await loadFonts(up);
+    const h = await up.evaluate(() => Math.round(document.querySelector('sc-tile')!.getBoundingClientRect().height));
+    expect(r).toEqual({ h, w: 180, corner: '#fine', icon: 40 });
+    expect(h).toBeGreaterThanOrEqual(112);
+    await page.close();
+  });
+
+  it('once upgraded keeps the same size and leaves the light-DOM link unrendered', async () => {
+    const page = await newScPage(`<div style="inline-size:180px">${MARKUP.match(/<sc-tile id="fine">[\s\S]*?<\/sc-tile>/)![0]}</div>`);
+    const r = await page.evaluate(() => [Math.round(document.querySelector('sc-tile')!.getBoundingClientRect().height), document.querySelector('sc-tile > a')!.getClientRects().length]);
+    expect(r).toEqual([112, 0]);
   });
 });
 

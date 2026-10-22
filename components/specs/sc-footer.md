@@ -1,63 +1,57 @@
 # sc-footer · specification (v2)
 
-Status: rebuilt for v2 by C1 (Wave 2b). Rules: component-language A29 (simple) and B5 (grouped), Standard CHR-06, decision Q-footer. Code: `src/components/sc-footer`.
+Status: rebuilt for v2 by C1 (Wave 2b); **CSS only since v2-lib-gaps**. Rules: component-language A29 (simple) and B5 (grouped), Standard CHR-06, decision Q-footer. Code: the `sc-footer` block of `src/global/components.css` (in `sc.css`); tests in `src/components/sc-footer`.
 
 ## Encapsulation
 
-**Shadow DOM** (architecture §3.1, chrome). The Channels group needs no swatches (CHR-06), so the channel rebinding problem of the switcher does not arise. Extra links are slotted (`::slotted(a)` styles them).
+**CSS only** (architecture §3.1, like `sc-container`): the tag is never registered. `sc.css` styles `sc-footer` and the plain markup inside it in `@layer sc.components`, so the footer needs no JavaScript, has its final size at first paint (no reservation) and works with scripting off (PERF-04, review B1). The page writes every link and line in the page language; the `<footer>` child is the `contentinfo` landmark and the content box (grid margins, the 1280px cap, the 1px rule).
+
+```html
+<sc-footer>
+  <footer>
+    <nav aria-label="Support links"><ul>
+      <li><a href="/en/help">Help and contact</a></li>
+      <li><a href="/en/accessibility">Accessibility statement</a></li>
+      <li><a href="/en/privacy">Privacy and cookies</a></li>
+      <li><a href="/en/terms">Terms of use</a></li>
+    </ul></nav>
+    <p>Government of Dubai</p>
+  </footer>
+</sc-footer>
+```
+
+Grouped: inside the `<footer>`, a `.sc-footer__brand` block (the first `<p>` is the channel's name, drawn after its ring mark; then the description and app badges), a `<section class="sc-footer__channels">` and two more `<section>`s, each with an `<h2>` and a `<ul>`, and a `.sc-footer__lower` block with the two lower lines. The current channel is the item with `aria-current="true"` (a link, or a `<span>` when it has no link). The three classes are the only hooks; everything else is styled by element.
 
 ## Variants
 
 | Variant | Use | Anatomy |
 | --- | --- | --- |
-| `simple` (default) | Transaction pages | A 1px `outline-variant` rule, padding 32/40; one row of links 32 apart (help and contact, accessibility statement, privacy, terms, cookies, about, sitemap: those with an href, then slotted extras) under a visually hidden "Support links" `<h2>`; "Government of Dubai" (`slot="meta"`, body-medium) at inline-end. Links stack as 44px rows below 600px. |
-| `grouped` | Channel sites | A 1px rule, padding 56/40 (32/40 below 600px). Four groups on 4/4/2/2 columns from 1024px (two columns from 600, one below): **brand** (the channel's ring mark and name in headline-small, `slot="brand"` for the description and app badges), **Channels** (all seven in the Standard 3.1 order, two inner columns, the current one Bold with a 3px `channel-action` bar at its inline start, 8 before the text, and `aria-current="true"`, no swatch), **Helpful information** (about, help and contact, accessibility statement, sitemap, then slotted extras), **Legal** (privacy and cookies, terms). Each group has an `<h2>`. Then a 1px rule, "Government of Dubai · Last updated {updated}" and "{Channel} is run by the Government of Dubai". |
+| `simple` (default) | Transaction pages | A 1px `outline-variant` rule, padding 32/40; one row of links 32 apart (help and contact, accessibility statement, privacy, terms, cookies, about, sitemap, then any extras) in a `<nav aria-label="Support links">`; "Government of Dubai" (the `<p>`, body-medium) at inline-end. Links stack as 44px rows below 600px. |
+| `grouped` | Channel sites | A 1px rule, padding 56/40 (32/40 below 600px). Four groups on 4/4/2/2 columns from 1024px (two columns from 600, one below): **brand** (the channel's ring mark and name in headline-small, then the description and app badges), **Channels** (all seven in the Standard 3.1 order, two inner columns, the current one Bold with a 3px `channel-action` bar at its inline start, 8 before the text, and `aria-current="true"`, no swatch), **Helpful information** (about, help and contact, accessibility statement, sitemap, then any extras), **Legal** (privacy and cookies, terms). Each group has an `<h2>`. Then a 1px rule, "Government of Dubai · Last updated {date}" and "{Channel} is run by the Government of Dubai". |
 
 Links: label-medium, `on-surface`, underlined 1px at 4px (5px Arabic), 2px on hover, at least 44px tall.
 
-**Link rule (R6, CMP-08).** Footer links are navigation links. R6 would let them underline on hover only, because their place in a footer list under a group heading identifies them as links; the footer keeps the underline in every state anyway, as CHR-06 draws it, so it meets the stricter running-text rule too. Their colour is `on-surface`, not `channel-action`: CHR-06's footer exception to CMP-08. Slotted extras get the same style.
+**Link rule (R6, CMP-08).** Footer links are navigation links. R6 would let them underline on hover only, because their place in a footer list under a group heading identifies them as links; the footer keeps the underline in every state anyway, as CHR-06 draws it, so it meets the stricter running-text rule too. Their colour is `on-surface`, not `channel-action`: CHR-06's footer exception to CMP-08. Every link in the footer gets the same style.
 
 **Current channel (R10).** Bold alone is no cue in Arabic, where label-medium is already Bold (D12), so the current channel also has the 3px `channel-action` bar at its inline start (`Highlight` in forced colours), in both languages. Meta: body-small in the grouped lower line, body-medium in the simple footer (A29), `on-surface-variant`. Group headings sit 8 above the first 44px link row (16 to its text, as board F66-0 draws compact). The footer is always on `surface`.
 
-## API changes from v1
+## API changes
 
-- New props: `variant`, `channel`, `links`, `about-href`, `cookies-href`, `sitemap-href`, `updated`. Kept: `help-href`, `accessibility-href`, `privacy-href`, `terms-href`, the default slot for extra links, `slot="meta"`, parts `footer`, `list`, `link`, `meta`.
-- Labels: "Accessibility" → "Accessibility statement", "Terms" → "Terms of use", and `privacy-href` reads "Privacy and cookies" unless `cookies-href` is also set (then "Privacy" and "Cookies"). Services that added `<a>Cookies</a>` as an extra link should set `cookies-href` instead.
-- No `sc-container` inside: the footer sets its own margins and 1280 cap.
+- **v2-lib-gaps (breaking):** CSS only. The props (`channel`, `links`, `about-href`, `help-href`, `accessibility-href`, `privacy-href`, `cookies-href`, `terms-href`, `sitemap-href`, `updated`), the slots (`brand`, `meta`, `fallback`, the default slot) and the parts are gone; `variant` stays. The page writes the markup above. See `docs/v2/migration.md`.
+- From v1 (Wave 2b): labels "Accessibility statement", "Terms of use", "Privacy and cookies" (or "Privacy" and "Cookies"); no `sc-container` inside.
 
 ## Strings
 
-`src/i18n/components/sc-footer.ts` (rewritten); channel names from `common.ts` through `channelStrings()`.
+None: the page writes the text. The wording above is the standard one (EN / AR): Support links / روابط الدعم; Channels / القنوات; Helpful information / معلومات مفيدة; Legal / المعلومات القانونية; About {channel} / عن {channel}; Help and contact / المساعدة والتواصل; Accessibility statement / بيان إمكانية الوصول; Sitemap / خريطة الموقع; Privacy and cookies / الخصوصية وملفات تعريف الارتباط; Terms of use / شروط الاستخدام; Government of Dubai / حكومة دبي; Last updated {date} / آخر تحديث {date}; {channel} is run by the Government of Dubai / {channel} تديرها حكومة دبي. Channel names: R12.
 
 ## Budget
 
-6 KiB override. Measured 5.6 KiB: own module 2.8 KiB, plus locale and channel strings.
+No JavaScript. Its rules are part of `sc.css` (about 0.4 KiB gzip).
 
 ## Tests
 
-Spec: simple links and meta, hrefs only, privacy/cookies split, slotted extras, the fallback left unslotted, grouped groups and order, current channel, lower line, Arabic. e2e: contentinfo, link roles and 44px, Tab order including slotted, grouped columns and mirroring, current Bold, the current bar in EN and AR (R10), underline in every state (R6), no-JS fallback links visible, 44px and with hrefs with JavaScript disabled in EN and AR, and hidden with the same hrefs rendered once upgraded (PERF-04), one column on phones; `describeAxe`. Visual: grouped and simple EN/AR × light/dark.
-
-## Without JavaScript (PERF-04)
-
-The footer renders in shadow DOM, so without script it would show nothing, and PERF-04 needs help and navigation to work without it. A service writes the same links as light-DOM children in `slot="fallback"`:
-
-```html
-<sc-footer help-href="/en/help" accessibility-href="/en/accessibility" privacy-href="/en/privacy" terms-href="/en/terms">
-  <nav slot="fallback" aria-label="Support links"><ul>
-    <li><a href="/en/help">Help and contact</a></li>
-    <li><a href="/en/accessibility">Accessibility statement</a></li>
-    <li><a href="/en/privacy">Privacy and cookies</a></li>
-    <li><a href="/en/terms">Terms of use</a></li>
-  </ul></nav>
-</sc-footer>
-```
-
-Before the footer is defined (no script, script blocked or failed, or not loaded yet), the browser shows that content: `sc.css` styles it as a row of underlined label-medium `on-surface` links, 44px tall, with the grid margins and a 1px rule above. The upgraded shadow root has no `fallback` slot, so the fallback is then neither shown nor in the accessibility tree; the footer's own links replace it. Bare `<a>` extras are hidden before upgrade when a fallback exists (list them in the fallback too). For the grouped footer, write one `<h2>` and `<ul>` per group inside the fallback. The fallback's links and hrefs must match the attributes: the e2e checks both states.
-
-## Before upgrade
-
-The shadow root is empty until the component upgrades (or shows only the fallback while the tag is undefined), so `sc.css` reserves the measured height (`sc-footer:not(:defined)`): simple 253 / 149 / 117px and grouped 946 / 760 / 388px at compact / medium (600) / expanded (1024), measured with the standard links in English (Arabic is equal or taller). CLS stays 0 on the typical page.
+e2e (`sc-footer.e2e.ts`): not registered; contentinfo, surface, underlined `on-surface` links at least 44px; simple padding 32/40, the rule and the body-medium meta at inline-end; the page margins at 375/700/1200/1440; Tab order; stacked 44px rows below 600px; grouped columns and mirroring, padding 56/32, the lower line 40 below under its rule; the brand mark; the current channel Bold with the 3px bar in EN and AR (R10); underline in every state, 2px on hover (R6); the same with JavaScript disabled in EN and AR (PERF-04); one column on phones; `hidden`; `describeAxe`. Visual: grouped and simple EN/AR × light/dark.
 
 ## Container
 
-The footer does not nest `sc-container` (CSS-only in v2 and unusable in a shadow root): it applies the grid margins (`--sc-grid-*-margin` per breakpoint) and the `--sc-container-max` cap in its own CSS. The same holds for `sc-site-header`, `sc-announcement-bar` and `sc-utility-bar`.
+The footer does not nest `sc-container`: its `<footer>` applies the grid margins and the `--sc-container-max` cap (sharing `sc-container`'s margin rules in `sc.css`).

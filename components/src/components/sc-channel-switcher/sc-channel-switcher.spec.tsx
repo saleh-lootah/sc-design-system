@@ -66,4 +66,14 @@ describe('sc-channel-switcher (spec)', () => {
     expect(host.querySelector('li[data-channel="now"] a')!.getAttribute('href')).toBe('/now/ar/');
     expect(host.querySelector('li[data-channel="now"] a')!.getAttribute('hreflang')).toBe('ar');
   });
+
+  it('shows value as the current channel, over channel and data-channel, and reflects it', async () => {
+    const page = await render(`<div data-channel="now"><sc-channel-switcher channel="transport" value="trade" links='${LINKS}'></sc-channel-switcher></div>`);
+    const host = page.body.querySelector('sc-channel-switcher')!;
+    expect(host.querySelector('button')!.textContent!.replace(/\s+/g, ' ').trim()).toBe('Choose a channel: Dubai Trade');
+    expect(host.querySelector('li[data-channel="trade"] a')!.getAttribute('aria-current')).toBe('true');
+    (host as unknown as { value: string }).value = 'visit';
+    await page.waitForChanges();
+    expect(host.getAttribute('value')).toBe('visit');
+  });
 });

@@ -104,10 +104,7 @@
   .site-main:focus {
     outline: none;
   }
-  /* The same height before and after the component upgrades (CLS 0). */
   .site-main > sc-breadcrumbs {
-    display: block;
-    min-block-size: var(--sc-size-target-min);
     margin-block-end: var(--sc-space-16);
   }
 
@@ -717,168 +714,6 @@
     max-inline-size: var(--sc-size-measure);
     margin-block-end: var(--sc-space-24);
   }
-
-  /*
-   * sc-callout and sc-status-tag have no pre-upgrade rule in sc.css, so they change size as
-   * they upgrade (CLS). Until they do, the callout is drawn with the component's own box and
-   * type (sc-callout.css: 16px padding, the icon column, the 4px start bar), and the status
-   * line holds the tag's 32px. Gap reported.
-   */
-  sc-callout:not(.hydrated) {
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    gap: var(--sc-space-4);
-    padding: var(--sc-space-16);
-    padding-inline-start: calc(var(--sc-space-16) + var(--sc-size-icon-l) + var(--sc-space-12));
-    border: var(--sc-size-border-hairline) solid transparent;
-    border-inline-start: var(--sc-size-strip) solid var(--sc-color-info);
-    border-radius: var(--sc-radius-field);
-    background: var(--sc-color-info-container);
-    color: var(--sc-color-on-surface);
-    font: var(--sc-type-body-medium);
-    font-weight: var(--sc-font-weight-medium);
-    overflow-wrap: anywhere;
-  }
-  sc-callout[tone='warning']:not(.hydrated) {
-    border-inline-start-color: var(--sc-color-warning);
-    background: var(--sc-color-warning-container);
-  }
-  sc-callout:not(.hydrated) > [slot='heading'] {
-    font: var(--sc-type-title-small);
-    font-weight: var(--sc-font-weight-bold);
-  }
-  .doc-status {
-    display: flex;
-    align-items: center;
-    min-block-size: var(--sc-space-32);
-  }
-  .doc-status sc-status-tag:not(.hydrated) {
-    display: inline-flex;
-    align-items: center;
-    min-block-size: var(--sc-space-32);
-  }
-
-  /*
-   * Component gaps (reported, not hidden): sc-site-header, sc-tile and sc-channel-network
-   * render nothing useful without JavaScript. With scripting off, the header's slotted links
-   * are laid out as a plain row, each route shows a plain link, and the network is replaced
-   * by a <noscript> list. With scripting on, the header keeps its reserved height while it
-   * loads, so its light-DOM links never push the page down.
-   */
-  .route__fallback {
-    display: none;
-  }
-  @media (scripting: enabled) {
-    sc-site-header:not(.hydrated) {
-      overflow: hidden;
-      max-block-size: calc(var(--sc-space-80) + var(--sc-size-border-hairline));
-    }
-  }
-  @media (scripting: enabled) and (max-width: 1023.98px) {
-    sc-site-header:not(.hydrated) {
-      max-block-size: calc(var(--sc-space-64) + var(--sc-size-border-hairline));
-    }
-  }
-  @media (scripting: none) {
-    sc-site-header {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 0 var(--sc-space-24);
-      padding-inline: var(--site-margin);
-      border-block-end: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
-    }
-    sc-site-header > a {
-      display: inline-flex;
-      align-items: center;
-      min-block-size: var(--sc-size-target-min);
-      color: var(--sc-color-on-surface);
-      font: var(--sc-type-label-medium);
-    }
-    sc-tile,
-    sc-channel-network {
-      display: none;
-    }
-    .route__fallback {
-      display: flex;
-      align-items: center;
-      min-block-size: var(--sc-size-target-min);
-      color: var(--site-link);
-      font: var(--sc-type-title-small);
-      text-decoration: underline;
-      text-underline-offset: var(--sc-space-4);
-    }
-  }
-  /*
-   * sc-channel-network reserves no height before it renders (sc.css has no rule for it), so
-   * the home page holds the space it takes, measured in Helium at the start of each width
-   * band (its own breakpoints are container widths 560 and 960). Gap reported.
-   */
-  @media (max-width: 359.98px) {
-    .home-network {
-      min-block-size: 570px;
-    }
-    .home-network:lang(ar) {
-      min-block-size: 634px;
-    }
-  }
-  @media (min-width: 360px) and (max-width: 399.98px) {
-    .home-network {
-      min-block-size: 526px;
-    }
-    .home-network:lang(ar) {
-      min-block-size: 586px;
-    }
-  }
-  @media (min-width: 400px) and (max-width: 479.98px) {
-    .home-network {
-      min-block-size: 506px;
-    }
-    .home-network:lang(ar) {
-      min-block-size: 562px;
-    }
-  }
-  @media (min-width: 480px) and (max-width: 623.98px) {
-    .home-network {
-      min-block-size: 466px;
-    }
-    .home-network:lang(ar) {
-      min-block-size: 490px;
-    }
-  }
-  @media (min-width: 624px) and (max-width: 839.98px) {
-    .home-network {
-      min-block-size: 322px;
-    }
-    .home-network:lang(ar) {
-      min-block-size: 358px;
-    }
-  }
-  @media (min-width: 840px) and (max-width: 1055.98px) {
-    .home-network {
-      min-block-size: 278px;
-    }
-    .home-network:lang(ar) {
-      min-block-size: 310px;
-    }
-  }
-  @media (min-width: 1056px) {
-    .home-network {
-      min-block-size: 176px;
-    }
-    .home-network:lang(ar) {
-      min-block-size: 200px;
-    }
-  }
-  .home-network {
-    display: block;
-  }
-  /* sc-channel-network's English eyebrow is set in capitals (CNT-07 asks for sentence case). */
-  .home-network .sc-channel-network__eyebrow {
-    text-transform: none;
-  }
-
   .doc-status {
     margin: 0 0 var(--sc-space-24);
   }
@@ -924,15 +759,6 @@
     display: block;
     max-inline-size: var(--sc-size-measure);
     margin-block-end: var(--sc-space-40);
-  }
-  .home-network-fallback {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--sc-space-8) var(--sc-space-24);
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    font: var(--sc-type-title-small);
   }
   .home-h2 {
     margin: var(--sc-space-64) 0 var(--sc-space-24);

@@ -4,8 +4,10 @@
  * (on-surface-variant) on neutral-96 (surface-container); channel is channel-action on
  * channel-subtle (W4).
  */
+/* inline-flex, not inline-block: an inline-block host adds its own line's strut, which made
+   the chip 34px tall in Arabic instead of 32. */
 :host {
-  display: inline-block;
+  display: inline-flex;
   vertical-align: middle;
   max-inline-size: 100%;
 }

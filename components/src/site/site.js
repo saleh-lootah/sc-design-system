@@ -47,28 +47,23 @@ addEventListener('hashchange', forward);
 
 /*
  * Component pages: the channel switcher above the examples re-themes them in place. Its links
- * carry ?channel= (so without this script they reload the page); here the click sets
- * data-channel on the examples instead, and the URL keeps the choice.
+ * carry ?channel= (so without this script they reload the page); here its scChannelChange
+ * event sets data-channel on the examples instead, and the URL keeps the choice.
  */
 const CHANNELS = ['now', 'transport', 'visit', 'justice', 'build', 'invest', 'trade'];
 const preview = document.getElementById('preview');
 const switcher = document.querySelector('.examples-bar sc-channel-switcher');
 if (preview && switcher) {
-  const apply = (channel) => {
-    preview.dataset.channel = channel;
-    switcher.setAttribute('channel', channel);
-  };
   const asked = new URLSearchParams(location.search).get('channel');
-  if (CHANNELS.includes(asked)) apply(asked);
-  switcher.addEventListener('click', (e) => {
-    const item = e.target.closest?.('a[href*="channel="]');
-    const channel = item?.closest('[data-channel]')?.dataset.channel;
-    if (!channel || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey) return;
+  if (CHANNELS.includes(asked)) {
+    preview.dataset.channel = asked;
+    switcher.setAttribute('value', asked);
+  }
+  switcher.addEventListener('scChannelChange', (e) => {
+    const { channel } = e.detail;
     e.preventDefault();
-    apply(channel);
+    preview.dataset.channel = channel;
     history.replaceState(null, '', `?channel=${channel}${location.hash}`);
-    // After the component has handled the click itself; close() returns focus to the trigger.
-    setTimeout(() => switcher.close?.());
   });
 }
 

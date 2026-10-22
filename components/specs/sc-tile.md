@@ -17,6 +17,10 @@ A compact tile that is one link: a tinted icon, a title and an optional count.
 | 3 | Title (`title`) | `title-small` (17/22 Medium; AR 19/28 Bold), `on-surface`. Up to three lines; never truncated. |
 | 4 | Count (`count`, optional) | `body-small`, `on-surface-variant`. Plural-aware in both languages (see Strings), Latin digits with grouping ("1,284 services"). A visually hidden comma separates it from the title in the link name. |
 
+## Light-DOM link (v2-lib-gaps)
+
+Write the title as an `<a href>` child: `<sc-tile><svg slot="icon">…</svg><a href="/en/moving-home">Moving home</a></sc-tile>`. Before upgrade and without JavaScript (PERF-04) that link is the tile: `sc.css` draws the final box (16 padding, 1px `outline-variant` edge, `radius-card`, at least 112px, the icon in its 40px `channel-subtle` tile, title-small) and stretches the link over the whole box. Once upgraded the tile reads the child's `href` and text and renders its own link; the child is not slotted, so it is neither shown nor read, and the tile's look and name are unchanged. Before upgrade the tint and the count are not shown (a colour change and, with a count, one more line at upgrade). `href` on the host with the title as text still works, with no link until upgrade.
+
 ## States
 
 | State | Rule |

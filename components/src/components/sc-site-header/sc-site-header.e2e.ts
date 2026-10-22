@@ -1,7 +1,7 @@
 import { E2EPage } from '@stencil/core/testing';
 import { describeAxe, expectNoAxeViolations } from '../../test/axe';
 import { siteHeader } from '../../test/chrome';
-import { contexts, loadFonts, newScPage, setPageContext } from '../../test/page';
+import { contexts, loadFonts, newScPage, noScriptPage, setPageContext } from '../../test/page';
 
 /** Evaluates `expr` with `root`, the header's shadow root. */
 function inRoot<T = unknown>(page: E2EPage, expr: string, sel = 'sc-site-header'): Promise<T> {
@@ -278,6 +278,108 @@ describe('sc-site-header (e2e)', () => {
       return [Math.round(nav[0].left - lockup.right), Math.round(nav[1].left - nav[0].right), Math.round(end[1].left - end[0].right)];
     });
     expect(gaps).toEqual([56, 36, 24]);
+  });
+});
+
+describe('sc-site-header slots: search and name', () => {
+  const SEARCH = '<sc-search slot="search" label="Search Dubai Now" label-hidden action="#search"></sc-search>';
+  const NAME = '<a slot="name" href="#home">Dubai Now</a>';
+  // Without the sign-in button: beside it, the name and an inline field don't fit in 1280px, and
+  // the header takes its compact layout (tested below).
+  const withSlots = (lang = 'en', signIn = false) => siteHeader(lang).replace(signIn ? '' : 'sign-in-href="#sign-in"', '').replace('<a slot="nav"', `${NAME}${SEARCH}<a slot="nav"`);
+
+  it('puts an sc-search inline in the row on wide screens, instead of the search link, and keeps the order', async () => {
+    const page = await newScPage(withSlots());
+    await desktop(page);
+    expect(await inRoot(page, 'root.querySelector(".end a.icon-button")')).toBeNull();
+    expect(await inRoot(page, 'root.querySelector(".end .search slot").assignedElements()[0].localName')).toBe('sc-search');
+    const r = await page.evaluate(() => {
+      const box = (s: string) => document.querySelector(s)!.getBoundingClientRect();
+      return { search: box('sc-search').left, lastNav: box('a[slot="nav"]:last-of-type').right, language: box('sc-language-switch').left, w: box('sc-search').width, h: box('sc-search').height };
+    });
+    expect(r.search).toBeGreaterThan(r.lastNav);
+    expect(r.search).toBeLessThan(r.language);
+    expect(r.w).toBeGreaterThanOrEqual(160);
+    expect(r.w).toBeLessThanOrEqual(320);
+    expect(r.h).toBeLessThanOrEqual(80);
+  });
+
+  it('takes the compact layout when the row cannot hold the field at 160px', async () => {
+    const page = await newScPage(withSlots('en', true));
+    await desktop(page);
+    await page.waitForFunction(() => !!document.querySelector('sc-site-header')!.shadowRoot!.querySelector('.menu-button'));
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(1440);
+  });
+
+  it('moves the sc-search to the top of the mobile menu on compact screens', async () => {
+    const page = await newScPage(withSlots());
+    await phone(page);
+    expect(await page.evaluate(() => document.querySelector('sc-search')!.getClientRects().length)).toBe(0);
+    await inRoot(page, 'root.querySelector(".menu-button").click()');
+    await page.waitForChanges();
+    expect(await inRoot(page, 'root.querySelector(".menu-body > .menu-search-field slot").assignedElements()[0].localName')).toBe('sc-search');
+    expect(await inRoot(page, 'root.querySelector(".menu-body > :first-child").className')).toBe('menu-search-field');
+    expect(await page.evaluate(() => document.querySelector('sc-search')!.getClientRects().length)).toBe(1);
+  });
+
+  it('keeps search-href as the search link when the slot is empty', async () => {
+    const page = await newScPage(siteHeader('en'));
+    await desktop(page);
+    expect(await inRoot(page, 'root.querySelector(".end a.icon-button").getAttribute("href")')).toBe('#search');
+  });
+
+  it('shows the site name after the lockup, in both layouts, and mirrors in Arabic', async () => {
+    for (const lang of ['en', 'ar'] as const) {
+      const page = await newScPage(withSlots(lang), { lang });
+      await desktop(page);
+      const order = () =>
+        page.evaluate(() => {
+          const x = (s: string) => document.querySelector(s)!.getBoundingClientRect().left;
+          return [x('[slot="lockup"]'), x('[slot="name"]'), x('a[slot="nav"]')];
+        });
+      const wide = await order();
+      expect(lang === 'en' ? [...wide].sort((a, b) => a - b) : [...wide].sort((a, b) => b - a)).toEqual(wide);
+      expect(await page.evaluate(() => getComputedStyle(document.querySelector('[slot="name"]')!).fontWeight)).toBe('700');
+      await phone(page);
+      expect(await page.evaluate(() => document.querySelector('[slot="name"]')!.getClientRects().length)).toBe(1);
+    }
+  });
+});
+
+describe('sc-site-header before it upgrades and without JavaScript (PERF-04)', () => {
+  it.each(['en', 'ar'] as const)('shows the light-DOM lockup and navigation as one row, the current link underlined in the channel colour (%s)', async (lang) => {
+    const page = await noScriptPage(siteHeader(lang), lang);
+    const r = await page.evaluate(() => {
+      const links = Array.from(document.querySelectorAll('sc-site-header > a[slot="nav"]'));
+      const cur = getComputedStyle(document.querySelector('sc-site-header > [aria-current="page"]')!);
+      return {
+        visible: links.every((a) => a.getBoundingClientRect().width > 0),
+        heights: links.map((a) => Math.round(a.getBoundingClientRect().height)),
+        rows: new Set(links.map((a) => Math.round(a.getBoundingClientRect().top))).size,
+        bar: [cur.borderBottomWidth, cur.borderBottomStyle, cur.fontWeight],
+        search: document.querySelector('sc-site-header > [slot="search"]') === null,
+      };
+    });
+    expect(r.visible).toBe(true);
+    for (const h of r.heights) expect(h).toBeGreaterThanOrEqual(44);
+    expect(r.rows).toBe(1);
+    expect(r.bar).toEqual(['3px', 'solid', '700']);
+    await page.close();
+  });
+
+  it('with JavaScript, holds its final height while it loads', async () => {
+    const page = await newScPage(siteHeader('en'));
+    await desktop(page);
+    const h = await page.evaluate(() => {
+      const el = document.querySelector('sc-site-header')!;
+      const upgraded = el.getBoundingClientRect().height;
+      el.classList.remove('hydrated');
+      const before = getComputedStyle(el);
+      const r = [upgraded, parseFloat(before.minHeight), parseFloat(before.maxHeight), before.overflow];
+      el.classList.add('hydrated');
+      return r;
+    });
+    expect(h).toEqual([81, 81, 81, 'hidden']);
   });
 });
 

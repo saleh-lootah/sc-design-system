@@ -24,6 +24,8 @@ The channel's logo and the channel switcher: a real button that discloses a labe
 
 Disclosure, not an ARIA menu (shared with `sc-account-menu`, `src/utils/disclosure.ts`): the button toggles; Tab moves through the links; Escape closes and returns focus to the button (and is consumed, so the mobile menu around it stays open); a press outside closes; focus leaving closes. Methods `open()`, `close()`.
 
+Choosing (v2-lib-gaps): a click on a channel's link emits `scChannelChange` (`detail: { channel }`, bubbles, composed, cancelable) before the link is followed. If a listener calls `preventDefault()`, the link is not followed, the reflected `value` prop becomes the chosen channel (the trigger and the check follow it) and the panel closes, returning focus to the trigger. Clicks with a modifier key or another button are left to the browser and emit nothing. A page that doesn't listen behaves as before. `value` wins over `channel` and the closest `data-channel` as the current channel; use it when the page switches channels in place (the documentation site re-themes its examples this way, keeping `?channel=` links for pages without JavaScript).
+
 Links: `links` (object or JSON) maps each channel to its home URL; `{lang}` becomes `en` or `ar`, so each link leads to that channel's home in the current language (CHR-03), with `hreflang`.
 
 ## Motion

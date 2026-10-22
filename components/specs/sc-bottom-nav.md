@@ -6,7 +6,7 @@ The primary navigation of signed-in channel pages on phones and tablets.
 
 ## Encapsulation
 
-**Shadow DOM**, reading plain child links like `sc-breadcrumbs` (see its spec). Children: `<a href data-icon aria-current>`; three to five of them. Parts: `nav`, `item`, `indicator`.
+**Shadow DOM**, reading plain child links like `sc-account-nav` (see its spec). Children: `<a href data-icon aria-current>`; three to five of them. Parts: `nav`, `item`, `indicator`.
 
 ## Anatomy
 

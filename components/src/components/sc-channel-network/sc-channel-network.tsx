@@ -20,7 +20,16 @@ const strings = channelStrings(own);
  * site, the design system's documentation): no tile is current and every tile is a link.
  *
  * A `<nav>` labelled "Government of Dubai channels" with a list of links. Seven tiles in a
- * row from 1024px (by the strip's own width), four from 600px, two below.
+ * row from 960px of the strip's own width, four from 560px, two below. The eyebrow is set in
+ * sentence case as written (CNT-07).
+ *
+ * Without JavaScript (PERF-04, B1): the strip renders from its props, so write the same links
+ * as light-DOM children in `slot="fallback"` (a `<nav aria-label>` with a `<ul>` of
+ * `<a href>`, the current channel as text with `aria-current="true"`). `sc.css` shows them as
+ * a row of 44px links until the strip upgrades, and hides them once it has rendered.
+ * Before it upgrades the host also reserves the strip's measured height for its width.
+ *
+ * @slot fallback - Never shown once upgraded: the channel links for pages without JavaScript.
  */
 @Component({
   tag: 'sc-channel-network',

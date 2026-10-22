@@ -9,7 +9,7 @@ const tiles = (ar: boolean) => `
     <sc-tile href="#c" tint="blue" count="2">${ICON}${ar ? 'امتلاك مركبة' : 'Owning a vehicle'}</sc-tile>
     <sc-tile href="#d" tint="violet">${ICON}${ar ? 'شهادة حسن السيرة' : 'Police certificate'}</sc-tile>
     <sc-tile href="#e" tint="green" count="1">${ICON}${ar ? 'الصحة' : 'Health'}</sc-tile>
-    <sc-tile href="#f" id="focused">${ICON}${ar ? 'دفع مخالفة مرورية' : 'Pay a traffic fine'}</sc-tile>
+    <sc-tile id="focused">${ICON}<a href="#f">${ar ? 'دفع مخالفة مرورية' : 'Pay a traffic fine'}</a></sc-tile>
   </div>`;
 
 describeVisual('sc-tile screenshots', () => {

@@ -124,4 +124,57 @@ describe('sc-channel-switcher (e2e)', () => {
   });
 });
 
+describe('sc-channel-switcher scChannelChange', () => {
+  const choose = async (page: E2EPage, channel: string) => {
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Enter');
+    await page.waitForChanges();
+    await page.click(`li[data-channel="${channel}"] a`);
+    await page.waitForChanges();
+  };
+
+  it('a page that does not listen follows the link, as before', async () => {
+    const page = await newScPage(SWITCHER);
+    await choose(page, 'visit');
+    expect(await page.evaluate(() => location.hash)).toBe('#visit-en');
+  });
+
+  it('emits the chosen channel; preventDefault() keeps the page, sets value, closes the panel and returns focus', async () => {
+    const page = await newScPage(SWITCHER);
+    await page.evaluate(() => {
+      (window as unknown as { seen: string[] }).seen = [];
+      document.addEventListener('scChannelChange', (e) => {
+        (window as unknown as { seen: string[] }).seen.push((e as CustomEvent).detail.channel);
+        e.preventDefault();
+      });
+    });
+    await choose(page, 'justice');
+    expect(await page.evaluate(() => (window as unknown as { seen: string[] }).seen)).toEqual(['justice']);
+    expect(await page.evaluate(() => location.hash)).toBe('');
+    expect(await page.evaluate(() => document.querySelector('sc-channel-switcher')!.getAttribute('value'))).toBe('justice');
+    expect(await expanded(page)).toBe('false');
+    expect(await page.evaluate(() => document.activeElement!.classList.contains('sc-channel-switcher__trigger'))).toBe(true);
+    expect(await page.evaluate(() => document.querySelector('.sc-channel-switcher__trigger')!.textContent!.replace(/\s+/g, ' ').trim())).toBe('Choose a channel: Dubai Justice');
+    expect(await page.evaluate(() => document.querySelector('li[data-channel="justice"] a')!.getAttribute('aria-current'))).toBe('true');
+  });
+
+  it('emits nothing for a click with a modifier key (left to the browser)', async () => {
+    const page = await newScPage(SWITCHER);
+    await page.evaluate(() => {
+      (window as unknown as { seen: number }).seen = 0;
+      document.addEventListener('scChannelChange', (e) => {
+        (window as unknown as { seen: number }).seen++;
+        e.preventDefault();
+      });
+      // Keep the test page: stop the browser from opening the link.
+      document.addEventListener('click', (e) => e.preventDefault());
+    });
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Enter');
+    await page.waitForChanges();
+    await page.evaluate(() => (document.querySelector('li[data-channel="visit"] a') as HTMLElement).dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, ctrlKey: true })));
+    expect(await page.evaluate(() => (window as unknown as { seen: number }).seen)).toBe(0);
+  });
+});
+
 describeAxe('sc-channel-switcher', SWITCHER);

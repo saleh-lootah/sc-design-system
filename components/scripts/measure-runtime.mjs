@@ -72,11 +72,11 @@ const PROBE = () => {
   };
   document.addEventListener('DOMContentLoaded', async () => {
     const wait = async () => {
-      // CSS-only tags (sc-container, sc-grid, sc-ltr) are never defined: skip them.
-      const els = all().filter((el) => !['sc-container', 'sc-grid', 'sc-ltr'].includes(el.localName));
+      // CSS-only tags (sc-container, sc-grid, sc-ltr, sc-footer, sc-breadcrumbs) are never defined: skip them.
+      const els = all().filter((el) => !['sc-container', 'sc-grid', 'sc-ltr', 'sc-footer', 'sc-breadcrumbs'].includes(el.localName));
       await Promise.all(els.map((el) => customElements.whenDefined(el.localName).then(() => (el.componentOnReady ? el.componentOnReady() : null))));
       // Children rendered inside shadow roots may have appeared meanwhile.
-      if (all().filter((el) => !['sc-container', 'sc-grid', 'sc-ltr'].includes(el.localName)).length !== els.length) return wait();
+      if (all().filter((el) => !['sc-container', 'sc-grid', 'sc-ltr', 'sc-footer', 'sc-breadcrumbs'].includes(el.localName)).length !== els.length) return wait();
       return els;
     };
     const els = await wait();

@@ -1,12 +1,18 @@
-import { Component, Element, Host, Method, Prop, State, h } from '@stencil/core';
+import { Component, Element, Event, EventEmitter, Host, Method, Prop, State, h } from '@stencil/core';
 import { LocaleController } from '../../i18n/controller';
 import own from '../../i18n/components/sc-channel-switcher';
 import { channelStrings, descKey, nameKey } from '../../i18n/components/channels';
 import { Check, ExpandMore } from '../../icons/for/sc-channel-switcher';
 import { Disclosure } from '../../utils/disclosure';
+import { fromPointer } from '../../utils/motion';
 import { Channel, ChannelLinks, channelHref, channels, parseLinks, resolveChannel } from '../../utils/channels';
 
 const strings = channelStrings(own);
+
+export interface ScChannelChangeDetail {
+  /** The channel the user chose. */
+  channel: Channel;
+}
 
 let instances = 0;
 
@@ -21,6 +27,12 @@ let instances = 0;
  * swatch is that channel's `channel-action`; that is why the component renders into light
  * DOM (Stencil `scoped`): the document's channel rules must reach the items. The current
  * channel carries a check and `aria-current="true"`.
+ *
+ * Choosing a channel emits `scChannelChange` (`detail.channel`), then follows its link. A page
+ * that switches channels in place (a documentation site re-theming its examples, a single-page
+ * app) calls `preventDefault()`: the link is not followed, `value` becomes the chosen channel
+ * and the panel closes, returning focus to the trigger. Clicks with a modifier key (a new tab
+ * or window) are left to the browser and emit nothing.
  *
  * Escape and a press outside close the panel; Escape returns focus to the button; the panel
  * closes when focus leaves it. From a pointer it grows from the trigger's corner over
@@ -40,6 +52,19 @@ export class ScChannelSwitcher {
 
   /** The current channel. Defaults to the closest `data-channel` (as set by `sc-page`). */
   @Prop({ reflect: true }) channel?: Channel;
+
+  /**
+   * The channel shown as current, when the page switches channels in place. Wins over
+   * `channel`; set by the switcher itself when an `scChannelChange` listener calls
+   * `preventDefault()`.
+   */
+  @Prop({ reflect: true, mutable: true }) value?: Channel;
+
+  /**
+   * Emitted when the user chooses a channel, before its link is followed. Cancelable:
+   * `preventDefault()` keeps the page where it is and makes the choice the `value`.
+   */
+  @Event({ eventName: 'scChannelChange', bubbles: true, composed: true, cancelable: true }) scChannelChange!: EventEmitter<ScChannelChangeDetail>;
 
   /**
    * Each channel's home page, as an object or a JSON attribute:
@@ -91,9 +116,17 @@ export class ScChannelSwitcher {
     this.disclosure.close(false);
   }
 
+  private onItemClick = (ev: MouseEvent, channel: Channel) => {
+    if (ev.button !== 0 || ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey) return;
+    if (!this.scChannelChange.emit({ channel }).defaultPrevented) return;
+    ev.preventDefault();
+    this.value = channel;
+    this.disclosure.close(fromPointer(ev), true);
+  };
+
   render() {
     const { t, lang } = this.locale;
-    const current = resolveChannel(this.el, this.channel);
+    const current = resolveChannel(this.el, this.value || this.channel);
     const links = parseLinks(this.links);
     const panelId = `${this.ids}-panel`;
     const captionId = `${this.ids}-caption`;
@@ -137,7 +170,13 @@ export class ScChannelSwitcher {
                 return (
                   <li class="sc-channel-switcher__entry" data-channel={channel} key={channel}>
                     {href ? (
-                      <a class={{ 'sc-channel-switcher__item': true, 'focus-ring': true, 'state-layer': true, 'is-current': isCurrent }} href={href} hreflang={lang} aria-current={isCurrent ? 'true' : undefined}>
+                      <a
+                        class={{ 'sc-channel-switcher__item': true, 'focus-ring': true, 'state-layer': true, 'is-current': isCurrent }}
+                        href={href}
+                        hreflang={lang}
+                        aria-current={isCurrent ? 'true' : undefined}
+                        onClick={(ev) => this.onItemClick(ev, channel)}
+                      >
                         {content}
                       </a>
                     ) : (

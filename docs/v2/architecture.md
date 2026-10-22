@@ -26,7 +26,7 @@ gzip unless stated.
 |---|---|---|
 | JS on the page (lazy build, including the nested `sc-button`) | 46.4 KiB, in 16 scripts | **≤ 30 KiB** |
 | Stencil runtime core | 15.5 KiB | ≤ 14 KiB |
-| Global stylesheet (tokens, `@font-face`, body) | 4.1 KiB | ≤ 9 KiB (W7), which now also holds the shared helpers, type roles and layout primitives |
+| Global stylesheet (tokens, `@font-face`, body) | 4.1 KiB | ≤ 10 KiB (R23, amends W7), which now also holds the shared helpers, type roles and layout primitives |
 | Component CSS parsed on the page | 4.3 KiB | ≤ 4 KiB (W13) |
 | Fonts downloaded | 188.7 KiB: 3 full weights at 63–64 KiB each | **≤ 75 KiB in English, ≤ 100 KiB in Arabic** |
 | Total transferred | 239.5 KiB, 79% of it fonts | ≤ 115 KiB in English, ≤ 140 KiB in Arabic |
@@ -369,14 +369,14 @@ and never registered.
 
 | Family | Components | Mode | Why (measured or documented) |
 |---|---|---|---|
-| Layout primitives | `sc-container`, `sc-grid`, `sc-ltr` | **CSS only** (unregistered element styled by tag and attribute selectors in `@layer sc.components`) | They have no behaviour. Today they cost JS, a shadow root and, in the lazy build, visibility hidden until hydrated. `sc-container` was a CLS source. `sc-grid` spans become `sc-grid[span-medium="4"]` rules (36 rules). `sc-ltr` is `direction: ltr; unicode-bidi: isolate`, which equals `<bdi dir=ltr>`. |
+| Layout primitives (and, since v2-lib-gaps, the static chrome `sc-footer` and `sc-breadcrumbs`) | `sc-container`, `sc-grid`, `sc-ltr`, `sc-footer`, `sc-breadcrumbs` | **CSS only** (unregistered element styled by tag and attribute selectors in `@layer sc.components`) | They have no behaviour. Today they cost JS, a shadow root and, in the lazy build, visibility hidden until hydrated. `sc-container` was a CLS source. `sc-grid` spans become `sc-grid[span-medium="4"]` rules (36 rules). `sc-ltr` is `direction: ltr; unicode-bidi: isolate`, which equals `<bdi dir=ltr>`. |
 | Page shell | `sc-page` | **Scoped** (light DOM), with minimal JS | It must wrap content in `<main>` and set `lang`, `dir` and channel. Already scoped in v1. |
 | Card | `sc-card` | **Scoped** | Landmark role and label wiring. Consumers' headings stay in light DOM, so `aria-labelledby` works with ordinary IDs. |
 | Form fields | `sc-text-input`, `sc-textarea`, `sc-select`, `sc-date-input`, `sc-search`, `sc-checkbox`, `sc-checkbox-group`, `sc-radio-group`, `sc-radio`, `sc-date-range` (its inputs) | **Scoped**: the component renders the native `<label>`, `<input>`, hint and error into light DOM from props | Enter-to-submit works natively (probe a–g). No ElementInternals mirroring, so less JS. Service `<label for>`, `aria-describedby` and error-summary links can target the real control ID. Native constraint validation and `FormData`. Lowest autofill risk. The radio group no longer needs manual slot assignment, because native radios share a `name` in one tree. |
 | Actions | `sc-button` | **Scoped**: renders a native `<button>` or `<a>` in light DOM | It must be able to be the form's default button (probe e). Native `type=submit`, `form=`, `formaction` and `disabled` all work with no ElementInternals. |
 | Links | `sc-link`, `sc-back-link`, `sc-skip-link` | **Shadow** (`delegatesFocus`) | Self-contained. Nothing references inside them. In-page fragments resolve in the document. A CSS-only class for inline links in running text is recommended alongside (see §6). |
 | Lists and tables with native semantics | `sc-table`, `sc-summary-list` + `sc-summary-row`, and the planned accordion, timeline and notification list | **Scoped** | `<table>`, `<dl>` and `<ol>` must directly contain their parts. v1's summary list copies row data into a shadow `<dl>` through an internal `sc-summary-row-update` element. In light DOM the rows are the real `<div><dt><dd>` groups. |
-| Chrome and display | `sc-app-bar`, `sc-footer`, `sc-channel-hero`, `sc-callout`, `sc-status-tag`, `sc-channel-chip`, `sc-spinner`, `sc-step-progress`, `sc-service-card`, `sc-error-summary`, `sc-language-switch`, new `sc-modal`, attention card, module card, tile, empty state, filter chips | **Shadow** | Visual encapsulation is the point. Nothing crosses the boundary. `::part()` is the styling escape hatch. `sc-modal` uses a native `<dialog>` in its own root with `showModal()` for the top layer and inert background. |
+| Chrome and display | `sc-app-bar`, `sc-channel-hero`, `sc-callout`, `sc-status-tag`, `sc-channel-chip`, `sc-spinner`, `sc-step-progress`, `sc-service-card`, `sc-error-summary`, `sc-language-switch`, new `sc-modal`, attention card, module card, tile, empty state, filter chips | **Shadow** | Visual encapsulation is the point. Nothing crosses the boundary. `::part()` is the styling escape hatch. `sc-modal` uses a native `<dialog>` in its own root with `showModal()` for the top layer and inert background. |
 
 Rules for scoped (light DOM) components:
 
@@ -483,7 +483,7 @@ Shadow components:
   `--sc-channel-*` to that channel's tonal roles. It applies anywhere in the tree, not only on
   `:root`, so a shared-network strip can show city indigo inside a channel page. Entities never
   get a block; they get attribution only, per the plan.
-- **Budget:** the whole document stylesheet ≤ 9 KiB gzip (W7), including tokens, all type roles,
+- **Budget:** the whole document stylesheet ≤ 10 KiB gzip (R23, amends W7), including tokens, all type roles,
   helpers, CSS-only primitives and the light-DOM component styles.
 - **Delivery:** `<link rel="stylesheet">` in `<head>`, never `@import`. It is render-blocking by
   design, because it holds the tokens.
@@ -578,7 +578,7 @@ figures are gzip -9, per file.
 | Budget | Limit | v1 |
 |---|---|---|
 | Runtime core | 14 KiB | 15.5 KiB ✗ |
-| Document stylesheet (`sc.css`) | 9 KiB | 4.1 KiB (tokens only) |
+| Document stylesheet (`sc.css`) | 10 KiB (R23) | 4.1 KiB (tokens only) |
 | Leaf component (JS + its CSS + its strings, excluding core) | **4 KiB** | 0.3–7.9 KiB (14 of 23 fail) |
 | Form field | 7 KiB | 9.5–10.1 KiB ✗ |
 | `sc-error-summary` | 6 KiB | 6.8 KiB ✗ |

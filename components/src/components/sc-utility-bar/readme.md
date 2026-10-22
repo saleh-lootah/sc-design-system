@@ -8,7 +8,7 @@ Help and feedback for channel sites (decision U4, Standard CHR-05). Spec: `specs
 <sc-page channel="now" sync-document>
   …
   <div slot="footer">
-    <sc-footer variant="grouped" …></sc-footer>
+    <sc-footer variant="grouped"><footer>…</footer></sc-footer>
     <sc-utility-bar happiness-href="/en/happiness" contact-href="tel:04…" services-href="/en/services" chat-href="/en/chat" accessibility-href="/en/accessibility"></sc-utility-bar>
   </div>
 </sc-page>

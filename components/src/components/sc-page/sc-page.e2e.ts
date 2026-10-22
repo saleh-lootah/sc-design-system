@@ -62,8 +62,9 @@ describe('sc-page (e2e)', () => {
     await page.waitForChanges();
     expect(await attrs()).toEqual(['ar', 'rtl', 'now']);
     // Components inside take the page's language.
-    const label = await page.evaluate(() => document.querySelector('sc-footer')!.shadowRoot!.querySelector('#g-channels')!.textContent);
-    expect(label).toBe('القنوات');
+    await page.waitForChanges();
+    const label = await page.evaluate(() => document.querySelector('sc-channel-network nav')!.getAttribute('aria-label'));
+    expect(label).toBe('قنوات حكومة دبي');
   });
 
   it('themes everything inside by channel', async () => {
@@ -173,10 +174,10 @@ describe('sc-page (e2e)', () => {
 
   it('re-renders the chrome strings when the page language changes', async () => {
     const page = await newScPage(HOME(), { lang: 'ar' });
-    const heading = () => page.evaluate(() => document.querySelector('sc-footer')!.shadowRoot!.querySelector('#g-helpful')!.textContent);
-    expect(await heading()).toBe('معلومات مفيدة');
+    const heading = () => page.evaluate(() => document.querySelector('sc-channel-network nav')!.getAttribute('aria-label'));
+    expect(await heading()).toBe('قنوات حكومة دبي');
     await setPageContext(page, { lang: 'en' });
-    expect(await heading()).toBe('Helpful information');
+    expect(await heading()).toBe('Government of Dubai channels');
   });
 });
 

@@ -82,6 +82,31 @@
   color: inherit;
 }
 
+/* Site name or wordmark (slot="name"): title-medium Bold, never underlined at rest. */
+.name {
+  display: flex;
+  align-items: center;
+  min-inline-size: 0;
+}
+
+::slotted([slot='name']) {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--sc-size-target-min);
+  color: inherit;
+  font: var(--sc-type-title-medium);
+  font-weight: var(--sc-font-weight-bold);
+  letter-spacing: var(--sc-type-title-medium-tracking);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.compact ::slotted([slot='name']) {
+  font: var(--sc-type-title-small);
+  font-weight: var(--sc-font-weight-bold);
+  letter-spacing: var(--sc-type-title-small-tracking);
+}
+
 /* Main navigation: full-height links, a 3px channel-action bar under the current one. */
 .nav {
   display: flex;
@@ -142,6 +167,36 @@
 
 .compact .end {
   gap: var(--sc-space-8);
+}
+
+/* An sc-search in slot="search": inline in the row, 320px wide, shrinking to 160px when the
+   row is tight (the navigation never shrinks for it); when even that does not fit, the header
+   takes its compact layout. At the top of the menu on compact screens, full width. */
+.search {
+  display: flex;
+  flex: 0 1 calc(var(--sc-space-80) * 4);
+  align-items: center;
+  min-inline-size: calc(var(--sc-space-80) * 2);
+}
+
+.end:has(> .search) {
+  flex: 0 1 auto;
+  min-inline-size: 0;
+}
+
+.end:has(> .search) > :not(.search),
+.inner:has(.search) > .nav {
+  flex: none;
+}
+
+::slotted([slot='search']) {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.menu-search-field {
+  display: flex;
+  padding-block: var(--sc-space-8) var(--sc-space-16);
 }
 
 .language,

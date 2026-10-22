@@ -1,6 +1,6 @@
 import { E2EPage } from '@stencil/core/testing';
 import { describeAxe } from '../../test/axe';
-import { newScPage } from '../../test/page';
+import { loadFonts, newScPage, noScriptPage } from '../../test/page';
 
 function tag(page: E2EPage, selector: string, read: string) {
   return page.evaluate(
@@ -89,6 +89,28 @@ describe('sc-status-tag (e2e)', () => {
     await forceColors(page);
     expect(await tag(page, '#e', 'getComputedStyle(tag).borderTopStyle')).toBe('solid');
     expect(await tag(page, '#e', 'getComputedStyle(tag).borderTopColor')).not.toBe('rgba(0, 0, 0, 0)');
+  });
+});
+
+describe('sc-status-tag before it upgrades (CLS 0)', () => {
+  it.each([
+    ['<sc-status-tag>In review</sc-status-tag>', 'en'],
+    ['<sc-status-tag tone="error">Action needed</sc-status-tag>', 'en'],
+    ['<sc-status-tag tone="success">تم الدفع</sc-status-tag>', 'ar'],
+  ])('the host draws the same box before upgrade: %s', async (html, lang) => {
+    const wrap = `<div style="inline-size: 360px">${html}</div>`;
+    const measure = () => {
+      const b = document.querySelector('sc-status-tag')!.getBoundingClientRect();
+      return [Math.round(b.width), Math.round(b.height)];
+    };
+    const page = await newScPage(wrap, { lang: lang as 'en' | 'ar' });
+    await loadFonts(page);
+    const upgraded = await page.evaluate(measure);
+    // Never defined: only sc.css applies, as before the upgrade.
+    const pre = await noScriptPage(wrap, lang);
+    await pre.evaluate(() => Promise.all(['400', '500', '700'].map((w) => document.fonts.load(`${w} 16px "Dubai W23 Arabic", "Dubai W23"`, 'Aا'))));
+    expect(await pre.evaluate(measure)).toEqual(upgraded);
+    await pre.close();
   });
 });
 

@@ -35,11 +35,57 @@ export function siteHeader(lang = 'en', { signedIn = false, attrs = '' } = {}): 
     </sc-site-header>`;
 }
 
-/** The grouped footer with every required link. */
-export function groupedFooter(lang = 'en', attrs = ''): string {
+const CHANNEL_KEYS = ['now', 'transport', 'visit', 'justice', 'build', 'invest', 'trade'];
+/** The official channel names (R12), in the Standard 3.1 order. */
+export const CHANNEL_NAMES = {
+  en: ['Dubai Now', 'Dubai Transport', 'Visit Dubai', 'Dubai Justice', 'Build in Dubai', 'Invest in Dubai', 'Dubai Trade'],
+  ar: ['دبي الآن', 'مواصلات دبي', 'زوروا دبي', 'دبي للعدالة', 'دبي للبناء', 'استثمر في دبي', 'دبي التجارية'],
+};
+
+/**
+ * The grouped footer with every required link, as a service writes it (CSS only): the brand,
+ * the Channels group with `current` marked, Helpful information, Legal and the lower line.
+ */
+export function groupedFooter(lang = 'en', { current = 'now', attrs = '' } = {}): string {
+  const names = lang === 'ar' ? CHANNEL_NAMES.ar : CHANNEL_NAMES.en;
+  const name = names[CHANNEL_KEYS.indexOf(current)];
+  const li = (href: string, text: string, extra = '') => `<li><a href="${href}"${extra}>${text}</a></li>`;
   return `
-    <sc-footer variant="grouped" ${attrs} updated="${t(lang, '12 October 2026', '12 أكتوبر 2026')}" links='${CHANNEL_LINKS}'
-      about-href="#about" help-href="#help" accessibility-href="#accessibility" privacy-href="#privacy" terms-href="#terms" sitemap-href="#sitemap">
-      <p slot="brand">${t(lang, 'Government services for everyone who lives in Dubai, in one place.', 'الخدمات الحكومية لكل من يعيش في دبي، في مكان واحد.')}</p>
-    </sc-footer>`;
+    <sc-footer variant="grouped" ${attrs}><footer>
+      <div class="sc-footer__brand">
+        <p>${name}</p>
+        <p>${t(lang, 'Government services for everyone who lives in Dubai, in one place.', 'الخدمات الحكومية لكل من يعيش في دبي، في مكان واحد.')}</p>
+      </div>
+      <section class="sc-footer__channels" aria-labelledby="footer-channels">
+        <h2 id="footer-channels">${t(lang, 'Channels', 'القنوات')}</h2>
+        <ul>${CHANNEL_KEYS.map((k, i) => li(`#${k}-${lang}`, names[i], k === current ? ` hreflang="${lang}" aria-current="true"` : ` hreflang="${lang}"`)).join('')}</ul>
+      </section>
+      <section aria-labelledby="footer-helpful">
+        <h2 id="footer-helpful">${t(lang, 'Helpful information', 'معلومات مفيدة')}</h2>
+        <ul>${li('#about', t(lang, `About ${name}`, `عن ${name}`))}${li('#help', t(lang, 'Help and contact', 'المساعدة والتواصل'))}${li('#accessibility', t(lang, 'Accessibility statement', 'بيان إمكانية الوصول'))}${li('#sitemap', t(lang, 'Sitemap', 'خريطة الموقع'))}</ul>
+      </section>
+      <section aria-labelledby="footer-legal">
+        <h2 id="footer-legal">${t(lang, 'Legal', 'المعلومات القانونية')}</h2>
+        <ul>${li('#privacy', t(lang, 'Privacy and cookies', 'الخصوصية وملفات تعريف الارتباط'))}${li('#terms', t(lang, 'Terms of use', 'شروط الاستخدام'))}</ul>
+      </section>
+      <div class="sc-footer__lower">
+        <p>${t(lang, 'Government of Dubai · Last updated 12 October 2026', 'حكومة دبي · آخر تحديث 12 أكتوبر 2026')}</p>
+        <p>${t(lang, `${name} is run by the Government of Dubai`, `${name} تديرها حكومة دبي`)}</p>
+      </div>
+    </footer></sc-footer>`;
+}
+
+/** The simple footer (transaction pages), as a service writes it. */
+export function simpleFooter(lang = 'en', extra = ''): string {
+  const links: [string, string, string][] = [
+    ['#help', 'Help and contact', 'المساعدة والتواصل'],
+    ['#a11y', 'Accessibility statement', 'بيان إمكانية الوصول'],
+    ['#privacy', 'Privacy', 'الخصوصية'],
+    ['#terms', 'Terms of use', 'شروط الاستخدام'],
+    ['#cookies', 'Cookies', 'ملفات تعريف الارتباط'],
+  ];
+  return `<sc-footer><footer>
+    <nav aria-label="${t(lang, 'Support links', 'روابط الدعم')}"><ul>${links.map(([h, en, ar]) => `<li><a href="${h}">${t(lang, en, ar)}</a></li>`).join('')}${extra}</ul></nav>
+    <p>${t(lang, 'Government of Dubai', 'حكومة دبي')}</p>
+  </footer></sc-footer>`;
 }

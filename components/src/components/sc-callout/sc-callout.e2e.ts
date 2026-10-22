@@ -1,6 +1,6 @@
 import { E2EPage } from '@stencil/core/testing';
 import { describeAxe, expectNoAxeViolations } from '../../test/axe';
-import { newScPage, setPageContext } from '../../test/page';
+import { loadFonts, newScPage, noScriptPage, setPageContext } from '../../test/page';
 
 function inner(page: E2EPage, selector: string, read: string) {
   return page.evaluate(
@@ -106,6 +106,29 @@ describe('sc-callout (e2e)', () => {
       await setPageContext(page, { channel, theme: 'dark' });
       await expectNoAxeViolations(page);
     }
+  });
+});
+
+describe('sc-callout before it upgrades (CLS 0)', () => {
+  it.each([
+    ['<sc-callout>If your payment is interrupted, don’t pay again. Check your email first.</sc-callout>', 'en'],
+    ['<sc-callout tone="warning"><span slot="heading">Your registration expires soon</span>Renew it before 30 November to avoid a fine.</sc-callout>', 'en'],
+    ['<sc-callout tone="error"><p>Your payment failed.</p><p>Try again or use another card.</p></sc-callout>', 'en'],
+    ['<sc-callout tone="success"><span slot="heading">تم استلام الدفعة</span>أرسلنا الإيصال إلى بريدك الإلكتروني.</sc-callout>', 'ar'],
+  ])('the host draws the same box before upgrade: %s', async (html, lang) => {
+    const wrap = `<div style="inline-size: 360px">${html}</div>`;
+    const measure = () => {
+      const b = document.querySelector('sc-callout')!.getBoundingClientRect();
+      return [Math.round(b.width), Math.round(b.height)];
+    };
+    const page = await newScPage(wrap, { lang: lang as 'en' | 'ar' });
+    await loadFonts(page);
+    const upgraded = await page.evaluate(measure);
+    // Never defined: only sc.css applies, as before the upgrade.
+    const pre = await noScriptPage(wrap, lang);
+    await pre.evaluate(() => Promise.all(['400', '500', '700'].map((w) => document.fonts.load(`${w} 16px "Dubai W23 Arabic", "Dubai W23"`, 'Aا'))));
+    expect(await pre.evaluate(measure)).toEqual(upgraded);
+    await pre.close();
   });
 });
 

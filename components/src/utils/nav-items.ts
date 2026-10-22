@@ -1,5 +1,5 @@
 /**
- * Navigation items written as plain children (C2: sc-breadcrumbs, sc-account-nav,
+ * Navigation items written as plain children (C2: sc-account-nav,
  * sc-bottom-nav). The service writes ordinary links, which are what a page shows before the
  * component upgrades and without JavaScript:
  *

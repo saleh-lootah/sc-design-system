@@ -54,6 +54,10 @@ The accent and icon sit at inline-start, so on the right in Arabic. Icons do not
 - Look: tone-95 containers with a start accent bar replace v1's tinted pill-radius box; `info` is now blue (`info-container`) rather than a neutral fill.
 - API, parts and slots unchanged.
 
+## Before upgrade (v2-lib-gaps)
+
+`sc.css` draws the callout's box on the host while it is undefined, around its light-DOM text: 16px padding with room for the 24px icon and 12 gap at the inline start, the 4px tone bar, the tone-95 fill, body-medium Medium, a `slot="heading"` line in title-small Bold 4 above the text. The upgraded callout is the same size, so it never shifts the page (CLS 0). A heading given by the `heading` prop appears only on upgrade: use `slot="heading"` where that matters.
+
 ## Budget
 
 Leaf, 4 KiB. Measured: **3.3 KiB** gzip (custom-elements closure, including its inlined Material Symbols status icons and the locale controller); component CSS 0.6 KiB.
