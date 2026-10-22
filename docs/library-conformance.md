@@ -74,7 +74,7 @@ How it was checked: the standard was read in full; every component's Arabic stri
 | FND-20 | glass components | See A11Y-07. | None. | met |
 | FND-21 | `sc-date-range` | Draws its own calendar icon (`sc-date-range/calendar-icon.tsx`) because `src/icons` is owner-only; the standard says icons come from the shared set and are not drawn locally. | None. Adding `calendar` to `src/icons/` is for the icon set's owner. | open |
 | OQ-26 | token pipeline | `check:contrast` checked `--sc-channel-action` against `--sc-color-surface` (3:1) only. | `scripts/check-contrast.mjs` also checks action against `canvas` and `grouped` (3:1), for every channel in light and dark, covering both sides of the focus ring. All pass; the tightest margin is unchanged (1.037×, light). | done |
-| OQ-20 | tokens, `sc-link` | Visited links used `--sc-channel-ink`; there was no visited-link token. | New channel role `link-visited` (`--sc-channel-link-visited`, also in Tailwind, Swift, Kotlin and Paper outputs), set to each channel's ink in light and dark. `sc-link` uses it. `check:contrast` checks it at 4.5:1 on surface, canvas and grouped. Choosing a distinct visited colour stays open: it must pass 4.5:1 everywhere and stay out of the teal hue range (FND-04). | done |
+| OQ-20 | tokens, `sc-link` | Visited links used `--sc-channel-ink`; there was no visited-link token. | New channel role `link-visited` (`--sc-channel-link-visited`, also in Tailwind, Swift, Kotlin and Paper outputs), set to each channel's ink in light and dark. `sc-link` uses it. `check:contrast` checks it at 4.5:1 on surface, canvas and grouped. Choosing a distinct visited colour stays open: it must pass 4.5:1 everywhere and stay out of the reserved hue band (FND-04). | done |
 
 ### Chapter 9. Content design
 
@@ -139,6 +139,6 @@ These are errors or gaps in `docs/shared-channels-ux-standard.md` found while ch
 
 On branch `feat/standard-2-conformance`, in Helium:
 
-- `npm run build` (repo root): tokens built, `check:contrast`, `check:teal`, `check:no-hex` pass.
+- `npm run build` (repo root): tokens built, `check:contrast`, `check:hue-band`, `check:no-hex` pass.
 - `components/`: `npm run build`, `npm run check:literals` and `npm test` (spec and e2e) pass.
 - Every playground page renders in English and Arabic with no console errors, and no Arabic-Indic digits appear in any rendered page.

@@ -1,6 +1,6 @@
 /*
  * Site search: a static index built by scripts/build-site.mjs (site/search-index.json, and
- * site/search-records.json for the project records), fetched when the search page opens.
+ * site/search-records.json for the project records in an internal build), fetched when the search page opens.
  * The query lives in the URL (?q=…&records=1), so a search can be linked. Without JavaScript
  * the page lists every page instead.
  *
@@ -108,7 +108,7 @@ async function run(write = true) {
   if (write) {
     const params = new URLSearchParams();
     if (q) params.set('q', q);
-    if (records.checked) params.set('records', '1');
+    if (records?.checked) params.set('records', '1');
     history.replaceState(null, '', params.size ? `?${params}` : location.pathname);
   }
   list.replaceChildren();
@@ -121,7 +121,7 @@ async function run(write = true) {
   let hits;
   try {
     const indexes = [await load('search-index.json')];
-    if (records.checked) indexes.push(await load('search-records.json'));
+    if (records?.checked) indexes.push(await load('search-records.json'));
     hits = indexes.flatMap((ix) => search(ix, q)).sort((a, b) => b.score - a.score);
   } catch {
     status.textContent = T.failed;
@@ -143,12 +143,12 @@ async function run(write = true) {
 }
 
 const params = new URLSearchParams(location.search);
-records.checked = params.get('records') === '1';
+if (records) records.checked = params.get('records') === '1';
 await customElements.whenDefined('sc-search');
 field.value = params.get('q') ?? '';
 field.addEventListener('scSearch', (e) => {
   e.preventDefault();
   run();
 });
-records.addEventListener('change', () => run());
+records?.addEventListener('change', () => run());
 run(false);

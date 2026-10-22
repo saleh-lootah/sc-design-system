@@ -38,7 +38,7 @@ jobs:
           cache: npm
           cache-dependency-path: components/package-lock.json
 
-      - name: Build tokens and run token checks (contrast, teal, no hex)
+      - name: Build tokens and run token checks (contrast, hue band, no hex)
         run: npm run build
 
       - name: Install component dependencies

@@ -15,6 +15,10 @@
  * All URLs are relative, so the site works under any path (GitHub Pages serves it from
  * /sc-design-system/).
  *
+ * The project records (docs/v2/*, the review reports, the motion audit) are internal working
+ * notes: they are built only with SC_SITE_INTERNAL=1 (`npm run build:site:internal`), never in
+ * the default build, which is what GitHub Pages publishes (decision R3).
+ *
  * The playground (src/index.html, built by Stencil as www/index.html) moves to
  * www/playground.html; the site's home page takes www/index.html.
  */
@@ -34,6 +38,7 @@ const LANGS = ['en', 'ar'];
 const BLOB = 'https://github.com/saleh-lootah/sc-design-system/blob/v2/';
 const TREE = 'https://github.com/saleh-lootah/sc-design-system/tree/v2/';
 
+const INTERNAL = process.env.SC_SITE_INTERNAL === '1';
 const warnings = [];
 const warn = (m) => warnings.push(m);
 const read = (f) => readFileSync(join(REPO, f), 'utf8');
@@ -73,7 +78,7 @@ const DOCS = [
 ];
 /** A chapter heading: numbered, or an appendix. Unnumbered `##` before the first stay on the overview. */
 const CHAPTER = /^(\d+\.|[A-Z]\.|Appendix\b|Part\b)/;
-const SECTION_ORDER = ['design-system', 'standard', 'reference', 'assurance', 'records'];
+const SECTION_ORDER = ['design-system', 'standard', 'reference', 'assurance', ...(INTERNAL ? ['records'] : [])];
 const SECTION_HOME = { 'design-system': 'design-system/', standard: 'standard/', reference: 'reference/', assurance: 'assurance/', records: 'records/' };
 
 /* Component pages: the playground registry, the demo fragments, the specs ------------------ */
@@ -112,6 +117,7 @@ const docs = new Map(); // repo file -> { cfg, parsed, ar?, pages[] }
 const reqs = new Map(); // ID -> { id, title, page, doc }
 
 for (const cfg of DOCS) {
+  if (cfg.internal && !INTERNAL) continue;
   const src = read(cfg.key);
   const parsed = parseDoc(src, { split: !!cfg.split, splitAt: CHAPTER, splitParts: cfg.splitParts });
   const arFile = cfg.key.replace(/\.md$/, '.ar.md');
@@ -197,9 +203,11 @@ for (const p of componentPages) {
 }
 
 const reqPage = addPage({ kind: 'requirements', path: 'requirements/', section: 'standard', group: 'About the standard', title: { en: STRINGS.en.requirements, ar: STRINGS.ar.requirements } });
-const recordsHome = addPage({ kind: 'records-home', path: 'records/', section: 'records', group: null, title: NAMES.records, navTitle: { en: STRINGS.en.overview, ar: STRINGS.ar.overview }, internal: true });
-pages.splice(pages.indexOf(recordsHome), 1);
-pages.splice(pages.findIndex((p) => p.section === 'records'), 0, recordsHome);
+const recordsHome = INTERNAL && addPage({ kind: 'records-home', path: 'records/', section: 'records', group: null, title: NAMES.records, navTitle: { en: STRINGS.en.overview, ar: STRINGS.ar.overview }, internal: true });
+if (recordsHome) {
+  pages.splice(pages.indexOf(recordsHome), 1);
+  pages.splice(pages.findIndex((p) => p.section === 'records'), 0, recordsHome);
+}
 const searchPage = addPage({ kind: 'search', path: 'search/', section: null, title: { en: STRINGS.en.search, ar: STRINGS.ar.search }, hidden: true });
 const home = addPage({ kind: 'home', path: '', section: null, title: { en: 'Shared Channels design system', ar: STRINGS.ar.titleSuffix }, hidden: true });
 
@@ -622,6 +630,7 @@ function renderHome(page, lang) {
     { path: 'design-system/foundations/', title: { en: 'Foundations', ar: 'الأسس' } },
     { path: 'search/', title: { en: STRINGS.en.search, ar: STRINGS.ar.search } },
   ].filter((q) => pages.some((p) => p.path === q.path));
+  // The old playground's links (?page=sc-button&lang=ar) open the component's page.
   const body = `<div class="home-hero">
 <h1 id="top">${esc(page.title[lang])}</h1>
 <p class="doc-lede">${esc(intro[lang])}</p>
@@ -635,7 +644,7 @@ function renderHome(page, lang) {
     .join('')}</ul>
 <h2 id="quick" class="home-h2">${lang === 'ar' ? 'روابط سريعة' : 'Quick links'}</h2>
 <ul class="home-quick">${quick.map((q) => `<li><a href="${rel(from, langPath(lang, q.path))}">${esc(q.title[lang])}</a></li>`).join('')}</ul>
-<script>{const q=new URLSearchParams(location.search).get('page');if(q&&/^[a-z0-9-]+$/.test(q))location.replace((q==='foundations'?'design-system/foundations/':'components/'+q+'/')+location.hash);}</script>`;
+${lang === 'en' ? `<script>{const s=new URLSearchParams(location.search),q=s.get('page');if(q&&/^[a-z0-9-]+$/.test(q))location.replace((s.get('lang')==='ar'?'ar/':'')+(q==='foundations'?'design-system/foundations/':'components/'+q+'/')+location.hash);}</script>` : ''}`;
   return layout(page, lang, { body });
 }
 
@@ -713,7 +722,7 @@ function renderSearch(page, lang) {
   }).join('');
   const body = `<div class="search-form">
 <sc-search label="${esc(t.searchLabel)}" placeholder="${esc(t.searchPlaceholder)}" name="q" action="./"></sc-search>
-<label class="search-scope"><input type="checkbox" id="search-records"> <span>${esc(t.searchIncludeRecords)}</span></label>
+${INTERNAL ? `<label class="search-scope"><input type="checkbox" id="search-records"> <span>${esc(t.searchIncludeRecords)}</span></label>` : ''}
 </div>
 <noscript><p class="site-notice">${esc(t.searchNoScript)}</p></noscript>
 <script>if (/[?&]q=[^&]/.test(location.search)) document.body.classList.add('is-searching');</script>
@@ -757,7 +766,7 @@ function buildIndex() {
   }
   for (const r of reqs.values()) index.reqs.push([r.id, r.title, pageRef(index, r.page)]);
   writeFileSync(join(WWW, 'site', 'search-index.json'), JSON.stringify(index));
-  writeFileSync(join(WWW, 'site', 'search-records.json'), JSON.stringify(records));
+  if (INTERNAL) writeFileSync(join(WWW, 'site', 'search-records.json'), JSON.stringify(records));
 }
 
 /* Write --------------------------------------------------------------------------------- */
@@ -773,7 +782,7 @@ const stencilIndex = join(WWW, 'index.html');
 if (existsSync(stencilIndex) && readFileSync(stencilIndex, 'utf8').includes('playground/playground.js')) {
   cpSync(stencilIndex, join(WWW, 'playground.html'));
 }
-for (const d of ['ar', 'site', ...SECTION_ORDER, 'components', 'requirements', 'search', 'ux-standard']) rmSync(join(WWW, d), { recursive: true, force: true });
+for (const d of ['ar', 'site', 'records', ...SECTION_ORDER, 'components', 'requirements', 'search', 'ux-standard']) rmSync(join(WWW, d), { recursive: true, force: true });
 mkdirSync(join(WWW, 'site', 'ce'), { recursive: true });
 for (const f of readdirSync(CE)) if (f.endsWith('.js')) cpSync(join(CE, f), join(WWW, 'site', 'ce', f));
 for (const f of readdirSync(join(COMPONENTS, 'src/site'))) cpSync(join(COMPONENTS, 'src/site', f), join(WWW, 'site', f));
@@ -800,6 +809,6 @@ for (const doc of docs.values()) {
 buildIndex();
 
 const uniq = [...new Set(warnings)];
-console.log(`build-site: ${count} pages (${pages.length} in English and Arabic), ${reqs.size} requirement IDs${uniq.length ? `, ${uniq.length} warnings` : ''}`);
+console.log(`build-site: ${INTERNAL ? 'INTERNAL build with the project records (do not publish), ' : ''}${count} pages (${pages.length} in English and Arabic), ${reqs.size} requirement IDs${uniq.length ? `, ${uniq.length} warnings` : ''}`);
 if (uniq.length) for (const w of uniq.slice(0, process.argv.includes('--verbose') ? 1000 : 25)) console.log(`  ${w}`);
 if (uniq.length > 25 && !process.argv.includes('--verbose')) console.log(`  … ${uniq.length - 25} more (--verbose)`);

@@ -43,8 +43,8 @@ const PAGES = [
   'assurance/how-we-check-test-scripts/',
   'requirements/',
   'search/?q=focus+ring',
-  'records/',
-  'records/decisions/',
+  'design-system/conformance/',
+  'standard/changes/',
   'ux-standard/',
 ];
 const MODES = [

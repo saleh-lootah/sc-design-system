@@ -1,5 +1,6 @@
-# Builds the tokens and the Stencil component playground, then publishes the
-# playground to GitHub Pages: https://saleh-lootah.github.io/sc-design-system/
+# Builds the tokens, the Stencil components, the playground and the documentation
+# site (components/scripts/build-site.mjs, run after the component build), then
+# publishes components/www to GitHub Pages: https://saleh-lootah.github.io/sc-design-system/
 name: Publish component library
 
 on:
@@ -44,7 +45,7 @@ jobs:
         working-directory: components
         run: npm run check:literals
 
-      - name: Build components and playground
+      - name: Build components, playground and documentation site
         working-directory: components
         run: npm run build
 

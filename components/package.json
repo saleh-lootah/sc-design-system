@@ -35,7 +35,7 @@
     "test:visual": "SC_VISUAL=1 stencil test --e2e -- --max-workers=1 visual.e2e",
     "test:visual:update": "SC_VISUAL=1 SC_UPDATE_SCREENSHOTS=1 stencil test --e2e -- --max-workers=1 visual.e2e",
     "check:literals": "node scripts/check-literals.mjs",
-    "check": "npm run check:literals && npm run check:icons && npm run build && npm test && npm run check:budget && npm run check:site",
+    "check": "npm run check:literals && npm run check:icons && npm run build && npm run check:budget && npm run check:site && npm test",
     "measure:bundle": "node scripts/measure-bundle.mjs",
     "measure:runtime": "node scripts/measure-runtime.mjs",
     "check:budget": "node scripts/measure-bundle.mjs --budget perf-budgets.json",
@@ -46,9 +46,11 @@
     "check:icons": "node scripts/gen-icons.mjs --check",
     "build:site": "node scripts/build-site.mjs",
     "serve:site": "node scripts/serve-site.mjs",
-    "check:site": "node scripts/check-site-links.mjs && node scripts/check-site-budget.mjs",
+    "check:site": "node scripts/check-site-links.mjs && node scripts/check-site-budget.mjs && node scripts/check-site-publishable.mjs",
     "check:site-budget": "node scripts/check-site-budget.mjs",
-    "check:site-a11y": "node scripts/check-site-a11y.mjs"
+    "check:site-a11y": "node scripts/check-site-a11y.mjs",
+    "build:site:internal": "SC_SITE_INTERNAL=1 node scripts/build-site.mjs",
+    "check:site-publishable": "node scripts/check-site-publishable.mjs"
   },
   "devDependencies": {
     "@stencil/core": "4.45.2",

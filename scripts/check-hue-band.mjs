@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Fails if any colour, light or dark, sits in OKLCH hue 160-215 with chroma above 0.015.
-// Covers semantic, channel and shadow colours. Run: node scripts/check-teal.mjs
+// Covers semantic, channel and shadow colours. The band is reserved (decision R3). Run: node scripts/check-hue-band.mjs
 import { loadTokens } from './lib/tokens.mjs';
 import { lch } from './lib/oklab.mjs';
 
@@ -34,7 +34,7 @@ for (const [mode, list] of [['light', light], ['dark', dark]]) {
 
 if (bad.length) {
   for (const b of bad) console.error(`FAIL ${b}`);
-  console.error(`check:teal failed: ${bad.length} colour(s) in the teal band`);
+  console.error(`check:hue-band failed: ${bad.length} colour(s) in the reserved hue band`);
   process.exit(1);
 }
-console.log(`check:teal passed (${checked} colours, none in hue ${HUE_MIN}-${HUE_MAX} above chroma ${CHROMA_MAX})`);
+console.log(`check:hue-band passed (${checked} colours, none in hue ${HUE_MIN}-${HUE_MAX} above chroma ${CHROMA_MAX})`);
