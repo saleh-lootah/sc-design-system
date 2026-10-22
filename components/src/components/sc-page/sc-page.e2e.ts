@@ -1,7 +1,7 @@
 import { E2EPage } from '@stencil/core/testing';
 import { describeAxe } from '../../test/axe';
 import { CHANNEL_LINKS, groupedFooter, siteHeader } from '../../test/chrome';
-import { newScPage, setPageContext } from '../../test/page';
+import { loadFonts, newScPage, setPageContext } from '../../test/page';
 
 /** A channel home in miniature: skip link, announcement, header, content, network, footer, utility bar. */
 const HOME = (lang = 'en') => `
@@ -123,13 +123,24 @@ describe('sc-page (e2e)', () => {
 
     it.each(['sc-app-bar', 'sc-site-header'])('pads the document scroll by the %s height plus 8px, and scrolls focus clear of it', async (tag) => {
       const page = await newScPage(STICKY(tag));
+      // Without the fonts, sc-site-header's row can overflow in the fallback font and switch
+      // between full (81px) and compact (65px) while the test reads it.
+      await loadFonts(page);
       await page.setViewport({ width: 1280, height: 600 });
       await waitForPadding(page);
-      // The padding is first set for the header at the 800px default viewport; wait until the
-      // ResizeObserver has caught up with the header at 1280px.
+      // The padding is first set for the header at the 800px default viewport, and the
+      // ResizeObserver reports a new height only at the next frame. Wait until the header
+      // height has held, with the padding matching it, for five frames in a row.
       await page.waitForFunction(
-        (t: string) => getComputedStyle(document.documentElement).scrollPaddingTop === `${Math.ceil(document.querySelector(t)!.getBoundingClientRect().height) + 8}px`,
-        { timeout: 5000 },
+        (t: string) => {
+          const w = window as unknown as { scLast?: number; scHeld?: number };
+          const h = Math.ceil(document.querySelector(t)!.getBoundingClientRect().height);
+          const matches = getComputedStyle(document.documentElement).scrollPaddingTop === `${h + 8}px`;
+          w.scHeld = matches && h === w.scLast ? (w.scHeld ?? 0) + 1 : 0;
+          w.scLast = h;
+          return w.scHeld >= 5;
+        },
+        { polling: 'raf', timeout: 5000 },
         tag,
       );
       const height = await page.evaluate((t: string) => Math.ceil(document.querySelector(t)!.getBoundingClientRect().height), tag);
