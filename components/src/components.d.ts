@@ -1091,8 +1091,9 @@ export namespace Components {
      * It is a native `<dialog>` opened with `showModal()`, so the page behind is inert and focus
      * can't leave it. On open, focus goes to the heading (or, with `initial-focus="first"`, the
      * first control). Escape, the close button and a click on the scrim close it (an `alert`
-     * dialog ignores the scrim and has no close button), and focus returns to whatever had it
-     * before. A sheet can also be dragged down or flicked closed, never only that (WCAG 2.5.7).
+     * dialog ignores the scrim, can't be dragged and has no close button), and focus returns to
+     * whatever had it before. A sheet can also be dragged down or flicked closed, never only that
+     * (WCAG 2.5.7).
      * Motion (W21): the dialog stays centred and enters with opacity and a slight scale over
      * `--sc-duration-base` (200ms) with the strong ease-out, and exits over `--sc-duration-exit`
      * (160ms); the sheet slides up over `--sc-duration-slow` (280ms) on `--sc-easing-drawer` and
@@ -1101,11 +1102,14 @@ export namespace Components {
      * Session timeout: set `alert` and `countdown` (seconds). The time left shows as text,
      * updated every second, and is announced politely only once on open, at each whole minute
      * and at 30 and 10 seconds, never every second. `scCountdownEnd` fires at zero; expiring
-     * never submits anything (TIME-03).
+     * never submits anything (TIME-03). Escape means "stay signed in": it closes with reason
+     * `stay`, and the service extends the session as for the "Stay signed in" button (R7). The
+     * body and countdown describe the dialog (`aria-describedby`). Open the warning at least
+     * 2 minutes before expiry (`countdown` of 120 or more).
      */
     interface ScModal {
         /**
-          * An alert dialog (`role="alertdialog"`) for something that needs an answer, such as the session timeout: a click on the scrim does not close it, and there is no close button; the actions decide. Escape still closes it (reason `escape`).
+          * An alert dialog (`role="alertdialog"`) for something that needs an answer, such as the session timeout: a click on the scrim does not close it, a sheet can't be dragged closed, and there is no close button; the actions decide. Escape closes it with reason `stay`, the safe default ("Stay signed in" for the session timeout, R7). The body and countdown describe it (`aria-describedby`).
           * @default false
          */
         "alert": boolean;
@@ -2729,8 +2733,9 @@ declare global {
      * It is a native `<dialog>` opened with `showModal()`, so the page behind is inert and focus
      * can't leave it. On open, focus goes to the heading (or, with `initial-focus="first"`, the
      * first control). Escape, the close button and a click on the scrim close it (an `alert`
-     * dialog ignores the scrim and has no close button), and focus returns to whatever had it
-     * before. A sheet can also be dragged down or flicked closed, never only that (WCAG 2.5.7).
+     * dialog ignores the scrim, can't be dragged and has no close button), and focus returns to
+     * whatever had it before. A sheet can also be dragged down or flicked closed, never only that
+     * (WCAG 2.5.7).
      * Motion (W21): the dialog stays centred and enters with opacity and a slight scale over
      * `--sc-duration-base` (200ms) with the strong ease-out, and exits over `--sc-duration-exit`
      * (160ms); the sheet slides up over `--sc-duration-slow` (280ms) on `--sc-easing-drawer` and
@@ -2739,7 +2744,10 @@ declare global {
      * Session timeout: set `alert` and `countdown` (seconds). The time left shows as text,
      * updated every second, and is announced politely only once on open, at each whole minute
      * and at 30 and 10 seconds, never every second. `scCountdownEnd` fires at zero; expiring
-     * never submits anything (TIME-03).
+     * never submits anything (TIME-03). Escape means "stay signed in": it closes with reason
+     * `stay`, and the service extends the session as for the "Stay signed in" button (R7). The
+     * body and countdown describe the dialog (`aria-describedby`). Open the warning at least
+     * 2 minutes before expiry (`countdown` of 120 or more).
      */
     interface HTMLScModalElement extends Components.ScModal, HTMLStencilElement {
         addEventListener<K extends keyof HTMLScModalElementEventMap>(type: K, listener: (this: HTMLScModalElement, ev: ScModalCustomEvent<HTMLScModalElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
@@ -4357,8 +4365,9 @@ declare namespace LocalJSX {
      * It is a native `<dialog>` opened with `showModal()`, so the page behind is inert and focus
      * can't leave it. On open, focus goes to the heading (or, with `initial-focus="first"`, the
      * first control). Escape, the close button and a click on the scrim close it (an `alert`
-     * dialog ignores the scrim and has no close button), and focus returns to whatever had it
-     * before. A sheet can also be dragged down or flicked closed, never only that (WCAG 2.5.7).
+     * dialog ignores the scrim, can't be dragged and has no close button), and focus returns to
+     * whatever had it before. A sheet can also be dragged down or flicked closed, never only that
+     * (WCAG 2.5.7).
      * Motion (W21): the dialog stays centred and enters with opacity and a slight scale over
      * `--sc-duration-base` (200ms) with the strong ease-out, and exits over `--sc-duration-exit`
      * (160ms); the sheet slides up over `--sc-duration-slow` (280ms) on `--sc-easing-drawer` and
@@ -4367,11 +4376,14 @@ declare namespace LocalJSX {
      * Session timeout: set `alert` and `countdown` (seconds). The time left shows as text,
      * updated every second, and is announced politely only once on open, at each whole minute
      * and at 30 and 10 seconds, never every second. `scCountdownEnd` fires at zero; expiring
-     * never submits anything (TIME-03).
+     * never submits anything (TIME-03). Escape means "stay signed in": it closes with reason
+     * `stay`, and the service extends the session as for the "Stay signed in" button (R7). The
+     * body and countdown describe the dialog (`aria-describedby`). Open the warning at least
+     * 2 minutes before expiry (`countdown` of 120 or more).
      */
     interface ScModal {
         /**
-          * An alert dialog (`role="alertdialog"`) for something that needs an answer, such as the session timeout: a click on the scrim does not close it, and there is no close button; the actions decide. Escape still closes it (reason `escape`).
+          * An alert dialog (`role="alertdialog"`) for something that needs an answer, such as the session timeout: a click on the scrim does not close it, a sheet can't be dragged closed, and there is no close button; the actions decide. Escape closes it with reason `stay`, the safe default ("Stay signed in" for the session timeout, R7). The body and countdown describe it (`aria-describedby`).
           * @default false
          */
         "alert"?: boolean;
@@ -4398,7 +4410,7 @@ declare namespace LocalJSX {
          */
         "initialFocus"?: ModalInitialFocus;
         /**
-          * Fires when the dialog closes, with why: `close-button`, `escape`, `scrim`, `drag` or `method`.
+          * Fires when the dialog closes, with why: `close-button`, `escape`, `stay` (Escape in an `alert` dialog), `scrim`, `drag` or `method`.
          */
         "onScClose"?: (event: ScModalCustomEvent<{ reason: ModalCloseReason }>) => void;
         /**
@@ -6163,8 +6175,9 @@ declare module "@stencil/core" {
              * It is a native `<dialog>` opened with `showModal()`, so the page behind is inert and focus
              * can't leave it. On open, focus goes to the heading (or, with `initial-focus="first"`, the
              * first control). Escape, the close button and a click on the scrim close it (an `alert`
-             * dialog ignores the scrim and has no close button), and focus returns to whatever had it
-             * before. A sheet can also be dragged down or flicked closed, never only that (WCAG 2.5.7).
+             * dialog ignores the scrim, can't be dragged and has no close button), and focus returns to
+             * whatever had it before. A sheet can also be dragged down or flicked closed, never only that
+             * (WCAG 2.5.7).
              * Motion (W21): the dialog stays centred and enters with opacity and a slight scale over
              * `--sc-duration-base` (200ms) with the strong ease-out, and exits over `--sc-duration-exit`
              * (160ms); the sheet slides up over `--sc-duration-slow` (280ms) on `--sc-easing-drawer` and
@@ -6173,7 +6186,10 @@ declare module "@stencil/core" {
              * Session timeout: set `alert` and `countdown` (seconds). The time left shows as text,
              * updated every second, and is announced politely only once on open, at each whole minute
              * and at 30 and 10 seconds, never every second. `scCountdownEnd` fires at zero; expiring
-             * never submits anything (TIME-03).
+             * never submits anything (TIME-03). Escape means "stay signed in": it closes with reason
+             * `stay`, and the service extends the session as for the "Stay signed in" button (R7). The
+             * body and countdown describe the dialog (`aria-describedby`). Open the warning at least
+             * 2 minutes before expiry (`countdown` of 120 or more).
              */
             "sc-modal": LocalJSX.IntrinsicElements["sc-modal"] & JSXBase.HTMLAttributes<HTMLScModalElement>;
             /**

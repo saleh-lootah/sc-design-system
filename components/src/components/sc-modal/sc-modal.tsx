@@ -5,7 +5,11 @@ import { Close } from '../../icons/for/sc-modal';
 
 export type ModalHeadingLevel = 2 | 3;
 export type ModalInitialFocus = 'heading' | 'first';
-export type ModalCloseReason = 'close-button' | 'escape' | 'scrim' | 'drag' | 'method';
+/**
+ * Why the dialog closed. `stay` is Escape in an `alert` dialog: the user chose the safe default,
+ * so nothing ends (R7). For the session timeout the service treats it exactly like "Stay signed in".
+ */
+export type ModalCloseReason = 'close-button' | 'escape' | 'stay' | 'scrim' | 'drag' | 'method';
 
 const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 /** Release velocity (px/ms) above which a downward flick closes the sheet (MOT-10). */
@@ -27,8 +31,9 @@ function deepActive(doc: Document): HTMLElement | null {
  * It is a native `<dialog>` opened with `showModal()`, so the page behind is inert and focus
  * can't leave it. On open, focus goes to the heading (or, with `initial-focus="first"`, the
  * first control). Escape, the close button and a click on the scrim close it (an `alert`
- * dialog ignores the scrim and has no close button), and focus returns to whatever had it
- * before. A sheet can also be dragged down or flicked closed, never only that (WCAG 2.5.7).
+ * dialog ignores the scrim, can't be dragged and has no close button), and focus returns to
+ * whatever had it before. A sheet can also be dragged down or flicked closed, never only that
+ * (WCAG 2.5.7).
  *
  * Motion (W21): the dialog stays centred and enters with opacity and a slight scale over
  * `--sc-duration-base` (200ms) with the strong ease-out, and exits over `--sc-duration-exit`
@@ -39,7 +44,10 @@ function deepActive(doc: Document): HTMLElement | null {
  * Session timeout: set `alert` and `countdown` (seconds). The time left shows as text,
  * updated every second, and is announced politely only once on open, at each whole minute
  * and at 30 and 10 seconds, never every second. `scCountdownEnd` fires at zero; expiring
- * never submits anything (TIME-03).
+ * never submits anything (TIME-03). Escape means "stay signed in": it closes with reason
+ * `stay`, and the service extends the session as for the "Stay signed in" button (R7). The
+ * body and countdown describe the dialog (`aria-describedby`). Open the warning at least
+ * 2 minutes before expiry (`countdown` of 120 or more).
  *
  * @slot - The body: one or two short paragraphs.
  * @slot actions - The buttons, primary first: `<sc-button slot="actions">Stay signed in</sc-button>`. On a sheet they stack at full width.
@@ -70,8 +78,10 @@ export class ScModal {
 
   /**
    * An alert dialog (`role="alertdialog"`) for something that needs an answer, such as the
-   * session timeout: a click on the scrim does not close it, and there is no close button;
-   * the actions decide. Escape still closes it (reason `escape`).
+   * session timeout: a click on the scrim does not close it, a sheet can't be dragged closed,
+   * and there is no close button; the actions decide. Escape closes it with reason `stay`, the
+   * safe default ("Stay signed in" for the session timeout, R7). The body and countdown
+   * describe it (`aria-describedby`).
    */
   @Prop({ reflect: true }) alert = false;
 
@@ -90,7 +100,7 @@ export class ScModal {
   /** Fires after the dialog opens. */
   @Event({ eventName: 'scOpen', bubbles: true, composed: true }) scOpen!: EventEmitter<void>;
 
-  /** Fires when the dialog closes, with why: `close-button`, `escape`, `scrim`, `drag` or `method`. */
+  /** Fires when the dialog closes, with why: `close-button`, `escape`, `stay` (Escape in an `alert` dialog), `scrim`, `drag` or `method`. */
   @Event({ eventName: 'scClose', bubbles: true, composed: true }) scClose!: EventEmitter<{ reason: ModalCloseReason }>;
 
   /** Fires when the countdown reaches zero. The dialog stays open; the service decides what happens. */
@@ -270,7 +280,8 @@ export class ScModal {
   /* Events ------------------------------------------------------------------------------ */
   private onCancel = (ev: Event) => {
     ev.preventDefault();
-    this.requestClose('escape');
+    // R7: in an alert dialog Escape is the safe default. For the session timeout that is "stay signed in".
+    this.requestClose(this.alert ? 'stay' : 'escape');
   };
 
   /** A click on the dialog element itself is a click on the scrim: the panel fills the box. */
@@ -280,7 +291,8 @@ export class ScModal {
 
   /** The sheet follows the finger from its top edge, and closes on a flick or a long drag. */
   private onPointerDown = (ev: PointerEvent) => {
-    if (!this.sheet || !this.dialog || ev.button !== 0) return;
+    // R7: an alert sheet is never dragged closed; a scroll gesture must not dismiss the warning.
+    if (!this.sheet || this.alert || !this.dialog || ev.button !== 0) return;
     (ev.currentTarget as HTMLElement).setPointerCapture?.(ev.pointerId);
     this.drag = { y: ev.clientY, t: ev.timeStamp, dy: 0, v: 0 };
     this.dialog.classList.add('is-dragging');
@@ -325,6 +337,7 @@ export class ScModal {
     const level = Number(this.headingLevel) === 3 ? 3 : 2;
     const Heading = `h${level}` as 'h2';
     const headingId = `${this.id}-heading`;
+    const bodyId = `${this.id}-body`;
 
     return (
       <Host class={{ 'is-sheet': this.sheet }}>
@@ -333,6 +346,7 @@ export class ScModal {
           part="dialog"
           role={this.alert ? 'alertdialog' : undefined}
           aria-labelledby={headingId}
+          aria-describedby={this.alert ? bodyId : undefined}
           aria-modal="true"
           ref={(el) => (this.dialog = el)}
           onCancel={this.onCancel}
@@ -340,7 +354,7 @@ export class ScModal {
         >
           <div class="panel" part="panel">
             <div class="top" onPointerDown={this.onPointerDown} onPointerMove={this.onPointerMove} onPointerUp={this.onPointerUp} onPointerCancel={this.onPointerUp}>
-              <span class="grabber" aria-hidden="true"></span>
+              {!this.alert && <span class="grabber" aria-hidden="true"></span>}
               <Heading id={headingId} class="heading" part="heading" tabindex="-1" ref={(el) => (this.headingEl = el)}>
                 {this.heading}
               </Heading>
@@ -350,7 +364,7 @@ export class ScModal {
                 </button>
               )}
             </div>
-            <div class="body">
+            <div class="body" id={bodyId}>
               {this.renderCountdown()}
               <slot />
             </div>

@@ -25,7 +25,7 @@ As `sc-text-input`. `error-parts` (space-separated `day month year`) puts the 2p
 ## Worst-case data (break-ui)
 
 - 31 April or 29 February 2026: the value is empty and the first box gets "The date must be a real date".
-- Arabic-Indic digits ("٢٧ / ۳ / ١٩٩٠") become "27 / 3 / 1990" as they are typed (LANG-21).
+- Arabic-Indic digits ("٢٧ / ۳ / ١٩٩٠") become "27 / 3 / 1990" as they are typed (LANG-21). Bidirectional control characters (U+200E, U+200F, U+202A–U+202E, U+2066–U+2069), which a code copied from an Arabic SMS often carries, are removed from pasted or typed text, with the caret kept on the same character (R9, amends LANG-21).
 - A two-digit year is not a real date (the year box needs 4 digits).
 
 ## Accessibility
@@ -58,7 +58,7 @@ Form field, 7 KiB gzip; measured in the C3 report.
 
 ## Tests
 
-`sc-date-input.spec.tsx`, `sc-date-input.e2e.ts` (group and part names, ISO and parts submitted, LANG-21, native validity, reset, RTL order and labels, host focus and error-parts, axe on every channel, `describeAxe`), `sc-date-input.visual.e2e.ts`.
+`sc-date-input.spec.tsx`, `sc-date-input.e2e.ts` (group and part names, ISO and parts submitted, LANG-21 and pasted bidi controls (R9), native validity, reset, RTL order and labels, host focus and error-parts, axe on every channel, `describeAxe`), `sc-date-input.visual.e2e.ts`.
 
 ## Paper board alignment
 

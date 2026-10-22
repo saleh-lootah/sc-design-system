@@ -220,6 +220,11 @@
   touch-action: none;
 }
 
+/* R7: an alert sheet can't be dragged, so the top strip lets the page gesture through. */
+:host(.is-sheet[alert]) .top {
+  touch-action: auto;
+}
+
 :host(.is-sheet) .body {
   margin-block-start: var(--sc-space-8);
 }

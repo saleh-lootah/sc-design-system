@@ -158,6 +158,21 @@ describe('sc-text-input (e2e)', () => {
     expect(await inner(page, '#eid', 'input.selectionStart')).toBe(12);
   });
 
+  it('strips bidi control characters from a pasted value (R9, LANG-21)', async () => {
+    const page = await newScPage(`<form><sc-text-input id="code" name="code" label="رمز التحقق" inputmode="numeric" ltr></sc-text-input></form>`, { lang: 'ar' });
+    // A code copied from an Arabic SMS carries LANG-15 isolates: U+2066 ... U+2069.
+    await page.evaluate((sel: string) => {
+      const field = document.querySelector(sel)!.querySelector('input') as HTMLInputElement;
+      field.focus();
+      document.execCommand('insertText', false, String.fromCharCode(0x2066) + '123456' + String.fromCharCode(0x2069));
+    }, '#code');
+    await page.waitForChanges();
+    expect(await page.evaluate((sel: string) => (document.querySelector(sel)!.querySelector('input') as HTMLInputElement).value, '#code')).toBe('123456');
+    expect(await page.evaluate((sel: string) => (document.querySelector(sel)!.querySelector('input') as HTMLInputElement).selectionStart, '#code')).toBe(6);
+    expect(await page.$eval('#code', (el) => (el as HTMLElement & { value: string }).value)).toBe('123456');
+    expect(await page.evaluate(() => new FormData(document.querySelector('form')!).get('code'))).toBe('123456');
+  });
+
   it('uses native constraint validation on the input', async () => {
     const page = await newScPage(`<form><sc-text-input id="name" name="name" label="Full name" required></sc-text-input><sc-text-input id="email" name="email" label="Email" type="email" ltr></sc-text-input></form>`);
     expect(await page.evaluate(() => document.querySelector('form')!.checkValidity())).toBe(false);

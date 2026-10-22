@@ -235,6 +235,51 @@ describe('sc-table (e2e)', () => {
     }
   });
 
+  it('keeps a focused control clear of the sticky row-header column when tabbing sideways (WCAG 2.4.11)', async () => {
+    for (const lang of ['en', 'ar'] as const) {
+      const cols = Array.from({ length: 7 }, (_, i) => i + 1);
+      const page = await newScPage(
+        `<main><h1>Fines</h1><div style="inline-size: 360px">
+          <sc-table caption="Wide" responsive="scroll" selectable ${STRINGS}>
+            <table>
+              <thead><tr><th scope="col">Reference</th>${cols.map((i) => `<th scope="col">Column ${i}</th>`).join('')}</tr></thead>
+              <tbody>
+                <tr><th scope="row"><a href="#a">F-2026-118204</a></th>${cols.map((i) => `<td><a href="#c${i}" class="far">Link ${i}</a></td>`).join('')}</tr>
+              </tbody>
+            </table>
+          </sc-table></div></main>`,
+        { lang },
+      );
+      await page.setViewport({ width: 400, height: 700 });
+      await page.waitForChanges();
+      expect(await page.$eval('sc-table .scroller', (el) => parseFloat(getComputedStyle(el).scrollPaddingInlineStart))).toBeGreaterThan(0);
+      /** How far the focused link overlaps the sticky cells (0 when clear), and which link has focus. */
+      const overlap = () =>
+        page.evaluate(() => {
+          const focused = document.activeElement as HTMLElement;
+          const box = focused.getBoundingClientRect();
+          const sticky = Array.from(document.querySelectorAll('sc-table tbody tr > *')).filter((c) => getComputedStyle(c).position === 'sticky').map((c) => c.getBoundingClientRect());
+          const start = Math.min(...sticky.map((s) => s.left));
+          const end = Math.max(...sticky.map((s) => s.right));
+          return { link: focused.getAttribute('href'), overlap: Math.max(0, Math.min(box.right, end) - Math.max(box.left, start)) };
+        });
+      // Into the row: the checkbox, the row header link, then the links across to the far column.
+      await page.focus('sc-table tbody .sc-table__select input');
+      await page.keyboard.press('Tab');
+      for (const i of cols) {
+        await page.keyboard.press('Tab');
+        expect(await overlap()).toEqual({ link: `#c${i}`, overlap: 0 });
+      }
+      // Back from the far column to the near ones: each scrolls in at the start edge, clear of the sticky column.
+      for (const i of cols.slice(0, -1).reverse()) {
+        await page.keyboard.down('Shift');
+        await page.keyboard.press('Tab');
+        await page.keyboard.up('Shift');
+        expect(await overlap()).toEqual({ link: `#c${i}`, overlap: 0 });
+      }
+    }
+  });
+
   it('gives links in body cells a target of at least 44 x 44 px without changing the row height (A11Y-04)', async () => {
     for (const density of ['default', 'compact']) {
       const page = await newScPage(`

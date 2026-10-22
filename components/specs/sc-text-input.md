@@ -48,7 +48,7 @@ A single-line answer: a plate number, an Emirates ID number, an email address, a
 ## Worst-case data (break-ui)
 
 - A two-line hint or error grows the group, never the box (56 stays 56 in Arabic, where the value is 20/32).
-- An Emirates ID typed with Arabic-Indic digits ("٧٨٤-۱۹۹۰-١٢٣") becomes "784-1990-123" as it is typed, with the caret where it was (LANG-21).
+- An Emirates ID typed with Arabic-Indic digits ("٧٨٤-۱۹۹۰-١٢٣") becomes "784-1990-123" as it is typed, with the caret where it was (LANG-21). Bidirectional control characters (U+200E, U+200F, U+202A–U+202E, U+2066–U+2069), which a code copied from an Arabic SMS often carries, are removed from pasted or typed text, with the caret kept on the same character (R9, amends LANG-21).
 - A long Arabic label wraps; the error bar runs the full height of the group.
 
 ## Accessibility
@@ -106,7 +106,7 @@ Form field budget 7 KiB gzip (custom-elements closure, excluding the runtime): *
 ## Tests
 
 - `sc-text-input.spec.tsx`: light DOM, IDs, hint and error wiring, Arabic strings, `ltr`, attributes, widths and affixes, heading, rich slots.
-- `sc-text-input.e2e.ts`: per-instance IDs, accessible name and description, 56px box and 4px bar, type roles EN/AR, RTL, native submission and reset, Enter-to-submit, LANG-21, native validation, focus forwarding and the U1 ring, disabled fieldset, rich slots, re-render on `lang`, forced colours, axe on every channel; `describeAxe` EN/AR × light/dark.
+- `sc-text-input.e2e.ts`: per-instance IDs, accessible name and description, 56px box and 4px bar, type roles EN/AR, RTL, native submission and reset, Enter-to-submit, LANG-21 and pasted bidi controls (R9), native validation, focus forwarding and the U1 ring, disabled fieldset, rich slots, re-render on `lang`, forced colours, axe on every channel; `describeAxe` EN/AR × light/dark.
 - `sc-text-input.visual.e2e.ts`: every state in EN/AR × light/dark.
 
 ## Paper board alignment (v2 file, page 07)

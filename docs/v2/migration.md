@@ -251,3 +251,10 @@ Icons added to the shared set: `check`, `schedule`, `hourglass`, `pending`, `inb
 | `sc-accordion` | Light DOM (`scoped`) | New. |
 
 For test authors: `newScPage` now ignores unregistered `sc-` tags when it waits for hydration, so pages using the CSS-only primitives load.
+
+## sc-modal: session timeout (R7, review fix B3)
+
+- `scClose` has a new reason, `stay`. In an `alert` dialog Escape now closes with `stay` instead of `escape`: the safe default, which the session timeout treats as "Stay signed in" (extend the session). Non-alert dialogs still close on Escape with `escape`. Services that listened for `escape` on the timeout dialog should listen for `stay`.
+- An `alert` sheet can no longer be dragged or flicked closed, and has no grabber.
+- An `alert` dialog has `aria-describedby` pointing at its body (countdown included).
+- The timeout warning opens at least 2 minutes before expiry (`countdown` of 120 or more).

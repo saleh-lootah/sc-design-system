@@ -835,6 +835,9 @@
   :host([responsive='scroll']) .scroller {
     overflow-x: auto;
     overscroll-behavior-x: contain;
+    /* WCAG 2.4.11: focus scrolls clear of the sticky row-header column. The script sets
+       --_sticky-w to that column's measured width (checkbox included). */
+    scroll-padding-inline-start: var(--_sticky-w, 0px);
   }
 
   :host([responsive='scroll']) ::slotted(table) {

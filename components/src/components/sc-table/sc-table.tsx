@@ -156,7 +156,14 @@ export class ScTable {
       this.resizeObserver = new ResizeObserver(() => this.updateScroll());
       // Fires once on observe, then on every size change.
       this.resizeObserver.observe(this.scroller);
+      // The sticky column's width follows the table's content (WCAG 2.4.11 scroll padding).
+      if (this.table) this.resizeObserver.observe(this.table);
     }
+  }
+
+  componentDidRender() {
+    // A language change re-renders and can change the row header column's width.
+    this.updateScroll();
   }
 
   componentWillRender() {
@@ -537,7 +544,7 @@ export class ScTable {
   }
 
   /** Makes the region focusable only when it actually scrolls, and shows the edge on the side with more content. */
-  private updateScroll = () => {
+  private updateScroll = (ev?: Event) => {
     const scroller = this.scroller;
     if (!scroller) return;
     // Any table that is wider than its container scrolls rather than clipping data; `scroll` mode
@@ -558,7 +565,31 @@ export class ScTable {
     const max = scroller.scrollWidth - scroller.clientWidth;
     const edges = { start: scrolls && offset > 1, end: scrolls && offset < max - 1 };
     if (edges.start !== this.scrollEdges.start || edges.end !== this.scrollEdges.end) this.scrollEdges = edges;
+    // WCAG 2.4.11: a control focused in a later column scrolls clear of the sticky row-header
+    // column, not under it. The scroll padding at inline-start (the right in RTL) is that
+    // column's width, read from the cells that are actually sticky.
+    // The width doesn't change while scrolling, so a scroll event skips the measurement.
+    if (ev) return;
+    const sticky = this.stickyWidth();
+    const current = scroller.style.getPropertyValue('--_sticky-w');
+    if (sticky && current !== `${sticky}px`) scroller.style.setProperty('--_sticky-w', `${sticky}px`);
+    else if (!sticky && current) scroller.style.removeProperty('--_sticky-w');
   };
+
+  /** The width of the sticky cells (checkbox and row header) at the start of a body row, or 0. */
+  private stickyWidth(): number {
+    const row = this.table?.querySelector('tbody tr');
+    if (!row || typeof getComputedStyle !== 'function') return 0;
+    let start = Infinity;
+    let end = -Infinity;
+    for (const cell of Array.from(row.children) as HTMLElement[]) {
+      if (getComputedStyle(cell).position !== 'sticky') continue;
+      const box = cell.getBoundingClientRect();
+      start = Math.min(start, box.left);
+      end = Math.max(end, box.right);
+    }
+    return end > start ? Math.ceil(end - start) : 0;
+  }
 
   render() {
     const open = this.selectable && this.selected.length > 0;
