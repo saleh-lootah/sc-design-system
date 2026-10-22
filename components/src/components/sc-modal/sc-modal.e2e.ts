@@ -66,6 +66,36 @@ describe('sc-modal (e2e)', () => {
     expect(reasons).toEqual(['escape']);
   });
 
+  it('in an alert dialog, Escape means "stay signed in": it closes with reason stay (R7)', async () => {
+    const page = await newScPage(HTML);
+    const reasons: string[] = [];
+    await page.exposeFunction('onClose', (r: string) => reasons.push(r));
+    await page.evaluate(() => document.addEventListener('scClose', (e: any) => (window as any).onClose(e.detail.reason)));
+    await page.focus('#open');
+    await page.$eval('#t', (el: any) => el.show());
+    await page.waitForChanges();
+    await page.keyboard.press('Escape');
+    await page.waitForChanges();
+    expect(await isOpen(page, 't')).toBe(false);
+    expect(await focused(page)).toBe('open');
+    expect(reasons).toEqual(['stay']);
+  });
+
+  it('an alert dialog is described by its body and countdown (R7)', async () => {
+    const page = await newScPage(HTML);
+    await page.$eval('#t', (el: any) => {
+      el.countdown = 125;
+      el.show();
+    });
+    await page.waitForChanges();
+    const handle = await page.evaluateHandle(() => document.getElementById('t')!.shadowRoot!.querySelector('dialog')!);
+    const node = await page.accessibility.snapshot({ root: handle as never, interestingOnly: false });
+    expect(node!.role).toBe('alertdialog');
+    expect(node!.name).toBe('You will be signed out soon');
+    expect(node!.description).toContain('Time left: 2:0');
+    expect(node!.description).toContain("We'll keep your answers if you stay signed in.");
+  });
+
   it('closes from the close button and from the scrim; an alert dialog ignores the scrim', async () => {
     const page = await newScPage(HTML);
     await openWithClick(page);
@@ -177,6 +207,40 @@ describe('sc-modal (e2e)', () => {
     await page.waitForChanges();
     const exit = await page.evaluate(() => getComputedStyle(document.getElementById('m')!.shadowRoot!.querySelector('dialog')!).transitionDuration.split(', ')[0]);
     expect(exit).toBe('0.224s');
+  });
+
+  it('an alert sheet is not dragged or tapped closed; a plain sheet is (R7)', async () => {
+    const page = await newScPage(HTML);
+    await page.setViewport({ width: 390, height: 800 });
+    await page.waitForChanges();
+    /** Drags the sheet's top strip 300px down and releases. */
+    const drag = async (id: string) => {
+      const box = await page.evaluate((i: string) => {
+        const r = document.getElementById(i)!.shadowRoot!.querySelector('.top')!.getBoundingClientRect();
+        return { x: r.x + r.width / 2, y: r.y + 8 };
+      }, id);
+      await page.mouse.move(box.x, box.y);
+      await page.mouse.down();
+      for (let i = 1; i <= 10; i++) await page.mouse.move(box.x, box.y + i * 30);
+      await page.mouse.up();
+      await page.waitForChanges();
+    };
+    await page.$eval('#t', (el: any) => el.show());
+    await page.waitForChanges();
+    expect(await page.evaluate(() => getComputedStyle(document.getElementById('t')!.shadowRoot!.querySelector('.top')!).touchAction)).toBe('auto');
+    await drag('t');
+    expect(await isOpen(page, 't')).toBe(true);
+    expect(await page.evaluate(() => document.getElementById('t')!.shadowRoot!.querySelector('dialog')!.style.transform)).toBe('');
+    await page.mouse.click(195, 5);
+    await page.waitForChanges();
+    expect(await isOpen(page, 't')).toBe(true);
+    await page.$eval('#t', (el: any) => el.close());
+    await page.waitForChanges();
+
+    await page.$eval('#m', (el: any) => el.show());
+    await page.waitForChanges();
+    await drag('m');
+    expect(await isOpen(page, 'm')).toBe(false);
   });
 
   it('opens a sheet instantly from the keyboard too (MOT-02)', async () => {
