@@ -23,6 +23,7 @@ Set `maxlength` to show a count under the box: "You have 120 characters remainin
 - **Announced politely, after a pause.** The visible count changes on every keystroke but is hidden from screen readers. A separate polite live region (`aria-live="polite"`, `aria-atomic`) is updated once typing has paused for one second, so screen reader users hear the count when they stop, not on every key.
 - **Described up front.** "You can enter up to 200 characters" is part of the textarea's description, so the limit is heard on focus.
 - **Arabic plurals.** The Arabic count uses the right form for the number (حرف واحد، حرفان، 3 أحرف، 120 حرفًا، 100 حرف), chosen with `Intl.PluralRules('ar')`. Characters are counted as people see them, so an emoji counts as one.
+- **Digits and pasted text.** Arabic-Indic digits become Latin digits as they are typed (LANG-21), and bidi control characters pasted with a code (U+200E, U+200F, U+202A–U+202E, U+2066–U+2069) are removed (R9, amends LANG-21).
 
 Use a limit only when there is a real one (a system field length). Size the box with `rows` to fit a typical answer.
 

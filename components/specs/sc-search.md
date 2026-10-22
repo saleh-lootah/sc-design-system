@@ -39,7 +39,7 @@ A search landmark named by the label (visible or visually hidden) and a searchbo
 
 ## RTL and Arabic
 
-The icon is on the right and the button on the left. The default label and button read "بحث". Digits typed in Arabic-Indic forms become Latin.
+The icon is on the right and the button on the left. The default label and button read "بحث". Digits typed in Arabic-Indic forms become Latin (LANG-21). Bidi control characters pasted with a code (U+200E, U+200F, U+202A–U+202E, U+2066–U+2069) are removed (R9, amends LANG-21).
 
 ## Motion
 
@@ -89,7 +89,7 @@ On a page with any `sc-button`, the search's own cost is 2.8 KiB. v1 was 10.3 Ki
 
 ## Tests
 
-`sc-search.spec.tsx`, `sc-search.e2e.ts` (landmark and searchbox names, keyboard and native Enter-to-submit, click, host focus and the U1 ring, sizes and E1 geometry, `action` and cancel, LANG-21, RTL, channel colour, forced colours, `describeAxe`), `sc-search.visual.e2e.ts`.
+`sc-search.spec.tsx`, `sc-search.e2e.ts` (landmark and searchbox names, keyboard and native Enter-to-submit, click, host focus and the U1 ring, sizes and E1 geometry, `action` and cancel, LANG-21 and pasted bidi controls (R9), RTL, channel colour, forced colours, `describeAxe`), `sc-search.visual.e2e.ts`.
 
 ## Paper board alignment
 

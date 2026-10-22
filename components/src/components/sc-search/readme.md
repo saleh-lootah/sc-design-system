@@ -22,7 +22,7 @@ document.querySelector('sc-search').addEventListener('scSearch', (ev) => {
 
 ### Behaviour
 
-v2 renders `<form role="search">` named by the label, a field box (radius 8, 1.5px `outline` edge, search icon at inline-start) holding a native `<input type="search">`, and a separate primary `sc-button type="submit"` 12px away (E1), all in light DOM (decision A2). Enter in the field submits through the button natively; `scSearch` carries the trimmed query. `focus()` on the host goes to the input, and the U1 focus ring wraps the field box. `size="l"` is the 64px hero search; the default `m` is 56px. Arabic-Indic digits typed into the query become Latin digits. The form is self-contained: don't put `sc-search` inside another `<form>`.
+v2 renders `<form role="search">` named by the label, a field box (radius 8, 1.5px `outline` edge, search icon at inline-start) holding a native `<input type="search">`, and a separate primary `sc-button type="submit"` 12px away (E1), all in light DOM (decision A2). Enter in the field submits through the button natively; `scSearch` carries the trimmed query. `focus()` on the host goes to the input, and the U1 focus ring wraps the field box. `size="l"` is the 64px hero search; the default `m` is 56px. Arabic-Indic digits typed into the query become Latin digits (LANG-21). Bidi control characters pasted with a code (U+200E, U+200F, U+202A–U+202E, U+2066–U+2069) are removed (R9, amends LANG-21). The form is self-contained: don't put `sc-search` inside another `<form>`.
 
 ### Arabic
 
