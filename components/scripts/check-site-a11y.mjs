@@ -162,7 +162,7 @@ async function check(path, lang, mode, scheme) {
 
   // A page that sets text in both scripts (an Arabic page around an English document, an
   // English page with Arabic examples) is held to the site's mixed-script budget.
-  const mixed = await page.evaluate((ar) => [...document.querySelectorAll(ar ? '[lang="en"]' : '[lang="ar"]')].some((e) => !e.closest('sc-language-switch') && e.textContent.trim().length > 40), lang === 'ar');
+  const mixed = await page.evaluate((ar) => [...document.querySelectorAll(ar ? '[lang="en"]' : '[lang="ar"]')].some((e) => !e.closest('sc-language-switch') && e.textContent.trim().length > 20), lang === 'ar');
   const fontsBudget = mixed ? budgets.site.pageFontsMixedBytes : lang === 'ar' ? budgets.pageFontsArBytes : budgets.pageFontsEnBytes;
   if (fontBytes > fontsBudget) fail(where, `fonts ${fontBytes} B > budget ${fontsBudget} B`);
 

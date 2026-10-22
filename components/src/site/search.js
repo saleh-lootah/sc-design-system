@@ -75,7 +75,7 @@ function search(index, q) {
       if (id.toLowerCase() !== q.trim().toLowerCase()) continue;
       const url = `${index.pages[pi][0]}#${id}`;
       seen.add(url);
-      hits.push({ score: 1e6, url, title: `${id}. ${title}`, where: [T.requirement, index.pages[pi][ar ? 2 : 1]], text: '' });
+      hits.push({ score: 1e6, url, title: `${id} ${title}`, where: `${T.requirement} (${index.pages[pi][ar ? 2 : 1]})`, text: '' });
     }
   }
   for (const [pi, anchor, heading, text] of index.entries) {
@@ -98,7 +98,7 @@ function search(index, q) {
     seen.add(url);
     const pageTitle = ar ? arTitle : en;
     const sub = heading && heading !== en;
-    hits.push({ score: score + (anchor ? 0 : 3), url, title: sub ? heading : pageTitle, where: [SECTIONS[section] ?? '', sub ? pageTitle : ''].filter(Boolean), text: snippet(text, terms) });
+    hits.push({ score: score + (anchor ? 0 : 3), url, title: sub ? heading : pageTitle, where: sub ? `${pageTitle} (${SECTIONS[section] ?? ''})` : SECTIONS[section] ?? '', text: snippet(text, terms) });
   }
   return hits;
 }
@@ -135,7 +135,7 @@ async function run(write = true) {
     .slice(0, LIMIT)
     .map(
       (h) =>
-        `<li><a href="${langRoot}${h.url}"${/[\u0600-\u06FF]/.test(h.title) ? '' : en}>${escapeHtml(h.title)}</a><p class="search-where">${escapeHtml(h.where.join(' · '))}</p>` +
+        `<li><a href="${langRoot}${h.url}"${/[\u0600-\u06FF]/.test(h.title) ? '' : en}>${escapeHtml(h.title)}</a><p class="search-where">${escapeHtml(h.where)}</p>` +
         (h.text ? `<p class="search-snippet"${en}>${h.text}</p>` : '') +
         '</li>',
     )

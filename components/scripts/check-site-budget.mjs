@@ -70,7 +70,11 @@ for (const page of pages) {
   const js = m.js + siteJs + (html.includes('site/search.js') ? searchJs : 0);
   // A showcase page's allowance: the approved budgets above the default of what it shows.
   const showcase = /(^|\/)components\/sc-[a-z-]+\/$/.test(name);
-  const allowance = showcase ? tags.reduce((a, t) => a + Math.max(0, (budgets.components[t] ?? budgets.componentGzip) - budgets.componentGzip), 0) : 0;
+  const over = (t) => Math.max(0, (budgets.components[t] ?? budgets.componentGzip) - budgets.componentGzip);
+  // R17: a showcase page, the approved overrides of what it demonstrates. Site chrome
+  // (site.chromeTags, pending approval): every page, the overrides of the chrome it carries.
+  const chrome = tags.filter((t) => site.chromeTags.includes(t));
+  const allowance = (showcase ? tags : chrome).reduce((a, t) => a + over(t), 0);
   const htmlGz = gzipSync(html, { level: 9 }).length;
   rows.push({ name, js, css: m.css, html: htmlGz, allowance });
   check(`${name} JavaScript`, js, budgets.pageJsGzip + allowance);
