@@ -185,7 +185,8 @@
     letter-spacing: var(--sc-type-title-medium-tracking);
   }
 
-  /* Previous at inline-start, next at inline-end: a 44px target around a 36px circle. */
+  /* Previous at inline-start, next at inline-end: the button is the 44px target (A11Y-04) and
+     the 36px circle is drawn inside it, so the target adds nothing visible and meets no neighbour. */
   .sc-date-range__nav {
     position: relative;
     display: grid;
@@ -480,6 +481,12 @@
       overlay var(--sc-duration-base) allow-discrete;
   }
 
+  /* MOT-02: opened from the keyboard (Enter or Space on the calendar button), it appears instantly. */
+  .sc-date-range__picker--popover.sc-date-range__picker--instant,
+  .sc-date-range__picker--popover.sc-date-range__picker--instant:popover-open {
+    transition-duration: var(--sc-duration-instant);
+  }
+
   @starting-style {
     .sc-date-range__picker--popover:popover-open {
       opacity: 0;
@@ -508,6 +515,10 @@
   /* Bottom sheet (below 600px) ---------------------------------------------------------- */
   .sc-date-range__picker--sheet {
     --_sheet-exit: calc(var(--sc-duration-slow) * 0.8);
+    /* 1.4.10: the calendar's inline padding shrinks (20 down to 4) so seven 44px columns fit:
+       at 320px it is 6 each side. Below 316px the columns narrow instead (see the day button). */
+    --_pad: clamp(var(--sc-space-4), (100cqi - 7 * var(--_col)) / 2, var(--sc-space-20));
+    container-type: inline-size;
     position: fixed;
     inset: auto 0 0 0;
     inline-size: 100%;
@@ -671,7 +682,7 @@
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     margin-inline: calc(-1 * var(--sc-space-20));
-    padding-inline: var(--sc-space-20);
+    padding-inline: var(--_pad);
     border-block-end: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
   }
 
@@ -684,8 +695,11 @@
     flex: 1 1 auto;
     min-block-size: 0;
     display: block;
-    padding-inline: var(--sc-space-20);
+    padding-inline: var(--_pad);
     overflow-y: auto;
+    /* 2.4.11: the weekday row and the footer sit outside this scroll area, so they can't cover a
+       day; the padding keeps a focused day's ring clear of its clipped edges too. */
+    scroll-padding-block: var(--sc-space-8);
     overscroll-behavior: contain;
   }
 
@@ -710,6 +724,10 @@
 
   .sc-date-range__picker--sheet .sc-date-range__day {
     inline-size: auto;
+  }
+
+  .sc-date-range__picker--sheet .sc-date-range__day-button {
+    inline-size: min(var(--_cell), 100%);
   }
 
   .sc-date-range__picker--sheet .sc-date-range__picker-foot {

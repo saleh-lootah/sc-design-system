@@ -165,6 +165,8 @@ export class ScDateRange {
   @State() shown?: Problem;
   @State() twoMonths = false;
   @State() flipped = false;
+  /** Opened from the keyboard: the popover appears without its entrance (MOT-02). */
+  @State() instant = false;
 
   private inputs: Partial<Record<End, HTMLInputElement>> = {};
   private calendarButton?: HTMLButtonElement;
@@ -181,6 +183,12 @@ export class ScDateRange {
   private drag?: { id: number; y: number; t: number; dy: number };
   /** A pointer month change waiting for its render, so the new months can slide in. */
   private pendingSlide: 0 | 1 | -1 = 0;
+  /**
+   * The month the sheet's list is centred on. It stays put while focus moves, because moving
+   * the window re-orders the month elements and that drops the focus; it only moves when focus
+   * leaves the list.
+   */
+  private sheetCentre?: YearMonth;
 
   connectedCallback() {
     this.locale.connect();
@@ -403,10 +411,12 @@ export class ScDateRange {
     return this.mode === 'sheet' ? this.sheet : this.popover;
   }
 
-  private openPicker() {
+  private openPicker(fromKeyboard = false) {
     if (this.isOpen || this.calendarButton?.matches(':disabled')) return;
     const compact = typeof matchMedia !== 'undefined' && matchMedia('(max-width: 599.98px)').matches;
     this.mode = compact ? 'sheet' : 'popover';
+    // A click from Enter or Space has detail 0; a pointer click counts presses from 1.
+    this.instant = fromKeyboard;
     const months = Number(this.months);
     this.twoMonths = !compact && (months === 2 || (months !== 1 && typeof innerWidth !== 'undefined' && innerWidth >= 720));
     // Start from what is typed, so a typed start shows in the calendar.
@@ -417,7 +427,7 @@ export class ScDateRange {
     this.hover = '';
     this.announcement = '';
     this.focusDate = this.pending.start || this.clamp(this.todayValue);
-    this.view = ymOf(this.focusDate);
+    this.view = this.sheetCentre = ymOf(this.focusDate);
     this.isOpen = true;
     // Render the contents, then show the element in the top layer and focus the day.
     this.pendingShow = true;
@@ -499,7 +509,7 @@ export class ScDateRange {
 
   private visibleMonths(): YearMonth[] {
     if (this.mode === 'sheet') {
-      const centre = ymOf(this.focusDate || this.clamp(this.todayValue));
+      const centre = this.sheetCentre || ymOf(this.focusDate || this.clamp(this.todayValue));
       let from = shiftMonth(centre, -SHEET_MONTHS_BEFORE);
       let to = shiftMonth(centre, SHEET_MONTHS_AFTER);
       if (isIso(this.min) && compareMonth(from, ymOf(this.min!)) < 0) from = ymOf(this.min!);
@@ -559,12 +569,13 @@ export class ScDateRange {
   private moveFocus(iso: string) {
     const previous = this.focusDate;
     this.focusDate = iso;
-    if (this.mode === 'popover') {
-      const m = ymOf(iso);
-      const months = this.visibleMonths();
-      if (compareMonth(m, months[0]) < 0) this.view = m;
-      else if (compareMonth(m, months[months.length - 1]) > 0) this.view = shiftMonth(m, -(months.length - 1));
-    }
+    const m = ymOf(iso);
+    const months = this.visibleMonths();
+    const outside = compareMonth(m, months[0]) < 0 || compareMonth(m, months[months.length - 1]) > 0;
+    if (this.mode === 'sheet') {
+      if (outside) this.sheetCentre = m;
+    } else if (compareMonth(m, months[0]) < 0) this.view = m;
+    else if (outside) this.view = shiftMonth(m, -(months.length - 1));
     // A day that is already on screen gets focus now, so fast key repeats never outrun the
     // render; a day in another month is focused once that month has rendered.
     const button = this.pickerEl?.querySelector<HTMLButtonElement>(`button[data-date="${iso}"]`);
@@ -720,7 +731,7 @@ export class ScDateRange {
       // Show the end of the range in the last visible month (with max = today, the month
       // after it would be all unavailable days).
       this.view = shiftMonth(endMonth, -(months.length - 1));
-    }
+    } else this.sheetCentre = ymOf(preset.start);
     this.announce();
   }
 
@@ -1004,7 +1015,7 @@ export class ScDateRange {
               aria-label={buttonLabel}
               aria-haspopup="dialog"
               aria-expanded={this.isOpen ? 'true' : 'false'}
-              onClick={() => (this.isOpen ? this.closePicker(true) : this.openPicker())}
+              onClick={(ev: MouseEvent) => (this.isOpen ? this.closePicker(true) : this.openPicker(ev.detail === 0))}
             >
               <CalendarIcon />
             </button>
@@ -1013,7 +1024,7 @@ export class ScDateRange {
         </fieldset>
         <div
           ref={(el) => (this.popover = el)}
-          class={{ 'sc-date-range__picker': true, 'sc-date-range__picker--popover': true, 'sc-date-range__picker--two': this.twoMonths, 'sc-date-range__picker--presets': this.presetList().length > 0, 'sc-date-range__picker--flipped': this.flipped }}
+          class={{ 'sc-date-range__picker': true, 'sc-date-range__picker--popover': true, 'sc-date-range__picker--two': this.twoMonths, 'sc-date-range__picker--presets': this.presetList().length > 0, 'sc-date-range__picker--flipped': this.flipped, 'sc-date-range__picker--instant': this.instant }}
           {...{ popover: 'manual' }}
           role="dialog"
           aria-label={this.t('dateRangeChoose')}
