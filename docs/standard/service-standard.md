@@ -457,6 +457,8 @@ The issuing authority adopts the standard, appoints assessors, approves high-sev
 
 Services are assessed against the [12 points](#points) at alpha, beta and live, by a route that matches their risk. A **major change** is a new platform, a new identity or payment flow, a new channel listing or a change to who the service is for; it brings a reassessment of the points it affects.
 
+The risk tiers, routes and approvals below are proposed for consultation ([OQ-39](#open-questions)).
+
 - **ASR-11. Risk tier.** Each service MUST have a risk tier (high, standard or low) recorded in its catalogue record. A service that takes payment, establishes identity or authority, has legal effect, handles sensitive personal data or has high volume is high risk.
 - **ASR-12. Assessment route.** High-risk services MUST be assessed by a central panel at alpha, beta and live. Standard-risk services MUST pass a channel panel at beta and MAY self-assess at alpha and live, with central sampling. Low-risk changes MAY be self-assessed. Every panel MUST include an Arabic content specialist and an accessibility specialist.
 
@@ -1516,6 +1518,7 @@ Some details are still being confirmed. The standard does not rely on any of the
 | OQ-36 | How the standard applies by owner type: Dubai government entities, semi-government bodies and concession operators, federal bodies and third parties | Issuing authority | [1.2](#scope) |
 | OQ-37 | The transition deadlines (12 months for the minimum public duty, 6 months for channel roadmaps) and the volume threshold for high-risk services | Issuing authority with channel owners | [4](#transition), [11.2](#assurance) |
 | OQ-38 | The consultation route, contact and closing date | Initiative leadership | [The standard on a page](#on-a-page) |
+| OQ-39 | The assessment model: the risk-tier criteria (ASR-11), assessment routes (ASR-12), who approves exceptions at each severity (ASR-13), the 18-month support period per major version (ASR-10) and the 10-working-day limit for entity sign-off of accessibility statements | Issuing authority with channel owners | [11](#assurance), [19](#contributing) |
 
 ---
 

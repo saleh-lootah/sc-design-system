@@ -168,3 +168,12 @@ Where this file disagrees with `foundations.md` or `component-language.md`, this
 | # | Decision |
 | --- | --- |
 | R12 | **Official Arabic channel names:** دبي الآن (Dubai Now), مواصلات دبي (Dubai Transport), زوروا دبي (Visit Dubai), دبي للعدالة (Dubai Justice), دبي للبناء (Build in Dubai), استثمر في دبي (Invest in Dubai), دبي التجارية (Dubai Trade). They replace عدالة دبي and ابنِ في دبي, and close review item A7. `components/src/i18n/components/channel-names.ts` is the source; `sc-channel-chip` and `sc-step-list` copies must match it. |
+
+## Coordinator decisions on the restructured standard (delegated by the user, 22 October 2026)
+
+| # | Decision |
+| --- | --- |
+| R13 | **Service Standard length:** kept at about 1,550 lines. The journey patterns stay in it: they are what the critics valued most, and services are assessed on them. "The standard on a page", the must-pass list and the requirement index give readers the short route. |
+| R14 | **Policy proposals stay proposals.** Scope by owner type (OQ-36), the transition deadlines (OQ-37), the assessment model, exception approvals, the 18-month support period and the entity sign-off limit (OQ-39) are published as questions for consultation, not settled policy. The issuing authority decides them after consultation. |
+| R15 | **Arabic editions:** the Service Standard is published in Arabic and English on the same day (R2). The Design System reference and the Assurance handbook stay English-only for now, because their readers are delivery teams and assessors; their Arabic editions are reconsidered after consultation. |
+| R16 | **Keyboard-opened sheets are instant:** the `sc-date-range` bottom sheet, like the popover (B10), appears without the slide when opened from the keyboard (MOT-02). Pointer and touch opening keep the motion. |
