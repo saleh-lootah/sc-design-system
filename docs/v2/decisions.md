@@ -141,3 +141,24 @@ Where this file disagrees with `foundations.md` or `component-language.md`, this
 | W24 | Arabic wording | **The code is right**: «مؤشر السعادة» (the official Happiness Meter name), «المحادثة», «المعلومات القانونية», and «عرض 1 إلى 20 من 1,284» (LANG-22A). Correct the boards. |
 | W25 | Account menu items | **Keep the code**: profile, settings, "change who you act for" and sign out, with notifications as their own bell. Applications and payments live in `sc-account-nav`, so they aren't duplicated in the menu. |
 | W26 | Tags the boards ask for (`sc-plate`, `sc-icon-tile`, general `sc-chip`) | **Build in Wave 3, when the Dubai Now reference needs them.** `sc-plate` (number plate) will be needed. |
+
+## Standard review decisions (user, 22 October 2026)
+
+| # | Decision |
+| --- | --- |
+| R1 | **Consultation draft.** The standard is issued as a draft for consultation with channel owners and entities. It becomes binding when an authority adopts it. The issuing authority stays an open question. |
+| R2 | **Split into three documents:** (1) a short **Service Standard**, with only the assessed requirements, published in Arabic and English; (2) a **Design System reference**, covering tokens, components, motion and budgets, versioned with the library and not assessed; (3) an **Assurance handbook**, covering panels, evidence, templates and exceptions. |
+| R3 | **Neutral public wording.** The public documents don't name or ban the Dubai Design System teal: they say channel colours are set centrally in the token files. The teal ban stays as an internal design-system rule (check:teal). The motion rules stay, and their source is credited in the bibliography of the Design System reference, not in the body. |
+| R4 | **Marketing is allowed** on Visit Dubai and Invest in Dubai (and any channel whose purpose includes promotion), inside defined template slots, without changing fixed chrome or the behaviour of transactions. |
+| R5 | **Kept as is:** entity logos stay banned (attribution is text only); the status vocabulary stays closed to the five tones; UAE PASS and Dubai Pay stay the only identity and payment routes. |
+
+## Coordinator decisions from the review (review/0-summary.md, section B)
+
+| # | Decision |
+| --- | --- |
+| R6 | **Links:** running-text links are always underlined. Navigation links (header nav, footer, breadcrumbs, cards, tiles, chips, skip link) may underline on hover only, provided another cue (position, a heading or an icon) identifies them as links. CMP-08 says this. |
+| R7 | **Session timeout:** Escape means "stay signed in" (the safe default); the `alert` modal can't be dragged or dismissed by tapping the scrim; it has `aria-describedby`; the warning appears at least 2 minutes before expiry. |
+| R8 | **Dismissed announcements** are remembered in `sessionStorage` only, before consent (PRV-12). |
+| R9 | **Pasted input:** text and number fields strip bidi control characters (U+200E, U+200F, U+202A–U+202E, U+2066–U+2069) from pasted values. This amends LANG-21. |
+| R10 | **Current-item cue:** current navigation items carry a non-weight cue (an indicator bar or underline) as well as Bold, because short Arabic text is already Bold. |
+| R11 | **Utility bar at short heights:** below a viewport height of 600px (or at high zoom), the docked utility bar becomes static at the end of the page (WCAG 2.4.11 and 1.4.10). |
