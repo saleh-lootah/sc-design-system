@@ -26,6 +26,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync, statSync, cpSync, r
 import { dirname, join, posix } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import vm from 'node:vm';
+import { createRequire } from 'node:module';
 import { parseDoc, renderChunk, chunkHeadings, searchSections, escapeHtml as esc, inlineText, md } from './site/markdown.mjs';
 import { STRINGS, NAMES, BLURBS } from './site/strings.mjs';
 
@@ -800,7 +801,14 @@ if (existsSync(stencilIndex) && readFileSync(stencilIndex, 'utf8').includes('pla
 for (const d of ['ar', 'site', 'records', ...SECTION_ORDER, 'components', 'requirements', 'search', 'ux-standard']) rmSync(join(WWW, d), { recursive: true, force: true });
 mkdirSync(join(WWW, 'site', 'ce'), { recursive: true });
 for (const f of readdirSync(CE)) if (f.endsWith('.js')) cpSync(join(CE, f), join(WWW, 'site', 'ce', f));
-for (const f of readdirSync(join(COMPONENTS, 'src/site'))) cpSync(join(COMPONENTS, 'src/site', f), join(WWW, 'site', f));
+// The site's own CSS and scripts ship minified, as the library's stylesheets do: comments and
+// indentation go (the CSS through the library's own minifier).
+const { minifyCss } = createRequire(import.meta.url)('./lib/minify-css.cjs');
+const minifyJs = (js) => js.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '').replace(/\n\s+/g, '\n').replace(/\n{2,}/g, '\n').trim();
+for (const f of readdirSync(join(COMPONENTS, 'src/site'))) {
+  const src = readFileSync(join(COMPONENTS, 'src/site', f), 'utf8');
+  writeFileSync(join(WWW, 'site', f), f.endsWith('.css') ? minifyCss(src) : f.endsWith('.js') ? minifyJs(src) : src);
+}
 
 const RENDER = { doc: renderDocPage, component: renderComponentPage, home: renderHome, 'ds-home': renderDsHome, 'records-home': renderRecordsHome, requirements: renderRequirements, search: renderSearch };
 let count = 0;

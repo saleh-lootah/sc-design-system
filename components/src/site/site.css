@@ -725,6 +725,7 @@
    * line holds the tag's 32px. Gap reported.
    */
   sc-callout:not(.hydrated) {
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     gap: var(--sc-space-4);
@@ -907,9 +908,10 @@
       font: var(--sc-type-display-small);
       letter-spacing: var(--sc-type-display-small-tracking);
     }
-    .home-title > span + span {
-      padding-inline-start: var(--sc-space-48);
-      border-inline-start: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+    /* The rule sits on the first headline, which is in the page's own direction. */
+    .home-title > span:first-child {
+      padding-inline-end: var(--sc-space-48);
+      border-inline-end: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
     }
   }
   .home-lede {
@@ -967,6 +969,7 @@
     border-block-start: var(--sc-size-border-accent) solid var(--sc-color-outline-variant);
   }
   .route--lead {
+    align-self: start;
     padding: var(--sc-space-32);
     border-radius: var(--sc-radius-card);
     background: var(--sc-color-surface-container);

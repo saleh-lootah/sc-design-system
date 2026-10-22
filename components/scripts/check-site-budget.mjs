@@ -9,7 +9,8 @@
  * the components' stylesheets. The site's own site.js (and search.js on the search page) is
  * added to the page's JavaScript; site.css and the page's HTML are held to the "site" budgets.
  *
- * A component's showcase page necessarily loads the components it demonstrates, so it may
+ * R21 and R22 (perf-budgets.json $siteChromeComment) add the site chrome, the showcase tooling
+ * and a page's own component. A component's showcase page necessarily loads the components it demonstrates, so it may
  * exceed the page budgets by their approved allowances: for each, its "components" override
  * above the default componentGzip (sc-page's examples are a whole channel page, with the
  * site header and the footer). Every other page meets the budgets as they are.
@@ -72,9 +73,12 @@ for (const page of pages) {
   const showcase = /(^|\/)components\/sc-[a-z-]+\/$/.test(name);
   const over = (t) => Math.max(0, (budgets.components[t] ?? budgets.componentGzip) - budgets.componentGzip);
   // R17: a showcase page, the approved overrides of what it demonstrates. Site chrome
-  // (site.chromeTags, pending approval): every page, the overrides of the chrome it carries.
-  const chrome = tags.filter((t) => site.chromeTags.includes(t));
-  const allowance = (showcase ? tags : chrome).reduce((a, t) => a + over(t), 0);
+  // (R21, site.chromeTags): every page, the overrides of the chrome it carries.
+  // R22: the channel switcher on a showcase page is tooling (its whole approved budget), and a
+  // page's own component (sc-search on /search/) brings its approved override.
+  const chrome = tags.filter((t) => site.chromeTags.includes(t) || site.pageComponents[name]?.includes(t));
+  const tooling = (t) => (showcase && site.showcaseTooling.includes(t) ? budgets.components[t] ?? budgets.componentGzip : over(t));
+  const allowance = (showcase ? tags : chrome).reduce((a, t) => a + tooling(t), 0);
   const htmlGz = gzipSync(html, { level: 9 }).length;
   rows.push({ name, js, css: m.css, html: htmlGz, allowance });
   check(`${name} JavaScript`, js, budgets.pageJsGzip + allowance);
