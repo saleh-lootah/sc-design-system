@@ -52,7 +52,38 @@ describe('sc-announcement-bar (e2e)', () => {
     }, BAR('dismissible announcement-id="maintenance-25-oct"'));
     await page.waitForChanges();
     expect(await page.evaluate(() => getComputedStyle(document.querySelector('sc-announcement-bar')!).display)).toBe('none');
+    await page.evaluate(() => sessionStorage.clear());
+  });
+
+  it('remembers a dismissal in sessionStorage only, never localStorage (R8, PRV-12)', async () => {
+    const page = await newScPage(BAR('dismissible announcement-id="outage-1"'));
+    await page.evaluate(() => {
+      localStorage.clear();
+      sessionStorage.clear();
+    });
+    await page.evaluate(() => (document.querySelector('sc-announcement-bar') as HTMLElement & { dismiss(): Promise<void> }).dismiss());
+    await page.waitForChanges();
+    const stored = await page.evaluate(() => [sessionStorage.getItem('sc-announcement-dismissed:outage-1'), localStorage.length]);
+    expect(stored).toEqual(['1', 0]);
+    // A dismissal left in localStorage (by v2.0) is ignored: the bar shows.
+    await page.evaluate((m: string) => {
+      sessionStorage.clear();
+      localStorage.setItem('sc-announcement-dismissed:outage-1', '1');
+      document.querySelector('sc-announcement-bar')!.remove();
+      document.body.insertAdjacentHTML('afterbegin', m);
+    }, BAR('dismissible announcement-id="outage-1"'));
+    await page.waitForChanges();
+    expect(await page.evaluate(() => document.querySelector('sc-announcement-bar')!.hidden)).toBe(false);
     await page.evaluate(() => localStorage.clear());
+  });
+
+  it('underlines a link written in the message (running text, R6)', async () => {
+    const page = await newScPage(`<sc-announcement-bar>Planned maintenance. <a href="#s">See affected services</a>.</sc-announcement-bar>`);
+    const look = await page.evaluate(() => {
+      const s = getComputedStyle(document.querySelector('sc-announcement-bar a')!);
+      return [s.textDecorationLine, s.textUnderlineOffset, s.color];
+    });
+    expect(look).toEqual(['underline', '4px', await token(page, '--sc-color-on-surface')]);
   });
 
   it('a pointer dismissal fades out without animating height', async () => {

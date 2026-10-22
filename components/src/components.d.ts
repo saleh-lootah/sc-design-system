@@ -188,13 +188,14 @@ export namespace Components {
      * live region and not an alert. The text carries the severity in words ("Planned
      * maintenance…"); the tone's icon and container repeat it.
      * Dismissing it fires `scDismiss` (cancelable) and hides it. With `announcement-id`, the
-     * dismissal is remembered in this browser, so the same announcement does not come back.
+     * dismissal is remembered for the browser session (`sessionStorage`, decision R8), so the same
+     * announcement does not come back on later pages of the visit.
      * Focus moves to the next focusable element after it. From a pointer it fades out over
      * `duration-exit`; from the keyboard it goes at once. Its height is never animated (MOT-11).
      */
     interface ScAnnouncementBar {
         /**
-          * Remembers a dismissal in this browser (localStorage) under this id, so the announcement stays hidden on later pages. Change the id when the message changes.
+          * Remembers a dismissal for this browser session (`sessionStorage`, never `localStorage`: decision R8, PRV-12) under this id, so the announcement stays hidden on later pages of the visit. Change the id when the message changes.
          */
         "announcementId"?: string;
         /**
@@ -960,8 +961,8 @@ export namespace Components {
      *   links and "Government of Dubai", under a 1px rule.
      * - `grouped` (channel sites, Standard CHR-06, decision Q-footer; B5): the channel's brand
      *   group (`slot="brand"`: a one-sentence description and app badges); a **Channels** group
-     *   listing all seven channels in the Standard 3.1 order, the current one Bold with
-     *   `aria-current="true"` and no swatch; **Helpful information** (about, help and contact,
+     *   listing all seven channels in the Standard 3.1 order, the current one Bold with a 3px
+     *   `channel-action` bar at its inline start and `aria-current="true"`, and no swatch; **Helpful information** (about, help and contact,
      *   accessibility statement, sitemap); and **Legal** (privacy and cookies, terms). Each group
      *   has an `<h2>`. Then "Government of Dubai · Last updated …" and "… is run by the
      *   Government of Dubai".
@@ -969,6 +970,14 @@ export namespace Components {
      * language. Every channel sets all of them (TPL-01, LEG-01). Extra links go in the default
      * slot as plain `<a href>` elements; each gets its own list item (the footer sets their
      * `slot` attribute). The footer is on `surface`, never a dark band.
+     * Links are navigation links (decision R6): underlined in every state, in `on-surface`
+     * (CHR-06). The current channel carries a 3px `channel-action` bar at its inline start as well
+     * as Bold (R10: Arabic is already Bold).
+     * Without JavaScript (PERF-04): the footer renders in shadow DOM, so write the same links as
+     * light-DOM children in `slot="fallback"` (a `<nav>` or `<ul>` of `<a href>`). The browser
+     * shows them until the footer upgrades; the upgraded footer has no `fallback` slot, so they are
+     * then neither shown nor read. Bare `<a>` extras are hidden before upgrade when a fallback
+     * exists, so list them in the fallback too.
      */
     interface ScFooter {
         /**
@@ -1027,7 +1036,12 @@ export namespace Components {
      * `preventDefault()` on it and switches in place, and the link still works without script.
      * The language name is kept as one light-DOM `<span lang>` child that the component writes
      * itself and shows through its slot: the type roles switch by `lang` in the document, which
-     * a span inside the shadow root could not reach. Don't add or remove children yourself.
+     * a span inside the shadow root could not reach. Don't add or remove children yourself, other
+     * than the `fallback` link below.
+     * Without JavaScript (PERF-04, LANG-04): the switch renders in shadow DOM, so write the same
+     * link as a light-DOM child, `<a slot="fallback" href hreflang lang>` with the other
+     * language's name. The browser shows it until the switch upgrades; the upgraded switch has no
+     * `fallback` slot, so it is then neither shown nor read.
      * Without `href` it falls back to a `<button lang>`. That mode is deprecated and will be
      * removed: always set `href`.
      */
@@ -2064,7 +2078,14 @@ export namespace Components {
      * `sc-footer`, and it becomes an in-flow "Help and feedback" group, a 2 × 2 grid of outlined
      * text buttons (Services is left out there: the site's menu already carries it). It is
      * present when the page loads and does not animate.
-     * A `<nav>` labelled "Help and feedback". Items appear when their `*-href` is set.
+     * At short viewport heights (below 600px, which also covers high zoom) the wide bar is not
+     * docked: it keeps its row of items but sits static at the end of the page, and publishes no
+     * height, so `sc-page` reserves nothing (decision R11; WCAG 2.4.11 and 1.4.10).
+     * Without JavaScript (PERF-04): the bar renders in shadow DOM, so write the same links as
+     * light-DOM children in `slot="fallback"` (a `<nav aria-label="Help and feedback">` with a
+     * `<ul>` of `<a href>`). The browser shows them, in the flow at the end of the page, until the
+     * bar upgrades; the upgraded bar has no `fallback` slot, so they are then neither shown nor
+     * read.
      */
     interface ScUtilityBar {
         /**
@@ -2244,7 +2265,8 @@ declare global {
      * live region and not an alert. The text carries the severity in words ("Planned
      * maintenance…"); the tone's icon and container repeat it.
      * Dismissing it fires `scDismiss` (cancelable) and hides it. With `announcement-id`, the
-     * dismissal is remembered in this browser, so the same announcement does not come back.
+     * dismissal is remembered for the browser session (`sessionStorage`, decision R8), so the same
+     * announcement does not come back on later pages of the visit.
      * Focus moves to the next focusable element after it. From a pointer it fades out over
      * `duration-exit`; from the keyboard it goes at once. Its height is never animated (MOT-11).
      */
@@ -2654,8 +2676,8 @@ declare global {
      *   links and "Government of Dubai", under a 1px rule.
      * - `grouped` (channel sites, Standard CHR-06, decision Q-footer; B5): the channel's brand
      *   group (`slot="brand"`: a one-sentence description and app badges); a **Channels** group
-     *   listing all seven channels in the Standard 3.1 order, the current one Bold with
-     *   `aria-current="true"` and no swatch; **Helpful information** (about, help and contact,
+     *   listing all seven channels in the Standard 3.1 order, the current one Bold with a 3px
+     *   `channel-action` bar at its inline start and `aria-current="true"`, and no swatch; **Helpful information** (about, help and contact,
      *   accessibility statement, sitemap); and **Legal** (privacy and cookies, terms). Each group
      *   has an `<h2>`. Then "Government of Dubai · Last updated …" and "… is run by the
      *   Government of Dubai".
@@ -2663,6 +2685,14 @@ declare global {
      * language. Every channel sets all of them (TPL-01, LEG-01). Extra links go in the default
      * slot as plain `<a href>` elements; each gets its own list item (the footer sets their
      * `slot` attribute). The footer is on `surface`, never a dark band.
+     * Links are navigation links (decision R6): underlined in every state, in `on-surface`
+     * (CHR-06). The current channel carries a 3px `channel-action` bar at its inline start as well
+     * as Bold (R10: Arabic is already Bold).
+     * Without JavaScript (PERF-04): the footer renders in shadow DOM, so write the same links as
+     * light-DOM children in `slot="fallback"` (a `<nav>` or `<ul>` of `<a href>`). The browser
+     * shows them until the footer upgrades; the upgraded footer has no `fallback` slot, so they are
+     * then neither shown nor read. Bare `<a>` extras are hidden before upgrade when a fallback
+     * exists, so list them in the fallback too.
      */
     interface HTMLScFooterElement extends Components.ScFooter, HTMLStencilElement {
     }
@@ -2683,7 +2713,12 @@ declare global {
      * `preventDefault()` on it and switches in place, and the link still works without script.
      * The language name is kept as one light-DOM `<span lang>` child that the component writes
      * itself and shows through its slot: the type roles switch by `lang` in the document, which
-     * a span inside the shadow root could not reach. Don't add or remove children yourself.
+     * a span inside the shadow root could not reach. Don't add or remove children yourself, other
+     * than the `fallback` link below.
+     * Without JavaScript (PERF-04, LANG-04): the switch renders in shadow DOM, so write the same
+     * link as a light-DOM child, `<a slot="fallback" href hreflang lang>` with the other
+     * language's name. The browser shows it until the switch upgrades; the upgraded switch has no
+     * `fallback` slot, so it is then neither shown nor read.
      * Without `href` it falls back to a `<button lang>`. That mode is deprecated and will be
      * removed: always set `href`.
      */
@@ -3272,7 +3307,14 @@ declare global {
      * `sc-footer`, and it becomes an in-flow "Help and feedback" group, a 2 × 2 grid of outlined
      * text buttons (Services is left out there: the site's menu already carries it). It is
      * present when the page loads and does not animate.
-     * A `<nav>` labelled "Help and feedback". Items appear when their `*-href` is set.
+     * At short viewport heights (below 600px, which also covers high zoom) the wide bar is not
+     * docked: it keeps its row of items but sits static at the end of the page, and publishes no
+     * height, so `sc-page` reserves nothing (decision R11; WCAG 2.4.11 and 1.4.10).
+     * Without JavaScript (PERF-04): the bar renders in shadow DOM, so write the same links as
+     * light-DOM children in `slot="fallback"` (a `<nav aria-label="Help and feedback">` with a
+     * `<ul>` of `<a href>`). The browser shows them, in the flow at the end of the page, until the
+     * bar upgrades; the upgraded bar has no `fallback` slot, so they are then neither shown nor
+     * read.
      */
     interface HTMLScUtilityBarElement extends Components.ScUtilityBar, HTMLStencilElement {
     }
@@ -3446,13 +3488,14 @@ declare namespace LocalJSX {
      * live region and not an alert. The text carries the severity in words ("Planned
      * maintenance…"); the tone's icon and container repeat it.
      * Dismissing it fires `scDismiss` (cancelable) and hides it. With `announcement-id`, the
-     * dismissal is remembered in this browser, so the same announcement does not come back.
+     * dismissal is remembered for the browser session (`sessionStorage`, decision R8), so the same
+     * announcement does not come back on later pages of the visit.
      * Focus moves to the next focusable element after it. From a pointer it fades out over
      * `duration-exit`; from the keyboard it goes at once. Its height is never animated (MOT-11).
      */
     interface ScAnnouncementBar {
         /**
-          * Remembers a dismissal in this browser (localStorage) under this id, so the announcement stays hidden on later pages. Change the id when the message changes.
+          * Remembers a dismissal for this browser session (`sessionStorage`, never `localStorage`: decision R8, PRV-12) under this id, so the announcement stays hidden on later pages of the visit. Change the id when the message changes.
          */
         "announcementId"?: string;
         /**
@@ -4230,8 +4273,8 @@ declare namespace LocalJSX {
      *   links and "Government of Dubai", under a 1px rule.
      * - `grouped` (channel sites, Standard CHR-06, decision Q-footer; B5): the channel's brand
      *   group (`slot="brand"`: a one-sentence description and app badges); a **Channels** group
-     *   listing all seven channels in the Standard 3.1 order, the current one Bold with
-     *   `aria-current="true"` and no swatch; **Helpful information** (about, help and contact,
+     *   listing all seven channels in the Standard 3.1 order, the current one Bold with a 3px
+     *   `channel-action` bar at its inline start and `aria-current="true"`, and no swatch; **Helpful information** (about, help and contact,
      *   accessibility statement, sitemap); and **Legal** (privacy and cookies, terms). Each group
      *   has an `<h2>`. Then "Government of Dubai · Last updated …" and "… is run by the
      *   Government of Dubai".
@@ -4239,6 +4282,14 @@ declare namespace LocalJSX {
      * language. Every channel sets all of them (TPL-01, LEG-01). Extra links go in the default
      * slot as plain `<a href>` elements; each gets its own list item (the footer sets their
      * `slot` attribute). The footer is on `surface`, never a dark band.
+     * Links are navigation links (decision R6): underlined in every state, in `on-surface`
+     * (CHR-06). The current channel carries a 3px `channel-action` bar at its inline start as well
+     * as Bold (R10: Arabic is already Bold).
+     * Without JavaScript (PERF-04): the footer renders in shadow DOM, so write the same links as
+     * light-DOM children in `slot="fallback"` (a `<nav>` or `<ul>` of `<a href>`). The browser
+     * shows them until the footer upgrades; the upgraded footer has no `fallback` slot, so they are
+     * then neither shown nor read. Bare `<a>` extras are hidden before upgrade when a fallback
+     * exists, so list them in the fallback too.
      */
     interface ScFooter {
         /**
@@ -4297,7 +4348,12 @@ declare namespace LocalJSX {
      * `preventDefault()` on it and switches in place, and the link still works without script.
      * The language name is kept as one light-DOM `<span lang>` child that the component writes
      * itself and shows through its slot: the type roles switch by `lang` in the document, which
-     * a span inside the shadow root could not reach. Don't add or remove children yourself.
+     * a span inside the shadow root could not reach. Don't add or remove children yourself, other
+     * than the `fallback` link below.
+     * Without JavaScript (PERF-04, LANG-04): the switch renders in shadow DOM, so write the same
+     * link as a light-DOM child, `<a slot="fallback" href hreflang lang>` with the other
+     * language's name. The browser shows it until the switch upgrades; the upgraded switch has no
+     * `fallback` slot, so it is then neither shown nor read.
      * Without `href` it falls back to a `<button lang>`. That mode is deprecated and will be
      * removed: always set `href`.
      */
@@ -5366,7 +5422,14 @@ declare namespace LocalJSX {
      * `sc-footer`, and it becomes an in-flow "Help and feedback" group, a 2 × 2 grid of outlined
      * text buttons (Services is left out there: the site's menu already carries it). It is
      * present when the page loads and does not animate.
-     * A `<nav>` labelled "Help and feedback". Items appear when their `*-href` is set.
+     * At short viewport heights (below 600px, which also covers high zoom) the wide bar is not
+     * docked: it keeps its row of items but sits static at the end of the page, and publishes no
+     * height, so `sc-page` reserves nothing (decision R11; WCAG 2.4.11 and 1.4.10).
+     * Without JavaScript (PERF-04): the bar renders in shadow DOM, so write the same links as
+     * light-DOM children in `slot="fallback"` (a `<nav aria-label="Help and feedback">` with a
+     * `<ul>` of `<a href>`). The browser shows them, in the flow at the end of the page, until the
+     * bar upgrades; the upgraded bar has no `fallback` slot, so they are then neither shown nor
+     * read.
      */
     interface ScUtilityBar {
         /**
@@ -5884,7 +5947,8 @@ declare module "@stencil/core" {
              * live region and not an alert. The text carries the severity in words ("Planned
              * maintenance…"); the tone's icon and container repeat it.
              * Dismissing it fires `scDismiss` (cancelable) and hides it. With `announcement-id`, the
-             * dismissal is remembered in this browser, so the same announcement does not come back.
+             * dismissal is remembered for the browser session (`sessionStorage`, decision R8), so the same
+             * announcement does not come back on later pages of the visit.
              * Focus moves to the next focusable element after it. From a pointer it fades out over
              * `duration-exit`; from the keyboard it goes at once. Its height is never animated (MOT-11).
              */
@@ -6127,8 +6191,8 @@ declare module "@stencil/core" {
              *   links and "Government of Dubai", under a 1px rule.
              * - `grouped` (channel sites, Standard CHR-06, decision Q-footer; B5): the channel's brand
              *   group (`slot="brand"`: a one-sentence description and app badges); a **Channels** group
-             *   listing all seven channels in the Standard 3.1 order, the current one Bold with
-             *   `aria-current="true"` and no swatch; **Helpful information** (about, help and contact,
+             *   listing all seven channels in the Standard 3.1 order, the current one Bold with a 3px
+             *   `channel-action` bar at its inline start and `aria-current="true"`, and no swatch; **Helpful information** (about, help and contact,
              *   accessibility statement, sitemap); and **Legal** (privacy and cookies, terms). Each group
              *   has an `<h2>`. Then "Government of Dubai · Last updated …" and "… is run by the
              *   Government of Dubai".
@@ -6136,6 +6200,14 @@ declare module "@stencil/core" {
              * language. Every channel sets all of them (TPL-01, LEG-01). Extra links go in the default
              * slot as plain `<a href>` elements; each gets its own list item (the footer sets their
              * `slot` attribute). The footer is on `surface`, never a dark band.
+             * Links are navigation links (decision R6): underlined in every state, in `on-surface`
+             * (CHR-06). The current channel carries a 3px `channel-action` bar at its inline start as well
+             * as Bold (R10: Arabic is already Bold).
+             * Without JavaScript (PERF-04): the footer renders in shadow DOM, so write the same links as
+             * light-DOM children in `slot="fallback"` (a `<nav>` or `<ul>` of `<a href>`). The browser
+             * shows them until the footer upgrades; the upgraded footer has no `fallback` slot, so they are
+             * then neither shown nor read. Bare `<a>` extras are hidden before upgrade when a fallback
+             * exists, so list them in the fallback too.
              */
             "sc-footer": LocalJSX.IntrinsicElements["sc-footer"] & JSXBase.HTMLAttributes<HTMLScFooterElement>;
             /**
@@ -6148,7 +6220,12 @@ declare module "@stencil/core" {
              * `preventDefault()` on it and switches in place, and the link still works without script.
              * The language name is kept as one light-DOM `<span lang>` child that the component writes
              * itself and shows through its slot: the type roles switch by `lang` in the document, which
-             * a span inside the shadow root could not reach. Don't add or remove children yourself.
+             * a span inside the shadow root could not reach. Don't add or remove children yourself, other
+             * than the `fallback` link below.
+             * Without JavaScript (PERF-04, LANG-04): the switch renders in shadow DOM, so write the same
+             * link as a light-DOM child, `<a slot="fallback" href hreflang lang>` with the other
+             * language's name. The browser shows it until the switch upgrades; the upgraded switch has no
+             * `fallback` slot, so it is then neither shown nor read.
              * Without `href` it falls back to a `<button lang>`. That mode is deprecated and will be
              * removed: always set `href`.
              */
@@ -6511,7 +6588,14 @@ declare module "@stencil/core" {
              * `sc-footer`, and it becomes an in-flow "Help and feedback" group, a 2 × 2 grid of outlined
              * text buttons (Services is left out there: the site's menu already carries it). It is
              * present when the page loads and does not animate.
-             * A `<nav>` labelled "Help and feedback". Items appear when their `*-href` is set.
+             * At short viewport heights (below 600px, which also covers high zoom) the wide bar is not
+             * docked: it keeps its row of items but sits static at the end of the page, and publishes no
+             * height, so `sc-page` reserves nothing (decision R11; WCAG 2.4.11 and 1.4.10).
+             * Without JavaScript (PERF-04): the bar renders in shadow DOM, so write the same links as
+             * light-DOM children in `slot="fallback"` (a `<nav aria-label="Help and feedback">` with a
+             * `<ul>` of `<a href>`). The browser shows them, in the flow at the end of the page, until the
+             * bar upgrades; the upgraded bar has no `fallback` slot, so they are then neither shown nor
+             * read.
              */
             "sc-utility-bar": LocalJSX.IntrinsicElements["sc-utility-bar"] & JSXBase.HTMLAttributes<HTMLScUtilityBarElement>;
         }

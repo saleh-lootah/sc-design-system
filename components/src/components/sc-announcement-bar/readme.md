@@ -12,7 +12,8 @@ A site-wide announcement above the header (after the skip link). Spec: `specs/sc
 ```
 
 - `tone`: `warning` (default), `info` or `error`. Say the severity in the words too.
-- It is a labelled region present at load, not an alert. Change `announcement-id` when the message changes.
+- It is a labelled region present at load, not an alert. Change `announcement-id` when the message changes. The dismissal is kept in `sessionStorage` for the visit only (R8), never `localStorage`.
+- A link inside the message is running text and is always underlined (R6).
 - `dismiss-label` overrides the dismiss button's name ("Dismiss announcement" / "إغلاق الإعلان").
 
 <!-- Auto Generated Below -->
@@ -29,20 +30,21 @@ live region and not an alert. The text carries the severity in words ("Planned
 maintenance…"); the tone's icon and container repeat it.
 
 Dismissing it fires `scDismiss` (cancelable) and hides it. With `announcement-id`, the
-dismissal is remembered in this browser, so the same announcement does not come back.
+dismissal is remembered for the browser session (`sessionStorage`, decision R8), so the same
+announcement does not come back on later pages of the visit.
 Focus moves to the next focusable element after it. From a pointer it fades out over
 `duration-exit`; from the keyboard it goes at once. Its height is never animated (MOT-11).
 
 ## Properties
 
-| Property         | Attribute         | Description                                                                                                                                                  | Type                             | Default     |
-| ---------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------- | ----------- |
-| `announcementId` | `announcement-id` | Remembers a dismissal in this browser (localStorage) under this id, so the announcement stays hidden on later pages. Change the id when the message changes. | `string \| undefined`            | `undefined` |
-| `dismissLabel`   | `dismiss-label`   | Overrides the dismiss button's name, "Dismiss announcement" (in the page language).                                                                          | `string \| undefined`            | `undefined` |
-| `dismissible`    | `dismissible`     | Shows the dismiss button.                                                                                                                                    | `boolean`                        | `false`     |
-| `linkHref`       | `link-href`       | A link with more detail ("See affected services"). Shown with `link-text`.                                                                                   | `string \| undefined`            | `undefined` |
-| `linkText`       | `link-text`       | The link's text.                                                                                                                                             | `string \| undefined`            | `undefined` |
-| `tone`           | `tone`            | `warning` (maintenance; default), `info`, or `error` (a service is down).                                                                                    | `"error" \| "info" \| "warning"` | `'warning'` |
+| Property         | Attribute         | Description                                                                                                                                                                                                                       | Type                             | Default     |
+| ---------------- | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- | ----------- |
+| `announcementId` | `announcement-id` | Remembers a dismissal for this browser session (`sessionStorage`, never `localStorage`: decision R8, PRV-12) under this id, so the announcement stays hidden on later pages of the visit. Change the id when the message changes. | `string \| undefined`            | `undefined` |
+| `dismissLabel`   | `dismiss-label`   | Overrides the dismiss button's name, "Dismiss announcement" (in the page language).                                                                                                                                               | `string \| undefined`            | `undefined` |
+| `dismissible`    | `dismissible`     | Shows the dismiss button.                                                                                                                                                                                                         | `boolean`                        | `false`     |
+| `linkHref`       | `link-href`       | A link with more detail ("See affected services"). Shown with `link-text`.                                                                                                                                                        | `string \| undefined`            | `undefined` |
+| `linkText`       | `link-text`       | The link's text.                                                                                                                                                                                                                  | `string \| undefined`            | `undefined` |
+| `tone`           | `tone`            | `warning` (maintenance; default), `info`, or `error` (a service is down).                                                                                                                                                         | `"error" \| "info" \| "warning"` | `'warning'` |
 
 
 ## Events
