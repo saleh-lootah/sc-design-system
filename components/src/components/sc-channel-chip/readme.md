@@ -12,7 +12,7 @@ Points to another channel that also offers this service: "Also on Dubai Transpor
 
 - The chip sets `data-channel` on itself and shows that channel's colours: an 8px dot and the label in its action colour.
 - `variant="subtle"` (default) on white cards; `variant="outlined"` (surface fill, 1px channel outline, Bold) on a channel tint.
-- 32px tall with a 44px hit area when it is a link. Never dismissable, never the main way forward.
+- 32px tall with a 44px hit area when it is a link. A linked chip underlines on hover only: its shape and end chevron identify it as a link (R6). It follows on release, never on press. Never dismissable, never the main way forward.
 
 ### Styling hooks
 

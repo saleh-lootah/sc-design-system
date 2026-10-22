@@ -116,6 +116,32 @@ describe('sc-filter-chips (e2e)', () => {
     expect(await page.$eval('#f .sc-filter-chips__chip', (b) => getComputedStyle(b).transform)).toBe('matrix(0.97, 0, 0, 0.97, 0, 0)');
   });
 
+  it('removes on release only: pressing, sliding off and releasing removes nothing (WCAG 2.5.2)', async () => {
+    const page = await newScPage(`${MARKUP}<div style="block-size: 400px"></div>`);
+    const removed = await page.spyOnEvent('scRemove');
+    const cleared = await page.spyOnEvent('scClear');
+    for (const sel of ['#f .sc-filter-chips__chip', '#f .sc-filter-chips__clear']) {
+      const box = (await (await page.$(sel))!.boundingBox())!;
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      await page.mouse.down();
+      // The press feedback shows while the pointer is down …
+      await new Promise((r) => setTimeout(r, 300));
+      expect(await page.$eval(sel, (b) => getComputedStyle(b).transform)).toBe('matrix(0.97, 0, 0, 0.97, 0, 0)');
+      // … but nothing happens until release, and releasing off the chip cancels it.
+      expect(await labels(page)).toEqual(['Transport and vehicles', 'Paid online', '2026']);
+      await page.mouse.move(box.x + box.width / 2, 380, { steps: 4 });
+      await page.mouse.up();
+      await page.waitForChanges();
+      expect(await labels(page)).toEqual(['Transport and vehicles', 'Paid online', '2026']);
+    }
+    expect(removed).not.toHaveReceivedEvent();
+    expect(cleared).not.toHaveReceivedEvent();
+    await page.click('#f .sc-filter-chips__chip');
+    await page.waitForChanges();
+    expect(removed).toHaveReceivedEventDetail({ value: 'transport', label: 'Transport and vehicles' });
+    expect(await labels(page)).toEqual(['Paid online', '2026']);
+  });
+
   it('has no axe violations while focused, on every channel', async () => {
     const page = await newScPage(MARKUP);
     await page.keyboard.press('Tab');

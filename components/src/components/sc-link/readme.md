@@ -19,7 +19,7 @@ Goes somewhere. If it does something instead (submits, saves, deletes), use `sc-
 | `standalone` | A link on its own line, below a list or a card. label-large Bold, an end arrow (mirrored in Arabic) and a 44px target. | "All 412 services", "Payment history" |
 | `external` | A link that must open in a new tab because leaving would lose the user's progress. | "RTA fees guide" |
 
-- Links are always underlined (1px at 4px, 5px in Arabic), in the channel action colour; the underline thickens to 2px on hover. Visited links look the same (D8).
+- Links are always underlined (1px at 4px, 5px in Arabic), in the channel action colour; the underline thickens to 2px on hover. Visited links look the same (D8). That holds in every state, for inline `sc-link` and `.sc-link` alike: running-text links are always underlined (R6, CMP-08). Only navigation links in other components (breadcrumbs, chips, the skip link) may underline on hover only.
 - Don't open links in a new tab by default. When you do, use `external`: it adds the 20px external icon (6px gap) and the visually hidden "(opens in new tab)" / "(يفتح في علامة تبويب جديدة)", and sets `rel="noopener noreferrer"`. Override the hidden text with `external-text`, e.g. "(PDF, 2 MB, opens in new tab)".
 - Use `hreflang` when the linked page is in the other language, and `download` for files.
 - Components that need another link colour set `--sc-link-color` on an ancestor: the footer uses `on-surface`, the error summary `error`. Services don't.

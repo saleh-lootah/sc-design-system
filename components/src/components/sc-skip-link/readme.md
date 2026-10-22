@@ -14,6 +14,7 @@
 
 - Hidden until it has keyboard focus, then a 48px `inverse-surface` block 8px from the top and inline-start corner (top right in Arabic). It appears instantly.
 - `href` defaults to `#main-content`, the id `sc-page` renders. Activating it moves focus to the target, so the next Tab continues from the main content.
+- Not underlined at rest, underlined on hover: it is a navigation link identified by its place and text (R6).
 - Override the label through the default slot only if the page has no `<main>` content to skip to by that name.
 
 ### Styling hooks

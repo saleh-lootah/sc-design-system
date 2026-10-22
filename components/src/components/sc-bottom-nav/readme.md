@@ -17,7 +17,7 @@ The primary navigation of signed-in channel pages on phones and tablets. Spec: `
 
 - Three to five destinations, each an icon above a label. Docked flat to the bottom edge below 1024px and hidden from 1024px, where the header navigation takes over.
 - `sc.css` reserves its height at the end of the page (`padding-block-end` on `body` and `scroll-padding-block-end`), so nothing is covered.
-- The current destination (`aria-current="page"`) gets a 56 × 32 `channel-container` indicator and a Bold label in the channel action colour.
+- The current destination (`aria-current="page"`) gets a 56 × 32 `channel-container` indicator with a 3px channel-action bar above it on the top rule, a Filled icon and a Bold label in the channel action colour. The bar is the cue that still works in Arabic, where every label is Bold (R10).
 - When it is present, the utility bar folds into the footer.
 
 ### Styling hooks

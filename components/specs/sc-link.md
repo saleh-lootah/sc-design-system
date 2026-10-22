@@ -27,6 +27,10 @@ The `.sc-link` helper (`src/global/shadow.css`, also in `sc.css` `@layer sc.util
 | `standalone` | `label-large` (18/22 Bold EN, 20/28 Bold AR) | inline-flex, min-height 44 (`size-target-min`) |
 | `external` | as inline or standalone | adds `target="_blank" rel="noopener noreferrer"` |
 
+## Underline rule (R6, CMP-08)
+
+Running-text links (inline `sc-link` and the `.sc-link` class) are underlined in every state: at rest, on hover (2px) and with focus. `standalone` links keep the underline too. Navigation links (header, footer, breadcrumbs, cards, tiles, chips, the skip link) may underline on hover only, and only when their position, a heading or an icon identifies them as links; they are other components, not `sc-link`.
+
 ## Colour and states
 
 | State | Rule |
@@ -65,4 +69,4 @@ Custom-elements closure 2,755 B gzip (4 KiB budget), of which its own CSS 524 B.
 
 ## Tests
 
-`sc-link.spec.tsx` (render, external, Arabic text, standalone, attributes), `sc-link.e2e.ts` (underline values EN/AR, hover 2px, parity with `.sc-link`, `--sc-link-color`, keyboard and U1 ring, accessible name with hidden text in both languages, standalone type and mirrored arrow, channel and theme; `describeAxe` EN/AR × light/dark, axe on every channel in both themes), `sc-link.visual.e2e.ts` (baselines in `test/visual/darwin/sc-link/`).
+`sc-link.spec.tsx` (render, external, Arabic text, standalone, attributes), `sc-link.e2e.ts` (underline values EN/AR, hover 2px, underline at rest, hover and focus for inline `sc-link` and `.sc-link` EN/AR, parity with `.sc-link`, `--sc-link-color`, keyboard and U1 ring, accessible name with hidden text in both languages, standalone type and mirrored arrow, channel and theme; `describeAxe` EN/AR × light/dark, axe on every channel in both themes), `sc-link.visual.e2e.ts` (baselines in `test/visual/darwin/sc-link/`).
