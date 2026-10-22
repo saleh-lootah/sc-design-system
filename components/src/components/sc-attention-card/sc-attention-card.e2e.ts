@@ -1,5 +1,46 @@
+import { E2EPage } from '@stencil/core/testing';
 import { describeAxe } from '../../test/axe';
 import { newScPage, setPageContext } from '../../test/page';
+
+/**
+ * WCAG 2.5.2 (MOT-09): press gives visual feedback only; activation is the native click on
+ * release. Presses `control` (a page expression), drags off to the far corner of the viewport and releases
+ * there, then clicks normally. Returns what was seen at each step; `look` reads the press visual.
+ */
+async function pressAndCancel(page: E2EPage, control: string, look: string) {
+  const run = (expr: string) =>
+    page.evaluate(
+      (c: string, e: string) => {
+        // eslint-disable-next-line no-new-func
+        const el = new Function(`return (${c});`)() as HTMLElement;
+        // eslint-disable-next-line no-new-func
+        return new Function('el', 'w', `return (${e});`)(el, window);
+      },
+      control,
+      expr,
+    );
+  await run(`(w.pressLog = { clicks: 0, submits: 0, hashes: 0 },
+    el.addEventListener('click', () => w.pressLog.clicks++),
+    w.pressHooked || ((w.pressHooked = true),
+      w.addEventListener('hashchange', () => w.pressLog.hashes++),
+      document.addEventListener('submit', (ev) => { ev.preventDefault(); w.pressLog.submits++; }, true)), 0)`);
+  const at = (await run(`(({ x, y, width, height }) => [x + width / 2, y + height / 2])(el.getBoundingClientRect())`)) as number[];
+  const off = (await run('[w.innerWidth - 2, w.innerHeight - 2]')) as number[];
+  const settle = () => new Promise((r) => setTimeout(r, 400));
+  const log = () => run('({ ...w.pressLog, hash: location.hash })');
+  const rest = await run(look);
+  await page.mouse.move(at[0], at[1]);
+  await page.mouse.down();
+  await settle();
+  const pressed = await run(look);
+  await page.mouse.move(off[0], off[1], { steps: 5 });
+  await page.mouse.up();
+  await settle();
+  const cancelled = { log: await log(), look: await run(look) };
+  await page.mouse.click(at[0], at[1]);
+  await settle();
+  return { rest, pressed, cancelled, clicked: await log() };
+}
 
 const BULB = `<svg slot="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9V16h7v-2.1A6 6 0 0 0 12 3z"/></svg>`;
 const status = (words: string, tone = 'warning') => `<sc-status-tag slot="status" tone="${tone}">${words}</sc-status-tag>`;
@@ -100,6 +141,15 @@ describe('sc-attention-card (e2e)', () => {
       return [root.querySelector('.icon-tile')!.getBoundingClientRect().x, document.querySelector('#bill [slot="status"]')!.getBoundingClientRect().x];
     });
     expect(r[0]).toBeGreaterThan(r[1]);
+  });
+
+  it('gives visual feedback on press and activates on release only: dragging off the action cancels (2.5.2)', async () => {
+    const page = await newScPage(MARKUP);
+    const r = await pressAndCancel(page, `document.querySelector('#doc sc-button .sc-button')`, 'getComputedStyle(el).transform');
+    expect(r.rest).toBe('none');
+    expect(r.pressed).toBe('matrix(0.97, 0, 0, 0.97, 0, 0)');
+    expect(r.cancelled).toEqual({ log: { clicks: 0, submits: 0, hashes: 0, hash: '' }, look: 'none' });
+    expect(r.clicked).toEqual({ clicks: 1, submits: 0, hashes: 1, hash: '#upload' });
   });
 });
 

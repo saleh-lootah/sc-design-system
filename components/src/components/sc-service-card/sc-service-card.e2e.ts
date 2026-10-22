@@ -1,5 +1,46 @@
+import { E2EPage } from '@stencil/core/testing';
 import { describeAxe } from '../../test/axe';
 import { newScPage, setPageContext } from '../../test/page';
+
+/**
+ * WCAG 2.5.2 (MOT-09): press gives visual feedback only; activation is the native click on
+ * release. Presses `control` (a page expression), drags off to the far corner of the viewport and releases
+ * there, then clicks normally. Returns what was seen at each step; `look` reads the press visual.
+ */
+async function pressAndCancel(page: E2EPage, control: string, look: string) {
+  const run = (expr: string) =>
+    page.evaluate(
+      (c: string, e: string) => {
+        // eslint-disable-next-line no-new-func
+        const el = new Function(`return (${c});`)() as HTMLElement;
+        // eslint-disable-next-line no-new-func
+        return new Function('el', 'w', `return (${e});`)(el, window);
+      },
+      control,
+      expr,
+    );
+  await run(`(w.pressLog = { clicks: 0, submits: 0, hashes: 0 },
+    el.addEventListener('click', () => w.pressLog.clicks++),
+    w.pressHooked || ((w.pressHooked = true),
+      w.addEventListener('hashchange', () => w.pressLog.hashes++),
+      document.addEventListener('submit', (ev) => { ev.preventDefault(); w.pressLog.submits++; }, true)), 0)`);
+  const at = (await run(`(({ x, y, width, height }) => [x + width / 2, y + height / 2])(el.getBoundingClientRect())`)) as number[];
+  const off = (await run('[w.innerWidth - 2, w.innerHeight - 2]')) as number[];
+  const settle = () => new Promise((r) => setTimeout(r, 400));
+  const log = () => run('({ ...w.pressLog, hash: location.hash })');
+  const rest = await run(look);
+  await page.mouse.move(at[0], at[1]);
+  await page.mouse.down();
+  await settle();
+  const pressed = await run(look);
+  await page.mouse.move(off[0], off[1], { steps: 5 });
+  await page.mouse.up();
+  await settle();
+  const cancelled = { log: await log(), look: await run(look) };
+  await page.mouse.click(at[0], at[1]);
+  await settle();
+  return { rest, pressed, cancelled, clicked: await log() };
+}
 
 /** E2EPage is a Puppeteer page; this is the slice used to emulate forced colours. */
 type CdpPage = { createCDPSession(): Promise<{ send(method: string, params: object): Promise<unknown> }> };
@@ -204,6 +245,14 @@ describe('sc-service-card (e2e)', () => {
     await (await (page as unknown as CdpPage).createCDPSession()).send('Emulation.setEmulatedMedia', { features: [{ name: 'forced-colors', value: 'active' }] });
     const border = await page.evaluate(() => getComputedStyle(document.querySelector('#renew')!.shadowRoot!.querySelector('.card')!).borderTopColor);
     expect(border).not.toBe('rgba(0, 0, 0, 0)');
+  });
+
+  it('gives visual feedback on press and activates on release only: dragging off cancels (2.5.2)', async () => {
+    const page = await newScPage(GRID);
+    const r = await pressAndCancel(page, `document.querySelector('#bills').shadowRoot.querySelector('.link')`, 'getComputedStyle(el).color');
+    expect(r.pressed).not.toBe(r.rest);
+    expect(r.cancelled).toEqual({ log: { clicks: 0, submits: 0, hashes: 0, hash: '' }, look: r.rest });
+    expect(r.clicked).toEqual({ clicks: 1, submits: 0, hashes: 1, hash: '#bills' });
   });
 });
 

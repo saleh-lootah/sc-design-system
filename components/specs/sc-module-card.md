@@ -32,7 +32,7 @@ Mirrors: icon on the right, link on the left. Plates and amounts stay isolated.
 
 ## Motion
 
-Link underline over 120ms on hover (fine pointers).
+Link underline over 120ms on hover (fine pointers); the link takes `channel-action-pressed` while pressed. Visual feedback on press, activation on release (2.5.2, MOT-09): the press state is CSS `:active` only, nothing acts on `pointerdown`, `mousedown` or `touchstart`, and the action is the native `click` on release, so moving the pointer off before release cancels it.
 
 ## Code
 
@@ -73,4 +73,4 @@ Slots: default, `icon`, `action`, `footer`. Parts: `card`, `header`, `icon`, `ti
 
 ## Tests
 
-`sc-module-card.spec.tsx`; `sc-module-card.e2e.ts` (headings and link names with context, metrics, link at the end in both directions, rules when divided, the footer at the bottom below a rule, `describeAxe`); `sc-module-card.visual.e2e.ts`.
+`sc-module-card.spec.tsx`; `sc-module-card.e2e.ts` (headings and link names with context, metrics, link at the end in both directions, rules when divided, the footer at the bottom below a rule, press-and-drag-off on the header link cancels (2.5.2), `describeAxe`); `sc-module-card.visual.e2e.ts`.

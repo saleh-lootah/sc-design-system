@@ -39,7 +39,7 @@ The icon tile is at the right and the arrow at the left, pointing left. Titles a
 
 ## Motion
 
-Edge colour over `duration-fast` with `easing-hover`, fine pointers only. No scale.
+Edge colour over `duration-fast` with `easing-hover`, fine pointers only. No scale; the pressed title colour is the only press feedback. Visual feedback on press, activation on release (2.5.2, MOT-09): the press state is CSS `:active` only, nothing acts on `pointerdown`, `mousedown` or `touchstart`, and the action is the native `click` on release, so moving the pointer off before release cancels it.
 
 ## Code
 
@@ -66,4 +66,4 @@ Slots: default (title), `entity`, `icon` (new), `chip`. Parts: `card`, `icon` (n
 
 ## Tests
 
-`sc-service-card.spec.tsx` (heading and link, decorative arrow, single link, heading levels, empty parts, icon tile and tint); `sc-service-card.e2e.ts` (tab order and Enter, ring around the title, title-only target, 44px target, names and description, box metrics, arrow position and mirroring, tint roles, fine-pointer-only hover, forced colours, `describeAxe`); `sc-service-card.visual.e2e.ts`.
+`sc-service-card.spec.tsx` (heading and link, decorative arrow, single link, heading levels, empty parts, icon tile and tint); `sc-service-card.e2e.ts` (tab order and Enter, ring around the title, title-only target, 44px target, names and description, box metrics, arrow position and mirroring, tint roles, fine-pointer-only hover, press-and-drag-off cancels (2.5.2), forced colours, `describeAxe`); `sc-service-card.visual.e2e.ts`.
