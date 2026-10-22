@@ -45,7 +45,7 @@ Content aligns right. Arabic counts use the six plural forms: لا توجد خد
 
 ## Motion
 
-Edge colour over 120ms (fine pointers); press scale over 150ms with `easing-enter`, 1 under reduced motion; keyboard activation instant.
+Edge colour over 120ms (fine pointers); press scale over 150ms with `easing-enter`, 1 under reduced motion; keyboard activation instant. Visual feedback on press, activation on release (2.5.2, MOT-09): the press state is CSS `:active` only, nothing acts on `pointerdown`, `mousedown` or `touchstart`, and the action is the native `click` on release, so moving the pointer off before release cancels it.
 
 ## Code
 
@@ -76,4 +76,4 @@ Slots: default (title), `icon`. Parts: `link`, `icon`, `title`, `count`. No even
 
 ## Tests
 
-`sc-tile.spec.tsx` (single link, counts in English and in all six Arabic forms with Latin digits and grouping, count-label, no count, tint); `sc-tile.e2e.ts` (link names, Tab and Enter, metrics and tint roles, the U1 ring, pointer-only press, Arabic re-render, `describeAxe`); `sc-tile.visual.e2e.ts`.
+`sc-tile.spec.tsx` (single link, counts in English and in all six Arabic forms with Latin digits and grouping, count-label, no count, tint); `sc-tile.e2e.ts` (link names, Tab and Enter, metrics and tint roles, the U1 ring, pointer-only press, press-and-drag-off cancels (2.5.2), Arabic re-render, `describeAxe`); `sc-tile.visual.e2e.ts`.
