@@ -208,7 +208,12 @@ describe('sc-site-header (e2e)', () => {
       await inRoot(page, 'root.querySelector(".menu-button").click()');
       await page.waitForChanges();
       await inRoot(page, 'root.querySelector(".menu-head .icon-button").click()');
-      await page.waitForFunction(() => !document.querySelector('sc-site-header')!.shadowRoot!.querySelector('dialog')!.open);
+      // Wait for the close to be handled, not just for the dialog to shut: its close event (which
+      // clears the open state) fires a task later and would otherwise land after openMenu().
+      await page.waitForFunction(() => {
+        const root = document.querySelector('sc-site-header')!.shadowRoot!;
+        return !root.querySelector('dialog')!.open && root.querySelector('.menu-button')!.getAttribute('aria-expanded') === 'false';
+      });
       await page.evaluate(() => (document.querySelector('sc-site-header') as HTMLElement & { openMenu(): Promise<void> }).openMenu());
       await page.waitForChanges();
       await page.evaluate(() => (document.querySelector('a[slot="nav"][href="#services"]') as HTMLElement).click());
