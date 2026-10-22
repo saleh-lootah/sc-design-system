@@ -162,3 +162,9 @@ Where this file disagrees with `foundations.md` or `component-language.md`, this
 | R9 | **Pasted input:** text and number fields strip bidi control characters (U+200E, U+200F, U+202A–U+202E, U+2066–U+2069) from pasted values. This amends LANG-21. |
 | R10 | **Current-item cue:** current navigation items carry a non-weight cue (an indicator bar or underline) as well as Bold, because short Arabic text is already Bold. |
 | R11 | **Utility bar at short heights:** below a viewport height of 600px (or at high zoom), the docked utility bar becomes static at the end of the page (WCAG 2.4.11 and 1.4.10). |
+
+## Official Arabic channel names (user, 22 October 2026)
+
+| # | Decision |
+| --- | --- |
+| R12 | **Official Arabic channel names:** دبي الآن (Dubai Now), مواصلات دبي (Dubai Transport), زوروا دبي (Visit Dubai), دبي للعدالة (Dubai Justice), دبي للبناء (Build in Dubai), استثمر في دبي (Invest in Dubai), دبي التجارية (Dubai Trade). They replace عدالة دبي and ابنِ في دبي, and close review item A7. `components/src/i18n/components/channel-names.ts` is the source; `sc-channel-chip` and `sc-step-list` copies must match it. |

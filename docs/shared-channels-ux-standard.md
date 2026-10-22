@@ -186,8 +186,8 @@ An entity owns a service and is accountable for its outcome. A channel makes ser
 | Dubai Now | دبي الآن | `now` | Residents and citizens | Pay water and electricity bills; get a good conduct certificate |
 | Dubai Transport | مواصلات دبي | `transport` | Drivers, vehicle owners, transport operators | Renew vehicle registration; pay a traffic fine |
 | Visit Dubai | زوروا دبي | `visit` | Visitors and event organisers | Get a permit to hold an event |
-| Dubai Justice | عدالة دبي | `justice` | Parties to cases, lawyers, legal professionals | Check a court case status; pay a court fee |
-| Build in Dubai | ابنِ في دبي | `build` | Developers, consultants, contractors | Apply for a building permit; book a building inspection |
+| Dubai Justice | دبي للعدالة | `justice` | Parties to cases, lawyers, legal professionals | Check a court case status; pay a court fee |
+| Build in Dubai | دبي للبناء | `build` | Developers, consultants, contractors | Apply for a building permit; book a building inspection |
 | Invest in Dubai | استثمر في دبي | `invest` | Founders, investors, company representatives | Apply for a trade licence; renew a trade licence |
 | Dubai Trade | دبي التجارية | `trade` | Importers, exporters, logistics companies | Submit a customs declaration |
 
@@ -824,7 +824,7 @@ Shared Channels content is plain, direct and calm. It speaks to one person about
 
 - **CNT-09. Register.** Arabic content MUST be written in plain Modern Standard Arabic: short sentences, common words, no legal or bureaucratic formulas where a plain phrase exists. It MUST NOT use a dialect, including Gulf dialect, in service content.
 - **CNT-10. Written, not translated.** Arabic content is written for Arabic readers from the same facts as the English. Sentence order, structure and length may differ from the English; meaning, facts and actions MUST NOT.
-- **CNT-11. Addressing the reader without assuming gender** (changed in v2). Arabic marks gender in verbs, so content MUST be written so that it reads correctly for every reader. Official names are not content and are kept as they are ([CNT-14](#arabic-style)), even where they contain an imperative or a diacritic, as the channel names "استثمر في دبي" and "ابنِ في دبي" do ([3.1](#seven-channels)):
+- **CNT-11. Addressing the reader without assuming gender** (changed in v2). Arabic marks gender in verbs, so content MUST be written so that it reads correctly for every reader. Official names are not content and are kept as they are ([CNT-14](#arabic-style)), even where they contain an imperative, as the channel name "استثمر في دبي" does ([3.1](#seven-channels)):
   - Buttons, links, labels and headings use a verbal noun (masdar), not an imperative: "متابعة" (Continue), "دفع الرسوم" (Pay the fee), "حفظ والمتابعة لاحقًا" (Save and finish later), "إرفاق المستندات" (Upload documents).
   - Instructions and error messages use "يُرجى" with a verbal noun: "يُرجى إدخال رقم اللوحة" (Enter the plate number).
   - Sentences use forms that are not marked for gender in unvocalised text: "يمكنك…" (you can), the possessive suffix "ـك" ("طلبك", "رقم لوحتك") and passive or impersonal constructions ("تم استلام طلبك").
@@ -1693,7 +1693,7 @@ Failures are of five kinds, each with its own response: a validation error ([13.
 | --- | --- |
 | Destination unavailable or return lost | Keep the draft and the referral reference; give a resume link and a way to check the other service |
 
-**Example:** Continue to Dubai Justice to pay the court fee / المتابعة إلى عدالة دبي لدفع رسوم المحكمة.
+**Example:** Continue to Dubai Justice to pay the court fee / المتابعة إلى دبي للعدالة لدفع رسوم المحكمة.
 
 ### How we check
 
