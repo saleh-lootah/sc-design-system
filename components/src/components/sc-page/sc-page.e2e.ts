@@ -125,6 +125,13 @@ describe('sc-page (e2e)', () => {
       const page = await newScPage(STICKY(tag));
       await page.setViewport({ width: 1280, height: 600 });
       await waitForPadding(page);
+      // The padding is first set for the header at the 800px default viewport; wait until the
+      // ResizeObserver has caught up with the header at 1280px.
+      await page.waitForFunction(
+        (t: string) => getComputedStyle(document.documentElement).scrollPaddingTop === `${Math.ceil(document.querySelector(t)!.getBoundingClientRect().height) + 8}px`,
+        { timeout: 5000 },
+        tag,
+      );
       const height = await page.evaluate((t: string) => Math.ceil(document.querySelector(t)!.getBoundingClientRect().height), tag);
       expect(height).toBeGreaterThan(0);
       expect(await padding(page)).toBe(`${height + 8}px`);

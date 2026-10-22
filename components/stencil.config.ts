@@ -140,9 +140,14 @@ export const config: Config = {
     browserExecutablePath: browser,
     // Stencil only accepts 'shell' or false. Puppeteer then passes plain --headless, which in
     // Chromium 132+ (Helium 0.19 is Chromium 155) is the new headless mode of the full browser.
-    browserHeadless: 'shell',
+    // SC_HEADFUL=1 (CI, under xvfb-run) runs the full browser instead: headless Chromium on
+    // Linux has no pointer device and reports (hover: none) and (pointer: none), so the hover
+    // styles behind (hover: hover) and (pointer: fine) could not be tested. macOS reports a
+    // fine pointer in headless mode too.
+    browserHeadless: process.env.SC_HEADFUL ? false : 'shell',
     // GitHub's Ubuntu runners block Chromium's sandbox (AppArmor), so CI runs without it.
-    browserArgs: ['--hide-scrollbars', ...(process.env.CI ? ['--no-sandbox'] : [])],
+    // Headful on CI clears CI (see ci.yml), so it needs the runner's arguments too.
+    browserArgs: ['--hide-scrollbars', ...(process.env.CI || process.env.SC_HEADFUL ? ['--no-sandbox', '--disable-dev-shm-usage'] : [])],
     // Keep the e2e page small and deterministic.
     browserWaitUntil: 'load',
     // Stencil does not pass testing.testTimeout on to Jest (it stayed at 45 s in v1), so the

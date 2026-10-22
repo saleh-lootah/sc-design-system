@@ -194,7 +194,10 @@ describe('sc-button (e2e)', () => {
     );
     expect(files).toContain('dubai-w23-700-latin.woff2');
     expect(files.filter((f) => f.includes('arabic'))).toEqual([]);
-    expect(await page.evaluate(() => [...document.fonts].some((f) => f.status === 'error'))).toBe(false);
+    // Only the downloaded Dubai W23 faces must load. The "Dubai W23 Fallback" faces are local()
+    // Arial and Tahoma, which error where those are not installed (Linux CI); the stack then
+    // moves on to system-ui, by design.
+    expect(await page.evaluate(() => [...document.fonts].some((f) => f.status === 'error' && f.family !== 'Dubai W23 Fallback'))).toBe(false);
     expect(await page.evaluate(() => document.fonts.check('700 18px "Dubai W23"', 'Continue'))).toBe(true);
   });
 
