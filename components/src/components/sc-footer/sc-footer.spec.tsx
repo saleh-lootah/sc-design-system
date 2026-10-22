@@ -34,6 +34,14 @@ describe('sc-footer (spec)', () => {
     expect(page.root!.shadowRoot!.querySelectorAll('li').length).toBe(3);
   });
 
+  it('leaves the no-JS fallback alone: it is not slotted, and its links are not extras (PERF-04)', async () => {
+    const page = await render(`<sc-footer help-href="/help"><a slot="fallback" href="/help">Help and contact</a><nav slot="fallback"><a href="/terms">Terms of use</a></nav><a href="/feedback">Give feedback</a></sc-footer>`);
+    const host = page.root!;
+    expect(Array.from(host.children).filter((c) => c.localName === 'a').map((a) => a.getAttribute('slot'))).toEqual(['fallback', 'link-0']);
+    expect(host.shadowRoot!.querySelector('slot[name="fallback"]')).toBeNull();
+    expect(host.shadowRoot!.querySelectorAll('li').length).toBe(2);
+  });
+
   it('grouped: brand, Channels, Helpful information and Legal groups, each with an h2 (CHR-06)', async () => {
     const page = await render(`<sc-footer variant="grouped" channel="transport" updated="12 October 2026" links='${LINKS}' ${HREFS}></sc-footer>`);
     const root = page.root!.shadowRoot!;

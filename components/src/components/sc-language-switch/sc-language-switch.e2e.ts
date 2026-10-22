@@ -1,4 +1,5 @@
-import { E2EPage } from '@stencil/core/testing';
+import { E2EPage, newE2EPage } from '@stencil/core/testing';
+import type { HTTPRequest, Page as PuppeteerPage } from 'puppeteer';
 import { describeAxe, expectNoAxeViolations } from '../../test/axe';
 import { newScPage, setPageContext } from '../../test/page';
 
@@ -14,6 +15,34 @@ function inner<T = unknown>(page: E2EPage, selector: string, read: string): Prom
     selector,
     read,
   ) as Promise<T>;
+}
+
+/** The switch as a service writes it for PERF-04: the same link again, in slot="fallback". */
+const WITH_FALLBACK = (lang: 'en' | 'ar') =>
+  lang === 'ar'
+    ? `<sc-language-switch href="/en/renew"><a slot="fallback" href="/en/renew" hreflang="en" lang="en" dir="ltr">English</a></sc-language-switch>`
+    : `<sc-language-switch href="/ar/renew"><a slot="fallback" href="/ar/renew" hreflang="ar" lang="ar" dir="rtl">العربية</a></sc-language-switch>`;
+
+/**
+ * Opens `html` with sc.css and JavaScript disabled, so no sc- tag is ever defined: what a
+ * visitor gets when script fails or is blocked (PERF-04), and what every visitor sees before
+ * the upgrade.
+ */
+async function noScriptPage(html: string, lang = 'en') {
+  const e2e = await newE2EPage();
+  await e2e.setContent('');
+  const origin = new URL(e2e.url()).origin;
+  // E2EPage is a Puppeteer page; its type hides browser().
+  const page = await (e2e as unknown as PuppeteerPage).browser().newPage();
+  await page.setJavaScriptEnabled(false);
+  await page.setRequestInterception(true);
+  page.on('request', (r: HTTPRequest) =>
+    r.url() === `${origin}/no-script.html`
+      ? r.respond({ status: 200, contentType: 'text/html', body: `<!doctype html><html lang="${lang}" dir="${lang === 'ar' ? 'rtl' : 'ltr'}" data-channel="now"><head><meta charset="utf-8"><link rel="stylesheet" href="/build/sc.css"></head><body><p>${html}</p></body></html>` })
+      : r.continue(),
+  );
+  await page.goto(`${origin}/no-script.html`, { waitUntil: 'load' });
+  return page;
 }
 
 const token = (page: E2EPage, name: string) =>
@@ -103,6 +132,29 @@ describe('sc-language-switch (e2e)', () => {
     await page.keyboard.press('Space');
     await page.waitForChanges();
     expect(spy).toHaveReceivedEventDetail({ lang: 'en' });
+  });
+
+  describe('without JavaScript (PERF-04, LANG-04)', () => {
+    it.each(['en', 'ar'] as const)('shows the fallback link, visible, 44px and with href and hreflang, before any upgrade (%s page)', async (lang) => {
+      const page = await noScriptPage(WITH_FALLBACK(lang), lang);
+      expect(await page.evaluate(() => !!customElements.get('sc-language-switch'))).toBe(false);
+      const link = await page.evaluate(() => {
+        const a = document.querySelector('sc-language-switch a')!;
+        const r = a.getBoundingClientRect();
+        return [a.getAttribute('href'), a.getAttribute('hreflang'), r.width > 0 && getComputedStyle(a).visibility === 'visible', Math.round(r.height) >= 44, Math.round(r.width) >= 44, getComputedStyle(a).textDecorationLine];
+      });
+      const other = lang === 'ar' ? 'en' : 'ar';
+      expect(link).toEqual([`/${other}/renew`, other, true, true, true, 'underline']);
+      await page.close();
+    });
+
+    it('once upgraded, renders its own link to the same page and hides the fallback', async () => {
+      const page = await newScPage(WITH_FALLBACK('en'));
+      expect(await page.evaluate(() => document.querySelector('sc-language-switch a[slot="fallback"]')!.getClientRects().length)).toBe(0);
+      expect(await inner(page, 'sc-language-switch', '[control.getAttribute("href"), control.getAttribute("hreflang")]')).toEqual(['/ar/renew', 'ar']);
+      expect(await accessibleName(page)).toBe('العربية');
+      expect(await page.evaluate(() => document.querySelectorAll('sc-language-switch > [data-sc-language-name]').length)).toBe(1);
+    });
   });
 
   describeAxe('sc-language-switch', ALL_STATES);

@@ -7,6 +7,9 @@ import { Accessibility as AccessibilityIcon, Chat, GridView, Mood, Phone } from 
 /** The custom property the page reads to keep clear of the docked bar. */
 const RESERVE = '--sc-utility-bar-block-size';
 
+/** Where the bar is docked; mirrors the CSS. Below 600px of viewport height it is static (R11). */
+const DOCKED = '(min-width: 1024px) and (min-height: 600px)';
+
 /**
  * The help and feedback bar of a channel site (decision U4, Standard CHR-05; component-
  * language B4 as amended by U4): the Happiness Meter, Call 04, Services, Chat and
@@ -21,6 +24,18 @@ const RESERVE = '--sc-utility-bar-block-size';
  * `sc-footer`, and it becomes an in-flow "Help and feedback" group, a 2 × 2 grid of outlined
  * text buttons (Services is left out there: the site's menu already carries it). It is
  * present when the page loads and does not animate.
+ *
+ * At short viewport heights (below 600px, which also covers high zoom) the wide bar is not
+ * docked: it keeps its row of items but sits static at the end of the page, and publishes no
+ * height, so `sc-page` reserves nothing (decision R11; WCAG 2.4.11 and 1.4.10).
+ *
+ * Without JavaScript (PERF-04): the bar renders in shadow DOM, so write the same links as
+ * light-DOM children in `slot="fallback"` (a `<nav aria-label="Help and feedback">` with a
+ * `<ul>` of `<a href>`). The browser shows them, in the flow at the end of the page, until the
+ * bar upgrades; the upgraded bar has no `fallback` slot, so they are then neither shown nor
+ * read.
+ *
+ * @slot fallback - Never shown once upgraded: the links for pages without JavaScript (PERF-04), shown until the bar upgrades.
  *
  * A `<nav>` labelled "Help and feedback". Items appear when their `*-href` is set.
  *
@@ -61,7 +76,8 @@ export class ScUtilityBar {
   connectedCallback() {
     this.locale.connect();
     if (typeof matchMedia === 'function') {
-      this.media = matchMedia('(min-width: 1024px)');
+      // The bar docks (position: fixed) only in this range; R11 keeps it static below 600px tall.
+      this.media = matchMedia(DOCKED);
       this.media.addEventListener('change', this.publish);
     }
   }

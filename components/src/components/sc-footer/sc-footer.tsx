@@ -17,8 +17,8 @@ type Link = [href: string | undefined, label: string];
  *   links and "Government of Dubai", under a 1px rule.
  * - `grouped` (channel sites, Standard CHR-06, decision Q-footer; B5): the channel's brand
  *   group (`slot="brand"`: a one-sentence description and app badges); a **Channels** group
- *   listing all seven channels in the Standard 3.1 order, the current one Bold with
- *   `aria-current="true"` and no swatch; **Helpful information** (about, help and contact,
+ *   listing all seven channels in the Standard 3.1 order, the current one Bold with a 3px
+ *   `channel-action` bar at its inline start and `aria-current="true"`, and no swatch; **Helpful information** (about, help and contact,
  *   accessibility statement, sitemap); and **Legal** (privacy and cookies, terms). Each group
  *   has an `<h2>`. Then "Government of Dubai · Last updated …" and "… is run by the
  *   Government of Dubai".
@@ -28,8 +28,19 @@ type Link = [href: string | undefined, label: string];
  * slot as plain `<a href>` elements; each gets its own list item (the footer sets their
  * `slot` attribute). The footer is on `surface`, never a dark band.
  *
+ * Links are navigation links (decision R6): underlined in every state, in `on-surface`
+ * (CHR-06). The current channel carries a 3px `channel-action` bar at its inline start as well
+ * as Bold (R10: Arabic is already Bold).
+ *
+ * Without JavaScript (PERF-04): the footer renders in shadow DOM, so write the same links as
+ * light-DOM children in `slot="fallback"` (a `<nav>` or `<ul>` of `<a href>`). The browser
+ * shows them until the footer upgrades; the upgraded footer has no `fallback` slot, so they are
+ * then neither shown nor read. Bare `<a>` extras are hidden before upgrade when a fallback
+ * exists, so list them in the fallback too.
+ *
  * @slot - Extra links, as `<a href>` elements, listed after the standard ones (in Helpful information when grouped).
  * @slot brand - Grouped: the channel's description and app badges, under its name.
+ * @slot fallback - Never shown once upgraded: the links for pages without JavaScript (PERF-04), shown until the footer upgrades.
  * @slot meta - Replaces "Government of Dubai" at the end of the simple footer.
  *
  * @part footer - The `<footer>`.
@@ -98,7 +109,7 @@ export class ScFooter {
   }
 
   private extraLinks(): Element[] {
-    return Array.from(this.el.children).filter((c) => c.localName === 'a' || (c.getAttribute('slot') ?? '').startsWith('link-'));
+    return Array.from(this.el.children).filter((c) => (c.localName === 'a' && c.getAttribute('slot') !== 'fallback') || (c.getAttribute('slot') ?? '').startsWith('link-'));
   }
 
   componentWillRender() {

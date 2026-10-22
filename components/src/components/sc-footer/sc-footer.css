@@ -40,7 +40,8 @@
 }
 
 /* Links: label-medium, on-surface, underlined 1px at 4px (5px in Arabic); 2px on hover.
-   Each is at least 44px tall. */
+   Each is at least 44px tall. They are navigation links (R6), but keep the underline in every
+   state, as CHR-06 draws them; on-surface rather than channel-action is CHR-06's exception. */
 .link,
 ::slotted(a) {
   box-sizing: border-box;
@@ -81,8 +82,11 @@
   letter-spacing: var(--sc-type-label-medium-tracking);
 }
 
-/* The current channel: Bold, aria-current, no swatch (CHR-06). */
+/* The current channel: Bold, aria-current, no swatch (CHR-06), and a 3px channel-action bar
+   at its inline start (R10: Bold alone is no cue in Arabic, which is already Bold). */
 .is-current {
+  padding-inline-start: var(--sc-space-8);
+  border-inline-start: var(--sc-size-border-accent) solid var(--sc-color-channel-action);
   font-weight: var(--sc-font-weight-bold);
 }
 
@@ -249,6 +253,9 @@ ul {
   }
   .mark {
     border-color: CanvasText;
+  }
+  .is-current {
+    border-color: Highlight;
   }
   .mark::after {
     background-color: CanvasText;

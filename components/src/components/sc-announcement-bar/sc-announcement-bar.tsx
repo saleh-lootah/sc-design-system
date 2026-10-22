@@ -9,9 +9,13 @@ export type AnnouncementTone = 'info' | 'warning' | 'error';
 
 const KEY = 'sc-announcement-dismissed:';
 
+/**
+ * Session storage only (decision R8, PRV-12): a dismissal is remembered for this tab's
+ * session, before any consent, and is gone when the session ends. Never localStorage.
+ */
 function storage(): Storage | undefined {
   try {
-    return typeof localStorage === 'undefined' ? undefined : localStorage;
+    return typeof sessionStorage === 'undefined' ? undefined : sessionStorage;
   } catch {
     return undefined;
   }
@@ -27,7 +31,8 @@ function storage(): Storage | undefined {
  * maintenance…"); the tone's icon and container repeat it.
  *
  * Dismissing it fires `scDismiss` (cancelable) and hides it. With `announcement-id`, the
- * dismissal is remembered in this browser, so the same announcement does not come back.
+ * dismissal is remembered for the browser session (`sessionStorage`, decision R8), so the same
+ * announcement does not come back on later pages of the visit.
  * Focus moves to the next focusable element after it. From a pointer it fades out over
  * `duration-exit`; from the keyboard it goes at once. Its height is never animated (MOT-11).
  *
@@ -58,8 +63,9 @@ export class ScAnnouncementBar {
   @Prop({ reflect: true }) dismissible = false;
 
   /**
-   * Remembers a dismissal in this browser (localStorage) under this id, so the announcement
-   * stays hidden on later pages. Change the id when the message changes.
+   * Remembers a dismissal for this browser session (`sessionStorage`, never `localStorage`:
+   * decision R8, PRV-12) under this id, so the announcement stays hidden on later pages of the
+   * visit. Change the id when the message changes.
    */
   @Prop() announcementId?: string;
 

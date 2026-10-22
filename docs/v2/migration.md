@@ -251,3 +251,14 @@ Icons added to the shared set: `check`, `schedule`, `hourglass`, `pending`, `inb
 | `sc-accordion` | Light DOM (`scoped`) | New. |
 
 For test authors: `newScPage` now ignores unregistered `sc-` tags when it waits for hydration, so pages using the CSS-only primitives load.
+
+## Library fixes from the standard review (v2-fixes-chrome)
+
+No breaking changes; additions services should adopt.
+
+| Tag | Change |
+| --- | --- |
+| `sc-footer`, `sc-utility-bar`, `sc-language-switch` | **New `slot="fallback"` convention (PERF-04, review B1).** These render in shadow DOM, so without JavaScript they showed nothing. Repeat the same links as light-DOM children in `slot="fallback"` (footer and bar: a `<nav>` with a `<ul>` of `<a href>`; switch: one `<a href hreflang lang dir>`). `sc.css` shows and styles them while the tag is undefined; the upgraded shadow root has no `fallback` slot, so they are then neither shown nor read. Keep their hrefs in step with the attributes. A footer with a fallback hides its bare `<a>` extras before upgrade, so list those in the fallback too. |
+| `sc-footer` | The current channel in the Channels group gains a 3px `channel-action` bar at its inline start (R10). Links stay underlined in every state (R6). |
+| `sc-utility-bar` | Docked only when the viewport is at least 600px tall; below that it is static at the end of the page and publishes no `--sc-utility-bar-block-size`, so `sc-page` reserves nothing (R11). |
+| `sc-announcement-bar` | `announcement-id` now remembers a dismissal in `sessionStorage` only (R8, PRV-12), so a dismissed announcement comes back in a new session. Dismissals stored in `localStorage` by earlier builds are ignored. Links written in the message are underlined (R6). |

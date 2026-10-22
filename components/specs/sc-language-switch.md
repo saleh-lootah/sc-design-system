@@ -29,6 +29,16 @@ Focus: U1 ring. Forced colours: `LinkText` (`ButtonText` for the deprecated butt
 
 `scSwitch` (`{ lang }`, bubbles, composed, cancelable) fires on every activation; `preventDefault()` stops the link from navigating, for single-page apps. Without `href` it renders a deprecated `<button>` and warns once per page.
 
+## Without JavaScript (PERF-04, LANG-04)
+
+The switch renders in shadow DOM, so without script it would show nothing, and LANG-04 needs the switch on every page. A service writes the same link as a light-DOM child in `slot="fallback"`:
+
+```html
+<sc-language-switch href="/ar/renew"><a slot="fallback" href="/ar/renew" hreflang="ar" lang="ar" dir="rtl">العربية</a></sc-language-switch>
+```
+
+Until the switch is defined, `sc.css` shows it as the `inline` appearance: an underlined label-medium link in `channel-action`, at least 44 × 44, in the endonym face. The upgraded shadow root has no `fallback` slot, so the link is then neither shown nor read, and the component's own control and name span take over. The component ignores the fallback when it writes its name span.
+
 ## Strings
 
 `src/i18n/components/sc-language-switch.ts`: the two endonyms (the same in both dictionaries on purpose).
@@ -46,4 +56,4 @@ Custom-elements closure 3,205 B gzip (4 KiB budget), its own CSS 573 B.
 
 ## Tests
 
-`sc-language-switch.spec.tsx` (both directions, one name child, button mode and `scSwitch`, appearance mapping), `sc-language-switch.e2e.ts` (accessible name, `lang`, `hreflang` and the name's own type role in both directions; inline and header colours and sizes; globe not mirrored; 44px, keyboard and ring; `scSwitch` and `preventDefault`; button with Space; `describeAxe`, axe with focus on every channel), `sc-language-switch.visual.e2e.ts`.
+`sc-language-switch.spec.tsx` (both directions, one name child, button mode and `scSwitch`, appearance mapping), `sc-language-switch.e2e.ts` (accessible name, `lang`, `hreflang` and the name's own type role in both directions; inline and header colours and sizes; globe not mirrored; 44px, keyboard and ring; `scSwitch` and `preventDefault`; button with Space; the no-JS fallback visible, 44px and with `href` and `hreflang` with JavaScript disabled on EN and AR pages, hidden once upgraded (PERF-04); `describeAxe`, axe with focus on every channel), `sc-language-switch.visual.e2e.ts`.

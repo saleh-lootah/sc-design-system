@@ -17,6 +17,8 @@ The page footer. `simple` for transaction pages; `grouped` for channel sites, wi
 
 - Standard links appear when their `*-href` is set, with text in the page language. Extra links go in the default slot as `<a href>`.
 - `privacy-href` reads "Privacy and cookies" unless `cookies-href` is set too.
+- Without JavaScript (PERF-04): repeat the links as light-DOM children in `slot="fallback"` (a `<nav>` with a `<ul>` of `<a href>`; one `<h2>` and `<ul>` per group for `grouped`). They show until the footer upgrades and are never shown after. See the spec.
+- Links are navigation links, underlined in every state in `on-surface` (R6). The current channel is Bold with a 3px `channel-action` bar at its inline start (R10).
 
 <!-- Auto Generated Below -->
 
@@ -29,8 +31,8 @@ The page footer, a `<footer>` (the page's `contentinfo` landmark). Two variants:
   links and "Government of Dubai", under a 1px rule.
 - `grouped` (channel sites, Standard CHR-06, decision Q-footer; B5): the channel's brand
   group (`slot="brand"`: a one-sentence description and app badges); a **Channels** group
-  listing all seven channels in the Standard 3.1 order, the current one Bold with
-  `aria-current="true"` and no swatch; **Helpful information** (about, help and contact,
+  listing all seven channels in the Standard 3.1 order, the current one Bold with a 3px
+  `channel-action` bar at its inline start and `aria-current="true"`, and no swatch; **Helpful information** (about, help and contact,
   accessibility statement, sitemap); and **Legal** (privacy and cookies, terms). Each group
   has an `<h2>`. Then "Government of Dubai · Last updated …" and "… is run by the
   Government of Dubai".
@@ -39,6 +41,16 @@ The standard links appear when their `*-href` is set, with text from strings in 
 language. Every channel sets all of them (TPL-01, LEG-01). Extra links go in the default
 slot as plain `<a href>` elements; each gets its own list item (the footer sets their
 `slot` attribute). The footer is on `surface`, never a dark band.
+
+Links are navigation links (decision R6): underlined in every state, in `on-surface`
+(CHR-06). The current channel carries a 3px `channel-action` bar at its inline start as well
+as Bold (R10: Arabic is already Bold).
+
+Without JavaScript (PERF-04): the footer renders in shadow DOM, so write the same links as
+light-DOM children in `slot="fallback"` (a `<nav>` or `<ul>` of `<a href>`). The browser
+shows them until the footer upgrades; the upgraded footer has no `fallback` slot, so they are
+then neither shown nor read. Bare `<a>` extras are hidden before upgrade when a fallback
+exists, so list them in the fallback too.
 
 ## Properties
 
@@ -59,11 +71,12 @@ slot as plain `<a href>` elements; each gets its own list item (the footer sets 
 
 ## Slots
 
-| Slot      | Description                                                                                                |
-| --------- | ---------------------------------------------------------------------------------------------------------- |
-|           | Extra links, as `<a href>` elements, listed after the standard ones (in Helpful information when grouped). |
-| `"brand"` | Grouped: the channel's description and app badges, under its name.                                         |
-| `"meta"`  | Replaces "Government of Dubai" at the end of the simple footer.                                            |
+| Slot         | Description                                                                                                   |
+| ------------ | ------------------------------------------------------------------------------------------------------------- |
+|              | Extra links, as `<a href>` elements, listed after the standard ones (in Helpful information when grouped).    |
+| `"brand"`    | Grouped: the channel's description and app badges, under its name.                                            |
+| `"fallback"` | Never shown once upgraded: the links for pages without JavaScript (PERF-04), shown until the footer upgrades. |
+| `"meta"`     | Replaces "Government of Dubai" at the end of the simple footer.                                               |
 
 
 ## Shadow Parts
