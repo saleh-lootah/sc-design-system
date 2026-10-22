@@ -26,8 +26,8 @@ gzip unless stated.
 |---|---|---|
 | JS on the page (lazy build, including the nested `sc-button`) | 46.4 KiB, in 16 scripts | **≤ 30 KiB** |
 | Stencil runtime core | 15.5 KiB | ≤ 14 KiB |
-| Global stylesheet (tokens, `@font-face`, body) | 4.1 KiB | ≤ 7 KiB, which now also holds the shared helpers, type roles and layout primitives |
-| Component CSS parsed on the page | 4.3 KiB | ≤ 3 KiB |
+| Global stylesheet (tokens, `@font-face`, body) | 4.1 KiB | ≤ 9 KiB (W7), which now also holds the shared helpers, type roles and layout primitives |
+| Component CSS parsed on the page | 4.3 KiB | ≤ 4 KiB (W13) |
 | Fonts downloaded | 188.7 KiB: 3 full weights at 63–64 KiB each | **≤ 75 KiB in English, ≤ 100 KiB in Arabic** |
 | Total transferred | 239.5 KiB, 79% of it fonts | ≤ 115 KiB in English, ≤ 140 KiB in Arabic |
 | All `sc-` content visible, Slow 4G with CPU ×4 | 1.89 s (lazy); 1.24 s (custom elements) | ≤ 1.2 s |
@@ -425,7 +425,7 @@ Shadow components:
   - The 21.4 KiB of `shared.css` copies and the 54.8 KiB of type-role copies go.
   - Total component CSS falls from 195.9 KiB raw / 16.4 KiB gzip to under 100 KiB raw /
     10 KiB gzip across the library.
-  - The typical page's component CSS falls from 4.3 KiB to 3 KiB or less.
+  - The typical page's component CSS falls from 4.3 KiB to 4 KiB or less (W13).
 
 ### 3.3 Type roles without duplication
 
@@ -483,7 +483,7 @@ Shadow components:
   `--sc-channel-*` to that channel's tonal roles. It applies anywhere in the tree, not only on
   `:root`, so a shared-network strip can show city indigo inside a channel page. Entities never
   get a block; they get attribution only, per the plan.
-- **Budget:** the whole document stylesheet ≤ 7 KiB gzip, including tokens, all type roles,
+- **Budget:** the whole document stylesheet ≤ 9 KiB gzip (W7), including tokens, all type roles,
   helpers, CSS-only primitives and the light-DOM component styles.
 - **Delivery:** `<link rel="stylesheet">` in `<head>`, never `@import`. It is render-blocking by
   design, because it holds the tokens.
@@ -578,14 +578,14 @@ figures are gzip -9, per file.
 | Budget | Limit | v1 |
 |---|---|---|
 | Runtime core | 14 KiB | 15.5 KiB ✗ |
-| Document stylesheet (`sc.css`) | 7 KiB | 4.1 KiB (tokens only) |
+| Document stylesheet (`sc.css`) | 9 KiB | 4.1 KiB (tokens only) |
 | Leaf component (JS + its CSS + its strings, excluding core) | **4 KiB** | 0.3–7.9 KiB (14 of 23 fail) |
 | Form field | 7 KiB | 9.5–10.1 KiB ✗ |
 | `sc-error-summary` | 6 KiB | 6.8 KiB ✗ |
 | `sc-table` | 12 KiB | 13.0 KiB ✗ |
 | `sc-date-range` | 16 KiB | 19.1 KiB ✗ |
 | Typical page JS (lazy, including loader and core) | **30 KiB** | 38.8 KiB static + 7.9 KiB nested = 46.4 KiB transferred ✗ |
-| Typical page component CSS | 3 KiB | 4.3 KiB ✗ |
+| Typical page component CSS | 4 KiB | 4.3 KiB ✗ |
 | Each font file | 32 KiB | 63–64 KiB ✗ |
 
 Runtime budgets, checked by Q3 with `npm run measure:runtime -- --cpu 4 --net slow4g`:

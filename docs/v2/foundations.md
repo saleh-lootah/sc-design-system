@@ -65,7 +65,7 @@ All three switches are attribute selectors on ordinary elements, resolved by the
 - **Channel.** The default channel (`now`) is bound at `:root`. `data-channel="<name>"` on any element rebinds the six per-channel `--sc-color-channel-*` roles for its subtree. A page sets it once on `<html>`; an attribution chip ("Also on Dubai Transport") sets it on itself, so the chip shows Transport's colours on a Dubai Now page without any per-channel variables.
 - **Script.** English values are bound at `:root` and on any element whose `lang` is not Arabic; `lang="ar"` (or `ar-AE`) rebinds every `--sc-type-*` property to the Arabic scale. `lang="en"` inside an Arabic page switches back. Components read `--sc-type-<role>-*` only and never branch on script.
 
-`light-dark()` is Baseline 2024 (Chrome and Edge 123, Firefox 120, Safari 17.5). There is no fallback for older engines; see decision D9.
+`light-dark()` is Baseline 2024 (Chrome and Edge 123, Firefox 120, Safari 17.5). The token build also emits a `prefers-color-scheme` and `[data-theme]` fallback for older engines (decision A1).
 
 These three switches were verified in a headless Chromium build (Helium): one page with a light Dubai Now band containing a Transport chip, a forced-dark Visit section containing Arabic and English text, and an Arabic block containing English. Computed values matched the tokens in each case.
 
@@ -191,12 +191,12 @@ Components use roles, never palette tones. Light and dark values (generated):
 | `--sc-color-outline` | neutral-40<br>`oklab(0.4829 0.0003 -0.004)` | neutral-60<br>`oklab(0.6553 0.0003 -0.004)` | Control boundaries (1.5px) and inactive markers; at least 3:1 |
 | `--sc-color-outline-strong` | neutral-10<br>`oklab(0.2242 0.0003 -0.004)` | neutral-90<br>`oklab(0.9139 0.0003 -0.004)` | Hovered control edges, the sign-in edge and the plate chip; at least 3:1 (17.14:1 / 13.27:1 on surface). Added in Wave 2 (C0) |
 | `--sc-color-outline-variant` | neutral-90<br>`oklab(0.9139 0.0003 -0.004)` | neutral-24<br>`oklab(0.3449 0.0003 -0.004)` | Dividers and card edges only; never the only edge of a control |
-| `--sc-color-inverse-surface` | neutral-20<br>`oklab(0.3104 0.0003 -0.004)` | neutral-90<br>`oklab(0.9139 0.0003 -0.004)` | Tooltips and toasts |
+| `--sc-color-inverse-surface` | neutral-20<br>`oklab(0.3104 0.0003 -0.004)` | neutral-90<br>`oklab(0.9139 0.0003 -0.004)` | Tooltips |
 | `--sc-color-inverse-on-surface` | neutral-96<br>`oklab(0.9656 0.0003 -0.004)` | neutral-10<br>`oklab(0.2242 0.0003 -0.004)` | Text on inverse-surface |
 | `--sc-color-disabled-container` | neutral-94<br>`oklab(0.9484 0.0003 -0.004)` | neutral-20<br>`oklab(0.3104 0.0003 -0.004)` | Fill of a disabled control |
 | `--sc-color-on-disabled` | neutral-50<br>`oklab(0.5691 0.0003 -0.004)` | neutral-60<br>`oklab(0.6553 0.0003 -0.004)` | Text, icons and edges of a disabled control |
 | `--sc-color-focus-ring` | neutral-10<br>`oklab(0.2242 0.0003 -0.004)` | neutral-100<br>`oklab(1 0 0)` | The 3px focus ring, drawn outside a 2px gap of surface |
-| `--sc-color-primary` | indigo-30<br>`oklab(0.4037 0.0099 -0.1152)` | indigo-80<br>`oklab(0.8306 0.0072 -0.0832)` | City indigo: the network strip, sign-in and Dubai Pay hand-offs |
+| `--sc-color-primary` | indigo-30<br>`oklab(0.4037 0.0099 -0.1152)` | indigo-80<br>`oklab(0.8306 0.0072 -0.0832)` | City indigo: the network strip and Dubai Pay hand-offs (never UAE PASS, U3a) |
 | `--sc-color-on-primary` | neutral-100<br>`oklab(1 0 0)` | neutral-10<br>`oklab(0.2242 0.0003 -0.004)` | Text and icons on primary |
 | `--sc-color-primary-hover` | indigo-25<br>`oklab(0.3585 0.0077 -0.0896)` | indigo-75<br>`oklab(0.7882 0.0082 -0.096)` | Primary fill on pointer hover |
 | `--sc-color-primary-pressed` | indigo-20<br>`oklab(0.3131 0.0049 -0.0576)` | indigo-70<br>`oklab(0.7459 0.0093 -0.1088)` | Primary fill while pressed |
@@ -209,7 +209,7 @@ Components use roles, never palette tones. Light and dark values (generated):
 | `--sc-color-error-pressed` | error-30<br>`oklab(0.4173 0.1504 0.0806)` | error-70<br>`oklab(0.7578 0.1275 0.0683)` | Destructive fill while pressed |
 | `--sc-color-error-container` | error-95<br>`oklab(0.9591 0.0178 0.0096)` | error-20<br>`oklab(0.3213 0.0823 0.0441)` | Error summary, error chip and callout background |
 | `--sc-color-on-error-container` | error-30<br>`oklab(0.4173 0.1504 0.0806)` | error-90<br>`oklab(0.9183 0.0369 0.0198)` | Strong text on error-container |
-| `--sc-color-success` | success-40<br>`oklab(0.4691 -0.11 0.067)` | success-80<br>`oklab(0.8182 -0.0715 0.0436)` | Success text and icons; completed step markers |
+| `--sc-color-success` | success-40<br>`oklab(0.4691 -0.11 0.067)` | success-80<br>`oklab(0.8182 -0.0715 0.0436)` | Success text and icons (completed steps use the channel colour, U2) |
 | `--sc-color-on-success` | neutral-100<br>`oklab(1 0 0)` | neutral-10<br>`oklab(0.2242 0.0003 -0.004)` | Text and icons on a success fill |
 | `--sc-color-success-container` | success-95<br>`oklab(0.9525 -0.033 0.0201)` | success-20<br>`oklab(0.304 -0.0495 0.0302)` | Success chip and callout background |
 | `--sc-color-on-success-container` | success-30<br>`oklab(0.385 -0.0934 0.0569)` | success-90<br>`oklab(0.9094 -0.033 0.0201)` | Strong text on success-container |
@@ -331,7 +331,7 @@ Six tints for category icon tiles, favourite tiles and topic accents, re-derived
 | Text | `on-surface-variant` | `surface-container` | 4.5:1 | 5.84:1 | 8.45:1 | Secondary text |
 | Text | `on-surface-variant` | `surface-container-high` | 4.5:1 | 5.55:1 | 7.24:1 | Secondary text |
 | Text | `on-surface-variant` | `primary-subtle` | 4.5:1 | 5.70:1 | 7.72:1 | Secondary text |
-| Text | `inverse-on-surface` | `inverse-surface` | 4.5:1 | 11.89:1 | 13.27:1 | Tooltip and toast text |
+| Text | `inverse-on-surface` | `inverse-surface` | 4.5:1 | 11.89:1 | 13.27:1 | Tooltip text |
 | State layers | `on-surface` | `surface+hover:on-surface` | 4.5:1 | 14.61:1 | 13.65:1 | Text on a hovered or pressed quiet control |
 | State layers | `on-surface` | `surface+pressed:on-surface` | 4.5:1 | 13.44:1 | 11.95:1 | Text on a hovered or pressed quiet control |
 | State layers | `on-surface` | `surface-container+pressed:on-surface` | 4.5:1 | 12.21:1 | 9.82:1 | Text on a hovered or pressed quiet control |
@@ -446,7 +446,7 @@ A Material-style scale of 15 roles, with English and Arabic values. Arabic runs 
 | `headline-medium` | Section heading (`h2`) | 28 / 34, Bold | 32 / 44, Bold |
 | `headline-small` | Subsection heading (`h3`); totals and amounts | 24 / 30, Bold | 28 / 38, Bold |
 | `title-large` | Card and panel titles | 22 / 28, Bold | 24 / 34, Bold |
-| `title-medium` | Row titles, the legend of a question group, emphasised values | 18 / 24, Bold | 20 / 30, Bold |
+| `title-medium` | Row titles, emphasised values (legends use `label-large`, W11) | 18 / 24, Bold | 20 / 30, Bold |
 | `title-small` | Navigation items, back link, summary-list values, step names | 17 / 22, Medium | 19 / 28, Bold |
 | `body-large` | Body text, the default for running text | **18 / 26**, Regular | **20 / 32**, Regular |
 | `body-medium` | Hints, secondary text, table cells | 16 / 24, Regular | 18 / 28, Regular |
@@ -532,7 +532,7 @@ Surfaces are flat and outline-first. A shadow means "this floats over the page",
 | --- | --- | --- |
 | `--sc-elevation-0` | none | Everything in the page flow, cards included |
 | `--sc-elevation-1` | `0 1px 3px oklab(0 0 0 / 0.08)` | Sticky bars once content scrolls under them |
-| `--sc-elevation-2` | `0 2px 6px oklab(0 0 0 / 0.06), 0 8px 24px oklab(0 0 0 / 0.1)` | Popovers, menus, dialogs, sheets, toasts |
+| `--sc-elevation-2` | `0 2px 6px oklab(0 0 0 / 0.06), 0 8px 24px oklab(0 0 0 / 0.1)` | Popovers, menus, dialogs, sheets |
 
 - **ELV-01.** Cards are separated by a 1px `outline-variant` edge or by sitting on `surface-container`, never by a shadow.
 - **ELV-02.** In dark mode shadows barely show, so overlays also take a 1px `outline-variant` edge, and dialogs and sheets use `surface-container` so they step up from the page beneath the scrim.
@@ -552,7 +552,7 @@ Surfaces are flat and outline-first. A shadow means "this floats over the page",
 
   Use `outline`, not `box-shadow`: it survives forced-colours mode and needs no knowledge of the background. The 2px offset leaves the background showing between control and ring, as E draws it.
 - **FOC-02.** The ring is neutral, not the channel colour: `focus-ring` is neutral-10 in light mode and neutral-100 in dark, as E draws it. Against everything a control can sit on it measures at least 12.33:1 (dark `surface-container-high`) and at least 13.14:1 on any channel band; see section 2.8. It never depends on the channel, so it never fails on a pale channel.
-- **FOC-03.** Inside a filled region, set `--sc-color-focus-ring` to that region's "on" colour for the subtree: `on-primary` on the indigo strip (9.35:1 light, 10.07:1 dark), `channel-on-action` on a filled channel band (6.46:1 at the lowest), `inverse-on-surface` in a toast (11.89:1). These are the same pairs as the text checks, so they are covered.
+- **FOC-03.** Inside a filled region, set `--sc-color-focus-ring` to that region's "on" colour for the subtree: `on-primary` on the indigo strip (9.35:1 light, 10.07:1 dark), `channel-on-action` on a filled channel band (6.46:1 at the lowest), `inverse-on-surface` in a tooltip (11.89:1). These are the same pairs as the text checks, so they are covered.
 - **FOC-04.** Focus is never removed and never animated (MOT-02: keyboard actions are instant).
 
 ---
@@ -613,7 +613,7 @@ Carried over unchanged from v1 (`tokens/motion.json`), which is already distille
 | `--sc-duration-press` | 150ms | Press feedback (`scale(0.97)` on `:active`) |
 | `--sc-duration-base` | 200ms | Entrances of tooltips, popovers, menus, selects |
 | `--sc-duration-exit` | 160ms | Exits of base-duration elements (about 20% faster) |
-| `--sc-duration-slow` | 280ms | Modals, drawers and bottom sheets only; they exit at `calc(var(--sc-duration-slow) * 0.8)` |
+| `--sc-duration-slow` | 280ms | Bottom sheets and drawers only; they exit at `calc(var(--sc-duration-slow) * 0.8)`. Centred dialogs use `duration-base` (W21) |
 | `--sc-duration-spin` | 600ms | One spinner rotation, linear; 0 under reduced motion |
 | `--sc-easing-enter`, `--sc-easing-exit` | `cubic-bezier(0.23, 1, 0.32, 1)` | Strong ease-out for anything entering or leaving |
 | `--sc-easing-standard` | `cubic-bezier(0.77, 0, 0.175, 1)` | Strong ease-in-out for things already on screen that move or morph |
@@ -624,7 +624,6 @@ Carried over unchanged from v1 (`tokens/motion.json`), which is already distille
 
 The rules MOT-01 to MOT-12 in Standard 2.0 section 8.7 apply unchanged: decide by frequency, never animate keyboard actions, ease-out for enter and exit, ease-in-out for movement, never ease-in, 100 to 150ms for micro-interactions, 150 to 250ms for standard UI, 200 to 300ms for modals and drawers, exits about 20% faster, nothing from `scale(0)`, popovers grow from their trigger's logical corner, only `transform` and `opacity` animate movement, transitions over keyframes for anything interruptible, hover motion gated on `(hover: hover) and (pointer: fine)`, and under reduced motion movement stops while opacity and colour keep their timing.
 
-Note for S1: Standard 2.0 still says `--sc-duration-slow` is 320ms (OQ-29) and that `--sc-easing-exit` is an ease-in curve (MOT-05, OQ-22). Both were fixed in the tokens before v2 (280ms, and the exit curve is now the strong ease-out). Chapter 8.7 should drop those caveats.
 
 ---
 
@@ -773,10 +772,10 @@ The playground (`components/src/www/`) also references `--sc-channel-now-action`
 | D6 | `on-surface-variant` (secondary text) is neutral-40, 6.46:1, as E uses for hints. | Neutral-30, 9.35:1, AAA. |
 | D7 | Dark-mode text is pure white (E's `d-ink`), 17.14:1 on the dark page. | Neutral-96 to soften halation. |
 | D8 | Visited links are not styled differently; v1's placeholder token is removed. | A visited colour per channel. |
-| D9 | Dark mode uses `light-dark()` (Baseline 2024), with no fallback for older browsers. F3 should confirm against the support policy. | Emit a `prefers-color-scheme` fallback block, which repeats every colour role. |
+| D9 | Closed by A1: dark mode uses `light-dark()` (Baseline 2024), and the token build also emits a `prefers-color-scheme` and `[data-theme]` fallback. | Emit a `prefers-color-scheme` fallback block, which repeats every colour role. |
 | D10 | Info shares Dubai Now's blue hue. | Shift info towards indigo (it would then sit near `primary`). |
 | D11 | Decorative tints keep v1's six hues, several of which share a family with a channel or status. | Re-hue tints away from channels. |
 | D12 | Arabic sets short UI text in Bold where English uses Medium (from v1). | Medium in both scripts. |
 | D13 | Icons are Material Symbols Outlined, as inline SVG, with filled variants for status and selection. E uses the classic filled Material Icons font throughout. | Filled everywhere, as E. |
-| D14 | The focus ring is neutral (neutral-10 light, white dark), as E draws it; v1 used the channel action. | Channel-coloured ring. |
+| D14 | Closed by U1: the focus ring is neutral (neutral-10 light, white dark), as E draws it; v1 used the channel action. | Channel-coloured ring. |
 | D15 | The worktree branch is `v2-foundations`: git cannot create `v2/foundations` while a branch named `v2` exists. | Rename `v2` to something like `v2/main` first. |

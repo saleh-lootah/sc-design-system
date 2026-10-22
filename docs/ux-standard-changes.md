@@ -269,3 +269,47 @@ Numbers of removed questions are not reused.
 - `sc-utility-bar` ("اتصل") and the `sc-site-header` menu hint ("سجّل الدخول …") use imperatives, against CNT-11. Listed in 10.3.
 - `components/COMPONENTS.md` (v2 StatusTag entry: "no channel tone") and `docs/library-conformance.md` 9.6 ("deprecated") still contradict W4a, as the alignment report notes.
 - `docs/v2/foundations.md` (the city indigo row of the system roles table and COL-11) still lists UAE PASS sign-in as a city indigo use, against U3a. `components/COMPONENTS.md` still gives `sc-attention-card` a top strip (against U5) and pagination as "1–20" (against LANG-22A). These files were outside this update.
+
+## Restructure (consultation draft, 22 October 2026)
+
+The standard is split into three documents (decision R2) and issued as a consultation draft (R1). `shared-channels-ux-standard.md` is now a pointer page that keeps the old chapter anchors. All 347 requirement identifiers keep their numbers; 24 are new. The five critic reports in `docs/v2/review/` and the consolidated summary drove the editorial changes.
+
+### Old chapters to new homes
+
+| Old chapter | New home |
+| --- | --- |
+| Front matter, 0 About | Service Standard: the standard on a page (English and Arabic), reading paths, 1 About (status, scope by owner type, keywords, where the detail lives). The repository layout table moved to the Design System reference 1 |
+| 1 Principles | Service Standard 2 (principle 6 now "may lawfully reuse"; principle 7 no longer switches to "we") |
+| 2 Service standard | Service Standard 3 (point 6 reworded without component and token jargon) |
+| (new) | Service Standard 4: conformance and transition (TRN-01 to TRN-05), tiers for live services, proposed deadlines (OQ-37) |
+| 3 Channels and services | Service Standard 5 (SVC-01 to SVC-15) |
+| 4 Legal and policy context | Service Standard 12, now last in Part 1. Law No. (1) of 2025 described precisely: Article 7 usage manual, Article 6(b) prior authorisation for non-government and commercial entities only |
+| 5 Arabic and English | Service Standard 6. LANG-24 (icon classification) moved to the Design System reference 7. LANG-21 strips pasted bidi controls (R9). LANG-20 allows Arabic-Indic digits in reproduced official documents |
+| 6 Accessibility | Service Standard 7. A11Y-05 split into A11Y-05 (visible) and A11Y-15 (never covered, static bars at short heights, R11). New A11Y-16 to A11Y-23 (hover content, label in name, single-key shortcuts, third-party widgets and overlays, media, documents, adopted AAA, pointer cancellation). Support matrix adds Narrator, ZoomText or Fusion, speech input, Arabic voices and a braille check. EN 301 549 and ISO/IEC 40500 named as procurement references. A11Y-10 scales manual testing by change size. The statement template moved to the Assurance handbook 12.2 |
+| 7 Platforms | Service Standard 17. PLAT-05 cites the specs only (not the stale `COMPONENTS.md`); PLAT-06 exception renewed under ASR-02; PLAT-10 adds accessibility language; new PLAT-13 (orientation and display settings). The platform table moved to the Design System reference 13 |
+| 8 Visual foundations | Service outcomes (FND-01, FND-02, FND-06, FND-09, FND-10, FND-22, FND-23, FND-28) in Service Standard 18. Everything else (FND-03 to FND-05, FND-07, FND-08, FND-11 to FND-21, FND-24 to FND-27, FND-29) in the Design System reference 2 to 7. FND-04 reworded neutrally (R3) |
+| 8.7 Motion | MOT-02, MOT-14, MOT-15 in Service Standard 18; MOT-01, MOT-03 to MOT-13 and the component motion table in the Design System reference 8. The source is credited in that document's bibliography (R3) |
+| 8.8 Focus | Design System reference 9 |
+| 9 Content design | Service Standard 13. CNT-02 allows promotion in defined slots (R4, CHR-11). New CNT-20 (no positional or sensory instructions) and CNT-21 (the closed status vocabulary as a numbered rule) |
+| 10 Components | CMP-01 to CMP-12 as outcomes in Service Standard 18; index, component behaviour, planned components and library conventions in the Design System reference 10 and 13 |
+| 11 Page templates | Service Standard 15; chrome design values in the Design System reference 11; new CHR-11 promotion slots |
+| 12 Ask users for | Service Standard 14 ("Asking for information"); new ASK-14 (no CAPTCHAs) |
+| 13 Journey patterns | Service Standard 16; recovery tables condensed; new HELP-06 (contextual help split from HELP-01) |
+| 14 Privacy, security and consent | Service Standard 8 |
+| 15 Performance and resilience | PERF-01 to PERF-07 in Service Standard 9; PERF-08 to PERF-11 in the Design System reference 12 |
+| 16 User research | Service Standard 10 |
+| 17 Assurance | Rules (ASR-01 to ASR-06, new ASR-11 to ASR-14, measures) in Service Standard 11; roles, risk tiers, panels, evidence, test scripts, exceptions process, contracts and templates in the Assurance handbook |
+| 18 Contributing and versioning | Service Standard 19; ASR-10 adds an 18-month support period |
+| 19 Open questions | Service Standard Appendix G, "Questions for consultation" |
+| Appendix A, B | Service Standard Appendices A (with "Covered by" and adopted AAA) and B (adds `risk_tier`, `conformance_level`, assurance level) |
+| Appendix C, D | Assurance handbook 12.2 and 12.1 |
+| Appendix E | Service Standard Appendix H; design system sources in the Design System reference 14 |
+| (new) | Service Standard Appendices C (must-pass list), D (requirement index), E (old-to-new map), F (bilingual glossary) |
+
+### Review corrections applied
+
+- Facts: CMP-05 no longer claims to follow GOV.UK; 2.5.8 inline exemption stated; SMS 70 and 67 characters (OQ-12 closed); the date-range scrim fades over `duration-slow`; icons are optical size 24; compact stepper markers are 24px; header navigation is `label-large`; legends use `label-large` (W11); font loading names `Dubai W23 Arabic`; the `data-theme` fallback limitation stated; the four unapproved budget values match `perf-budgets.json`.
+- Open questions: OQ-1 and OQ-2 closed into the bibliography (WCAG 2.2, 12 December 2024, first published 5 October 2023; WCAG2ICT at https://www.w3.org/TR/wcag2ict-22/); OQ-10 narrowed, with U+20C3 marked unconfirmed; OQ-16 closed; OQ-15 and OQ-28 removed (internal); OQ-9 narrowed to the glossary. New OQ-32 to OQ-38. Arabic channel names are official (R12), so no open question remains for them.
+- Contradictions: docked bars flat with a hairline; dialogs in dark mode on `surface-container-high`; outlined buttons use `channel-action` edges; radius lists corrected; FND-01 and FND-03 state the lockup and UAE PASS colour exemption; FND-29 hero exception; TPL-03 after "Error: "; TPL-08 and Q-04 agree on order; NAV-03 no longer mentions the app bar; CHR-04 compact row "whenever the full row does not fit"; CHR-06 allows about and sitemap; CMP-08 link rule (R6); A11Y-04 drops the compact table sentence; A11Y-05 names the skip-link exception (Design System reference 9); PERF-08 is a gate for the enforce list; MOT-06 bands are entrances; MOT-09 fires on release; the empty "Known gaps" heading and the two wrong anchors are gone.
+- Arabic: «قد تحتاج إلى خدمة أخرى» → «قد تكون هناك خدمة أنسب لطلبك»; «أكملت 3 من 6 أقسام» → «تم إكمال 3 من 6 أقسام»; «نيابةً عمّن يُقدَّم هذا الطلب؟» → «لمن هذا الطلب؟»; «ينتهي خلال {n} يومًا» → «تنتهي الصلاحية خلال {n} يومًا» with plural forms; "Not paid" → "Awaiting payment" to match «بانتظار الدفع».
+- Hygiene: all "(changed in v2)" and "(new in v2)" tags, version 1 and phase references, the bug list, reviewer documents and repository paths removed from the Service Standard and handbook; every numbered rule carries a keyword; duplicated rules (mirroring, focus, error title, target sizes, Arabic minimum size) now have one home each.
