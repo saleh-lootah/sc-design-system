@@ -642,7 +642,7 @@ function renderHome(page, lang) {
 <h1 id="top" class="home-title">${heads.map(([l, d, x]) => `<span lang="${l}" dir="${d}">${esc(x)}</span>`).join(' ')}</h1>
 <p class="home-lede">${esc(t.heroLede)}</p>
 <sc-callout class="home-draft"><span slot="heading">${esc(t.draftHeading)}</span><span>${esc(t.draftText)}</span></sc-callout>
-<sc-channel-network class="home-network" eyebrow="${esc(t.networkEyebrow)}"></sc-channel-network>
+<sc-channel-network class="home-network" channel="none" eyebrow="${esc(t.networkEyebrow)}"></sc-channel-network>
 <noscript><ul class="home-network-fallback" aria-label="${esc(t.networkEyebrow)}">${CHANNEL_NAMES[lang].map((n) => `<li>${esc(n)}</li>`).join('')}</ul></noscript>
 </div>
 <h2 id="routes" class="home-h2">${esc(t.routesHeading)}</h2>

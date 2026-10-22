@@ -841,7 +841,7 @@
   }
   @media (min-width: 480px) and (max-width: 623.98px) {
     .home-network {
-      min-block-size: 446px;
+      min-block-size: 466px;
     }
     .home-network:lang(ar) {
       min-block-size: 490px;
@@ -857,7 +857,7 @@
   }
   @media (min-width: 840px) and (max-width: 1055.98px) {
     .home-network {
-      min-block-size: 258px;
+      min-block-size: 278px;
     }
     .home-network:lang(ar) {
       min-block-size: 310px;

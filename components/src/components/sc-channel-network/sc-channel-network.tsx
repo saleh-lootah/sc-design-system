@@ -16,7 +16,8 @@ const strings = channelStrings(own);
  * Each tile sets its own `data-channel` (FND-26), which is why the strip renders into light
  * DOM (Stencil `scoped`). The current channel's tile is filled with its `channel-subtle`,
  * says "You are here", carries `aria-current="true"` and is not a link (it would lead to
- * this site).
+ * this site). `channel="none"` is for a page that belongs to no channel (the network's own
+ * site, the design system's documentation): no tile is current and every tile is a link.
  *
  * A `<nav>` labelled "Government of Dubai channels" with a list of links. Seven tiles in a
  * row from 1024px (by the strip's own width), four from 600px, two below.
@@ -29,8 +30,11 @@ const strings = channelStrings(own);
 export class ScChannelNetwork {
   @Element() el!: HTMLElement;
 
-  /** The current channel. Defaults to the closest `data-channel`. */
-  @Prop() channel?: Channel;
+  /**
+   * The current channel. Defaults to the closest `data-channel` (else Dubai Now). `none`: the
+   * page belongs to no channel, so no tile says "You are here".
+   */
+  @Prop() channel?: Channel | 'none';
 
   /** Each channel's home page (as `sc-channel-switcher` `links`; `{lang}` becomes `en` or `ar`). */
   @Prop() links?: ChannelLinks | string;
@@ -50,7 +54,7 @@ export class ScChannelNetwork {
 
   render() {
     const { t, lang } = this.locale;
-    const current = resolveChannel(this.el, this.channel);
+    const current = this.channel === 'none' ? undefined : resolveChannel(this.el, this.channel);
     const links = parseLinks(this.links);
     return (
       <Host>

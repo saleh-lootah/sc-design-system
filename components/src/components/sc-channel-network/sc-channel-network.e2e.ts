@@ -47,6 +47,19 @@ describe('sc-channel-network (e2e)', () => {
     expect(eyebrow).toBe(await probe(page, '', 'color', 'var(--sc-color-primary)'));
   });
 
+  it('has no current tile and no current fill with channel="none"', async () => {
+    const page = await newScPage(NETWORK.replace('<sc-channel-network ', '<sc-channel-network channel="none" '), { channel: 'visit' });
+    const state = await page.evaluate(() => {
+      const tiles = Array.from(document.querySelectorAll('.sc-channel-network__tile'));
+      return {
+        current: document.querySelectorAll('.is-current, [aria-current]').length,
+        links: tiles.filter((t) => t.localName === 'a').length,
+        fills: new Set(tiles.map((t) => getComputedStyle(t).backgroundColor)).size,
+      };
+    });
+    expect(state).toEqual({ current: 0, links: 7, fills: 1 });
+  });
+
   it('upper-cases and tracks the eyebrow in English only', async () => {
     const page = await newScPage(NETWORK);
     const read = () => page.evaluate(() => {
@@ -73,3 +86,4 @@ describe('sc-channel-network (e2e)', () => {
 });
 
 describeAxe('sc-channel-network', NETWORK);
+describeAxe('sc-channel-network, no current channel', NETWORK.replace('<sc-channel-network ', '<sc-channel-network channel="none" '));
