@@ -29,7 +29,7 @@ Where this file disagrees with `foundations.md` or `component-language.md`, this
 | D8 | Visited links | **Not styled differently.** A visited link is not a task-progress signal on these sites. Revisit if research shows a need. |
 | D9 | `light-dark()` | **Accepted** if F3 confirms the browser support target. Otherwise F3 specifies the fallback. |
 | D10 | Info colour | **Shares Dubai Now's blue hue.** Info is always paired with an icon, so the two are never confused. |
-| D11 | Decorative tints | **Keep the six hues**, as tints only (tones 95 and 30). |
+| D11 | Decorative tints | **Keep the six hues**, as tints only (tones 95 and 40; the on-tint text was moved from 30 to 40 in the tokens). |
 | D12 | Arabic weight | **Short Arabic UI text uses Bold** where English uses Medium. |
 | D13 | Icons | **Material Symbols Outlined** as inline SVG, with Filled versions for status and selected states. |
 | D14 | Focus ring | See U1. |
@@ -162,3 +162,9 @@ Where this file disagrees with `foundations.md` or `component-language.md`, this
 | R9 | **Pasted input:** text and number fields strip bidi control characters (U+200E, U+200F, U+202A–U+202E, U+2066–U+2069) from pasted values. This amends LANG-21. |
 | R10 | **Current-item cue:** current navigation items carry a non-weight cue (an indicator bar or underline) as well as Bold, because short Arabic text is already Bold. |
 | R11 | **Utility bar at short heights:** below a viewport height of 600px (or at high zoom), the docked utility bar becomes static at the end of the page (WCAG 2.4.11 and 1.4.10). |
+
+## Official Arabic channel names (user, 22 October 2026)
+
+| # | Decision |
+| --- | --- |
+| R12 | **Official Arabic channel names:** دبي الآن (Dubai Now), مواصلات دبي (Dubai Transport), زوروا دبي (Visit Dubai), دبي للعدالة (Dubai Justice), دبي للبناء (Build in Dubai), استثمر في دبي (Invest in Dubai), دبي التجارية (Dubai Trade). They replace عدالة دبي and ابنِ في دبي, and close review item A7. `components/src/i18n/components/channel-names.ts` is the source; `sc-channel-chip` and `sc-step-list` copies must match it. |
