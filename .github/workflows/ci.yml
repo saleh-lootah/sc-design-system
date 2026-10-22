@@ -85,12 +85,14 @@ jobs:
 
       # .puppeteerrc.cjs skips Puppeteer's own download (Helium is used locally), so CI
       # installs Chrome for Testing explicitly and points the checks and tests at it.
-      - name: Install Chrome for Testing and point the tests at it
-        working-directory: components
-        run: |
-          path=$(npx --yes @puppeteer/browsers install chrome@stable --path "$HOME/.cache/sc-browsers" | tail -1 | awk '{print $2}')
-          test -x "$path"
-          echo "SC_BROWSER=$path" >> "$GITHUB_ENV"
+      - name: Install Chrome for Testing
+        id: chrome
+        uses: browser-actions/setup-chrome@v1
+        with:
+          chrome-version: stable
+
+      - name: Point the checks and tests at it
+        run: echo "SC_BROWSER=${{ steps.chrome.outputs.chrome-path }}" >> "$GITHUB_ENV"
 
       - name: Build components
         working-directory: components
