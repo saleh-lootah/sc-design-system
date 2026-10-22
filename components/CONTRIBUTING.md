@@ -158,7 +158,7 @@ Write a `## Usage` section **above** the `<!-- Auto Generated Below -->` marker:
 
 ## 9. Playground page
 
-Create `src/www/pages/<tag>.html`: an HTML fragment (no `<html>`/`<body>`) showing every variant, size and state, an Arabic block (`<div class="pg-card" lang="ar" dir="rtl">`), and the component inside a form where relevant. Helpers from `src/www/playground.css`: `pg-title`, `pg-lede`, `pg-section`, `pg-card`, `pg-row`, `pg-grid`, `pg-cell`, `pg-label`, `pg-note`, `pg-narrow`. Shell conventions:
+Create `src/www/pages/<tag>.html`: an HTML fragment (no `<html>`/`<body>`) showing every variant, size and state, an Arabic block (`<div class="pg-card" lang="ar" dir="rtl">`), and the component inside a form where relevant. The same fragment is the examples section of the component's page on the documentation site, with your spec (`specs/<tag>.md`) and the API from `docs/components.json` under it; `data-ar` text is applied when the Arabic page is built. Helpers from `src/www/demo.css`: `pg-title`, `pg-lede`, `pg-section`, `pg-card`, `pg-row`, `pg-grid`, `pg-cell`, `pg-label`, `pg-note`, `pg-narrow`. Shell conventions:
 - `data-ar="…"` on a text-only element swaps its text when the toolbar is set to العربية. On a light-DOM component put it on a `<span>` inside the label (`<sc-button><span data-ar="متابعة">Continue</span></sc-button>`): swapping the host's own text would wipe the rendered control;
 - `<script>` blocks run after the fragment is inserted (wrap code in `{ … }`);
 - `data-demo-focus` focuses one element on load (to show the focus ring).

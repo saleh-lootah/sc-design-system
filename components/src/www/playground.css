@@ -1,4 +1,4 @@
-/* Playground shell and page helpers. Tokens only, like the components. */
+/* Playground shell. Tokens only, like the components. The example helpers are in demo.css. */
 
 :root {
   --pg-bar-height: 64px;
@@ -30,8 +30,8 @@ html {
   min-block-size: var(--pg-bar-height);
   padding-block: var(--sc-space-8);
   padding-inline: var(--sc-space-24);
-  background: var(--sc-color-glass);
-  border-block-end: 0.5px solid var(--sc-color-glass-edge);
+  background: var(--sc-color-surface);
+  border-block-end: 0.5px solid var(--sc-color-outline-variant);
   box-shadow: var(--sc-elevation-2);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
   backdrop-filter: blur(24px) saturate(180%);
@@ -48,25 +48,20 @@ html {
   display: flex;
   align-items: center;
   gap: var(--sc-space-12);
-  color: var(--sc-color-ink-strong);
+  color: var(--sc-color-on-surface);
   text-decoration: none;
-  font-family: var(--sc-font-family-bold);
-  font-weight: var(--sc-font-weight-bold);
-  font-size: var(--sc-text-latin-title-s);
-  line-height: var(--sc-leading-latin-title-s);
+    font: var(--sc-type-title-medium);
   white-space: nowrap;
 }
 .pg-brand__mark {
   inline-size: var(--sc-size-icon-l);
   block-size: var(--sc-size-icon-l);
-  border-radius: var(--sc-radius-xs);
-  background: linear-gradient(135deg in oklab, var(--sc-channel-now-action), var(--sc-channel-visit-action));
+  border-radius: var(--sc-radius-control);
+  background: linear-gradient(135deg in oklab, var(--sc-color-primary), var(--sc-color-channel-action));
 }
 .pg-brand__sub {
-  color: var(--sc-color-muted);
-  font-family: var(--sc-font-family-regular);
-  font-weight: var(--sc-font-weight-regular);
-}
+  color: var(--sc-color-on-surface-variant);
+    }
 
 .pg-tools {
   display: flex;
@@ -79,46 +74,42 @@ html {
 .pg-seg {
   display: inline-flex;
   padding: var(--sc-space-2);
-  border-radius: var(--sc-radius-pill);
-  background: var(--sc-color-fill-quiet);
+  border-radius: var(--sc-radius-full);
+  background: var(--sc-color-surface-container);
 }
 .pg-seg button,
 .pg-select select {
-  min-block-size: 36px;
+  min-block-size: var(--sc-size-target-min);
   padding-inline: var(--sc-space-16);
   border: 0;
-  border-radius: var(--sc-radius-pill);
+  border-radius: var(--sc-radius-full);
   background: transparent;
-  color: var(--sc-color-ink);
-  font-family: var(--sc-font-family-medium);
-  font-weight: var(--sc-font-weight-medium);
-  font-size: var(--sc-text-latin-label-m);
+  color: var(--sc-color-on-surface);
+    font: var(--sc-type-label-medium);
   cursor: pointer;
 }
 .pg-seg button:lang(ar) {
-  font-family: var(--sc-font-family-bold);
-  font-weight: var(--sc-font-weight-bold);
-  font-size: var(--sc-text-arabic-caption);
+    font: var(--sc-type-body-small);
 }
 .pg-seg button[aria-pressed='true'] {
   background: var(--sc-color-surface);
-  color: var(--sc-color-ink-strong);
+  color: var(--sc-color-on-surface);
   box-shadow: var(--sc-elevation-1);
 }
 .pg-select {
   display: inline-flex;
   align-items: center;
   gap: var(--sc-space-8);
-  color: var(--sc-color-muted);
-  font-size: var(--sc-text-latin-label-s);
+  color: var(--sc-color-on-surface-variant);
+  font: var(--sc-type-label-small);
 }
 .pg-select select {
-  background: var(--sc-color-fill-quiet);
+  background: var(--sc-color-surface-container);
 }
 .pg-seg button:focus-visible,
 .pg-select select:focus-visible,
 .pg-nav a:focus-visible {
-  outline: var(--sc-size-focus-ring) solid var(--sc-channel-now-action);
+  outline: var(--sc-size-focus-ring) solid var(--sc-color-primary);
   outline-offset: var(--sc-size-focus-offset);
 }
 
@@ -140,11 +131,8 @@ html {
 }
 .pg-nav__group {
   margin: var(--sc-space-16) var(--sc-space-12) var(--sc-space-4);
-  color: var(--sc-color-muted);
-  font-family: var(--sc-font-family-medium);
-  font-weight: var(--sc-font-weight-medium);
-  font-size: var(--sc-text-latin-eyebrow);
-  line-height: var(--sc-leading-latin-eyebrow);
+  color: var(--sc-color-on-surface-variant);
+    font: var(--sc-type-label-small);
 }
 .pg-nav__group:first-child {
   margin-block-start: 0;
@@ -157,21 +145,18 @@ html {
 .pg-nav a {
   display: block;
   padding: var(--sc-space-8) var(--sc-space-12);
-  border-radius: var(--sc-radius-s);
-  color: var(--sc-color-ink);
+  border-radius: var(--sc-radius-control);
+  color: var(--sc-color-on-surface);
   text-decoration: none;
-  font-size: var(--sc-text-latin-body-s);
-  line-height: var(--sc-leading-latin-body-s);
+  font: var(--sc-type-body-small);
 }
 .pg-nav a:hover {
-  background: var(--sc-color-fill-quiet);
+  background: var(--sc-color-surface-container);
 }
 .pg-nav a[aria-current='page'] {
-  background: var(--sc-color-fill-selected);
-  color: var(--sc-color-ink-strong);
-  font-family: var(--sc-font-family-medium);
-  font-weight: var(--sc-font-weight-medium);
-}
+  background: var(--sc-color-primary-subtle);
+  color: var(--sc-color-on-surface);
+    }
 
 .pg-main {
   padding: var(--sc-space-32) var(--sc-space-48) var(--sc-space-96);
@@ -198,104 +183,4 @@ html {
   .pg-main {
     padding: var(--sc-space-24) var(--sc-space-16) var(--sc-space-64);
   }
-}
-
-/* Page content helpers ---------------------------------------------------------------- */
-.pg-title {
-  margin: 0 0 var(--sc-space-8);
-  color: var(--sc-color-ink-strong);
-}
-.pg-lede {
-  margin: 0 0 var(--sc-space-32);
-  max-inline-size: var(--sc-size-measure);
-  color: var(--sc-color-muted);
-}
-.pg-section {
-  margin-block: var(--sc-space-32);
-}
-.pg-section > h2 {
-  margin: 0 0 var(--sc-space-12);
-  color: var(--sc-color-ink-strong);
-}
-.pg-card {
-  padding: var(--sc-space-24);
-  border-radius: var(--sc-radius-card);
-  background: var(--sc-color-surface);
-  box-shadow: var(--sc-elevation-1);
-}
-.pg-card + .pg-card {
-  margin-block-start: var(--sc-space-16);
-}
-.pg-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--sc-space-16);
-}
-.pg-row + .pg-row {
-  margin-block-start: var(--sc-space-16);
-}
-.pg-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: var(--sc-space-24);
-}
-.pg-cell {
-  display: grid;
-  gap: var(--sc-space-8);
-  align-content: start;
-  justify-items: start;
-}
-.pg-label {
-  /* Labels are code names (variant, size); keep them in their own direction inside RTL. */
-  unicode-bidi: plaintext;
-  color: var(--sc-color-muted);
-  font-size: var(--sc-text-latin-caption);
-  line-height: var(--sc-leading-latin-caption);
-}
-.pg-note {
-  margin: var(--sc-space-12) 0 0;
-  max-inline-size: var(--sc-size-measure);
-  color: var(--sc-color-muted);
-  font-size: var(--sc-text-latin-body-s);
-  line-height: var(--sc-leading-latin-body-s);
-}
-:lang(ar) .pg-label,
-:lang(ar) .pg-note,
-.pg-label:lang(ar),
-.pg-note:lang(ar) {
-  font-size: var(--sc-text-arabic-caption);
-  line-height: var(--sc-leading-arabic-caption);
-}
-.pg-narrow {
-  max-inline-size: 360px;
-}
-.pg-code {
-  direction: ltr;
-  unicode-bidi: isolate;
-  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
-  font-size: var(--sc-text-latin-caption-s);
-  color: var(--sc-color-muted);
-}
-
-/* Native form bits used in demos (the real fields are separate components). */
-.pg-field {
-  display: grid;
-  gap: var(--sc-space-6);
-  margin-block-end: var(--sc-space-16);
-}
-.pg-field input {
-  max-inline-size: 320px;
-  min-block-size: var(--sc-size-control-l);
-  padding-inline: var(--sc-space-16);
-  border: 1.5px solid var(--sc-color-control);
-  border-radius: var(--sc-radius-field);
-  background: var(--sc-color-surface);
-  color: var(--sc-color-ink);
-  font: inherit;
-}
-.pg-output {
-  min-block-size: var(--sc-leading-latin-body-s);
-  margin-block-start: var(--sc-space-12);
-  color: var(--sc-channel-ink);
 }

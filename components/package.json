@@ -23,7 +23,7 @@
     "build:css": "node scripts/build-sc-css.mjs",
     "prebuild": "npm run build:css",
     "build": "stencil build --docs",
-    "postbuild": "node scripts/build-preload.mjs",
+    "postbuild": "node scripts/build-preload.mjs && node scripts/build-site.mjs",
     "prestart": "npm run build:css",
     "start": "stencil build --dev --watch --serve",
     "pretest": "npm run build:css",
@@ -35,7 +35,7 @@
     "test:visual": "SC_VISUAL=1 stencil test --e2e -- --max-workers=1 visual.e2e",
     "test:visual:update": "SC_VISUAL=1 SC_UPDATE_SCREENSHOTS=1 stencil test --e2e -- --max-workers=1 visual.e2e",
     "check:literals": "node scripts/check-literals.mjs",
-    "check": "npm run check:literals && npm run check:icons && npm run build && npm test && npm run check:budget",
+    "check": "npm run check:literals && npm run check:icons && npm run build && npm run check:budget && npm run check:site && npm test",
     "measure:bundle": "node scripts/measure-bundle.mjs",
     "measure:runtime": "node scripts/measure-runtime.mjs",
     "check:budget": "node scripts/measure-bundle.mjs --budget perf-budgets.json",
@@ -43,7 +43,14 @@
     "test:e2e:v2": "stencil test --e2e -- --max-workers=1 $(node scripts/v2-tags.mjs)",
     "pretest:e2e:v2": "npm run build:css",
     "icons": "node scripts/gen-icons.mjs",
-    "check:icons": "node scripts/gen-icons.mjs --check"
+    "check:icons": "node scripts/gen-icons.mjs --check",
+    "build:site": "node scripts/build-site.mjs",
+    "serve:site": "node scripts/serve-site.mjs",
+    "check:site": "node scripts/check-site-links.mjs && node scripts/check-site-budget.mjs && node scripts/check-site-publishable.mjs",
+    "check:site-budget": "node scripts/check-site-budget.mjs",
+    "check:site-a11y": "node scripts/check-site-a11y.mjs",
+    "build:site:internal": "SC_SITE_INTERNAL=1 node scripts/build-site.mjs",
+    "check:site-publishable": "node scripts/check-site-publishable.mjs"
   },
   "devDependencies": {
     "@stencil/core": "4.45.2",
@@ -52,6 +59,7 @@
     "axe-core": "4.13.0",
     "jest": "29.7.0",
     "jest-cli": "29.7.0",
+    "markdown-it": "14.1.0",
     "puppeteer": "24.43.1"
   }
 }

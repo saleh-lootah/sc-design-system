@@ -94,5 +94,15 @@
   "$pageCssComment": "Approved (W13): 4 KiB, from 3 KiB. The typical page parses the stylesheets of 9 components (sc-search renders sc-button): 3,914 B gzip once Stencil's minifier failure is fixed (scripts/lib/minify-css.cjs; it was 4,281 B). Type roles are already shared tokens; what remains is each component's own layout, states, forced-colours and RTL rules. The largest are sc-button (1.3 KiB, six variants and the loading state) and sc-footer (1.1 KiB, both variants). 3 KiB would mean dropping states or variants.",
   "fontFileBytes": 32768,
   "pageFontsEnBytes": 76800,
-  "pageFontsArBytes": 102400
+  "pageFontsArBytes": 102400,
+  "$siteComment": "Documentation site (scripts/build-site.mjs), checked by npm run check:site-budget: every built page against pageJsGzip and pageComponentCssGzip (custom-elements modules it imports, plus site.js), plus the site's own files below. A component's showcase page may exceed the page budgets by the approved overrides above componentGzip of the components it demonstrates.",
+  "site": {
+    "cssGzip": 6144,
+    "jsGzip": 1536,
+    "searchJsGzip": 3072,
+    "demoCssGzip": 1536,
+    "htmlGzip": 30720,
+    "pageFontsMixedBytes": 112640
+  },
+  "$siteFontsComment": "site.pageFontsMixedBytes (110 KiB, for approval): a page that sets text in both scripts, such as an Arabic page around an English document or an English component page with Arabic examples, downloads the Arabic and the Latin faces it uses. Single-script pages keep pageFontsEnBytes and pageFontsArBytes. Checked by npm run check:site-a11y."
 }

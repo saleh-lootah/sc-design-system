@@ -10,7 +10,7 @@ Summary: 53 of the 56 findings are resolved in the text. 3 are resolved in the t
 | --- | --- | --- |
 | 1 | Resolved. shadcn/ui, React, Radix, Base UI and Sonner removed. The library is described as StencilJS web components with the `sc-` prefix, framework-agnostic, no runtime dependency, wrappers later. Every pattern names real `sc-` components | 0.4, 10.1, 10.2, 13 |
 | 2 | Resolved. Channel theming contract: one `data-channel` per page, channel roles only, entities get attribution text only and supply no colours, fonts, radii or header logos | 3.2 (SVC-01 to SVC-03), 8.1 |
-| 3 | Resolved. Hex palette deleted. Colours given by token name with OKLAB values; OKLAB-only and no-teal rules are MUSTs, with `check:no-hex`, `check:teal`, `check:contrast` | 8.1 (FND-03 to FND-05) |
+| 3 | Resolved. Hex palette deleted. Colours given by token name with OKLAB values; OKLAB-only and reserved-hue-band rules are MUSTs, with `check:no-hex`, `check:hue-band`, `check:contrast` | 8.1 (FND-03 to FND-05) |
 | 4 | Resolved. Dubai Font only; separate Latin and Arabic scales from `typography.json` with sizes, leading and weights; tight leading; 1.4.12 tested instead of a 1.6 minimum; no entity font choice | 8.2 (FND-10 to FND-13), 5.7 |
 | 5 | Resolved. Focus ring from `CONVENTIONS.md` (3px channel action, 2px surface offset, `:focus-visible`), 3:1 contrast requirement, forced-colours fallback. Pipeline coverage of the ring is OQ-26 | 6.2 (A11Y-05) |
 | 6 | Resolved. Light and dark themes both required, with the same checks | 8.1 (FND-08, FND-09), 6.2 (A11Y-07) |
@@ -71,7 +71,7 @@ Summary: 53 of the 56 findings are resolved in the text. 3 are resolved in the t
 | --- | --- |
 | C1–C7 | shadcn/ui, React and Sonner removed; `sc-` library described (0.4, 10.1); toast not planned (10.4); framework wrappers mentioned as a later step (10.1) |
 | C8–C10 | Entity theming replaced by channel theming; entities attribution only (3.2) |
-| C11–C12 | Hex values and the teal-band greens deleted; OKLAB tokens and `check:teal` (8.1) |
+| C11–C12 | Hex values and the greens in the reserved hue band deleted; OKLAB tokens and `check:hue-band` (8.1) |
 | C13–C15 | Dubai Font only, token leading and the two scales (8.2) |
 | C16 | Latin-digit output rule (5.5) |
 | C17 | Phasing from `MOBILE.md` (7.1) |
@@ -125,7 +125,7 @@ None is asserted. Items 1–16 are OQ-1 to OQ-16. New open questions found while
 
 ## Other changes in 2.0
 
-- Motion rules rewritten from Emil Kowalski's skills (8.7), with the token conflicts (`easing.exit` is ease-in; spinner speed; reduced-motion durations; missing ease-in-out token) listed as OQ-22 to OQ-25.
+- Motion rules revised (8.7; sources in the Design System reference), with the token conflicts (`easing.exit` is ease-in; spinner speed; reduced-motion durations; missing ease-in-out token) listed as OQ-22 to OQ-25.
 - Known component gaps recorded: imperative Arabic default strings in `sc-skip-link` and `sc-date-range`, the `sc-skip-link` default target versus `sc-page`'s `main-content`, and the missing visited-link token (10.3, OQ-20).
 
 ## v2: design system v2 (21 October 2026)

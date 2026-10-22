@@ -61,7 +61,7 @@ A component uses shadow DOM only when nothing outside it needs to reach inside: 
 
 ## Tokens and colour
 
-- Components use **role tokens** only (`--sc-color-*`, `--sc-color-channel-*`), never palette tones, never a named channel, never a literal (`check:literals` fails on hex, `rgb()`, `hsl()` and raw font sizes). Every colour is OKLAB; nothing near DDS teal.
+- Components use **role tokens** only (`--sc-color-*`, `--sc-color-channel-*`), never palette tones, never a named channel, never a literal (`check:literals` fails on hex, `rgb()`, `hsl()` and raw font sizes). Every colour is OKLAB; nothing in the reserved hue band (`check:hue-band`).
 - `data-channel` on any element rebinds the channel roles for its subtree; `data-theme` forces light or dark for a subtree. Neither needs JS.
 - Filled controls use explicit hover and pressed roles (`channel-action-hover`, `-pressed`); quiet controls use state layers or the roles below. Disabled: `disabled-container` and `on-disabled`.
 - Control edges are 1.5px `outline` (`--sc-size-border-control`); `outline-variant` is for dividers only. Hovered edges and the sign-in edge use `outline-strong`.
@@ -119,7 +119,7 @@ A component uses shadow DOM only when nothing outside it needs to reach inside: 
 
 ## Motion
 
-Values in `tokens/motion.json`, rules MOT-01 to MOT-15 (Standard 2.0 §8.7), from Emil Kowalski's skills.
+Values in `tokens/motion.json`, rules MOT-01 to MOT-15 (Standard 2.0 §8.7; sources in the Design System reference).
 
 - Hover and colour: `--sc-duration-fast` (120ms), `--sc-easing-hover`, inside `@media (hover: hover) and (pointer: fine)`.
 - Press: pointer and touch only, never from the keyboard:
