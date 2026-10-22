@@ -35,7 +35,7 @@
     "test:visual": "SC_VISUAL=1 stencil test --e2e -- --max-workers=1 visual.e2e",
     "test:visual:update": "SC_VISUAL=1 SC_UPDATE_SCREENSHOTS=1 stencil test --e2e -- --max-workers=1 visual.e2e",
     "check:literals": "node scripts/check-literals.mjs",
-    "check": "npm run check:literals && npm run check:icons && npm run build && npm test && npm run check:budget",
+    "check": "npm run check:literals && npm run check:icons && npm run build && npm test && npm run check:budget && npm run check:site",
     "measure:bundle": "node scripts/measure-bundle.mjs",
     "measure:runtime": "node scripts/measure-runtime.mjs",
     "check:budget": "node scripts/measure-bundle.mjs --budget perf-budgets.json",
@@ -45,7 +45,9 @@
     "icons": "node scripts/gen-icons.mjs",
     "check:icons": "node scripts/gen-icons.mjs --check",
     "build:site": "node scripts/build-site.mjs",
-    "serve:site": "node scripts/serve-site.mjs"
+    "serve:site": "node scripts/serve-site.mjs",
+    "check:site": "node scripts/check-site-links.mjs && node scripts/check-site-budget.mjs",
+    "check:site-budget": "node scripts/check-site-budget.mjs"
   },
   "devDependencies": {
     "@stencil/core": "4.45.2",

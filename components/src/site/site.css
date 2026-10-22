@@ -914,6 +914,41 @@
     font: var(--sc-type-title-medium);
   }
 
+  /* Footer ------------------------------------------------------------------------------ */
+  .site-footer {
+    border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+    background: var(--sc-color-surface-container);
+  }
+  .site-footer__bar {
+    max-inline-size: var(--sc-container-max);
+    margin-inline: auto;
+    padding: var(--sc-space-24) var(--site-margin) var(--sc-space-32);
+    box-sizing: border-box;
+  }
+  .site-footer ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--sc-space-24);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .site-footer a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--sc-size-target-min);
+    color: var(--sc-color-on-surface);
+    font: var(--sc-type-label-medium);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: var(--sc-space-4);
+  }
+  .site-footer p {
+    margin: var(--sc-space-8) 0 0;
+    color: var(--sc-color-on-surface-variant);
+    font: var(--sc-type-body-small);
+  }
+
   /* Component examples: the playground's page fragments, styled by demo.css ---------------- */
   .demo {
     margin-block-end: var(--sc-space-24);
@@ -931,7 +966,7 @@
     .site-menu,
     .doc-aside,
     .site-pager,
-    sc-footer {
+    .site-footer {
       display: none;
     }
     .site-body {

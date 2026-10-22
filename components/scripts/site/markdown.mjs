@@ -49,9 +49,10 @@ export function inlineText(tok) {
 /**
  * Parses and annotates one document.
  * @param o.splitAt  with split: the first chapter is the first `##` whose text matches this
+ * @param o.splitParts with split: `###` headings that also start a page ("Part A · …")
  * @returns {{ title, chunks: Array<{ tokens, heading?: {id, text} }>, anchors: Map<id, chunkIndex>, aliases: Map<alias, id>, reqs: Array<{id, title, chunk, anchor}> }}
  */
-export function parseDoc(src, { split = false, splitAt = null } = {}) {
+export function parseDoc(src, { split = false, splitAt = null, splitParts = null } = {}) {
   const tokens = md.parse(src, {});
   const slugs = new Map();
   const uniqueSlug = (s) => {
@@ -161,7 +162,9 @@ export function parseDoc(src, { split = false, splitAt = null } = {}) {
     if (!t) return;
     // With splitAt, unnumbered `##` sections before the first chapter (a summary, the contents)
     // stay in the intro.
-    if (split && t.type === 'heading_open' && t.tag === 'h2' && (!splitAt || splitAt.test(t.meta.text) || chunks.length || cur.heading)) {
+    const chapter = t.type === 'heading_open' && t.tag === 'h2' && (!splitAt || splitAt.test(t.meta.text) || chunks.length || cur.heading);
+    const part = splitParts && t.type === 'heading_open' && t.tag === 'h3' && cur.heading && splitParts.test(t.meta.text);
+    if (split && (chapter || part)) {
       chunks.push(cur);
       cur = { tokens: [], start: i, heading: t.meta };
     }

@@ -38,8 +38,8 @@ const warnings = [];
 const warn = (m) => warnings.push(m);
 const read = (f) => readFileSync(join(REPO, f), 'utf8');
 
-if (!existsSync(join(WWW, 'build', 'sc-components.esm.js'))) {
-  console.error('build-site: no Stencil www build. Run `npm run build` in components/ first.');
+if (!existsSync(join(WWW, 'build', 'sc.css')) || !existsSync(join(COMPONENTS, 'dist', 'components', 'index.js'))) {
+  console.error('build-site: no Stencil build. Run `npm run build` in components/ first.');
   process.exit(1);
 }
 
@@ -65,7 +65,7 @@ const DOCS = [
   { key: 'docs/v2/wave-2b-brief.md', section: 'records', base: 'records/wave-2b-brief/', group: 'Decisions', internal: true },
   { key: 'docs/v2/architecture.md', section: 'records', base: 'records/architecture/', group: 'Specifications', internal: true, split: true },
   { key: 'docs/v2/foundations.md', section: 'records', base: 'records/foundations/', group: 'Specifications', internal: true, split: true },
-  { key: 'docs/v2/component-language.md', section: 'records', base: 'records/component-language/', group: 'Specifications', internal: true, split: true },
+  { key: 'docs/v2/component-language.md', section: 'records', base: 'records/component-language/', group: 'Specifications', internal: true, split: true, splitParts: /^Part [A-Z]\b/ },
   { key: 'components/COMPONENTS.md', section: 'records', base: 'records/component-status/', group: 'Specifications', internal: true },
   { key: 'docs/v2/alignment-report.md', section: 'records', base: 'records/alignment-report/', group: 'Reviews', internal: true },
   { key: 'docs/ux-standard-review.md', section: 'records', base: 'records/standard-review/', group: 'Reviews', internal: true },
@@ -113,9 +113,9 @@ const reqs = new Map(); // ID -> { id, title, page, doc }
 
 for (const cfg of DOCS) {
   const src = read(cfg.key);
-  const parsed = parseDoc(src, { split: !!cfg.split, splitAt: CHAPTER });
+  const parsed = parseDoc(src, { split: !!cfg.split, splitAt: CHAPTER, splitParts: cfg.splitParts });
   const arFile = cfg.key.replace(/\.md$/, '.ar.md');
-  const ar = existsSync(join(REPO, arFile)) ? parseDoc(read(arFile), { split: !!cfg.split, splitAt: CHAPTER }) : null;
+  const ar = existsSync(join(REPO, arFile)) ? parseDoc(read(arFile), { split: !!cfg.split, splitAt: CHAPTER, splitParts: cfg.splitParts }) : null;
   if (ar && ar.chunks.length !== parsed.chunks.length) warn(`${arFile}: ${ar.chunks.length} chapters, the English has ${parsed.chunks.length}; Arabic ignored`);
   const doc = { cfg, parsed, ar: ar && ar.chunks.length === parsed.chunks.length ? ar : null, pages: [] };
   docs.set(cfg.key, doc);
@@ -274,9 +274,35 @@ const ICONS = JSON.parse(readFileSync(join(COMPONENTS, 'src/icons/icons.json'), 
 const icon = (name, cls = '') =>
   `<svg class="site-icon${ICONS[name].mirror ? ' site-icon--mirror' : ''}${cls ? ` ${cls}` : ''}" viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="${ICONS[name].d}"/></svg>`;
 
-/* Preload hints: the lazy loader's core and page-shell bundle, as build-preload.mjs does ---- */
-const loader = readFileSync(join(WWW, 'build', 'sc-components.esm.js'), 'utf8');
-const coreFile = [...loader.matchAll(/(?:from|import)\s*"\.\/([^"]+\.js)"/g)][0]?.[1];
+/* Components: the custom-elements build, only the tags each page uses ------------------- */
+/**
+ * Site pages load dist/components (the primary build: one module per tag that defines it on
+ * import), copied to site/ce/. The lazy loader groups tags into bundles for channel pages,
+ * so a page with breadcrumbs and a footer would pull in the whole page-shell and navigation
+ * bundles (37 KiB gzip); importing just the tags it uses costs about half that. Each page
+ * gets modulepreload hints for the whole import closure, so there is no waterfall.
+ */
+const CE = join(COMPONENTS, 'dist', 'components');
+const ceImports = new Map();
+const importsOf = (f) => {
+  if (!ceImports.has(f)) ceImports.set(f, [...new Set([...readFileSync(join(CE, f), 'utf8').matchAll(/(?:from|import)\s*"\.\/([^"]+\.js)"/g)].map((m) => m[1]))]);
+  return ceImports.get(f);
+};
+function componentModules(html, from) {
+  const tags = [...new Set([...html.matchAll(/<(sc-[a-z-]+)[\s>]/g)].map((m) => m[1]))].filter((t) => existsSync(join(CE, `${t}.js`)));
+  const closure = new Set();
+  const walk = (f) => {
+    if (closure.has(f)) return;
+    closure.add(f);
+    for (const d of importsOf(f)) walk(d);
+  };
+  for (const t of tags) walk(`${t}.js`);
+  const base = rel(from, 'site/ce/');
+  return [
+    ...[...closure].map((f) => `<link rel="modulepreload" href="${base}${f}">`),
+    `<script type="module">${tags.map((t) => `import '${base}${t}.js';`).join('')}</script>`,
+  ].join('\n');
+}
 
 /* Layout -------------------------------------------------------------------------------- */
 /** On an Arabic page, English text (a document's own title) is marked as English. */
@@ -392,8 +418,7 @@ function layout(page, lang, { head = '', body, headings = [], bodyLang, extraHea
 <link rel="alternate" hreflang="${other}" href="${otherHref}">
 <link rel="stylesheet" href="${root}build/sc.css">
 <link rel="stylesheet" href="${root}site/site.css">
-${extraHead}<link rel="modulepreload" href="${root}build/${coreFile}">
-<script type="module" src="${root}build/sc-components.esm.js"></script>
+${extraHead}<!--sc-modules-->
 <script type="module" src="${root}site/site.js"></script>
 ${head}</head>
 <body${bodyAttrs}>
@@ -417,7 +442,17 @@ ${internal}${notice}${body}
 ${page.kind === 'home' || page.kind === 'search' ? '' : pager(page, lang)}
 </main>
 </div>
-<sc-footer variant="simple"><span slot="meta">${esc(t.footerMeta)}</span><p slot="fallback">${esc(t.footerMeta)}</p></sc-footer>
+<footer class="site-footer">
+  <div class="site-footer__bar">
+    <nav aria-label="${esc(t.footerNav)}"><ul>
+      <li><a href="${rel(from, langPath(lang, 'requirements/'))}">${esc(t.requirements)}</a></li>
+      <li><a href="${rel(from, 'playground.html')}${lang === 'ar' ? '?lang=ar' : ''}">${esc(t.playground)}</a></li>
+      <li><a href="${rel(from, langPath(lang, 'standard/changes/'))}">${esc(t.changes)}</a></li>
+      <li><a href="${rel(from, langPath(lang, 'search/'))}">${esc(t.search)}</a></li>
+    </ul></nav>
+    <p>${esc(t.footerMeta)}</p>
+  </div>
+</footer>
 </body>
 </html>
 `;
@@ -445,9 +480,10 @@ function renderDocPage(page, lang) {
   const shift = page.chunk > 0 ? 1 : 0;
   const from = langPath(lang, page.path);
   const t = STRINGS[lang];
-  // The h1 is rendered by the article; drop it from the body.
+  // The page's own heading (the document's `#`, or the chapter's `##` or part's `###`) is the
+  // article's h1; drop it from the body.
   const tokens = chunk.tokens;
-  const h1 = tokens.findIndex((tk) => tk.type === 'heading_open' && tk.meta.level - shift === 1);
+  const h1 = chunk.heading ? tokens.indexOf(tokens.find((tk) => tk.type === 'heading_open')) : tokens.findIndex((tk) => tk.type === 'heading_open' && tk.meta.level === 1);
   const titleText = h1 >= 0 ? tokens[h1].meta.text : page.title[lang];
   const titleId = h1 >= 0 ? tokens[h1].meta.id : 'top';
   const rest = h1 >= 0 ? { tokens: tokens.filter((_, i) => i < h1 || i > h1 + 2) } : chunk;
@@ -702,6 +738,7 @@ function buildIndex() {
 
 /* Write --------------------------------------------------------------------------------- */
 const out = (path, html) => {
+  html = html.replace('<!--sc-modules-->', componentModules(html.slice(html.indexOf('<body')), path));
   const dir = join(WWW, path);
   mkdirSync(dir, { recursive: true });
   writeFileSync(join(dir, 'index.html'), html);
@@ -712,8 +749,9 @@ const stencilIndex = join(WWW, 'index.html');
 if (existsSync(stencilIndex) && readFileSync(stencilIndex, 'utf8').includes('playground/playground.js')) {
   cpSync(stencilIndex, join(WWW, 'playground.html'));
 }
-for (const d of ['ar', ...SECTION_ORDER, 'design-system', 'components', 'requirements', 'search', 'ux-standard']) rmSync(join(WWW, d), { recursive: true, force: true });
-mkdirSync(join(WWW, 'site'), { recursive: true });
+for (const d of ['ar', 'site', ...SECTION_ORDER, 'components', 'requirements', 'search', 'ux-standard']) rmSync(join(WWW, d), { recursive: true, force: true });
+mkdirSync(join(WWW, 'site', 'ce'), { recursive: true });
+for (const f of readdirSync(CE)) if (f.endsWith('.js')) cpSync(join(CE, f), join(WWW, 'site', 'ce', f));
 for (const f of readdirSync(join(COMPONENTS, 'src/site'))) cpSync(join(COMPONENTS, 'src/site', f), join(WWW, 'site', f));
 
 const RENDER = { doc: renderDocPage, component: renderComponentPage, home: renderHome, 'ds-home': renderDsHome, 'records-home': renderRecordsHome, requirements: renderRequirements, search: renderSearch };
