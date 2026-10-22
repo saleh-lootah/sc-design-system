@@ -40,8 +40,8 @@ export class ScButton {
    * - `secondary`: other actions beside a primary one (outlined in the channel colour). 48px.
    * - `tertiary`: low-emphasis actions, styled as an underlined link. 48px.
    * - `destructive`: deletes or cancels something that can't be undone (error fill). 56px.
-   * - `handoff`: a shared government hand-off, such as "Sign in with UAE PASS" or "Pay with
-   *   Dubai Pay": city indigo on every channel (decision U3). 56px.
+   * - `handoff`: a shared government hand-off, such as "Pay with Dubai Pay": city indigo on every channel
+   *   (decision U3b). UAE PASS sign-in uses the official UAE PASS button instead (U3a). 56px.
    */
   @Prop({ reflect: true }) variant: ButtonVariant = 'primary';
 

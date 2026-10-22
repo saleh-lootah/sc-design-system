@@ -104,5 +104,5 @@
     "htmlGzip": 30720,
     "pageFontsMixedBytes": 112640
   },
-  "$siteFontsComment": "site.pageFontsMixedBytes (110 KiB, for approval): a page that sets text in both scripts, such as an Arabic page around an English document or an English component page with Arabic examples, downloads the Arabic and the Latin faces it uses. Single-script pages keep pageFontsEnBytes and pageFontsArBytes. Checked by npm run check:site-a11y."
+  "$siteFontsComment": "site.pageFontsMixedBytes (110 KiB, approved R18): a page that sets text in both scripts, such as an Arabic page around an English document or an English component page with Arabic examples, downloads the Arabic and the Latin faces it uses. Single-script pages keep pageFontsEnBytes and pageFontsArBytes. Checked by npm run check:site-a11y."
 }

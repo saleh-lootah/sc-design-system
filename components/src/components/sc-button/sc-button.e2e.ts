@@ -102,7 +102,7 @@ export const ALL_STATES = `
       <sc-button variant="secondary">Save and finish later</sc-button>
       <sc-button variant="tertiary">Cancel</sc-button>
       <sc-button variant="destructive">Delete draft</sc-button>
-      <sc-button variant="handoff">Sign in with UAE PASS</sc-button>
+      <sc-button variant="handoff">Pay with Dubai Pay</sc-button>
       <sc-button size="m">Change</sc-button>
       <sc-button size="xl" icon="search" icon-position="start">Search services</sc-button>
       <sc-button loading>Pay with Dubai Pay</sc-button>

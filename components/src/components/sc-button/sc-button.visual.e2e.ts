@@ -11,7 +11,7 @@ const gallery = (lang: string) => `
     <sc-button variant="secondary">${label('Save and finish later', 'احفظ وأكمل لاحقًا', lang)}</sc-button>
     <sc-button variant="tertiary">${label('Cancel', 'إلغاء', lang)}</sc-button>
     <sc-button variant="destructive">${label('Delete draft', 'حذف المسودة', lang)}</sc-button>
-    <sc-button variant="handoff">${label('Sign in with UAE PASS', 'تسجيل الدخول باستخدام الهوية الرقمية', lang)}</sc-button>
+    <sc-button variant="handoff">${label('Pay with Dubai Pay', 'الدفع عبر ⁦Dubai Pay⁩', lang)}</sc-button>
     <sc-button size="m" icon="search" icon-position="start">${label('Search', 'بحث', lang)}</sc-button>
     <sc-button disabled>${label('Continue', 'متابعة', lang)}</sc-button>
     <sc-button variant="secondary" disabled>${label('Change', 'تغيير', lang)}</sc-button>

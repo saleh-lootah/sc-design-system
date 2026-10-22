@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-22T06:09:45",
+  "timestamp": "2026-10-22T09:42:45",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.45.2",
@@ -1472,7 +1472,7 @@
       "filePath": "src/components/sc-button/sc-button.tsx",
       "encapsulation": "scoped",
       "tag": "sc-button",
-      "readme": "# sc-button\n\nStarts an action. If it goes somewhere instead, use `sc-link` (or `sc-button href` for a call to action that must look like a button, such as \"Start now\").\n\n## Usage\n\n```html\n<sc-button type=\"submit\" icon=\"arrow-forward\">Continue</sc-button>\n<sc-button variant=\"secondary\">Save and finish later</sc-button>\n<sc-button href=\"/renew/start\" icon=\"arrow-forward\">Start now</sc-button>\n```\n\n### Which variant\n\n| Variant | Use it for | Example |\n|---|---|---|\n| `primary` | The one main action on the page. Never more than one per page or section. | \"Continue\", \"Pay with Dubai Pay\" |\n| `secondary` | Other actions next to a primary one, or the main action when it isn't the way forward. | \"Save and finish later\", \"Change\" |\n| `tertiary` | Low-emphasis actions that would compete with the primary if they had a fill. | \"Cancel\", \"View all services\" |\n| `destructive` | An action that deletes data or can't be undone. Confirm it on the next screen. | \"Delete draft\", \"Cancel renewal\" |\n| `handoff` | A shared government hand-off. City indigo on every channel, so it never looks like the channel's own action (U3). | \"Sign in with UAE PASS\", \"Pay with Dubai Pay\" |\n\n- Heights follow the variant: 56px for `primary`, `destructive` and `handoff`; 48px for `secondary` and `tertiary`. Set `size=\"l\"` (56px) or `size=\"m\"` (48px) to override; `size=\"xl\"` (64px) is for the hero search only.\n- Use `full-width` on narrow screens when the button ends a form.\n- Put the primary button first in the reading order. In Arabic it sits on the right automatically.\n\n### Content\n\n- Start with a verb and say what happens: \"Continue\", \"Pay with Dubai Pay\", \"Save and finish later\". Not \"Submit\", \"OK\" or \"Click here\".\n- Sentence case, no full stop, as short as it can be while staying specific. Write the Arabic label, don't machine-translate it.\n- Use the `arrow-forward` icon at the end only for actions that move the user forward in a journey. It mirrors in Arabic. Don't add icons for decoration.\n- Amounts and references inside a label stay left-to-right: `<sc-button>Pay <sc-ltr>AED 450.00</sc-ltr></sc-button>`.\n\n### States\n\n- **Loading:** set `loading` while the action runs (for example, while a payment starts). The button keeps its width, shows a spinner, sets `aria-busy`, announces \"Pay with Dubai Pay, Loading\" (or the Arabic equivalent) and ignores clicks. Remove `loading` when the action ends.\n- **Disabled:** supported, but avoid it. A disabled button can't be focused and gives no reason, so many users can't tell why they're stuck. Leave it enabled and show an error message (and `sc-error-summary`) when the user tries to continue.\n\n### Forms\n\n`sc-button` renders a native `<button>` (or `<a>`) in light DOM (v2, decision A2), so it is a real form control:\n\n- `type=\"submit\"` submits the surrounding `<form>`, and the first submit button is the form's **default button**: Enter in any field submits through it. `name`, `value` and `form=\"<form id>\"` work as on a native button. `type=\"reset\"` resets the form. The default `type` is `button`, unlike the native element.\n- A `<fieldset disabled>` disables it natively.\n- `focus()` and `click()` on the host reach the native control.\n- There is no `::part()` in v2. Style overrides, if you must, target `.sc-button`, `.sc-button__label` and `.sc-button__icon`; the component's rules are in `@layer sc.components`, so your unlayered CSS wins.\n- Frameworks that own children (React) must not re-render the label text after upgrade: Stencil moves it into the native button.\n",
+      "readme": "# sc-button\n\nStarts an action. If it goes somewhere instead, use `sc-link` (or `sc-button href` for a call to action that must look like a button, such as \"Start now\").\n\n## Usage\n\n```html\n<sc-button type=\"submit\" icon=\"arrow-forward\">Continue</sc-button>\n<sc-button variant=\"secondary\">Save and finish later</sc-button>\n<sc-button href=\"/renew/start\" icon=\"arrow-forward\">Start now</sc-button>\n```\n\n### Which variant\n\n| Variant | Use it for | Example |\n|---|---|---|\n| `primary` | The one main action on the page. Never more than one per page or section. | \"Continue\", \"Pay with Dubai Pay\" |\n| `secondary` | Other actions next to a primary one, or the main action when it isn't the way forward. | \"Save and finish later\", \"Change\" |\n| `tertiary` | Low-emphasis actions that would compete with the primary if they had a fill. | \"Cancel\", \"View all services\" |\n| `destructive` | An action that deletes data or can't be undone. Confirm it on the next screen. | \"Delete draft\", \"Cancel renewal\" |\n| `handoff` | A shared government hand-off. City indigo on every channel, so it never looks like the channel's own action (U3b). UAE PASS uses its official button instead (U3a). | \"Pay with Dubai Pay\" |\n\n- Heights follow the variant: 56px for `primary`, `destructive` and `handoff`; 48px for `secondary` and `tertiary`. Set `size=\"l\"` (56px) or `size=\"m\"` (48px) to override; `size=\"xl\"` (64px) is for the hero search only.\n- Use `full-width` on narrow screens when the button ends a form.\n- Put the primary button first in the reading order. In Arabic it sits on the right automatically.\n\n### Content\n\n- Start with a verb and say what happens: \"Continue\", \"Pay with Dubai Pay\", \"Save and finish later\". Not \"Submit\", \"OK\" or \"Click here\".\n- Sentence case, no full stop, as short as it can be while staying specific. Write the Arabic label, don't machine-translate it.\n- Use the `arrow-forward` icon at the end only for actions that move the user forward in a journey. It mirrors in Arabic. Don't add icons for decoration.\n- Amounts and references inside a label stay left-to-right: `<sc-button>Pay <sc-ltr>AED 450.00</sc-ltr></sc-button>`.\n\n### States\n\n- **Loading:** set `loading` while the action runs (for example, while a payment starts). The button keeps its width, shows a spinner, sets `aria-busy`, announces \"Pay with Dubai Pay, Loading\" (or the Arabic equivalent) and ignores clicks. Remove `loading` when the action ends.\n- **Disabled:** supported, but avoid it. A disabled button can't be focused and gives no reason, so many users can't tell why they're stuck. Leave it enabled and show an error message (and `sc-error-summary`) when the user tries to continue.\n\n### Forms\n\n`sc-button` renders a native `<button>` (or `<a>`) in light DOM (v2, decision A2), so it is a real form control:\n\n- `type=\"submit\"` submits the surrounding `<form>`, and the first submit button is the form's **default button**: Enter in any field submits through it. `name`, `value` and `form=\"<form id>\"` work as on a native button. `type=\"reset\"` resets the form. The default `type` is `button`, unlike the native element.\n- A `<fieldset disabled>` disables it natively.\n- `focus()` and `click()` on the host reach the native control.\n- There is no `::part()` in v2. Style overrides, if you must, target `.sc-button`, `.sc-button__label` and `.sc-button__icon`; the component's rules are in `@layer sc.components`, so your unlayered CSS wins.\n- Frameworks that own children (React) must not re-render the label text after upgrade: Stencil moves it into the native button.\n",
       "docs": "Starts an action. Use a verb: \"Continue\", \"Pay with Dubai Pay\", \"Save and finish later\".\n\nv2 renders a native `<button>` (or an `<a>` when `href` is set) in light DOM (Stencil\n`scoped`, decision A2). The button is a real form control: Enter in a field submits the\nform through the first `type=\"submit\"` button (it is the form's default button), and\n`name`, `value`, `form` and a disabled `<fieldset>` all work natively. `focus()` and\n`click()` on the host reach the inner control. There is no `::part()`: if you must style\nit, use the classes `.sc-button`, `.sc-button__label` and `.sc-button__icon`.",
       "docsTags": [
         {
@@ -1915,7 +1915,7 @@
           "mutable": false,
           "attr": "variant",
           "reflectToAttr": true,
-          "docs": "Visual weight.\n- `primary`: the one main action on a page (channel action fill). 56px.\n- `secondary`: other actions beside a primary one (outlined in the channel colour). 48px.\n- `tertiary`: low-emphasis actions, styled as an underlined link. 48px.\n- `destructive`: deletes or cancels something that can't be undone (error fill). 56px.\n- `handoff`: a shared government hand-off, such as \"Sign in with UAE PASS\" or \"Pay with\n  Dubai Pay\": city indigo on every channel (decision U3). 56px.",
+          "docs": "Visual weight.\n- `primary`: the one main action on a page (channel action fill). 56px.\n- `secondary`: other actions beside a primary one (outlined in the channel colour). 48px.\n- `tertiary`: low-emphasis actions, styled as an underlined link. 48px.\n- `destructive`: deletes or cancels something that can't be undone (error fill). 56px.\n- `handoff`: a shared government hand-off, such as \"Pay with Dubai Pay\": city indigo on every channel\n  (decision U3b). UAE PASS sign-in uses the official UAE PASS button instead (U3a). 56px.",
           "docsTags": [
             {
               "name": "default",
@@ -12052,6 +12052,21 @@
     }
   ],
   "typeLibrary": {
+    "src/components/sc-announcement-bar/sc-announcement-bar.tsx::AnnouncementTone": {
+      "declaration": "export type AnnouncementTone = 'info' | 'warning' | 'error';",
+      "docstring": "",
+      "path": "src/components/sc-announcement-bar/sc-announcement-bar.tsx"
+    },
+    "src/components/sc-attention-card/sc-attention-card.tsx::AttentionCardHeadingLevel": {
+      "declaration": "export type AttentionCardHeadingLevel = 2 | 3 | 4 | 5 | 6;",
+      "docstring": "",
+      "path": "src/components/sc-attention-card/sc-attention-card.tsx"
+    },
+    "src/components/sc-attention-card/sc-attention-card.tsx::AttentionCardTint": {
+      "declaration": "export type AttentionCardTint = 'blue' | 'violet' | 'rose' | 'orange' | 'amber' | 'green';",
+      "docstring": "",
+      "path": "src/components/sc-attention-card/sc-attention-card.tsx"
+    },
     "src/components/sc-button/sc-button.tsx::ButtonVariant": {
       "declaration": "export type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'destructive' | 'handoff';",
       "docstring": "",
@@ -12076,21 +12091,6 @@
       "declaration": "export type ButtonIconPosition = 'start' | 'end';",
       "docstring": "",
       "path": "src/components/sc-button/sc-button.tsx"
-    },
-    "src/components/sc-announcement-bar/sc-announcement-bar.tsx::AnnouncementTone": {
-      "declaration": "export type AnnouncementTone = 'info' | 'warning' | 'error';",
-      "docstring": "",
-      "path": "src/components/sc-announcement-bar/sc-announcement-bar.tsx"
-    },
-    "src/components/sc-attention-card/sc-attention-card.tsx::AttentionCardHeadingLevel": {
-      "declaration": "export type AttentionCardHeadingLevel = 2 | 3 | 4 | 5 | 6;",
-      "docstring": "",
-      "path": "src/components/sc-attention-card/sc-attention-card.tsx"
-    },
-    "src/components/sc-attention-card/sc-attention-card.tsx::AttentionCardTint": {
-      "declaration": "export type AttentionCardTint = 'blue' | 'violet' | 'rose' | 'orange' | 'amber' | 'green';",
-      "docstring": "",
-      "path": "src/components/sc-attention-card/sc-attention-card.tsx"
     },
     "src/components/sc-callout/sc-callout.tsx::CalloutTone": {
       "declaration": "export type CalloutTone = 'info' | 'success' | 'warning' | 'error';",
@@ -12132,31 +12132,6 @@
       "docstring": "",
       "path": "src/components/sc-channel-hero/sc-channel-hero.tsx"
     },
-    "src/utils/channels.ts::Channel": {
-      "declaration": "\"build\" | \"now\" | \"transport\" | \"visit\" | \"justice\" | \"invest\" | \"trade\"",
-      "docstring": "",
-      "path": "src/utils/channels.ts"
-    },
-    "src/utils/channels.ts::ChannelLinks": {
-      "declaration": "{\n    [P in keyof T]?: T[P];\n}",
-      "docstring": "",
-      "path": "src/utils/channels.ts"
-    },
-    "src/components/sc-text-input/field.tsx::HeadingLevel": {
-      "declaration": "export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;",
-      "docstring": "",
-      "path": "src/components/sc-text-input/field.tsx"
-    },
-    "src/components/sc-date-input/date.ts::Parts": {
-      "declaration": "{\n    [P in K]: T;\n}",
-      "docstring": "",
-      "path": "src/components/sc-date-input/date.ts"
-    },
-    "src/components/sc-date-range/overrides.ts::StringsInput": {
-      "declaration": "export type StringsInput = string | Record<string, unknown> | undefined | null;",
-      "docstring": "",
-      "path": "src/components/sc-date-range/overrides.ts"
-    },
     "src/components/sc-empty-state/sc-empty-state.tsx::EmptyStateHeadingLevel": {
       "declaration": "export type EmptyStateHeadingLevel = 2 | 3 | 4 | 5 | 6;",
       "docstring": "",
@@ -12191,6 +12166,16 @@
       "declaration": "export type FooterVariant = 'simple' | 'grouped';",
       "docstring": "",
       "path": "src/components/sc-footer/sc-footer.tsx"
+    },
+    "src/utils/channels.ts::Channel": {
+      "declaration": "\"build\" | \"now\" | \"transport\" | \"visit\" | \"justice\" | \"invest\" | \"trade\"",
+      "docstring": "",
+      "path": "src/utils/channels.ts"
+    },
+    "src/utils/channels.ts::ChannelLinks": {
+      "declaration": "{\n    [P in keyof T]?: T[P];\n}",
+      "docstring": "",
+      "path": "src/utils/channels.ts"
     },
     "src/components/sc-language-switch/sc-language-switch.tsx::LanguageSwitchAppearance": {
       "declaration": "export type LanguageSwitchAppearance = 'inline' | 'header';",
@@ -12302,6 +12287,11 @@
       "docstring": "",
       "path": "src/components/sc-text-input/sc-text-input.tsx"
     },
+    "src/components/sc-text-input/field.tsx::HeadingLevel": {
+      "declaration": "export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;",
+      "docstring": "",
+      "path": "src/components/sc-text-input/field.tsx"
+    },
     "src/components/sc-tile/sc-tile.tsx::TileTint": {
       "declaration": "export type TileTint = 'blue' | 'violet' | 'rose' | 'orange' | 'amber' | 'green';",
       "docstring": "",
@@ -12311,6 +12301,16 @@
       "declaration": "export type TimelineOrder = 'newest-first' | 'oldest-first';",
       "docstring": "",
       "path": "src/components/sc-timeline/sc-timeline.tsx"
+    },
+    "src/components/sc-date-input/date.ts::Parts": {
+      "declaration": "{\n    [P in K]: T;\n}",
+      "docstring": "",
+      "path": "src/components/sc-date-input/date.ts"
+    },
+    "src/components/sc-date-range/overrides.ts::StringsInput": {
+      "declaration": "export type StringsInput = string | Record<string, unknown> | undefined | null;",
+      "docstring": "",
+      "path": "src/components/sc-date-range/overrides.ts"
     }
   }
 }

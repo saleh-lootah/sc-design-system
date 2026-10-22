@@ -34,7 +34,7 @@ A button starts an action: "Continue", "Pay with Dubai Pay", "Save and finish la
 | `handoff` (U3) | 56 (`l`) | `primary` (city indigo) | `on-primary` | none | `primary-hover` | `primary-pressed` + scale |
 
 - `size` overrides the variant's height: `l` 56 (`size-control-primary`), `m` 48 (`size-control-secondary`), `xl` 64 (hero search only). Every size is at least 44 wide (`size-target-min`).
-- `handoff` is the same city indigo on every channel, so a UAE PASS sign-in or a Dubai Pay hand-off never looks like the channel's own action. Provider artwork can be added later through `slot="icon"`.
+- `handoff` is the same city indigo on every channel, so a Dubai Pay hand-off never looks like the channel's own action (U3b). "Sign in with UAE PASS" is not a `handoff` button: it uses the official UAE PASS button (U3a). Provider artwork can be added later through `slot="icon"`.
 - component-language.md proposed an `inverse` variant for these placeholders; U3 replaced it with `handoff`.
 - component-language's "channel-container" (secondary hover) is the token `channel-subtle`, and its "channel-container-high" (secondary pressed) is `channel-container`, per the role table.
 - Secondary is transparent rather than `surface`-filled, so it sits correctly on bands and the hero; every pair it creates is in the contrast check (`channel-action` on surfaces, `channel-subtle` and `channel-container`: 5.00:1 at the lowest).
