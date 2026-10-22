@@ -23,7 +23,7 @@
     "build:css": "node scripts/build-sc-css.mjs",
     "prebuild": "npm run build:css",
     "build": "stencil build --docs",
-    "postbuild": "node scripts/build-preload.mjs",
+    "postbuild": "node scripts/build-preload.mjs && node scripts/build-site.mjs",
     "prestart": "npm run build:css",
     "start": "stencil build --dev --watch --serve",
     "pretest": "npm run build:css",
@@ -43,7 +43,9 @@
     "test:e2e:v2": "stencil test --e2e -- --max-workers=1 $(node scripts/v2-tags.mjs)",
     "pretest:e2e:v2": "npm run build:css",
     "icons": "node scripts/gen-icons.mjs",
-    "check:icons": "node scripts/gen-icons.mjs --check"
+    "check:icons": "node scripts/gen-icons.mjs --check",
+    "build:site": "node scripts/build-site.mjs",
+    "serve:site": "node scripts/serve-site.mjs"
   },
   "devDependencies": {
     "@stencil/core": "4.45.2",
@@ -52,6 +54,7 @@
     "axe-core": "4.13.0",
     "jest": "29.7.0",
     "jest-cli": "29.7.0",
+    "markdown-it": "14.1.0",
     "puppeteer": "24.43.1"
   }
 }

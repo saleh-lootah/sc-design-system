@@ -15,6 +15,8 @@
     "check:contrast": "node scripts/check-contrast.mjs",
     "check:teal": "node scripts/check-teal.mjs",
     "check:no-hex": "node scripts/check-no-hex.mjs",
-    "report:contrast": "node scripts/check-contrast.mjs --markdown"
+    "report:contrast": "node scripts/check-contrast.mjs --markdown",
+    "site": "npm run build && npm --prefix components run build",
+    "site:serve": "npm --prefix components run serve:site"
   }
 }
