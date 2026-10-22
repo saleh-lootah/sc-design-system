@@ -60,3 +60,5 @@ page('Content and layout', 'sc-tile', 'Tile');
 page('Content and layout', 'sc-attention-card', 'Attention card');
 page('Content and layout', 'sc-module-card', 'Module card');
 page('Content and layout', 'sc-accordion', 'Accordion');
+page('Content and layout', 'sc-official-banner', 'Official banner');
+page('Feedback and status', 'sc-environment-banner', 'Environment banner');

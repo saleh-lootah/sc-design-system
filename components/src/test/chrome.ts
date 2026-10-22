@@ -89,3 +89,25 @@ export function simpleFooter(lang = 'en', extra = ''): string {
     <p>${t(lang, 'Government of Dubai', 'حكومة دبي')}</p>
   </footer></sc-footer>`;
 }
+
+/** The standard sc-official-banner markup (CHR-01a), in either language. */
+export function officialBanner(lang = 'en', { open = false } = {}): string {
+  const t =
+    lang === 'ar'
+      ? ['موقع رسمي لحكومة دبي', 'موقع إلكتروني رسمي لحكومة دبي', 'طريقة التحقق', 'المواقع الرسمية تستخدم', 'العنوان الذي ينتهي بـ <sc-ltr>.gov.ae</sc-ltr> يعني أن الموقع تابع لجهة حكومية في دولة الإمارات.', 'المواقع الآمنة تستخدم', 'يدل رمز القفل أو <sc-ltr>https://</sc-ltr> قبل العنوان على أن الاتصال آمن.']
+      : ['Official website of the Government of Dubai', 'An official website of the Government of Dubai', 'How to check', 'Official websites use', 'An address that ends in .gov.ae means the website belongs to a government organisation in the UAE.', 'Secure websites use', 'A lock or https:// before the address means your connection is secure.'];
+  return `<sc-official-banner><section aria-label="${t[0]}"><details${open ? ' open' : ''}>
+    <summary><span>${t[1]}</span> <span>${t[2]}</span></summary>
+    <div>
+      <p class="sc-official-banner__domain"><strong>${t[3]} <sc-ltr>.gov.ae</sc-ltr></strong>${t[4]}</p>
+      <p class="sc-official-banner__https"><strong>${t[5]} <sc-ltr>HTTPS</sc-ltr></strong>${t[6]}</p>
+    </div>
+  </details></section></sc-official-banner>`;
+}
+
+/** The standard sc-environment-banner markup (CHR-01b), in either language. */
+export function environmentBanner(lang = 'en', env = 'QA'): string {
+  return lang === 'ar'
+    ? `<sc-environment-banner><section aria-label="نسخة تجريبية"><p><strong>${env}</strong>هذه نسخة تجريبية من دبي الآن. يُرجى عدم إدخال بيانات شخصية أو بيانات دفع حقيقية.</p></section></sc-environment-banner>`
+    : `<sc-environment-banner><section aria-label="Test version"><p><strong>${env}</strong>This is a test version of Dubai Now. Don't enter real personal or payment details.</p></section></sc-environment-banner>`;
+}

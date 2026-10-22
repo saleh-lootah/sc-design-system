@@ -480,10 +480,12 @@ Whether Dubai Pay needs its own button component depends on whether it mandates 
 
 ## 11. Site chrome
 
-The Service Standard sets what channel-site chrome must contain and how it must behave ([CHR-01 to CHR-11](service-standard.md#tpl-chrome)). These are the design values the components use.
+The Service Standard sets what channel-site chrome must contain and how it must behave ([CHR-01 to CHR-13](service-standard.md#tpl-chrome)). These are the design values the components use.
 
 | Part | Design values |
 | --- | --- |
+| Official banner (`sc-official-banner`) | CSS only. A full-bleed `surface-container` band; the statement and "How to check" in `label-small` on one 44px row, "How to check" underlined with a 16px chevron that turns when open. The panel: two items under a 1px `outline-variant` rule, each a 24px icon (a government building, a lock), a Bold heading in `on-surface` and `body-small` text in `on-surface-variant`; two columns from 600px. No motion |
+| Environment banner (`sc-environment-banner`) | CSS only. An `inverse-surface` band with a 4px striped top edge (`warning-container` and `inverse-surface`, 45°), `label-medium` text; the environment's name in a `warning-container` chip with a 6px radius. In the flow, never sticky |
 | Site header (`sc-site-header`) | Flat `surface` bar with a 1px `outline-variant` rule beneath it. Main navigation in `label-large` (Medium in English, Bold in Arabic). The current item is `channel-action`, Bold, with a 3px `channel-action` bar at its block end and `aria-current="page"`. A compact row with a modal menu below 1024px, and whenever the full row does not fit |
 | Government of Dubai lockup | Taken through the header's `lockup` slot; the library ships no logo. Public demonstration pages use a neutral placeholder of the same proportions, labelled "Government of Dubai lockup". Until the usage manual sets them ([OQ-30](service-standard.md#open-questions)), the interim values are: at least 40px tall in the header, clear space on every side equal to the height of the wordmark's capital "G", and a white plate on dark surfaces |
 | Channel switcher (`sc-channel-switcher`) | A disclosure listing the seven channels with a swatch in each channel's own colour ([FND-26](#colour)); the current channel has a check |
