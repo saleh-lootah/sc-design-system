@@ -165,7 +165,7 @@ All gzip, per file, measured by `npm run measure:bundle`; components in the cust
 | What | Budget |
 | --- | --- |
 | Runtime core | 14 KiB |
-| `sc.css` | 7 KiB |
+| `sc.css` | 9 KiB (W7) |
 | Shadow helper sheet | 1.5 KiB |
 | Leaf component | 4 KiB (`sc-button` 5 KiB: see its spec) |
 | Form field | 7 KiB |
