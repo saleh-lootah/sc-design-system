@@ -67,6 +67,7 @@ The table is used as-is from `--breakpoint-medium` (600px) up. Below 600px, the 
 - **`scroll`** (for genuinely wide comparisons).
   - The table keeps its layout inside a horizontal scroll region with `role="region"`, `tabindex="0"` and `aria-labelledby` pointing at the caption.
   - The row header column is sticky at inline-start.
+  - Focus is never hidden under it (WCAG 2.4.11): the scroll region has `scroll-padding-inline-start` equal to the sticky cells' measured width (checkbox and row header), kept current by the ResizeObserver, the MutationObserver and every render, so a link, checkbox or button focused in a later column scrolls in clear of the sticky column, on the left in English and the right in Arabic.
   - An 8px shadow edge (`doc-shadow-10` fading to transparent) shows on whichever side has more content. In RTL it starts on the left.
   - `overscroll-behavior-x: contain`.
 
@@ -191,4 +192,4 @@ Slots: default (the native table), `footer`, `empty`, `actions` (selection bar a
 
 ## Tests
 
-`sc-table.spec.tsx` and `sc-table.e2e.ts` (the v1 regression suite, all passing on v2: native semantics, keyboard order, sorting with announcements, selection with Space and the bar's total, Arabic mirroring, string re-labelling, stacked and scroll modes, 44px link targets, axe per context and per state) plus the v2 checks: container and header against the tokens, `channel-subtle` selection and the U1 ring, underlined links and the Arabic scale, and `@layer` overridability; `describeAxe` on the loading, empty, no-results, error and compact states. `sc-table.visual.e2e.ts`: desktop and stacked, EN/AR × light/dark.
+`sc-table.spec.tsx` and `sc-table.e2e.ts` (the v1 regression suite, all passing on v2: native semantics, keyboard order, sorting with announcements, selection with Space and the bar's total, Arabic mirroring, string re-labelling, stacked and scroll modes, focus clear of the sticky column when tabbing sideways in EN and AR (2.4.11), 44px link targets, axe per context and per state) plus the v2 checks: container and header against the tokens, `channel-subtle` selection and the U1 ring, underlined links and the Arabic scale, and `@layer` overridability; `describeAxe` on the loading, empty, no-results, error and compact states. `sc-table.visual.e2e.ts`: desktop and stacked, EN/AR × light/dark.
