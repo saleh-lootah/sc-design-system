@@ -47,7 +47,8 @@
     "build:site": "node scripts/build-site.mjs",
     "serve:site": "node scripts/serve-site.mjs",
     "check:site": "node scripts/check-site-links.mjs && node scripts/check-site-budget.mjs",
-    "check:site-budget": "node scripts/check-site-budget.mjs"
+    "check:site-budget": "node scripts/check-site-budget.mjs",
+    "check:site-a11y": "node scripts/check-site-a11y.mjs"
   },
   "devDependencies": {
     "@stencil/core": "4.45.2",

@@ -5,7 +5,8 @@
  *   npm run build && npm run serve:site      # http://localhost:4400/
  *   PORT=8080 npm run serve:site
  *
- * No dependencies. Directories serve their index.html; nothing is cached.
+ * No dependencies. Directories serve their index.html; nothing is cached. check-site-a11y.mjs
+ * imports serveSite() to test the built pages.
  */
 import { createServer } from 'node:http';
 import { createReadStream, existsSync, statSync } from 'node:fs';
@@ -13,7 +14,6 @@ import { dirname, extname, join, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', 'www');
-const port = Number(process.env.PORT) || 4400;
 const types = {
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
@@ -24,7 +24,14 @@ const types = {
   '.map': 'application/json; charset=utf-8',
 };
 
-createServer((req, res) => {
+/** Starts the server; resolves with it once it listens (port 0 picks a free port). */
+export const serveSite = (port) =>
+  new Promise((resolve) => {
+    const server = createServer(handle);
+    server.listen(port, () => resolve(server));
+  });
+
+function handle(req, res) {
   const url = new URL(req.url, 'http://localhost');
   let file = normalize(join(root, decodeURIComponent(url.pathname)));
   if (!file.startsWith(root)) {
@@ -44,4 +51,9 @@ createServer((req, res) => {
   }
   res.writeHead(200, { 'content-type': types[extname(file)] ?? 'application/octet-stream', 'cache-control': 'no-store' });
   createReadStream(file).pipe(res);
-}).listen(port, () => console.log(`Documentation site: http://localhost:${port}/`));
+}
+
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  const port = Number(process.env.PORT) || 4400;
+  serveSite(port).then(() => console.log(`Documentation site: http://localhost:${port}/`));
+}

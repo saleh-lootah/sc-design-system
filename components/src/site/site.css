@@ -160,7 +160,14 @@
     gap: var(--sc-space-8);
     margin-inline-start: auto;
   }
+  /* Wide enough for "English" and "العربية" in both states, so the upgrade moves nothing. */
+  .site-header__tools sc-language-switch {
+    display: inline-flex;
+    justify-content: flex-end;
+    min-inline-size: var(--sc-space-64);
+  }
   .site-tool {
+    flex: none;
     display: inline-flex;
     align-items: center;
     gap: var(--sc-space-8);
@@ -211,7 +218,10 @@
   .site-main:focus {
     outline: none;
   }
+  /* The same height before and after the component upgrades (CLS 0). */
   .site-main > sc-breadcrumbs {
+    display: block;
+    min-block-size: var(--sc-size-target-min);
     margin-block-end: var(--sc-space-16);
   }
 
@@ -351,8 +361,9 @@
   .doc-aside {
     grid-area: aside;
   }
-  .doc-layout > .doc {
+  .doc-layout > :is(.doc, .doc-body) {
     grid-area: doc;
+    min-inline-size: 0;
   }
   @media (min-width: 1280px) {
     .doc-layout.has-toc {
@@ -741,7 +752,7 @@
     border-style: dashed;
   }
   .site-card__link {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     min-block-size: var(--sc-size-target-min);
     color: var(--site-link);
@@ -789,6 +800,8 @@
   .home-quick a {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
+    min-inline-size: var(--sc-size-target-min);
     min-block-size: var(--sc-size-target-min);
     font: var(--sc-type-label-medium);
   }
@@ -845,6 +858,7 @@
   /* Search ------------------------------------------------------------------------------ */
   .search-form {
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--sc-space-12);
     max-inline-size: var(--sc-size-measure);
   }
@@ -870,8 +884,17 @@
   .search-status:empty {
     display: none;
   }
+  /* With a query in the URL the results arrive after load: hold the space so nothing below
+     them moves (CLS 0), and keep the full page list out of the way. */
+  .is-searching .search-results {
+    min-block-size: 100vh;
+  }
+  .is-searching #search-all {
+    display: none;
+  }
   .search-results {
     max-inline-size: var(--sc-size-measure);
+    overflow-wrap: anywhere;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -936,6 +959,8 @@
   .site-footer a {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
+    min-inline-size: var(--sc-size-target-min);
     min-block-size: var(--sc-size-target-min);
     color: var(--sc-color-on-surface);
     font: var(--sc-type-label-medium);

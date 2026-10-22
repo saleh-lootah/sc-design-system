@@ -297,7 +297,8 @@ function componentModules(html, from) {
     for (const d of importsOf(f)) walk(d);
   };
   for (const t of tags) walk(`${t}.js`);
-  const base = rel(from, 'site/ce/');
+  // A module specifier must start with ./ or ../ (the home page's would not).
+  const base = rel(from, 'site/ce/').replace(/^(?!\.)/, './');
   return [
     ...[...closure].map((f) => `<link rel="modulepreload" href="${base}${f}">`),
     `<script type="module">${tags.map((t) => `import '${base}${t}.js';`).join('')}</script>`,
@@ -305,6 +306,18 @@ function componentModules(html, from) {
 }
 
 /* Layout -------------------------------------------------------------------------------- */
+/**
+ * The regular and bold faces every page sets text in, preloaded so they are there at first
+ * paint: with font-display: swap, a late font reflows the header and the first lines (CLS).
+ */
+const FONT_PRELOAD = {
+  // The language switch sets "العربية" / "English" in the name subsets.
+  en: ['dubai-w23-400-latin.woff2', 'dubai-w23-500-latin.woff2', 'dubai-w23-700-latin.woff2', 'dubai-w23-700-name-ar.woff2'],
+  // Arabic text quotes Latin names (WCAG, UAE PASS), set in the Latin regular face.
+  ar: ['dubai-w23-400-arabic.woff2', 'dubai-w23-700-arabic.woff2', 'dubai-w23-500-name-en.woff2', 'dubai-w23-400-latin.woff2'],
+  // An Arabic page around an English document also sets Latin headings and labels.
+  arWithEnglish: ['dubai-w23-500-latin.woff2', 'dubai-w23-700-latin.woff2'],
+};
 /** On an Arabic page, English text (a document's own title) is marked as English. */
 const ARABIC = /[\u0600-\u06FF]/;
 const en = (text, lang) => (lang === 'ar' && !ARABIC.test(text) ? ' lang="en" dir="ltr"' : '');
@@ -413,9 +426,11 @@ function layout(page, lang, { head = '', body, headings = [], bodyLang, extraHea
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(page.description?.[lang] ?? (page.section ? `${NAMES[page.section][lang]}: ${page.title[lang]}` : t.titleSuffix))}">
 <link rel="alternate" hreflang="${other}" href="${otherHref}">
+${[...FONT_PRELOAD[lang], ...(lang === 'ar' && (bodyLang === 'en' || page.kind === 'component' || page.kind === 'requirements') ? FONT_PRELOAD.arWithEnglish : [])].map((f) => `<link rel="preload" as="font" type="font/woff2" crossorigin href="${root}build/assets/fonts/${f}">`).join('\n')}
 <link rel="stylesheet" href="${root}build/sc.css">
 <link rel="stylesheet" href="${root}site/site.css">
 ${extraHead}<!--sc-modules-->
@@ -463,7 +478,7 @@ const article = ({ titleHtml, lead = '', tocHtml = '', body, bodyLang, lang, cls
   `<div class="doc-layout${tocHtml ? ' has-toc' : ''}">
 <div class="doc-head">${titleHtml}${lead}</div>
 ${tocHtml ? `<div class="doc-aside">${tocHtml}</div>` : ''}
-<div class="doc ${cls}"${bodyLang && bodyLang !== lang ? ` lang="${bodyLang}" dir="${bodyLang === 'ar' ? 'rtl' : 'ltr'}"` : ''}>
+<div class="${cls || 'doc'}"${bodyLang && bodyLang !== lang ? ` lang="${bodyLang}" dir="${bodyLang === 'ar' ? 'rtl' : 'ltr'}"` : ''}>
 ${body}
 </div>
 </div>`;
@@ -561,13 +576,21 @@ function renderComponentPage(page, lang) {
 <div class="doc"${lang === 'ar' ? ' lang="en" dir="ltr"' : ''}>${renderChunk(rest, { shift: -1, resolve: makeResolver(page.doc.cfg.key, lang, from), isReq: (id) => reqs.has(id), t })}${sourceLink(page.doc.cfg.key, lang)}</div></section>`;
     headings.push({ id: 'specification', text: t.specification, level: 2 });
   }
+  // Foundations: the examples are drawn by script; the reference's chapters are the text.
+  if (page.id === 'foundations') {
+    const ref = docs.get('docs/standard/design-system-reference.md').pages.slice(1, 10);
+    const label = lang === 'ar' ? 'في مرجع نظام التصميم' : 'In the Design System reference';
+    spec = `<section class="doc-part" aria-labelledby="in-reference"><div class="doc-heading"><h2 id="in-reference">${esc(label)}</h2></div>${cards(ref, lang, from)}</section>`;
+    headings.push({ id: 'in-reference', text: label, level: 2 });
+  }
   const apiHtml = page.id.startsWith('sc-') ? apiTables(page.id, lang) : '';
   if (apiHtml) headings.push({ id: 'api', text: t.api, level: 2 });
   const playground = `<p class="doc-actions"><a class="doc-action" href="${rel(from, 'playground.html')}?page=${page.id}${lang === 'ar' ? '&amp;lang=ar' : ''}">${esc(t.openPlayground)}${icon('ArrowForward')}</a></p>`;
   const body = `${demo}${spec}${apiHtml ? `<section class="doc-part" aria-labelledby="api"><div class="doc-heading"><h2 id="api">${esc(t.api)}</h2></div>${apiHtml}</section>` : ''}`;
   return layout(page, lang, {
     extraHead: `<link rel="stylesheet" href="${rel(from, 'playground/demo.css')}">\n`,
-    body: article({ titleHtml, lead: lead + playground, tocHtml: toc(headings, lang), body, lang }),
+    // Not .doc: the examples keep the library's own look, without the site's text styles.
+    body: article({ titleHtml, lead: lead + playground, tocHtml: toc(headings, lang), body, lang, cls: 'doc-body' }),
   });
 }
 
@@ -693,6 +716,7 @@ function renderSearch(page, lang) {
 <label class="search-scope"><input type="checkbox" id="search-records"> <span>${esc(t.searchIncludeRecords)}</span></label>
 </div>
 <noscript><p class="site-notice">${esc(t.searchNoScript)}</p></noscript>
+<script>if (/[?&]q=[^&]/.test(location.search)) document.body.classList.add('is-searching');</script>
 <p class="search-status" role="status" id="search-status"></p>
 <ol class="search-results" id="search-results"></ol>
 <div id="search-all"><h2 id="all-pages">${esc(t.allPages)}</h2>${bySection}<p><a href="${rel(from, langPath(lang, 'requirements/'))}">${esc(t.requirements)}</a></p></div>`;
