@@ -97,13 +97,13 @@ describe('sc-textarea (e2e)', () => {
     const page = await newScPage(`<form><sc-textarea id="note" name="note" label="ملاحظة"></sc-textarea></form>`, { lang: 'ar' });
     // A code copied from an Arabic SMS carries LANG-15 isolates: U+2066 ... U+2069.
     await page.evaluate((sel: string) => {
-      const field = document.querySelector(sel)!.querySelector('textarea') as HTMLInputElement;
+      const field = document.querySelector(sel)!.querySelector('textarea') as HTMLTextAreaElement;
       field.focus();
       document.execCommand('insertText', false, String.fromCharCode(0x2066) + '123456' + String.fromCharCode(0x2069));
     }, '#note');
     await page.waitForChanges();
-    expect(await page.evaluate((sel: string) => (document.querySelector(sel)!.querySelector('textarea') as HTMLInputElement).value, '#note')).toBe('123456');
-    expect(await page.evaluate((sel: string) => (document.querySelector(sel)!.querySelector('textarea') as HTMLInputElement).selectionStart, '#note')).toBe(6);
+    expect(await page.evaluate((sel: string) => (document.querySelector(sel)!.querySelector('textarea') as HTMLTextAreaElement).value, '#note')).toBe('123456');
+    expect(await page.evaluate((sel: string) => (document.querySelector(sel)!.querySelector('textarea') as HTMLTextAreaElement).selectionStart, '#note')).toBe(6);
     expect(await page.$eval('#note', (el) => (el as HTMLElement & { value: string }).value)).toBe('123456');
     expect(await page.evaluate(() => new FormData(document.querySelector('form')!).get('note'))).toBe('123456');
   });
