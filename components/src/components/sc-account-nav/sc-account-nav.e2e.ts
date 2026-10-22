@@ -110,5 +110,48 @@ describe('sc-account-nav (e2e)', () => {
     expect(await read(page, 'root.querySelector("[aria-current]").getAttribute("href")')).toBe('#profile');
   });
 
+  it('marks the current item with a bar as well as Bold, so the cue holds in Arabic where every label is Bold (R10)', async () => {
+    for (const lang of ['en', 'ar'] as const) {
+      for (const width of [1024, 375]) {
+        const page = await newScPage(ALL_STATES.replace('inline-size: 300px', width < 600 ? 'inline-size: 100%' : 'inline-size: 300px'), { lang });
+        await page.setViewport({ width, height: 700 });
+        await page.waitForChanges();
+        const weights = await read<string[]>(page, 'items.map((a) => getComputedStyle(a).fontWeight)');
+        if (lang === 'ar') expect(new Set(weights)).toEqual(new Set(['700'])); // weight alone tells nothing in Arabic
+        // The non-weight cue: a 3px channel-action bar on the current item only, inline-start
+        // on wide screens, along the bottom edge in the compact row.
+        const bar = await read<{ content: string; w: number; h: number; bg: string }[]>(
+          page,
+          'items.map((a) => { const s = getComputedStyle(a, "::before"); return { content: s.content, w: parseFloat(s.width), h: parseFloat(s.height), bg: s.backgroundColor }; })',
+        );
+        expect(bar.filter((b) => b.content !== 'none').length).toBe(1);
+        expect(bar[1].content).not.toBe('none');
+        expect(bar[1].bg).toBe(await token(page, '--sc-color-channel-action', 'backgroundColor'));
+        expect(bar[1].bg).not.toBe(await read(page, 'getComputedStyle(items[1]).backgroundColor'));
+        if (width < 600) {
+          expect(bar[1].h).toBe(3);
+          expect(Math.round(bar[1].w)).toBe(await read(page, 'items[1].clientWidth')); // the padding box, inside the hairline
+        } else {
+          expect(bar[1].w).toBe(3);
+          expect(Math.round(bar[1].h)).toBe(await read(page, 'items[1].clientHeight'));
+        }
+      }
+    }
+  });
+
+  it('follows an item on release only: pressing, sliding off and releasing does nothing (WCAG 2.5.2)', async () => {
+    const page = await newScPage(ALL_STATES);
+    const box = (await (await page.$('sc-account-nav >>> a[href="#notifications"]'))!.boundingBox())!;
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(700, box.y + box.height / 2, { steps: 4 });
+    await page.mouse.up();
+    await page.waitForChanges();
+    expect(await page.evaluate(() => location.hash)).toBe('');
+    await page.click('sc-account-nav >>> a[href="#notifications"]');
+    await page.waitForChanges();
+    expect(await page.evaluate(() => location.hash)).toBe('#notifications');
+  });
+
   describeAxe('sc-account-nav', ALL_STATES);
 });

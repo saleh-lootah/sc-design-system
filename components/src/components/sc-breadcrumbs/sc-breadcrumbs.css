@@ -14,7 +14,9 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0 var(--sc-space-8);
+  /* 4px between wrapped rows, so the 44px hit areas of links on neighbouring rows never
+     overlap (40px rows, each link's target reaches 2px past it above and below). */
+  gap: var(--sc-space-4) var(--sc-space-8);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -37,8 +39,10 @@
   color: var(--sc-color-on-surface-variant);
 }
 
-/* 10px of block padding gives each link a target taller than 24px (WCAG 2.5.8). */
+/* Ancestor links are navigation links (R6, CMP-08): they stay underlined at rest as well,
+   which the chevrons and their position in the trail back up. */
 .link {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: var(--sc-space-4);
@@ -53,6 +57,16 @@
 
 .link:lang(ar) {
   text-underline-offset: 5px;
+}
+
+/* The hit area reaches 44 x 44 (A11Y-04) with an invisible extension centred on the link, so
+   the layout doesn't move. The 44px of chevron and gaps between two links (8 + 4 + 20 + 4 + 8)
+   keeps neighbouring targets from overlapping however short the labels are. */
+.link::after {
+  content: '';
+  position: absolute;
+  inset-block: min(0px, calc((100% - var(--sc-size-target-min)) / 2));
+  inset-inline: min(0px, calc((100% - var(--sc-size-target-min)) / 2));
 }
 
 @media (hover: hover) and (pointer: fine) {

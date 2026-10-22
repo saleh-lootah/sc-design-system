@@ -80,6 +80,18 @@ describe('sc-skip-link (e2e)', () => {
     expect(await inner(page, 'getComputedStyle(control).fontSize')).toBe('20px');
   });
 
+  it('is a navigation link: no underline at rest, underlined on hover (R6, CMP-08)', async () => {
+    for (const lang of ['en', 'ar'] as const) {
+      const page = await newScPage(PAGE, { lang });
+      await page.keyboard.press('Tab');
+      expect(await inner(page, 'getComputedStyle(control).textDecorationLine')).toBe('none');
+      await page.hover('sc-skip-link >>> [part="control"]');
+      expect(await inner(page, 'getComputedStyle(control).textDecorationLine')).toBe('underline');
+      expect(await inner(page, 'getComputedStyle(control).textDecorationThickness')).toBe('1px');
+      expect(await inner(page, 'getComputedStyle(control).textUnderlineOffset')).toBe(lang === 'ar' ? '5px' : '4px');
+    }
+  });
+
   describeAxe('sc-skip-link', PAGE);
 
   for (const ctx of contexts) {

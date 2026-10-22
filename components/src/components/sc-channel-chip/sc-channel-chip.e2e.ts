@@ -108,5 +108,35 @@ describe('sc-channel-chip (e2e)', () => {
     expect(await chip(page, 'sc-channel-chip', 'getComputedStyle(chip.querySelector("svg")).transform')).toBe('matrix(-1, 0, 0, 1, 0, 0)');
   });
 
+  it('is a navigation link: no underline at rest, underlined on hover, identified by its chevron (R6, CMP-08)', async () => {
+    for (const lang of ['en', 'ar'] as const) {
+      const page = await newScPage(`<sc-channel-chip channel="transport" href="#transport"></sc-channel-chip><sc-channel-chip id="plain" channel="visit"></sc-channel-chip>`, { lang });
+      const deco = () => chip(page, 'sc-channel-chip', 'getComputedStyle(chip.querySelector(".label")).textDecorationLine');
+      expect(await deco()).toBe('none');
+      // The cue that it is a link without the underline: the end chevron.
+      expect(await chip(page, 'sc-channel-chip', 'chip.querySelector("[part=icon] svg").getBoundingClientRect().width')).toBe(16);
+      await page.hover('sc-channel-chip');
+      expect(await deco()).toBe('underline');
+      // A chip without href is not a link: no chevron and no hover underline.
+      await page.hover('#plain');
+      expect(await chip(page, '#plain', 'chip.querySelector("[part=icon]")')).toBeNull();
+      expect(await chip(page, '#plain', 'getComputedStyle(chip.querySelector(".label")).textDecorationLine')).toBe('none');
+    }
+  });
+
+  it('follows the link on release only: pressing, sliding off and releasing does nothing (WCAG 2.5.2)', async () => {
+    const page = await newScPage(`<sc-channel-chip channel="transport" href="#transport"></sc-channel-chip><div style="block-size: 400px"></div>`);
+    const box = (await (await page.$('sc-channel-chip'))!.boundingBox())!;
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(box.x + box.width / 2, 300, { steps: 4 });
+    await page.mouse.up();
+    await page.waitForChanges();
+    expect(await page.evaluate(() => location.hash)).toBe('');
+    await page.click('sc-channel-chip');
+    await page.waitForChanges();
+    expect(await page.evaluate(() => location.hash)).toBe('#transport');
+  });
+
   describeAxe('sc-channel-chip', ALL);
 });

@@ -24,7 +24,7 @@ The filters applied to a list of results, as removable chips beside the result c
 | State | Rule |
 | --- | --- |
 | Hover (fine pointers) | Chip `channel-container`; clear underline 2px; 120ms |
-| Pressed (pointer) | Scale 0.97 over 150ms; never from the keyboard (MOT-02) |
+| Pressed (pointer) | Scale 0.97 over 150ms; never from the keyboard (MOT-02). Visual only: a chip removes, and Clear all clears, on release (the native `click`), so pressing, sliding off and releasing does nothing (WCAG 2.5.2) |
 | Focus | U1 ring (3px `focus-ring`, 2px offset) round the pill |
 | Forced colours | Chip edge `ButtonText` |
 
@@ -87,4 +87,4 @@ Leaf, 4 KiB gzip; measured in the C3 report.
 
 ## Tests
 
-`sc-filter-chips.spec.tsx`, `sc-filter-chips.e2e.ts` (names, 32/44 geometry and colours, removal and focus order, clear all, page-driven count, Arabic plurals and RTL, pointer-only press, axe on every channel, `describeAxe`), `sc-filter-chips.visual.e2e.ts`.
+`sc-filter-chips.spec.tsx`, `sc-filter-chips.e2e.ts` (names, 32/44 geometry and colours, removal and focus order, clear all, page-driven count, Arabic plurals and RTL, pointer-only press, press-and-slide-off removes nothing while a click does, axe on every channel, `describeAxe`), `sc-filter-chips.visual.e2e.ts`.

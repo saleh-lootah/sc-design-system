@@ -106,5 +106,44 @@ describe('sc-bottom-nav (e2e)', () => {
     expect(await page.evaluate(() => location.hash)).toBe('#services');
   });
 
+  it('marks the current item with a 3px bar as well as Bold, so the cue holds in Arabic where every label is Bold (R10)', async () => {
+    for (const lang of ['en', 'ar'] as const) {
+      const page = await newScPage(PAGE, { lang });
+      await mobile(page);
+      const weights = await read<string[]>(page, 'items.map((a) => getComputedStyle(a).fontWeight)');
+      if (lang === 'ar') expect(new Set(weights)).toEqual(new Set(['700'])); // weight alone tells nothing in Arabic
+      const bars = await read<{ content: string; w: number; h: number; bg: string; top: number; centre: number; pill: number }[]>(
+        page,
+        `items.map((a) => {
+          const s = getComputedStyle(a, "::before");
+          const r = a.getBoundingClientRect();
+          const p = a.querySelector(".indicator").getBoundingClientRect();
+          return { content: s.content, w: parseFloat(s.width), h: parseFloat(s.height), bg: s.backgroundColor, top: parseFloat(s.top), centre: r.left + parseFloat(s.left) + parseFloat(s.width) / 2, pill: p.left + p.width / 2 };
+        })`,
+      );
+      expect(bars.filter((b) => b.content !== 'none').length).toBe(1);
+      const bar = bars[0];
+      expect(bar.content).not.toBe('none');
+      expect([bar.w, bar.h, bar.top]).toEqual([56, 3, 0]);
+      expect(Math.abs(bar.centre - bar.pill)).toBeLessThan(0.5);
+      expect(bar.bg).toBe(await token(page, '--sc-color-channel-action', 'backgroundColor'));
+    }
+  });
+
+  it('follows an item on release only: pressing, sliding off and releasing does nothing (WCAG 2.5.2)', async () => {
+    const page = await newScPage(PAGE);
+    await mobile(page);
+    const box = (await (await page.$('sc-bottom-nav >>> a[href="#services"]'))!.boundingBox())!;
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(box.x + box.width / 2, 100, { steps: 4 });
+    await page.mouse.up();
+    await page.waitForChanges();
+    expect(await page.evaluate(() => location.hash)).toBe('');
+    await page.click('sc-bottom-nav >>> a[href="#services"]');
+    await page.waitForChanges();
+    expect(await page.evaluate(() => location.hash)).toBe('#services');
+  });
+
   describeAxe('sc-bottom-nav', ALL_STATES);
 });

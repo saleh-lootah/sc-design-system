@@ -23,12 +23,16 @@ The primary navigation of signed-in channel pages on phones and tablets.
 | State | Rule |
 | --- | --- |
 | Default | Icon and label `on-surface-variant` |
-| Current | Indicator `channel-container`, icon and label `channel-action`, label Bold, `aria-current="page"` |
+| Current | Indicator `channel-container`, a 3px `channel-action` bar along the top rule above the indicator, as wide as it (56px, `size-border-accent`), Filled icon and label `channel-action`, label Bold, `aria-current="page"`. The bar is the non-weight cue R10 asks for: Arabic labels are already Bold (D12), and the indicator tint is only about 1.3:1 against `surface` (1.8:1 in dark mode), while the bar is 6.3:1 or more on every channel |
 | Pressed | Indicator `on-surface` at 12% |
 | Focus | U1 ring drawn inside the item (offset −3px), so the screen edge never clips it |
-| Forced colours | `LinkText`; current indicator `Highlight` |
+| Forced colours | `LinkText`; current indicator and bar `Highlight` |
 
 Motion: the indicator crossfades its colour over `duration-fast`; it never slides.
+
+## Links and press
+
+Items are navigation links (R6): never underlined, identified by their icons and their place in the bar. Pressed is visual only (the indicator tint); an item follows on release (the native `click`), so pressing, sliding off and releasing does nothing (WCAG 2.5.2).
 
 ## Page reservation
 
@@ -44,11 +48,11 @@ The item order mirrors (the first destination is on the right).
 
 ## Budget
 
-Custom-elements closure 3,858 B gzip (4 KiB budget), its own CSS 777 B.
+Custom-elements closure 4,450 B gzip (4.5 KiB budget, perf-budgets.json), its own CSS 852 B (with the current bar, v2-fixes-nav).
 
 ## Tests
 
-`sc-bottom-nav.spec.tsx` (landmark, items, indicator and label order, current, Arabic and label override), `sc-bottom-nav.e2e.ts` (docked, height, roles, equal widths; hidden from 1024px; page reservation; current indicator size and colours, label colours and type EN/AR; RTL order; ring inside the item and Enter; `describeAxe`), `sc-bottom-nav.visual.e2e.ts`.
+`sc-bottom-nav.spec.tsx` (landmark, items, indicator and label order, current, Arabic and label override), `sc-bottom-nav.e2e.ts` (docked, height, roles, equal widths; hidden from 1024px; page reservation; current indicator size and colours, the current bar EN/AR with every Arabic label Bold (R10), activation on release only, label colours and type EN/AR; RTL order; ring inside the item and Enter; `describeAxe`), `sc-bottom-nav.visual.e2e.ts`.
 
 ## Open
 

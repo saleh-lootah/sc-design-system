@@ -14,7 +14,7 @@ The side navigation of the signed-in account area. Spec: `specs/sc-account-nav.m
 </sc-account-nav>
 ```
 
-- Write the items as plain links. `aria-current="page"` marks the current one (channel-subtle fill, 3px bar, channel-action icon and Bold label); `data-icon` picks a 24px icon (`description`, `credit-card`, `notifications`, `person`, `history`, `home`, `apps`, `logout`); `data-count` adds a badge read as `data-count-label` (default "{count} new" / "{count} جديدة"); `data-sign-out` puts the item after the divider.
+- Write the items as plain links. `aria-current="page"` marks the current one (channel-subtle fill, 3px bar, channel-action icon and Bold label; the bar is the cue that still works in Arabic, where every label is Bold, R10); `data-icon` picks a 24px icon (`description`, `credit-card`, `notifications`, `person`, `history`, `home`, `apps`, `logout`); `data-count` adds a badge read as `data-count-label` (default "{count} new" / "{count} جديدة"); `data-sign-out` puts the item after the divider.
 - 3 of 12 columns on wide screens. Below 600px it becomes one row of 44px items that scrolls sideways.
 - The links are what shows before upgrade and without JavaScript. Changing them re-renders the nav.
 

@@ -25,11 +25,11 @@ Points to another channel that also offers the service: "Also on Dubai Transport
 | `subtle` (default) | `channel-subtle` | none (transparent 1px for forced colours) | `label-small` Medium in `channel-action` | white cards |
 | `outlined` | `surface` | 1px `channel-outline` | `label-small` Bold in `channel-action` | on a channel tint |
 
-`label-small`: 14/18 EN, 16/22 Bold AR. Hover (links, fine pointers): the label underlines 1px at 3px (5px in Arabic). Focus: U1 ring. Forced colours: `CanvasText` / `LinkText` edge, `CanvasText` dot. Never dismissable.
+`label-small`: 14/18 EN, 16/22 Bold AR. Hover (links, fine pointers): the label underlines 1px at 3px (5px in Arabic). A linked chip is a navigation link (R6): no underline at rest, because the chip shape and its end chevron identify it as a link; a chip without `href` has neither chevron nor hover underline. Focus: U1 ring. Forced colours: `CanvasText` / `LinkText` edge, `CanvasText` dot. Never dismissable.
 
 ## Motion
 
-None (A19). v1's press scale and hover tint are dropped.
+None (A19). v1's press scale and hover tint are dropped. A linked chip follows on release (the native `click`): pressing, sliding off and releasing does nothing (WCAG 2.5.2).
 
 ## Strings
 
@@ -48,4 +48,4 @@ Custom-elements closure 3,966 B gzip (4 KiB budget), its own CSS 678 B.
 
 ## Tests
 
-`sc-channel-chip.spec.tsx` (seven channels and names, link, `data-channel` updates, Arabic and label override, variants), `sc-channel-chip.e2e.ts` (each channel's colours whatever the page channel; size, radius, type and the named channel's roles; outlined roles; theme; link focus, ring, Enter and 44px hit area; not focusable without href; Arabic and mirrored chevron; `describeAxe` EN/AR × light/dark), `sc-channel-chip.visual.e2e.ts`.
+`sc-channel-chip.spec.tsx` (seven channels and names, link, `data-channel` updates, Arabic and label override, variants), `sc-channel-chip.e2e.ts` (each channel's colours whatever the page channel; size, radius, type and the named channel's roles; outlined roles; theme; link focus, ring, Enter and 44px hit area; not focusable without href; Arabic and mirrored chevron; no underline at rest and underline on hover EN/AR; activation on release only; `describeAxe` EN/AR × light/dark), `sc-channel-chip.visual.e2e.ts`.
