@@ -327,14 +327,25 @@ describe('sc-date-range (e2e)', () => {
     expect(await page.evaluate(() => (window as unknown as { changes: number }).changes)).toBe(1);
   });
 
-  it('slides the sheet up on the drawer easing and fades the scrim', async () => {
+  it('slides the sheet up on the drawer easing and fades the scrim when opened by pointer', async () => {
     const page = await newScPage(field());
     await page.setViewport({ width: 375, height: 812 });
-    await openWithKeyboard(page);
+    const box = await inner<number[]>(page, `((r) => [r.left + r.width / 2, r.top + r.height / 2])(root.querySelector('.sc-date-range__calendar-button').getBoundingClientRect())`);
+    await page.mouse.click(box[0], box[1]);
+    await page.waitForChanges();
+    await page.waitForFunction(() => document.querySelector('#d dialog')!.hasAttribute('open'));
     const motion = await inner<string[]>(page, `((s) => [s.transitionTimingFunction.match(/^(cubic-bezier\\([^)]*\\)|[\\w-]+)/)[0], s.transitionDuration.split(', ')[0]])(getComputedStyle(root.querySelector('dialog')))`);
     const drawer = await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--sc-easing-drawer').trim());
     expect(motion[0].replace(/\s/g, '')).toBe(drawer.replace(/\s/g, ''));
     expect(motion[1]).toBe('0.28s');
+  });
+
+  it('opens the sheet instantly from the keyboard, sheet and scrim alike (MOT-02, R16)', async () => {
+    const page = await newScPage(field());
+    await page.setViewport({ width: 375, height: 812 });
+    await openWithKeyboard(page);
+    const durations = await inner<string[][]>(page, `[getComputedStyle(root.querySelector('dialog')).transitionDuration.split(', '), getComputedStyle(root.querySelector('dialog'), '::backdrop').transitionDuration.split(', ')]`);
+    for (const list of durations) for (const d of list) expect(d).toBe('0s');
   });
 
   it('gives the month buttons a 44px target that meets no neighbour (A11Y-04)', async () => {

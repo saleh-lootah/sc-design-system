@@ -211,7 +211,8 @@ Applies the emil-design-eng and mobile-native rules.
 | Element | Motion |
 | --- | --- |
 | Popover open | Opacity 0 → 1 and scale 0.96 (`scale.enter`) → 1, from `transform-origin` at the field's top inline-start corner (the trigger). 200ms, `easing.enter`. Never from scale 0. |
-| Popover open from the keyboard | Instant (MOT-02, OQ-28): Enter or Space on the calendar button (a click with `detail` 0) adds `sc-date-range__picker--instant`, which sets every transition to `duration.instant`; a later close by Escape is instant too. Pointer opening and `open()` keep the motion. Alt+Arrow Down isn't supported. The sheet keeps its slide, because it is the phone pattern and the slide shows where it came from. |
+| Popover open from the keyboard | Instant (MOT-02, OQ-28): Enter or Space on the calendar button (a click with `detail` 0) adds `sc-date-range__picker--instant`, which sets every transition to `duration.instant`; a later close by Escape is instant too. Pointer opening and `open()` keep the motion. Alt+Arrow Down isn't supported. |
+| Sheet open from the keyboard | Instant too (R16): the same class on the sheet sets the sheet's and the scrim's transitions to `duration.instant`, so it appears with no slide; a later close by Escape is instant. Pointer and touch opening keep the slide. |
 | Popover close | Opacity only, 160ms (`duration.exit`), `easing.exit`. About 20% faster than the entrance. |
 | Sheet open | translateY(100%) → 0, 280ms (`duration.slow`), `easing.drawer` (`cubic-bezier(0.32, 0.72, 0, 1)`). The scrim fades in with it over 280ms, `easing.enter`. |
 | Sheet close | Can be dragged down: a velocity flick over 0.11 px/ms dismisses it. Otherwise back down over 224ms (`duration.slow` × 0.8), `easing.drawer`; the scrim fades out with it. |

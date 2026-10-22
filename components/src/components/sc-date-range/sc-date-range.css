@@ -557,6 +557,15 @@
     transition: none;
   }
 
+  /* MOT-02 and R16: opened from the keyboard, the sheet and its scrim appear instantly, with no
+     slide; pointer and touch opening keep the motion. */
+  .sc-date-range__picker--sheet.sc-date-range__picker--instant,
+  .sc-date-range__picker--sheet.sc-date-range__picker--instant[open],
+  .sc-date-range__picker--sheet.sc-date-range__picker--instant::backdrop,
+  .sc-date-range__picker--sheet.sc-date-range__picker--instant[open]::backdrop {
+    transition-duration: var(--sc-duration-instant);
+  }
+
   .sc-date-range__picker--sheet::backdrop {
     background: var(--sc-color-scrim);
     opacity: 0;

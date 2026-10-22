@@ -1034,7 +1034,7 @@ export class ScDateRange {
         </div>
         <dialog
           ref={(el) => (this.sheet = el)}
-          class={{ 'sc-date-range__picker': true, 'sc-date-range__picker--sheet': true }}
+          class={{ 'sc-date-range__picker': true, 'sc-date-range__picker--sheet': true, 'sc-date-range__picker--instant': this.instant }}
           aria-labelledby={`${this.uid}-title`}
           onCancel={(ev: Event) => {
             ev.preventDefault();
