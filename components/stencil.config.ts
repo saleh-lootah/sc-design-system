@@ -146,7 +146,8 @@ export const config: Config = {
     // fine pointer in headless mode too.
     browserHeadless: process.env.SC_HEADFUL ? false : 'shell',
     // GitHub's Ubuntu runners block Chromium's sandbox (AppArmor), so CI runs without it.
-    browserArgs: ['--hide-scrollbars', ...(process.env.CI ? ['--no-sandbox'] : [])],
+    // Headful on CI clears CI (see ci.yml), so it needs the runner's arguments too.
+    browserArgs: ['--hide-scrollbars', ...(process.env.CI || process.env.SC_HEADFUL ? ['--no-sandbox', '--disable-dev-shm-usage'] : [])],
     // Keep the e2e page small and deterministic.
     browserWaitUntil: 'load',
     // Stencil does not pass testing.testTimeout on to Jest (it stayed at 45 s in v1), so the
