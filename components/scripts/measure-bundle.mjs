@@ -311,7 +311,9 @@ const fonts = existsSync(fontDir) ? readdirSync(fontDir).filter((f) => f.endsWit
  */
 let pageFonts = { en: null, ar: null, files: { en: [], ar: [] }, error: null };
 if (flag('--no-browser') || opt('--page')) pageFonts.error = flag('--no-browser') ? 'skipped (--no-browser)' : 'skipped (custom --page)';
-else {
+else if (!existsSync(process.env.SC_BROWSER || '/Applications/Helium.app/Contents/MacOS/Helium')) {
+  pageFonts.error = `not measured: no browser at ${process.env.SC_BROWSER || '/Applications/Helium.app/Contents/MacOS/Helium'} (set SC_BROWSER)`;
+} else {
   try {
     const { typicalPageFonts } = await import('./lib/typical-page.mjs');
     const got = await typicalPageFonts(root, process.env.SC_BROWSER || '/Applications/Helium.app/Contents/MacOS/Helium');

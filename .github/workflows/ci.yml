@@ -59,7 +59,7 @@ jobs:
 
       - name: Bundle report (informational on every push)
         working-directory: components
-        run: npm run measure:bundle >> "$GITHUB_STEP_SUMMARY"
+        run: npm run measure:bundle -- --no-browser >> "$GITHUB_STEP_SUMMARY"
 
   quality:
     name: e2e, axe, screenshots, budgets, runtime
