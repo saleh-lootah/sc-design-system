@@ -59,7 +59,7 @@ On medium and wider screens the picker is a popover anchored below the field.
   - The list is configurable: a booking calendar uses "This weekend" and "Next 7 nights" instead.
 - **Months:**
   - Two months side by side when there are at least 720px; otherwise one.
-  - Month heading: `title-s`, `ink-strong` ("September 2026" · "سبتمبر 2026"), with previous and next icon buttons (36 circles, `fill-quiet`, chevrons).
+  - Month heading: `title-s`, `ink-strong` ("September 2026" · "سبتمبر 2026"), with previous and next icon buttons (36 circles, `fill-quiet`, chevrons). Each button is a 44 × 44 target (A11Y-04) with the 36 circle drawn inside it, so the extra target is invisible and doesn't meet the month title or a neighbour.
   - Previous sits above the first month at inline-start, and next above the last month at inline-end.
 - **Weekday row:** `caption` in `muted`; the week starts on Monday, the UAE working week.
   - English: Mo Tu We Th Fr Sa Su.
@@ -123,9 +123,11 @@ In dark mode the same roles use their `-dark` tokens: `action-dark`, `subtle-dar
 - **Header:** the title "Choose dates" (`title-m`) and a close button.
 - **Pinned summary row:** two tappable chips, "From 21 Sep" and "To 9 Oct". Tapping a chip says which end the next tap sets.
 - **Presets:** a horizontal row of `fill-quiet` chips. It scrolls; in RTL it starts at the right.
-- **Months:** a vertical continuous list, with the weekday row sticky under the header. The scroll area has `overscroll-behavior: contain`.
-- **Footer:** sticky, holding a full-width primary "Apply" and a quiet "Clear" above it. Padding-bottom is `space-16` plus the safe-area inset.
-- **Day cells:** 44×44 on phones.
+- **Months:** a vertical continuous list. The weekday row is pinned under the header, outside the scroll area, so it can't cover a day (WCAG 2.4.11). The scroll area has `overscroll-behavior: contain` and `scroll-padding-block: space-8`, so a day focused from the keyboard scrolls fully into view with its focus ring. The list is centred on the focused month when the sheet opens and stays put while focus moves, so moving through months never drops focus; it re-centres only when focus or a preset leaves it.
+- **Footer:** pinned below the scroll area (it can't cover a day either), holding a full-width primary "Apply" and a quiet "Clear" above it. Padding-bottom is `space-16` plus the safe-area inset.
+- **Day cells:** 44×44 on phones. At 320 CSS px (WCAG 1.4.10) the sheet doesn't scroll sideways: the calendar's inline padding (weekday row and month list) shrinks from `space-20` to fit seven 44px columns, `clamp(space-4, (100cqi − 7 × 44px) / 2, space-20)`, which is 6px each side at 320px. Wider than 348px nothing changes.
+  - Why: A11Y-04 asks for 44px, and WCAG 2.5.8's 24px minimum is only the floor. Keeping 44 × 44 targets that don't overlap meets both with no recorded exception; a narrower margin at the very smallest width costs less than smaller targets or a list fallback. The header, chips and presets keep `space-20`.
+  - Below 316px (zoom beyond 400%, or a narrower device) the columns narrow to fit and the day button takes the column width (`min(44px, 100%)`), still 44 tall and never overlapping. That is the A11Y-04 exception, and only there.
 
 **Medium and wider:** the popover described above, with one or two months.
 
@@ -209,6 +211,7 @@ Applies the emil-design-eng and mobile-native rules.
 | Element | Motion |
 | --- | --- |
 | Popover open | Opacity 0 → 1 and scale 0.96 (`scale.enter`) → 1, from `transform-origin` at the field's top inline-start corner (the trigger). 200ms, `easing.enter`. Never from scale 0. |
+| Popover open from the keyboard | Instant (MOT-02, OQ-28): Enter or Space on the calendar button (a click with `detail` 0) adds `sc-date-range__picker--instant`, which sets every transition to `duration.instant`; a later close by Escape is instant too. Pointer opening and `open()` keep the motion. Alt+Arrow Down isn't supported. The sheet keeps its slide, because it is the phone pattern and the slide shows where it came from. |
 | Popover close | Opacity only, 160ms (`duration.exit`), `easing.exit`. About 20% faster than the entrance. |
 | Sheet open | translateY(100%) → 0, 280ms (`duration.slow`), `easing.drawer` (`cubic-bezier(0.32, 0.72, 0, 1)`). The scrim fades in with it over 280ms, `easing.enter`. |
 | Sheet close | Can be dragged down: a velocity flick over 0.11 px/ms dismisses it. Otherwise back down over 224ms (`duration.slow` × 0.8), `easing.drawer`; the scrim fades out with it. |
@@ -220,7 +223,7 @@ Applies the emil-design-eng and mobile-native rules.
 
 ## Budget (v2)
 
-`perf-budgets.json` gives `sc-date-range` **21 KiB gzip** instead of 16 KiB: the custom-elements closure counts in full `sc-button` (3.2 KiB with its strings), the icon set (0.8) and the locale controller (0.9), which a page with any button pays once. Measured: closure 20.5 KiB; the component's own cost (module with its CSS, field helpers, strings, digits) 15.6 KiB, inside the original 16 KiB. v1 was 22.2 KiB. Needs the coordinator's sign-off.
+`perf-budgets.json` gives `sc-date-range` **21 KiB gzip** instead of 16 KiB: the custom-elements closure counts in full `sc-button` (3.2 KiB with its strings), the icon set (0.8) and the locale controller (0.9), which a page with any button pays once. Measured: closure 20.2 KiB (after the review fixes B2, B4, B5 and B10); the component's own cost (module with its CSS, field helpers, strings, digits) 15.6 KiB, inside the original 16 KiB. v1 was 22.2 KiB. Needs the coordinator's sign-off.
 
 ## Code
 

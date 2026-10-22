@@ -337,6 +337,78 @@ describe('sc-date-range (e2e)', () => {
     expect(motion[1]).toBe('0.28s');
   });
 
+  it('gives the month buttons a 44px target that meets no neighbour (A11Y-04)', async () => {
+    const page = await newScPage(field('start="2026-09-21" months="2"'));
+    await openWithKeyboard(page);
+    const boxes = await inner<number[][]>(page, `['.sc-date-range__nav--prev', '.sc-date-range__month-title', '.sc-date-range__nav--next'].map((q) => { const r = root.querySelector(q).getBoundingClientRect(); return [r.left, r.right, r.top, r.bottom]; })`);
+    const [prev, title, next] = boxes;
+    for (const b of [prev, next]) {
+      expect(b[1] - b[0]).toBeGreaterThanOrEqual(44);
+      expect(b[3] - b[2]).toBeGreaterThanOrEqual(44);
+    }
+    expect(prev[1]).toBeLessThanOrEqual(title[0]);
+    // The visible circle stays 36px inside the target.
+    expect(await inner(page, `((s) => parseFloat(s.width) + 2 * parseFloat(s.borderLeftWidth))(getComputedStyle(root.querySelector('.sc-date-range__nav'), '::before'))`)).toBe(36);
+  });
+
+  it('keeps a day focused from the keyboard clear of the sheet weekday row and footer (2.4.11)', async () => {
+    const page = await newScPage(field('start="2026-09-01"'));
+    await page.setViewport({ width: 390, height: 664 });
+    await openWithKeyboard(page);
+    const clear = () =>
+      inner<number[]>(
+        page,
+        `(() => { const r = document.activeElement.getBoundingClientRect(); const ring = 5; const w = root.querySelector('.sc-date-range__weekdays').getBoundingClientRect(); const f = root.querySelector('.sc-date-range__picker-foot').getBoundingClientRect(); const b = root.querySelector('.sc-date-range__picker-body').getBoundingClientRect(); return [r.top - ring - Math.max(w.bottom, b.top), Math.min(f.top, b.bottom) - (r.bottom + ring)]; })()`,
+      );
+    const keys = [...Array(10).fill('ArrowDown'), ...Array(10).fill('ArrowUp')];
+    for (const key of keys) {
+      await page.keyboard.press(key as never);
+      await page.waitForChanges();
+      const [above, below] = await clear();
+      expect(await focused(page)).toMatch(/^2026-(09|10|11)-/);
+      expect(above).toBeGreaterThanOrEqual(0);
+      expect(below).toBeGreaterThanOrEqual(0);
+    }
+    expect(await focused(page)).toBe('2026-09-01');
+  });
+
+  for (const lang of ['en', 'ar'] as const) {
+    it(`fits the sheet at 320px without sideways scrolling, with 44px day targets that don't overlap (1.4.10, ${lang})`, async () => {
+      const page = await newScPage(field('start="2026-09-21" end="2026-10-09" presets', lang), { lang });
+      await page.setViewport({ width: 320, height: 640 });
+      await openWithKeyboard(page);
+      const result = await inner<{ doc: number[]; body: number[]; small: number; overlaps: number }>(
+        page,
+        `(() => {
+          const e = document.scrollingElement, body = root.querySelector('.sc-date-range__picker-body');
+          let small = 0, overlaps = 0;
+          for (const row of root.querySelectorAll('.sc-date-range__grid tbody tr')) {
+            const rs = [...row.querySelectorAll('.sc-date-range__day-button')].map((b) => b.getBoundingClientRect()).sort((a, b) => a.left - b.left);
+            rs.forEach((r, i) => { if (r.width < 44 || r.height < 44) small++; if (i && r.left < rs[i - 1].right - 0.01) overlaps++; });
+          }
+          return { doc: [e.scrollWidth, e.clientWidth], body: [body.scrollWidth, body.clientWidth], small, overlaps };
+        })()`,
+      );
+      expect(result.doc[0]).toBe(result.doc[1]);
+      expect(result.body[0]).toBe(result.body[1]);
+      expect(result.small).toBe(0);
+      expect(result.overlaps).toBe(0);
+    });
+  }
+
+  it('opens the popover instantly from the keyboard and with motion from a pointer (MOT-02)', async () => {
+    const page = await newScPage(field());
+    await openWithKeyboard(page);
+    const durations = () => inner<string[]>(page, `getComputedStyle(root.querySelector('.sc-date-range__picker--popover')).transitionDuration.split(', ')`);
+    expect(new Set(await durations())).toEqual(new Set(['0s']));
+    await page.keyboard.press('Escape');
+    await page.waitForChanges();
+    await page.click('#d .sc-date-range__calendar-button');
+    await page.waitForChanges();
+    expect(await inner(page, `root.querySelector('.sc-date-range__picker--popover').matches(':popover-open')`)).toBe(true);
+    expect((await durations()).some((d) => d !== '0s')).toBe(true);
+  });
+
   it('marks applied preset chips with a check, 40px tall', async () => {
     const page = await newScPage(field('presets max="2026-10-19"'));
     await openWithKeyboard(page);
