@@ -26,10 +26,18 @@ export interface LanguageSwitchDetail {
  *
  * The language name is kept as one light-DOM `<span lang>` child that the component writes
  * itself and shows through its slot: the type roles switch by `lang` in the document, which
- * a span inside the shadow root could not reach. Don't add or remove children yourself.
+ * a span inside the shadow root could not reach. Don't add or remove children yourself, other
+ * than the `fallback` link below.
+ *
+ * Without JavaScript (PERF-04, LANG-04): the switch renders in shadow DOM, so write the same
+ * link as a light-DOM child, `<a slot="fallback" href hreflang lang>` with the other
+ * language's name. The browser shows it until the switch upgrades; the upgraded switch has no
+ * `fallback` slot, so it is then neither shown nor read.
  *
  * Without `href` it falls back to a `<button lang>`. That mode is deprecated and will be
  * removed: always set `href`.
+ *
+ * @slot fallback - Never shown once upgraded: the link for pages without JavaScript (PERF-04), shown until the switch upgrades.
  *
  * @part control - The inner `<a>` (or, deprecated, `<button>` when `href` is missing).
  * @part label - The wrapper around the language name.

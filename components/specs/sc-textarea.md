@@ -27,7 +27,7 @@ As `sc-text-input`. Over the limit: the count turns `error` Bold ("You have 6 ch
 
 - Arabic counts use the right plural for the number (حرف واحد، حرفان، 3 أحرف، 120 حرفًا، 100 حرف).
 - Emoji and combined characters count as one (user-perceived characters).
-- Arabic-Indic digits typed into the text become Latin digits (LANG-21).
+- Arabic-Indic digits typed into the text become Latin digits (LANG-21). Bidirectional control characters (U+200E, U+200F, U+202A–U+202E, U+2066–U+2069), which a code copied from an Arabic SMS often carries, are removed from pasted or typed text, with the caret kept on the same character (R9, amends LANG-21).
 
 ## Accessibility
 
@@ -59,7 +59,7 @@ Form field, 7 KiB gzip. Measured: see the report table in `docs/v2/migration.md`
 
 ## Tests
 
-`sc-textarea.spec.tsx`, `sc-textarea.e2e.ts` (light DOM, description, count and polite announcement, over-limit validity, submit/reset/fieldset, Enter never submits, LANG-21, Arabic plurals, type, axe on every channel, `describeAxe`), `sc-textarea.visual.e2e.ts`.
+`sc-textarea.spec.tsx`, `sc-textarea.e2e.ts` (light DOM, description, count and polite announcement, over-limit validity, submit/reset/fieldset, Enter never submits, LANG-21 and pasted bidi controls (R9), Arabic plurals, type, axe on every channel, `describeAxe`), `sc-textarea.visual.e2e.ts`.
 
 ## Paper board alignment
 

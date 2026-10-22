@@ -83,6 +83,25 @@ describe('sc-site-header (e2e)', () => {
     expect(tree).toMatch(/"role":"navigation"[^{}]*"name":"Main"/);
   });
 
+  // R10: Bold is no cue in Arabic, where every nav item is already Bold (D12), so the current
+  // item also carries the 3px bar, in both languages.
+  it.each(['en', 'ar'] as const)('marks the current item with a non-weight cue, the 3px bar (%s)', async (lang) => {
+    // Signed in, so the Arabic row is not pushed into the compact fallback (tested below).
+    const page = await newScPage(siteHeader(lang, { signedIn: true }), { lang });
+    await desktop(page);
+    expect(await inRoot(page, 'getComputedStyle(root.querySelector(".nav")).display')).toBe('flex');
+    const [current, other] = await page.evaluate(() =>
+      ['a[slot="nav"][aria-current="page"]', 'a[slot="nav"]:not([aria-current])'].map((sel) => {
+        const s = getComputedStyle(document.querySelector(sel)!);
+        return [s.borderBottomStyle, s.borderBottomWidth, s.borderBottomColor, s.fontWeight];
+      }),
+    );
+    expect(current.slice(0, 3)).toEqual(['solid', '3px', await token(page, '--sc-color-channel-action')]);
+    expect(other[2]).toBe('rgba(0, 0, 0, 0)');
+    // In Arabic both are Bold: the bar is what tells them apart.
+    if (lang === 'ar') expect(other[3]).toBe(current[3]);
+  });
+
   it('marks the current item with a 3px channel-action bar, Bold and aria-current, and keeps 44px targets', async () => {
     const page = await newScPage(siteHeader('en'));
     await desktop(page);

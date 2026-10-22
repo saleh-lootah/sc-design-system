@@ -14,10 +14,18 @@
   <h2 id="ft-simple" class="sc-type-headline-small" data-ar="بسيط">Simple</h2>
   <div class="pg-frame">
     <sc-footer help-href="#help" accessibility-href="#accessibility" privacy-href="#privacy" cookies-href="#cookies" terms-href="#terms">
+      <nav slot="fallback" aria-label="Support links"><ul>
+        <li><a href="#help" data-ar="المساعدة والتواصل">Help and contact</a></li>
+        <li><a href="#accessibility" data-ar="بيان إمكانية الوصول">Accessibility statement</a></li>
+        <li><a href="#privacy" data-ar="الخصوصية">Privacy</a></li>
+        <li><a href="#terms" data-ar="شروط الاستخدام">Terms of use</a></li>
+        <li><a href="#cookies" data-ar="ملفات تعريف الارتباط">Cookies</a></li>
+        <li><a href="#feedback" data-ar="شاركنا رأيك">Give feedback</a></li>
+      </ul></nav>
       <a href="#feedback" data-ar="شاركنا رأيك">Give feedback</a>
     </sc-footer>
   </div>
-  <p class="pg-note" data-ar="نصوص الروابط من ملف النصوص بلغة الصفحة. الروابط الإضافية في الفتحة الافتراضية.">Link text comes from strings, in the page language. Extra links go in the default slot.</p>
+  <p class="pg-note" data-ar="نصوص الروابط من ملف النصوص بلغة الصفحة. الروابط الإضافية في الفتحة الافتراضية. الروابط نفسها في slot=&quot;fallback&quot; تعمل من دون JavaScript، ولا تظهر بعد تحميل المكوّن.">Link text comes from strings, in the page language. Extra links go in the default slot. The same links in slot="fallback" work without JavaScript and are never shown once the footer upgrades (PERF-04).</p>
 </section>
 <style>
   .pg-frame { overflow: visible; border: 1px solid var(--sc-color-outline-variant); border-radius: var(--sc-radius-card); background: var(--sc-color-surface); }

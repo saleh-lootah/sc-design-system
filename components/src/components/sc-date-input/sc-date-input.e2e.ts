@@ -66,6 +66,20 @@ describe('sc-date-input (e2e)', () => {
     expect(await page.$eval('#d', (el) => Array.from(el.querySelectorAll('input:not([type=hidden])')).map((i) => (i as HTMLInputElement).value))).toEqual(['27', '3', '1990']);
   });
 
+  it('strips bidi control characters from a pasted value (R9, LANG-21)', async () => {
+    const page = await newScPage(`<form><sc-date-input id="d" name="dob" label="تاريخ الميلاد"></sc-date-input></form>`, { lang: 'ar' });
+    // A code copied from an Arabic SMS carries LANG-15 isolates: U+2066 ... U+2069.
+    await page.evaluate((sel: string) => {
+      const field = document.querySelector(sel)!.querySelector('[id$="-year"]') as HTMLInputElement;
+      field.focus();
+      document.execCommand('insertText', false, String.fromCharCode(0x2066) + '123456' + String.fromCharCode(0x2069));
+    }, '#d');
+    await page.waitForChanges();
+    expect(await page.evaluate((sel: string) => (document.querySelector(sel)!.querySelector('[id$="-year"]') as HTMLInputElement).value, '#d')).toBe('123456');
+    expect(await page.evaluate((sel: string) => (document.querySelector(sel)!.querySelector('[id$="-year"]') as HTMLInputElement).selectionStart, '#d')).toBe(6);
+    expect(await part(page, '#d', 'year', 'i.value')).toBe('123456');
+  });
+
   it('reports an impossible date and an empty required date as native validity errors', async () => {
     const page = await newScPage(`<form><sc-date-input id="d" name="d" label="Start date" required></sc-date-input></form>`);
     expect(await part(page, '#d', 'day', 'i.validationMessage')).toBe('Enter a date');

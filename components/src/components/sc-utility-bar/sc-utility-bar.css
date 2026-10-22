@@ -1,7 +1,8 @@
 /*
  * sc-utility-bar (v2, shadow DOM). Rules: decision U4 and Standard CHR-05 (a flat bar docked
  * to the bottom, elevation 1, a 1px outline-variant top edge; folds into the footer below
- * 1024px), component-language.md B4 for items, read through the decisions role table.
+ * 1024px; static below 600px of viewport height, R11), component-language.md B4 for items,
+ * read through the decisions role table.
  */
 :host {
   display: block;
@@ -74,20 +75,32 @@
   transition: --sc-layer var(--sc-duration-fast) var(--sc-easing-hover);
 }
 
-/* Expanded and wider: docked to the bottom edge, full width, flat (U4). ------------------ */
+/* Expanded and wider: the full-width row of icon items, docked to the bottom edge (U4). ---
+   Below 600px of viewport height (a short window, or high zoom) it stays the same row but
+   static, at the end of the page, so it never covers the focused element or a quarter of the
+   screen (R11; WCAG 2.4.11, 1.4.10). The component then publishes no reserved height. */
 @media (min-width: 1024px) {
+  .bar {
+    box-sizing: border-box;
+    max-inline-size: none;
+    padding-block: var(--sc-space-12);
+    padding-inline: var(--sc-grid-expanded-margin);
+    border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+  }
+}
+
+@media (min-width: 1024px) and (min-height: 600px) {
   .bar {
     position: fixed;
     inset-inline: 0;
     inset-block-end: 0;
     z-index: 30;
-    box-sizing: border-box;
-    max-inline-size: none;
-    padding-block: var(--sc-space-12) max(var(--sc-space-12), env(safe-area-inset-bottom));
-    padding-inline: var(--sc-grid-expanded-margin);
-    border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+    padding-block-end: max(var(--sc-space-12), env(safe-area-inset-bottom));
     box-shadow: var(--sc-elevation-1);
   }
+}
+
+@media (min-width: 1024px) {
 
   .title {
     position: absolute;

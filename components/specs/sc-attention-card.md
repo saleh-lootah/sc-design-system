@@ -32,7 +32,7 @@ Mirrors: icon tile on the right, status on the left. Amounts and references stay
 
 ## Motion
 
-None (the action button has its own).
+None (the action button has its own: visual feedback on press, activation on release, 2.5.2). The card adds no press handlers, so moving the pointer off the action before release cancels it.
 
 ## Code
 
@@ -72,4 +72,4 @@ Slots: default (title), `icon`, `status`, `fact`, `meta`, `action`. Parts: `card
 
 ## Tests
 
-`sc-attention-card.spec.tsx` (heading, slot order, tint, empty parts, fallbacks); `sc-attention-card.e2e.ts` (no coloured edge, tile tint and status tone, tone changes, fact type and full-width action, headings and link names, actions aligned across a row, Arabic mirroring, `describeAxe`); `sc-attention-card.visual.e2e.ts`.
+`sc-attention-card.spec.tsx` (heading, slot order, tint, empty parts, fallbacks); `sc-attention-card.e2e.ts` (no coloured edge, tile tint and status tone, tone changes, fact type and full-width action, headings and link names, actions aligned across a row, Arabic mirroring, press-and-drag-off on the action cancels (2.5.2), `describeAxe`); `sc-attention-card.visual.e2e.ts`.

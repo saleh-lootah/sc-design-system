@@ -17,7 +17,7 @@ Status: rebuilt for v2 by C2 (Wave 2b). Visual rules: `docs/v2/component-languag
 
 ## Type and colour
 
-`label-large` (18/22 Bold EN, 20/28 Bold AR). Fill `inverse-surface`, text `inverse-on-surface`, not underlined (it is a solid block, not running text; Paper board sc-skip-link), so it stands out over any hero or announcement colour. The U1 ring shows whenever it is focused, including by script or pointer, because it is only ever visible while focused. Forced colours: `Canvas`, `LinkText`, `Highlight` ring.
+`label-large` (18/22 Bold EN, 20/28 Bold AR). Fill `inverse-surface`, text `inverse-on-surface`, not underlined at rest (a navigation link, R6: its place as the first thing on the page and its text identify it; Paper board sc-skip-link), underlined 1px at 4px (5px Arabic) on hover, so it stands out over any hero or announcement colour. The U1 ring shows whenever it is focused, including by script or pointer, because it is only ever visible while focused. Forced colours: `Canvas`, `LinkText`, `Highlight` ring.
 
 ## Motion
 
@@ -34,8 +34,8 @@ None: it appears instantly (MOT-02).
 
 ## Budget
 
-Custom-elements closure 2,383 B gzip (4 KiB budget), its own CSS 505 B.
+Custom-elements closure 2,387 B gzip (4 KiB budget), its own CSS 536 B (with the hover underline, v2-fixes-nav).
 
 ## Tests
 
-`sc-skip-link.spec.tsx`, `sc-skip-link.e2e.ts` (hidden until focused; 48px, 8px from the corner, radius, inverse roles, type, U1 ring; default href; ring on script focus; Enter moves focus and the next Tab continues; Arabic label, top right and Arabic size; `describeAxe` and axe while focused in EN/AR × light/dark), `sc-skip-link.visual.e2e.ts`.
+`sc-skip-link.spec.tsx`, `sc-skip-link.e2e.ts` (hidden until focused; 48px, 8px from the corner, radius, inverse roles, type, U1 ring; default href; ring on script focus; Enter moves focus and the next Tab continues; Arabic label, top right and Arabic size; no underline at rest and underline on hover EN/AR; `describeAxe` and axe while focused in EN/AR × light/dark), `sc-skip-link.visual.e2e.ts`.

@@ -61,7 +61,7 @@ Native: Tab focuses; Enter and Space activate a button; Enter follows a link. No
 
 ## Motion
 
-Colour over `duration-fast` (120ms) with `easing-hover`, fine pointers only. Press scale `scale-press` (0.97) over `duration-press` (150ms) with `easing-enter`; `scale-press` is 1 under reduced motion. The spinner turns at `duration-spin` linear and stops under reduced motion (its text stays).
+Colour over `duration-fast` (120ms) with `easing-hover`, fine pointers only. Press scale `scale-press` (0.97) over `duration-press` (150ms) with `easing-enter`; `scale-press` is 1 under reduced motion. Visual feedback on press, activation on release (2.5.2, MOT-09): the press state is CSS `:active` only, nothing acts on `pointerdown`, `mousedown` or `touchstart`, and the action is the native `click` on release, so moving the pointer off before release cancels it. The spinner turns at `duration-spin` linear and stops under reduced motion (its text stays).
 
 ## RTL and Arabic
 
@@ -91,5 +91,5 @@ The locale controller is paid once per page, not once per component. The `icon` 
 ## Tests
 
 - `sc-button.spec.tsx`: variants and default heights, size override, native attributes, link, disabled, loading and its strings in both languages, icon placement.
-- `sc-button.e2e.ts`: heights and radius, channel and city-indigo colours against the tokens, dark mode, type roles in EN and AR, font subsets loaded, full width, link with Enter, Enter-to-submit through the default button, submit/reset/`form=`, fieldset, keyboard and the U1 ring, the "on" ring inside a filled area, pointer-only press scale, host `focus()`/`click()`, loading, accessibility tree, RTL icon, size reservation; `describeAxe` in EN/AR × light/dark.
+- `sc-button.e2e.ts`: heights and radius, channel and city-indigo colours against the tokens, dark mode, type roles in EN and AR, font subsets loaded, full width, link with Enter, Enter-to-submit through the default button, submit/reset/`form=`, fieldset, keyboard and the U1 ring, the "on" ring inside a filled area, pointer-only press scale, press-and-drag-off cancels with no click, submit or navigation (2.5.2), host `focus()`/`click()`, loading, accessibility tree, RTL icon, size reservation; `describeAxe` in EN/AR × light/dark.
 - `sc-button.visual.e2e.ts`: every variant and state in EN/AR × light/dark; baselines in `test/visual/darwin/sc-button/`.

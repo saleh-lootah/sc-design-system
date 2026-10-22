@@ -23,6 +23,17 @@ describe('sc-modal (spec)', () => {
     expect(r(page.root!).querySelector('[part="actions"]')).toHaveClass('actions--empty');
   });
 
+  it('as an alert it is described by its body and countdown, and has no grabber (R7)', async () => {
+    const page = await newSpecPage({ components: [ScModal], html: `<sc-modal alert heading="You will be signed out soon"><p>Body</p></sc-modal><sc-modal heading="x"></sc-modal>` });
+    const [alert, plain] = Array.from(page.body.querySelectorAll('sc-modal'));
+    const body = r(alert).querySelector('.body')!;
+    expect(body.id).toMatch(/^sc-modal-\d+-body$/);
+    expect(r(alert).querySelector('dialog')!.getAttribute('aria-describedby')).toBe(body.id);
+    expect(r(alert).querySelector('.grabber')).toBeNull();
+    expect(r(plain).querySelector('dialog')!.hasAttribute('aria-describedby')).toBe(false);
+    expect(r(plain).querySelector('.grabber')).not.toBeNull();
+  });
+
   it('names the close button in Arabic, and takes close-label', async () => {
     const page = await newSpecPage({ components: [ScModal], html: `<div lang="ar"><sc-modal heading="x"></sc-modal></div><sc-modal heading="y" close-label="Close the map"></sc-modal>` });
     const [ar, custom] = Array.from(page.body.querySelectorAll('sc-modal'));

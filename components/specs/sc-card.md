@@ -37,7 +37,7 @@ Symmetrical. Padding does not change in Arabic.
 
 ## Motion
 
-None.
+None. The card is not pressable and has no press state or pointer handlers; controls inside it keep visual feedback on press, activation on release (2.5.2).
 
 ## Code
 
@@ -64,4 +64,4 @@ No events. Slot: default. **v1 to v2:** the shadow root and `::part(surface)` ar
 
 ## Tests
 
-`sc-card.spec.tsx` (light DOM, classes, defaults, landmarks, label); `sc-card.e2e.ts` (content stays light DOM, landmarks in the accessibility tree, radius/edge/padding/no shadow against the tokens, filled fill, dark mode (including the filled step-up), child margins, late heading, forced colours, `describeAxe`); `sc-card.visual.e2e.ts` (EN/AR × light/dark).
+`sc-card.spec.tsx` (light DOM, classes, defaults, landmarks, label); `sc-card.e2e.ts` (content stays light DOM, landmarks in the accessibility tree, radius/edge/padding/no shadow against the tokens, filled fill, dark mode (including the filled step-up), child margins, late heading, forced colours, no press behaviour and press-and-drag-off on a link inside cancels (2.5.2), `describeAxe`); `sc-card.visual.e2e.ts` (EN/AR × light/dark).

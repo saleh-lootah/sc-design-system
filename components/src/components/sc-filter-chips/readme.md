@@ -17,7 +17,7 @@ The filters applied to a list of results, as removable chips beside the result c
 
 - Each chip is a native button named "Remove filter: Transport and vehicles". Removing one takes it away at once and moves focus to the next chip, else the previous, else `focus-target` (your results heading).
 - Count changes are announced politely: "Filter removed: Paid online. 1 filter applied".
-- Chips are 32px tall with a 44px target (decision Q-chips), `channel-subtle` with `channel-action` text.
+- Chips are 32px tall with a 44px target (decision Q-chips), `channel-subtle` with `channel-action` text. Pressing scales a chip (visual only); it is removed on release, so sliding off before releasing cancels.
 - Set `filters` (an array or JSON) when your page adds or changes filters; the component announces the new count.
 - Light DOM: style with `.sc-filter-chips__chip` if you must.
 

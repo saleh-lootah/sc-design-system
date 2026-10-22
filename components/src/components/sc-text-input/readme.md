@@ -41,7 +41,7 @@ Plates, phone numbers, emails, IBANs and references: add `ltr`. The input gets `
 
 ### Forms
 
-The input is native: it submits under `name`, **Enter submits the form through its default button** (the first `<sc-button type="submit">`), `form.reset()` restores the initial `value`, `<fieldset disabled>` disables it, and `required`, `type="email"`, `pattern`, `minlength` and `maxlength` drive the browser's own validation (`input.matches(':invalid')`, `reportValidity()`). Native `input` and `change` bubble from the input; `scInput` and `scChange` carry `{ value }`. Digits typed in Arabic-Indic forms become Latin digits as they are typed (LANG-21).
+The input is native: it submits under `name`, **Enter submits the form through its default button** (the first `<sc-button type="submit">`), `form.reset()` restores the initial `value`, `<fieldset disabled>` disables it, and `required`, `type="email"`, `pattern`, `minlength` and `maxlength` drive the browser's own validation (`input.matches(':invalid')`, `reportValidity()`). Native `input` and `change` bubble from the input; `scInput` and `scChange` carry `{ value }`. Digits typed in Arabic-Indic forms become Latin digits as they are typed (LANG-21). Bidi control characters pasted with a code (U+200E, U+200F, U+202A–U+202E, U+2066–U+2069) are removed (R9, amends LANG-21).
 
 The `error` prop is presentation only: it never blocks submission.
 

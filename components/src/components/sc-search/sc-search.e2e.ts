@@ -106,6 +106,20 @@ describe('sc-search (e2e)', () => {
     expect(await inner(page, 'sc-search', 'input.value')).toBe('مخالفة 123');
   });
 
+  it('strips bidi control characters from a pasted value (R9, LANG-21)', async () => {
+    const page = await newScPage(`<sc-search id="s" label-hidden></sc-search>`, { lang: 'ar' });
+    // A code copied from an Arabic SMS carries LANG-15 isolates: U+2066 ... U+2069.
+    await page.evaluate((sel: string) => {
+      const field = document.querySelector(sel)!.querySelector('input') as HTMLInputElement;
+      field.focus();
+      document.execCommand('insertText', false, String.fromCharCode(0x2066) + '123456' + String.fromCharCode(0x2069));
+    }, '#s');
+    await page.waitForChanges();
+    expect(await page.evaluate((sel: string) => (document.querySelector(sel)!.querySelector('input') as HTMLInputElement).value, '#s')).toBe('123456');
+    expect(await page.evaluate((sel: string) => (document.querySelector(sel)!.querySelector('input') as HTMLInputElement).selectionStart, '#s')).toBe(6);
+    expect(await page.$eval('#s', (el) => (el as HTMLElement & { value: string }).value)).toBe('123456');
+  });
+
   it('mirrors in Arabic: the icon on the right and the button on the left; strings re-render', async () => {
     const page = await newScPage(`<sc-search label-hidden></sc-search>`, { lang: 'ar' });
     const layout = () => inner<{ button: number; input: number; icon: number; label: string; text: string }>(page, 'sc-search', '({ button: q("sc-button").getBoundingClientRect().x, input: input.getBoundingClientRect().x, icon: q(".sc-search__icon").getBoundingClientRect().x, label: q("label").textContent, text: q("sc-button").textContent })');

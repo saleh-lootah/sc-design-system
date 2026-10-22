@@ -37,11 +37,15 @@ Items: `label-large` with the `label-medium` weight (18/22 Medium EN, 20/28 Bold
 | State | Rule |
 | --- | --- |
 | Hover | `.state-layer` (8% `on-surface`); pressed 12% |
-| Current | `channel-subtle` fill, a 3px `channel-action` bar at inline-start (`size-border-accent`), icon and label `channel-action`, Bold, `aria-current="page"` (board G7G-0) |
+| Current | `channel-subtle` fill, a 3px `channel-action` bar at inline-start (`size-border-accent`), icon and label `channel-action`, Bold, `aria-current="page"` (board G7G-0). The bar is the non-weight cue R10 asks for: in Arabic every label is already Bold (D12), so Bold alone marks nothing there. The bar is 5.6:1 or more against the fill on every channel |
 | Focus | U1 ring |
 | Forced colours | `LinkText` items; the current item gets a `LinkText` border (transparent otherwise) and bar |
 
 Motion: colour only, `duration-fast`.
+
+## Links and press
+
+Items are navigation links (R6): never underlined, identified by their icons and their place in the account area. They follow on release (the native `click`); the pressed state layer is visual only, so pressing, sliding off and releasing does nothing (WCAG 2.5.2).
 
 ## Compact screens
 
@@ -65,4 +69,4 @@ Custom-elements closure 4,095 B gzip (4 KiB budget: 1 B of room), its own CSS 81
 
 ## Tests
 
-`sc-account-nav.spec.tsx` (landmark, lists, current, icons and mirroring, badge and hidden text, default and Arabic count text, non-links ignored), `sc-account-nav.e2e.ts` (item size, icon size, type and colours EN/AR; current fill, bar, icon and weight; RTL bar and icons; accessible name with the count; badge roles and size; keyboard and ring; compact row; re-render on change; `describeAxe`), `sc-account-nav.visual.e2e.ts`.
+`sc-account-nav.spec.tsx` (landmark, lists, current, icons and mirroring, badge and hidden text, default and Arabic count text, non-links ignored), `sc-account-nav.e2e.ts` (item size, icon size, type and colours EN/AR; current fill, bar, icon and weight; the bar on the current item only, EN/AR, wide and compact, with every Arabic label Bold (R10); activation on release only; RTL bar and icons; accessible name with the count; badge roles and size; keyboard and ring; compact row; re-render on change; `describeAxe`), `sc-account-nav.visual.e2e.ts`.

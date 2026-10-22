@@ -13,7 +13,7 @@ A date people know: a date of birth, the start date on an insurance policy, the 
 ```
 
 - Three labelled boxes, Day, Month and Year (يوم / شهر / سنة), in a `<fieldset>` with the question as the `<legend>`. Each box uses the numeric keyboard (`inputmode="numeric"`).
-- **In Arabic** the boxes run right to left: Day on the right, Year on the left. Digits stay Latin.
+- **In Arabic** the boxes run right to left: Day on the right, Year on the left. Digits stay Latin: Arabic-Indic digits become Latin as they are typed (LANG-21), and bidi control characters pasted with them (U+200E, U+200F, U+202A–U+202E, U+2066–U+2069) are removed (R9).
 - **Hint:** give an example in the order of the boxes: "For example, 27 3 2026".
 - **Error on one part:** set `error` and `error-parts` to the boxes it's about, for example `error-parts="year"` with "The date your policy starts must include a year". Only those boxes get the error border and `aria-invalid`. Without `error-parts`, the error highlights all three.
 - **Date of birth:** `autocomplete="bday"` sets `bday-day`, `bday-month`, `bday-year` on the boxes.

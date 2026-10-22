@@ -40,11 +40,25 @@
   color: var(--sc-color-inverse-on-surface);
   font: var(--sc-type-label-large);
   letter-spacing: var(--sc-type-label-large-tracking);
-  /* A solid block, not running text: no underline (Paper sc-skip-link, every specimen). */
+  /* A navigation link, not running text (R6, CMP-08): no underline at rest (Paper
+     sc-skip-link, every specimen), underlined on hover. Its place as the first thing on the
+     page and its "Skip to main content" text identify it as a link. */
   text-decoration-line: none;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
   /* The link is only ever visible while focused, so even mouse focus shows the U1 ring. */
   outline: var(--sc-size-focus-ring) solid var(--sc-color-focus-ring);
   outline-offset: var(--sc-size-focus-offset);
+}
+
+.control:lang(ar) {
+  text-underline-offset: 5px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .control:focus:hover {
+    text-decoration-line: underline;
+  }
 }
 
 @media (forced-colors: active) {

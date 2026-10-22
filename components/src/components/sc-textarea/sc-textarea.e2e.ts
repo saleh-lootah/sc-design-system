@@ -93,6 +93,21 @@ describe('sc-textarea (e2e)', () => {
     expect(await inner(page, 'sc-textarea', 'input.value')).toBe('الطابق 3');
   });
 
+  it('strips bidi control characters from a pasted value (R9, LANG-21)', async () => {
+    const page = await newScPage(`<form><sc-textarea id="note" name="note" label="ملاحظة"></sc-textarea></form>`, { lang: 'ar' });
+    // A code copied from an Arabic SMS carries LANG-15 isolates: U+2066 ... U+2069.
+    await page.evaluate((sel: string) => {
+      const field = document.querySelector(sel)!.querySelector('textarea') as HTMLTextAreaElement;
+      field.focus();
+      document.execCommand('insertText', false, String.fromCharCode(0x2066) + '123456' + String.fromCharCode(0x2069));
+    }, '#note');
+    await page.waitForChanges();
+    expect(await page.evaluate((sel: string) => (document.querySelector(sel)!.querySelector('textarea') as HTMLTextAreaElement).value, '#note')).toBe('123456');
+    expect(await page.evaluate((sel: string) => (document.querySelector(sel)!.querySelector('textarea') as HTMLTextAreaElement).selectionStart, '#note')).toBe(6);
+    expect(await page.$eval('#note', (el) => (el as HTMLElement & { value: string }).value)).toBe('123456');
+    expect(await page.evaluate(() => new FormData(document.querySelector('form')!).get('note'))).toBe('123456');
+  });
+
   it('counts in Arabic with the right plural, and re-renders when lang changes', async () => {
     const page = await newScPage(`<sc-textarea label="Reason" maxlength="120"></sc-textarea>`, { lang: 'en' });
     expect(await inner(page, 'sc-textarea', 'q(".sc-textarea__count").textContent')).toBe('You have 120 characters remaining');

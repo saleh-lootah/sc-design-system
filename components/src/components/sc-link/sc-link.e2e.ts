@@ -128,6 +128,29 @@ describe('sc-link (e2e)', () => {
     expect(await inner(page, 'sc-link', 'getComputedStyle(control).color')).toBe(await token(page, 'body', '--sc-color-channel-action'));
   });
 
+  it('is always underlined, at rest, on hover and with focus: sc-link inline and the .sc-link class (R6, CMP-08)', async () => {
+    for (const lang of ['en', 'ar'] as const) {
+      const page = await newScPage(`<p>Read the <sc-link href="#a">fees guide</sc-link> or the <a class="sc-link" href="#b">guide</a>.</p>`, { lang });
+      const states = async () => [
+        await inner<string>(page, 'sc-link', 'getComputedStyle(label).textDecorationLine + " " + getComputedStyle(label).textDecorationThickness'),
+        await page.$eval('a.sc-link', (a) => getComputedStyle(a).textDecorationLine + ' ' + getComputedStyle(a).textDecorationThickness),
+      ];
+      expect(await states()).toEqual(['underline 1px', 'underline 1px']);
+      await page.hover('sc-link');
+      await page.waitForFunction(() => getComputedStyle(document.querySelector('sc-link')!.shadowRoot!.querySelector('[part="label"]')!).textDecorationThickness === '2px');
+      expect((await states())[0]).toBe('underline 2px');
+      await page.hover('a.sc-link');
+      await page.waitForFunction(() => getComputedStyle(document.querySelector('a.sc-link')!).textDecorationThickness === '2px');
+      expect((await states())[1]).toBe('underline 2px');
+      await page.mouse.move(0, 500);
+      await page.keyboard.press('Tab');
+      await page.keyboard.press('Tab');
+      await page.waitForFunction(() => getComputedStyle(document.querySelector('a.sc-link')!).textDecorationThickness === '1px');
+      expect(await page.evaluate(() => document.activeElement!.className)).toBe('sc-link');
+      expect(await states()).toEqual(['underline 1px', 'underline 1px']);
+    }
+  });
+
   describeAxe('sc-link', ALL_STATES);
 
   it('has no axe violations on every channel, light and dark', async () => {
