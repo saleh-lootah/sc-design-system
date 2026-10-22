@@ -35,7 +35,7 @@ const REPO = join(COMPONENTS, '..');
 const WWW = join(COMPONENTS, 'www');
 const LANGS = ['en', 'ar'];
 /** Where links to repository files that are not pages go. Switch to main when v2 is merged. */
-const BLOB = 'https://github.com/saleh-lootah/sc-design-system/blob/v2/';
+const BLOB = 'https://github.com/saleh-lootah/sc-design-system/blob/main/';
 const TREE = 'https://github.com/saleh-lootah/sc-design-system/tree/v2/';
 
 const INTERNAL = process.env.SC_SITE_INTERNAL === '1';
