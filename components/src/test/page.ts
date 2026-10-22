@@ -94,6 +94,19 @@ export async function newScPage(html: string, context: PageContext = {}): Promis
   return page;
 }
 
+/**
+ * Loads every Dubai W23 face (both scripts, every weight) before a layout is measured. While a
+ * face loads, text is set in the "Dubai W23 Fallback" faces, metric-matched to Arial and
+ * Tahoma. Where those are not installed (Linux CI), it is set in a wider system font, and a
+ * layout that depends on text width, such as sc-site-header's full row, can overflow and
+ * switch to compact mid-test. Use it in tests of the laid-out result, not of font-swap timing.
+ */
+export async function loadFonts(page: E2EPage): Promise<void> {
+  await page.evaluate(() =>
+    Promise.all(['400', '500', '700'].map((w) => document.fonts.load(`${w} 16px "Dubai W23 Arabic", "Dubai W23", "Dubai W23 Name"`, 'Aا'))),
+  );
+}
+
 /** Waits until every sc- element on the page has hydrated (Stencil adds the `hydrated` class). */
 export async function waitForHydration(page: E2EPage): Promise<void> {
   await page.waitForFunction(() =>
