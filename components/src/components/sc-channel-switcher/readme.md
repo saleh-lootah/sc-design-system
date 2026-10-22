@@ -11,7 +11,15 @@ The channel's logo and the channel switcher (Standard CHR-03), for `sc-site-head
 ```
 
 - Give all seven links; `{lang}` becomes `en` or `ar`. A channel without a link is listed as text.
-- The current channel comes from `channel` or the closest `data-channel`.
+- The current channel comes from `value`, else `channel`, else the closest `data-channel`.
+- Choosing a channel emits `scChannelChange` (`detail.channel`) before its link is followed. To switch in place, call `preventDefault()`: the page stays, `value` becomes the channel and the panel closes.
+
+```js
+switcher.addEventListener('scChannelChange', (e) => {
+  e.preventDefault();
+  document.querySelector('#preview').dataset.channel = e.detail.channel;
+});
+```
 - Put the channel's own logo (24px, `alt=""`) inside to replace the swatch (10px, in the channel colour) the trigger shows without one.
 - Light DOM: each item sets its own `data-channel`, so its swatch is that channel's colour.
 
@@ -31,6 +39,12 @@ swatch is that channel's `channel-action`; that is why the component renders int
 DOM (Stencil `scoped`): the document's channel rules must reach the items. The current
 channel carries a check and `aria-current="true"`.
 
+Choosing a channel emits `scChannelChange` (`detail.channel`), then follows its link. A page
+that switches channels in place (a documentation site re-theming its examples, a single-page
+app) calls `preventDefault()`: the link is not followed, `value` becomes the chosen channel
+and the panel closes, returning focus to the trigger. Clicks with a modifier key (a new tab
+or window) are left to the browser and emit nothing.
+
 Escape and a press outside close the panel; Escape returns focus to the button; the panel
 closes when focus leaves it. From a pointer it grows from the trigger's corner over
 `duration-base`; from the keyboard it appears instantly (MOT-02). Below 1024px the trigger
@@ -42,6 +56,14 @@ shrinks to the logo and chevron and keeps its accessible name (CHR-04).
 | --------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------- | ----------- |
 | `channel` | `channel` | The current channel. Defaults to the closest `data-channel` (as set by `sc-page`).                                                                                                                                                                                                               | `"build" \| "invest" \| "justice" \| "now" \| "trade" \| "transport" \| "visit" \| undefined`           | `undefined` |
 | `links`   | `links`   | Each channel's home page, as an object or a JSON attribute: `links='{"now":"https://…/{lang}/","transport":"https://…/{lang}/"}'`. `{lang}` becomes `en` or `ar`, so each link leads to that channel's home in the current language. Give all seven; a channel without a link is listed as text. | `"build" \| "invest" \| "justice" \| "now" \| "trade" \| "transport" \| "visit" \| string \| undefined` | `undefined` |
+| `value`   | `value`   | The channel shown as current, when the page switches channels in place. Wins over `channel`; set by the switcher itself when an `scChannelChange` listener calls `preventDefault()`.                                                                                                             | `"build" \| "invest" \| "justice" \| "now" \| "trade" \| "transport" \| "visit" \| undefined`           | `undefined` |
+
+
+## Events
+
+| Event             | Description                                                                                                                                                       | Type                                 |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| `scChannelChange` | Emitted when the user chooses a channel, before its link is followed. Cancelable: `preventDefault()` keeps the page where it is and makes the choice the `value`. | `CustomEvent<ScChannelChangeDetail>` |
 
 
 ## Methods

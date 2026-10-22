@@ -83,14 +83,14 @@ const scCss = (dest: string) => ({ src: 'global/generated/sc.css', dest, warn: t
  * longer duplicates sc-button. scripts/build-preload.mjs lists this bundle for modulepreload.
  */
 const bundles = [
-  { components: ['sc-page', 'sc-skip-link', 'sc-app-bar', 'sc-language-switch', 'sc-footer', 'sc-button', 'sc-channel-hero', 'sc-service-card', 'sc-search'] },
+  { components: ['sc-page', 'sc-skip-link', 'sc-app-bar', 'sc-language-switch', 'sc-button', 'sc-channel-hero', 'sc-service-card', 'sc-search'] },
   { components: ['sc-back-link', 'sc-link', 'sc-callout', 'sc-status-tag', 'sc-channel-chip', 'sc-card', 'sc-spinner', 'sc-step-progress', 'sc-tile', 'sc-attention-card', 'sc-module-card'] },
   { components: ['sc-site-header', 'sc-channel-switcher', 'sc-account-menu', 'sc-announcement-bar', 'sc-utility-bar', 'sc-channel-network'] },
   { components: ['sc-text-input', 'sc-textarea', 'sc-select', 'sc-date-input', 'sc-checkbox', 'sc-checkbox-group', 'sc-radio-group', 'sc-radio', 'sc-error-summary'] },
   { components: ['sc-summary-list', 'sc-summary-row', 'sc-accordion'] },
   { components: ['sc-table'] },
   { components: ['sc-date-range'] },
-  { components: ['sc-breadcrumbs', 'sc-pagination', 'sc-account-nav', 'sc-bottom-nav'] },
+  { components: ['sc-pagination', 'sc-account-nav', 'sc-bottom-nav'] },
 ];
 
 export const config: Config = {

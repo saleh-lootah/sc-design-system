@@ -9,6 +9,7 @@
  * lang + dir and data-channel go on <html>; data-theme goes on <html> (forced light or dark).
  */
 import { E2EPage, newE2EPage } from '@stencil/core/testing';
+import type { HTTPRequest, Page as PuppeteerPage } from 'puppeteer';
 
 export type TestLang = 'en' | 'ar';
 export type TestTheme = 'light' | 'dark';
@@ -116,4 +117,26 @@ export async function waitForHydration(page: E2EPage): Promise<void> {
       .every((el) => el.classList.contains('hydrated')),
   );
   await page.waitForChanges();
+}
+
+/**
+ * Opens `html` with sc.css and JavaScript disabled: what a visitor gets when script fails or
+ * is blocked (PERF-04), and, for registered tags, what every visitor sees before the upgrade.
+ */
+export async function noScriptPage(html: string, lang = 'en', width = 1280) {
+  const e2e = await newE2EPage();
+  await e2e.setContent('');
+  const origin = new URL(e2e.url()).origin;
+  // E2EPage is a Puppeteer page; its type hides browser().
+  const page = await (e2e as unknown as PuppeteerPage).browser().newPage();
+  await page.setJavaScriptEnabled(false);
+  await page.setRequestInterception(true);
+  page.on('request', (r: HTTPRequest) =>
+    r.url() === `${origin}/no-script.html`
+      ? r.respond({ status: 200, contentType: 'text/html', body: `<!doctype html><html lang="${lang}" dir="${lang === 'ar' ? 'rtl' : 'ltr'}" data-channel="now"><head><meta charset="utf-8"><link rel="stylesheet" href="/build/sc.css"></head><body>${html}</body></html>` })
+      : r.continue(),
+  );
+  await page.setViewport({ width, height: 800 });
+  await page.goto(`${origin}/no-script.html`, { waitUntil: 'load' });
+  return page;
 }

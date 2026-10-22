@@ -1,13 +1,17 @@
 import { E2EPage } from '@stencil/core/testing';
 import { describeAxe } from '../../test/axe';
-import { newScPage, setPageContext, settleTransitions } from '../../test/page';
+import { newScPage, noScriptPage, setPageContext, settleTransitions } from '../../test/page';
 
-const TRAIL_EN = `<a href="#home">Home</a><a href="#vehicles">Vehicles</a><span>Renew your vehicle registration</span>`;
-const TRAIL_AR = `<a href="#home">الرئيسية</a><a href="#vehicles">المركبات</a><span>تجديد ترخيص المركبة</span>`;
+/** A trail as a service writes it (CSS only): a named <nav>, an <ol> of links, the current page last. */
+const crumbs = (links: [string, string][], current: string, label = 'Breadcrumb') =>
+  `<sc-breadcrumbs><nav aria-label="${label}"><ol>${links.map(([href, text]) => `<li><a href="${href}">${text}</a></li>`).join('')}<li aria-current="page">${current}</li></ol></nav></sc-breadcrumbs>`;
+const TRAIL_EN = crumbs([['#home', 'Home'], ['#vehicles', 'Vehicles']], 'Renew your vehicle registration');
+const TRAIL_AR = crumbs([['#home', 'الرئيسية'], ['#vehicles', 'المركبات']], 'تجديد ترخيص المركبة', 'مسار التنقل');
 
+/** Evaluates `expr` with `root` bound to the sc-breadcrumbs element. */
 function read<T = unknown>(page: E2EPage, expr: string): Promise<T> {
   return page.evaluate((e: string) => {
-    const root = document.querySelector('sc-breadcrumbs')!.shadowRoot!;
+    const root = document.querySelector('sc-breadcrumbs')!;
     // eslint-disable-next-line no-new-func
     return new Function('root', `return (${e});`)(root);
   }, expr) as Promise<T>;
@@ -44,16 +48,16 @@ async function pressAndSlideOff(page: E2EPage, selector: string, x: number, y: n
   await page.waitForChanges();
 }
 
-const TINY = `<a href="#a">A</a><a href="#b">B</a><a href="#c">C</a><span>D</span>`;
+const TINY = crumbs([['#a', 'A'], ['#b', 'B'], ['#c', 'C']], 'D');
 const ROUNDING = 1 / 32;
 const overlaps = (a: { left: number; top: number; right: number; bottom: number }, b: typeof a) =>
   a.left < b.right - ROUNDING && b.left < a.right - ROUNDING && a.top < b.bottom - ROUNDING && b.top < a.bottom - ROUNDING;
 
-export const ALL_STATES = `<main><sc-breadcrumbs>${TRAIL_EN}</sc-breadcrumbs><h1>Renew your vehicle registration</h1></main>`;
+export const ALL_STATES = `<main>${TRAIL_EN}<h1>Renew your vehicle registration</h1></main>`;
 
-describe('sc-breadcrumbs (e2e)', () => {
+describe('sc-breadcrumbs (e2e, CSS only)', () => {
   it('exposes a navigation landmark with a list of links and the current page', async () => {
-    const page = await newScPage(`<sc-breadcrumbs>${TRAIL_EN}</sc-breadcrumbs>`);
+    const page = await newScPage(`${TRAIL_EN}`);
     type Node = { role: string; name?: string; children?: Node[] };
     const all = (n: Node): Node[] => [n, ...(n.children ?? []).flatMap(all)];
     const nodes = all((await page.accessibility.snapshot()) as Node).map((n) => `${n.role}:${n.name ?? ''}`);
@@ -61,12 +65,12 @@ describe('sc-breadcrumbs (e2e)', () => {
     expect(nodes).toContain('link:Home');
     expect(nodes).toContain('link:Vehicles');
     expect(await read(page, 'root.querySelector("[aria-current=page]").textContent')).toBe('Renew your vehicle registration');
-    // The light-DOM children are not rendered once upgraded.
-    expect(await page.$eval('sc-breadcrumbs > a', (a) => (a as HTMLElement).getBoundingClientRect().width)).toBe(0);
+    // CSS only: never registered, so it needs no JavaScript and never waits for an upgrade.
+    expect(await page.evaluate(() => !!customElements.get('sc-breadcrumbs'))).toBe(false);
   });
 
   it('styles links label-medium in on-surface, underlined; the current page Bold; chevrons muted', async () => {
-    const page = await newScPage(`<sc-breadcrumbs>${TRAIL_EN}</sc-breadcrumbs>`);
+    const page = await newScPage(`${TRAIL_EN}`);
     const s = (sel: string, p: string) => read<string>(page, `getComputedStyle(root.querySelector("${sel}")).${p}`);
     expect(await s('a', 'color')).toBe(await token(page, '--sc-color-on-surface'));
     expect(await s('a', 'textDecorationLine')).toBe('underline');
@@ -74,53 +78,67 @@ describe('sc-breadcrumbs (e2e)', () => {
     expect(await s('a', 'fontSize')).toBe('16px');
     expect(await s('[aria-current]', 'fontWeight')).toBe('700');
     expect(await s('[aria-current]', 'textDecorationLine')).toBe('none');
-    expect(await s('.sep', 'color')).toBe(await token(page, '--sc-color-on-surface-variant'));
+    expect(await read(page, 'getComputedStyle(root.querySelectorAll("li")[1], "::before").backgroundColor')).toBe(await token(page, '--sc-color-on-surface-variant'));
+    expect(await read(page, 'getComputedStyle(root.querySelectorAll("li")[0], "::before").display')).toBe('none');
     await setPageContext(page, { lang: 'ar' });
     expect(await s('a', 'fontSize')).toBe('18px');
   });
 
   it('mirrors the chevrons in Arabic and runs from the right', async () => {
-    const page = await newScPage(`<sc-breadcrumbs>${TRAIL_AR}</sc-breadcrumbs>`, { lang: 'ar' });
-    expect(await read(page, 'getComputedStyle(root.querySelector(".sep")).transform')).toBe('matrix(-1, 0, 0, 1, 0, 0)');
+    const page = await newScPage(`${TRAIL_AR}`, { lang: 'ar' });
+    expect(await read(page, 'getComputedStyle(root.querySelectorAll("li")[1], "::before").transform')).toBe('matrix(-1, 0, 0, 1, 0, 0)');
     const [first, second] = await read<number[]>(page, '[...root.querySelectorAll("a")].map((a) => a.getBoundingClientRect().left)');
     expect(first).toBeGreaterThan(second);
   });
 
-  it('collapses to one "Back to {parent}" link below 600px', async () => {
-    const page = await newScPage(`<sc-breadcrumbs>${TRAIL_EN}</sc-breadcrumbs>`);
+  it.each([
+    ['en', TRAIL_EN, 'Back to Vehicles', 'matrix(-1, 0, 0, 1, 0, 0)'],
+    ['ar', TRAIL_AR, 'رجوع إلى المركبات', 'none'],
+  ] as const)('collapses to one "Back to {parent}" link with a back chevron below 600px (%s)', async (lang, trail, name, flip) => {
+    const page = await newScPage(trail, { lang });
     await page.setViewport({ width: 375, height: 640 });
     await page.waitForChanges();
-    const visible = await read<string[]>(page, '[...root.querySelectorAll("li")].filter((li) => li.getBoundingClientRect().width > 0).map((li) => li.innerText.trim())');
-    expect(visible).toEqual(['Back to Vehicles']);
-    const snap = await page.accessibility.snapshot({ root: (await page.$('sc-breadcrumbs >>> .item--parent a'))! });
-    expect(snap!.name).toBe('Back to Vehicles');
-    expect(await read<number>(page, 'root.querySelector(".item--parent a").getBoundingClientRect().height')).toBeGreaterThanOrEqual(44);
+    const visible = await read<number>(page, '[...root.querySelectorAll("li")].filter((li) => li.getBoundingClientRect().width > 0).length');
+    expect(visible).toBe(1);
+    const snap = await page.accessibility.snapshot({ root: (await page.$('sc-breadcrumbs li:nth-last-child(2) a'))! });
+    expect(snap!.name).toBe(name);
+    expect(await read<number>(page, 'root.querySelector("li:nth-last-child(2) a").getBoundingClientRect().height')).toBeGreaterThanOrEqual(44);
+    expect(await read(page, 'getComputedStyle(root.querySelector("li:nth-last-child(2)"), "::before").transform')).toBe(flip);
+  });
+
+  it('takes its compact wording from --sc-breadcrumbs-back, and shows a two-item trail as one back link', async () => {
+    const page = await newScPage(`<div style="--sc-breadcrumbs-back: 'Return to '">${crumbs([['#home', 'Home']], 'Pay a fine')}</div>`);
+    await page.setViewport({ width: 375, height: 640 });
+    const snap = await page.accessibility.snapshot({ root: (await page.$('sc-breadcrumbs a'))! });
+    expect(snap!.name).toBe('Return to Home');
+    expect(await read(page, 'getComputedStyle(root.querySelector("li"), "::before").display')).toBe('block');
+  });
+
+  it('works the same without JavaScript', async () => {
+    const page = await noScriptPage(TRAIL_EN);
+    const links = await page.evaluate(() => Array.from(document.querySelectorAll('sc-breadcrumbs a')).map((a) => [a.getAttribute('href'), getComputedStyle(a).textDecorationLine, getComputedStyle(a).paddingTop]));
+    expect(links).toEqual([
+      ['#home', 'underline', '10px'],
+      ['#vehicles', 'underline', '10px'],
+    ]);
+    await page.close();
   });
 
   it('Tab reaches each ancestor link and Enter follows it', async () => {
-    const page = await newScPage(`<sc-breadcrumbs>${TRAIL_EN}</sc-breadcrumbs>`);
+    const page = await newScPage(`${TRAIL_EN}`);
     await page.keyboard.press('Tab');
     await page.keyboard.press('Tab');
-    expect(await read(page, 'root.activeElement.getAttribute("href")')).toBe('#vehicles');
-    expect(await read(page, 'getComputedStyle(root.activeElement).outlineWidth')).toBe('3px');
+    expect(await page.evaluate(() => document.activeElement!.getAttribute('href'))).toBe('#vehicles');
+    expect(await page.evaluate(() => getComputedStyle(document.activeElement!).outlineWidth)).toBe('3px');
     await page.keyboard.press('Enter');
     await page.waitForChanges();
     expect(await page.evaluate(() => location.hash)).toBe('#vehicles');
   });
 
-  it('re-renders when its children change', async () => {
-    const page = await newScPage(`<sc-breadcrumbs>${TRAIL_EN}</sc-breadcrumbs>`);
-    await page.evaluate(() => {
-      document.querySelector('sc-breadcrumbs > span')!.textContent = 'Pay a fine';
-    });
-    await page.waitForChanges();
-    expect(await read(page, 'root.querySelector("[aria-current]").textContent')).toBe('Pay a fine');
-  });
-
   it('gives every ancestor link a 44 x 44 hit area without moving the layout, and no two overlap (A11Y-04)', async () => {
     for (const lang of ['en', 'ar'] as const) {
       for (const trail of [lang === 'en' ? TRAIL_EN : TRAIL_AR, TINY]) {
-        const page = await newScPage(`<div style="padding: 24px"><sc-breadcrumbs>${trail}</sc-breadcrumbs></div>`, { lang });
+        const page = await newScPage(`<div style="padding: 24px">${trail}</div>`, { lang });
         // The visible link keeps its 10px padding: 40px tall in English (20px line), 44 in Arabic.
         expect(await read(page, 'getComputedStyle(root.querySelector("a")).paddingTop')).toBe('10px');
         const areas = await hitAreas(page);
@@ -129,7 +147,7 @@ describe('sc-breadcrumbs (e2e)', () => {
           expect(a.right - a.left).toBeGreaterThanOrEqual(44 - ROUNDING);
           expect(a.bottom - a.top).toBeGreaterThanOrEqual(44 - ROUNDING);
           // The extension really takes the pointer: its corners hit the link.
-          const hit = await read<string>(page, `root.elementFromPoint(${a.left + 1}, ${a.top + 1})?.closest("a")?.getAttribute("href") ?? ""`);
+          const hit = await read<string>(page, `document.elementFromPoint(${a.left + 1}, ${a.top + 1})?.closest("a")?.getAttribute("href") ?? ""`);
           expect(hit).not.toBe('');
         }
         for (let i = 0; i < areas.length; i++) for (let j = i + 1; j < areas.length; j++) expect(overlaps(areas[i], areas[j])).toBe(false);
@@ -138,8 +156,8 @@ describe('sc-breadcrumbs (e2e)', () => {
   });
 
   it('keeps hit areas apart when the trail wraps onto several rows', async () => {
-    const trail = Array.from({ length: 8 }, (_, i) => `<a href="#p${i}">Page ${i}</a>`).join('') + '<span>Here</span>';
-    const page = await newScPage(`<div style="inline-size: 260px"><sc-breadcrumbs>${trail}</sc-breadcrumbs></div>`);
+    const trail = crumbs(Array.from({ length: 8 }, (_, i): [string, string] => [`#p${i}`, `Page ${i}`]), 'Here');
+    const page = await newScPage(`<div style="inline-size: 260px">${trail}</div>`);
     const areas = await hitAreas(page);
     const rows = new Set(areas.map((a) => Math.round(a.top)));
     expect(rows.size).toBeGreaterThan(1);
@@ -148,10 +166,10 @@ describe('sc-breadcrumbs (e2e)', () => {
 
   it('keeps the underline in every state: rest, hover and focus (R6: a navigation link that stays underlined)', async () => {
     for (const lang of ['en', 'ar'] as const) {
-      const page = await newScPage(`<sc-breadcrumbs>${lang === 'en' ? TRAIL_EN : TRAIL_AR}</sc-breadcrumbs>`, { lang });
+      const page = await newScPage(`${lang === 'en' ? TRAIL_EN : TRAIL_AR}`, { lang });
       const deco = () => read<string>(page, '(() => { const s = getComputedStyle(root.querySelector("a")); return s.textDecorationLine + " " + s.textDecorationThickness; })()');
       expect(await deco()).toBe('underline 1px');
-      await page.hover('sc-breadcrumbs >>> a');
+      await page.hover('sc-breadcrumbs a');
       await settleTransitions(page);
       expect(await deco()).toBe('underline 2px');
       await page.mouse.move(0, 400);
@@ -162,10 +180,10 @@ describe('sc-breadcrumbs (e2e)', () => {
   });
 
   it('follows a link on release only: pressing, sliding off and releasing does nothing (WCAG 2.5.2)', async () => {
-    const page = await newScPage(`<sc-breadcrumbs>${TRAIL_EN}</sc-breadcrumbs><div style="block-size: 400px"></div>`);
-    await pressAndSlideOff(page, 'sc-breadcrumbs >>> a[href="#vehicles"]', 300, 300);
+    const page = await newScPage(`${TRAIL_EN}<div style="block-size: 400px"></div>`);
+    await pressAndSlideOff(page, 'sc-breadcrumbs a[href="#vehicles"]', 300, 300);
     expect(await page.evaluate(() => location.hash)).toBe('');
-    await page.click('sc-breadcrumbs >>> a[href="#vehicles"]');
+    await page.click('sc-breadcrumbs a[href="#vehicles"]');
     await page.waitForChanges();
     expect(await page.evaluate(() => location.hash)).toBe('#vehicles');
   });

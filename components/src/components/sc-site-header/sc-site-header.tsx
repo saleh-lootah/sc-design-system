@@ -11,8 +11,10 @@ const COMPACT = '(max-width: 1023.98px)';
  * The header of channel pages outside a transaction (Standard CHR-01 to CHR-04;
  * component-language B2). Transaction pages use `sc-app-bar`.
  *
- * From the inline-start edge: the Government of Dubai lockup (`slot="lockup"`), the main
- * navigation (`slot="nav"`), search, the language switch (`slot="language"`), sign in with UAE PASS
+ * From the inline-start edge: the Government of Dubai lockup (`slot="lockup"`), an optional
+ * site name or wordmark (`slot="name"`), the main navigation (`slot="nav"`), search (an
+ * `sc-search` in `slot="search"`, else a search link to `search-href`), the language switch
+ * (`slot="language"`), sign in with UAE PASS
  * (`slot="signin"`) or the account menu once signed in (`slot="account"`), and the
  * channel's logo and switcher (`slot="switcher"`, an `sc-channel-switcher`). Sign in is the
  * official UAE PASS button (decision U3a), never a themed `sc-button`: until the official kit
@@ -20,11 +22,16 @@ const COMPACT = '(max-width: 1023.98px)';
  * 56px) that `slot="signin"` replaces. The order
  * mirrors in Arabic. A flat `surface` bar, 80px tall, with a 1px `outline-variant` rule.
  *
- * Below 1024px the row keeps the menu button, the lockup, the language switch and the
+ * Below 1024px the row keeps the menu button, the lockup, the name, the language switch and the
  * channel switcher (64px). Navigation, search and sign in (or the account menu) move into
  * the mobile menu: a modal `<dialog>` labelled "Menu", with focus on its close button when
  * it opens, Escape closing it and returning focus to the menu button, and the page behind
  * it inert. The same slotted elements move; nothing is duplicated.
+ *
+ * Before it upgrades, and without JavaScript, `sc.css` lays the light-DOM children out as one
+ * plain row (PERF-04, B1): the lockup, the name and the navigation links (the current one
+ * underlined in the channel colour, R10), 44px targets. With JavaScript the host keeps its
+ * final height meanwhile, so nothing moves when it upgrades.
  *
  * The host is a `<header>` banner landmark. It is not fixed by default; with `sticky`,
  * `sc-page` keeps `scroll-padding-top` clear of it (A11Y-05, F-009).
@@ -32,8 +39,14 @@ const COMPACT = '(max-width: 1023.98px)';
  * @slot lockup - The Government of Dubai lockup, as supplied (decision L1–L4): an `<img>` or
  *   `<svg>` with the text alternative "Government of Dubai" / "حكومة دبي", 40px tall, usually
  *   inside an `<a href>` to the channel home. The library ships no logo.
+ * @slot name - Optional: the site's name or wordmark, after the lockup (text, an `<img>` or an
+ *   `<svg>` with a text alternative, usually inside an `<a href>` to the site home). Never the
+ *   Government of Dubai lockup, which goes in `slot="lockup"`.
  * @slot nav - The main navigation: `<a href>` elements, direct children of the header, four
  *   or five of them. Mark the current one with `aria-current="page"`.
+ * @slot search - Optional: an `<sc-search>` (with `label-hidden`), inline in the row on wide
+ *   screens and at the top of the mobile menu on compact ones. Without it, `search-href` gives
+ *   a search link.
  * @slot language - `<sc-language-switch>`.
  * @slot signin - The official UAE PASS sign-in button, when available (U3a). Replaces the
  *   built-in placeholder; it moves into the mobile menu on compact screens.
@@ -60,7 +73,10 @@ export class ScSiteHeader {
   /** Overrides the placeholder's "Sign in with UAE PASS" (in the page language). */
   @Prop() signInText?: string;
 
-  /** The search page. Adds a search button (an icon link named "Search"). */
+  /**
+   * The search page. Adds a search button (an icon link named "Search") when there is no
+   * `slot="search"` child.
+   */
   @Prop() searchHref?: string;
 
   /** Keeps the header at the top while the page scrolls. `sc-page` then sets `scroll-padding-top`. */
@@ -71,6 +87,8 @@ export class ScSiteHeader {
   @State() menuOpen = false;
   @State() hasAccount = false;
   @State() hasSignIn = false;
+  @State() hasSearch = false;
+  @State() hasName = false;
 
   private locale = new LocaleController(this, strings);
   private media?: MediaQueryList;
@@ -118,6 +136,8 @@ export class ScSiteHeader {
     const slots = Array.from(this.el.children).map((c) => c.getAttribute('slot'));
     this.hasAccount = slots.includes('account');
     this.hasSignIn = slots.includes('signin');
+    this.hasSearch = slots.includes('search');
+    this.hasName = slots.includes('name');
   }
 
   /**
@@ -208,6 +228,7 @@ export class ScSiteHeader {
   }
 
   private renderSearch(row: boolean) {
+    if (this.hasSearch) return <div class={row ? 'menu-search-field' : 'search'}><slot name="search" /></div>;
     if (!this.searchHref) return null;
     const { t } = this.locale;
     return row ? (
@@ -248,6 +269,11 @@ export class ScSiteHeader {
             <div class="lockup">
               <slot name="lockup" />
             </div>
+            {this.hasName && (
+              <div class="name">
+                <slot name="name" />
+              </div>
+            )}
             {!compact && (
               <nav class="nav" aria-label={t('headerNav')} ref={(el) => (this.nav = el)}>
                 <slot name="nav" />

@@ -35,6 +35,23 @@
   </div>
 </section>
 
+<section class="pg-section" aria-labelledby="sh-name">
+  <h2 id="sh-name" class="sc-type-headline-small" data-ar="مع اسم الموقع وحقل البحث">With a site name and a search field</h2>
+  <div class="pg-frame">
+    <sc-site-header>
+      <a slot="lockup" href="#home" class="pg-lockup"><svg role="img" aria-label="Government of Dubai" viewBox="0 0 680.84 274.11"><rect x="3" y="3" width="674.84" height="268.11" rx="16" fill="none" stroke="currentColor" stroke-width="6" stroke-dasharray="18 12"/><text x="340" y="150" text-anchor="middle" font-size="48" fill="currentColor" font-family="sans-serif">Government of Dubai lockup</text></svg></a>
+      <a slot="name" href="#home" data-ar="دبي الآن">Dubai Now</a>
+      <sc-search slot="search" label="Search Dubai Now" label-hidden action="#search"></sc-search>
+      <a slot="nav" href="#home" aria-current="page" data-ar="الرئيسية">Home</a>
+      <a slot="nav" href="#services" data-ar="الخدمات">Services</a>
+      <a slot="nav" href="#help" data-ar="المساعدة">Help</a>
+      <sc-language-switch slot="language" appearance="plain" href="#other-language"></sc-language-switch>
+      <sc-channel-switcher slot="switcher" links='{"now":"#now-{lang}","transport":"#transport-{lang}","visit":"#visit-{lang}","justice":"#justice-{lang}","build":"#build-{lang}","invest":"#invest-{lang}","trade":"#trade-{lang}"}'></sc-channel-switcher>
+    </sc-site-header>
+  </div>
+  <p class="pg-note" data-ar="slot=&quot;name&quot; لاسم الموقع بعد الشعار. slot=&quot;search&quot; يأخذ sc-search: في الصف على الشاشات العريضة، وفي أعلى القائمة على الشاشات الصغيرة. من دون JavaScript تظهر روابط التنقل صفًا بسيطًا.">slot="name" holds the site's name after the lockup. slot="search" takes an sc-search: in the row on wide screens, at the top of the menu on narrow ones. Without JavaScript the navigation links show as a plain row.</p>
+</section>
+
 <section class="pg-section" aria-labelledby="sh-compact">
   <h2 id="sh-compact" class="sc-type-headline-small" data-ar="الشاشات الصغيرة">Compact</h2>
   <p class="pg-note" data-ar="تحت 1024 بكسل (أو حين لا يتسع الصف الكامل) يبقى زر القائمة والشعار واللغة ومبدّل القنوات، وينتقل التنقل والبحث وتسجيل الدخول إلى قائمة نافذة. ضيّق النافذة لتجربته: يفتح زر القائمة حوارًا، والتركيز على زر الإغلاق، وEsc يغلقه ويعيد التركيز.">Below 1024px (or when the full row does not fit) the row keeps the menu button, lockup, language and switcher; navigation, search and sign in move into a modal menu. Narrow the window to try it: the menu button opens a dialog with focus on its close button; Escape closes it and returns focus.</p>

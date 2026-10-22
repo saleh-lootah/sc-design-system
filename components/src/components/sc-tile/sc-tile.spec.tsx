@@ -47,4 +47,13 @@ describe('sc-tile (spec)', () => {
     const page = await newSpecPage({ components: [ScTile], html: `<sc-tile href="#" tint="teal">x<svg slot="icon"></svg></sc-tile>` });
     expect(root(page).querySelector('[part="icon"]')!.className).not.toContain('icon-tile--');
   });
+
+  it('takes the href and title from a light-DOM <a href> child, which it then leaves unslotted', async () => {
+    const page = await newSpecPage({ components: [ScTile], html: `<sc-tile count="3"><svg slot="icon"></svg><a href="/moving">Moving home</a></sc-tile>` });
+    const links = root(page).querySelectorAll('a');
+    expect(links.length).toBe(1);
+    expect(links[0].getAttribute('href')).toBe('/moving');
+    expect(root(page).querySelector('[part="title"]')!.textContent).toBe('Moving home');
+    expect(root(page).querySelector('[part="title"] slot')).toBeNull();
+  });
 });

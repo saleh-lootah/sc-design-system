@@ -15,6 +15,7 @@ import { Channel } from "./i18n/core";
 import { ChannelChipVariant } from "./components/sc-channel-chip/sc-channel-chip";
 import { ChannelHeroSize } from "./components/sc-channel-hero/sc-channel-hero";
 import { Channel as Channel1, ChannelLinks } from "./utils/channels";
+import { ScChannelChangeDetail } from "./components/sc-channel-switcher/sc-channel-switcher";
 import { HeadingLevel } from "./components/sc-text-input/field";
 import { Parts } from "./components/sc-date-input/date";
 import { StringsInput } from "./components/sc-date-range/overrides";
@@ -22,7 +23,6 @@ import { EmptyStateHeadingLevel, EmptyStateVariant } from "./components/sc-empty
 import { EmptyStateIconName } from "./icons/for/sc-empty-state";
 import { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
 import { FilterChip } from "./components/sc-filter-chips/sc-filter-chips";
-import { FooterVariant } from "./components/sc-footer/sc-footer";
 import { LanguageSwitchAppearance, LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
 import { ModalCloseReason, ModalHeadingLevel, ModalInitialFocus } from "./components/sc-modal/sc-modal";
 import { ModuleCardHeadingLevel, ModuleCardTint } from "./components/sc-module-card/sc-module-card";
@@ -49,6 +49,7 @@ export { Channel } from "./i18n/core";
 export { ChannelChipVariant } from "./components/sc-channel-chip/sc-channel-chip";
 export { ChannelHeroSize } from "./components/sc-channel-hero/sc-channel-hero";
 export { Channel as Channel1, ChannelLinks } from "./utils/channels";
+export { ScChannelChangeDetail } from "./components/sc-channel-switcher/sc-channel-switcher";
 export { HeadingLevel } from "./components/sc-text-input/field";
 export { Parts } from "./components/sc-date-input/date";
 export { StringsInput } from "./components/sc-date-range/overrides";
@@ -56,7 +57,6 @@ export { EmptyStateHeadingLevel, EmptyStateVariant } from "./components/sc-empty
 export { EmptyStateIconName } from "./icons/for/sc-empty-state";
 export { ErrorSummaryHeadingLevel, ErrorSummaryItem } from "./components/sc-error-summary/sc-error-summary";
 export { FilterChip } from "./components/sc-filter-chips/sc-filter-chips";
-export { FooterVariant } from "./components/sc-footer/sc-footer";
 export { LanguageSwitchAppearance, LanguageSwitchDetail } from "./components/sc-language-switch/sc-language-switch";
 export { ModalCloseReason, ModalHeadingLevel, ModalInitialFocus } from "./components/sc-modal/sc-modal";
 export { ModuleCardHeadingLevel, ModuleCardTint } from "./components/sc-module-card/sc-module-card";
@@ -320,31 +320,6 @@ export namespace Components {
         "label"?: string;
     }
     /**
-     * Where this page sits in the channel's hierarchy, on pages outside a transaction (in the
-     * hero of inner pages, CHR-07). Never inside a journey: use `sc-back-link` there.
-     * Write the trail as plain children: a link for each ancestor, then the current page as
-     * plain text (a `<span>`). The last child is always the current page; it is not a link and
-     * carries `aria-current="page"`.
-     *   <sc-breadcrumbs>
-     *     <a href="/en">Home</a>
-     *     <a href="/en/vehicles">Vehicles</a>
-     *     <span>Renew your vehicle registration</span>
-     *   </sc-breadcrumbs>
-     * Renders `<nav aria-label="Breadcrumb">` with an ordered list in its shadow root. The
-     * chevrons between items mirror in right-to-left. Below 600px the trail collapses to one
-     * "Back to {parent}" link.
-     */
-    interface ScBreadcrumbs {
-        /**
-          * Overrides the text of the single link shown on compact screens (default "Back to {parent}" / "رجوع إلى {parent}"). `{parent}` is replaced by the parent page's text.
-         */
-        "compactLabel"?: string;
-        /**
-          * Overrides the landmark name ("Breadcrumb" / "مسار التنقل").
-         */
-        "label"?: string;
-    }
-    /**
      * Starts an action. Use a verb: "Continue", "Pay with Dubai Pay", "Save and finish later".
      * v2 renders a native `<button>` (or an `<a>` when `href` is set) in light DOM (Stencil
      * `scoped`, decision A2). The button is a real form control: Enter in a field submits the
@@ -531,7 +506,13 @@ export namespace Components {
      * this site). `channel="none"` is for a page that belongs to no channel (the network's own
      * site, the design system's documentation): no tile is current and every tile is a link.
      * A `<nav>` labelled "Government of Dubai channels" with a list of links. Seven tiles in a
-     * row from 1024px (by the strip's own width), four from 600px, two below.
+     * row from 960px of the strip's own width, four from 560px, two below. The eyebrow is set in
+     * sentence case as written (CNT-07).
+     * Without JavaScript (PERF-04, B1): the strip renders from its props, so write the same links
+     * as light-DOM children in `slot="fallback"` (a `<nav aria-label>` with a `<ul>` of
+     * `<a href>`, the current channel as text with `aria-current="true"`). `sc.css` shows them as
+     * a row of 44px links until the strip upgrades, and hides them once it has rendered.
+     * Before it upgrades the host also reserves the strip's measured height for its width.
      */
     interface ScChannelNetwork {
         /**
@@ -557,6 +538,11 @@ export namespace Components {
      * swatch is that channel's `channel-action`; that is why the component renders into light
      * DOM (Stencil `scoped`): the document's channel rules must reach the items. The current
      * channel carries a check and `aria-current="true"`.
+     * Choosing a channel emits `scChannelChange` (`detail.channel`), then follows its link. A page
+     * that switches channels in place (a documentation site re-theming its examples, a single-page
+     * app) calls `preventDefault()`: the link is not followed, `value` becomes the chosen channel
+     * and the panel closes, returning focus to the trigger. Clicks with a modifier key (a new tab
+     * or window) are left to the browser and emit nothing.
      * Escape and a press outside close the panel; Escape returns focus to the button; the panel
      * closes when focus leaves it. From a pointer it grows from the trigger's corner over
      * `duration-base`; from the keyboard it appears instantly (MOT-02). Below 1024px the trigger
@@ -579,6 +565,10 @@ export namespace Components {
           * Opens the panel (as from the keyboard: no animation).
          */
         "open": () => Promise<void>;
+        /**
+          * The channel shown as current, when the page switches channels in place. Wins over `channel`; set by the switcher itself when an `scChannelChange` listener calls `preventDefault()`.
+         */
+        "value"?: Channel1;
     }
     /**
      * A checkbox: one of several choices in an `sc-checkbox-group`, or on its own for a single
@@ -955,77 +945,6 @@ export namespace Components {
           * @default false
          */
         "noClear": boolean;
-    }
-    /**
-     * The page footer, a `<footer>` (the page's `contentinfo` landmark). Two variants:
-     * - `simple` (default; transaction pages, component-language A29): one row of underlined
-     *   links and "Government of Dubai", under a 1px rule.
-     * - `grouped` (channel sites, Standard CHR-06, decision Q-footer; B5): the channel's brand
-     *   group (`slot="brand"`: a one-sentence description and app badges); a **Channels** group
-     *   listing all seven channels in the Standard 3.1 order, the current one Bold with a 3px
-     *   `channel-action` bar at its inline start and `aria-current="true"`, and no swatch; **Helpful information** (about, help and contact,
-     *   accessibility statement, sitemap); and **Legal** (privacy and cookies, terms). Each group
-     *   has an `<h2>`. Then "Government of Dubai · Last updated …" and "… is run by the
-     *   Government of Dubai".
-     * The standard links appear when their `*-href` is set, with text from strings in the page
-     * language. Every channel sets all of them (TPL-01, LEG-01). Extra links go in the default
-     * slot as plain `<a href>` elements; each gets its own list item (the footer sets their
-     * `slot` attribute). The footer is on `surface`, never a dark band.
-     * Links are navigation links (decision R6): underlined in every state, in `on-surface`
-     * (CHR-06). The current channel carries a 3px `channel-action` bar at its inline start as well
-     * as Bold (R10: Arabic is already Bold).
-     * Without JavaScript (PERF-04): the footer renders in shadow DOM, so write the same links as
-     * light-DOM children in `slot="fallback"` (a `<nav>` or `<ul>` of `<a href>`). The browser
-     * shows them until the footer upgrades; the upgraded footer has no `fallback` slot, so they are
-     * then neither shown nor read. Bare `<a>` extras are hidden before upgrade when a fallback
-     * exists, so list them in the fallback too.
-     */
-    interface ScFooter {
-        /**
-          * About the channel ("About Dubai Now").
-         */
-        "aboutHref"?: string;
-        /**
-          * The accessibility statement.
-         */
-        "accessibilityHref"?: string;
-        /**
-          * The current channel. Defaults to the closest `data-channel`.
-         */
-        "channel"?: Channel1;
-        /**
-          * A separate cookies page. Splits "Privacy and cookies" into "Privacy" and "Cookies".
-         */
-        "cookiesHref"?: string;
-        /**
-          * The help and contact page.
-         */
-        "helpHref"?: string;
-        /**
-          * Each channel's home page, for the Channels group (as `sc-channel-switcher` `links`; `{lang}` becomes `en` or `ar`).
-         */
-        "links"?: ChannelLinks | string;
-        /**
-          * The privacy notice. Labelled "Privacy and cookies" unless `cookies-href` is set too.
-         */
-        "privacyHref"?: string;
-        /**
-          * The sitemap.
-         */
-        "sitemapHref"?: string;
-        /**
-          * The terms of use.
-         */
-        "termsHref"?: string;
-        /**
-          * Grouped: when the site was last updated, as it should read ("12 October 2026").
-         */
-        "updated"?: string;
-        /**
-          * `simple` (one row) or `grouped` (channel sites, with the Channels group).
-          * @default 'simple'
-         */
-        "variant": FooterVariant;
     }
     /**
      * Switches to the same page in the other language. The label is always the other
@@ -1544,19 +1463,25 @@ export namespace Components {
     /**
      * The header of channel pages outside a transaction (Standard CHR-01 to CHR-04;
      * component-language B2). Transaction pages use `sc-app-bar`.
-     * From the inline-start edge: the Government of Dubai lockup (`slot="lockup"`), the main
-     * navigation (`slot="nav"`), search, the language switch (`slot="language"`), sign in with UAE PASS
+     * From the inline-start edge: the Government of Dubai lockup (`slot="lockup"`), an optional
+     * site name or wordmark (`slot="name"`), the main navigation (`slot="nav"`), search (an
+     * `sc-search` in `slot="search"`, else a search link to `search-href`), the language switch
+     * (`slot="language"`), sign in with UAE PASS
      * (`slot="signin"`) or the account menu once signed in (`slot="account"`), and the
      * channel's logo and switcher (`slot="switcher"`, an `sc-channel-switcher`). Sign in is the
      * official UAE PASS button (decision U3a), never a themed `sc-button`: until the official kit
      * arrives the header renders a marked placeholder (black, white label, fingerprint glyph,
      * 56px) that `slot="signin"` replaces. The order
      * mirrors in Arabic. A flat `surface` bar, 80px tall, with a 1px `outline-variant` rule.
-     * Below 1024px the row keeps the menu button, the lockup, the language switch and the
+     * Below 1024px the row keeps the menu button, the lockup, the name, the language switch and the
      * channel switcher (64px). Navigation, search and sign in (or the account menu) move into
      * the mobile menu: a modal `<dialog>` labelled "Menu", with focus on its close button when
      * it opens, Escape closing it and returning focus to the menu button, and the page behind
      * it inert. The same slotted elements move; nothing is duplicated.
+     * Before it upgrades, and without JavaScript, `sc.css` lays the light-DOM children out as one
+     * plain row (PERF-04, B1): the lockup, the name and the navigation links (the current one
+     * underlined in the channel colour, R10), 44px targets. With JavaScript the host keeps its
+     * final height meanwhile, so nothing moves when it upgrades.
      * The host is a `<header>` banner landmark. It is not fixed by default; with `sticky`,
      * `sc-page` keeps `scroll-padding-top` clear of it (A11Y-05, F-009).
      */
@@ -1570,7 +1495,7 @@ export namespace Components {
          */
         "openMenu": () => Promise<void>;
         /**
-          * The search page. Adds a search button (an icon link named "Search").
+          * The search page. Adds a search button (an icon link named "Search") when there is no `slot="search"` child.
          */
         "searchHref"?: string;
         /**
@@ -2014,6 +1939,12 @@ export namespace Components {
      * The whole tile is one link, because the title (and the count) is its only content and so
      * the link's whole name: "Moving home, 14 services". That does not conflict with CMP-06,
      * which is about cards that hold more than one thing. Tiles carry no other links or buttons.
+     * Write the title as a light-DOM link, so the tile works before it upgrades and without
+     * JavaScript (PERF-04): `<sc-tile><svg slot="icon">…</svg><a href="/en/moving-home">Moving
+     * home</a></sc-tile>`. `sc.css` draws it as the tile meanwhile, the whole box one link. Once
+     * upgraded the tile takes the link's `href` and text and renders its own link; the child is
+     * then neither shown nor read. The older form, `href` on the host and the title as text, still
+     * works, but shows no link until the tile upgrades.
      */
     interface ScTile {
         /**
@@ -2025,9 +1956,9 @@ export namespace Components {
          */
         "countLabel"?: string;
         /**
-          * Where the tile goes. Required.
+          * Where the tile goes, when the title is not written as an `<a href>` child.
          */
-        "href": string;
+        "href"?: string;
         /**
           * The icon tile's decorative topic tint (foundations §2.7): `blue` transport and vehicles, `violet` residency and identity, `rose` family, `orange` housing and utilities, `amber` bills and money, `green` health. Without it the tile takes the channel's container colour.
          */
@@ -2123,6 +2054,10 @@ export interface ScAccountMenuCustomEvent<T> extends CustomEvent<T> {
 export interface ScAnnouncementBarCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLScAnnouncementBarElement;
+}
+export interface ScChannelSwitcherCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLScChannelSwitcherElement;
 }
 export interface ScCheckboxCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -2355,27 +2290,6 @@ declare global {
         new (): HTMLScBottomNavElement;
     };
     /**
-     * Where this page sits in the channel's hierarchy, on pages outside a transaction (in the
-     * hero of inner pages, CHR-07). Never inside a journey: use `sc-back-link` there.
-     * Write the trail as plain children: a link for each ancestor, then the current page as
-     * plain text (a `<span>`). The last child is always the current page; it is not a link and
-     * carries `aria-current="page"`.
-     *   <sc-breadcrumbs>
-     *     <a href="/en">Home</a>
-     *     <a href="/en/vehicles">Vehicles</a>
-     *     <span>Renew your vehicle registration</span>
-     *   </sc-breadcrumbs>
-     * Renders `<nav aria-label="Breadcrumb">` with an ordered list in its shadow root. The
-     * chevrons between items mirror in right-to-left. Below 600px the trail collapses to one
-     * "Back to {parent}" link.
-     */
-    interface HTMLScBreadcrumbsElement extends Components.ScBreadcrumbs, HTMLStencilElement {
-    }
-    var HTMLScBreadcrumbsElement: {
-        prototype: HTMLScBreadcrumbsElement;
-        new (): HTMLScBreadcrumbsElement;
-    };
-    /**
      * Starts an action. Use a verb: "Continue", "Pay with Dubai Pay", "Save and finish later".
      * v2 renders a native `<button>` (or an `<a>` when `href` is set) in light DOM (Stencil
      * `scoped`, decision A2). The button is a real form control: Enter in a field submits the
@@ -2463,7 +2377,13 @@ declare global {
      * this site). `channel="none"` is for a page that belongs to no channel (the network's own
      * site, the design system's documentation): no tile is current and every tile is a link.
      * A `<nav>` labelled "Government of Dubai channels" with a list of links. Seven tiles in a
-     * row from 1024px (by the strip's own width), four from 600px, two below.
+     * row from 960px of the strip's own width, four from 560px, two below. The eyebrow is set in
+     * sentence case as written (CNT-07).
+     * Without JavaScript (PERF-04, B1): the strip renders from its props, so write the same links
+     * as light-DOM children in `slot="fallback"` (a `<nav aria-label>` with a `<ul>` of
+     * `<a href>`, the current channel as text with `aria-current="true"`). `sc.css` shows them as
+     * a row of 44px links until the strip upgrades, and hides them once it has rendered.
+     * Before it upgrades the host also reserves the strip's measured height for its width.
      */
     interface HTMLScChannelNetworkElement extends Components.ScChannelNetwork, HTMLStencilElement {
     }
@@ -2471,6 +2391,9 @@ declare global {
         prototype: HTMLScChannelNetworkElement;
         new (): HTMLScChannelNetworkElement;
     };
+    interface HTMLScChannelSwitcherElementEventMap {
+        "scChannelChange": ScChannelChangeDetail;
+    }
     /**
      * The channel's logo and the channel switcher, at the inline-end of `sc-site-header`
      * (Standard CHR-01, CHR-03; component-language B2a).
@@ -2481,12 +2404,25 @@ declare global {
      * swatch is that channel's `channel-action`; that is why the component renders into light
      * DOM (Stencil `scoped`): the document's channel rules must reach the items. The current
      * channel carries a check and `aria-current="true"`.
+     * Choosing a channel emits `scChannelChange` (`detail.channel`), then follows its link. A page
+     * that switches channels in place (a documentation site re-theming its examples, a single-page
+     * app) calls `preventDefault()`: the link is not followed, `value` becomes the chosen channel
+     * and the panel closes, returning focus to the trigger. Clicks with a modifier key (a new tab
+     * or window) are left to the browser and emit nothing.
      * Escape and a press outside close the panel; Escape returns focus to the button; the panel
      * closes when focus leaves it. From a pointer it grows from the trigger's corner over
      * `duration-base`; from the keyboard it appears instantly (MOT-02). Below 1024px the trigger
      * shrinks to the logo and chevron and keeps its accessible name (CHR-04).
      */
     interface HTMLScChannelSwitcherElement extends Components.ScChannelSwitcher, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLScChannelSwitcherElementEventMap>(type: K, listener: (this: HTMLScChannelSwitcherElement, ev: ScChannelSwitcherCustomEvent<HTMLScChannelSwitcherElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLScChannelSwitcherElementEventMap>(type: K, listener: (this: HTMLScChannelSwitcherElement, ev: ScChannelSwitcherCustomEvent<HTMLScChannelSwitcherElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLScChannelSwitcherElement: {
         prototype: HTMLScChannelSwitcherElement;
@@ -2671,36 +2607,6 @@ declare global {
     var HTMLScFilterChipsElement: {
         prototype: HTMLScFilterChipsElement;
         new (): HTMLScFilterChipsElement;
-    };
-    /**
-     * The page footer, a `<footer>` (the page's `contentinfo` landmark). Two variants:
-     * - `simple` (default; transaction pages, component-language A29): one row of underlined
-     *   links and "Government of Dubai", under a 1px rule.
-     * - `grouped` (channel sites, Standard CHR-06, decision Q-footer; B5): the channel's brand
-     *   group (`slot="brand"`: a one-sentence description and app badges); a **Channels** group
-     *   listing all seven channels in the Standard 3.1 order, the current one Bold with a 3px
-     *   `channel-action` bar at its inline start and `aria-current="true"`, and no swatch; **Helpful information** (about, help and contact,
-     *   accessibility statement, sitemap); and **Legal** (privacy and cookies, terms). Each group
-     *   has an `<h2>`. Then "Government of Dubai · Last updated …" and "… is run by the
-     *   Government of Dubai".
-     * The standard links appear when their `*-href` is set, with text from strings in the page
-     * language. Every channel sets all of them (TPL-01, LEG-01). Extra links go in the default
-     * slot as plain `<a href>` elements; each gets its own list item (the footer sets their
-     * `slot` attribute). The footer is on `surface`, never a dark band.
-     * Links are navigation links (decision R6): underlined in every state, in `on-surface`
-     * (CHR-06). The current channel carries a 3px `channel-action` bar at its inline start as well
-     * as Bold (R10: Arabic is already Bold).
-     * Without JavaScript (PERF-04): the footer renders in shadow DOM, so write the same links as
-     * light-DOM children in `slot="fallback"` (a `<nav>` or `<ul>` of `<a href>`). The browser
-     * shows them until the footer upgrades; the upgraded footer has no `fallback` slot, so they are
-     * then neither shown nor read. Bare `<a>` extras are hidden before upgrade when a fallback
-     * exists, so list them in the fallback too.
-     */
-    interface HTMLScFooterElement extends Components.ScFooter, HTMLStencilElement {
-    }
-    var HTMLScFooterElement: {
-        prototype: HTMLScFooterElement;
-        new (): HTMLScFooterElement;
     };
     interface HTMLScLanguageSwitchElementEventMap {
         "scSwitch": LanguageSwitchDetail;
@@ -3011,19 +2917,25 @@ declare global {
     /**
      * The header of channel pages outside a transaction (Standard CHR-01 to CHR-04;
      * component-language B2). Transaction pages use `sc-app-bar`.
-     * From the inline-start edge: the Government of Dubai lockup (`slot="lockup"`), the main
-     * navigation (`slot="nav"`), search, the language switch (`slot="language"`), sign in with UAE PASS
+     * From the inline-start edge: the Government of Dubai lockup (`slot="lockup"`), an optional
+     * site name or wordmark (`slot="name"`), the main navigation (`slot="nav"`), search (an
+     * `sc-search` in `slot="search"`, else a search link to `search-href`), the language switch
+     * (`slot="language"`), sign in with UAE PASS
      * (`slot="signin"`) or the account menu once signed in (`slot="account"`), and the
      * channel's logo and switcher (`slot="switcher"`, an `sc-channel-switcher`). Sign in is the
      * official UAE PASS button (decision U3a), never a themed `sc-button`: until the official kit
      * arrives the header renders a marked placeholder (black, white label, fingerprint glyph,
      * 56px) that `slot="signin"` replaces. The order
      * mirrors in Arabic. A flat `surface` bar, 80px tall, with a 1px `outline-variant` rule.
-     * Below 1024px the row keeps the menu button, the lockup, the language switch and the
+     * Below 1024px the row keeps the menu button, the lockup, the name, the language switch and the
      * channel switcher (64px). Navigation, search and sign in (or the account menu) move into
      * the mobile menu: a modal `<dialog>` labelled "Menu", with focus on its close button when
      * it opens, Escape closing it and returning focus to the menu button, and the page behind
      * it inert. The same slotted elements move; nothing is duplicated.
+     * Before it upgrades, and without JavaScript, `sc.css` lays the light-DOM children out as one
+     * plain row (PERF-04, B1): the lockup, the name and the navigation links (the current one
+     * underlined in the channel colour, R10), 44px targets. With JavaScript the host keeps its
+     * final height meanwhile, so nothing moves when it upgrades.
      * The host is a `<header>` banner landmark. It is not fixed by default; with `sticky`,
      * `sc-page` keeps `scroll-padding-top` clear of it (A11Y-05, F-009).
      */
@@ -3262,6 +3174,12 @@ declare global {
      * The whole tile is one link, because the title (and the count) is its only content and so
      * the link's whole name: "Moving home, 14 services". That does not conflict with CMP-06,
      * which is about cards that hold more than one thing. Tiles carry no other links or buttons.
+     * Write the title as a light-DOM link, so the tile works before it upgrades and without
+     * JavaScript (PERF-04): `<sc-tile><svg slot="icon">…</svg><a href="/en/moving-home">Moving
+     * home</a></sc-tile>`. `sc.css` draws it as the tile meanwhile, the whole box one link. Once
+     * upgraded the tile takes the link's `href` and text and renders its own link; the child is
+     * then neither shown nor read. The older form, `href` on the host and the title as text, still
+     * works, but shows no link until the tile upgrades.
      */
     interface HTMLScTileElement extends Components.ScTile, HTMLStencilElement {
     }
@@ -3333,7 +3251,6 @@ declare global {
         "sc-attention-card": HTMLScAttentionCardElement;
         "sc-back-link": HTMLScBackLinkElement;
         "sc-bottom-nav": HTMLScBottomNavElement;
-        "sc-breadcrumbs": HTMLScBreadcrumbsElement;
         "sc-button": HTMLScButtonElement;
         "sc-callout": HTMLScCalloutElement;
         "sc-card": HTMLScCardElement;
@@ -3348,7 +3265,6 @@ declare global {
         "sc-empty-state": HTMLScEmptyStateElement;
         "sc-error-summary": HTMLScErrorSummaryElement;
         "sc-filter-chips": HTMLScFilterChipsElement;
-        "sc-footer": HTMLScFooterElement;
         "sc-language-switch": HTMLScLanguageSwitchElement;
         "sc-link": HTMLScLinkElement;
         "sc-modal": HTMLScModalElement;
@@ -3622,31 +3538,6 @@ declare namespace LocalJSX {
         "label"?: string;
     }
     /**
-     * Where this page sits in the channel's hierarchy, on pages outside a transaction (in the
-     * hero of inner pages, CHR-07). Never inside a journey: use `sc-back-link` there.
-     * Write the trail as plain children: a link for each ancestor, then the current page as
-     * plain text (a `<span>`). The last child is always the current page; it is not a link and
-     * carries `aria-current="page"`.
-     *   <sc-breadcrumbs>
-     *     <a href="/en">Home</a>
-     *     <a href="/en/vehicles">Vehicles</a>
-     *     <span>Renew your vehicle registration</span>
-     *   </sc-breadcrumbs>
-     * Renders `<nav aria-label="Breadcrumb">` with an ordered list in its shadow root. The
-     * chevrons between items mirror in right-to-left. Below 600px the trail collapses to one
-     * "Back to {parent}" link.
-     */
-    interface ScBreadcrumbs {
-        /**
-          * Overrides the text of the single link shown on compact screens (default "Back to {parent}" / "رجوع إلى {parent}"). `{parent}` is replaced by the parent page's text.
-         */
-        "compactLabel"?: string;
-        /**
-          * Overrides the landmark name ("Breadcrumb" / "مسار التنقل").
-         */
-        "label"?: string;
-    }
-    /**
      * Starts an action. Use a verb: "Continue", "Pay with Dubai Pay", "Save and finish later".
      * v2 renders a native `<button>` (or an `<a>` when `href` is set) in light DOM (Stencil
      * `scoped`, decision A2). The button is a real form control: Enter in a field submits the
@@ -3833,7 +3724,13 @@ declare namespace LocalJSX {
      * this site). `channel="none"` is for a page that belongs to no channel (the network's own
      * site, the design system's documentation): no tile is current and every tile is a link.
      * A `<nav>` labelled "Government of Dubai channels" with a list of links. Seven tiles in a
-     * row from 1024px (by the strip's own width), four from 600px, two below.
+     * row from 960px of the strip's own width, four from 560px, two below. The eyebrow is set in
+     * sentence case as written (CNT-07).
+     * Without JavaScript (PERF-04, B1): the strip renders from its props, so write the same links
+     * as light-DOM children in `slot="fallback"` (a `<nav aria-label>` with a `<ul>` of
+     * `<a href>`, the current channel as text with `aria-current="true"`). `sc.css` shows them as
+     * a row of 44px links until the strip upgrades, and hides them once it has rendered.
+     * Before it upgrades the host also reserves the strip's measured height for its width.
      */
     interface ScChannelNetwork {
         /**
@@ -3859,6 +3756,11 @@ declare namespace LocalJSX {
      * swatch is that channel's `channel-action`; that is why the component renders into light
      * DOM (Stencil `scoped`): the document's channel rules must reach the items. The current
      * channel carries a check and `aria-current="true"`.
+     * Choosing a channel emits `scChannelChange` (`detail.channel`), then follows its link. A page
+     * that switches channels in place (a documentation site re-theming its examples, a single-page
+     * app) calls `preventDefault()`: the link is not followed, `value` becomes the chosen channel
+     * and the panel closes, returning focus to the trigger. Clicks with a modifier key (a new tab
+     * or window) are left to the browser and emit nothing.
      * Escape and a press outside close the panel; Escape returns focus to the button; the panel
      * closes when focus leaves it. From a pointer it grows from the trigger's corner over
      * `duration-base`; from the keyboard it appears instantly (MOT-02). Below 1024px the trigger
@@ -3873,6 +3775,14 @@ declare namespace LocalJSX {
           * Each channel's home page, as an object or a JSON attribute: `links='{"now":"https://…/{lang}/","transport":"https://…/{lang}/"}'`. `{lang}` becomes `en` or `ar`, so each link leads to that channel's home in the current language. Give all seven; a channel without a link is listed as text.
          */
         "links"?: ChannelLinks | string;
+        /**
+          * Emitted when the user chooses a channel, before its link is followed. Cancelable: `preventDefault()` keeps the page where it is and makes the choice the `value`.
+         */
+        "onScChannelChange"?: (event: ScChannelSwitcherCustomEvent<ScChannelChangeDetail>) => void;
+        /**
+          * The channel shown as current, when the page switches channels in place. Wins over `channel`; set by the switcher itself when an `scChannelChange` listener calls `preventDefault()`.
+         */
+        "value"?: Channel1;
     }
     /**
      * A checkbox: one of several choices in an `sc-checkbox-group`, or on its own for a single
@@ -4269,77 +4179,6 @@ declare namespace LocalJSX {
           * Fires when a chip is removed, with `{ value, label }`. The chip is already gone.
          */
         "onScRemove"?: (event: ScFilterChipsCustomEvent<FilterChip>) => void;
-    }
-    /**
-     * The page footer, a `<footer>` (the page's `contentinfo` landmark). Two variants:
-     * - `simple` (default; transaction pages, component-language A29): one row of underlined
-     *   links and "Government of Dubai", under a 1px rule.
-     * - `grouped` (channel sites, Standard CHR-06, decision Q-footer; B5): the channel's brand
-     *   group (`slot="brand"`: a one-sentence description and app badges); a **Channels** group
-     *   listing all seven channels in the Standard 3.1 order, the current one Bold with a 3px
-     *   `channel-action` bar at its inline start and `aria-current="true"`, and no swatch; **Helpful information** (about, help and contact,
-     *   accessibility statement, sitemap); and **Legal** (privacy and cookies, terms). Each group
-     *   has an `<h2>`. Then "Government of Dubai · Last updated …" and "… is run by the
-     *   Government of Dubai".
-     * The standard links appear when their `*-href` is set, with text from strings in the page
-     * language. Every channel sets all of them (TPL-01, LEG-01). Extra links go in the default
-     * slot as plain `<a href>` elements; each gets its own list item (the footer sets their
-     * `slot` attribute). The footer is on `surface`, never a dark band.
-     * Links are navigation links (decision R6): underlined in every state, in `on-surface`
-     * (CHR-06). The current channel carries a 3px `channel-action` bar at its inline start as well
-     * as Bold (R10: Arabic is already Bold).
-     * Without JavaScript (PERF-04): the footer renders in shadow DOM, so write the same links as
-     * light-DOM children in `slot="fallback"` (a `<nav>` or `<ul>` of `<a href>`). The browser
-     * shows them until the footer upgrades; the upgraded footer has no `fallback` slot, so they are
-     * then neither shown nor read. Bare `<a>` extras are hidden before upgrade when a fallback
-     * exists, so list them in the fallback too.
-     */
-    interface ScFooter {
-        /**
-          * About the channel ("About Dubai Now").
-         */
-        "aboutHref"?: string;
-        /**
-          * The accessibility statement.
-         */
-        "accessibilityHref"?: string;
-        /**
-          * The current channel. Defaults to the closest `data-channel`.
-         */
-        "channel"?: Channel1;
-        /**
-          * A separate cookies page. Splits "Privacy and cookies" into "Privacy" and "Cookies".
-         */
-        "cookiesHref"?: string;
-        /**
-          * The help and contact page.
-         */
-        "helpHref"?: string;
-        /**
-          * Each channel's home page, for the Channels group (as `sc-channel-switcher` `links`; `{lang}` becomes `en` or `ar`).
-         */
-        "links"?: ChannelLinks | string;
-        /**
-          * The privacy notice. Labelled "Privacy and cookies" unless `cookies-href` is set too.
-         */
-        "privacyHref"?: string;
-        /**
-          * The sitemap.
-         */
-        "sitemapHref"?: string;
-        /**
-          * The terms of use.
-         */
-        "termsHref"?: string;
-        /**
-          * Grouped: when the site was last updated, as it should read ("12 October 2026").
-         */
-        "updated"?: string;
-        /**
-          * `simple` (one row) or `grouped` (channel sites, with the Channels group).
-          * @default 'simple'
-         */
-        "variant"?: FooterVariant;
     }
     /**
      * Switches to the same page in the other language. The label is always the other
@@ -4874,25 +4713,31 @@ declare namespace LocalJSX {
     /**
      * The header of channel pages outside a transaction (Standard CHR-01 to CHR-04;
      * component-language B2). Transaction pages use `sc-app-bar`.
-     * From the inline-start edge: the Government of Dubai lockup (`slot="lockup"`), the main
-     * navigation (`slot="nav"`), search, the language switch (`slot="language"`), sign in with UAE PASS
+     * From the inline-start edge: the Government of Dubai lockup (`slot="lockup"`), an optional
+     * site name or wordmark (`slot="name"`), the main navigation (`slot="nav"`), search (an
+     * `sc-search` in `slot="search"`, else a search link to `search-href`), the language switch
+     * (`slot="language"`), sign in with UAE PASS
      * (`slot="signin"`) or the account menu once signed in (`slot="account"`), and the
      * channel's logo and switcher (`slot="switcher"`, an `sc-channel-switcher`). Sign in is the
      * official UAE PASS button (decision U3a), never a themed `sc-button`: until the official kit
      * arrives the header renders a marked placeholder (black, white label, fingerprint glyph,
      * 56px) that `slot="signin"` replaces. The order
      * mirrors in Arabic. A flat `surface` bar, 80px tall, with a 1px `outline-variant` rule.
-     * Below 1024px the row keeps the menu button, the lockup, the language switch and the
+     * Below 1024px the row keeps the menu button, the lockup, the name, the language switch and the
      * channel switcher (64px). Navigation, search and sign in (or the account menu) move into
      * the mobile menu: a modal `<dialog>` labelled "Menu", with focus on its close button when
      * it opens, Escape closing it and returning focus to the menu button, and the page behind
      * it inert. The same slotted elements move; nothing is duplicated.
+     * Before it upgrades, and without JavaScript, `sc.css` lays the light-DOM children out as one
+     * plain row (PERF-04, B1): the lockup, the name and the navigation links (the current one
+     * underlined in the channel colour, R10), 44px targets. With JavaScript the host keeps its
+     * final height meanwhile, so nothing moves when it upgrades.
      * The host is a `<header>` banner landmark. It is not fixed by default; with `sticky`,
      * `sc-page` keeps `scroll-padding-top` clear of it (A11Y-05, F-009).
      */
     interface ScSiteHeader {
         /**
-          * The search page. Adds a search button (an icon link named "Search").
+          * The search page. Adds a search button (an icon link named "Search") when there is no `slot="search"` child.
          */
         "searchHref"?: string;
         /**
@@ -5360,6 +5205,12 @@ declare namespace LocalJSX {
      * The whole tile is one link, because the title (and the count) is its only content and so
      * the link's whole name: "Moving home, 14 services". That does not conflict with CMP-06,
      * which is about cards that hold more than one thing. Tiles carry no other links or buttons.
+     * Write the title as a light-DOM link, so the tile works before it upgrades and without
+     * JavaScript (PERF-04): `<sc-tile><svg slot="icon">…</svg><a href="/en/moving-home">Moving
+     * home</a></sc-tile>`. `sc.css` draws it as the tile meanwhile, the whole box one link. Once
+     * upgraded the tile takes the link's `href` and text and renders its own link; the child is
+     * then neither shown nor read. The older form, `href` on the host and the title as text, still
+     * works, but shows no link until the tile upgrades.
      */
     interface ScTile {
         /**
@@ -5371,9 +5222,9 @@ declare namespace LocalJSX {
          */
         "countLabel"?: string;
         /**
-          * Where the tile goes. Required.
+          * Where the tile goes, when the title is not written as an `<a href>` child.
          */
-        "href": string;
+        "href"?: string;
         /**
           * The icon tile's decorative topic tint (foundations §2.7): `blue` transport and vehicles, `violet` residency and identity, `rose` family, `orange` housing and utilities, `amber` bills and money, `green` health. Without it the tile takes the channel's container colour.
          */
@@ -5504,10 +5355,6 @@ declare namespace LocalJSX {
     interface ScBottomNavAttributes {
         "label": string;
     }
-    interface ScBreadcrumbsAttributes {
-        "label": string;
-        "compactLabel": string;
-    }
     interface ScButtonAttributes {
         "variant": ButtonVariant;
         "size": ButtonSize;
@@ -5552,6 +5399,7 @@ declare namespace LocalJSX {
     }
     interface ScChannelSwitcherAttributes {
         "channel": Channel;
+        "value": Channel;
         "links": ChannelLinks | string;
     }
     interface ScCheckboxAttributes {
@@ -5627,19 +5475,6 @@ declare namespace LocalJSX {
         "label": string;
         "focusTarget": string;
         "noClear": boolean;
-    }
-    interface ScFooterAttributes {
-        "variant": FooterVariant;
-        "channel": Channel;
-        "links": ChannelLinks | string;
-        "aboutHref": string;
-        "helpHref": string;
-        "accessibilityHref": string;
-        "privacyHref": string;
-        "cookiesHref": string;
-        "termsHref": string;
-        "sitemapHref": string;
-        "updated": string;
     }
     interface ScLanguageSwitchAttributes {
         "href": string;
@@ -5846,7 +5681,6 @@ declare namespace LocalJSX {
         "sc-attention-card": Omit<ScAttentionCard, keyof ScAttentionCardAttributes> & { [K in keyof ScAttentionCard & keyof ScAttentionCardAttributes]?: ScAttentionCard[K] } & { [K in keyof ScAttentionCard & keyof ScAttentionCardAttributes as `attr:${K}`]?: ScAttentionCardAttributes[K] } & { [K in keyof ScAttentionCard & keyof ScAttentionCardAttributes as `prop:${K}`]?: ScAttentionCard[K] };
         "sc-back-link": Omit<ScBackLink, keyof ScBackLinkAttributes> & { [K in keyof ScBackLink & keyof ScBackLinkAttributes]?: ScBackLink[K] } & { [K in keyof ScBackLink & keyof ScBackLinkAttributes as `attr:${K}`]?: ScBackLinkAttributes[K] } & { [K in keyof ScBackLink & keyof ScBackLinkAttributes as `prop:${K}`]?: ScBackLink[K] };
         "sc-bottom-nav": Omit<ScBottomNav, keyof ScBottomNavAttributes> & { [K in keyof ScBottomNav & keyof ScBottomNavAttributes]?: ScBottomNav[K] } & { [K in keyof ScBottomNav & keyof ScBottomNavAttributes as `attr:${K}`]?: ScBottomNavAttributes[K] } & { [K in keyof ScBottomNav & keyof ScBottomNavAttributes as `prop:${K}`]?: ScBottomNav[K] };
-        "sc-breadcrumbs": Omit<ScBreadcrumbs, keyof ScBreadcrumbsAttributes> & { [K in keyof ScBreadcrumbs & keyof ScBreadcrumbsAttributes]?: ScBreadcrumbs[K] } & { [K in keyof ScBreadcrumbs & keyof ScBreadcrumbsAttributes as `attr:${K}`]?: ScBreadcrumbsAttributes[K] } & { [K in keyof ScBreadcrumbs & keyof ScBreadcrumbsAttributes as `prop:${K}`]?: ScBreadcrumbs[K] };
         "sc-button": Omit<ScButton, keyof ScButtonAttributes> & { [K in keyof ScButton & keyof ScButtonAttributes]?: ScButton[K] } & { [K in keyof ScButton & keyof ScButtonAttributes as `attr:${K}`]?: ScButtonAttributes[K] } & { [K in keyof ScButton & keyof ScButtonAttributes as `prop:${K}`]?: ScButton[K] };
         "sc-callout": Omit<ScCallout, keyof ScCalloutAttributes> & { [K in keyof ScCallout & keyof ScCalloutAttributes]?: ScCallout[K] } & { [K in keyof ScCallout & keyof ScCalloutAttributes as `attr:${K}`]?: ScCalloutAttributes[K] } & { [K in keyof ScCallout & keyof ScCalloutAttributes as `prop:${K}`]?: ScCallout[K] };
         "sc-card": Omit<ScCard, keyof ScCardAttributes> & { [K in keyof ScCard & keyof ScCardAttributes]?: ScCard[K] } & { [K in keyof ScCard & keyof ScCardAttributes as `attr:${K}`]?: ScCardAttributes[K] } & { [K in keyof ScCard & keyof ScCardAttributes as `prop:${K}`]?: ScCard[K] };
@@ -5861,7 +5695,6 @@ declare namespace LocalJSX {
         "sc-empty-state": Omit<ScEmptyState, keyof ScEmptyStateAttributes> & { [K in keyof ScEmptyState & keyof ScEmptyStateAttributes]?: ScEmptyState[K] } & { [K in keyof ScEmptyState & keyof ScEmptyStateAttributes as `attr:${K}`]?: ScEmptyStateAttributes[K] } & { [K in keyof ScEmptyState & keyof ScEmptyStateAttributes as `prop:${K}`]?: ScEmptyState[K] } & OneOf<"heading", ScEmptyState["heading"], ScEmptyStateAttributes["heading"]>;
         "sc-error-summary": Omit<ScErrorSummary, keyof ScErrorSummaryAttributes> & { [K in keyof ScErrorSummary & keyof ScErrorSummaryAttributes]?: ScErrorSummary[K] } & { [K in keyof ScErrorSummary & keyof ScErrorSummaryAttributes as `attr:${K}`]?: ScErrorSummaryAttributes[K] } & { [K in keyof ScErrorSummary & keyof ScErrorSummaryAttributes as `prop:${K}`]?: ScErrorSummary[K] };
         "sc-filter-chips": Omit<ScFilterChips, keyof ScFilterChipsAttributes> & { [K in keyof ScFilterChips & keyof ScFilterChipsAttributes]?: ScFilterChips[K] } & { [K in keyof ScFilterChips & keyof ScFilterChipsAttributes as `attr:${K}`]?: ScFilterChipsAttributes[K] } & { [K in keyof ScFilterChips & keyof ScFilterChipsAttributes as `prop:${K}`]?: ScFilterChips[K] };
-        "sc-footer": Omit<ScFooter, keyof ScFooterAttributes> & { [K in keyof ScFooter & keyof ScFooterAttributes]?: ScFooter[K] } & { [K in keyof ScFooter & keyof ScFooterAttributes as `attr:${K}`]?: ScFooterAttributes[K] } & { [K in keyof ScFooter & keyof ScFooterAttributes as `prop:${K}`]?: ScFooter[K] };
         "sc-language-switch": Omit<ScLanguageSwitch, keyof ScLanguageSwitchAttributes> & { [K in keyof ScLanguageSwitch & keyof ScLanguageSwitchAttributes]?: ScLanguageSwitch[K] } & { [K in keyof ScLanguageSwitch & keyof ScLanguageSwitchAttributes as `attr:${K}`]?: ScLanguageSwitchAttributes[K] } & { [K in keyof ScLanguageSwitch & keyof ScLanguageSwitchAttributes as `prop:${K}`]?: ScLanguageSwitch[K] };
         "sc-link": Omit<ScLink, keyof ScLinkAttributes> & { [K in keyof ScLink & keyof ScLinkAttributes]?: ScLink[K] } & { [K in keyof ScLink & keyof ScLinkAttributes as `attr:${K}`]?: ScLinkAttributes[K] } & { [K in keyof ScLink & keyof ScLinkAttributes as `prop:${K}`]?: ScLink[K] };
         "sc-modal": Omit<ScModal, keyof ScModalAttributes> & { [K in keyof ScModal & keyof ScModalAttributes]?: ScModal[K] } & { [K in keyof ScModal & keyof ScModalAttributes as `attr:${K}`]?: ScModalAttributes[K] } & { [K in keyof ScModal & keyof ScModalAttributes as `prop:${K}`]?: ScModal[K] } & OneOf<"heading", ScModal["heading"], ScModalAttributes["heading"]>;
@@ -5885,7 +5718,7 @@ declare namespace LocalJSX {
         "sc-table": Omit<ScTable, keyof ScTableAttributes> & { [K in keyof ScTable & keyof ScTableAttributes]?: ScTable[K] } & { [K in keyof ScTable & keyof ScTableAttributes as `attr:${K}`]?: ScTableAttributes[K] } & { [K in keyof ScTable & keyof ScTableAttributes as `prop:${K}`]?: ScTable[K] };
         "sc-text-input": Omit<ScTextInput, keyof ScTextInputAttributes> & { [K in keyof ScTextInput & keyof ScTextInputAttributes]?: ScTextInput[K] } & { [K in keyof ScTextInput & keyof ScTextInputAttributes as `attr:${K}`]?: ScTextInputAttributes[K] } & { [K in keyof ScTextInput & keyof ScTextInputAttributes as `prop:${K}`]?: ScTextInput[K] };
         "sc-textarea": Omit<ScTextarea, keyof ScTextareaAttributes> & { [K in keyof ScTextarea & keyof ScTextareaAttributes]?: ScTextarea[K] } & { [K in keyof ScTextarea & keyof ScTextareaAttributes as `attr:${K}`]?: ScTextareaAttributes[K] } & { [K in keyof ScTextarea & keyof ScTextareaAttributes as `prop:${K}`]?: ScTextarea[K] };
-        "sc-tile": Omit<ScTile, keyof ScTileAttributes> & { [K in keyof ScTile & keyof ScTileAttributes]?: ScTile[K] } & { [K in keyof ScTile & keyof ScTileAttributes as `attr:${K}`]?: ScTileAttributes[K] } & { [K in keyof ScTile & keyof ScTileAttributes as `prop:${K}`]?: ScTile[K] } & OneOf<"href", ScTile["href"], ScTileAttributes["href"]>;
+        "sc-tile": Omit<ScTile, keyof ScTileAttributes> & { [K in keyof ScTile & keyof ScTileAttributes]?: ScTile[K] } & { [K in keyof ScTile & keyof ScTileAttributes as `attr:${K}`]?: ScTileAttributes[K] } & { [K in keyof ScTile & keyof ScTileAttributes as `prop:${K}`]?: ScTile[K] };
         "sc-timeline": Omit<ScTimeline, keyof ScTimelineAttributes> & { [K in keyof ScTimeline & keyof ScTimelineAttributes]?: ScTimeline[K] } & { [K in keyof ScTimeline & keyof ScTimelineAttributes as `attr:${K}`]?: ScTimelineAttributes[K] } & { [K in keyof ScTimeline & keyof ScTimelineAttributes as `prop:${K}`]?: ScTimeline[K] };
         "sc-utility-bar": Omit<ScUtilityBar, keyof ScUtilityBarAttributes> & { [K in keyof ScUtilityBar & keyof ScUtilityBarAttributes]?: ScUtilityBar[K] } & { [K in keyof ScUtilityBar & keyof ScUtilityBarAttributes as `attr:${K}`]?: ScUtilityBarAttributes[K] } & { [K in keyof ScUtilityBar & keyof ScUtilityBarAttributes as `prop:${K}`]?: ScUtilityBar[K] };
     }
@@ -6006,22 +5839,6 @@ declare module "@stencil/core" {
              */
             "sc-bottom-nav": LocalJSX.IntrinsicElements["sc-bottom-nav"] & JSXBase.HTMLAttributes<HTMLScBottomNavElement>;
             /**
-             * Where this page sits in the channel's hierarchy, on pages outside a transaction (in the
-             * hero of inner pages, CHR-07). Never inside a journey: use `sc-back-link` there.
-             * Write the trail as plain children: a link for each ancestor, then the current page as
-             * plain text (a `<span>`). The last child is always the current page; it is not a link and
-             * carries `aria-current="page"`.
-             *   <sc-breadcrumbs>
-             *     <a href="/en">Home</a>
-             *     <a href="/en/vehicles">Vehicles</a>
-             *     <span>Renew your vehicle registration</span>
-             *   </sc-breadcrumbs>
-             * Renders `<nav aria-label="Breadcrumb">` with an ordered list in its shadow root. The
-             * chevrons between items mirror in right-to-left. Below 600px the trail collapses to one
-             * "Back to {parent}" link.
-             */
-            "sc-breadcrumbs": LocalJSX.IntrinsicElements["sc-breadcrumbs"] & JSXBase.HTMLAttributes<HTMLScBreadcrumbsElement>;
-            /**
              * Starts an action. Use a verb: "Continue", "Pay with Dubai Pay", "Save and finish later".
              * v2 renders a native `<button>` (or an `<a>` when `href` is set) in light DOM (Stencil
              * `scoped`, decision A2). The button is a real form control: Enter in a field submits the
@@ -6084,7 +5901,13 @@ declare module "@stencil/core" {
              * this site). `channel="none"` is for a page that belongs to no channel (the network's own
              * site, the design system's documentation): no tile is current and every tile is a link.
              * A `<nav>` labelled "Government of Dubai channels" with a list of links. Seven tiles in a
-             * row from 1024px (by the strip's own width), four from 600px, two below.
+             * row from 960px of the strip's own width, four from 560px, two below. The eyebrow is set in
+             * sentence case as written (CNT-07).
+             * Without JavaScript (PERF-04, B1): the strip renders from its props, so write the same links
+             * as light-DOM children in `slot="fallback"` (a `<nav aria-label>` with a `<ul>` of
+             * `<a href>`, the current channel as text with `aria-current="true"`). `sc.css` shows them as
+             * a row of 44px links until the strip upgrades, and hides them once it has rendered.
+             * Before it upgrades the host also reserves the strip's measured height for its width.
              */
             "sc-channel-network": LocalJSX.IntrinsicElements["sc-channel-network"] & JSXBase.HTMLAttributes<HTMLScChannelNetworkElement>;
             /**
@@ -6097,6 +5920,11 @@ declare module "@stencil/core" {
              * swatch is that channel's `channel-action`; that is why the component renders into light
              * DOM (Stencil `scoped`): the document's channel rules must reach the items. The current
              * channel carries a check and `aria-current="true"`.
+             * Choosing a channel emits `scChannelChange` (`detail.channel`), then follows its link. A page
+             * that switches channels in place (a documentation site re-theming its examples, a single-page
+             * app) calls `preventDefault()`: the link is not followed, `value` becomes the chosen channel
+             * and the panel closes, returning focus to the trigger. Clicks with a modifier key (a new tab
+             * or window) are left to the browser and emit nothing.
              * Escape and a press outside close the panel; Escape returns focus to the button; the panel
              * closes when focus leaves it. From a pointer it grows from the trigger's corner over
              * `duration-base`; from the keyboard it appears instantly (MOT-02). Below 1024px the trigger
@@ -6189,31 +6017,6 @@ declare module "@stencil/core" {
              * Chips are 32px tall (decision Q-chips) with a 44px target. Light DOM (Stencil `scoped`).
              */
             "sc-filter-chips": LocalJSX.IntrinsicElements["sc-filter-chips"] & JSXBase.HTMLAttributes<HTMLScFilterChipsElement>;
-            /**
-             * The page footer, a `<footer>` (the page's `contentinfo` landmark). Two variants:
-             * - `simple` (default; transaction pages, component-language A29): one row of underlined
-             *   links and "Government of Dubai", under a 1px rule.
-             * - `grouped` (channel sites, Standard CHR-06, decision Q-footer; B5): the channel's brand
-             *   group (`slot="brand"`: a one-sentence description and app badges); a **Channels** group
-             *   listing all seven channels in the Standard 3.1 order, the current one Bold with a 3px
-             *   `channel-action` bar at its inline start and `aria-current="true"`, and no swatch; **Helpful information** (about, help and contact,
-             *   accessibility statement, sitemap); and **Legal** (privacy and cookies, terms). Each group
-             *   has an `<h2>`. Then "Government of Dubai · Last updated …" and "… is run by the
-             *   Government of Dubai".
-             * The standard links appear when their `*-href` is set, with text from strings in the page
-             * language. Every channel sets all of them (TPL-01, LEG-01). Extra links go in the default
-             * slot as plain `<a href>` elements; each gets its own list item (the footer sets their
-             * `slot` attribute). The footer is on `surface`, never a dark band.
-             * Links are navigation links (decision R6): underlined in every state, in `on-surface`
-             * (CHR-06). The current channel carries a 3px `channel-action` bar at its inline start as well
-             * as Bold (R10: Arabic is already Bold).
-             * Without JavaScript (PERF-04): the footer renders in shadow DOM, so write the same links as
-             * light-DOM children in `slot="fallback"` (a `<nav>` or `<ul>` of `<a href>`). The browser
-             * shows them until the footer upgrades; the upgraded footer has no `fallback` slot, so they are
-             * then neither shown nor read. Bare `<a>` extras are hidden before upgrade when a fallback
-             * exists, so list them in the fallback too.
-             */
-            "sc-footer": LocalJSX.IntrinsicElements["sc-footer"] & JSXBase.HTMLAttributes<HTMLScFooterElement>;
             /**
              * Switches to the same page in the other language. The label is always the other
              * language's own name, "العربية" on an English page and "English" on an Arabic page,
@@ -6395,19 +6198,25 @@ declare module "@stencil/core" {
             /**
              * The header of channel pages outside a transaction (Standard CHR-01 to CHR-04;
              * component-language B2). Transaction pages use `sc-app-bar`.
-             * From the inline-start edge: the Government of Dubai lockup (`slot="lockup"`), the main
-             * navigation (`slot="nav"`), search, the language switch (`slot="language"`), sign in with UAE PASS
+             * From the inline-start edge: the Government of Dubai lockup (`slot="lockup"`), an optional
+             * site name or wordmark (`slot="name"`), the main navigation (`slot="nav"`), search (an
+             * `sc-search` in `slot="search"`, else a search link to `search-href`), the language switch
+             * (`slot="language"`), sign in with UAE PASS
              * (`slot="signin"`) or the account menu once signed in (`slot="account"`), and the
              * channel's logo and switcher (`slot="switcher"`, an `sc-channel-switcher`). Sign in is the
              * official UAE PASS button (decision U3a), never a themed `sc-button`: until the official kit
              * arrives the header renders a marked placeholder (black, white label, fingerprint glyph,
              * 56px) that `slot="signin"` replaces. The order
              * mirrors in Arabic. A flat `surface` bar, 80px tall, with a 1px `outline-variant` rule.
-             * Below 1024px the row keeps the menu button, the lockup, the language switch and the
+             * Below 1024px the row keeps the menu button, the lockup, the name, the language switch and the
              * channel switcher (64px). Navigation, search and sign in (or the account menu) move into
              * the mobile menu: a modal `<dialog>` labelled "Menu", with focus on its close button when
              * it opens, Escape closing it and returning focus to the menu button, and the page behind
              * it inert. The same slotted elements move; nothing is duplicated.
+             * Before it upgrades, and without JavaScript, `sc.css` lays the light-DOM children out as one
+             * plain row (PERF-04, B1): the lockup, the name and the navigation links (the current one
+             * underlined in the channel colour, R10), 44px targets. With JavaScript the host keeps its
+             * final height meanwhile, so nothing moves when it upgrades.
              * The host is a `<header>` banner landmark. It is not fixed by default; with `sticky`,
              * `sc-page` keeps `scroll-padding-top` clear of it (A11Y-05, F-009).
              */
@@ -6555,6 +6364,12 @@ declare module "@stencil/core" {
              * The whole tile is one link, because the title (and the count) is its only content and so
              * the link's whole name: "Moving home, 14 services". That does not conflict with CMP-06,
              * which is about cards that hold more than one thing. Tiles carry no other links or buttons.
+             * Write the title as a light-DOM link, so the tile works before it upgrades and without
+             * JavaScript (PERF-04): `<sc-tile><svg slot="icon">…</svg><a href="/en/moving-home">Moving
+             * home</a></sc-tile>`. `sc.css` draws it as the tile meanwhile, the whole box one link. Once
+             * upgraded the tile takes the link's `href` and text and renders its own link; the child is
+             * then neither shown nor read. The older form, `href` on the host and the title as text, still
+             * works, but shows no link until the tile upgrades.
              */
             "sc-tile": LocalJSX.IntrinsicElements["sc-tile"] & JSXBase.HTMLAttributes<HTMLScTileElement>;
             /**

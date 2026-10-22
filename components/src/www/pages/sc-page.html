@@ -24,7 +24,44 @@
         <sc-channel-network links='{"now":"#now-{lang}","transport":"#transport-{lang}","visit":"#visit-{lang}","justice":"#justice-{lang}","build":"#build-{lang}","invest":"#invest-{lang}","trade":"#trade-{lang}"}'></sc-channel-network>
       </div>
       <div slot="footer">
-        <sc-footer variant="grouped" updated="12 October 2026" links='{"now":"#now-{lang}","transport":"#transport-{lang}","visit":"#visit-{lang}","justice":"#justice-{lang}","build":"#build-{lang}","invest":"#invest-{lang}","trade":"#trade-{lang}"}' about-href="#about" help-href="#help" accessibility-href="#accessibility" privacy-href="#privacy" terms-href="#terms" sitemap-href="#sitemap"></sc-footer>
+        <sc-footer variant="grouped"><footer>
+          <div class="sc-footer__brand">
+            <p data-ar="دبي الآن">Dubai Now</p>
+            <p data-ar="الخدمات الحكومية لكل من يعيش في دبي، في مكان واحد.">Government services for everyone who lives in Dubai, in one place.</p>
+          </div>
+          <section class="sc-footer__channels" aria-labelledby="pg-ft-channels">
+            <h2 id="pg-ft-channels" data-ar="القنوات">Channels</h2>
+            <ul>
+              <li><a href="#now" aria-current="true" data-ar="دبي الآن">Dubai Now</a></li>
+              <li><a href="#transport" data-ar="مواصلات دبي">Dubai Transport</a></li>
+              <li><a href="#visit" data-ar="زوروا دبي">Visit Dubai</a></li>
+              <li><a href="#justice" data-ar="دبي للعدالة">Dubai Justice</a></li>
+              <li><a href="#build" data-ar="دبي للبناء">Build in Dubai</a></li>
+              <li><a href="#invest" data-ar="استثمر في دبي">Invest in Dubai</a></li>
+              <li><a href="#trade" data-ar="دبي التجارية">Dubai Trade</a></li>
+            </ul>
+          </section>
+          <section aria-labelledby="pg-ft-helpful">
+            <h2 id="pg-ft-helpful" data-ar="معلومات مفيدة">Helpful information</h2>
+            <ul>
+              <li><a href="#about" data-ar="عن دبي الآن">About Dubai Now</a></li>
+              <li><a href="#help" data-ar="المساعدة والتواصل">Help and contact</a></li>
+              <li><a href="#accessibility" data-ar="بيان إمكانية الوصول">Accessibility statement</a></li>
+              <li><a href="#sitemap" data-ar="خريطة الموقع">Sitemap</a></li>
+            </ul>
+          </section>
+          <section aria-labelledby="pg-ft-legal">
+            <h2 id="pg-ft-legal" data-ar="المعلومات القانونية">Legal</h2>
+            <ul>
+              <li><a href="#privacy" data-ar="الخصوصية وملفات تعريف الارتباط">Privacy and cookies</a></li>
+              <li><a href="#terms" data-ar="شروط الاستخدام">Terms of use</a></li>
+            </ul>
+          </section>
+          <div class="sc-footer__lower">
+            <p data-ar="حكومة دبي · آخر تحديث 12 أكتوبر 2026">Government of Dubai · Last updated 12 October 2026</p>
+            <p data-ar="دبي الآن تديرها حكومة دبي">Dubai Now is run by the Government of Dubai</p>
+          </div>
+        </footer></sc-footer>
       </div>
     </sc-page>
   </div>

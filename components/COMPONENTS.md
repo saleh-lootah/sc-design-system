@@ -132,7 +132,7 @@ The first 24 components, in four families, plus the components added after Phase
 - A reading-width wrapper at 680px.
 - Sets `lang`, `dir` and `data-channel` at the root.
 
-**Footer** (`sc-footer`): help and contact, accessibility, privacy, terms, and "Government of Dubai". Uses `<footer>` and a list of links.
+**Footer** (`sc-footer`): help and contact, accessibility, privacy, terms, and "Government of Dubai". CSS only in v2: the page writes a `<footer>` with a list of links.
 
 **Table** (`sc-table`): compares rows of the same kind of thing (fines, payments, permit applications) across a few attributes. Scoped (light DOM): it styles and enhances a slotted native `<table>`, never a div grid. For the details of one thing, use SummaryList. Spec: `specs/sc-table.md`.
 - `caption` writes a native `<caption>` (required; `caption-hidden` hides it visually). Column types on the header cell, `data-type`: `text`, `reference`, `date`, `amount`, `status`, `action`, set alignment, wrapping and tabular figures. Empty cells read "None" (لا يوجد).
@@ -159,7 +159,7 @@ The v2 specs in `specs/` supersede the Phase 3 entries above for these tags.
 - **AccountMenu** (`sc-account-menu`, new): notifications with the unread count and the account disclosure. See `specs/sc-account-menu.md`.
 - **AnnouncementBar** (`sc-announcement-bar`, new): a site-wide labelled region above the header, `info`, `warning` or `error`, dismissible. See `specs/sc-announcement-bar.md`.
 - **UtilityBar** (`sc-utility-bar`, new): help and feedback, docked flat at the bottom from 1024px, folded into the footer below (U4, CHR-05). See `specs/sc-utility-bar.md`.
-- **Footer** (`sc-footer`): `simple` and `grouped` with the Channels group (CHR-06). See `specs/sc-footer.md`.
+- **Footer** (`sc-footer`): `simple` and `grouped` with the Channels group (CHR-06). CSS only: the page writes the markup. See `specs/sc-footer.md`.
 - **ChannelNetwork** (`sc-channel-network`, new, light DOM): "One network · seven channels" (CHR-08). See `specs/sc-channel-network.md`.
 - **PageShell** (`sc-page`): `main-content`, landmarks, `sync-document`, sticky-header and utility-bar reservations. See `specs/sc-page.md`.
 
@@ -169,7 +169,7 @@ The v2 specs in `specs/` supersede the Phase 3 entries above for these tags.
 
 The entries above describe v1. For `sc-link`, `sc-back-link`, `sc-skip-link`, `sc-language-switch` and `sc-channel-chip`, the v2 specs in `specs/<tag>.md` replace them. New in this family:
 
-**Breadcrumbs** (`sc-breadcrumbs`): where the page sits in the channel's hierarchy, outside transactions. Plain child links, then the current page as text (never a link, `aria-current="page"`). Chevrons mirror in RTL; below 600px one "Back to {parent}" link. Spec: `specs/sc-breadcrumbs.md`.
+**Breadcrumbs** (`sc-breadcrumbs`): where the page sits in the channel's hierarchy, outside transactions. CSS only: a `<nav>` with an `<ol>` of links, then the current page as text (never a link, `aria-current="page"`). Chevrons mirror in RTL; below 600px one "Back to {parent}" link. Spec: `specs/sc-breadcrumbs.md`.
 
 **Pagination** (`sc-pagination`): pages of a long list. `page`, `total-pages` or `total-items` with `page-size`, `href-template`, `item-label` (plural template); event `scPageChange`. "Showing 1–20 of 1,284 fines" / "عرض 1 إلى 20 من 1,284 مخالفة". Previous and Next mirror. Spec: `specs/sc-pagination.md`.
 

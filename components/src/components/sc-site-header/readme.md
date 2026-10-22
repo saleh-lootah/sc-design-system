@@ -21,6 +21,9 @@ The header of channel pages outside a transaction (Standard CHR-01 to CHR-04). T
 - Sign in is the official UAE PASS button (decision U3a). Put it in `slot="signin"` when the kit is available; until then `sign-in-href` renders a marked black placeholder. Never use `sc-button` for it.
 - Signed in: add `<sc-account-menu slot="account">`; it replaces sign in.
 - Below 1024px (or when the row does not fit) navigation, search and sign in move into a modal menu.
+- Optional: `<a slot="name" href="/en/">Dubai Now</a>` for the site's name or wordmark after the lockup.
+- Optional: `<sc-search slot="search" label="Search Dubai Now" label-hidden action="/en/search"></sc-search>` puts a search field in the row (320px, shrinking to 160px) and at the top of the menu. Without it, `search-href` gives a search icon link.
+- Before it upgrades, and without JavaScript, `sc.css` shows the lockup, name and navigation links as a plain row.
 
 <!-- Auto Generated Below -->
 
@@ -30,8 +33,10 @@ The header of channel pages outside a transaction (Standard CHR-01 to CHR-04). T
 The header of channel pages outside a transaction (Standard CHR-01 to CHR-04;
 component-language B2). Transaction pages use `sc-app-bar`.
 
-From the inline-start edge: the Government of Dubai lockup (`slot="lockup"`), the main
-navigation (`slot="nav"`), search, the language switch (`slot="language"`), sign in with UAE PASS
+From the inline-start edge: the Government of Dubai lockup (`slot="lockup"`), an optional
+site name or wordmark (`slot="name"`), the main navigation (`slot="nav"`), search (an
+`sc-search` in `slot="search"`, else a search link to `search-href`), the language switch
+(`slot="language"`), sign in with UAE PASS
 (`slot="signin"`) or the account menu once signed in (`slot="account"`), and the
 channel's logo and switcher (`slot="switcher"`, an `sc-channel-switcher`). Sign in is the
 official UAE PASS button (decision U3a), never a themed `sc-button`: until the official kit
@@ -39,11 +44,16 @@ arrives the header renders a marked placeholder (black, white label, fingerprint
 56px) that `slot="signin"` replaces. The order
 mirrors in Arabic. A flat `surface` bar, 80px tall, with a 1px `outline-variant` rule.
 
-Below 1024px the row keeps the menu button, the lockup, the language switch and the
+Below 1024px the row keeps the menu button, the lockup, the name, the language switch and the
 channel switcher (64px). Navigation, search and sign in (or the account menu) move into
 the mobile menu: a modal `<dialog>` labelled "Menu", with focus on its close button when
 it opens, Escape closing it and returning focus to the menu button, and the page behind
 it inert. The same slotted elements move; nothing is duplicated.
+
+Before it upgrades, and without JavaScript, `sc.css` lays the light-DOM children out as one
+plain row (PERF-04, B1): the lockup, the name and the navigation links (the current one
+underlined in the channel colour, R10), 44px targets. With JavaScript the host keeps its
+final height meanwhile, so nothing moves when it upgrades.
 
 The host is a `<header>` banner landmark. It is not fixed by default; with `sticky`,
 `sc-page` keeps `scroll-padding-top` clear of it (A11Y-05, F-009).
@@ -52,7 +62,7 @@ The host is a `<header>` banner landmark. It is not fixed by default; with `stic
 
 | Property     | Attribute      | Description                                                                                                                                              | Type                  | Default     |
 | ------------ | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ----------- |
-| `searchHref` | `search-href`  | The search page. Adds a search button (an icon link named "Search").                                                                                     | `string \| undefined` | `undefined` |
+| `searchHref` | `search-href`  | The search page. Adds a search button (an icon link named "Search") when there is no `slot="search"` child.                                              | `string \| undefined` | `undefined` |
 | `signInHref` | `sign-in-href` | Where the UAE PASS placeholder button leads. The placeholder shows when this is set and there is neither a `slot="signin"` nor a `slot="account"` child. | `string \| undefined` | `undefined` |
 | `signInText` | `sign-in-text` | Overrides the placeholder's "Sign in with UAE PASS" (in the page language).                                                                              | `string \| undefined` | `undefined` |
 | `sticky`     | `sticky`       | Keeps the header at the top while the page scrolls. `sc-page` then sets `scroll-padding-top`.                                                            | `boolean`             | `false`     |
@@ -94,7 +104,9 @@ Type: `Promise<void>`
 | `"account"`  | `<sc-account-menu>` once the user is signed in. It replaces sign in.                                                                                                                                                                       |
 | `"language"` | `<sc-language-switch>`.                                                                                                                                                                                                                    |
 | `"lockup"`   | The Government of Dubai lockup, as supplied (decision L1–L4): an `<img>` or `<svg>` with the text alternative "Government of Dubai" / "حكومة دبي", 40px tall, usually inside an `<a href>` to the channel home. The library ships no logo. |
+| `"name"`     | Optional: the site's name or wordmark, after the lockup (text, an `<img>` or an `<svg>` with a text alternative, usually inside an `<a href>` to the site home). Never the Government of Dubai lockup, which goes in `slot="lockup"`.      |
 | `"nav"`      | The main navigation: `<a href>` elements, direct children of the header, four or five of them. Mark the current one with `aria-current="page"`.                                                                                            |
+| `"search"`   | Optional: an `<sc-search>` (with `label-hidden`), inline in the row on wide screens and at the top of the mobile menu on compact ones. Without it, `search-href` gives a search link.                                                      |
 | `"signin"`   | The official UAE PASS sign-in button, when available (U3a). Replaces the built-in placeholder; it moves into the mobile menu on compact screens.                                                                                           |
 | `"switcher"` | `<sc-channel-switcher>`, the channel's logo and the channel switcher.                                                                                                                                                                      |
 

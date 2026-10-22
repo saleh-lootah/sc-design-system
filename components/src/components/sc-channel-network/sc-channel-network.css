@@ -16,8 +16,8 @@
     display: none;
   }
 
-  /* Eyebrow: a 24 × 3 rule, then the label, in city indigo. Upper case and tracked in
-     English only. */
+  /* Eyebrow: a 24 × 3 rule, then the label, in city indigo. Sentence case as written
+     (CNT-07): never forced to capitals. */
   .sc-channel-network__eyebrow {
     display: flex;
     align-items: center;
@@ -26,13 +26,7 @@
     color: var(--sc-color-primary);
     font: var(--sc-type-label-small);
     font-weight: var(--sc-font-weight-bold);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .sc-channel-network__eyebrow:lang(ar) {
-    letter-spacing: 0;
-    text-transform: none;
+    letter-spacing: var(--sc-type-label-small-tracking);
   }
 
   .sc-channel-network__eyebrow::before {

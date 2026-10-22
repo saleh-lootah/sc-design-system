@@ -3,8 +3,8 @@ import { describeVisual, expectScreenshot } from '../../test/visual';
 
 const trail = (lang: string) =>
   lang === 'ar'
-    ? `<a href="#h">الرئيسية</a><a href="#v">المركبات</a><span>تجديد ترخيص المركبة</span>`
-    : `<a href="#h">Home</a><a href="#v">Vehicles</a><span>Renew your vehicle registration</span>`;
+    ? `<nav aria-label="مسار التنقل"><ol><li><a href="#h">الرئيسية</a></li><li><a href="#v">المركبات</a></li><li aria-current="page">تجديد ترخيص المركبة</li></ol></nav>`
+    : `<nav aria-label="Breadcrumb"><ol><li><a href="#h">Home</a></li><li><a href="#v">Vehicles</a></li><li aria-current="page">Renew your vehicle registration</li></ol></nav>`;
 
 describeVisual('sc-breadcrumbs screenshots', () => {
   it.each(contexts)('wide and compact, $lang, $theme', async (ctx) => {

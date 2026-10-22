@@ -1,94 +1,76 @@
 # sc-footer
 
-The page footer. `simple` for transaction pages; `grouped` for channel sites, with the Channels group (Standard CHR-06). Spec: `specs/sc-footer.md`.
+The page footer: support and legal links on every page (Standard CHR-06). Two variants: `simple` (transaction pages, one row of links) and `grouped` (channel sites: the channel's brand, all seven channels, Helpful information and Legal).
+
+## v2: CSS only
+
+`sc-footer` is not a registered custom element (like `sc-container`). `sc.css` styles the tag and the plain markup inside it, so it needs no JavaScript, is at its final size at first paint and works with scripting off (PERF-04). Write every link and line in the page language.
 
 ## Usage
 
-```html
-<sc-footer variant="grouped" updated="12 October 2026" links='{"now":"https://…/{lang}/", …}'
-  about-href="/en/about" help-href="/en/help" accessibility-href="/en/accessibility"
-  privacy-href="/en/privacy" terms-href="/en/terms" sitemap-href="/en/sitemap">
-  <p slot="brand">Government services for everyone who lives in Dubai, in one place.</p>
-</sc-footer>
+### Simple
 
-<sc-footer help-href="/en/help" accessibility-href="/en/accessibility" privacy-href="/en/privacy"
-  cookies-href="/en/cookies" terms-href="/en/terms"></sc-footer>
+```html
+<sc-footer>
+  <footer>
+    <nav aria-label="Support links"><ul>
+      <li><a href="/en/help">Help and contact</a></li>
+      <li><a href="/en/accessibility">Accessibility statement</a></li>
+      <li><a href="/en/privacy">Privacy and cookies</a></li>
+      <li><a href="/en/terms">Terms of use</a></li>
+    </ul></nav>
+    <p>Government of Dubai</p>
+  </footer>
+</sc-footer>
 ```
 
-- Standard links appear when their `*-href` is set, with text in the page language. Extra links go in the default slot as `<a href>`.
-- `privacy-href` reads "Privacy and cookies" unless `cookies-href` is set too.
-- Without JavaScript (PERF-04): repeat the links as light-DOM children in `slot="fallback"` (a `<nav>` with a `<ul>` of `<a href>`; one `<h2>` and `<ul>` per group for `grouped`). They show until the footer upgrades and are never shown after. See the spec.
-- Links are navigation links, underlined in every state in `on-surface` (R6). The current channel is Bold with a 3px `channel-action` bar at its inline start (R10).
+### Grouped (channel sites)
 
-<!-- Auto Generated Below -->
+```html
+<sc-footer variant="grouped">
+  <footer>
+    <div class="sc-footer__brand">
+      <p>Dubai Now</p>
+      <p>Government services for everyone who lives in Dubai, in one place.</p>
+    </div>
+    <section class="sc-footer__channels" aria-labelledby="footer-channels">
+      <h2 id="footer-channels">Channels</h2>
+      <ul>
+        <li><a href="/en/" hreflang="en" aria-current="true">Dubai Now</a></li>
+        <li><a href="https://transport.example/en/" hreflang="en">Dubai Transport</a></li>
+        <!-- … all seven, in the Standard 3.1 order -->
+      </ul>
+    </section>
+    <section aria-labelledby="footer-helpful">
+      <h2 id="footer-helpful">Helpful information</h2>
+      <ul>
+        <li><a href="/en/about">About Dubai Now</a></li>
+        <li><a href="/en/help">Help and contact</a></li>
+        <li><a href="/en/accessibility">Accessibility statement</a></li>
+        <li><a href="/en/sitemap">Sitemap</a></li>
+      </ul>
+    </section>
+    <section aria-labelledby="footer-legal">
+      <h2 id="footer-legal">Legal</h2>
+      <ul>
+        <li><a href="/en/privacy">Privacy and cookies</a></li>
+        <li><a href="/en/terms">Terms of use</a></li>
+      </ul>
+    </section>
+    <div class="sc-footer__lower">
+      <p>Government of Dubai · Last updated 12 October 2026</p>
+      <p>Dubai Now is run by the Government of Dubai</p>
+    </div>
+  </footer>
+</sc-footer>
+```
 
+- The `<footer>` is the `contentinfo` landmark and the content box: grid margins, the 1280px cap, a 1px rule above.
+- Links are label-medium in `on-surface`, underlined in every state (R6), 2px on hover, at least 44px tall.
+- The current channel is the item with `aria-current="true"`: Bold, with a 3px `channel-action` bar at its inline start (R10). A channel without a link is a `<span>`.
+- In Arabic, write the same in Arabic: روابط الدعم، القنوات، معلومات مفيدة، المعلومات القانونية، حكومة دبي. See `specs/sc-footer.md` for every standard label.
 
-## Overview
-
-The page footer, a `<footer>` (the page's `contentinfo` landmark). Two variants:
-
-- `simple` (default; transaction pages, component-language A29): one row of underlined
-  links and "Government of Dubai", under a 1px rule.
-- `grouped` (channel sites, Standard CHR-06, decision Q-footer; B5): the channel's brand
-  group (`slot="brand"`: a one-sentence description and app badges); a **Channels** group
-  listing all seven channels in the Standard 3.1 order, the current one Bold with a 3px
-  `channel-action` bar at its inline start and `aria-current="true"`, and no swatch; **Helpful information** (about, help and contact,
-  accessibility statement, sitemap); and **Legal** (privacy and cookies, terms). Each group
-  has an `<h2>`. Then "Government of Dubai · Last updated …" and "… is run by the
-  Government of Dubai".
-
-The standard links appear when their `*-href` is set, with text from strings in the page
-language. Every channel sets all of them (TPL-01, LEG-01). Extra links go in the default
-slot as plain `<a href>` elements; each gets its own list item (the footer sets their
-`slot` attribute). The footer is on `surface`, never a dark band.
-
-Links are navigation links (decision R6): underlined in every state, in `on-surface`
-(CHR-06). The current channel carries a 3px `channel-action` bar at its inline start as well
-as Bold (R10: Arabic is already Bold).
-
-Without JavaScript (PERF-04): the footer renders in shadow DOM, so write the same links as
-light-DOM children in `slot="fallback"` (a `<nav>` or `<ul>` of `<a href>`). The browser
-shows them until the footer upgrades; the upgraded footer has no `fallback` slot, so they are
-then neither shown nor read. Bare `<a>` extras are hidden before upgrade when a fallback
-exists, so list them in the fallback too.
-
-## Properties
-
-| Property            | Attribute            | Description                                                                                                         | Type                                                                                                    | Default     |
-| ------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ----------- |
-| `aboutHref`         | `about-href`         | About the channel ("About Dubai Now").                                                                              | `string \| undefined`                                                                                   | `undefined` |
-| `accessibilityHref` | `accessibility-href` | The accessibility statement.                                                                                        | `string \| undefined`                                                                                   | `undefined` |
-| `channel`           | `channel`            | The current channel. Defaults to the closest `data-channel`.                                                        | `"build" \| "invest" \| "justice" \| "now" \| "trade" \| "transport" \| "visit" \| undefined`           | `undefined` |
-| `cookiesHref`       | `cookies-href`       | A separate cookies page. Splits "Privacy and cookies" into "Privacy" and "Cookies".                                 | `string \| undefined`                                                                                   | `undefined` |
-| `helpHref`          | `help-href`          | The help and contact page.                                                                                          | `string \| undefined`                                                                                   | `undefined` |
-| `links`             | `links`              | Each channel's home page, for the Channels group (as `sc-channel-switcher` `links`; `{lang}` becomes `en` or `ar`). | `"build" \| "invest" \| "justice" \| "now" \| "trade" \| "transport" \| "visit" \| string \| undefined` | `undefined` |
-| `privacyHref`       | `privacy-href`       | The privacy notice. Labelled "Privacy and cookies" unless `cookies-href` is set too.                                | `string \| undefined`                                                                                   | `undefined` |
-| `sitemapHref`       | `sitemap-href`       | The sitemap.                                                                                                        | `string \| undefined`                                                                                   | `undefined` |
-| `termsHref`         | `terms-href`         | The terms of use.                                                                                                   | `string \| undefined`                                                                                   | `undefined` |
-| `updated`           | `updated`            | Grouped: when the site was last updated, as it should read ("12 October 2026").                                     | `string \| undefined`                                                                                   | `undefined` |
-| `variant`           | `variant`            | `simple` (one row) or `grouped` (channel sites, with the Channels group).                                           | `"grouped" \| "simple"`                                                                                 | `'simple'`  |
-
-
-## Slots
-
-| Slot         | Description                                                                                                   |
-| ------------ | ------------------------------------------------------------------------------------------------------------- |
-|              | Extra links, as `<a href>` elements, listed after the standard ones (in Helpful information when grouped).    |
-| `"brand"`    | Grouped: the channel's description and app badges, under its name.                                            |
-| `"fallback"` | Never shown once upgraded: the links for pages without JavaScript (PERF-04), shown until the footer upgrades. |
-| `"meta"`     | Replaces "Government of Dubai" at the end of the simple footer.                                               |
-
-
-## Shadow Parts
-
-| Part       | Description           |
-| ---------- | --------------------- |
-| `"footer"` | The `<footer>`.       |
-| `"link"`   | Each standard link.   |
-| `"list"`   | Each `<ul>` of links. |
-| `"meta"`   | The end text.         |
-
-
-----------------------------------------------
-
-
+| Attribute | Values | Default |
+| --- | --- | --- |
+| `variant` | `simple`, `grouped` | `simple` |
+| `hidden` | | |

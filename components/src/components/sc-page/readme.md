@@ -13,7 +13,7 @@ The page shell: header, one `<main id="main-content">` and footer, with the page
   </div>
   …
   <div slot="footer">
-    <sc-footer variant="grouped" …></sc-footer>
+    <sc-footer variant="grouped"><footer>…</footer></sc-footer>
     <sc-utility-bar …></sc-utility-bar>
   </div>
 </sc-page>

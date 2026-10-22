@@ -32,8 +32,8 @@ A component uses shadow DOM only when nothing outside it needs to reach inside: 
 | `sc-button`, form fields (`sc-text-input`, `sc-textarea`, `sc-select`, `sc-date-input`, `sc-search`, `sc-checkbox`, `sc-checkbox-group`, `sc-radio-group`, `sc-radio`, `sc-date-range` inputs) | **Light DOM** (`scoped: true`): native elements as children, real form controls (A2) |
 | Lists and tables with native semantics (`sc-table`, `sc-summary-list`, `sc-summary-row`, accordion, timeline, notification list) | **Light DOM** |
 | `sc-page`, `sc-card` | **Light DOM**, minimal JS |
-| `sc-container`, `sc-grid`, `sc-ltr` | **CSS only** in `sc.css` (no JS, no registration) |
-| Chrome and display (`sc-app-bar`, `sc-footer`, `sc-channel-hero`, `sc-callout`, `sc-status-tag`, `sc-channel-chip`, `sc-spinner`, `sc-step-progress`, `sc-service-card`, `sc-error-summary`, `sc-language-switch`, `sc-link`, `sc-back-link`, `sc-skip-link`, `sc-modal` and the new display components) | **Shadow DOM**, with `part`s; `delegatesFocus` where the host is the focus target. Never a form control inside |
+| `sc-container`, `sc-grid`, `sc-ltr`, `sc-footer`, `sc-breadcrumbs` | **CSS only** in `sc.css` (no JS, no registration); the page writes the markup |
+| Chrome and display (`sc-app-bar`, `sc-channel-hero`, `sc-callout`, `sc-status-tag`, `sc-channel-chip`, `sc-spinner`, `sc-step-progress`, `sc-service-card`, `sc-error-summary`, `sc-language-switch`, `sc-link`, `sc-back-link`, `sc-skip-link`, `sc-modal` and the new display components) | **Shadow DOM**, with `part`s; `delegatesFocus` where the host is the focus target. Never a form control inside |
 
 ## How styles reach a component
 
@@ -165,7 +165,7 @@ All gzip, per file, measured by `npm run measure:bundle`; components in the cust
 | What | Budget |
 | --- | --- |
 | Runtime core | 14 KiB |
-| `sc.css` | 9 KiB (W7) |
+| `sc.css` | 10 KiB (R23, amends W7) |
 | Shadow helper sheet | 1.5 KiB |
 | Leaf component | 4 KiB (`sc-button` 5 KiB: see its spec) |
 | Form field | 7 KiB |

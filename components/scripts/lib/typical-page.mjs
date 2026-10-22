@@ -16,7 +16,7 @@ import { extname, join, normalize } from 'node:path';
 import { gzipSync } from 'node:zlib';
 
 const TYPES = { '.js': 'text/javascript', '.css': 'text/css', '.html': 'text/html', '.woff2': 'font/woff2', '.json': 'application/json', '.map': 'application/json' };
-export const CE_TAGS = ['sc-page', 'sc-skip-link', 'sc-app-bar', 'sc-language-switch', 'sc-channel-hero', 'sc-search', 'sc-service-card', 'sc-footer'];
+export const CE_TAGS = ['sc-page', 'sc-skip-link', 'sc-app-bar', 'sc-language-switch', 'sc-channel-hero', 'sc-search', 'sc-service-card'];
 
 export function pageHtml(root, lang, build) {
   const template = readFileSync(join(root, 'test', 'perf', 'typical-page.html'), 'utf8');

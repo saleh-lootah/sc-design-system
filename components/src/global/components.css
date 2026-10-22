@@ -38,13 +38,53 @@ sc-page:not(:defined) {
   flex-direction: column;
   min-block-size: 100dvh;
 }
+/* sc-site-header before it upgrades, and without JavaScript (PERF-04, B1): its light-DOM
+   children as one plain row (lockup, name, navigation links with the current one underlined
+   in the channel colour, R10). With scripting on, the host holds its final 80px (64px below
+   1024px) and clips the rest, so nothing moves when it upgrades; the search field, which
+   renders nothing yet, is hidden. */
 sc-site-header:not(:defined) {
-  display: block;
-  min-block-size: calc(var(--sc-space-80) + var(--sc-size-border-hairline));
+  --_h: calc(var(--sc-space-80) + var(--sc-size-border-hairline));
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 var(--sc-space-24);
+  min-block-size: var(--_h);
+  padding-inline: var(--_cm);
+  border-block-end: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+}
+sc-site-header:not(:defined) > :is([slot='nav'], [slot='name']) {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--sc-size-target-min);
+  border-block: var(--sc-size-border-accent) solid transparent;
+  color: var(--sc-color-on-surface);
+  font: var(--sc-type-label-large);
+  letter-spacing: var(--sc-type-label-large-tracking);
+  text-decoration: none;
+}
+sc-site-header:not(:defined) > [slot='name'] {
+  font: var(--sc-type-title-medium);
+  font-weight: var(--sc-font-weight-bold);
+}
+sc-site-header:not(:defined) > [aria-current='page'] {
+  border-block-end-color: var(--sc-color-channel-action);
+  color: var(--sc-color-channel-action);
+  font-weight: var(--sc-font-weight-bold);
 }
 @media (max-width: 1023.98px) {
   sc-site-header:not(:defined) {
-    min-block-size: calc(var(--sc-space-64) + var(--sc-size-border-hairline));
+    --_h: calc(var(--sc-space-64) + var(--sc-size-border-hairline));
+  }
+}
+@media (scripting: enabled) {
+  sc-site-header:not(:defined) {
+    max-block-size: var(--_h);
+    overflow: hidden;
+  }
+  sc-site-header:not(:defined) > [slot='search'] {
+    display: none;
   }
 }
 sc-app-bar:not(:defined) {
@@ -56,43 +96,77 @@ sc-channel-switcher:not(:defined) {
   vertical-align: middle;
   min-block-size: var(--sc-size-control-secondary);
 }
+/* sc-channel-network renders from its props. Before it upgrades the host holds the strip's
+   height for its own width (2, 4 or 7 tiles from container widths 560 and 960; measured with
+   the standard strings in Helium at the start of each band, EN and AR), in a ::before that
+   queries the host as its container. A light-DOM slot="fallback" list (PERF-04) shares the
+   same grid cell; without JavaScript it is all there is, as a row of 44px links. */
 sc-channel-network:not(:defined) {
-  display: block;
+  display: grid;
+  container-type: inline-size;
 }
-
-/* sc-footer and sc-utility-bar render everything in shadow DOM, so before upgrade they are
-   empty: reserve the heights measured with the standard links (EN; Arabic is equal or
-   taller), so the footer does not jump in (CLS 0). The docked utility bar (from 1024px) is
-   fixed and takes no space. */
-sc-footer:not(:defined) {
-  display: block;
-  min-block-size: 241px;
+sc-channel-network:not(:defined) > * {
+  grid-area: 1 / 1;
 }
-sc-footer:not(:defined)[variant='grouped'] {
-  min-block-size: 964px;
+@media (scripting: enabled) {
+  sc-channel-network:not(:defined)::before {
+    --_e: 570px;
+    --_a: 634px;
+    content: '';
+    grid-area: 1 / 1;
+    block-size: var(--_e);
+  }
+  sc-channel-network:not(:defined):lang(ar)::before {
+    block-size: var(--_a);
+  }
+  @container (min-width: 320px) {
+    sc-channel-network:not(:defined)::before { --_e: 526px; --_a: 586px; }
+  }
+  @container (min-width: 360px) {
+    sc-channel-network:not(:defined)::before { --_e: 506px; --_a: 562px; }
+  }
+  @container (min-width: 392px) {
+    sc-channel-network:not(:defined)::before { --_e: 466px; --_a: 538px; }
+  }
+  @container (min-width: 420px) {
+    sc-channel-network:not(:defined)::before { --_e: 466px; --_a: 490px; }
+  }
+  @container (min-width: 560px) {
+    sc-channel-network:not(:defined)::before { --_e: 322px; --_a: 358px; }
+  }
+  @container (min-width: 648px) {
+    sc-channel-network:not(:defined)::before { --_e: 278px; --_a: 310px; }
+  }
+  @container (min-width: 820px) {
+    sc-channel-network:not(:defined)::before { --_e: 258px; --_a: 286px; }
+  }
+  @container (min-width: 960px) {
+    sc-channel-network:not(:defined)::before { --_e: 176px; --_a: 200px; }
+  }
+  @container (min-width: 1144px) {
+    sc-channel-network:not(:defined)::before { --_e: 154px; --_a: 172px; }
+  }
 }
-sc-utility-bar:not(:defined) {
-  display: block;
-  min-block-size: 210px;
+/* Once rendered, the strip's own list replaces the fallback (scoped styles can't reach it). */
+sc-channel-network.hydrated > [slot='fallback'] {
+  display: none;
 }
-@media (min-width: 600px) {
-  sc-footer:not(:defined) {
-    min-block-size: 137px;
-  }
-  sc-footer:not(:defined)[variant='grouped'] {
-    min-block-size: 754px;
-  }
+sc-channel-network:not(:defined) ul {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: start;
+  gap: 0 var(--sc-space-24);
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
-@media (min-width: 1024px) {
-  sc-footer:not(:defined) {
-    min-block-size: 109px;
-  }
-  sc-footer:not(:defined)[variant='grouped'] {
-    min-block-size: 388px;
-  }
-  sc-utility-bar:not(:defined) {
-    min-block-size: 0;
-  }
+sc-channel-network:not(:defined) li > * {
+  display: flex;
+  align-items: center;
+  min-block-size: var(--sc-size-target-min);
+  color: var(--sc-color-on-surface);
+  font: var(--sc-type-title-small);
+  font-weight: var(--sc-font-weight-bold);
 }
 
 /* A docked sc-utility-bar publishes its height here; focus and #fragments scroll clear of it
@@ -135,15 +209,6 @@ sc-filter-chips:not(:defined) {
 
 /* C2 navigation. Shadow components whose items are plain child links: before upgrade the
    links show as a simple list at about their final size. */
-sc-breadcrumbs:not(:defined) {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0 var(--sc-space-32);
-  min-block-size: var(--sc-size-target-min);
-  font: var(--sc-type-label-medium);
-  letter-spacing: var(--sc-type-label-medium-tracking);
-}
 sc-pagination:not(:defined) {
   display: block;
   min-block-size: var(--sc-size-target-min);
@@ -202,8 +267,10 @@ sc-step-progress:not(:defined) > * {
 /* sc-container: page margins 20 / 32 / 48 / 80px, content capped at 1280px (LAY-01).
    width="reading" caps the column at 680px, kept at the start edge so it lines up with the
    page content above and below it. */
-sc-container {
+sc-container, sc-footer, sc-utility-bar, sc-site-header {
   --_cm: var(--sc-grid-compact-margin);
+}
+sc-container {
   display: block;
   box-sizing: border-box;
   inline-size: 100%;
@@ -220,13 +287,13 @@ sc-container[width="reading"] {
   );
 }
 @media (min-width: 600px) {
-  sc-container { --_cm: var(--sc-grid-medium-margin); }
+  :is(sc-container, sc-footer, sc-utility-bar, sc-site-header) { --_cm: var(--sc-grid-medium-margin); }
 }
 @media (min-width: 1024px) {
-  sc-container { --_cm: var(--sc-grid-expanded-margin); }
+  :is(sc-container, sc-footer, sc-utility-bar, sc-site-header) { --_cm: var(--sc-grid-expanded-margin); }
 }
 @media (min-width: 1440px) {
-  sc-container { --_cm: var(--sc-grid-wide-margin); }
+  :is(sc-container, sc-footer, sc-utility-bar, sc-site-header) { --_cm: var(--sc-grid-wide-margin); }
 }
 
 /* sc-grid: 4, 8 or 12 columns with 16, 20 or 24px gutters. span, span-medium and
@@ -319,60 +386,146 @@ sc-ltr {
   display: block;
 }
 
-/* Board alignment (v2-align-chrome-b): the simple footer gained 8px of top padding and a
-   body-medium meta line, the compact grouped footer lost 24px of top padding and its brand
-   name is headline-small, and the folded utility bar's gap is 8. Re-measured reservations. */
-sc-footer:not(:defined) {
-  min-block-size: 253px;
+/* sc-callout and sc-status-tag render their box in shadow DOM: before upgrade the host draws
+   the same box around its light-DOM text (padding, the icon's room, the 4px start bar, the
+   tone fill; the 32px chip), so neither changes size as it upgrades (CLS 0). A heading given
+   by the `heading` prop appears only once upgraded: use slot="heading" to hold its line too. */
+sc-callout:not(:defined) {
+  --_a: var(--sc-color-info);
+  --_f: var(--sc-color-info-container);
+  display: block;
+  padding: var(--sc-space-16);
+  padding-inline-start: calc(var(--sc-space-16) + var(--sc-size-icon-l) + var(--sc-space-12));
+  border: var(--sc-size-border-hairline) solid transparent;
+  border-inline-start: var(--sc-size-strip) solid var(--_a);
+  border-radius: var(--sc-radius-field);
+  background: var(--_f);
+  color: var(--sc-color-on-surface);
+  font: var(--sc-type-body-medium);
+  font-weight: var(--sc-font-weight-medium);
+  letter-spacing: var(--sc-type-body-medium-tracking);
+  overflow-wrap: anywhere;
 }
-sc-footer:not(:defined)[variant='grouped'] {
-  min-block-size: 946px;
+sc-callout:not(:defined) > [slot='heading'] {
+  display: block;
+  margin-block-end: var(--sc-space-4);
+  font: var(--sc-type-title-small);
+  font-weight: var(--sc-font-weight-bold);
+  letter-spacing: var(--sc-type-title-small-tracking);
 }
+sc-callout:not(:defined) > p {
+  margin: 0;
+}
+sc-status-tag:not(:defined) {
+  --_a: var(--sc-color-on-surface-variant);
+  --_f: var(--sc-color-surface-container);
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  max-inline-size: 100%;
+  min-block-size: var(--sc-size-chip);
+  padding: var(--sc-space-4) var(--sc-space-12);
+  padding-inline-start: calc(var(--sc-space-12) + var(--sc-size-icon-s) + var(--sc-space-6));
+  border: var(--sc-size-border-hairline) solid transparent;
+  border-radius: var(--sc-radius-chip);
+  background: var(--_f);
+  color: var(--_a);
+  font: var(--sc-type-label-small);
+  letter-spacing: var(--sc-type-label-small-tracking);
+}
+:is(sc-callout, sc-status-tag)[tone='success']:not(:defined) {
+  --_a: var(--sc-color-success);
+  --_f: var(--sc-color-success-container);
+}
+:is(sc-callout, sc-status-tag)[tone='warning']:not(:defined) {
+  --_a: var(--sc-color-warning);
+  --_f: var(--sc-color-warning-container);
+}
+:is(sc-callout, sc-status-tag)[tone='error']:not(:defined) {
+  --_a: var(--sc-color-error);
+  --_f: var(--sc-color-error-container);
+}
+sc-status-tag[tone='info']:not(:defined) {
+  --_a: var(--sc-color-info);
+  --_f: var(--sc-color-info-container);
+}
+sc-status-tag[tone='channel']:not(:defined) {
+  --_a: var(--sc-color-channel-action);
+  --_f: var(--sc-color-channel-subtle);
+}
+
+/* sc-tile: the title written as a light-DOM <a href> is the tile until it upgrades (PERF-04):
+   the final box, the icon in its 40px tile, the whole box one link. */
+sc-tile:not(:defined) {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sc-space-16);
+  block-size: 100%;
+  min-block-size: calc(var(--sc-space-96) + var(--sc-space-16));
+  padding: var(--sc-space-16);
+  border: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+  border-radius: var(--sc-radius-card);
+  background: var(--sc-color-surface-card);
+  color: var(--sc-color-on-surface);
+}
+sc-tile:not(:defined) > [slot='icon'] {
+  inline-size: var(--sc-size-icon-l);
+  block-size: var(--sc-size-icon-l);
+  padding: var(--sc-space-8);
+  border-radius: var(--sc-radius-field);
+  background: var(--sc-color-channel-subtle);
+  color: var(--sc-color-channel-action);
+}
+sc-tile:not(:defined) > a {
+  color: inherit;
+  font: var(--sc-type-title-small);
+  letter-spacing: var(--sc-type-title-small-tracking);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+sc-tile:not(:defined) > a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+
+/* sc-utility-bar renders in shadow DOM: reserve its folded height (measured with the
+   standard items, EN; Arabic is equal or taller). Docked from 1024px, it takes no space. */
 sc-utility-bar:not(:defined) {
+  display: block;
   min-block-size: 206px;
 }
-@media (min-width: 600px) {
-  sc-footer:not(:defined) {
-    min-block-size: 149px;
-  }
-  sc-footer:not(:defined)[variant='grouped'] {
-    min-block-size: 760px;
-  }
-}
 @media (min-width: 1024px) {
-  sc-footer:not(:defined) {
-    min-block-size: 117px;
-  }
-  sc-footer:not(:defined)[variant='grouped'] {
-    min-block-size: 388px;
-  }
   sc-utility-bar:not(:defined) {
     min-block-size: 0;
   }
 }
 
 /* ---------------------------------------------------------------------------------------
- * No-JS fallbacks (B1, PERF-04). sc-footer, sc-utility-bar and sc-language-switch render in
- * shadow DOM, so without script they would show nothing. A service writes the same links as
- * light-DOM children in slot="fallback": the browser shows them until the component
- * upgrades, and the upgraded shadow root has no "fallback" slot, so they are then neither
- * shown nor read. These rules make them plain, usable links in the meantime: the footer's
- * link style (label-medium, on-surface, underlined, 44px rows), in the flow at the page end.
+ * No-JS fallbacks (B1, PERF-04). sc-utility-bar and sc-language-switch render in shadow DOM,
+ * so without script they would show nothing. A service writes the same links as light-DOM
+ * children in slot="fallback": the browser shows them until the component upgrades, and the
+ * upgraded shadow root has no "fallback" slot, so they are then neither shown nor read.
+ * These rules make them plain, usable links in the meantime, in the footer's link style.
  * --------------------------------------------------------------------------------------- */
-:is(sc-footer, sc-utility-bar):not(:defined) > [slot='fallback'] {
+sc-utility-bar:not(:defined) > [slot='fallback'] {
   display: block;
   max-inline-size: var(--sc-container-max);
   margin: 0 auto;
-  padding: var(--sc-space-24) var(--sc-grid-compact-margin);
-  border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+  padding: var(--sc-space-24) var(--_cm);
 }
-:is(sc-footer, sc-utility-bar):not(:defined) > [slot='fallback'] :is(h2, h3) {
+sc-utility-bar:not(:defined) > [slot='fallback'] :is(h2, h3) {
   margin: 0 0 var(--sc-space-8);
   font: var(--sc-type-title-small);
   font-weight: var(--sc-font-weight-bold);
 }
-:is(sc-footer, sc-utility-bar):not(:defined) > [slot='fallback'] :is(ul, ol),
-:is(sc-footer, sc-utility-bar):not(:defined) > :is(ul, ol)[slot='fallback'] {
+sc-utility-bar:not(:defined) > [slot='fallback'] ul {
   display: flex;
   flex-wrap: wrap;
   gap: 0 var(--sc-space-32);
@@ -380,7 +533,7 @@ sc-utility-bar:not(:defined) {
   padding-inline-start: 0;
   list-style: none;
 }
-:is(sc-footer, sc-utility-bar):not(:defined) > [slot='fallback'] a,
+sc-utility-bar:not(:defined) > [slot='fallback'] a,
 sc-language-switch:not(:defined) > a[slot='fallback'] {
   display: inline-flex;
   align-items: center;
@@ -397,21 +550,294 @@ sc-language-switch:not(:defined) > a[slot='fallback'] {
   padding-inline: var(--sc-space-4);
   color: var(--sc-color-channel-action);
 }
-:is(sc-footer, sc-utility-bar, sc-language-switch):not(:defined) a:lang(ar) {
+:is(sc-utility-bar, sc-language-switch):not(:defined) a:lang(ar) {
   text-underline-offset: 5px;
 }
-/* Bare extra links of a footer that has a fallback are listed in it. */
-sc-footer:not(:defined):has(> [slot='fallback']) > a:not([slot]) {
-  display: none;
+
+/* ---------------------------------------------------------------------------------------
+ * CSS-only chrome (v2.1, like sc-container): sc-footer and sc-breadcrumbs are never
+ * registered. The page writes their links as plain markup, so they need no JavaScript, show
+ * at their final size at first paint and work with scripting off (PERF-04, B1).
+ * --------------------------------------------------------------------------------------- */
+
+/* sc-footer (A29 simple, B5 grouped; CHR-06, Q-footer). On surface, never a dark band. A
+   <footer> child is the content box: the grid margins, the 1280px cap and a 1px rule. */
+sc-footer {
+  display: block;
+  background-color: var(--sc-color-surface);
+  color: var(--sc-color-on-surface);
+}
+sc-footer > footer {
+  box-sizing: content-box;
+  max-inline-size: var(--sc-container-max);
+  margin-inline: auto;
+  padding: var(--sc-space-32) var(--_cm) var(--sc-space-40);
+  border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+}
+sc-footer ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--sc-space-32);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* Links: label-medium, on-surface (CHR-06's exception to CMP-08), underlined 1px at 4px (5px
+   in Arabic) in every state (R6), 2px on hover, rows at least 44px tall (B2). */
+sc-footer :is(a, li > span) {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--sc-size-target-min);
+  font: var(--sc-type-label-medium);
+  letter-spacing: var(--sc-type-label-medium-tracking);
+}
+sc-footer a {
+  color: var(--sc-color-on-surface);
+  text-decoration: underline 1px;
+  text-underline-offset: 4px;
+  transition: text-decoration-thickness var(--sc-duration-fast) var(--sc-easing-hover);
+}
+sc-footer a:lang(ar) {
+  text-underline-offset: 5px;
+}
+@media (hover: hover) and (pointer: fine) {
+  sc-footer a:hover {
+    text-decoration-thickness: 2px;
+  }
+}
+/* The current channel: Bold and a 3px channel-action bar at its inline start (R10, B7). */
+sc-footer li > [aria-current] {
+  padding-inline-start: var(--sc-space-8);
+  border-inline-start: var(--sc-size-border-accent) solid var(--sc-color-channel-action);
+  font-weight: var(--sc-font-weight-bold);
+}
+sc-footer p {
+  margin: 0;
+  color: var(--sc-color-on-surface-variant);
+  font: var(--sc-type-body-small);
+  letter-spacing: var(--sc-type-body-small-tracking);
+}
+sc-footer h2 {
+  margin: 0 0 var(--sc-space-8);
+  font: var(--sc-type-title-small);
+  font-weight: var(--sc-font-weight-bold);
+  letter-spacing: var(--sc-type-title-small-tracking);
+}
+/* Simple: a row of links, the meta line at inline-end in body-medium; stacked below 600px. */
+sc-footer:not([variant='grouped']) > footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sc-space-8) var(--sc-space-32);
+}
+sc-footer:not([variant='grouped']) > footer > p {
+  font: var(--sc-type-body-medium);
+  letter-spacing: var(--sc-type-body-medium-tracking);
+}
+/* Grouped: brand, Channels (two inner columns), Helpful information and Legal on 4/4/2/2
+   columns from 1024px, two columns from 600px (brand and Channels full width), one below. */
+sc-footer[variant='grouped'] > footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--sc-space-40) var(--sc-space-24);
+}
+sc-footer[variant='grouped'] ul {
+  flex-direction: column;
+}
+.sc-footer__brand {
+  color: var(--sc-color-on-surface-variant);
+  font: var(--sc-type-body-medium);
+  letter-spacing: var(--sc-type-body-medium-tracking);
+}
+.sc-footer__brand > * {
+  margin: 0 0 var(--sc-space-16);
+  font: inherit;
+}
+/* The channel's name in headline-small after its ring mark (as on the channel switcher). */
+.sc-footer__brand > p:first-child {
+  display: flex;
+  align-items: center;
+  gap: var(--sc-space-12);
+  color: var(--sc-color-on-surface);
+  font: var(--sc-type-headline-small);
+  letter-spacing: var(--sc-type-headline-small-tracking);
+}
+.sc-footer__brand > p:first-child::before {
+  content: '';
+  box-sizing: border-box;
+  flex: none;
+  inline-size: var(--sc-size-icon-l);
+  block-size: var(--sc-size-icon-l);
+  border: var(--sc-size-border-accent) solid var(--sc-color-channel-action);
+  border-radius: var(--sc-radius-full);
+  background: radial-gradient(circle, var(--sc-color-channel-action) calc(var(--sc-space-6) / 2), transparent 0);
+}
+sc-footer[variant='grouped'] .sc-footer__channels ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(4, auto);
+  grid-auto-flow: column;
+  column-gap: var(--sc-space-24);
+}
+/* The lower line: "Government of Dubai · Last updated …" and "… is run by the Government of
+   Dubai", under a 1px rule, 40 below the groups. */
+.sc-footer__lower {
+  display: flex;
+  flex-wrap: wrap;
+  grid-column: 1 / -1;
+  justify-content: space-between;
+  gap: var(--sc-space-8) var(--sc-space-32);
+  padding-block-start: var(--sc-space-24);
+  border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+}
+@media (max-width: 599.98px) {
+  sc-footer:not([variant='grouped']) ul {
+    flex-direction: column;
+  }
 }
 @media (min-width: 600px) {
-  :is(sc-footer, sc-utility-bar):not(:defined) > [slot='fallback'] {
-    padding-inline: var(--sc-grid-medium-margin);
+  sc-footer[variant='grouped'] > footer {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding-block-start: var(--sc-space-56);
+  }
+  :is(.sc-footer__brand, .sc-footer__channels) {
+    grid-column: 1 / -1;
   }
 }
 @media (min-width: 1024px) {
-  :is(sc-footer, sc-utility-bar):not(:defined) > [slot='fallback'] {
-    padding-inline: var(--sc-grid-expanded-margin);
+  sc-footer[variant='grouped'] > footer {
+    grid-template-columns: 4fr 4fr 2fr 2fr;
+  }
+  :is(.sc-footer__brand, .sc-footer__channels) {
+    grid-column: auto;
+  }
+}
+
+/* sc-breadcrumbs (B6, CHR-07): a <nav> with an <ol> of links; the last item is the current
+   page, as text with aria-current="page". Chevrons between items are drawn here (Material
+   Symbols chevron_right as a mask), 20px, on-surface-variant, mirrored in right-to-left. */
+sc-breadcrumbs {
+  display: block;
+}
+sc-breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  /* Rows 4 apart, so 44px targets on neighbouring rows never overlap. */
+  gap: var(--sc-space-4) var(--sc-space-8);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--sc-color-on-surface);
+  font: var(--sc-type-label-medium);
+  letter-spacing: var(--sc-type-label-medium-tracking);
+}
+sc-breadcrumbs li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sc-space-8);
+  min-inline-size: 0;
+}
+sc-breadcrumbs li::before {
+  content: '';
+  flex: none;
+  inline-size: var(--sc-size-icon-m);
+  block-size: var(--sc-size-icon-m);
+  margin-inline: var(--sc-space-4);
+  background-color: var(--sc-color-on-surface-variant);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -960 960 960'%3E%3Cpath d='M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+sc-breadcrumbs li:first-child::before {
+  display: none;
+}
+sc-breadcrumbs li:dir(rtl)::before {
+  transform: scaleX(-1);
+}
+/* Ancestor links stay underlined at rest as well (R6, the stricter choice): 1px at 4px (5px
+   in Arabic), 2px on hover. 10px block padding; an invisible extension centred on the link
+   makes the target at least 44 × 44 (B2) without moving the layout. */
+sc-breadcrumbs a {
+  position: relative;
+  padding-block: calc(var(--sc-space-8) + var(--sc-space-2));
+  border-radius: var(--sc-radius-control);
+  color: inherit;
+  text-decoration: underline 1px;
+  text-underline-offset: 4px;
+  transition: text-decoration-thickness var(--sc-duration-fast) var(--sc-easing-hover);
+}
+sc-breadcrumbs a:lang(ar) {
+  text-underline-offset: 5px;
+}
+sc-breadcrumbs a::after {
+  content: '';
+  position: absolute;
+  inset-block: min(0px, (100% - var(--sc-size-target-min)) / 2);
+  inset-inline: min(0px, (100% - var(--sc-size-target-min)) / 2);
+}
+@media (hover: hover) and (pointer: fine) {
+  sc-breadcrumbs a:hover {
+    text-decoration-thickness: 2px;
+  }
+}
+/* The current page: Bold, never underlined (R10). */
+sc-breadcrumbs [aria-current] {
+  padding-block: calc(var(--sc-space-8) + var(--sc-space-2));
+  font-weight: var(--sc-font-weight-bold);
+}
+/* Below 600px only the parent shows, as one "Back to {parent}" link with a back chevron, 44px
+   tall (12 + 20 + 12). The words come from --sc-breadcrumbs-back, so the link's name is what
+   it shows. */
+@media (width < 600px) {
+  sc-breadcrumbs li:not(:nth-last-child(2)) {
+    display: none;
+  }
+  sc-breadcrumbs li {
+    gap: var(--sc-space-4);
+  }
+  sc-breadcrumbs li::before {
+    margin: 0;
+    transform: scaleX(-1);
+  }
+  sc-breadcrumbs li:dir(rtl)::before {
+    transform: none;
+  }
+  sc-breadcrumbs li:nth-last-child(2)::before {
+    display: block;
+  }
+  sc-breadcrumbs a {
+    padding-block: var(--sc-space-12);
+  }
+  sc-breadcrumbs a::before {
+    content: var(--sc-breadcrumbs-back, "Back to ");
+  }
+  sc-breadcrumbs a:lang(ar)::before {
+    content: var(--sc-breadcrumbs-back, "رجوع إلى ");
+  }
+  sc-breadcrumbs a::after {
+    inset-inline-start: calc(-1 * (var(--sc-size-icon-m) + var(--sc-space-4)));
+  }
+}
+:is(sc-footer, sc-breadcrumbs)[hidden] {
+  display: none;
+}
+@media (forced-colors: active) {
+  sc-footer > footer,
+  .sc-footer__lower {
+    border-color: CanvasText;
+  }
+  :is(sc-footer, sc-breadcrumbs) a {
+    color: LinkText;
+  }
+  sc-footer li > [aria-current] {
+    border-color: Highlight;
+  }
+  .sc-footer__brand > p:first-child::before {
+    border-color: CanvasText;
+    background: radial-gradient(circle, CanvasText calc(var(--sc-space-6) / 2), transparent 0);
+  }
+  sc-breadcrumbs li::before {
+    background-color: CanvasText;
   }
 }
 

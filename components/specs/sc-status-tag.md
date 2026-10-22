@@ -41,6 +41,10 @@ The icon sits at inline-start. Icons never mirror.
 - New tone `info`. `tone="channel"` stays (W4), now `channel-action` on `channel-subtle` with an info icon.
 - Part `dot` is replaced by part `icon`.
 
+## Before upgrade (v2-lib-gaps)
+
+`sc.css` draws the 32px chip on the host while it is undefined: padding, room for the 16px icon, the transparent 1px edge, the tone fill and text, label-small. The host is now `inline-flex` (it was `inline-block`, whose line strut made the chip 34px tall in Arabic), so the upgraded tag is the same 32px in both languages and nothing shifts.
+
 ## Budget
 
 Leaf, 4 KiB. Measured **2.2 KiB** gzip; CSS 0.4 KiB.

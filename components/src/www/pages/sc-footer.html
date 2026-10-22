@@ -5,16 +5,51 @@
 <section class="pg-section" aria-labelledby="ft-grouped">
   <h2 id="ft-grouped" class="sc-type-headline-small" data-ar="مجمّع">Grouped</h2>
   <div class="pg-frame">
-    <sc-footer variant="grouped" updated="12 October 2026" links='{"now":"#now-{lang}","transport":"#transport-{lang}","visit":"#visit-{lang}","justice":"#justice-{lang}","build":"#build-{lang}","invest":"#invest-{lang}","trade":"#trade-{lang}"}' about-href="#about" help-href="#help" accessibility-href="#accessibility" privacy-href="#privacy" terms-href="#terms" sitemap-href="#sitemap">
-      <p slot="brand" data-ar="الخدمات الحكومية لكل من يعيش في دبي، في مكان واحد.">Government services for everyone who lives in Dubai, in one place.</p>
-    </sc-footer>
+    <sc-footer variant="grouped"><footer>
+      <div class="sc-footer__brand">
+        <p data-ar="دبي الآن">Dubai Now</p>
+        <p data-ar="الخدمات الحكومية لكل من يعيش في دبي، في مكان واحد.">Government services for everyone who lives in Dubai, in one place.</p>
+      </div>
+      <section class="sc-footer__channels" aria-labelledby="pg-ft-channels">
+        <h2 id="pg-ft-channels" data-ar="القنوات">Channels</h2>
+        <ul>
+          <li><a href="#now" aria-current="true" data-ar="دبي الآن">Dubai Now</a></li>
+          <li><a href="#transport" data-ar="مواصلات دبي">Dubai Transport</a></li>
+          <li><a href="#visit" data-ar="زوروا دبي">Visit Dubai</a></li>
+          <li><a href="#justice" data-ar="دبي للعدالة">Dubai Justice</a></li>
+          <li><a href="#build" data-ar="دبي للبناء">Build in Dubai</a></li>
+          <li><a href="#invest" data-ar="استثمر في دبي">Invest in Dubai</a></li>
+          <li><a href="#trade" data-ar="دبي التجارية">Dubai Trade</a></li>
+        </ul>
+      </section>
+      <section aria-labelledby="pg-ft-helpful">
+        <h2 id="pg-ft-helpful" data-ar="معلومات مفيدة">Helpful information</h2>
+        <ul>
+          <li><a href="#about" data-ar="عن دبي الآن">About Dubai Now</a></li>
+          <li><a href="#help" data-ar="المساعدة والتواصل">Help and contact</a></li>
+          <li><a href="#accessibility" data-ar="بيان إمكانية الوصول">Accessibility statement</a></li>
+          <li><a href="#sitemap" data-ar="خريطة الموقع">Sitemap</a></li>
+        </ul>
+      </section>
+      <section aria-labelledby="pg-ft-legal">
+        <h2 id="pg-ft-legal" data-ar="المعلومات القانونية">Legal</h2>
+        <ul>
+          <li><a href="#privacy" data-ar="الخصوصية وملفات تعريف الارتباط">Privacy and cookies</a></li>
+          <li><a href="#terms" data-ar="شروط الاستخدام">Terms of use</a></li>
+        </ul>
+      </section>
+      <div class="sc-footer__lower">
+        <p data-ar="حكومة دبي · آخر تحديث 12 أكتوبر 2026">Government of Dubai · Last updated 12 October 2026</p>
+        <p data-ar="دبي الآن تديرها حكومة دبي">Dubai Now is run by the Government of Dubai</p>
+      </div>
+    </footer></sc-footer>
   </div>
 </section>
 <section class="pg-section" aria-labelledby="ft-simple">
   <h2 id="ft-simple" class="sc-type-headline-small" data-ar="بسيط">Simple</h2>
   <div class="pg-frame">
-    <sc-footer help-href="#help" accessibility-href="#accessibility" privacy-href="#privacy" cookies-href="#cookies" terms-href="#terms">
-      <nav slot="fallback" aria-label="Support links"><ul>
+    <sc-footer><footer>
+      <nav aria-label="Support links"><ul>
         <li><a href="#help" data-ar="المساعدة والتواصل">Help and contact</a></li>
         <li><a href="#accessibility" data-ar="بيان إمكانية الوصول">Accessibility statement</a></li>
         <li><a href="#privacy" data-ar="الخصوصية">Privacy</a></li>
@@ -22,10 +57,10 @@
         <li><a href="#cookies" data-ar="ملفات تعريف الارتباط">Cookies</a></li>
         <li><a href="#feedback" data-ar="شاركنا رأيك">Give feedback</a></li>
       </ul></nav>
-      <a href="#feedback" data-ar="شاركنا رأيك">Give feedback</a>
-    </sc-footer>
+      <p data-ar="حكومة دبي">Government of Dubai</p>
+    </footer></sc-footer>
   </div>
-  <p class="pg-note" data-ar="نصوص الروابط من ملف النصوص بلغة الصفحة. الروابط الإضافية في الفتحة الافتراضية. الروابط نفسها في slot=&quot;fallback&quot; تعمل من دون JavaScript، ولا تظهر بعد تحميل المكوّن.">Link text comes from strings, in the page language. Extra links go in the default slot. The same links in slot="fallback" work without JavaScript and are never shown once the footer upgrades (PERF-04).</p>
+  <p class="pg-note" data-ar="التذييل CSS فقط: تكتب الصفحة الروابط والنصوص بلغتها، فيعمل من دون JavaScript ويظهر بحجمه النهائي من أول عرض.">The footer is CSS only: the page writes the links and text in its language, so it works without JavaScript and has its final size at first paint (PERF-04).</p>
 </section>
 <style>
   .pg-frame { overflow: visible; border: 1px solid var(--sc-color-outline-variant); border-radius: var(--sc-radius-card); background: var(--sc-color-surface); }

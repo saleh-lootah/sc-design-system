@@ -1,7 +1,7 @@
 import { E2EPage } from '@stencil/core/testing';
 import { describeAxe } from '../../test/axe';
 import { CHANNEL_LINKS } from '../../test/chrome';
-import { newScPage, setPageContext } from '../../test/page';
+import { loadFonts, newScPage, noScriptPage, setPageContext } from '../../test/page';
 
 const NETWORK = `<div style="padding: 24px"><sc-channel-network links='${CHANNEL_LINKS}'></sc-channel-network></div>`;
 
@@ -60,17 +60,12 @@ describe('sc-channel-network (e2e)', () => {
     expect(state).toEqual({ current: 0, links: 7, fills: 1 });
   });
 
-  it('upper-cases and tracks the eyebrow in English only', async () => {
+  it('sets the eyebrow as written, never forced to capitals (CNT-07)', async () => {
     const page = await newScPage(NETWORK);
-    const read = () => page.evaluate(() => {
-      const s = getComputedStyle(document.querySelector('.sc-channel-network__eyebrow')!);
-      return [s.textTransform, s.letterSpacing];
-    });
-    expect((await read())[0]).toBe('uppercase');
+    const read = () => page.evaluate(() => getComputedStyle(document.querySelector('.sc-channel-network__eyebrow')!).textTransform);
+    expect(await read()).toBe('none');
     await setPageContext(page, { lang: 'ar' });
-    const [transform, spacing] = await read();
-    expect(transform).toBe('none');
-    expect(spacing).toMatch(/^(normal|0px)$/);
+    expect(await read()).toBe('none');
   });
 
   it('runs seven tiles in a row on wide screens, two on phones, from the right in Arabic', async () => {
@@ -82,6 +77,47 @@ describe('sc-channel-network (e2e)', () => {
     expect([...lefts].sort((a, b) => b - a)).toEqual(lefts);
     await page.setViewport({ width: 390, height: 800 });
     expect(new Set(await tops()).size).toBe(4);
+  });
+});
+
+describe('sc-channel-network before it upgrades (PERF-04, CLS)', () => {
+  const FALLBACK = `<nav slot="fallback" aria-label="Government of Dubai channels"><ul><li><a href="#now">Dubai Now</a></li><li><a href="#transport">Dubai Transport</a></li><li><a href="#visit">Visit Dubai</a></li><li><a href="#justice">Dubai Justice</a></li><li><a href="#build">Build in Dubai</a></li><li><a href="#invest">Invest in Dubai</a></li><li><a href="#trade">Dubai Trade</a></li></ul></nav>`;
+
+  it.each([
+    [375, 'en'],
+    [700, 'en'],
+    [1280, 'en'],
+    [375, 'ar'],
+    [1280, 'ar'],
+  ] as const)('at %ipx (%s) reserves about its final height, and hides the fallback once rendered', async (width, lang) => {
+    const html = `<div style="padding-inline: 20px"><sc-channel-network channel="none">${FALLBACK}</sc-channel-network></div>`;
+    const page = await newScPage(html, { lang });
+    await page.setViewport({ width, height: 900 });
+    await loadFonts(page);
+    const final = await page.evaluate(() => document.querySelector('sc-channel-network')!.getBoundingClientRect().height);
+    expect(await page.evaluate(() => document.querySelector('sc-channel-network > nav[slot]')!.getClientRects().length)).toBe(0);
+    // Without the hydrated class the pre-upgrade rules apply again: read the reservation.
+    const reserved = await page.evaluate(() => {
+      const el = document.querySelector('sc-channel-network')!;
+      el.classList.remove('hydrated');
+      const h = parseFloat(getComputedStyle(el, '::before').blockSize);
+      el.classList.add('hydrated');
+      return h;
+    });
+    // Never short (that would push the page down); at most a little over within a width band.
+    expect(reserved).toBeGreaterThanOrEqual(final - 1);
+    expect(reserved - final).toBeLessThanOrEqual(48);
+  });
+
+  it('without JavaScript shows the fallback links, 44px tall, and reserves nothing', async () => {
+    const page = await noScriptPage(`<sc-channel-network channel="none">${FALLBACK}</sc-channel-network>`);
+    const r = await page.evaluate(() => [
+      Array.from(document.querySelectorAll('sc-channel-network a')).map((a) => Math.round(a.getBoundingClientRect().height)),
+      getComputedStyle(document.querySelector('sc-channel-network')!, '::before').content,
+    ]);
+    expect(r[0]).toEqual(Array(7).fill(44));
+    expect(r[1]).toBe('none');
+    await page.close();
   });
 });
 

@@ -6,7 +6,7 @@ The side navigation of the signed-in account area.
 
 ## Encapsulation
 
-**Shadow DOM**, reading plain child links like `sc-breadcrumbs` (see its spec for the reasoning). Children:
+**Shadow DOM**, reading plain child links (`src/utils/nav-items.ts`): an `<ol>` or `<ul>` must directly contain its `<li>`s, so the component renders its own list from the children rather than slotting them. Children:
 
 | Attribute on a child `<a>` | Effect |
 | --- | --- |
@@ -65,7 +65,7 @@ The bar and icons sit on the right; the `logout` icon mirrors.
 
 ## Budget
 
-Custom-elements closure 4,095 B gzip (4 KiB budget: 1 B of room), its own CSS 813 B. The board's 8px icon gap in the compact row (G7G-0) was left out because it put the closure 2 B over; the compact row keeps the 12px gap. Shared chunks: the locale controller (0.9 KiB), the destination icons (0.7 KiB, shared with `sc-bottom-nav`) and the nav-items reader (0.5 KiB, shared with `sc-breadcrumbs` and `sc-bottom-nav`). Any addition needs a trim or a budget override.
+Custom-elements closure 4,095 B gzip (4 KiB budget: 1 B of room), its own CSS 813 B. The board's 8px icon gap in the compact row (G7G-0) was left out because it put the closure 2 B over; the compact row keeps the 12px gap. Shared chunks: the locale controller (0.9 KiB), the destination icons (0.7 KiB, shared with `sc-bottom-nav`) and the nav-items reader (0.5 KiB, shared with `sc-bottom-nav`). Any addition needs a trim or a budget override.
 
 ## Tests
 

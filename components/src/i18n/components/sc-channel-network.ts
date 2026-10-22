@@ -1,6 +1,6 @@
 import { defineStrings } from '../define';
 
-/** sc-channel-network (v2). The eyebrow is upper case in English only (by CSS). */
+/** sc-channel-network (v2). The eyebrow is sentence case in both languages (CNT-07). */
 export default defineStrings({
   en: {
     networkLabel: 'Government of Dubai channels',
