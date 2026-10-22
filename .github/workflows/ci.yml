@@ -102,9 +102,13 @@ jobs:
         working-directory: components
         run: npm run check:budget
 
+      # Headful under a virtual display: headless Chromium on Linux reports no pointer
+      # ((hover: none), (pointer: none)), so hover tests need the full browser (stencil.config.ts).
       - name: e2e and axe, rebuilt components (one worker)
         working-directory: components
-        run: npm run test:e2e:v2
+        env:
+          SC_HEADFUL: '1'
+        run: xvfb-run -a npm run test:e2e:v2
 
       - name: Screenshots (EN/AR x light/dark)
         working-directory: components

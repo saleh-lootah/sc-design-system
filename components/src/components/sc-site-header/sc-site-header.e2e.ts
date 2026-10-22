@@ -34,6 +34,14 @@ const activeName = (page: E2EPage) =>
   });
 
 async function desktop(page: E2EPage) {
+  // Load every Dubai W23 face the full row can use (both scripts, so a later switch to Arabic
+  // is covered too) before it is measured. While a face loads, text is set in the "Dubai W23
+  // Fallback" faces, metric-matched to Arial and Tahoma. Where those are not installed (Linux
+  // CI), the row is set in a wider system font, overflows at 1440px and stays compact
+  // (overflowAt). These tests check the laid-out row, not font-swap timing.
+  await page.evaluate(() =>
+    Promise.all(['400', '500', '700'].map((w) => document.fonts.load(`${w} 16px "Dubai W23 Arabic", "Dubai W23", "Dubai W23 Name"`, 'Aا'))),
+  );
   await page.setViewport({ width: 1440, height: 800 });
   await page.waitForChanges();
 }
