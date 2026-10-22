@@ -102,7 +102,23 @@
     "searchJsGzip": 3072,
     "demoCssGzip": 1536,
     "htmlGzip": 30720,
-    "pageFontsMixedBytes": 112640
+    "pageFontsMixedBytes": 112640,
+    "chromeTags": [
+      "sc-site-header",
+      "sc-footer"
+    ],
+    "showcaseTooling": [
+      "sc-channel-switcher"
+    ],
+    "pageComponents": {
+      "search/": [
+        "sc-search"
+      ],
+      "ar/search/": [
+        "sc-search"
+      ]
+    }
   },
-  "$siteFontsComment": "site.pageFontsMixedBytes (110 KiB, approved R18): a page that sets text in both scripts, such as an Arabic page around an English document or an English component page with Arabic examples, downloads the Arabic and the Latin faces it uses. Single-script pages keep pageFontsEnBytes and pageFontsArBytes. Checked by npm run check:site-a11y."
+  "$siteFontsComment": "site.pageFontsMixedBytes (110 KiB, approved R18): a page that sets text in both scripts, such as an Arabic page around an English document or an English component page with Arabic examples, downloads the Arabic and the Latin faces it uses. Single-script pages keep pageFontsEnBytes and pageFontsArBytes. Checked by npm run check:site-a11y.",
+  "$siteChromeComment": "R21 (approved, decisions.md on v2, 845e937): documentation-site pages may also use the approved overrides above componentGzip of the site chrome they carry (site.chromeTags: sc-site-header +3.5 KiB, sc-footer +2 KiB). R22 (approved): on component pages sc-channel-switcher is showcase tooling and counts at its full approved budget (site.showcaseTooling); on /search/ sc-search is the page's own component and brings its approved override (site.pageComponents). Documentation site only: service pages keep the plain page budgets. Enforced by npm run check:site-budget."
 }

@@ -125,18 +125,25 @@ export function parseDoc(src, { split = false, splitAt = null, splitParts = null
         if (!host.attrGet('id')) {
           host.attrSet('id', id);
           host.attrJoin('class', 'req');
-          // The ID becomes a link to itself; the rest of the bold text stays.
-          const rest = b.content.slice(id.length);
-          const link = Object.assign(new t.children[0].constructor('link_open', 'a', 1), { attrs: [['href', `#${id}`], ['class', 'req-id']] });
-          const text = Object.assign(new t.children[0].constructor('text', '', 0), { content: id });
-          const close = new t.children[0].constructor('link_close', 'a', -1);
+          // The ID becomes a link to itself, before the bold title, so it can hang in the margin
+          // like a clause number; the bold text keeps the rest ("Target size.").
+          const Token = t.children[0].constructor;
+          const rest = b.content.slice(id.length).replace(/^\.\s*/, '');
+          const link = Object.assign(new Token('link_open', 'a', 1), { attrs: [['href', `#${id}`], ['class', 'req-id']] });
+          const idText = Object.assign(new Token('text', '', 0), { content: id });
+          const close = new Token('link_close', 'a', -1);
+          const space = Object.assign(new Token('text', '', 0), { content: ' ' });
           b.content = rest;
-          t.children.splice(1, 0, link, text, close);
           // Title: the bold text after the ID, if it is a short label.
-          let label = '';
-          for (let k = 4; k < t.children.length && t.children[k].type !== 'strong_close'; k++) label += t.children[k].content ?? '';
-          label = label.replace(/^\.\s*/, '').replace(/\.$/, '').trim();
-          const plain = inlineText(t).slice(id.length).replace(/^\.\s*/, '');
+          let label = rest;
+          for (let k = 2; k < t.children.length && t.children[k].type !== 'strong_close'; k++) label += t.children[k].content ?? '';
+          label = label.replace(/\.$/, '').trim();
+          // An ID with no title ("**A11Y-01.** Every page…") leaves an empty strong: drop it.
+          const strongClose = t.children.findIndex((c) => c.type === 'strong_close');
+          if (!label && strongClose === 2) t.children.splice(0, 3);
+          t.children.unshift(link, idText, close, space);
+          if (t.children[4]?.type === 'text' && !label) t.children[4].content = t.children[4].content.replace(/^\s+/, '');
+          const plain = inlineText(t).slice(id.length).trim();
           reqs.push({ id, title: label || plain.slice(0, 140) + (plain.length > 140 ? '…' : ''), token: i });
         }
       }
@@ -258,30 +265,42 @@ export function renderChunk(chunk, { shift = 0, resolve, isReq, t }) {
   rules.html_block = (tk, i) => rewriteHtml(tk[i].content);
   rules.html_inline = (tk, i) => rewriteHtml(tk[i].content);
 
-  // Auto-link bare requirement IDs in text that is not already a link or a heading.
+  // In text that is not already a link or a heading: bare requirement IDs become links, and the
+  // keywords MUST, SHOULD and MAY get a weight change only (never a colour).
+  const KEYWORD = /\b(MUST NOT|MUST|SHOULD NOT|SHOULD|MAY)\b/g;
   const work = tokens.map((tk, i) => {
     if (tk.type !== 'inline' || tokens[i - 1]?.type === 'heading_open' || !tk.children) return tk;
     const out = [];
     let inLink = 0;
+    let inStrong = 0;
     for (const c of tk.children) {
       if (c.type === 'link_open') inLink++;
       if (c.type === 'link_close') inLink--;
-      if (c.type !== 'text' || inLink || !REQ.test(c.content)) {
-        REQ.lastIndex = 0;
+      if (c.type === 'strong_open') inStrong++;
+      if (c.type === 'strong_close') inStrong--;
+      if (c.type !== 'text' || inLink) {
         out.push(c);
         continue;
       }
-      REQ.lastIndex = 0;
+      const Token = c.constructor;
+      const hits = [
+        ...[...c.content.matchAll(REQ)].filter((m) => isReq(m[1])).map((m) => ({ at: m.index, len: m[0].length, req: m[1] })),
+        ...(inStrong ? [] : [...c.content.matchAll(KEYWORD)].map((m) => ({ at: m.index, len: m[0].length, kw: m[1] }))),
+      ].sort((x, y) => x.at - y.at);
       let last = 0;
-      for (const m of c.content.matchAll(REQ)) {
-        if (!isReq(m[1])) continue;
-        if (m.index > last) out.push(Object.assign(new c.constructor('text', '', 0), { content: c.content.slice(last, m.index) }));
-        out.push(Object.assign(new c.constructor('link_open', 'a', 1), { attrs: [['href', `req:${m[1]}`], ['class', 'req-ref']] }));
-        out.push(Object.assign(new c.constructor('text', '', 0), { content: m[1] }));
-        out.push(new c.constructor('link_close', 'a', -1));
-        last = m.index + m[0].length;
+      for (const h of hits) {
+        if (h.at < last) continue;
+        if (h.at > last) out.push(Object.assign(new Token('text', '', 0), { content: c.content.slice(last, h.at) }));
+        if (h.req) {
+          out.push(Object.assign(new Token('link_open', 'a', 1), { attrs: [['href', `req:${h.req}`], ['class', 'req-ref']] }));
+          out.push(Object.assign(new Token('text', '', 0), { content: h.req }));
+          out.push(new Token('link_close', 'a', -1));
+        } else {
+          out.push(Object.assign(new Token('html_inline', '', 0), { content: `<strong class="kw">${h.kw}</strong>` }));
+        }
+        last = h.at + h.len;
       }
-      if (last < c.content.length) out.push(Object.assign(new c.constructor('text', '', 0), { content: c.content.slice(last) }));
+      if (last < c.content.length) out.push(Object.assign(new Token('text', '', 0), { content: c.content.slice(last) }));
     }
     return Object.assign(Object.create(Object.getPrototypeOf(tk)), tk, { children: out });
   });

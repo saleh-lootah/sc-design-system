@@ -26,6 +26,20 @@ describe('sc-channel-network (spec)', () => {
     expect(page.root!.querySelectorAll('li a').length).toBe(6);
   });
 
+  it('marks no tile current with channel="none", even inside a data-channel', async () => {
+    const page = await render(`<div data-channel="trade"><sc-channel-network channel="none" links='${LINKS}'></sc-channel-network></div>`);
+    const host = page.body.querySelector('sc-channel-network')!;
+    expect(host.querySelector('[aria-current]')).toBeNull();
+    expect(host.querySelector('.is-current')).toBeNull();
+    expect(host.querySelectorAll('li a').length).toBe(7);
+    expect(Array.from(host.querySelectorAll('.sc-channel-network__desc')).some((d) => d.textContent === 'You are here')).toBe(false);
+  });
+
+  it('defaults to Dubai Now as the current channel with no channel and no data-channel', async () => {
+    const page = await render(`<sc-channel-network links='${LINKS}'></sc-channel-network>`);
+    expect(page.root!.querySelector('[aria-current]')!.closest('li')!.getAttribute('data-channel')).toBe('now');
+  });
+
   it('takes the channel from the closest data-channel', async () => {
     const page = await render(`<div data-channel="trade"><sc-channel-network links='${LINKS}'></sc-channel-network></div>`);
     expect(page.body.querySelector('[aria-current]')!.closest('li')!.getAttribute('data-channel')).toBe('trade');

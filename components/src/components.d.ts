@@ -528,15 +528,16 @@ export namespace Components {
      * Each tile sets its own `data-channel` (FND-26), which is why the strip renders into light
      * DOM (Stencil `scoped`). The current channel's tile is filled with its `channel-subtle`,
      * says "You are here", carries `aria-current="true"` and is not a link (it would lead to
-     * this site).
+     * this site). `channel="none"` is for a page that belongs to no channel (the network's own
+     * site, the design system's documentation): no tile is current and every tile is a link.
      * A `<nav>` labelled "Government of Dubai channels" with a list of links. Seven tiles in a
      * row from 1024px (by the strip's own width), four from 600px, two below.
      */
     interface ScChannelNetwork {
         /**
-          * The current channel. Defaults to the closest `data-channel`.
+          * The current channel. Defaults to the closest `data-channel` (else Dubai Now). `none`: the page belongs to no channel, so no tile says "You are here".
          */
-        "channel"?: Channel1;
+        "channel"?: Channel1 | 'none';
         /**
           * Replaces the eyebrow, "One network · seven channels" in the page language.
          */
@@ -2459,7 +2460,8 @@ declare global {
      * Each tile sets its own `data-channel` (FND-26), which is why the strip renders into light
      * DOM (Stencil `scoped`). The current channel's tile is filled with its `channel-subtle`,
      * says "You are here", carries `aria-current="true"` and is not a link (it would lead to
-     * this site).
+     * this site). `channel="none"` is for a page that belongs to no channel (the network's own
+     * site, the design system's documentation): no tile is current and every tile is a link.
      * A `<nav>` labelled "Government of Dubai channels" with a list of links. Seven tiles in a
      * row from 1024px (by the strip's own width), four from 600px, two below.
      */
@@ -3828,15 +3830,16 @@ declare namespace LocalJSX {
      * Each tile sets its own `data-channel` (FND-26), which is why the strip renders into light
      * DOM (Stencil `scoped`). The current channel's tile is filled with its `channel-subtle`,
      * says "You are here", carries `aria-current="true"` and is not a link (it would lead to
-     * this site).
+     * this site). `channel="none"` is for a page that belongs to no channel (the network's own
+     * site, the design system's documentation): no tile is current and every tile is a link.
      * A `<nav>` labelled "Government of Dubai channels" with a list of links. Seven tiles in a
      * row from 1024px (by the strip's own width), four from 600px, two below.
      */
     interface ScChannelNetwork {
         /**
-          * The current channel. Defaults to the closest `data-channel`.
+          * The current channel. Defaults to the closest `data-channel` (else Dubai Now). `none`: the page belongs to no channel, so no tile says "You are here".
          */
-        "channel"?: Channel1;
+        "channel"?: Channel1 | 'none';
         /**
           * Replaces the eyebrow, "One network · seven channels" in the page language.
          */
@@ -5543,7 +5546,7 @@ declare namespace LocalJSX {
         "popularLabel": string;
     }
     interface ScChannelNetworkAttributes {
-        "channel": Channel;
+        "channel": Channel | 'none';
         "links": ChannelLinks | string;
         "eyebrow": string;
     }
@@ -6078,7 +6081,8 @@ declare module "@stencil/core" {
              * Each tile sets its own `data-channel` (FND-26), which is why the strip renders into light
              * DOM (Stencil `scoped`). The current channel's tile is filled with its `channel-subtle`,
              * says "You are here", carries `aria-current="true"` and is not a link (it would lead to
-             * this site).
+             * this site). `channel="none"` is for a page that belongs to no channel (the network's own
+             * site, the design system's documentation): no tile is current and every tile is a link.
              * A `<nav>` labelled "Government of Dubai channels" with a list of links. Seven tiles in a
              * row from 1024px (by the strip's own width), four from 600px, two below.
              */

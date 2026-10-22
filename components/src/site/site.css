@@ -79,120 +79,6 @@
     clip-path: inset(50%);
   }
 
-  /* Header ----------------------------------------------------------------------------- */
-  .site-header {
-    border-block-end: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
-    background: var(--sc-color-surface);
-  }
-  .site-header__bar {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--sc-space-8) var(--sc-space-24);
-    max-inline-size: var(--sc-container-max);
-    min-block-size: var(--sc-space-64);
-    margin-inline: auto;
-    padding-block: var(--sc-space-8);
-    padding-inline: var(--site-margin);
-    box-sizing: border-box;
-  }
-  .site-brand {
-    display: inline-flex;
-    flex-direction: column;
-    justify-content: center;
-    min-block-size: var(--sc-size-target-min);
-    color: var(--sc-color-on-surface);
-    text-decoration: none;
-  }
-  .site-brand__name {
-    font: var(--sc-type-title-medium);
-  }
-  .site-brand__sub {
-    color: var(--sc-color-on-surface-variant);
-    font: var(--sc-type-label-small);
-  }
-  .site-sections {
-    display: none;
-  }
-  .site-sections ul,
-  .site-menu__sections ul,
-  .site-nav ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .site-sections ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--sc-space-4);
-  }
-  .site-sections a {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    min-block-size: var(--sc-size-target-min);
-    padding-inline: var(--sc-space-12);
-    color: var(--sc-color-on-surface);
-    font: var(--sc-type-label-medium);
-    text-decoration: none;
-  }
-  /* Current section: a bar under it as well as bold (A11Y-06: shape, not weight alone). */
-  .site-sections a[aria-current] {
-    font-weight: var(--sc-font-weight-bold);
-  }
-  .site-sections a[aria-current]::after {
-    content: '';
-    position: absolute;
-    inset-inline: var(--sc-space-12);
-    inset-block-end: 0;
-    block-size: var(--sc-size-border-accent);
-    border-radius: var(--sc-radius-full);
-    background: var(--sc-color-primary);
-  }
-  @media (min-width: 1024px) {
-    .site-sections {
-      display: block;
-    }
-  }
-  .site-header__tools {
-    display: flex;
-    align-items: center;
-    gap: var(--sc-space-8);
-    margin-inline-start: auto;
-  }
-  /* Wide enough for "English" and "العربية" in both states, so the upgrade moves nothing. */
-  .site-header__tools sc-language-switch {
-    display: inline-flex;
-    justify-content: flex-end;
-    min-inline-size: var(--sc-space-64);
-  }
-  .site-tool {
-    flex: none;
-    display: inline-flex;
-    align-items: center;
-    gap: var(--sc-space-8);
-    min-block-size: var(--sc-size-target-min);
-    min-inline-size: var(--sc-size-target-min);
-    padding-inline: var(--sc-space-8);
-    color: var(--sc-color-on-surface);
-    font: var(--sc-type-label-medium);
-    text-decoration: none;
-  }
-  .site-tool[aria-current] {
-    text-decoration: underline;
-    text-decoration-thickness: var(--sc-size-border-accent);
-    text-underline-offset: var(--sc-space-6);
-  }
-  @media (hover: hover) and (pointer: fine) {
-    .site-sections a:hover,
-    .site-tool:hover,
-    .site-brand:hover .site-brand__name {
-      text-decoration: underline;
-      text-decoration-thickness: 1px;
-      text-underline-offset: var(--sc-space-4);
-    }
-  }
-
   /* Body grid -------------------------------------------------------------------------- */
   .site-body {
     display: grid;
@@ -259,11 +145,6 @@
   .site-menu__panel {
     padding: 0 var(--sc-space-8) var(--sc-space-16);
   }
-  .site-menu__sections {
-    margin-block-end: var(--sc-space-8);
-    padding-block-end: var(--sc-space-8);
-    border-block-end: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
-  }
   @media (min-width: 1024px) {
     .site-menu {
       position: sticky;
@@ -278,8 +159,7 @@
       background: none;
       box-sizing: border-box;
     }
-    .site-menu > summary,
-    .site-menu__sections {
+    .site-menu > summary {
       display: none;
     }
     .site-menu__panel {
@@ -296,8 +176,7 @@
     margin-inline-start: var(--sc-space-12);
     border-inline-start: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
   }
-  .site-nav a,
-  .site-menu__sections a {
+  .site-nav a {
     position: relative;
     display: flex;
     align-items: center;
@@ -310,14 +189,12 @@
     box-sizing: border-box;
     transition: background-color var(--sc-duration-fast) var(--sc-easing-hover);
   }
-  .site-nav a[aria-current],
-  .site-menu__sections a[aria-current] {
+  .site-nav a[aria-current] {
     background: var(--sc-color-primary-subtle);
     font-weight: var(--sc-font-weight-bold);
   }
   /* The indicator bar is the shape change (A11Y-06). */
-  .site-nav a[aria-current]::before,
-  .site-menu__sections a[aria-current]::before {
+  .site-nav a[aria-current]::before {
     content: '';
     position: absolute;
     inset-block: var(--sc-space-8);
@@ -330,8 +207,7 @@
     font-weight: var(--sc-font-weight-bold);
   }
   @media (hover: hover) and (pointer: fine) {
-    .site-nav a:hover,
-    .site-menu__sections a:hover {
+    .site-nav a:hover {
       background: var(--sc-color-surface-container);
     }
   }
@@ -456,7 +332,7 @@
     overflow-wrap: break-word;
   }
   .doc :is(p, ul, ol, blockquote, dl) {
-    max-inline-size: var(--sc-size-measure);
+    max-inline-size: min(70ch, var(--sc-size-measure));
   }
   .doc :is(p, ul, ol) {
     margin-block: 0 var(--sc-space-16);
@@ -524,24 +400,23 @@
   }
 
   /* Links in running text: underlined in every state, primary in the network chrome (CMP-08). */
-  .doc a:not(.doc-heading__link),
+  .doc a:not(.doc-heading__link, .req-id),
   .doc-source a,
-  .home-quick a,
   .search-results a,
   .search-all a,
-  .site-notice a,
-  .req-table a {
+  .req-table a,
+  .site-index a {
     color: var(--site-link);
     text-decoration-line: underline;
     text-decoration-thickness: 1px;
     text-underline-offset: var(--sc-space-4);
     transition: text-decoration-thickness var(--sc-duration-fast) var(--sc-easing-hover);
   }
-  :lang(ar) :is(.doc, .home-quick, .search-all, .req-table) a:not(.doc-heading__link) {
+  :lang(ar) :is(.doc, .search-all, .req-table, .site-index) a:not(.doc-heading__link, .req-id) {
     text-underline-offset: 5px;
   }
   @media (hover: hover) and (pointer: fine) {
-    :is(.doc, .doc-source, .home-quick, .search-results, .search-all, .req-table) a:not(.doc-heading__link):hover {
+    :is(.doc, .doc-source, .search-results, .search-all, .req-table, .site-index) a:not(.doc-heading__link, .req-id):hover {
       text-decoration-thickness: 2px;
     }
   }
@@ -653,41 +528,6 @@
     text-underline-offset: var(--sc-space-4);
   }
 
-  /* Notices ----------------------------------------------------------------------------- */
-  .site-notice {
-    max-inline-size: var(--sc-size-measure);
-    margin: 0 0 var(--sc-space-24);
-    padding: var(--sc-space-16) var(--sc-space-20);
-    border-inline-start: var(--sc-size-border-accent) solid var(--sc-color-info);
-    border-radius: var(--sc-radius-control);
-    background: var(--sc-color-info-container);
-    color: var(--sc-color-on-info-container);
-    font: var(--sc-type-body-medium);
-  }
-  .site-notice--internal {
-    border-inline-start-color: var(--sc-color-warning);
-    background: var(--sc-color-warning-container);
-    color: var(--sc-color-on-warning-container);
-  }
-  .site-tag {
-    display: inline-block;
-    margin-inline-end: var(--sc-space-8);
-    padding: 0 var(--sc-space-8);
-    border-radius: var(--sc-radius-chip);
-    background: var(--sc-color-warning);
-    color: var(--sc-color-on-warning);
-    font: var(--sc-type-label-small);
-  }
-  .site-status {
-    display: inline-block;
-    margin: 0;
-    padding: var(--sc-space-8) var(--sc-space-12);
-    border-radius: var(--sc-radius-control);
-    background: var(--sc-color-surface-container);
-    color: var(--sc-color-on-surface);
-    font: var(--sc-type-label-medium);
-  }
-
   /* Previous and next ------------------------------------------------------------------- */
   .site-pager {
     display: grid;
@@ -733,79 +573,6 @@
     }
   }
 
-  /* Cards: the home and section landing pages ------------------------------------------- */
-  .site-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
-    gap: var(--sc-space-16);
-    margin: 0 0 var(--sc-space-32);
-    padding: 0;
-    list-style: none;
-  }
-  .site-card {
-    padding: var(--sc-space-12) var(--sc-space-20) var(--sc-space-20);
-    border: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
-    border-radius: var(--sc-radius-card);
-    background: var(--sc-color-surface-card);
-  }
-  .site-card--internal {
-    border-style: dashed;
-  }
-  .site-card__link {
-    display: flex;
-    align-items: center;
-    min-block-size: var(--sc-size-target-min);
-    color: var(--site-link);
-    font: var(--sc-type-title-medium);
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: var(--sc-space-4);
-  }
-  .site-card p {
-    margin: 0;
-    color: var(--sc-color-on-surface-variant);
-    font: var(--sc-type-body-medium);
-  }
-  @media (hover: hover) and (pointer: fine) {
-    .site-card__link:hover {
-      text-decoration-thickness: 2px;
-    }
-  }
-
-  .home-hero {
-    padding-block: var(--sc-space-32) var(--sc-space-8);
-  }
-  .home-hero h1 {
-    max-inline-size: 20ch;
-    font: var(--sc-type-display-small);
-    letter-spacing: var(--sc-type-display-small-tracking);
-  }
-  @media (max-width: 599px) {
-    .home-hero h1 {
-      font: var(--sc-type-headline-large);
-    }
-  }
-  .home-h2 {
-    margin: var(--sc-space-40) 0 var(--sc-space-16);
-    font: var(--sc-type-headline-small);
-  }
-  .home-quick {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--sc-space-8) var(--sc-space-24);
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .home-quick a {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-inline-size: var(--sc-size-target-min);
-    min-block-size: var(--sc-size-target-min);
-    font: var(--sc-type-label-medium);
-  }
-
   /* Requirement index ------------------------------------------------------------------- */
   .req-jump ul {
     display: flex;
@@ -841,7 +608,7 @@
     display: inline-flex;
     align-items: center;
     min-block-size: var(--sc-size-target-min);
-    font-family: var(--site-mono);
+    font-variant-numeric: tabular-nums;
   }
   .req-table td a {
     display: inline-flex;
@@ -852,6 +619,7 @@
     scroll-margin-block-start: var(--sc-space-24);
   }
   .req-doc {
+    display: block;
     color: var(--sc-color-on-surface-variant);
   }
 
@@ -937,41 +705,441 @@
     font: var(--sc-type-title-medium);
   }
 
-  /* Footer ------------------------------------------------------------------------------ */
-  .site-footer {
-    border-block-start: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
-    background: var(--sc-color-surface-container);
-  }
-  .site-footer__bar {
-    max-inline-size: var(--sc-container-max);
-    margin-inline: auto;
-    padding: var(--sc-space-24) var(--site-margin) var(--sc-space-32);
-    box-sizing: border-box;
-  }
-  .site-footer ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0 var(--sc-space-24);
+  .site-nav ul {
     margin: 0;
     padding: 0;
     list-style: none;
   }
-  .site-footer a {
+
+  /* Library components: spacing only; their look is their own ------------------------- */
+  .site-callout {
+    display: block;
+    max-inline-size: var(--sc-size-measure);
+    margin-block-end: var(--sc-space-24);
+  }
+
+  /*
+   * sc-callout and sc-status-tag have no pre-upgrade rule in sc.css, so they change size as
+   * they upgrade (CLS). Until they do, the callout is drawn with the component's own box and
+   * type (sc-callout.css: 16px padding, the icon column, the 4px start bar), and the status
+   * line holds the tag's 32px. Gap reported.
+   */
+  sc-callout:not(.hydrated) {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sc-space-4);
+    padding: var(--sc-space-16);
+    padding-inline-start: calc(var(--sc-space-16) + var(--sc-size-icon-l) + var(--sc-space-12));
+    border: var(--sc-size-border-hairline) solid transparent;
+    border-inline-start: var(--sc-size-strip) solid var(--sc-color-info);
+    border-radius: var(--sc-radius-field);
+    background: var(--sc-color-info-container);
+    color: var(--sc-color-on-surface);
+    font: var(--sc-type-body-medium);
+    font-weight: var(--sc-font-weight-medium);
+    overflow-wrap: anywhere;
+  }
+  sc-callout[tone='warning']:not(.hydrated) {
+    border-inline-start-color: var(--sc-color-warning);
+    background: var(--sc-color-warning-container);
+  }
+  sc-callout:not(.hydrated) > [slot='heading'] {
+    font: var(--sc-type-title-small);
+    font-weight: var(--sc-font-weight-bold);
+  }
+  .doc-status {
+    display: flex;
+    align-items: center;
+    min-block-size: var(--sc-space-32);
+  }
+  .doc-status sc-status-tag:not(.hydrated) {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    min-inline-size: var(--sc-size-target-min);
-    min-block-size: var(--sc-size-target-min);
-    color: var(--sc-color-on-surface);
-    font: var(--sc-type-label-medium);
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: var(--sc-space-4);
+    min-block-size: var(--sc-space-32);
   }
-  .site-footer p {
-    margin: var(--sc-space-8) 0 0;
+
+  /*
+   * Component gaps (reported, not hidden): sc-site-header, sc-tile and sc-channel-network
+   * render nothing useful without JavaScript. With scripting off, the header's slotted links
+   * are laid out as a plain row, each route shows a plain link, and the network is replaced
+   * by a <noscript> list. With scripting on, the header keeps its reserved height while it
+   * loads, so its light-DOM links never push the page down.
+   */
+  .route__fallback {
+    display: none;
+  }
+  @media (scripting: enabled) {
+    sc-site-header:not(.hydrated) {
+      overflow: hidden;
+      max-block-size: calc(var(--sc-space-80) + var(--sc-size-border-hairline));
+    }
+  }
+  @media (scripting: enabled) and (max-width: 1023.98px) {
+    sc-site-header:not(.hydrated) {
+      max-block-size: calc(var(--sc-space-64) + var(--sc-size-border-hairline));
+    }
+  }
+  @media (scripting: none) {
+    sc-site-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0 var(--sc-space-24);
+      padding-inline: var(--site-margin);
+      border-block-end: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+    }
+    sc-site-header > a {
+      display: inline-flex;
+      align-items: center;
+      min-block-size: var(--sc-size-target-min);
+      color: var(--sc-color-on-surface);
+      font: var(--sc-type-label-medium);
+    }
+    sc-tile,
+    sc-channel-network {
+      display: none;
+    }
+    .route__fallback {
+      display: flex;
+      align-items: center;
+      min-block-size: var(--sc-size-target-min);
+      color: var(--site-link);
+      font: var(--sc-type-title-small);
+      text-decoration: underline;
+      text-underline-offset: var(--sc-space-4);
+    }
+  }
+  /*
+   * sc-channel-network reserves no height before it renders (sc.css has no rule for it), so
+   * the home page holds the space it takes, measured in Helium at the start of each width
+   * band (its own breakpoints are container widths 560 and 960). Gap reported.
+   */
+  @media (max-width: 359.98px) {
+    .home-network {
+      min-block-size: 570px;
+    }
+    .home-network:lang(ar) {
+      min-block-size: 634px;
+    }
+  }
+  @media (min-width: 360px) and (max-width: 399.98px) {
+    .home-network {
+      min-block-size: 526px;
+    }
+    .home-network:lang(ar) {
+      min-block-size: 586px;
+    }
+  }
+  @media (min-width: 400px) and (max-width: 479.98px) {
+    .home-network {
+      min-block-size: 506px;
+    }
+    .home-network:lang(ar) {
+      min-block-size: 562px;
+    }
+  }
+  @media (min-width: 480px) and (max-width: 623.98px) {
+    .home-network {
+      min-block-size: 466px;
+    }
+    .home-network:lang(ar) {
+      min-block-size: 490px;
+    }
+  }
+  @media (min-width: 624px) and (max-width: 839.98px) {
+    .home-network {
+      min-block-size: 322px;
+    }
+    .home-network:lang(ar) {
+      min-block-size: 358px;
+    }
+  }
+  @media (min-width: 840px) and (max-width: 1055.98px) {
+    .home-network {
+      min-block-size: 278px;
+    }
+    .home-network:lang(ar) {
+      min-block-size: 310px;
+    }
+  }
+  @media (min-width: 1056px) {
+    .home-network {
+      min-block-size: 176px;
+    }
+    .home-network:lang(ar) {
+      min-block-size: 200px;
+    }
+  }
+  .home-network {
+    display: block;
+  }
+  /* sc-channel-network's English eyebrow is set in capitals (CNT-07 asks for sentence case). */
+  .home-network .sc-channel-network__eyebrow {
+    text-transform: none;
+  }
+
+  .doc-status {
+    margin: 0 0 var(--sc-space-24);
+  }
+
+
+  /* Home --------------------------------------------------------------------------------- */
+  .home-hero {
+    padding-block: var(--sc-space-40) var(--sc-space-16);
+  }
+  /* The headline in both scripts, same role, side by side; each in its own direction. */
+  .home-title {
+    display: grid;
+    gap: var(--sc-space-16);
+    margin: 0 0 var(--sc-space-24);
+    color: var(--sc-color-on-surface);
+  }
+  .home-title > span {
+    font: var(--sc-type-headline-large);
+    text-align: start;
+  }
+  @media (min-width: 840px) {
+    .home-title {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sc-space-48);
+    }
+    .home-title > span {
+      font: var(--sc-type-display-small);
+      letter-spacing: var(--sc-type-display-small-tracking);
+    }
+    /* The rule sits on the first headline, which is in the page's own direction. */
+    .home-title > span:first-child {
+      padding-inline-end: var(--sc-space-48);
+      border-inline-end: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+    }
+  }
+  .home-lede {
+    max-inline-size: var(--sc-size-measure);
+    margin: 0 0 var(--sc-space-24);
     color: var(--sc-color-on-surface-variant);
-    font: var(--sc-type-body-small);
+    font: var(--sc-type-body-large);
+  }
+  .home-draft {
+    display: block;
+    max-inline-size: var(--sc-size-measure);
+    margin-block-end: var(--sc-space-40);
+  }
+  .home-network-fallback {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sc-space-8) var(--sc-space-24);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font: var(--sc-type-title-small);
+  }
+  .home-h2 {
+    margin: var(--sc-space-64) 0 var(--sc-space-24);
+    font: var(--sc-type-headline-medium);
+  }
+
+  /* Three routes by task: the first, for service teams, carries the most weight. */
+  .routes {
+    display: grid;
+    gap: var(--sc-space-32);
+  }
+  @media (min-width: 1024px) {
+    .routes {
+      grid-template-columns: 3fr 2fr;
+      grid-template-areas: 'lead design' 'lead assess';
+      column-gap: var(--sc-space-48);
+    }
+    .route--lead {
+      grid-area: lead;
+    }
+  }
+  .route h3 {
+    margin: 0 0 var(--sc-space-8);
+    font: var(--sc-type-title-large);
+  }
+  .route p {
+    max-inline-size: 52ch;
+    margin: 0 0 var(--sc-space-16);
+    color: var(--sc-color-on-surface-variant);
+    font: var(--sc-type-body-medium);
+  }
+  .route:not(.route--lead) {
+    padding-block-start: var(--sc-space-16);
+    border-block-start: var(--sc-size-border-accent) solid var(--sc-color-outline-variant);
+  }
+  .route--lead {
+    align-self: start;
+    padding: var(--sc-space-32);
+    border-radius: var(--sc-radius-card);
+    background: var(--sc-color-surface-container);
+  }
+  .route--lead h3 {
+    font: var(--sc-type-headline-small);
+  }
+  .route--lead p {
+    font: var(--sc-type-body-large);
+  }
+  .route__tiles {
+    display: grid;
+    gap: var(--sc-space-12);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Requirement lookup: a native form, so it works without JavaScript. */
+  .lookup__label {
+    display: block;
+    font: var(--sc-type-label-large);
+  }
+  .lookup__hint {
+    margin: var(--sc-space-4) 0 var(--sc-space-8);
+    color: var(--sc-color-on-surface-variant);
+    font: var(--sc-type-body-medium);
+  }
+  .lookup__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sc-space-12);
+  }
+  .lookup__input {
+    box-sizing: border-box;
+    inline-size: 14ch;
+    min-block-size: var(--sc-size-control-primary);
+    padding-inline: var(--sc-space-16);
+    border: var(--sc-size-border-control) solid var(--sc-color-outline-strong);
+    border-radius: var(--sc-radius-field);
+    background: var(--sc-color-surface);
+    color: var(--sc-color-on-surface);
+    font: var(--sc-type-title-medium);
+    font-variant-numeric: tabular-nums;
+    text-transform: uppercase;
+  }
+  .lookup__button {
+    min-block-size: var(--sc-size-control-primary);
+    padding-inline: var(--sc-space-24);
+    border: 0;
+    border-radius: var(--sc-radius-control);
+    background: var(--sc-color-primary);
+    color: var(--sc-color-on-primary);
+    font: var(--sc-type-label-large);
+    cursor: pointer;
+    transition: background-color var(--sc-duration-fast) var(--sc-easing-hover);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .lookup__button:hover {
+      background: var(--sc-color-primary-hover);
+    }
+  }
+  .lookup__button:active {
+    background: var(--sc-color-primary-pressed);
+  }
+  @media (forced-colors: active) {
+    .lookup__button {
+      border: var(--sc-size-border-control) solid ButtonText;
+    }
+  }
+
+  /* An index of pages: names with a line under each, not a grid of cards. */
+  .site-index {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: 0 var(--sc-space-32);
+    margin: 0 0 var(--sc-space-32);
+    padding: 0;
+    list-style: none;
+  }
+  .site-index li {
+    padding-block: var(--sc-space-8) var(--sc-space-16);
+    border-block-end: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+  }
+  .site-index a {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: var(--sc-size-target-min);
+    font: var(--sc-type-title-small);
+  }
+  .site-index p {
+    margin: 0;
+    color: var(--sc-color-on-surface-variant);
+    font: var(--sc-type-body-medium);
+  }
+
+  /* Component pages: the channel the examples are drawn in. */
+  .examples-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sc-space-8) var(--sc-space-16);
+    margin-block: var(--sc-space-8) var(--sc-space-24);
+    padding-block: var(--sc-space-8);
+    border-block: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+  }
+  .examples-bar__label {
+    margin: 0;
+    color: var(--sc-color-on-surface-variant);
+    font: var(--sc-type-body-medium);
+  }
+
+  /*
+   * The signature: requirement identifiers hang in the reading margin at inline-start, like
+   * clause numbers, in bold with tabular figures. Each is a link to itself. In a right-to-left
+   * document they hang in the right margin. Below 1024px they sit inline at the rule's start.
+   */
+  .doc li.req {
+    list-style: none;
+    scroll-margin-block-start: var(--sc-space-24);
+  }
+  .doc ul:has(> li.req) {
+    padding-inline-start: 0;
+  }
+  .doc .req-id {
+    color: var(--sc-color-on-surface);
+    font: var(--sc-type-label-large);
+    font-variant-numeric: tabular-nums;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .doc .req-id:hover {
+      text-decoration: underline;
+      text-underline-offset: var(--sc-space-4);
+    }
+  }
+  .doc .kw {
+    font-weight: var(--sc-font-weight-bold);
+  }
+  @media (min-width: 1024px) {
+    .doc:has(li.req) {
+      --site-clause: 7.5rem;
+      padding-inline-start: var(--site-clause);
+    }
+    .doc li.req {
+      position: relative;
+    }
+    .doc li.req > .req-id {
+      position: absolute;
+      inset-block-start: 0;
+      inset-inline-start: calc(-1 * var(--site-clause));
+      inline-size: calc(var(--site-clause) - var(--sc-space-16));
+      line-height: inherit;
+    }
+    /* Pages with clauses keep the on-page contents in the flow, so the text keeps its measure. */
+    .doc-layout.has-toc:has(li.req) {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: 'head' 'aside' 'doc';
+    }
+    .doc-layout:has(li.req) .doc-aside {
+      position: static;
+      max-block-size: none;
+    }
+    .doc-layout:has(li.req) .doc-toc > summary {
+      display: flex;
+    }
+    .doc-layout:has(li.req) .doc-toc__title {
+      display: none;
+    }
   }
 
   /* Component examples: the playground's page fragments, styled by demo.css ---------------- */
@@ -980,18 +1148,16 @@
   }
 
   @media (forced-colors: active) {
-    .site-sections a[aria-current]::after,
-    .site-nav a[aria-current]::before,
-    .site-menu__sections a[aria-current]::before {
+    .site-nav a[aria-current]::before {
       background: CanvasText;
     }
   }
   @media print {
-    .site-header,
+    sc-site-header,
     .site-menu,
     .doc-aside,
     .site-pager,
-    .site-footer {
+    sc-footer {
       display: none;
     }
     .site-body {

@@ -26,6 +26,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync, statSync, cpSync, r
 import { dirname, join, posix } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import vm from 'node:vm';
+import { createRequire } from 'node:module';
 import { parseDoc, renderChunk, chunkHeadings, searchSections, escapeHtml as esc, inlineText, md } from './site/markdown.mjs';
 import { STRINGS, NAMES, BLURBS } from './site/strings.mjs';
 
@@ -325,6 +326,8 @@ const FONT_PRELOAD = {
   ar: ['dubai-w23-400-arabic.woff2', 'dubai-w23-700-arabic.woff2', 'dubai-w23-500-name-en.woff2', 'dubai-w23-400-latin.woff2'],
   // An Arabic page around an English document also sets Latin headings and labels.
   arWithEnglish: ['dubai-w23-500-latin.woff2', 'dubai-w23-700-latin.woff2'],
+  // The home headline is set in both scripts.
+  homeHeadline: { en: ['dubai-w23-700-arabic.woff2'], ar: ['dubai-w23-700-latin.woff2'] },
 };
 /** On an Arabic page, English text (a document's own title) is marked as English. */
 const ARABIC = /[\u0600-\u06FF]/;
@@ -374,11 +377,9 @@ function sideNav(page, lang) {
       return `<details class="site-nav__group"${open ? ' open' : ''}><summary>${esc(NAMES[g.name]?.[lang] ?? g.name)}</summary><ul>${items}</ul></details>`;
     })
     .join('');
-  const sections = SECTION_ORDER.map((s) => `<li><a href="${rel(from, langPath(lang, SECTION_HOME[s]))}"${s === page.section ? ' aria-current="true"' : ''}>${esc(NAMES[s][lang])}</a></li>`).join('');
   return `<details class="site-menu" data-wide-open>
   <summary>${icon('Menu')}<span>${esc(t.menu)}</span>${icon('ExpandMore', 'site-disclosure')}</summary>
   <div class="site-menu__panel">
-    <nav class="site-menu__sections" aria-label="${esc(t.sections)}"><ul>${sections}</ul></nav>
     <nav class="site-nav" aria-label="${esc(t.sectionNav)}"><p class="site-nav__title">${esc(NAMES[page.section][lang])}</p>${body}</nav>
   </div>
 </details>
@@ -394,7 +395,7 @@ function pager(page, lang) {
   const from = langPath(lang, page.path);
   const a = (p, rel_, label, ic) =>
     p
-      ? `<a class="site-pager__link site-pager__link--${rel_}" rel="${rel_}" href="${rel(from, langPath(lang, p.path))}">${rel_ === 'prev' ? icon('ArrowBack') : ''}<span><span class="site-pager__label">${esc(label)}</span><span class="site-pager__title"${en(p.title[lang], lang)}>${esc(p.title[lang])}</span></span>${rel_ === 'next' ? icon('ArrowForward') : ''}</a>`
+      ? `<a class="site-pager__link site-pager__link--${rel_}" rel="${rel_}" href="${rel(from, langPath(lang, p.path))}"><span><span class="site-pager__label">${esc(label)}</span><span class="site-pager__title"${en(p.title[lang], lang)}>${esc(p.title[lang])}</span></span></a>`
       : '<span></span>';
   return `<nav class="site-pager" aria-label="${esc(t.pager)}">${a(order[i - 1], 'prev', t.previous)}${a(order[i + 1], 'next', t.next)}</nav>`;
 }
@@ -417,18 +418,24 @@ function layout(page, lang, { head = '', body, headings = [], bodyLang, extraHea
   const from = langPath(lang, page.path);
   const R = rel(from, '');
   const root = R === './' ? '' : R;
-  const title = page.kind === 'home' ? page.title[lang] : `${page.title[lang]} · ${t.titleSuffix}`;
+  const title = page.kind === 'home' ? page.title[lang] : `${page.title[lang]} – ${t.titleSuffix}`;
   const otherHref = rel(from, langPath(other, page.path));
   const crumbs = page.kind === 'home' ? '' : crumbsFor(page);
   const crumbHtml = crumbs
     ? `<sc-breadcrumbs>${crumbs.map((c) => `<a href="${rel(from, langPath(lang, c.path))}"${en(c.title[lang], lang)}>${esc(c.title[lang])}</a>`).join('')}<span${en(page.title[lang], lang)}>${esc(page.title[lang])}</span></sc-breadcrumbs>`
     : '';
-  const sectionLinks = SECTION_ORDER.map(
-    (s) => `<li><a href="${rel(from, langPath(lang, SECTION_HOME[s]))}"${s === page.section ? ' aria-current="true"' : ''}>${esc(NAMES[s][lang])}</a></li>`,
-  ).join('');
-  const notice =
-    bodyLang && bodyLang !== lang && t.englishOnly ? `<p class="site-notice" role="note">${esc(t.englishOnly)}</p>` : '';
-  const internal = page.internal ? `<p class="site-notice site-notice--internal" role="note"><strong class="site-tag">${esc(t.internalTag)}</strong> ${esc(t.internalBanner)}</p>` : '';
+  // The header's main navigation: home and the four sections (sc-site-header takes four or five).
+  const current = (path) => (page.path === path ? ' aria-current="page"' : page.section && SECTION_HOME[page.section] === path ? ' aria-current="true"' : '');
+  const navLinks = [`<a slot="nav" href="${rel(from, langPath(lang, ''))}"${current('')}>${esc(t.homeNav)}</a>`]
+    .concat(SECTION_ORDER.filter((s) => s !== 'records').map((s) => `<a slot="nav" href="${rel(from, langPath(lang, SECTION_HOME[s]))}"${current(SECTION_HOME[s])}>${esc(NAMES[s][lang])}</a>`))
+    .join('\n  ');
+  const notice = bodyLang && bodyLang !== lang && t.englishOnly ? `<sc-callout class="site-callout"><span>${esc(t.englishOnly)}</span></sc-callout>` : '';
+  const internal = page.internal ? `<sc-callout class="site-callout" tone="warning"><span slot="heading">${esc(t.internalHeading)}</span><span>${esc(t.internalBanner)}</span></sc-callout>` : '';
+  const footerLinks = [
+    [rel(from, langPath(lang, 'requirements/')), t.requirements],
+    [`${rel(from, 'playground.html')}${lang === 'ar' ? '?lang=ar' : ''}`, t.playground],
+    [rel(from, langPath(lang, 'standard/changes/')), t.changes],
+  ];
   return `<!doctype html>
 <html lang="${lang}" dir="${lang === 'ar' ? 'rtl' : 'ltr'}">
 <head>
@@ -438,7 +445,7 @@ function layout(page, lang, { head = '', body, headings = [], bodyLang, extraHea
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(page.description?.[lang] ?? (page.section ? `${NAMES[page.section][lang]}: ${page.title[lang]}` : t.titleSuffix))}">
 <link rel="alternate" hreflang="${other}" href="${otherHref}">
-${[...FONT_PRELOAD[lang], ...(lang === 'ar' && (bodyLang === 'en' || page.kind === 'component' || page.kind === 'requirements') ? FONT_PRELOAD.arWithEnglish : [])].map((f) => `<link rel="preload" as="font" type="font/woff2" crossorigin href="${root}build/assets/fonts/${f}">`).join('\n')}
+${[...FONT_PRELOAD[lang], ...(lang === 'ar' && (bodyLang === 'en' || page.kind === 'component' || page.kind === 'requirements') ? FONT_PRELOAD.arWithEnglish : []), ...(page.kind === 'home' ? FONT_PRELOAD.homeHeadline[lang] : [])].map((f) => `<link rel="preload" as="font" type="font/woff2" crossorigin href="${root}build/assets/fonts/${f}">`).join('\n')}
 <link rel="stylesheet" href="${root}build/sc.css">
 <link rel="stylesheet" href="${root}site/site.css">
 ${extraHead}<!--sc-modules-->
@@ -447,16 +454,10 @@ ${head}</head>
 <body${bodyAttrs}>
 <sc-skip-link href="#main-content"></sc-skip-link>
 <noscript><a class="site-skip" href="#main-content">${esc(t.skip)}</a></noscript>
-<header class="site-header">
-  <div class="site-header__bar">
-    <a class="site-brand" href="${rel(from, langPath(lang, ''))}"><span class="site-brand__name">${esc(t.siteName)}</span><span class="site-brand__sub">${esc(t.siteSub)}</span></a>
-    <nav class="site-sections" aria-label="${esc(t.primaryNav)}"><ul>${sectionLinks}</ul></nav>
-    <div class="site-header__tools">
-      <a class="site-tool" href="${rel(from, langPath(lang, 'search/'))}"${page.kind === 'search' ? ' aria-current="page"' : ''}>${icon('Search')}<span>${esc(t.search)}</span></a>
-      <sc-language-switch href="${otherHref}"><a slot="fallback" href="${otherHref}" hreflang="${other}" lang="${other}">${esc(t.langOther)}</a></sc-language-switch>
-    </div>
-  </div>
-</header>
+<sc-site-header search-href="${rel(from, langPath(lang, 'search/'))}">
+  ${navLinks}
+  <sc-language-switch slot="language" appearance="plain" href="${otherHref}"><a slot="fallback" href="${otherHref}" hreflang="${other}" lang="${other}">${esc(t.langOther)}</a></sc-language-switch>
+</sc-site-header>
 <div class="site-body${page.section ? '' : ' site-body--full'}">
 ${sideNav(page, lang)}
 <main id="main-content" tabindex="-1" class="site-main">
@@ -465,17 +466,11 @@ ${internal}${notice}${body}
 ${page.kind === 'home' || page.kind === 'search' ? '' : pager(page, lang)}
 </main>
 </div>
-<footer class="site-footer">
-  <div class="site-footer__bar">
-    <nav aria-label="${esc(t.footerNav)}"><ul>
-      <li><a href="${rel(from, langPath(lang, 'requirements/'))}">${esc(t.requirements)}</a></li>
-      <li><a href="${rel(from, 'playground.html')}${lang === 'ar' ? '?lang=ar' : ''}">${esc(t.playground)}</a></li>
-      <li><a href="${rel(from, langPath(lang, 'standard/changes/'))}">${esc(t.changes)}</a></li>
-      <li><a href="${rel(from, langPath(lang, 'search/'))}">${esc(t.search)}</a></li>
-    </ul></nav>
-    <p>${esc(t.footerMeta)}</p>
-  </div>
-</footer>
+<sc-footer variant="simple">
+  ${footerLinks.map(([h, l]) => `<a href="${h}">${esc(l)}</a>`).join('\n  ')}
+  <span slot="meta">${esc(t.footerMeta)}</span>
+  <nav slot="fallback" aria-label="${esc(t.footerNav)}"><ul>${footerLinks.map(([h, l]) => `<li><a href="${h}">${esc(l)}</a></li>`).join('')}</ul><p>${esc(t.footerMeta)}</p></nav>
+</sc-footer>
 </body>
 </html>
 `;
@@ -517,9 +512,13 @@ function renderDocPage(page, lang) {
   return layout(page, lang, {
     bodyLang,
     bodyAttrs: forward,
-    body: article({ titleHtml, tocHtml: toc(headings, lang), body: html + sourceLink(doc.cfg.key, lang), bodyLang, lang }),
+    body: article({ titleHtml, lead: statusTag(page, lang), tocHtml: toc(headings, lang), body: html + sourceLink(doc.cfg.key, lang), bodyLang, lang }),
   });
 }
+
+/** The Service Standard's status, on each of its pages: a draft until it is adopted. */
+const statusTag = (page, lang) =>
+  page.doc?.cfg.key === 'docs/standard/service-standard.md' ? `<p class="doc-status"><sc-status-tag>${esc(STRINGS[lang].statusDraft)}</sc-status-tag></p>` : '';
 
 /** Applies data-ar text at build time, so the Arabic examples read correctly before any script runs. */
 function arabicFragment(html) {
@@ -572,7 +571,11 @@ function renderComponentPage(page, lang) {
     const scripts = [];
     frag = frag.replace(/<script>([\s\S]*?)<\/script>/g, (all, js) => (scripts.push(js), ''));
     for (const m of frag.matchAll(/<h2[^>]*\sid="([^"]+)"[^>]*>([\s\S]*?)<\/h2>/g)) headings.push({ id: m[1], text: m[2].replace(/<[^>]+>/g, '').trim(), level: 2 });
-    demo = `<div id="preview" class="demo" data-channel="now">${frag}${scripts.map((s) => `<script>${s}</script>`).join('')}</div>`;
+    // The channel switcher re-themes the examples: its links reload the page with ?channel=,
+    // and site.js applies the channel in place without the reload.
+    const links = JSON.stringify(Object.fromEntries(CHANNELS.map((c) => [c, `?channel=${c}#examples`])));
+    const bar = `<div class="examples-bar" id="examples"><p class="examples-bar__label">${esc(t.examplesIn)}</p><sc-channel-switcher channel="now" links='${links}'></sc-channel-switcher></div>`;
+    demo = `${bar}<div id="preview" class="demo" data-channel="now">${frag}${scripts.map((s) => `<script>${s}</script>`).join('')}</div>`;
   }
   let spec = '';
   if (page.hasSpec) {
@@ -593,7 +596,7 @@ function renderComponentPage(page, lang) {
   }
   const apiHtml = page.id.startsWith('sc-') ? apiTables(page.id, lang) : '';
   if (apiHtml) headings.push({ id: 'api', text: t.api, level: 2 });
-  const playground = `<p class="doc-actions"><a class="doc-action" href="${rel(from, 'playground.html')}?page=${page.id}${lang === 'ar' ? '&amp;lang=ar' : ''}">${esc(t.openPlayground)}${icon('ArrowForward')}</a></p>`;
+  const playground = `<p class="doc-actions"><a class="doc-action" href="${rel(from, 'playground.html')}?page=${page.id}${lang === 'ar' ? '&amp;lang=ar' : ''}">${esc(t.openPlayground)}</a></p>`;
   const body = `${demo}${spec}${apiHtml ? `<section class="doc-part" aria-labelledby="api"><div class="doc-heading"><h2 id="api">${esc(t.api)}</h2></div>${apiHtml}</section>` : ''}`;
   return layout(page, lang, {
     extraHead: `<link rel="stylesheet" href="${rel(from, 'playground/demo.css')}">\n`,
@@ -603,48 +606,61 @@ function renderComponentPage(page, lang) {
 }
 
 function cards(items, lang, from) {
-  return `<ul class="site-cards">${items
+  return `<ul class="site-index">${items
     .map(
       (p) =>
-        `<li class="site-card"><a class="site-card__link" href="${rel(from, langPath(lang, p.path))}"${en(p.title[lang], lang)}>${esc(p.title[lang])}</a>${p.blurb ? `<p${en(p.blurb, lang)}>${esc(p.blurb)}</p>` : ''}</li>`,
+        `<li><a href="${rel(from, langPath(lang, p.path))}"${en(p.title[lang], lang)}>${esc(p.title[lang])}</a>${p.blurb ? `<p${en(p.blurb, lang)}>${esc(p.blurb)}</p>` : ''}</li>`,
     )
     .join('')}</ul>`;
 }
 
+const CHANNELS = ['now', 'transport', 'visit', 'justice', 'build', 'invest', 'trade'];
+/** The official channel names (R12), from the library's own strings, for the no-JavaScript list. */
+const CHANNEL_NAMES = (() => {
+  const src = readFileSync(join(COMPONENTS, 'src/i18n/components/channel-names.ts'), 'utf8');
+  const block = (lang) => [...src.slice(src.indexOf(`${lang}: {`)).split('}')[0].matchAll(/channel\w+: '([^']+)'/g)].map((m) => m[1]);
+  return { en: block('en'), ar: block('ar') };
+})();
+
+/** A 24px icon for an sc-tile's icon slot, from the library's icon set. */
+const tileIcon = (name) => `<svg slot="icon" viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path fill="currentColor" d="${ICONS[name].d}"/></svg>`;
+
 function renderHome(page, lang) {
   const t = STRINGS[lang];
   const from = langPath(lang, '');
-  const intro = {
-    en: 'One design system and one standard for the seven Government of Dubai channels: Dubai Now, Dubai Transport, Visit Dubai, Dubai Justice, Build in Dubai, Invest in Dubai and Dubai Trade. Arabic and English are equals.',
-    ar: 'نظام تصميم واحد ومعيار واحد لقنوات حكومة دبي السبع: دبي الآن، ومواصلات دبي، وزوروا دبي، ودبي للعدالة، ودبي للبناء، واستثمر في دبي، ودبي التجارية. العربية والإنجليزية متكافئتان.',
-  };
-  const status = {
-    en: 'Version 2, consultation draft. The Service Standard is not yet binding.',
-    ar: 'الإصدار 2، مسودة للتشاور. معيار الخدمات غير ملزم بعد.',
-  };
-  const sections = SECTION_ORDER.map((s) => ({ path: SECTION_HOME[s], title: NAMES[s], blurb: BLURBS[s][lang] }));
-  const quick = [
-    { path: 'requirements/', title: { en: STRINGS.en.requirements, ar: STRINGS.ar.requirements } },
-    { path: 'standard/the-12-points/', title: { en: 'The 12 points', ar: 'النقاط الاثنتا عشرة' } },
-    { path: 'standard/appendix-c-must-pass-list/', title: { en: 'Must-pass list', ar: 'قائمة المتطلبات الإلزامية للاجتياز' } },
-    { path: 'design-system/foundations/', title: { en: 'Foundations', ar: 'الأسس' } },
-    { path: 'search/', title: { en: STRINGS.en.search, ar: STRINGS.ar.search } },
-  ].filter((q) => pages.some((p) => p.path === q.path));
-  // The old playground's links (?page=sc-button&lang=ar) open the component's page.
+  const href = (p) => rel(from, langPath(lang, p));
+  // The headline in both scripts at the same role, the page's own language first.
+  const heads = [
+    ['en', 'ltr', t.heroEn],
+    ['ar', 'rtl', t.heroAr],
+  ];
+  if (lang === 'ar') heads.reverse();
+  const tile = (path, icon, text) => `<li><sc-tile href="${href(path)}">${tileIcon(icon)}${esc(text)}</sc-tile><a class="route__fallback" href="${href(path)}">${esc(text)}</a></li>`;
+  const route = (id, title, text, tiles, lead) =>
+    `<section class="route${lead ? ' route--lead' : ''}" aria-labelledby="${id}"><h3 id="${id}">${esc(title)}</h3><p>${esc(text)}</p><ul class="route__tiles">${tiles.join('')}</ul></section>`;
   const body = `<div class="home-hero">
-<h1 id="top">${esc(page.title[lang])}</h1>
-<p class="doc-lede">${esc(intro[lang])}</p>
-<p class="site-status">${esc(status[lang])}</p>
+<h1 id="top" class="home-title">${heads.map(([l, d, x]) => `<span lang="${l}" dir="${d}">${esc(x)}</span>`).join(' ')}</h1>
+<p class="home-lede">${esc(t.heroLede)}</p>
+<sc-callout class="home-draft"><span slot="heading">${esc(t.draftHeading)}</span><span>${esc(t.draftText)}</span></sc-callout>
+<sc-channel-network class="home-network" channel="none" eyebrow="${esc(t.networkEyebrow)}"></sc-channel-network>
+<noscript><ul class="home-network-fallback" aria-label="${esc(t.networkEyebrow)}">${CHANNEL_NAMES[lang].map((n) => `<li>${esc(n)}</li>`).join('')}</ul></noscript>
 </div>
-<h2 id="sections" class="home-h2">${esc(t.sections)}</h2>
-<ul class="site-cards site-cards--sections">${sections
-    .map(
-      (s) => `<li class="site-card${s.path === 'records/' ? ' site-card--internal' : ''}"><a class="site-card__link" href="${rel(from, langPath(lang, s.path))}">${esc(s.title[lang])}</a><p>${esc(s.blurb)}</p></li>`,
-    )
-    .join('')}</ul>
-<h2 id="quick" class="home-h2">${lang === 'ar' ? 'روابط سريعة' : 'Quick links'}</h2>
-<ul class="home-quick">${quick.map((q) => `<li><a href="${rel(from, langPath(lang, q.path))}">${esc(q.title[lang])}</a></li>`).join('')}</ul>
+<h2 id="routes" class="home-h2">${esc(t.routesHeading)}</h2>
+<div class="routes">
+${route('route-service', t.routeServiceTitle, t.routeServiceText, [tile('standard/appendix-c-must-pass-list/', 'CheckCircle', t.tileMustPass), tile('standard/', 'Description', t.tileStandard)], true)}
+${route('route-design', t.routeDesignTitle, t.routeDesignText, [tile('design-system/', 'Apps', t.tileComponents), tile('design-system/foundations/', 'Tune', t.tileFoundations)])}
+${route('route-assess', t.routeAssessTitle, t.routeAssessText, [tile('assurance/', 'Receipt', t.tileAssurance)])}
+</div>
+<section class="home-lookup" aria-labelledby="lookup">
+<h2 id="lookup" class="home-h2">${esc(t.lookupHeading)}</h2>
+<form class="lookup" action="${href('requirements/')}" method="get" data-lookup>
+<label class="lookup__label" for="lookup-id">${esc(t.lookupLabel)}</label>
+<p class="lookup__hint" id="lookup-hint">${esc(t.lookupHint)}</p>
+<div class="lookup__row"><input class="lookup__input" id="lookup-id" name="id" type="text" dir="ltr" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-describedby="lookup-hint"><button class="lookup__button" type="submit">${esc(t.lookupButton)}</button></div>
+</form>
+</section>
 ${lang === 'en' ? `<script>{const s=new URLSearchParams(location.search),q=s.get('page');if(q&&/^[a-z0-9-]+$/.test(q))location.replace((s.get('lang')==='ar'?'ar/':'')+(q==='foundations'?'design-system/foundations/':'components/'+q+'/')+location.hash);}</script>` : ''}`;
+  // The old playground's links (?page=sc-button&lang=ar) open the component's page (script above).
   return layout(page, lang, { body });
 }
 
@@ -702,7 +718,7 @@ function renderRequirements(page, lang) {
   const rows = list
     .map(
       (r) =>
-        `<tr id="${r.id}"><th scope="row"><a href="${rel(from, langPath(lang, r.page.path))}#${r.id}">${r.id}</a></th><td${lang === 'ar' ? ' lang="en" dir="ltr"' : ''}>${esc(r.title)}</td><td><a href="${rel(from, langPath(lang, r.page.path))}"${en(r.page.title[lang], lang)}>${esc(r.page.title[lang])}</a><span class="req-doc"> · ${esc(NAMES[r.page.section][lang])}</span></td></tr>`,
+        `<tr id="${r.id}"><th scope="row"><a href="${rel(from, langPath(lang, r.page.path))}#${r.id}">${r.id}</a></th><td${lang === 'ar' ? ' lang="en" dir="ltr"' : ''}>${esc(r.title)}</td><td><a href="${rel(from, langPath(lang, r.page.path))}"${en(r.page.title[lang], lang)}>${esc(r.page.title[lang])}</a><span class="req-doc">${esc(NAMES[r.page.section][lang])}</span></td></tr>`,
     )
     .join('');
   const jump = `<nav class="req-jump" aria-label="${lang === 'ar' ? 'الانتقال إلى البادئة' : 'Jump to a prefix'}"><ul>${prefixes.map((p) => `<li><a href="#${list.find((r) => r.id.startsWith(`${p}-`)).id}">${p}</a></li>`).join('')}</ul></nav>`;
@@ -785,7 +801,14 @@ if (existsSync(stencilIndex) && readFileSync(stencilIndex, 'utf8').includes('pla
 for (const d of ['ar', 'site', 'records', ...SECTION_ORDER, 'components', 'requirements', 'search', 'ux-standard']) rmSync(join(WWW, d), { recursive: true, force: true });
 mkdirSync(join(WWW, 'site', 'ce'), { recursive: true });
 for (const f of readdirSync(CE)) if (f.endsWith('.js')) cpSync(join(CE, f), join(WWW, 'site', 'ce', f));
-for (const f of readdirSync(join(COMPONENTS, 'src/site'))) cpSync(join(COMPONENTS, 'src/site', f), join(WWW, 'site', f));
+// The site's own CSS and scripts ship minified, as the library's stylesheets do: comments and
+// indentation go (the CSS through the library's own minifier).
+const { minifyCss } = createRequire(import.meta.url)('./lib/minify-css.cjs');
+const minifyJs = (js) => js.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '').replace(/\n\s+/g, '\n').replace(/\n{2,}/g, '\n').trim();
+for (const f of readdirSync(join(COMPONENTS, 'src/site'))) {
+  const src = readFileSync(join(COMPONENTS, 'src/site', f), 'utf8');
+  writeFileSync(join(WWW, 'site', f), f.endsWith('.css') ? minifyCss(src) : f.endsWith('.js') ? minifyJs(src) : src);
+}
 
 const RENDER = { doc: renderDocPage, component: renderComponentPage, home: renderHome, 'ds-home': renderDsHome, 'records-home': renderRecordsHome, requirements: renderRequirements, search: renderSearch };
 let count = 0;
