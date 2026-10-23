@@ -11,6 +11,7 @@
  * - CLS 0 from load until the components have hydrated;
  * - the font bytes each page downloads, against pageFontsEnBytes / pageFontsArBytes;
  * - no horizontal scrolling at 320 CSS px (WCAG 1.4.10);
+ * - the sticky side menu and contents fit below the header at 1280 × 720 (last link reachable);
  * - without JavaScript: the heading, the main text and the navigation are there.
  * Exit 1 on any failure. --screenshots <dir> also saves a screenshot of each page.
  */
@@ -171,6 +172,27 @@ async function check(path, lang, mode, scheme) {
     const over = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
     if (over > 0) fail(where, `scrolls sideways by ${over}px at 320px`);
     await page.setViewport({ width: mode.width, height: mode.height, isMobile: true, hasTouch: true });
+  }
+  // The sticky side menu and contents fit below the header: at 1280 × 720 with the page at the
+  // top, each one's last link comes into view by scrolling the column itself.
+  if (!mode.mobile && scheme === 'light') {
+    await page.setViewport({ width: 1280, height: 720 });
+    const cut = await page.evaluate(async () => {
+      scrollTo(0, 0);
+      await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+      const out = [];
+      for (const col of document.querySelectorAll('.site-menu, .doc-aside')) {
+        if (getComputedStyle(col).position !== 'sticky') continue;
+        col.scrollTop = col.scrollHeight;
+        const last = [...col.querySelectorAll('a')].filter((a) => a.getClientRects().length).pop();
+        const r = last?.getBoundingClientRect();
+        if (r && (r.bottom > innerHeight + 0.5 || r.top < 0)) out.push(`${col.className}: last link “${last.textContent.trim().slice(0, 30)}” ends at ${Math.round(r.bottom)} of ${innerHeight}`);
+        col.scrollTop = 0;
+      }
+      return out;
+    });
+    for (const c of cut) fail(where, `sticky column runs off the screen at 1280×720: ${c}`);
+    await page.setViewport({ width: mode.width, height: mode.height });
   }
   if (shots) await page.screenshot({ path: join(shots, `${where.replace(/[/?=+ ]+/g, '_').replace(/^_|_$/g, '')}.png`) });
   await page.close();
