@@ -101,9 +101,10 @@ export async function newScPage(html: string, context: PageContext = {}): Promis
  * Tahoma. Where those are not installed (Linux CI), it is set in a wider system font, and a
  * layout that depends on text width, such as sc-site-header's full row, can overflow and
  * switch to compact mid-test. Use it in tests of the laid-out result, not of font-swap timing.
+ * It takes a noScriptPage() too: fonts load there with scripting off.
  */
-export async function loadFonts(page: E2EPage): Promise<void> {
-  await page.evaluate(() =>
+export async function loadFonts(page: E2EPage | PuppeteerPage): Promise<void> {
+  await (page as PuppeteerPage).evaluate(() =>
     Promise.all(['400', '500', '700'].map((w) => document.fonts.load(`${w} 16px "Dubai W23 Arabic", "Dubai W23", "Dubai W23 Name"`, 'Aا'))),
   );
 }

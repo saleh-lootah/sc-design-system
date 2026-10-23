@@ -145,6 +145,7 @@ describe('sc-tile (e2e)', () => {
 describe('sc-tile before it upgrades and without JavaScript (PERF-04)', () => {
   it.each(['en', 'ar'] as const)('the light-DOM link is the tile: the whole box follows it, at the final size (%s)', async (lang) => {
     const page = await noScriptPage(`<div style="inline-size:180px">${MARKUP.match(/<sc-tile id="fine">[\s\S]*?<\/sc-tile>/)![0]}</div>`, lang);
+    await loadFonts(page);
     const r = await page.evaluate(() => {
       const tile = document.querySelector('sc-tile')!.getBoundingClientRect();
       const corner = document.elementFromPoint(tile.left + 4, tile.bottom - 4);
