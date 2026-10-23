@@ -1,0 +1,24 @@
+<h1 class="pg-title sc-type-headline-large" data-ar="شريط البيئة">Environment banner</h1>
+<p class="pg-lede sc-type-body-large" data-ar="يميّز أي نسخة ليست الخدمة الفعلية: التطوير أو ضمان الجودة أو اختبار القبول أو التجهيز. أعلى الصفحة، ولا يظهر أبدًا في بيئة الإنتاج.">
+  Marks any build that is not the live service: development, QA, UAT or staging. At the top of the page, and never in production.
+</p>
+<section class="pg-section" aria-labelledby="eb-examples">
+  <h2 id="eb-examples" class="sc-type-headline-small" data-ar="أمثلة">Examples</h2>
+  <div class="pg-frame">
+    <sc-environment-banner>
+      <section aria-label="Test version">
+        <p><strong>QA</strong><span data-ar="هذه نسخة تجريبية من دبي الآن. يُرجى عدم إدخال بيانات شخصية أو بيانات دفع حقيقية.">This is a test version of Dubai Now. Don't enter real personal or payment details.</span></p>
+      </section>
+    </sc-environment-banner>
+  </div>
+  <div style="block-size: var(--sc-space-16)"></div>
+  <div class="pg-frame">
+    <sc-environment-banner>
+      <section aria-label="Test version, staging example">
+        <p><strong data-ar="التجهيز">Staging</strong><span data-ar="هذه نسخة تجريبية من مواصلات دبي. الإصدار">This is a test version of Dubai Transport. Build</span> <sc-ltr>2026.10.22-4f3c9a1</sc-ltr></p>
+      </section>
+    </sc-environment-banner>
+  </div>
+  <p class="pg-note" data-ar="اعرضه من إعدادات بيئة الإصدار، وليس من الشيفرة. لا يُغلق، ولا يكون لاصقًا، ولا يؤثر في الشريط الرسمي تحته.">Render it from the build's environment setting, not from code. It can't be dismissed, isn't sticky, and doesn't change the official banner below it.</p>
+</section>
+<style>.pg-frame { overflow: hidden; border-radius: var(--sc-radius-card); border: 1px solid var(--sc-color-outline-variant); }</style>
