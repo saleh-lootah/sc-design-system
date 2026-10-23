@@ -198,3 +198,9 @@ Where this file disagrees with `foundations.md` or `component-language.md`, this
 | --- | --- |
 | R26 | **Approved by the user, 23 October 2026.** Safari paints each new page before module scripts run, so `sc-site-header` showed its plain pre-upgrade row for a frame or two and then jumped to its upgraded layout (the name 31px, the links up to 99px, the language switch up to 275px; reported from Safari on the documentation site). `sc.css` now lays out the light-DOM children exactly as the upgraded row, full and compact, and the header-look language switch with its globe; `sc-site-header` gains `full-from` (1280 or 1440) for rows that only fit wider. The rules and the globe add about 1.1 KiB to `sc.css` (11,969 B measured), so `globalCssGzip` would rise from 11 KiB to 12 KiB (12,288 B), amending R24. The alternative, holding the page's first paint until the components load, would delay every page instead of one stylesheet's cached kilobyte. |
 
+## Platform headroom for the site header (user, 23 October 2026)
+
+| # | Decision |
+| --- | --- |
+| R27 | **`sc-site-header` gets 128 B of platform headroom, as R20 gave the navigation components:** its budget moves from 7,680 B to 7,808 B. The Linux CI build measures about 75 B more than macOS for the same source (7,683 B against 7,608 B on the same commit), and the icon-button press scale (U1) and `full-from` (R26) leave it at 7,641 B on macOS. Budgets are enforced on CI. |
+
