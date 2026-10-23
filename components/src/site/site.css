@@ -142,11 +142,30 @@
   .site-menu__panel {
     padding: 0 var(--sc-space-8) var(--sc-space-16);
   }
+  /* The sticky columns (this menu, and the contents beside a document) start below the site
+     header, so a column 100dvh tall runs off the bottom of the screen until the page scrolls.
+     Each column fits the space between its own top and the bottom of the screen instead: a
+     view timeline on its parent tracks how far that top is down the viewport, and the column's
+     height runs from 0 (its top at the bottom edge) to 100dvh (its top at the top edge, and
+     stuck from there on), whatever the header and any banners above it measure. Without
+     scroll-driven animations the menu leaves room for the header. */
+  @keyframes site-column-fit {
+    from {
+      max-block-size: 0;
+    }
+    to {
+      max-block-size: 100dvh;
+    }
+  }
   @media (min-width: 1024px) {
+    .site-body {
+      view-timeline: --site-body block;
+      view-timeline-inset: 0;
+    }
     .site-menu {
       position: sticky;
       inset-block-start: 0;
-      max-block-size: 100vh;
+      max-block-size: calc(100dvh - var(--sc-space-80) - var(--sc-size-border-hairline));
       margin-block-start: 0;
       padding-block: var(--sc-space-24);
       overflow: auto;
@@ -161,6 +180,13 @@
     }
     .site-menu__panel {
       padding: 0;
+    }
+    @supports (view-timeline: --a) {
+      .site-menu {
+        animation: site-column-fit linear both;
+        animation-timeline: --site-body;
+        animation-range: entry 0% entry 100%;
+      }
     }
   }
 
@@ -269,11 +295,23 @@
       position: sticky;
       inset-block-start: 0;
       align-self: start;
-      max-block-size: 100vh;
+      max-block-size: 100dvh;
       padding-block: var(--sc-space-8) var(--sc-space-24);
       overflow: auto;
       overscroll-behavior: contain;
       box-sizing: border-box;
+    }
+    /* Fits the screen below its own top, as the side menu does (site-column-fit). */
+    .doc-layout.has-toc {
+      view-timeline: --doc-layout block;
+      view-timeline-inset: 0;
+    }
+    @supports (view-timeline: --a) {
+      .doc-aside {
+        animation: site-column-fit linear both;
+        animation-timeline: --doc-layout;
+        animation-range: entry 0% entry 100%;
+      }
     }
     .doc-toc > summary {
       display: none;
@@ -989,6 +1027,7 @@
     .doc-layout:has(li.req) .doc-aside {
       position: static;
       max-block-size: none;
+      animation: none;
     }
     .doc-layout:has(li.req) .doc-toc > summary {
       display: flex;
