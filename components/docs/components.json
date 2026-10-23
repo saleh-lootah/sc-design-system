@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-22T14:54:27",
+  "timestamp": "2026-10-23T10:34:20",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.45.2",
@@ -654,7 +654,7 @@
             "references": {
               "AnnouncementTone": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-announcement-bar/sc-announcement-bar.tsx",
+                "path": "src/components/sc-announcement-bar/sc-announcement-bar.tsx",
                 "id": "src/components/sc-announcement-bar/sc-announcement-bar.tsx::AnnouncementTone"
               }
             }
@@ -1034,7 +1034,7 @@
             "references": {
               "AttentionCardHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-attention-card/sc-attention-card.tsx",
+                "path": "src/components/sc-attention-card/sc-attention-card.tsx",
                 "id": "src/components/sc-attention-card/sc-attention-card.tsx::AttentionCardHeadingLevel"
               }
             }
@@ -1086,7 +1086,7 @@
             "references": {
               "AttentionCardTint": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-attention-card/sc-attention-card.tsx",
+                "path": "src/components/sc-attention-card/sc-attention-card.tsx",
                 "id": "src/components/sc-attention-card/sc-attention-card.tsx::AttentionCardTint"
               }
             }
@@ -1568,7 +1568,7 @@
             "references": {
               "ButtonIconPosition": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-button/sc-button.tsx",
+                "path": "src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonIconPosition"
               }
             }
@@ -1689,7 +1689,7 @@
             "references": {
               "ButtonSize": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-button/sc-button.tsx",
+                "path": "src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonSize"
               }
             }
@@ -1730,7 +1730,7 @@
             "references": {
               "ButtonType": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-button/sc-button.tsx",
+                "path": "src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonType"
               }
             }
@@ -1800,7 +1800,7 @@
             "references": {
               "ButtonVariant": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-button/sc-button.tsx",
+                "path": "src/components/sc-button/sc-button.tsx",
                 "id": "src/components/sc-button/sc-button.tsx::ButtonVariant"
               }
             }
@@ -1949,7 +1949,7 @@
             "references": {
               "CalloutHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-callout/sc-callout.tsx",
+                "path": "src/components/sc-callout/sc-callout.tsx",
                 "id": "src/components/sc-callout/sc-callout.tsx::CalloutHeadingLevel"
               }
             }
@@ -1998,7 +1998,7 @@
             "references": {
               "CalloutTone": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-callout/sc-callout.tsx",
+                "path": "src/components/sc-callout/sc-callout.tsx",
                 "id": "src/components/sc-callout/sc-callout.tsx::CalloutTone"
               }
             }
@@ -2150,7 +2150,7 @@
             "references": {
               "CardLandmark": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-card/sc-card.tsx",
+                "path": "src/components/sc-card/sc-card.tsx",
                 "id": "src/components/sc-card/sc-card.tsx::CardLandmark"
               }
             }
@@ -2187,7 +2187,7 @@
             "references": {
               "CardPadding": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-card/sc-card.tsx",
+                "path": "src/components/sc-card/sc-card.tsx",
                 "id": "src/components/sc-card/sc-card.tsx::CardPadding"
               }
             }
@@ -2227,7 +2227,7 @@
             "references": {
               "CardVariant": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-card/sc-card.tsx",
+                "path": "src/components/sc-card/sc-card.tsx",
                 "id": "src/components/sc-card/sc-card.tsx::CardVariant"
               }
             }
@@ -2417,7 +2417,7 @@
             "references": {
               "ChannelChipVariant": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-channel-chip/sc-channel-chip.tsx",
+                "path": "src/components/sc-channel-chip/sc-channel-chip.tsx",
                 "id": "src/components/sc-channel-chip/sc-channel-chip.tsx::ChannelChipVariant"
               }
             }
@@ -2559,7 +2559,7 @@
             "references": {
               "ChannelHeroSize": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-channel-hero/sc-channel-hero.tsx",
+                "path": "src/components/sc-channel-hero/sc-channel-hero.tsx",
                 "id": "src/components/sc-channel-hero/sc-channel-hero.tsx::ChannelHeroSize"
               }
             }
@@ -3069,7 +3069,7 @@
             "references": {
               "ScChannelChangeDetail": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-channel-switcher/sc-channel-switcher.tsx",
+                "path": "src/components/sc-channel-switcher/sc-channel-switcher.tsx",
                 "id": "src/components/sc-channel-switcher/sc-channel-switcher.tsx::ScChannelChangeDetail"
               }
             }
@@ -4870,7 +4870,7 @@
             "references": {
               "EmptyStateHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-empty-state/sc-empty-state.tsx",
+                "path": "src/components/sc-empty-state/sc-empty-state.tsx",
                 "id": "src/components/sc-empty-state/sc-empty-state.tsx::EmptyStateHeadingLevel"
               }
             }
@@ -4977,7 +4977,7 @@
             "references": {
               "EmptyStateVariant": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-empty-state/sc-empty-state.tsx",
+                "path": "src/components/sc-empty-state/sc-empty-state.tsx",
                 "id": "src/components/sc-empty-state/sc-empty-state.tsx::EmptyStateVariant"
               }
             }
@@ -5093,7 +5093,7 @@
             "references": {
               "ErrorSummaryItem": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-error-summary/sc-error-summary.tsx",
+                "path": "src/components/sc-error-summary/sc-error-summary.tsx",
                 "id": "src/components/sc-error-summary/sc-error-summary.tsx::ErrorSummaryItem"
               }
             }
@@ -5150,7 +5150,7 @@
             "references": {
               "ErrorSummaryHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-error-summary/sc-error-summary.tsx",
+                "path": "src/components/sc-error-summary/sc-error-summary.tsx",
                 "id": "src/components/sc-error-summary/sc-error-summary.tsx::ErrorSummaryHeadingLevel"
               }
             }
@@ -5289,7 +5289,7 @@
             "references": {
               "FilterChip": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-filter-chips/sc-filter-chips.tsx",
+                "path": "src/components/sc-filter-chips/sc-filter-chips.tsx",
                 "id": "src/components/sc-filter-chips/sc-filter-chips.tsx::FilterChip"
               }
             }
@@ -5426,7 +5426,7 @@
             "references": {
               "FilterChip": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-filter-chips/sc-filter-chips.tsx",
+                "path": "src/components/sc-filter-chips/sc-filter-chips.tsx",
                 "id": "src/components/sc-filter-chips/sc-filter-chips.tsx::FilterChip"
               }
             }
@@ -5481,7 +5481,7 @@
             "references": {
               "LanguageSwitchAppearance": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-language-switch/sc-language-switch.tsx",
+                "path": "src/components/sc-language-switch/sc-language-switch.tsx",
                 "id": "src/components/sc-language-switch/sc-language-switch.tsx::LanguageSwitchAppearance"
               }
             }
@@ -5559,7 +5559,7 @@
             "references": {
               "LanguageSwitchDetail": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-language-switch/sc-language-switch.tsx",
+                "path": "src/components/sc-language-switch/sc-language-switch.tsx",
                 "id": "src/components/sc-language-switch/sc-language-switch.tsx::LanguageSwitchDetail"
               }
             }
@@ -5974,7 +5974,7 @@
             "references": {
               "ModalHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-modal/sc-modal.tsx",
+                "path": "src/components/sc-modal/sc-modal.tsx",
                 "id": "src/components/sc-modal/sc-modal.tsx::ModalHeadingLevel"
               }
             }
@@ -6014,7 +6014,7 @@
             "references": {
               "ModalInitialFocus": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-modal/sc-modal.tsx",
+                "path": "src/components/sc-modal/sc-modal.tsx",
                 "id": "src/components/sc-modal/sc-modal.tsx::ModalInitialFocus"
               }
             }
@@ -6132,7 +6132,7 @@
             "references": {
               "ModalCloseReason": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-modal/sc-modal.tsx",
+                "path": "src/components/sc-modal/sc-modal.tsx",
                 "id": "src/components/sc-modal/sc-modal.tsx::ModalCloseReason"
               }
             }
@@ -6381,7 +6381,7 @@
             "references": {
               "ModuleCardHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-module-card/sc-module-card.tsx",
+                "path": "src/components/sc-module-card/sc-module-card.tsx",
                 "id": "src/components/sc-module-card/sc-module-card.tsx::ModuleCardHeadingLevel"
               }
             }
@@ -6433,7 +6433,7 @@
             "references": {
               "ModuleCardTint": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-module-card/sc-module-card.tsx",
+                "path": "src/components/sc-module-card/sc-module-card.tsx",
                 "id": "src/components/sc-module-card/sc-module-card.tsx::ModuleCardTint"
               }
             }
@@ -6974,7 +6974,7 @@
             "references": {
               "PaginationChangeDetail": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-pagination/sc-pagination.tsx",
+                "path": "src/components/sc-pagination/sc-pagination.tsx",
                 "id": "src/components/sc-pagination/sc-pagination.tsx::PaginationChangeDetail"
               }
             }
@@ -7677,7 +7677,7 @@
             "references": {
               "SearchSize": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-search/sc-search.tsx",
+                "path": "src/components/sc-search/sc-search.tsx",
                 "id": "src/components/sc-search/sc-search.tsx::SearchSize"
               }
             }
@@ -7773,7 +7773,7 @@
             "references": {
               "ScSearchDetail": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-search/sc-search.tsx",
+                "path": "src/components/sc-search/sc-search.tsx",
                 "id": "src/components/sc-search/sc-search.tsx::ScSearchDetail"
               }
             }
@@ -8227,7 +8227,7 @@
             "references": {
               "ServiceCardHeadingLevel": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-service-card/sc-service-card.tsx",
+                "path": "src/components/sc-service-card/sc-service-card.tsx",
                 "id": "src/components/sc-service-card/sc-service-card.tsx::ServiceCardHeadingLevel"
               }
             }
@@ -8302,7 +8302,7 @@
             "references": {
               "ServiceCardTint": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-service-card/sc-service-card.tsx",
+                "path": "src/components/sc-service-card/sc-service-card.tsx",
                 "id": "src/components/sc-service-card/sc-service-card.tsx::ServiceCardTint"
               }
             }
@@ -8829,7 +8829,7 @@
             "references": {
               "SpinnerSize": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-spinner/sc-spinner.tsx",
+                "path": "src/components/sc-spinner/sc-spinner.tsx",
                 "id": "src/components/sc-spinner/sc-spinner.tsx::SpinnerSize"
               }
             }
@@ -8912,7 +8912,7 @@
             "references": {
               "StatusTagTone": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-status-tag/sc-status-tag.tsx",
+                "path": "src/components/sc-status-tag/sc-status-tag.tsx",
                 "id": "src/components/sc-status-tag/sc-status-tag.tsx::StatusTagTone"
               }
             }
@@ -9135,7 +9135,7 @@
             "references": {
               "StepProgressLayout": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-step-progress/sc-step-progress.tsx",
+                "path": "src/components/sc-step-progress/sc-step-progress.tsx",
                 "id": "src/components/sc-step-progress/sc-step-progress.tsx::StepProgressLayout"
               }
             }
@@ -9280,7 +9280,7 @@
             "references": {
               "SummaryListAppearance": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-summary-list/sc-summary-list.tsx",
+                "path": "src/components/sc-summary-list/sc-summary-list.tsx",
                 "id": "src/components/sc-summary-list/sc-summary-list.tsx::SummaryListAppearance"
               }
             }
@@ -9320,7 +9320,7 @@
             "references": {
               "SummaryListLayout": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-summary-list/sc-summary-list.tsx",
+                "path": "src/components/sc-summary-list/sc-summary-list.tsx",
                 "id": "src/components/sc-summary-list/sc-summary-list.tsx::SummaryListLayout"
               }
             }
@@ -9526,7 +9526,7 @@
             "references": {
               "SummaryRowVariant": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-summary-row/sc-summary-row.tsx",
+                "path": "src/components/sc-summary-row/sc-summary-row.tsx",
                 "id": "src/components/sc-summary-row/sc-summary-row.tsx::SummaryRowVariant"
               }
             }
@@ -9906,7 +9906,7 @@
             "references": {
               "SortDirection": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-table/sc-table.tsx",
+                "path": "src/components/sc-table/sc-table.tsx",
                 "id": "src/components/sc-table/sc-table.tsx::SortDirection"
               }
             }
@@ -10479,7 +10479,7 @@
             "references": {
               "TextInputType": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-text-input/sc-text-input.tsx",
+                "path": "src/components/sc-text-input/sc-text-input.tsx",
                 "id": "src/components/sc-text-input/sc-text-input.tsx::TextInputType"
               }
             }
@@ -10564,7 +10564,7 @@
             "references": {
               "TextInputWidth": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-text-input/sc-text-input.tsx",
+                "path": "src/components/sc-text-input/sc-text-input.tsx",
                 "id": "src/components/sc-text-input/sc-text-input.tsx::TextInputWidth"
               }
             }
@@ -11211,7 +11211,7 @@
             "references": {
               "TileTint": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-tile/sc-tile.tsx",
+                "path": "src/components/sc-tile/sc-tile.tsx",
                 "id": "src/components/sc-tile/sc-tile.tsx::TileTint"
               }
             }
@@ -11345,7 +11345,7 @@
             "references": {
               "TimelineOrder": {
                 "location": "local",
-                "path": "/Users/saleh/Developer/Claude Workspace/sc-v2-lib-gaps/components/src/components/sc-timeline/sc-timeline.tsx",
+                "path": "src/components/sc-timeline/sc-timeline.tsx",
                 "id": "src/components/sc-timeline/sc-timeline.tsx::TimelineOrder"
               }
             }
