@@ -2,6 +2,7 @@ import { E2EPage } from '@stencil/core/testing';
 import { describeAxe, expectNoAxeViolations } from '../../test/axe';
 import { siteHeader } from '../../test/chrome';
 import { contexts, loadFonts, newScPage, noScriptPage, setPageContext } from '../../test/page';
+import { PRESSED, keyboardPress, pointerPress, transitions } from '../../test/press';
 
 /** Evaluates `expr` with `root`, the header's shadow root. */
 function inRoot<T = unknown>(page: E2EPage, expr: string, sel = 'sc-site-header'): Promise<T> {
@@ -226,6 +227,26 @@ describe('sc-site-header (e2e)', () => {
       await phone(page);
       await page.click('sc-site-header >>> .menu-button');
       expect(await inRoot(page, 'root.querySelector("dialog").getAnimations().length')).toBe(1);
+    });
+
+    it('presses the menu button and the menu close button to 0.97 from a pointer, not from the keyboard or under reduced motion (MOT-09)', async () => {
+      const SEL = 'sc-site-header >>> .menu-button';
+      let page = await newScPage(siteHeader('en'));
+      await phone(page);
+      expect(await transitions(page, SEL)).toContain('transform 0.15s cubic-bezier(0.23, 1, 0.32, 1)');
+      expect(await pointerPress(page, SEL)).toBe(PRESSED);
+      expect(await inRoot(page, 'root.querySelector(".menu-button").getAttribute("aria-expanded")')).toBe('false');
+      expect(await keyboardPress(page, SEL)).toBe('none');
+      // The menu's close button, in a menu opened by pointer (from the keyboard it is focused and :focus-visible).
+      page = await newScPage(siteHeader('en'));
+      await phone(page);
+      await page.click(SEL);
+      await page.waitForChanges();
+      expect(await pointerPress(page, 'sc-site-header >>> .menu-head .icon-button', 'sc-site-header >>> .menu-head')).toBe(PRESSED);
+      page = await newScPage(siteHeader('en'));
+      await phone(page);
+      await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+      expect(await pointerPress(page, SEL)).toBe('none');
     });
 
     it('marks the current row with an inline-start bar, and mirrors in Arabic', async () => {

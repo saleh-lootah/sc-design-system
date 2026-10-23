@@ -318,7 +318,7 @@ Three motion rules are outcomes that services are assessed on, and they are in t
 
 | Component and moment | Motion |
 | --- | --- |
-| Press feedback: `sc-button`, filter chips, `sc-tile`, `sc-pagination` number cells, `sc-channel-hero` links, `sc-date-range` days and presets | `scale(--sc-scale-press)` on `:active` over `--sc-duration-press` with `--sc-easing-enter`, pointer and touch only; none from the keyboard or under reduced motion. Cards and list rows do not scale |
+| Press feedback: `sc-button`, filter chips, `sc-tile`, `sc-pagination` number cells, `sc-channel-hero` links, `sc-date-range` days, presets, calendar button, month arrows and sheet close, and the icon buttons of `sc-modal`, `sc-site-header` and `sc-announcement-bar` | `scale(--sc-scale-press)` on `:active` over `--sc-duration-press` with `--sc-easing-enter`, pointer and touch only; none from the keyboard or under reduced motion. Cards and list rows do not scale |
 | `sc-checkbox` and `sc-radio` | Pointer: the check draws (`stroke-dashoffset`) and the dot grows from `scale(0.5)` with opacity, over `--sc-duration-fast` with `--sc-easing-enter`; the fill, edge and halo change colour on `--sc-easing-hover`. Keyboard: instant. Reduced motion: the dot only fades |
 | `sc-accordion` and `sc-official-banner` | Pointer: the chevron turns 180° over `--sc-duration-fast` with `--sc-easing-standard`, and the content fades in over `--sc-duration-fast` with `--sc-easing-enter` (opacity only; height never animates). Closing is instant. Keyboard: instant. Reduced motion: no turn; the fade stays. The turn is vertical, so it does not mirror in Arabic |
 | `sc-table` sort | None; rows reorder instantly |

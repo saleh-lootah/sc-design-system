@@ -42,7 +42,7 @@ v1 had one tag, `sc-app-bar`, for both the journey bar and the desktop channel h
 
 ## Motion
 
-Menu from a pointer: opacity and an 8px rise over `duration-base` with `easing-enter`; close button from a pointer: opacity over `duration-exit`. From the keyboard: instant (MOT-02). Under reduced motion: opacity only. Navigation hover is colour and underline only; the current bar does not slide.
+Menu from a pointer: opacity and an 8px rise over `duration-base` with `easing-enter`; close button from a pointer: opacity over `duration-exit`. From the keyboard: instant (MOT-02). Under reduced motion: opacity only. Navigation hover is colour and underline only; the current bar does not slide. The 44px icon buttons (search, the menu button and the menu's close button) press to `scale(--sc-scale-press)` on `:active` over `duration-press` with `easing-enter`, pointer and touch only (MOT-09); none from the keyboard (MOT-02) or under reduced motion (the token is 1). Approved by the user, 23 October 2026.
 
 ## Accessibility
 

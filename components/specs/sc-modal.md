@@ -36,6 +36,8 @@ Status: new in v2, built by C4 (Wave 2b). Rules: `docs/v2/component-language.md`
 
 `@starting-style` and `transition-behavior: allow-discrete` on `display` and `overlay`, so transitions retarget (MOT-12). Opened while the trigger is keyboard-focused: instant (MOT-02), for the sheet too. Reduced motion: the scale token is 1 and the sheet does not slide; only opacity remains.
 
+Close button: the state layer fades over `duration-fast` with `easing-hover`, and the button presses to `scale(--sc-scale-press)` on `:active` over `duration-press` with `easing-enter`, pointer and touch only (MOT-09); none from the keyboard (MOT-02) or under reduced motion (the token is 1). Approved by the user, 23 October 2026.
+
 ## RTL
 
 The close button moves to the left; actions keep primary first in reading order. Digits stay Latin.

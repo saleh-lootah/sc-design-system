@@ -1,6 +1,7 @@
 import { E2EPage } from '@stencil/core/testing';
 import { describeAxe } from '../../test/axe';
 import { newScPage, setPageContext } from '../../test/page';
+import { PRESSED, keyboardPress, pointerPress, transitions } from '../../test/press';
 
 const BAR = (attrs = 'dismissible') => `
   <sc-announcement-bar ${attrs} link-href="#status" link-text="See affected services">Planned maintenance on Saturday 25 October. Payment services will be unavailable from 2am to 6am (Dubai time).</sc-announcement-bar>
@@ -92,6 +93,18 @@ describe('sc-announcement-bar (e2e)', () => {
     const anims = await style(page, 'root.querySelector("section").getAnimations().map((a) => Object.keys(a.effect.getKeyframes()[0]).filter((k) => !["offset","easing","composite","computedOffset"].includes(k)))');
     expect(anims).toEqual([['opacity']]);
     await page.waitForFunction(() => document.querySelector('sc-announcement-bar')!.hidden);
+  });
+
+  it('presses the dismiss button to 0.97 from a pointer, not from the keyboard or under reduced motion (MOT-09)', async () => {
+    const SEL = 'sc-announcement-bar >>> .dismiss';
+    let page = await newScPage(BAR());
+    expect(await transitions(page, SEL)).toContain('transform 0.15s cubic-bezier(0.23, 1, 0.32, 1)');
+    expect(await pointerPress(page, SEL)).toBe(PRESSED);
+    expect(await page.$eval('sc-announcement-bar', (el) => (el as HTMLElement).hidden)).toBe(false);
+    expect(await keyboardPress(page, SEL)).toBe('none');
+    page = await newScPage(BAR());
+    await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+    expect(await pointerPress(page, SEL)).toBe('none');
   });
 
   it('mirrors in Arabic: icon at the right, dismiss at the left', async () => {

@@ -218,6 +218,7 @@ Applies the emil-design-eng and mobile-native rules.
 | Sheet close | Can be dragged down: a velocity flick over 0.11 px/ms dismisses it. Otherwise back down over 224ms (`duration.slow` × 0.8), `easing.drawer`; the scrim fades out with it. |
 | Month change by pointer | The grid crossfades with a 12px shift in the direction of travel, 200ms. `easing.enter`. The shift is mirrored in RTL. |
 | Month change by keyboard | Instant. Keyboard actions are never animated. |
+| Calendar button, month arrows and sheet close (pointer) | scale(0.97) (`scale.press`) on `:active` over `duration-press` with `easing-enter`, pointer and touch only (MOT-09); none from the keyboard (MOT-02) or under reduced motion (the token is 1). The month change itself is unchanged. Approved by the user, 23 October 2026. |
 | Day press (pointer) | scale(0.97) (`scale.press`) on `:active`, 150ms (`duration.press`), `easing.enter` |
 | Range band | Not animated; it follows the pointer instantly |
 | Reduced motion | No scale or translate; opacity fades only |

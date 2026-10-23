@@ -1,6 +1,7 @@
 import { E2EPage } from '@stencil/core/testing';
 import { describeAxe, expectNoAxeViolations } from '../../test/axe';
 import { contexts, newScPage, setPageContext, settleTransitions } from '../../test/page';
+import { PRESSED, keyboardPress, pointerPress, transitions } from '../../test/press';
 
 /**
  * Evaluates `expr` with `host` and `root`. v2 is light DOM, so `root` is the host itself; the
@@ -468,6 +469,34 @@ describe('sc-date-range (e2e)', () => {
     await page.waitForFunction(() => (window as unknown as { runs: string[] }).runs.length > 0);
     await new Promise((r) => setTimeout(r, 100));
     expect(await runs(page)).toEqual(['sheet::backdrop:opacity']);
+  });
+
+  it('presses the calendar button, the month arrows and the sheet close to 0.97 from a pointer, not from the keyboard or under reduced motion (MOT-09)', async () => {
+    const SEL = '#d .sc-date-range__nav--next';
+    let page = await newScPage(field());
+    const CAL = '#d .sc-date-range__calendar-button';
+    expect(await transitions(page, CAL)).toContain('transform 0.15s cubic-bezier(0.23, 1, 0.32, 1)');
+    expect(await pointerPress(page, CAL)).toBe(PRESSED);
+    expect(await keyboardPress(page, CAL)).toBe('none');
+    page = await newScPage(field());
+    await page.click('#d .sc-date-range__calendar-button');
+    await page.waitForChanges();
+    expect(await transitions(page, SEL)).toContain('transform 0.15s cubic-bezier(0.23, 1, 0.32, 1)');
+    const month = () => page.$eval('#d .sc-date-range__month-title', (h) => h.textContent);
+    const before = await month();
+    expect(await pointerPress(page, SEL)).toBe(PRESSED);
+    expect(await month()).toBe(before); // released off the arrow: no month change
+    expect(await keyboardPress(page, SEL)).toBe('none');
+    page = await newScPage(field());
+    await page.setViewport({ width: 375, height: 812 });
+    await page.click('#d .sc-date-range__calendar-button');
+    await page.waitForChanges();
+    expect(await pointerPress(page, '#d .sc-date-range__close')).toBe(PRESSED);
+    page = await newScPage(field());
+    await page.click('#d .sc-date-range__calendar-button');
+    await page.waitForChanges();
+    await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+    expect(await pointerPress(page, SEL)).toBe('none');
   });
 
   it('marks applied preset chips with a check, 40px tall', async () => {

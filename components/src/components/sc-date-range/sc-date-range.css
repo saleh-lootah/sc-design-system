@@ -121,7 +121,15 @@
     background: transparent;
     color: var(--sc-color-on-surface);
     cursor: pointer;
-    transition: background-color var(--sc-duration-fast) var(--sc-easing-hover);
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      background-color var(--sc-duration-fast) var(--sc-easing-hover),
+      transform var(--sc-duration-press) var(--sc-easing-enter);
+  }
+
+  /* Press feedback for pointer and touch only (MOT-09); opening from the keyboard stays instant (MOT-02). */
+  .sc-date-range__calendar-button:enabled:active:not(:focus-visible) {
+    transform: scale(var(--sc-scale-press));
   }
 
   .sc-date-range__frame--open .sc-date-range__calendar-button {
@@ -199,6 +207,14 @@
     background: transparent;
     color: var(--sc-color-on-surface);
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform var(--sc-duration-press) var(--sc-easing-enter);
+  }
+
+  /* Press feedback for pointer and touch only (MOT-09); the month change itself stays instant
+     from the keyboard (MOT-02). The 36px circle scales with the button. */
+  .sc-date-range__nav:enabled:active:not(:focus-visible) {
+    transform: scale(var(--sc-scale-press));
   }
 
   .sc-date-range__nav::before {

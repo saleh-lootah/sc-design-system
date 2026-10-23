@@ -4,7 +4,7 @@ An audit of the v2 `sc-` library and its documentation site for places that shou
 
 **Scope.** Every component in `components/src/components/`, the CSS-only components in `components/src/global/components.css` (`sc-footer`, `sc-breadcrumbs`, `sc-official-banner`, `sc-environment-banner`), and the documentation site (`components/src/site/site.css`, `site.js`, `scripts/build-site.mjs`).
 
-**Summary.** The library already moves where it should: popovers, menus, sheets, the dialog, the selection bar, the month change, press feedback on buttons, chips, tiles and pagination cells, and colour on hover. Most of what is left should stay still. The audit found two small gaps worth filling, six places where existing motion breaks a rule or did not run at all, and one question for the user.
+**Summary.** The library already moves where it should: popovers, menus, sheets, the dialog, the selection bar, the month change, press feedback on buttons, chips, tiles and pagination cells, and colour on hover. Most of what is left should stay still. The audit found two small gaps worth filling (three, with the user's U1), six places where existing motion breaks a rule or did not run at all, and one question for the user.
 
 ## 1. Candidates
 
@@ -37,11 +37,11 @@ Frequency uses the MOT-01 tiers: *many* (many times in a session, or from the ke
 | X14 | Documentation site: page-to-page transitions (View Transitions) | Many | MOT-01; navigation is the most frequent action on the site |
 | X15 | Documentation site: search results updating as you type | Many, from the keyboard | MOT-02 |
 
-### 1.3 Needs the user
+### 1.3 Decided by the user
 
 | # | Component and moment | Frequency | Purpose | Proposed motion | Why it needs a decision |
 | --- | --- | --- | --- | --- | --- |
-| U1 | Icon buttons without press scale: the `sc-modal` close button, the `sc-site-header` menu and close buttons, the `sc-announcement-bar` dismiss, the `sc-date-range` month arrows and sheet close | Occasional (date-range arrows: often) | Feedback | `:active:not(:focus-visible)`: `scale(var(--sc-scale-press))` over `--sc-duration-press`, `--sc-easing-enter`, as `sc-button` (MOT-09). Reduced motion: none (the token is 1) | MOT-09 says every pressable element gives press feedback, and the state grammar lists "buttons", but the per-component specs give these buttons the 12% state layer only. About 30 B gzip per component. Either the specs or MOT-09 should change |
+| U1 | Icon buttons without press scale: the `sc-modal` close button, the `sc-site-header` menu and close buttons, the `sc-announcement-bar` dismiss, the `sc-date-range` month arrows and sheet close; found while implementing it, the `sc-date-range` calendar button and the `sc-site-header` search link (also a 44px icon button) | Occasional (date-range arrows: often) | Feedback | `:active:not(:focus-visible)`: `scale(var(--sc-scale-press))` over `--sc-duration-press`, `--sc-easing-enter`, as `sc-button` (MOT-09). Reduced motion: none (the token is 1) | MOT-09 says every pressable element gives press feedback, and the state grammar lists "buttons", but the per-component specs gave these buttons the 12% state layer only. **Decided (user, 23 October 2026): do.** Implemented; the specs now follow MOT-09 |
 
 ## 2. Existing motion that breaks a rule
 
@@ -63,7 +63,7 @@ Frequency uses the MOT-01 tiers: *many* (many times in a session, or from the ke
 
 ## 3. Verdict
 
-The library needs very little more motion; it is close to right. The highest-leverage work is the fixes in section 2: B1 to B3 break the two rules services are assessed on (MOT-02 and MOT-15), and B6 means three documented entrances never played. D1 is the only new motion in the library, and it reuses the accordion's existing pattern. U1 is a question of consistency for the user, not a gap anyone will feel.
+The library needs very little more motion; it is close to right. The highest-leverage work is the fixes in section 2: B1 to B3 break the two rules services are assessed on (MOT-02 and MOT-15), and B6 means three documented entrances never played. D1 is the only new motion in the library, and it reuses the accordion's existing pattern. U1 was a question of consistency; the user chose to follow MOT-09.
 
 ## 4. Outcome
 
@@ -71,4 +71,4 @@ Implemented on branch `v2-motion`: D1, D2 and the fixes B1 to B6, with e2e tests
 
 No budget was raised. Measured gzip, before and after: `sc.css` 10,806 to 10,874 B (budget 11,264); custom-elements closures `sc-table` 10,611 to 10,664 B, `sc-channel-switcher` 6,871 to 6,919 B, `sc-account-menu` 6,852 to 6,891 B, `sc-checkbox` and `sc-radio` +3 B each, all within their budgets. The documentation site's stylesheet grows by about 0.06 KiB (3,809 B built, budget 6 KiB).
 
-U1 waits for the user.
+U1 was approved by the user and is implemented, with e2e tests in `sc-modal`, `sc-site-header`, `sc-announcement-bar` and `sc-date-range`.
