@@ -125,12 +125,24 @@ export async function waitForHydration(page: E2EPage): Promise<void> {
  * is blocked (PERF-04), and, for registered tags, what every visitor sees before the upgrade.
  */
 export async function noScriptPage(html: string, lang = 'en', width = 1280) {
+  return plainPage(html, lang, width, false);
+}
+
+/**
+ * Opens `html` with sc.css and scripting on, but no component code: what a page shows before
+ * its components upgrade (Safari paints a new page before module scripts run).
+ */
+export async function beforeUpgradePage(html: string, lang = 'en', width = 1280) {
+  return plainPage(html, lang, width, true);
+}
+
+async function plainPage(html: string, lang: string, width: number, scripting: boolean) {
   const e2e = await newE2EPage();
   await e2e.setContent('');
   const origin = new URL(e2e.url()).origin;
   // E2EPage is a Puppeteer page; its type hides browser().
   const page = await (e2e as unknown as PuppeteerPage).browser().newPage();
-  await page.setJavaScriptEnabled(false);
+  await page.setJavaScriptEnabled(scripting);
   await page.setRequestInterception(true);
   page.on('request', (r: HTTPRequest) =>
     r.url() === `${origin}/no-script.html`

@@ -192,3 +192,9 @@ Where this file disagrees with `foundations.md` or `component-language.md`, this
 | R24 | **Approved by the user, 23 October 2026.** `sc-official-banner` (CHR-12) and `sc-environment-banner` (CHR-13) are CSS only, like `sc-footer`: the official banner is a native `<details>`, so it works with scripting off and costs no JavaScript on any page. Their rules add about 0.7 KiB to `sc.css` (10.55 KiB measured), so `globalCssGzip` would rise from 10 KiB to 11 KiB (11,264 B), amending R23. The alternative, shadow-DOM components, would cost about 2 to 3 KiB of JavaScript on every page and show nothing without it. |
 | R25 | **The address wording is confirmed (user, 23 October 2026).** `.gov.ae` is reserved for official government websites, so the banner says "Official websites use .gov.ae". This closes OQ-40, which was opened the day before and is withdrawn from the open questions. |
 
+## The header before it upgrades (23 October 2026)
+
+| # | Decision |
+| --- | --- |
+| R26 | **Proposed, waiting for the user's approval.** Safari paints each new page before module scripts run, so `sc-site-header` showed its plain pre-upgrade row for a frame or two and then jumped to its upgraded layout (the name 31px, the links up to 99px, the language switch up to 275px; reported from Safari on the documentation site). `sc.css` now lays out the light-DOM children exactly as the upgraded row, full and compact, and the header-look language switch with its globe; `sc-site-header` gains `full-from` (1280 or 1440) for rows that only fit wider. The rules and the globe add about 1.1 KiB to `sc.css` (11,969 B measured), so `globalCssGzip` would rise from 11 KiB to 12 KiB (12,288 B), amending R24. The alternative, holding the page's first paint until the components load, would delay every page instead of one stylesheet's cached kilobyte. |
+

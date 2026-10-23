@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-23T10:34:20",
+  "timestamp": "2026-10-23T11:05:47",
   "compiler": {
     "name": "@stencil/core",
     "version": "4.45.2",
@@ -8450,6 +8450,37 @@
       ],
       "usage": {},
       "props": [
+        {
+          "name": "fullFrom",
+          "type": "1280 | 1440 | undefined",
+          "complexType": {
+            "original": "1280 | 1440",
+            "resolved": "1280 | 1440 | undefined",
+            "references": {}
+          },
+          "mutable": false,
+          "attr": "full-from",
+          "reflectToAttr": true,
+          "docs": "For a row that only fits wider than 1024px (five long items, as on the documentation\nsite): the width from which the full row is used, `1280` or `1440`. Below it the header is\ncompact from the first paint, before and after it upgrades, instead of measuring the row\nand switching (sc.css lays out the light-DOM children the same way).",
+          "docsTags": [],
+          "values": [
+            {
+              "value": "1280",
+              "type": "number"
+            },
+            {
+              "value": "1440",
+              "type": "number"
+            },
+            {
+              "type": "undefined"
+            }
+          ],
+          "optional": true,
+          "required": false,
+          "getter": false,
+          "setter": false
+        },
         {
           "name": "searchHref",
           "type": "string | undefined",

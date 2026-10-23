@@ -37,7 +37,7 @@ The switch renders in shadow DOM, so without script it would show nothing, and L
 <sc-language-switch href="/ar/renew"><a slot="fallback" href="/ar/renew" hreflang="ar" lang="ar" dir="rtl">العربية</a></sc-language-switch>
 ```
 
-Until the switch is defined, `sc.css` shows it as the `inline` appearance: an underlined label-medium link in `channel-action`, at least 44 × 44, in the endonym face. The upgraded shadow root has no `fallback` slot, so the link is then neither shown nor read, and the component's own control and name span take over. The component ignores the fallback when it writes its name span.
+Until the switch is defined, `sc.css` shows it as the `inline` appearance: an underlined label-medium link in `channel-action`, at least 44 × 44, in the endonym face. With `appearance="header"` or `"plain"` it shows the header look instead (the 20px globe, 6 before the name, label-large in `on-surface`, not underlined), so the switch keeps its size and place in the header when it upgrades (R26). The upgraded shadow root has no `fallback` slot, so the link is then neither shown nor read, and the component's own control and name span take over. The component ignores the fallback when it writes its name span.
 
 ## Strings
 

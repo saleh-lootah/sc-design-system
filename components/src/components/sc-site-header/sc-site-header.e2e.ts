@@ -1,7 +1,7 @@
 import { E2EPage } from '@stencil/core/testing';
 import { describeAxe, expectNoAxeViolations } from '../../test/axe';
 import { siteHeader } from '../../test/chrome';
-import { contexts, loadFonts, newScPage, noScriptPage, setPageContext } from '../../test/page';
+import { beforeUpgradePage, contexts, loadFonts, newScPage, noScriptPage, setPageContext } from '../../test/page';
 import { PRESSED, keyboardPress, pointerPress, transitions } from '../../test/press';
 
 /** Evaluates `expr` with `root`, the header's shadow root. */
@@ -401,6 +401,65 @@ describe('sc-site-header before it upgrades and without JavaScript (PERF-04)', (
       return r;
     });
     expect(h).toEqual([81, 81, 81, 'hidden']);
+  });
+});
+
+/** The header's item boxes, in page pixels, for comparing the row before and after upgrade. */
+const headerBoxes = (page: { evaluate: E2EPage['evaluate'] }) =>
+  page.evaluate(() => {
+    const box = (el: Element | null) => {
+      const r = el?.getBoundingClientRect();
+      return r && r.width ? [Math.round(r.left), Math.round(r.top), Math.round(r.width), Math.round(r.height)] : null;
+    };
+    const h = document.querySelector('sc-site-header')!;
+    const pick = (s: string) => Array.from(h.querySelectorAll(`:scope > ${s}`)).map(box);
+    return { host: box(h), lockup: pick('[slot="lockup"]'), name: pick('[slot="name"]'), nav: pick('[slot="nav"]'), language: pick('[slot="language"]') };
+  });
+
+/** The documentation site's header: a name, five links, search and the language switch. */
+const docsHeader = (lang: string, attrs = '') =>
+  `<sc-site-header search-href="#search" ${attrs}><a slot="name" href="#home">${lang === 'ar' ? 'القنوات المشتركة' : 'Shared Channels'}</a>${(lang === 'ar' ? ['الرئيسية', 'نظام التصميم', 'معيار الخدمات', 'مرجع نظام التصميم', 'دليل الضمان'] : ['Home', 'Design system', 'Service Standard', 'Design System reference', 'Assurance handbook']).map((t, i) => `<a slot="nav" href="#n${i}"${i === 1 ? ' aria-current="page"' : ''}>${t}</a>`).join('')}<sc-language-switch slot="language" appearance="plain" href="#other"><a slot="fallback" href="#other" lang="${lang === 'ar' ? 'en' : 'ar'}">${lang === 'ar' ? 'English' : 'العربية'}</a></sc-language-switch></sc-site-header>`;
+
+describe('sc-site-header: nothing moves when it upgrades (Safari paints before module scripts run)', () => {
+  // The language switch sets its name in "Dubai W23 Name", which loadFonts does not ask for.
+  const fontsReady = (p: { evaluate: E2EPage['evaluate'] }) =>
+    p.evaluate(async () => {
+      await document.fonts.load('500 18px "Dubai W23 Name"', 'العربية English');
+      await document.fonts.ready;
+    });
+
+  async function compare(html: string, lang: 'en' | 'ar', width: number) {
+    const before = await beforeUpgradePage(html, lang, width);
+    await loadFonts(before);
+    await fontsReady(before as unknown as E2EPage);
+    const pre = await headerBoxes(before as unknown as E2EPage);
+    await before.close();
+    const page = await newScPage(html, { lang });
+    await page.setViewport({ width, height: 800 });
+    await loadFonts(page);
+    await fontsReady(page);
+    await page.waitForChanges();
+    await new Promise((r) => setTimeout(r, 100)); // the row's fit check runs on the next frame
+    return { pre, up: await headerBoxes(page) };
+  }
+
+  it.each([
+    ['en', 1440, ''],
+    ['en', 1280, 'full-from="1280"'],
+    ['en', 1100, 'full-from="1280"'],
+    ['en', 900, ''],
+    ['en', 390, ''],
+    ['ar', 1440, ''],
+    ['ar', 1100, 'full-from="1280"'],
+    ['ar', 390, ''],
+  ] as const)('%s at %ipx %s: every item keeps its box', async (lang, width, attrs) => {
+    const { pre, up } = await compare(docsHeader(lang, attrs), lang, width);
+    expect(pre).toEqual(up);
+  });
+
+  it.each([1440, 900] as const)('a channel-site header at %ipx keeps its lockup, name and links in place (the sign-in button and channel switcher draw themselves)', async (width) => {
+    const { pre, up } = await compare(siteHeader('en'), 'en', width);
+    expect([pre.host, pre.lockup, pre.nav]).toEqual([up.host, up.lockup, up.nav]);
   });
 });
 
