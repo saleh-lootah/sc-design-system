@@ -374,7 +374,7 @@ function sideNav(page, lang) {
       const items = g.items.map(item).join('') + (g.name === 'Build and contribute' ? extra : '');
       if (!g.name) return `<ul class="site-nav__top">${items}</ul>`;
       const open = g.items.some((p) => p === page || p.doc === page.doc && page.doc) || g.name === 'Chapters' || page.kind === 'ds-home' || page.kind === 'records-home' || g.items.length < 6;
-      return `<details class="site-nav__group"${open ? ' open' : ''}><summary>${esc(NAMES[g.name]?.[lang] ?? g.name)}</summary><ul>${items}</ul></details>`;
+      return `<details class="site-nav__group"${open ? ' open' : ''}><summary><span>${esc(NAMES[g.name]?.[lang] ?? g.name)}</span>${icon('ExpandMore', 'site-disclosure')}</summary><ul>${items}</ul></details>`;
     })
     .join('');
   return `<details class="site-menu" data-wide-open>
