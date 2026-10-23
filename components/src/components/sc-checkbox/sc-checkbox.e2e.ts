@@ -52,6 +52,20 @@ describe('sc-checkbox on its own (e2e)', () => {
     expect(await inner(page, '#c', 'getComputedStyle(q(".sc-choice__mark")).opacity')).toBe('1');
   });
 
+  it('draws the check in on the strong ease-out over 120ms; the fill and edge change on ease (MOT-04)', async () => {
+    const page = await newScPage(ALONE);
+    const enter = 'cubic-bezier(0.23, 1, 0.32, 1)';
+    const hover = 'cubic-bezier(0.25, 0.1, 0.25, 1)';
+    const style = (sel: string) => inner<string[]>(page, '#c', `(s => [s.transitionProperty, s.transitionDuration, s.transitionTimingFunction])(getComputedStyle(q("${sel}")))`);
+    expect(await style('.sc-check__path')).toEqual(['stroke-dashoffset', '0.12s', enter]);
+    expect(await style('.sc-choice__mark')).toEqual(['opacity, transform, stroke-dashoffset', '0.12s, 0.12s, 0.12s', `${enter}, ${enter}, ${enter}`]);
+    expect(await style('.sc-choice__box')).toEqual(['background-color, border-color', '0.12s, 0.12s', `${hover}, ${hover}`]);
+    await page.click('#c label');
+    expect(await inner(page, '#c', 'q(".sc-check__path").getAnimations().length')).toBe(1);
+    await settleTransitions(page);
+    expect(await inner(page, '#c', 'getComputedStyle(q(".sc-check__path")).strokeDashoffset')).toBe('0px');
+  });
+
   it('follows lang for its error prefix', async () => {
     const page = await newScPage(ALONE);
     await setPageContext(page, { lang: 'ar' });

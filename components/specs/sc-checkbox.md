@@ -52,7 +52,7 @@ The box sits on the right of its label; the error bar is on the right; the check
 
 ## Motion
 
-The check draws over 120ms (stroke-dashoffset) and fills over 120ms with `easing-hover`, pointer only; from the keyboard it appears at once (MOT-02). The halo fades over 120ms.
+The check draws over 120ms (stroke-dashoffset) with `easing-enter`, because it is entering (MOT-04); the box fills and its edge changes colour over 120ms with `easing-hover`. Pointer only; from the keyboard it appears at once (MOT-02). The halo fades over 120ms.
 
 ## Code
 

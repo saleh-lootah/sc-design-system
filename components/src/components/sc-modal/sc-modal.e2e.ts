@@ -1,6 +1,7 @@
 import { E2EPage } from '@stencil/core/testing';
 import { expectNoAxeViolations } from '../../test/axe';
 import { contexts, newScPage } from '../../test/page';
+import { PRESSED, keyboardPress, pointerPress, transitions } from '../../test/press';
 
 const HTML = `<main><h1>My vehicles</h1>
   <button id="open">Remove vehicle</button>
@@ -178,6 +179,20 @@ describe('sc-modal (e2e)', () => {
     // 1px edge + 32 padding.
     expect(await geometry('light')).toEqual({ top: 33, end: 33, size: [44, 44], radius: '4px', gap: '16px', bg: 'surface' });
     expect((await geometry('dark')).bg).toBe('surface-container-high');
+  });
+
+  it('presses the close button to 0.97 from a pointer, not from the keyboard or under reduced motion (MOT-09)', async () => {
+    const SEL = '#m >>> .close';
+    const page = await newScPage(HTML);
+    await openWithClick(page);
+    expect(await transitions(page, SEL)).toContain('transform 0.15s cubic-bezier(0.23, 1, 0.32, 1)');
+    // Released on the heading, inside the panel: nothing fires (a release on the scrim would close it).
+    expect(await pointerPress(page, SEL, '#m >>> .heading')).toBe(PRESSED);
+    expect(await isOpen(page, 'm')).toBe(true);
+    expect(await keyboardPress(page, SEL)).toBe('none');
+    await openWithClick(page);
+    await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+    expect(await pointerPress(page, SEL, '#m >>> .heading')).toBe('none');
   });
 
   it('opens instantly from the keyboard (MOT-02)', async () => {

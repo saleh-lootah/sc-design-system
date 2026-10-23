@@ -124,9 +124,10 @@ Applies the emil-design-eng rules.
 
 - **Sorting:** rows reorder instantly. Sorting is repeated and often keyboard-triggered, so it is not animated.
 - **Row hover:** `background-color` over 120ms (`duration.fast`), `easing.hover` (ease).
-- **Selection bar:** enters with opacity 0 → 1 and translateY 8px → 0 over 200ms, using `easing.enter`. It exits with opacity only over 160ms (`duration.exit`, about 20% faster than the entrance), using `easing.exit`.
-- **Skeleton:** opacity pulse only.
-- **Reduced motion:** no translate; opacity changes stay.
+- **Selection bar:** from a pointer it enters with opacity 0 → 1 and translateY 8px → 0 over 200ms, using `easing.enter`, and exits with opacity only over 160ms (`duration.exit`, about 20% faster than the entrance), using `easing.exit`. When the selection changes from the keyboard (Space on a checkbox that is `:focus-visible`), it appears and goes at once (MOT-02).
+- **Skeleton:** an opacity pulse from 55% to 100% and back, linear (constant motion, MOT-04), one way per `duration.pulse` (1200ms).
+- **Reduced motion:** the selection bar only fades: the transform is left out of its transition, because its starting style still names the 8px. The skeleton holds still at 75%.
+- **Scoped `@starting-style`:** the starting selector repeats a class (`.selection-bar.selection-bar--open`), because Stencil does not add the scope class inside `@starting-style`; without it the open rule wins and the entrance does not play (it did not, until 23 October 2026).
 
 ## Code
 

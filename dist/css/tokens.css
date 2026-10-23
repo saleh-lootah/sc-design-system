@@ -130,6 +130,7 @@
   --sc-duration-exit: 160ms; /* Exits of base-duration elements (popovers, dropdowns, bars): about 20% faster than the 200ms entrance, not more. Sheets and modals exit at calc(var(--sc-duration-slow) * 0.8) (emil-design-eng: exit faster than enter; guidance: about 20%) */
   --sc-duration-slow: 280ms; /* Modals, drawers and bottom sheets only; larger elements move further, so slower (guidance: 200-300ms, UI stays under 300ms) */
   --sc-duration-spin: 600ms; /* One rotation of the loading spinner, linear; stops under reduced motion (emil-design-eng: a faster spinner makes loading feel faster) */
+  --sc-duration-pulse: 1200ms; /* One half-cycle of the loading skeleton's opacity pulse (alternate, linear); stops under reduced motion (emil-design-eng: constant motion is linear; MOT-12 keeps keyframes for the skeleton pulse) */
   --sc-easing-enter: cubic-bezier(0.23, 1, 0.32, 1); /* Strong ease-out for anything entering, and the default (emil-design-eng: entering or exiting uses ease-out; built-in curves are too weak) */
   --sc-easing-exit: cubic-bezier(0.23, 1, 0.32, 1); /* Strong ease-out for anything leaving, paired with duration.exit (emil-design-eng: never ease-in on UI; it delays the moment the user is watching) */
   --sc-easing-standard: cubic-bezier(0.77, 0, 0.175, 1); /* Strong ease-in-out for elements already on screen that move or morph (emil-design-eng: moving or morphing on screen uses ease-in-out) */
@@ -547,6 +548,7 @@
 @media (prefers-reduced-motion: reduce) {
   :root {
     --sc-duration-spin: 0ms;
+    --sc-duration-pulse: 0ms;
     --sc-scale-press: 1;
     --sc-scale-enter: 1;
   }

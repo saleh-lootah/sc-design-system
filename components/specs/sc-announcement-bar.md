@@ -24,7 +24,7 @@ Dismissing fires `scDismiss` (cancelable, `detail.id`) then hides the bar. With 
 
 ## Motion
 
-From a pointer: fades out over `duration-exit`, then hidden; the height is never animated (MOT-11). From the keyboard: instant.
+From a pointer: fades out over `duration-exit`, then hidden; the height is never animated (MOT-11). From the keyboard: instant. The dismiss button presses to `scale(--sc-scale-press)` on `:active` over `duration-press` with `easing-enter`, pointer and touch only (MOT-09); none from the keyboard (MOT-02) or under reduced motion (the token is 1). Approved by the user, 23 October 2026.
 
 ## Strings
 

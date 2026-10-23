@@ -100,7 +100,8 @@
     background: var(--sc-color-on-disabled);
   }
 
-  /* The check (18px, drawn over 120ms) and the dot (12px, from 0.5 to 1 over 120ms). Pointer
+  /* The check (18px, drawn over 120ms) and the dot (12px, from 0.5 to 1 over 120ms), entering
+     on the strong ease-out (MOT-04); the fill, edge and halo are colour, on ease. Pointer
      only: toggled from the keyboard (the input is :focus-visible) they appear at once (MOT-02). */
   .sc-choice__mark {
     position: relative;
@@ -108,9 +109,9 @@
     pointer-events: none;
     opacity: 0;
     transition:
-      opacity var(--sc-duration-fast) var(--sc-easing-hover),
-      transform var(--sc-duration-fast) var(--sc-easing-hover),
-      stroke-dashoffset var(--sc-duration-fast) var(--sc-easing-hover);
+      opacity var(--sc-duration-fast) var(--sc-easing-enter),
+      transform var(--sc-duration-fast) var(--sc-easing-enter),
+      stroke-dashoffset var(--sc-duration-fast) var(--sc-easing-enter);
   }
 
   .sc-choice__box:checked + .sc-choice__mark {
@@ -126,7 +127,7 @@
   .sc-choice__mark--check .sc-check__path {
     stroke-dasharray: 1;
     stroke-dashoffset: 1;
-    transition: stroke-dashoffset var(--sc-duration-fast) var(--sc-easing-hover);
+    transition: stroke-dashoffset var(--sc-duration-fast) var(--sc-easing-enter);
   }
 
   .sc-choice__box:checked + .sc-choice__mark--check .sc-check__path {

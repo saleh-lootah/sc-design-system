@@ -189,6 +189,7 @@
   --duration-exit: var(--sc-duration-exit);
   --duration-slow: var(--sc-duration-slow);
   --duration-spin: var(--sc-duration-spin);
+  --duration-pulse: var(--sc-duration-pulse);
   --default-transition-duration: var(--sc-duration-base);
   --default-transition-timing-function: var(--sc-easing-enter);
 

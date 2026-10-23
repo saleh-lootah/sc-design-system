@@ -145,6 +145,24 @@ describe('sc-radio-group (e2e)', () => {
     expect(await inner(page, 'sc-radio[value="dubai"]', 'getComputedStyle(q(".sc-choice__mark")).transitionDuration')).toBe('0s');
   });
 
+  it('grows the dot in on the strong ease-out over 120ms from a pointer; under reduced motion it only fades (MOT-04, MOT-15)', async () => {
+    const page = await newScPage(GROUP);
+    const enter = 'cubic-bezier(0.23, 1, 0.32, 1)';
+    const mark = (prop: string) => inner<string>(page, 'sc-radio[value="dubai"]', `getComputedStyle(q(".sc-choice__mark")).${prop}`);
+    expect(await mark('transitionProperty')).toBe('opacity, transform, stroke-dashoffset');
+    expect(await mark('transitionDuration')).toBe('0.12s, 0.12s, 0.12s');
+    expect(await mark('transitionTimingFunction')).toBe(`${enter}, ${enter}, ${enter}`);
+    await page.click('sc-radio[value="dubai"] label');
+    expect(await inner(page, 'sc-radio[value="dubai"]', 'q(".sc-choice__mark").getAnimations().map(a => a.transitionProperty).sort().join()')).toBe('opacity,transform');
+    await settleTransitions(page);
+    expect(await mark('transform')).toBe('none');
+    await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+    await settleTransitions(page); // the switch itself transitions the resting dot from 0.5 to 1
+    expect(await inner(page, 'sc-radio[value="abu-dhabi"]', 'getComputedStyle(q(".sc-choice__mark")).transform')).toBe('none');
+    await page.click('sc-radio[value="abu-dhabi"] label');
+    expect(await inner(page, 'sc-radio[value="abu-dhabi"]', 'q(".sc-choice__mark").getAnimations().map(a => a.transitionProperty).join()')).toBe('opacity');
+  });
+
   it('stays visible in forced colours', async () => {
     const page = await newScPage(`<sc-radio-group label="R" value="a"><sc-radio value="a">A</sc-radio></sc-radio-group>`);
     await forceColors(page);

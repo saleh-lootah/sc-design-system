@@ -1,6 +1,7 @@
 import { E2EPage } from '@stencil/core/testing';
 import { describeAxe, expectNoAxeViolations } from '../../test/axe';
-import { contexts, newScPage, setPageContext } from '../../test/page';
+import { contexts, newScPage, setPageContext, settleTransitions } from '../../test/page';
+import { PRESSED, keyboardPress, pointerPress, transitions } from '../../test/press';
 
 /**
  * Evaluates `expr` with `host` and `root`. v2 is light DOM, so `root` is the host itself; the
@@ -418,6 +419,84 @@ describe('sc-date-range (e2e)', () => {
     await page.waitForChanges();
     expect(await inner(page, `root.querySelector('.sc-date-range__picker--popover').matches(':popover-open')`)).toBe(true);
     expect((await durations()).some((d) => d !== '0s')).toBe(true);
+  });
+
+  it('actually runs the entrances from a pointer: the popover grows from the field corner (mirrored in Arabic), the sheet slides and its scrim fades; reduced motion keeps only fades (MOT-08, MOT-15)', async () => {
+    // Records the transitions each picker starts: a 200ms entrance can finish before a read.
+    const watch = (page: E2EPage) =>
+      page.evaluate(() => {
+        const w = window as unknown as { runs: string[] };
+        w.runs = [];
+        for (const el of document.querySelectorAll('#d .sc-date-range__picker'))
+          el.addEventListener('transitionrun', (e) => {
+            const t = e as TransitionEvent;
+            w.runs.push(`${(el as HTMLElement).classList.contains('sc-date-range__picker--sheet') ? 'sheet' : 'popover'}${t.pseudoElement}:${t.propertyName}`);
+          });
+      });
+    const runs = (page: E2EPage) => page.evaluate(() => [...new Set((window as unknown as { runs: string[] }).runs)].filter((r) => !/display|overlay/.test(r)).sort());
+    const click = async (page: E2EPage) => {
+      const box = await inner<number[]>(page, `((r) => [r.left + r.width / 2, r.top + r.height / 2])(root.querySelector('.sc-date-range__calendar-button').getBoundingClientRect())`);
+      await page.mouse.click(box[0], box[1]);
+      await page.waitForChanges();
+    };
+
+    let page = await newScPage(field());
+    await watch(page);
+    await click(page);
+    await page.waitForFunction(() => (window as unknown as { runs: string[] }).runs.length > 0);
+    expect(await runs(page)).toEqual(['popover:opacity', 'popover:transform']);
+    expect(await inner(page, `getComputedStyle(root.querySelector('.sc-date-range__picker--popover')).transformOrigin`)).toBe('0px 0px');
+
+    // In Arabic the field's inline-start corner is its top right.
+    page = await newScPage(field('', 'ar'), { lang: 'ar' });
+    await click(page);
+    await settleTransitions(page);
+    const [origin, width] = await inner<[string, number]>(page, `((el) => [getComputedStyle(el).transformOrigin, el.getBoundingClientRect().width])(root.querySelector('.sc-date-range__picker--popover'))`);
+    expect(origin).toBe(`${width}px 0px`);
+
+    page = await newScPage(field());
+    await page.setViewport({ width: 375, height: 812 });
+    await watch(page);
+    await click(page);
+    await page.waitForFunction(() => (window as unknown as { runs: string[] }).runs.length > 1);
+    expect(await runs(page)).toEqual(['sheet::backdrop:opacity', 'sheet:transform']);
+
+    page = await newScPage(field());
+    await page.setViewport({ width: 375, height: 812 });
+    await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+    await watch(page);
+    await click(page);
+    await page.waitForFunction(() => (window as unknown as { runs: string[] }).runs.length > 0);
+    await new Promise((r) => setTimeout(r, 100));
+    expect(await runs(page)).toEqual(['sheet::backdrop:opacity']);
+  });
+
+  it('presses the calendar button, the month arrows and the sheet close to 0.97 from a pointer, not from the keyboard or under reduced motion (MOT-09)', async () => {
+    const SEL = '#d .sc-date-range__nav--next';
+    let page = await newScPage(field());
+    const CAL = '#d .sc-date-range__calendar-button';
+    expect(await transitions(page, CAL)).toContain('transform 0.15s cubic-bezier(0.23, 1, 0.32, 1)');
+    expect(await pointerPress(page, CAL)).toBe(PRESSED);
+    expect(await keyboardPress(page, CAL)).toBe('none');
+    page = await newScPage(field());
+    await page.click('#d .sc-date-range__calendar-button');
+    await page.waitForChanges();
+    expect(await transitions(page, SEL)).toContain('transform 0.15s cubic-bezier(0.23, 1, 0.32, 1)');
+    const month = () => page.$eval('#d .sc-date-range__month-title', (h) => h.textContent);
+    const before = await month();
+    expect(await pointerPress(page, SEL)).toBe(PRESSED);
+    expect(await month()).toBe(before); // released off the arrow: no month change
+    expect(await keyboardPress(page, SEL)).toBe('none');
+    page = await newScPage(field());
+    await page.setViewport({ width: 375, height: 812 });
+    await page.click('#d .sc-date-range__calendar-button');
+    await page.waitForChanges();
+    expect(await pointerPress(page, '#d .sc-date-range__close')).toBe(PRESSED);
+    page = await newScPage(field());
+    await page.click('#d .sc-date-range__calendar-button');
+    await page.waitForChanges();
+    await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+    expect(await pointerPress(page, SEL)).toBe('none');
   });
 
   it('marks applied preset chips with a check, 40px tall', async () => {

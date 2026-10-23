@@ -145,7 +145,15 @@
   background-color: transparent;
   color: var(--sc-color-on-surface);
   cursor: pointer;
-  transition: --sc-layer var(--sc-duration-fast) var(--sc-easing-hover);
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    --sc-layer var(--sc-duration-fast) var(--sc-easing-hover),
+    transform var(--sc-duration-press) var(--sc-easing-enter);
+}
+
+/* Press feedback for pointer and touch only; keyboard activation is instant (MOT-02, MOT-09). */
+.dismiss:active:not(:focus-visible) {
+  transform: scale(var(--sc-scale-press));
 }
 
 @media (forced-colors: active) {

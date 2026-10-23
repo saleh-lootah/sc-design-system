@@ -140,6 +140,16 @@
   transform: rotate(180deg);
 }
 
+/* As the channel switcher: instant from the keyboard (MOT-02), no turn under reduced motion. */
+.trigger:focus-visible .chevron {
+  transition: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .chevron {
+    transition: none;
+  }
+}
+
 /* Panel: as the channel switcher's, 320 wide. */
 .panel {
   position: absolute;

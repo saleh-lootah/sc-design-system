@@ -119,6 +119,7 @@ export class ScTable {
   @State() selected: string[] = [];
   @State() announcement = '';
   @State() selectionText = '';
+  @State() selectionInstant = false;
   /** The bar shows the count (Bold) and the total (Medium) side by side (board 09.05). */
   private selectionParts: string[] = [];
   @State() empty = false;
@@ -357,7 +358,16 @@ export class ScTable {
       mark.setAttribute('aria-hidden', 'true');
       wrap.append(input, mark);
       cell.appendChild(wrap);
-      input.addEventListener('change', () => (section === 'head' ? this.toggleAll(input.checked) : this.toggleRow(row, input.checked)));
+      input.addEventListener('change', () => {
+        // Space on a focused checkbox is a keyboard action: the selection bar comes and goes at once (MOT-02).
+        try {
+          this.selectionInstant = input.matches(':focus-visible');
+        } catch {
+          this.selectionInstant = false; // a DOM without :focus-visible (the spec tests' mock document)
+        }
+        if (section === 'head') this.toggleAll(input.checked);
+        else this.toggleRow(row, input.checked);
+      });
     }
     row.insertBefore(cell, row.firstChild);
   }
@@ -616,7 +626,7 @@ export class ScTable {
             <slot name="footer" />
           </div>
         </div>
-        <div class={{ 'selection-bar': true, 'selection-bar--open': open }}>
+        <div class={{ 'selection-bar': true, 'selection-bar--open': open, 'selection-bar--instant': this.selectionInstant }}>
           <p class="selection-text">
             {this.selectionParts.map((part, i) => (i ? [<span class="selection-sep"> · </span>, <bdi class="selection-total">{part}</bdi>] : <bdi class="selection-count">{part}</bdi>))}
           </p>
