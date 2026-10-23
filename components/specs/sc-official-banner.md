@@ -46,7 +46,7 @@ The `<section>` makes it a labelled region, so no content sits outside a landmar
 | HTTPS heading | Secure websites use HTTPS | المواقع الآمنة تستخدم HTTPS |
 | HTTPS text | A lock or https:// before the address means your connection is secure. Share personal or payment details only on official, secure websites. | يدل رمز القفل أو ‎https://‎ قبل العنوان على أن الاتصال آمن. يُرجى مشاركة البيانات الشخصية أو بيانات الدفع على المواقع الرسمية والآمنة فقط. |
 
-Wrap `.gov.ae`, `HTTPS` and `https://` in `<sc-ltr>` in Arabic. The Arabic toggle and HTTPS text avoid gendered imperatives (CNT-11). The address wording is **open (OQ-40)**: some Dubai government entities use `.ae` addresses outside `.gov.ae`.
+Wrap `.gov.ae`, `HTTPS` and `https://` in `<sc-ltr>` in Arabic. The Arabic toggle and HTTPS text avoid gendered imperatives (CNT-11). The address wording is confirmed (decision R25): only official government websites can use `.gov.ae`.
 
 ## Placement
 

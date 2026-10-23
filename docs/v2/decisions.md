@@ -185,10 +185,10 @@ Where this file disagrees with `foundations.md` or `component-language.md`, this
 | R22 | **Site showcase tooling:** on documentation-site component pages, `sc-channel-switcher` counts as showcase tooling under R17. On `/search/`, `sc-search` counts as the page's own component, with its approved 4 KiB override. Documentation site only; to be tightened once `sc-footer` and `sc-breadcrumbs` need no JavaScript. |
 | R23 | **sc.css budget 10 KiB (amends W7):** `globalCssGzip` rises from 9 KiB to 10,240 B, because `sc-footer` and `sc-breadcrumbs` become CSS-only and the pre-upgrade reservations move into `sc.css`. That adds about 0.85 KiB of cached CSS and saves about 6 KiB of JavaScript on every page that has a footer and breadcrumbs. One stylesheet stays the rule; no separate chrome stylesheet. |
 
-## Official banner and environment banner (user request, 22 October 2026; R24 approved 23 October 2026)
+## Official banner and environment banner (user request, 22 October 2026; R24 and R25 decided 23 October 2026)
 
 | # | Decision |
 | --- | --- |
 | R24 | **Approved by the user, 23 October 2026.** `sc-official-banner` (CHR-12) and `sc-environment-banner` (CHR-13) are CSS only, like `sc-footer`: the official banner is a native `<details>`, so it works with scripting off and costs no JavaScript on any page. Their rules add about 0.7 KiB to `sc.css` (10.55 KiB measured), so `globalCssGzip` would rise from 10 KiB to 11 KiB (11,264 B), amending R23. The alternative, shadow-DOM components, would cost about 2 to 3 KiB of JavaScript on every page and show nothing without it. |
-| R25 | **The address wording is open (OQ-40).** The banner's "Official websites use .gov.ae" is a placeholder until the initiative confirms which addresses it may name as official; some Dubai government entities use other `.ae` addresses. |
+| R25 | **The address wording is confirmed (user, 23 October 2026).** `.gov.ae` is reserved for official government websites, so the banner says "Official websites use .gov.ae". This closes OQ-40, which was opened the day before and is withdrawn from the open questions. |
 
