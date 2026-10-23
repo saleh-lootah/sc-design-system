@@ -434,10 +434,13 @@ describe('sc-site-header: nothing moves when it upgrades (Safari paints before m
     await fontsReady(before as unknown as E2EPage);
     const pre = await headerBoxes(before as unknown as E2EPage);
     await before.close();
-    const page = await newScPage(html, { lang });
+    // Fonts first, then the header: on Linux (no Arial) a header that upgrades while Dubai W23
+    // loads measures a wider fallback, overflows and stays compact until the window widens.
+    const page = await newScPage('<p>Aا</p>', { lang });
     await page.setViewport({ width, height: 800 });
     await loadFonts(page);
     await fontsReady(page);
+    await page.evaluate((h: string) => (document.body.innerHTML = h), html);
     await page.waitForChanges();
     await new Promise((r) => setTimeout(r, 100)); // the row's fit check runs on the next frame
     return { pre, up: await headerBoxes(page) };
