@@ -454,7 +454,7 @@ ${head}</head>
 <body${bodyAttrs}>
 <sc-skip-link href="#main-content"></sc-skip-link>
 <noscript><a class="site-skip" href="#main-content">${esc(t.skip)}</a></noscript>
-<sc-site-header search-href="${rel(from, langPath(lang, 'search/'))}">
+<sc-site-header full-from="1280" search-href="${rel(from, langPath(lang, 'search/'))}">
   <a slot="name" href="${rel(from, langPath(lang, ''))}">${esc(t.siteName)}</a>
   ${navLinks}
   <sc-language-switch slot="language" appearance="plain" href="${otherHref}"><a slot="fallback" href="${otherHref}" hreflang="${other}" lang="${other}">${esc(t.langOther)}</a></sc-language-switch>

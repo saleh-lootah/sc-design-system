@@ -58,8 +58,8 @@
     "sc-environment-banner"
   ],
   "coreGzip": 14336,
-  "globalCssGzip": 11264,
-  "$globalCssComment": "R24 (amends R23, approved 23 October 2026): 11 KiB, from 10 KiB, for the CSS-only sc-official-banner and sc-environment-banner (about 0.7 KiB together; measured 10.55 KiB). R23 (amends W7, approved 22 October 2026): sc.css 10 KiB gzip, from 9 KiB. sc-footer and sc-breadcrumbs became CSS only (their rules moved into sc.css, about 0.8 KiB), and sc-callout, sc-status-tag, sc-tile and sc-channel-network gained pre-upgrade reservations, in exchange for about 6 KiB less JavaScript on every page with a footer and breadcrumbs.",
+  "globalCssGzip": 12288,
+  "$globalCssComment": "R26 (amends R24, approved 23 October 2026): 12 KiB, from 11 KiB, so sc-site-header and sc-language-switch keep their upgraded layout before they upgrade (measured 11,969 B). R24 (amends R23, approved 23 October 2026): 11 KiB, from 10 KiB, for the CSS-only sc-official-banner and sc-environment-banner (about 0.7 KiB together; measured 10.55 KiB). R23 (amends W7, approved 22 October 2026): sc.css 10 KiB gzip, from 9 KiB. sc-footer and sc-breadcrumbs became CSS only (their rules moved into sc.css, about 0.8 KiB), and sc-callout, sc-status-tag, sc-tile and sc-channel-network gained pre-upgrade reservations, in exchange for about 6 KiB less JavaScript on every page with a footer and breadcrumbs.",
   "shadowCssGzip": 1536,
   "componentGzip": 4096,
   "$componentsComment": "Overrides of componentGzip. sc-button: 5 KiB, because its closure counts the shared locale controller (1.0 KiB) in full; its icons (the named set and the spinner, Material Symbols) are inlined into its own module. See specs/sc-button.md.",

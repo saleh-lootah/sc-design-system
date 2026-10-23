@@ -38,34 +38,68 @@ sc-page:not(:defined) {
   flex-direction: column;
   min-block-size: 100dvh;
 }
-/* sc-site-header before it upgrades, and without JavaScript (PERF-04, B1): its light-DOM
-   children as one plain row (lockup, name, navigation links with the current one underlined
-   in the channel colour, R10). With scripting on, the host holds its final 80px (64px below
-   1024px) and clips the rest, so nothing moves when it upgrades; the search field, which
-   renders nothing yet, is hidden. */
+/* sc-site-header before it upgrades: its light-DOM children laid out as the upgraded row (B2),
+   item for item, so nothing moves when it upgrades. Safari paints a new page before module
+   scripts run, so this is what every page shows first there. The full row: content centred
+   in the 1280 container, an (empty) lockup, the name 24 after it, the navigation links full
+   height and --_ng apart, then the end controls (a 44px search button when search-href is
+   set, the language switch, the channel switcher) --_eg apart. With JavaScript, the compact
+   row below 1024px (or below full-from, for a row that only fits wider): space for the menu
+   button, the name in title-small, the language switch; the links wait for the menu. Without
+   JavaScript the full row wraps and keeps every link (PERF-04, B1). */
 sc-site-header:not(:defined) {
   --_h: calc(var(--sc-space-80) + var(--sc-size-border-hairline));
+  --_bg: var(--sc-space-16);
+  --_ng: var(--sc-space-32);
+  --_eg: var(--sc-space-16);
   box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0 var(--sc-space-24);
   min-block-size: var(--_h);
-  padding-inline: var(--_cm);
+  padding-inline: max(var(--_cm), (100% - var(--sc-container-max)) / 2);
   border-block-end: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
+  background-color: var(--sc-color-surface);
+  color: var(--sc-color-on-surface);
 }
 sc-site-header:not(:defined) > :is([slot='nav'], [slot='name']) {
   display: inline-flex;
   align-items: center;
   min-block-size: var(--sc-size-target-min);
-  border-block: var(--sc-size-border-accent) solid transparent;
-  color: var(--sc-color-on-surface);
-  font: var(--sc-type-label-large);
-  letter-spacing: var(--sc-type-label-large-tracking);
+  color: inherit;
   text-decoration: none;
+  white-space: nowrap;
+}
+sc-site-header:not(:defined) > [slot='lockup'] {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--sc-size-target-min);
+  margin-inline-start: calc(var(--sc-space-8) * var(--_k, 0));
+}
+sc-site-header:not(:defined) > [slot='lockup'] ~ [slot='name'] {
+  --_k2: 2;
 }
 sc-site-header:not(:defined) > [slot='name'] {
-  font: var(--sc-type-title-medium);
+  margin-inline-start: calc(var(--sc-space-24) - var(--sc-space-8) * var(--_k, 0) * var(--_k2, 1));
+  font: var(--_cf, var(--sc-type-title-medium));
+  font-weight: var(--sc-font-weight-bold);
+  letter-spacing: var(--_ct, var(--sc-type-title-medium-tracking));
+}
+sc-site-header:not(:defined) > [slot='nav'] {
+  box-sizing: border-box;
+  display: var(--_hide, inline-flex);
+  align-self: stretch;
+  margin-inline-start: var(--_ng);
+  padding-block-start: var(--sc-size-border-accent);
+  border-block-end: var(--sc-size-border-accent) solid transparent;
+  font: var(--sc-type-label-large);
+  font-weight: var(--sc-font-weight-medium);
+  letter-spacing: var(--sc-type-label-large-tracking);
+}
+sc-site-header:not(:defined) > :not([slot='nav']) + [slot='nav'] {
+  margin-inline-start: calc(var(--sc-space-24) + var(--_bg));
+}
+sc-site-header:not(:defined) > [slot='nav']:lang(ar) {
   font-weight: var(--sc-font-weight-bold);
 }
 sc-site-header:not(:defined) > [aria-current='page'] {
@@ -73,18 +107,87 @@ sc-site-header:not(:defined) > [aria-current='page'] {
   color: var(--sc-color-channel-action);
   font-weight: var(--sc-font-weight-bold);
 }
-@media (max-width: 1023.98px) {
+sc-site-header:not(:defined) > :is([slot='language'], [slot='account'], [slot='signin'], [slot='switcher']) {
+  order: 2;
+  margin-inline-start: calc(var(--_eg) - var(--sc-space-8) * var(--_k, 0));
+}
+sc-site-header:not(:defined) > :is([slot='account'], [slot='signin']) {
+  display: var(--_hide, inline-block);
+}
+/* The compact row's menu button (44px, its icon on the 8px inset of the edge). */
+sc-site-header:not(:defined)::before {
+  content: '';
+  flex: none;
+  order: -1;
+  inline-size: calc(var(--sc-size-target-min) * var(--_k, 0));
+  margin-inline-start: calc(var(--sc-space-8) * var(--_k, 0) * -1);
+}
+sc-site-header:not(:defined) > [slot='switcher'] {
+  order: 3;
+}
+sc-site-header:not(:defined)[search-href]::after {
+  content: '';
+  display: var(--_hide, block);
+  order: 1;
+  inline-size: var(--sc-size-target-min);
+  block-size: var(--sc-size-target-min);
+  margin-inline-start: auto;
+}
+sc-site-header:not(:defined) > [slot='language'] {
+  margin-inline-start: var(--_lm, calc(var(--_eg) - var(--sc-space-8) * var(--_k, 0)));
+}
+sc-site-header:not(:defined):not([search-href]) > [slot='language'] {
+  --_lm: auto;
+}
+/* The upgraded row keeps an (empty) channel-switcher box at the end, one end gap on. */
+sc-site-header:not(:defined) > :is([slot='language'], [slot='account'], [slot='signin']):last-child {
+  margin-inline-end: calc(var(--_eg) - var(--sc-space-8) * var(--_k, 0));
+}
+@media (min-width: 1440px) {
   sc-site-header:not(:defined) {
-    --_h: calc(var(--sc-space-64) + var(--sc-size-border-hairline));
+    --_bg: var(--sc-space-32);
+    --_ng: calc(var(--sc-space-32) + var(--sc-space-4));
+    --_eg: var(--sc-space-24);
   }
 }
 @media (scripting: enabled) {
   sc-site-header:not(:defined) {
+    flex-wrap: nowrap;
     max-block-size: var(--_h);
     overflow: hidden;
   }
   sc-site-header:not(:defined) > [slot='search'] {
     display: none;
+  }
+}
+@media (scripting: enabled) and (max-width: 1023.98px) {
+  sc-site-header:not(:defined) {
+    --_h: calc(var(--sc-space-64) + var(--sc-size-border-hairline));
+    --_k: 1;
+    --_hide: none;
+    --_lm: auto;
+    --_cf: var(--sc-type-title-small);
+    --_ct: var(--sc-type-title-small-tracking);
+  }
+}
+@media (scripting: enabled) and (max-width: 1279.98px) {
+  sc-site-header[full-from='1280']:not(:defined) {
+    --_h: calc(var(--sc-space-64) + var(--sc-size-border-hairline));
+    --_k: 1;
+    --_hide: none;
+    --_lm: auto;
+    --_cf: var(--sc-type-title-small);
+    --_ct: var(--sc-type-title-small-tracking);
+  }
+}
+@media (scripting: enabled) and (max-width: 1439.98px) {
+  sc-site-header[full-from='1440']:not(:defined) {
+    --_h: calc(var(--sc-space-64) + var(--sc-size-border-hairline));
+    --_k: 1;
+    --_hide: none;
+    --_lm: auto;
+    --_cf: var(--sc-type-title-small);
+    --_ct: var(--sc-type-title-small-tracking);
   }
 }
 sc-app-bar:not(:defined) {
@@ -546,9 +649,27 @@ sc-language-switch:not(:defined) > a[slot='fallback'] {
 sc-language-switch:not(:defined) > a[slot='fallback'] {
   --sc-font-family: "Dubai W23 Name", "Dubai W23 Fallback", system-ui, sans-serif;
   justify-content: center;
+  gap: var(--sc-space-6);
   min-inline-size: var(--sc-size-target-min);
   padding-inline: var(--sc-space-4);
   color: var(--sc-color-channel-action);
+}
+/* In the header (appearance header or plain): the globe, label-large and on-surface, not
+   underlined, as upgraded, so the switch keeps its size and place. */
+sc-language-switch:not(:defined):is([appearance='header'], [appearance='plain']) > a[slot='fallback'] {
+  color: var(--sc-color-on-surface);
+  font: var(--sc-type-label-large);
+  font-weight: var(--sc-type-label-medium-weight);
+  letter-spacing: var(--sc-type-label-large-tracking);
+  text-decoration: none;
+}
+sc-language-switch:not(:defined):is([appearance='header'], [appearance='plain']) > a[slot='fallback']::before {
+  content: '';
+  flex: none;
+  inline-size: var(--sc-size-icon-m);
+  block-size: var(--sc-size-icon-m);
+  background-color: currentColor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -960 960 960'%3E%3Cpath d='M480-80q-82 0-155-31.5t-127.5-86Q143-252 111.5-325T80-480q0-83 31.5-155.5t86-127Q252-817 325-848.5T480-880q83 0 155.5 31.5t127 86q54.5 54.5 86 127T880-480q0 82-31.5 155t-86 127.5q-54.5 54.5-127 86T480-80Zm0-82q26-36 45-75t31-83H404q12 44 31 83t45 75Zm-104-16q-18-33-31.5-68.5T322-320H204q29 50 72.5 87t99.5 55Zm208 0q56-18 99.5-55t72.5-87H638q-9 38-22.5 73.5T584-178ZM170-400h136q-3-20-4.5-39.5T300-480q0-21 1.5-40.5T306-560H170q-5 20-7.5 39.5T160-480q0 21 2.5 40.5T170-400Zm216 0h188q3-20 4.5-39.5T580-480q0-21-1.5-40.5T574-560H386q-3 20-4.5 39.5T380-480q0 21 1.5 40.5T386-400Zm268 0h136q5-20 7.5-39.5T800-480q0-21-2.5-40.5T790-560H654q3 20 4.5 39.5T660-480q0 21-1.5 40.5T654-400Zm-16-240h118q-29-50-72.5-87T584-782q18 33 31.5 68.5T638-640Zm-234 0h152q-12-44-31-83t-45-75q-26 36-45 75t-31 83Zm-200 0h118q9-38 22.5-73.5T376-782q-56 18-99.5 55T204-640Z'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 :is(sc-utility-bar, sc-language-switch):not(:defined) a:lang(ar) {
   text-underline-offset: 5px;

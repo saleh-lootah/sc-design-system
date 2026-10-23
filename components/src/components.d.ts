@@ -1491,6 +1491,10 @@ export namespace Components {
          */
         "closeMenu": (pointer?: boolean) => Promise<void>;
         /**
+          * For a row that only fits wider than 1024px (five long items, as on the documentation site): the width from which the full row is used, `1280` or `1440`. Below it the header is compact from the first paint, before and after it upgrades, instead of measuring the row and switching (sc.css lays out the light-DOM children the same way).
+         */
+        "fullFrom"?: 1280 | 1440;
+        /**
           * Opens the mobile menu (compact layout only).
          */
         "openMenu": () => Promise<void>;
@@ -4737,6 +4741,10 @@ declare namespace LocalJSX {
      */
     interface ScSiteHeader {
         /**
+          * For a row that only fits wider than 1024px (five long items, as on the documentation site): the width from which the full row is used, `1280` or `1440`. Below it the header is compact from the first paint, before and after it upgrades, instead of measuring the row and switching (sc.css lays out the light-DOM children the same way).
+         */
+        "fullFrom"?: 1280 | 1440;
+        /**
           * The search page. Adds a search button (an icon link named "Search") when there is no `slot="search"` child.
          */
         "searchHref"?: string;
@@ -5573,6 +5581,7 @@ declare namespace LocalJSX {
         "signInHref": string;
         "signInText": string;
         "searchHref": string;
+        "fullFrom": 1280 | 1440;
         "sticky": boolean;
     }
     interface ScSkipLinkAttributes {

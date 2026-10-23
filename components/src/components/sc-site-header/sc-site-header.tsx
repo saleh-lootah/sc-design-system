@@ -79,6 +79,14 @@ export class ScSiteHeader {
    */
   @Prop() searchHref?: string;
 
+  /**
+   * For a row that only fits wider than 1024px (five long items, as on the documentation
+   * site): the width from which the full row is used, `1280` or `1440`. Below it the header is
+   * compact from the first paint, before and after it upgrades, instead of measuring the row
+   * and switching (sc.css lays out the light-DOM children the same way).
+   */
+  @Prop({ reflect: true }) fullFrom?: 1280 | 1440;
+
   /** Keeps the header at the top while the page scrolls. `sc-page` then sets `scroll-padding-top`. */
   @Prop({ reflect: true }) sticky = false;
 
@@ -110,7 +118,7 @@ export class ScSiteHeader {
     }
     if (typeof matchMedia === 'function') {
       this.media = matchMedia(COMPACT);
-      this.compact = this.media.matches;
+      this.compact = this.media.matches || this.el.clientWidth < Number(this.fullFrom || 0);
       this.media.addEventListener('change', this.fit);
     }
     if (typeof ResizeObserver !== 'undefined') {
@@ -148,7 +156,7 @@ export class ScSiteHeader {
    */
   private fit = () => {
     const width = this.el.clientWidth;
-    if (this.media?.matches) {
+    if (this.media?.matches || width < Number(this.fullFrom || 0)) {
       this.compact = true;
       return;
     }
