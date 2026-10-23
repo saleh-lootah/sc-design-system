@@ -131,7 +131,9 @@ Values in `tokens/motion.json`, rules MOT-01 to MOT-15 (Standard 2.0 §8.7; sour
 
   The `focus-ring` helper sets `transition: none` while focused, so keyboard activation is instant (MOT-02).
 - Entrances `--sc-duration-base` with `--sc-easing-enter`, from `scale(var(--sc-scale-enter))` and `opacity: 0`, never `scale(0)`; exits about 20% faster. Modals and sheets `--sc-duration-slow`. Name exact properties, never `transition: all`; only `transform` and `opacity` animate movement.
-- Reduced motion: movement stops (`--sc-scale-press`, `--sc-scale-enter` become 1, `--sc-duration-spin` 0ms, `.spin` stops); opacity and colour keep their timing. Any other transform needs its own guard.
+- Reduced motion: movement stops (`--sc-scale-press`, `--sc-scale-enter` become 1, `--sc-duration-spin` and `--sc-duration-pulse` 0ms, `.spin` stops); opacity and colour keep their timing. Any other transform needs its own guard, and the guard leaves the transform out of the transition list: setting only the end value still lets an `@starting-style` move it.
+- `@starting-style` in a **scoped** component: Stencil adds the scope class to every selector except those inside `@starting-style`, so a starting rule weighs one class less than the rule it starts from and silently loses. Repeat a class (`.sc-x__panel.sc-x__panel--open`) so it matches the open rule's weight, and put the block after it. Shadow components are not affected.
+- Test entrances by listening for `transitionrun` before the action, not by reading computed styles afterwards: a 200ms transition can end before the read, and an entrance that never starts looks the same as one that finished.
 
 ## Forms and accessibility
 

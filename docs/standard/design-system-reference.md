@@ -308,24 +308,33 @@ Three motion rules are outcomes that services are assessed on, and they are in t
 - **MOT-12.** Anything that can be interrupted (a popover opened and closed quickly, a selection bar, a toggle) uses CSS transitions, which retarget from the current state, not keyframe animations, which restart. Keyframes are for constant motion only (the spinner, the skeleton pulse).
 - **MOT-13.** Hover motion is gated behind `@media (hover: hover) and (pointer: fine)`, so it does not stick after a tap on touch screens.
 
-**Reduced motion.** Under `prefers-reduced-motion: reduce` the tokens set `--sc-duration-spin` to 0ms and `--sc-scale-press` and `--sc-scale-enter` to 1, while the other durations keep their values, so short opacity fades stay ([MOT-15](service-standard.md#cmp-motion)).
+**Reduced motion.** Under `prefers-reduced-motion: reduce` the tokens set `--sc-duration-spin` and `--sc-duration-pulse` to 0ms and `--sc-scale-press` and `--sc-scale-enter` to 1, while the other durations keep their values, so short opacity fades stay ([MOT-15](service-standard.md#cmp-motion)). A component that moves anything else (a rotation, a rise) drops that movement itself: it leaves the transform out of its transition list, rather than only setting the end value, because a starting style would still move.
 
 **Spinner.** The spinner turns at constant (linear) speed, one rotation per `--sc-duration-spin` (600ms). A faster rotation reads as faster loading.
+
+**Skeleton.** Loading skeletons pulse their opacity between 55% and 100% at constant (linear) speed, one way per `--sc-duration-pulse` (1200ms). Under reduced motion they hold still at 75%.
 
 **How the rules apply to current components**
 
 | Component and moment | Motion |
 | --- | --- |
+| Press feedback: `sc-button`, filter chips, `sc-tile`, `sc-pagination` number cells, `sc-channel-hero` links, `sc-date-range` days and presets | `scale(--sc-scale-press)` on `:active` over `--sc-duration-press` with `--sc-easing-enter`, pointer and touch only; none from the keyboard or under reduced motion. Cards and list rows do not scale |
+| `sc-checkbox` and `sc-radio` | Pointer: the check draws (`stroke-dashoffset`) and the dot grows from `scale(0.5)` with opacity, over `--sc-duration-fast` with `--sc-easing-enter`; the fill, edge and halo change colour on `--sc-easing-hover`. Keyboard: instant. Reduced motion: the dot only fades |
+| `sc-accordion` and `sc-official-banner` | Pointer: the chevron turns 180° over `--sc-duration-fast` with `--sc-easing-standard`, and the content fades in over `--sc-duration-fast` with `--sc-easing-enter` (opacity only; height never animates). Closing is instant. Keyboard: instant. Reduced motion: no turn; the fade stays. The turn is vertical, so it does not mirror in Arabic |
 | `sc-table` sort | None; rows reorder instantly |
 | `sc-table` row hover | Background colour over `--sc-duration-fast`, `ease`, fine pointers only |
-| `sc-table` selection bar | Enters with opacity and an 8px rise over `--sc-duration-base`; leaves with opacity over `--sc-duration-exit` |
+| `sc-table` selection bar | Pointer: enters with opacity and an 8px rise over `--sc-duration-base`; leaves with opacity over `--sc-duration-exit`. Selected or cleared from the keyboard: instant. Reduced motion: opacity only |
+| `sc-table` loading skeleton | Opacity pulse, linear, over `--sc-duration-pulse`; still under reduced motion |
 | `sc-date-range` popover | Enters with opacity and `scale(0.96)` to 1 from the field's top inline-start corner over `--sc-duration-base`; leaves with opacity over `--sc-duration-exit` |
 | `sc-date-range` bottom sheet | Slides up over `--sc-duration-slow` with `--sc-easing-drawer`; the scrim fades with it over `--sc-duration-slow`, and out over `calc(var(--sc-duration-slow) * 0.8)` |
 | `sc-date-range` month change | Pointer: crossfade with a 12px shift in the direction of travel (mirrored in Arabic) over `--sc-duration-base`. Keyboard: instant |
-| Channel switcher and account menu ([11](#chrome)) | Pointer: opacity and `scale(--sc-scale-enter)` from the trigger's corner over `--sc-duration-base`; leaves with opacity over `--sc-duration-exit`. Keyboard: instant |
+| Channel switcher and account menu ([11](#chrome)) | Pointer: opacity and `scale(--sc-scale-enter)` from the trigger's corner over `--sc-duration-base`; leaves with opacity over `--sc-duration-exit`; the trigger's chevron turns over `--sc-duration-fast` with `--sc-easing-standard`. Keyboard: panel and chevron instant. Reduced motion: opacity only, no turn |
+| `sc-site-header` mobile menu | Pointer: opacity and an 8px rise over `--sc-duration-base`; leaves with opacity over `--sc-duration-exit`. Keyboard: instant. Reduced motion: opacity only |
+| `sc-announcement-bar` dismiss | Pointer: fades out over `--sc-duration-exit`, then is removed without animating its height. Keyboard: instant |
 | `sc-modal` centred dialog | Enters with opacity and `scale(--sc-scale-enter)` from its own centre over `--sc-duration-base` (200ms); leaves over `--sc-duration-exit` (160ms); the scrim fades with it. Opened from the keyboard: instant |
 | `sc-modal` bottom sheet (below 600px) | Slides up over `--sc-duration-slow` (280ms) with `--sc-easing-drawer`; leaves over 224ms, from wherever a drag left it |
 | `sc-notification-list` "mark all as read" | The unread fill fades over `--sc-duration-base` when a pointer started it; instant from the keyboard |
+| `sc-spinner` | One linear rotation per `--sc-duration-spin`; static with its label under reduced motion |
 
 The source of these motion rules is credited in the [bibliography](#bibliography).
 

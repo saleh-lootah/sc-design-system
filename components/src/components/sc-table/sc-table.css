@@ -482,17 +482,26 @@
     transform var(--sc-duration-base) var(--sc-easing-enter);
 }
 
+/* Stencil's scoped styles add a class to every selector except those inside @starting-style:
+   the repeated class matches the open rule's weight, so the starting style wins by order. */
 @starting-style {
-  .selection-bar--open {
+  .selection-bar.selection-bar--open {
     opacity: 0;
     transform: translateY(var(--sc-space-8));
   }
 }
 
+/* Reduced motion: the fade stays, the rise goes. The starting style still names the 8px, so the
+   transform is left out of the transition rather than set to its end value (MOT-15). */
 @media (prefers-reduced-motion: reduce) {
   .selection-bar--open {
-    transform: none;
+    transition: opacity var(--sc-duration-base) var(--sc-easing-enter);
   }
+}
+
+/* Selected or cleared from the keyboard (Space on a checkbox): the bar comes and goes at once (MOT-02). */
+.selection-bar.selection-bar--instant {
+  transition: none;
 }
 
 .selection-text {
@@ -540,7 +549,8 @@
   block-size: var(--sc-space-12);
   border-radius: var(--sc-radius-control);
   background: var(--sc-color-surface-container-high);
-  animation: sc-table-pulse 1.2s ease-in-out infinite alternate;
+  /* Constant motion is linear (MOT-04); the pulse stops under reduced motion (below). */
+  animation: sc-table-pulse var(--sc-duration-pulse) linear infinite alternate;
 }
 
 ::slotted(table) .sc-table__bar--amount,

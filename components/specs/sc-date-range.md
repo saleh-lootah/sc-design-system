@@ -222,6 +222,8 @@ Applies the emil-design-eng and mobile-native rules.
 | Range band | Not animated; it follows the pointer instantly |
 | Reduced motion | No scale or translate; opacity fades only |
 
+The popover, sheet and scrim entrances are `@starting-style` transitions. In this scoped component each starting selector repeats a class (`.sc-date-range__picker.sc-date-range__picker--popover:popover-open`), because Stencil does not add the scope class inside `@starting-style`; without it the open rule wins and nothing transitions (until 23 October 2026 the entrances did not play). The e2e tests listen for `transitionrun`.
+
 ## Budget (v2)
 
 `perf-budgets.json` gives `sc-date-range` **21 KiB gzip** instead of 16 KiB: the custom-elements closure counts in full `sc-button` (3.2 KiB with its strings), the icon set (0.8) and the locale controller (0.9), which a page with any button pays once. Measured: closure 20.2 KiB (after the review fixes B2, B4, B5 and B10); the component's own cost (module with its CSS, field helpers, strings, digits) 15.6 KiB, inside the original 16 KiB. v1 was 22.2 KiB. Needs the coordinator's sign-off.

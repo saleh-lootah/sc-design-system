@@ -54,7 +54,13 @@ After `sc-skip-link` and `sc-environment-banner` (when present), before `sc-anno
 
 ## Motion
 
-None. The panel appears at once (its height is never animated, MOT-11); the chevron turns without a transition.
+As `sc-accordion` (the two disclosures behave alike):
+
+- From a pointer: the chevron turns 180° over `duration-fast` (120ms) with `easing-standard`, and the explanation fades in over `duration-fast` with `easing-enter` (opacity only). Its height is never animated (MOT-11), and closing is instant.
+- From the keyboard (`summary:focus-visible`): both are instant (MOT-02).
+- Reduced motion: the turn is dropped; the fade stays (MOT-15).
+- Arabic: the turn is vertical, so it does not mirror.
+- Purpose (MOT-03): the chevron shows the state; the fade keeps the explanation from appearing with a jump. Opening it is rare, so standard motion is allowed (MOT-01). It costs under 0.1 KiB gzip on `sc.css`.
 
 ## Forced colours
 

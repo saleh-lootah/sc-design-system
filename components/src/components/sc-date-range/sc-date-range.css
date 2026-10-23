@@ -487,8 +487,11 @@
     transition-duration: var(--sc-duration-instant);
   }
 
+  /* Stencil's scoped styles add a class to every selector except those inside @starting-style,
+     so each starting selector repeats a class to match the rule it starts from; otherwise the
+     open rule wins the cascade and nothing transitions. */
   @starting-style {
-    .sc-date-range__picker--popover:popover-open {
+    .sc-date-range__picker.sc-date-range__picker--popover:popover-open {
       opacity: 0;
       transform: scale(var(--sc-scale-enter));
     }
@@ -548,7 +551,7 @@
   }
 
   @starting-style {
-    .sc-date-range__picker--sheet[open] {
+    .sc-date-range__picker.sc-date-range__picker--sheet[open] {
       transform: translateY(100%);
     }
   }
@@ -585,7 +588,7 @@
   }
 
   @starting-style {
-    .sc-date-range__picker--sheet[open]::backdrop {
+    .sc-date-range__picker.sc-date-range__picker--sheet[open]::backdrop {
       opacity: 0;
     }
   }

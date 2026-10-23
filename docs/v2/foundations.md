@@ -615,6 +615,7 @@ Carried over unchanged from v1 (`tokens/motion.json`), which is already distille
 | `--sc-duration-exit` | 160ms | Exits of base-duration elements (about 20% faster) |
 | `--sc-duration-slow` | 280ms | Bottom sheets and drawers only; they exit at `calc(var(--sc-duration-slow) * 0.8)`. Centred dialogs use `duration-base` (W21) |
 | `--sc-duration-spin` | 600ms | One spinner rotation, linear; 0 under reduced motion |
+| `--sc-duration-pulse` | 1200ms | One way of the skeleton's opacity pulse (alternate), linear; 0 under reduced motion |
 | `--sc-easing-enter`, `--sc-easing-exit` | `cubic-bezier(0.23, 1, 0.32, 1)` | Strong ease-out for anything entering or leaving |
 | `--sc-easing-standard` | `cubic-bezier(0.77, 0, 0.175, 1)` | Strong ease-in-out for things already on screen that move or morph |
 | `--sc-easing-hover` | `cubic-bezier(0.25, 0.1, 0.25, 1)` | Hover and colour changes |

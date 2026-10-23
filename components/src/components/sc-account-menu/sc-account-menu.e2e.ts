@@ -1,6 +1,6 @@
 import { E2EPage } from '@stencil/core/testing';
 import { describeAxe, expectNoAxeViolations } from '../../test/axe';
-import { contexts, newScPage, setPageContext } from '../../test/page';
+import { contexts, newScPage, setPageContext, settleTransitions } from '../../test/page';
 
 const MENU = `<div style="display:flex;justify-content:flex-end;padding:16px">
   <sc-account-menu name="Sara Al Mansoori" acting-for="Al Mansoori Trading LLC" profile-href="#profile" settings-href="#settings"
@@ -35,6 +35,38 @@ describe('sc-account-menu (e2e)', () => {
     await page.waitForChanges();
     expect(await inRoot(page, 'root.querySelector(".panel").hidden')).toBe(true);
     expect(await focused(page)).toMatch(/^trigger:/);
+  });
+
+  it('turns the chevron over 120ms on the in-out curve from a pointer; at once from the keyboard and under reduced motion (MOT-02, MOT-15)', async () => {
+    const chevron = (page: E2EPage) =>
+      inRoot<{ transition: string; running: number; transform: string }>(
+        page,
+        '(el => (s => ({ transition: s.transitionProperty + " " + s.transitionDuration + " " + s.transitionTimingFunction, running: el.getAnimations().length, transform: s.transform }))(getComputedStyle(el)))(root.querySelector(".chevron"))',
+      );
+    const open = { transition: 'none 0s ease', running: 0, transform: 'matrix(-1, 0, 0, -1, 0, 0)' };
+    let page = await newScPage(MENU);
+    await page.setViewport({ width: 1280, height: 800 });
+    expect((await chevron(page)).transition).toBe('transform 0.12s cubic-bezier(0.77, 0, 0.175, 1)');
+    await page.click('sc-account-menu >>> .trigger');
+    await page.waitForChanges();
+    expect((await chevron(page)).running).toBe(1);
+    await settleTransitions(page);
+    expect((await chevron(page)).transform).toBe(open.transform);
+
+    page = await newScPage(MENU);
+    await page.setViewport({ width: 1280, height: 800 });
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Enter');
+    await page.waitForChanges();
+    expect(await chevron(page)).toEqual(open);
+
+    page = await newScPage(MENU);
+    await page.setViewport({ width: 1280, height: 800 });
+    await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+    await page.click('sc-account-menu >>> .trigger');
+    await page.waitForChanges();
+    expect(await chevron(page)).toEqual(open);
   });
 
   it('closes when focus leaves, and on a press outside', async () => {

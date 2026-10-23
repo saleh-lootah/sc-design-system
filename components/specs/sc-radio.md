@@ -51,7 +51,7 @@ The radio sits on the right of its label; the bar is on the right; arrow keys be
 
 ## Motion
 
-The dot scales from 0.5 to 1 with opacity over 120ms with `easing-hover`, pointer only; from the keyboard it appears at once (MOT-02). Never from 0 (MOT-08). Under reduced motion it only fades.
+The dot scales from 0.5 to 1 with opacity over 120ms with `easing-enter`, because it is entering (MOT-04); pointer only; from the keyboard it appears at once (MOT-02). Never from 0 (MOT-08). Under reduced motion it only fades.
 
 ## Code
 

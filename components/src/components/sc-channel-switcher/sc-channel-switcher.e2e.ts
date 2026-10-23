@@ -1,7 +1,7 @@
 import { E2EPage } from '@stencil/core/testing';
 import { describeAxe, expectNoAxeViolations } from '../../test/axe';
 import { CHANNEL_LINKS } from '../../test/chrome';
-import { contexts, newScPage, setPageContext } from '../../test/page';
+import { contexts, newScPage, setPageContext, settleTransitions } from '../../test/page';
 
 const SWITCHER = `<div style="display:flex;justify-content:flex-end;padding:16px"><sc-channel-switcher links='${CHANNEL_LINKS}'></sc-channel-switcher></div><p><a id="after" href="#after">After</a></p>`;
 
@@ -50,6 +50,37 @@ describe('sc-channel-switcher (e2e)', () => {
     await page.waitForChanges();
     expect(await expanded(page)).toBe('false');
     await page.waitForFunction(() => document.querySelector('.sc-channel-switcher__panel')!.hasAttribute('hidden'));
+  });
+
+  it('turns the chevron over 120ms on the in-out curve from a pointer; at once from the keyboard and under reduced motion (MOT-02, MOT-15)', async () => {
+    const chevron = () =>
+      page.evaluate(() => {
+        const el = document.querySelector('.sc-channel-switcher__chevron')!;
+        const s = getComputedStyle(el);
+        return { transition: `${s.transitionProperty} ${s.transitionDuration} ${s.transitionTimingFunction}`, running: el.getAnimations().length, transform: s.transform };
+      });
+    let page = await newScPage(SWITCHER);
+    await page.setViewport({ width: 1280, height: 800 });
+    expect((await chevron()).transition).toBe('transform 0.12s cubic-bezier(0.77, 0, 0.175, 1)');
+    await page.click('.sc-channel-switcher__trigger');
+    await page.waitForChanges();
+    expect((await chevron()).running).toBe(1);
+    await settleTransitions(page);
+    expect((await chevron()).transform).toBe('matrix(-1, 0, 0, -1, 0, 0)');
+
+    page = await newScPage(SWITCHER);
+    await page.setViewport({ width: 1280, height: 800 });
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Enter');
+    await page.waitForChanges();
+    expect(await chevron()).toEqual({ transition: 'none 0s ease', running: 0, transform: 'matrix(-1, 0, 0, -1, 0, 0)' });
+
+    page = await newScPage(SWITCHER);
+    await page.setViewport({ width: 1280, height: 800 });
+    await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+    await page.click('.sc-channel-switcher__trigger');
+    await page.waitForChanges();
+    expect(await chevron()).toEqual({ transition: 'none 0s ease', running: 0, transform: 'matrix(-1, 0, 0, -1, 0, 0)' });
   });
 
   it("paints each swatch in its own channel's action colour (FND-26)", async () => {

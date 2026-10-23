@@ -1,7 +1,7 @@
 /*
  * Documentation site shell (scripts/build-site.mjs). Tokens and type roles from sc.css only:
  * no colour or size literals beyond hairlines, logical properties throughout, hover gated
- * behind (hover: hover) and (pointer: fine) (MOT-13), and only colour transitions (MOT-11).
+ * behind (hover: hover) and (pointer: fine) (MOT-13), and colour transitions plus press scale (MOT-09, MOT-11).
  * Rules are scoped to the site's own classes so the component examples keep the library's look.
  */
 @layer site {
@@ -871,7 +871,10 @@
     color: var(--sc-color-on-primary);
     font: var(--sc-type-label-large);
     cursor: pointer;
-    transition: background-color var(--sc-duration-fast) var(--sc-easing-hover);
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      background-color var(--sc-duration-fast) var(--sc-easing-hover),
+      transform var(--sc-duration-press) var(--sc-easing-enter);
   }
   @media (hover: hover) and (pointer: fine) {
     .lookup__button:hover {
@@ -880,6 +883,13 @@
   }
   .lookup__button:active {
     background: var(--sc-color-primary-pressed);
+  }
+  /* Press feedback as sc-button: pointer and touch only, instant from the keyboard (MOT-02, MOT-09). */
+  .lookup__button:active:not(:focus-visible) {
+    transform: scale(var(--sc-scale-press));
+  }
+  .lookup__button:focus-visible {
+    transition: none;
   }
   @media (forced-colors: active) {
     .lookup__button {

@@ -1,7 +1,7 @@
 import { E2EPage } from '@stencil/core/testing';
 import { describeAxe } from '../../test/axe';
 import { officialBanner } from '../../test/chrome';
-import { newScPage, noScriptPage } from '../../test/page';
+import { newScPage, noScriptPage, settleTransitions } from '../../test/page';
 
 const resolve = (page: E2EPage, role: string) =>
   page.evaluate((r: string) => {
@@ -50,7 +50,43 @@ describe('sc-official-banner (e2e, CSS only)', () => {
     expect(closed.slice(0, 4)).toEqual(['none', 'underline', 'none', '16px']);
     expect(closed[4]).toBe('none');
     await page.click('sc-official-banner summary');
-    expect((await read())[4]).not.toBe('none');
+    await settleTransitions(page);
+    expect((await read())[4]).toBe('matrix(-1, 0, 0, -1, 0, 0)');
+  });
+
+  it('from a pointer the chevron turns over 120ms and the explanation fades in; from the keyboard both are instant; reduced motion keeps only the fade (MOT-02, MOT-15)', async () => {
+    const motion = (page: E2EPage) =>
+      page.evaluate(() => {
+        const after = getComputedStyle(document.querySelectorAll('sc-official-banner summary > span')[1], '::after');
+        const panel = getComputedStyle(document.querySelector('sc-official-banner details > div')!);
+        return {
+          turn: `${after.transitionProperty} ${after.transitionDuration} ${after.transitionTimingFunction}`,
+          fade: `${panel.animationName} ${panel.animationDuration} ${panel.animationTimingFunction}`,
+          running: document
+            .getAnimations()
+            .map((a) => (a as CSSAnimation).animationName || (a as CSSTransition).transitionProperty)
+            .sort(),
+        };
+      });
+    const turn = 'transform 0.12s cubic-bezier(0.77, 0, 0.175, 1)';
+    const fade = 'sc-official-banner-fade 0.12s cubic-bezier(0.23, 1, 0.32, 1)';
+    let page = await newScPage(officialBanner());
+    expect((await motion(page)).turn).toBe(turn);
+    await page.click('sc-official-banner summary');
+    expect(await motion(page)).toEqual({ turn, fade, running: ['sc-official-banner-fade', 'transform'] });
+
+    page = await newScPage(officialBanner());
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Enter');
+    expect(await isOpen(page)).toBe(true);
+    expect(await motion(page)).toEqual({ turn: 'none 0s ease', fade: 'none 0s ease', running: [] });
+
+    page = await newScPage(officialBanner('ar'), { lang: 'ar' });
+    await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+    await page.click('sc-official-banner summary');
+    expect(await motion(page)).toEqual({ turn: 'none 0s ease', fade, running: ['sc-official-banner-fade'] });
+    // The turn is vertical, so Arabic does not mirror it.
+    expect(await page.evaluate(() => getComputedStyle(document.querySelectorAll('sc-official-banner summary > span')[1], '::after').transform)).toBe('matrix(-1, 0, 0, -1, 0, 0)');
   });
 
   it('Enter and Space on the summary open and close it (native details)', async () => {

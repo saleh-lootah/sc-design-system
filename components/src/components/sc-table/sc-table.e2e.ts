@@ -1,6 +1,6 @@
 import { E2EPage } from '@stencil/core/testing';
 import { describeAxe, expectNoAxeViolations } from '../../test/axe';
-import { contexts, newScPage, setPageContext } from '../../test/page';
+import { contexts, newScPage, setPageContext, settleTransitions } from '../../test/page';
 
 const STRINGS = `strings='{"en": {"tableSelectAll": "Select all fines on this page", "tableSelectRow": "Select fine {row}"}, "ar": {"tableSelectAll": "تحديد كل المخالفات في هذه الصفحة", "tableSelectRow": "تحديد المخالفة {row}"}}'`;
 
@@ -159,6 +159,63 @@ describe('sc-table (e2e)', () => {
     await page.waitForChanges();
     expect(change).toHaveReceivedEventDetail({ ids: [] });
     expect(await fill()).toBe('rgba(0, 0, 0, 0)');
+  });
+
+  it('brings the selection bar in with opacity and an 8px rise from a pointer, at once from the keyboard, and without the rise under reduced motion (MOT-02, MOT-15)', async () => {
+    const box = '#t tr[data-id="F-2026-118204"] .sc-table__select input';
+    const enter = 'cubic-bezier(0.23, 1, 0.32, 1)';
+    // Records the transitions the bar starts (200ms ones can finish before a read).
+    const watch = (page: E2EPage) =>
+      page.evaluate(() => {
+        const w = window as unknown as { runs: string[] };
+        w.runs = [];
+        document.querySelector('#t .selection-bar')!.addEventListener('transitionrun', (e) => w.runs.push((e as TransitionEvent).propertyName));
+      });
+    const bar = (page: E2EPage) =>
+      page.evaluate(() => {
+        const s = getComputedStyle(document.querySelector('#t .selection-bar')!);
+        const w = window as unknown as { runs: string[] };
+        const runs = [...new Set(w.runs)].sort().join();
+        w.runs = [];
+        return { transition: `${s.transitionProperty} ${s.transitionDuration} ${s.transitionTimingFunction}`, runs, display: s.display };
+      });
+    let page = await newScPage(fines('en'));
+    await watch(page);
+    expect((await bar(page)).transition).toBe(`opacity, display 0.16s, 0.16s ${enter}, ease`);
+    await page.click(box);
+    await page.waitForChanges();
+    expect(await bar(page)).toEqual({ transition: `opacity, transform 0.2s, 0.2s ${enter}, ${enter}`, runs: 'opacity,transform', display: 'flex' });
+    await settleTransitions(page);
+    expect(await page.$eval('#t .selection-bar', (el) => [getComputedStyle(el).opacity, getComputedStyle(el).transform])).toEqual(['1', 'none']);
+    await page.click(box);
+    await page.waitForChanges();
+    expect((await bar(page)).runs).toContain('opacity');
+
+    page = await newScPage(fines('en'));
+    await watch(page);
+    await page.focus(box);
+    await page.keyboard.press('Space');
+    await page.waitForChanges();
+    expect(await bar(page)).toEqual({ transition: 'none 0s ease', runs: '', display: 'flex' });
+    await page.keyboard.press('Space');
+    await page.waitForChanges();
+    expect(await bar(page)).toEqual({ transition: 'none 0s ease', runs: '', display: 'none' });
+
+    page = await newScPage(fines('en'));
+    await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+    await watch(page);
+    await page.click(box);
+    await page.waitForChanges();
+    expect(await bar(page)).toEqual({ transition: `opacity 0.2s ${enter}`, runs: 'opacity', display: 'flex' });
+  });
+
+  it('pulses the loading skeleton linearly on the pulse token, and holds it still under reduced motion (MOT-04, MOT-15)', async () => {
+    const page = await newScPage(STATES);
+    const pulse = () => page.$eval('.sc-table__bar', (el) => (s => [s.animationName, s.animationDuration, s.animationTimingFunction, s.animationIterationCount, s.animationDirection])(getComputedStyle(el)));
+    expect(await pulse()).toEqual([expect.stringContaining('sc-table-pulse'), '1.2s', 'linear', 'infinite', 'alternate']);
+    await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
+    expect((await pulse())[0]).toBe('none');
+    expect(await page.$eval('.sc-table__bar', (el) => getComputedStyle(el).opacity)).toBe('0.75');
   });
 
   it('mirrors in Arabic: first column and checkboxes on the right, amounts on the left, glyph after the label', async () => {

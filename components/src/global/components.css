@@ -872,9 +872,31 @@ sc-official-banner summary > span:last-child::after {
   block-size: var(--sc-size-icon-s);
   background-color: currentColor;
   mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -960 960 960'%3E%3Cpath d='M480-345 240-585l56-56 184 184 184-184 56 56-240 240Z'/%3E%3C/svg%3E") center / contain no-repeat;
+  transition: transform var(--sc-duration-fast) var(--sc-easing-standard);
 }
 sc-official-banner details[open] summary > span:last-child::after {
   transform: rotate(180deg);
+}
+/* As sc-accordion, from a pointer: the chevron turns and the explanation fades in (opacity
+   only). From the keyboard both are instant (MOT-02); reduced motion drops the turn. */
+sc-official-banner details[open] > div {
+  animation: sc-official-banner-fade var(--sc-duration-fast) var(--sc-easing-enter);
+}
+sc-official-banner summary:focus-visible > span:last-child::after {
+  transition: none;
+}
+sc-official-banner details[open]:has(> summary:focus-visible) > div {
+  animation: none;
+}
+@keyframes sc-official-banner-fade {
+  from {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  sc-official-banner summary > span:last-child::after {
+    transition: none;
+  }
 }
 /* The explanation: one column, two from 600px; each item a <p> with a <strong> heading and a
    24px icon at its inline start, under a 1px rule. */

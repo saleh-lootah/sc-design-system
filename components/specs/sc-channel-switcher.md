@@ -30,7 +30,7 @@ Links: `links` (object or JSON) maps each channel to its home URL; `{lang}` beco
 
 ## Motion
 
-From a pointer the panel grows from the trigger's block-end, inline-end corner: opacity and `scale(--sc-scale-enter)` over `duration-base`, `easing-enter`; it fades out over `duration-exit`. From the keyboard both are instant. Reduced motion: opacity only.
+From a pointer the panel grows from the trigger's block-end, inline-end corner: opacity and `scale(--sc-scale-enter)` over `duration-base`, `easing-enter`; it fades out over `duration-exit`. The trigger's chevron turns over `duration-fast` with `easing-standard`. From the keyboard the panel and the chevron are instant (the trigger's `transition: none` does not reach the icon, so the chevron has its own `:focus-visible` rule). Reduced motion: opacity only, and the chevron does not turn.
 
 ## Strings
 

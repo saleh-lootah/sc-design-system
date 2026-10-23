@@ -61,6 +61,20 @@
           "unit": "ms"
         }
       }
+    },
+    "pulse": {
+      "$type": "duration",
+      "$value": {
+        "value": 1200,
+        "unit": "ms"
+      },
+      "$description": "One half-cycle of the loading skeleton's opacity pulse (alternate, linear); stops under reduced motion (emil-design-eng: constant motion is linear; MOT-12 keeps keyframes for the skeleton pulse)",
+      "$extensions": {
+        "reducedMotion": {
+          "value": 0,
+          "unit": "ms"
+        }
+      }
     }
   },
   "easing": {

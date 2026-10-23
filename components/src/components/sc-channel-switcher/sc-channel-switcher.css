@@ -92,6 +92,17 @@
     transform: rotate(180deg);
   }
 
+  /* The trigger's own transition: none (.focus-ring) does not reach the icon: from the keyboard
+     the chevron turns at once, with the panel (MOT-02). Reduced motion: no turn (MOT-15). */
+  .sc-channel-switcher__trigger:focus-visible .sc-channel-switcher__chevron {
+    transition: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sc-channel-switcher__chevron {
+      transition: none;
+    }
+  }
+
   /* Panel: 360 wide, 12px corners, a 1px outline-variant edge and elevation 2, aligned to the
      trigger's inline-end edge, 8 below it. Grows from that corner (MOT-08). */
   .sc-channel-switcher__panel {
