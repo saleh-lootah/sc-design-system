@@ -1,6 +1,6 @@
 import { E2EPage } from '@stencil/core/testing';
 import { describeAxe, expectNoAxeViolations } from '../../test/axe';
-import { newScPage, setPageContext } from '../../test/page';
+import { newScPage, setPageContext, settleTransitions } from '../../test/page';
 import { CHANNELS, axNode, forceColors, inner, token } from '../sc-text-input/field-test';
 
 const GROUP = `
@@ -98,6 +98,8 @@ describe('sc-checkbox-group and sc-checkbox (e2e)', () => {
     const group = await axNode(page, '#g', 'fieldset');
     expect(group!.description).toBe('Error: Select at least one document');
     expect((await axNode(page, 'sc-checkbox', 'input'))!.invalid).toBe('true');
+    // The box's border fades to the error colour (120ms) once the group renders its error.
+    await settleTransitions(page);
     expect(await box(page, 'sc-checkbox', 'getComputedStyle(i).borderTopColor')).toBe(await token(page, 'body', '--sc-color-error'));
     await page.$eval('#g', (el) => el.removeAttribute('error'));
     await page.waitForChanges();

@@ -1,6 +1,6 @@
 import { E2EPage } from '@stencil/core/testing';
 import { describeAxe, expectNoAxeViolations } from '../../test/axe';
-import { newScPage, setPageContext } from '../../test/page';
+import { newScPage, setPageContext, settleTransitions } from '../../test/page';
 import { CHANNELS, axNode, forceColors, inner, token } from '../sc-text-input/field-test';
 
 const radio = (page: E2EPage, sel: string, i: number, expr: string) => inner(page, sel, `((r) => ${expr})(host.querySelectorAll('input[type=radio]')[${i}])`);
@@ -92,6 +92,8 @@ describe('sc-radio-group (e2e)', () => {
     expect(await inner(page, '#g', 'getComputedStyle(q("fieldset")).borderRightWidth')).toBe('4px');
     expect(await radio(page, '#g', 0, 'r.getBoundingClientRect().left > host.querySelector("sc-radio label").getBoundingClientRect().left')).toBe(true);
     expect(await inner(page, '#g', 'q(".sc-field__error .visually-hidden").textContent')).toBe('خطأ: ');
+    // The box's border fades to the error colour (120ms) once the group renders its error.
+    await settleTransitions(page);
     expect(await radio(page, '#g', 0, 'getComputedStyle(r).borderTopColor')).toBe(await token(page, 'body', '--sc-color-error'));
     await page.keyboard.press('Tab');
     await page.keyboard.press('ArrowDown');
