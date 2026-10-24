@@ -813,11 +813,6 @@
     color: var(--sc-color-on-surface-variant);
     font: var(--sc-type-body-large);
   }
-  .home-draft {
-    display: block;
-    max-inline-size: var(--sc-size-measure);
-    margin-block-end: var(--sc-space-40);
-  }
   .home-h2 {
     margin: var(--sc-space-64) 0 var(--sc-space-24);
     font: var(--sc-type-headline-medium);

@@ -412,7 +412,7 @@ function toc(headings, lang) {
 <script>document.currentScript.previousElementSibling.open = matchMedia('(min-width: 1280px)').matches;</script>`;
 }
 
-function layout(page, lang, { head = '', body, headings = [], bodyLang, extraHead = '', bodyAttrs = '' }) {
+function layout(page, lang, { head = '', body, headings = [], bodyLang, extraHead = '', bodyAttrs = '', top = '' }) {
   const t = STRINGS[lang];
   const other = lang === 'en' ? 'ar' : 'en';
   const from = langPath(lang, page.path);
@@ -454,7 +454,7 @@ ${head}</head>
 <body${bodyAttrs}>
 <sc-skip-link href="#main-content"></sc-skip-link>
 <noscript><a class="site-skip" href="#main-content">${esc(t.skip)}</a></noscript>
-<sc-site-header full-from="1280" search-href="${rel(from, langPath(lang, 'search/'))}">
+${top}<sc-site-header full-from="1280" search-href="${rel(from, langPath(lang, 'search/'))}">
   <a slot="name" href="${rel(from, langPath(lang, ''))}">${esc(t.siteName)}</a>
   ${navLinks}
   <sc-language-switch slot="language" appearance="plain" href="${otherHref}"><a slot="fallback" href="${otherHref}" hreflang="${other}" lang="${other}">${esc(t.langOther)}</a></sc-language-switch>
@@ -641,7 +641,6 @@ function renderHome(page, lang) {
   const body = `<div class="home-hero">
 <h1 id="top" class="home-title">${heads.map(([l, d, x]) => `<span lang="${l}" dir="${d}">${esc(x)}</span>`).join(' ')}</h1>
 <p class="home-lede">${esc(t.heroLede)}</p>
-<sc-callout class="home-draft"><span slot="heading">${esc(t.draftHeading)}</span><span>${esc(t.draftText)}</span></sc-callout>
 <sc-channel-network class="home-network" channel="none" eyebrow="${esc(t.networkEyebrow)}"><nav slot="fallback" aria-label="${esc(t.networkLabel)}"><ul>${CHANNEL_NAMES[lang].map((n) => `<li><span>${esc(n)}</span></li>`).join('')}</ul></nav></sc-channel-network>
 </div>
 <h2 id="routes" class="home-h2">${esc(t.routesHeading)}</h2>
@@ -660,7 +659,9 @@ ${route('route-assess', t.routeAssessTitle, t.routeAssessText, [tile('assurance/
 </section>
 ${lang === 'en' ? `<script>{const s=new URLSearchParams(location.search),q=s.get('page');if(q&&/^[a-z0-9-]+$/.test(q))location.replace((s.get('lang')==='ar'?'ar/':'')+(q==='foundations'?'design-system/foundations/':'components/'+q+'/')+location.hash);}</script>` : ''}`;
   // The old playground's links (?page=sc-button&lang=ar) open the component's page (script above).
-  return layout(page, lang, { body });
+  // The draft status sits first on the page, in the environment banner (CHR-13), not in the hero.
+  const top = `<sc-environment-banner><section aria-label="${esc(t.draftLabel)}"><p><strong>${esc(t.draftLabel)}</strong>${esc(t.draftHeading)}. ${esc(t.draftText)}</p></section></sc-environment-banner>\n`;
+  return layout(page, lang, { body, top });
 }
 
 function renderDsHome(page, lang) {

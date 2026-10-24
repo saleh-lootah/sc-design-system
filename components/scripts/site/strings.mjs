@@ -76,6 +76,7 @@ export const STRINGS = {
     heroAr: 'نظام تصميم القنوات المشتركة',
     heroLede:
       'What every service on the seven Government of Dubai channels must do, and the shared components that help you do it. Arabic and English are equal throughout.',
+    draftLabel: 'Draft',
     draftHeading: 'This is a draft for consultation',
     draftText: 'The Service Standard is not binding yet. You can comment on it until the consultation closes.',
     networkEyebrow: 'The seven channels',
@@ -179,6 +180,7 @@ export const STRINGS = {
     heroAr: 'نظام تصميم القنوات المشتركة',
     heroLede:
       'ما يجب أن تحققه كل خدمة على قنوات حكومة دبي السبع، والمكونات المشتركة التي تساعدك على ذلك. العربية والإنجليزية متكافئتان في كل شيء.',
+    draftLabel: 'مسودة',
     draftHeading: 'هذه مسودة للتشاور',
     draftText: 'معيار الخدمات غير ملزم بعد. يمكنك إبداء ملاحظاتك عليه حتى انتهاء فترة التشاور.',
     networkEyebrow: 'القنوات السبع',
