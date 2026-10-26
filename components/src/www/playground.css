@@ -1,8 +1,23 @@
 /* Playground shell. Tokens only, like the components. The example helpers are in demo.css. */
 
+/* The page grid matches the documentation site (site.css): a centred container of
+   --sc-container-max, the grid margin at each breakpoint, a 272px menu and a 48px gap. */
 :root {
   --pg-bar-height: 64px;
-  --pg-nav-width: 240px;
+  --pg-nav-width: 272px;
+  --pg-margin: var(--sc-grid-compact-margin);
+  /* Inline padding that lines the bar's content up with the centred layout below it. */
+  --pg-edge: max(var(--pg-margin), calc((100% - var(--sc-container-max)) / 2 + var(--pg-margin)));
+}
+@media (min-width: 600px) {
+  :root {
+    --pg-margin: var(--sc-grid-medium-margin);
+  }
+}
+@media (min-width: 1024px) {
+  :root {
+    --pg-margin: var(--sc-grid-expanded-margin);
+  }
 }
 
 * {
@@ -29,7 +44,7 @@ html {
   gap: var(--sc-space-24);
   min-block-size: var(--pg-bar-height);
   padding-block: var(--sc-space-8);
-  padding-inline: var(--sc-space-24);
+  padding-inline: var(--pg-edge);
   background: var(--sc-color-surface);
   border-block-end: 0.5px solid var(--sc-color-outline-variant);
   box-shadow: var(--sc-elevation-2);
@@ -117,57 +132,91 @@ html {
 .pg-layout {
   display: grid;
   grid-template-columns: var(--pg-nav-width) minmax(0, 1fr);
-  min-block-size: calc(100vh - var(--pg-bar-height));
+  column-gap: var(--sc-space-48);
+  inline-size: 100%;
+  max-inline-size: var(--sc-container-max);
+  min-block-size: calc(100dvh - var(--pg-bar-height));
+  margin-inline: auto;
+  padding-inline: var(--pg-margin);
 }
 
+/* The menu: the documentation site's side menu (.site-nav in site.css), so both read alike. */
 .pg-nav {
   position: sticky;
   top: var(--pg-bar-height);
   align-self: start;
-  max-block-size: calc(100vh - var(--pg-bar-height));
+  max-block-size: calc(100dvh - var(--pg-bar-height));
   overflow: auto;
   overscroll-behavior: contain;
-  padding: var(--sc-space-24) var(--sc-space-16);
+  padding-block: var(--sc-space-24);
 }
 .pg-nav__group {
-  margin: var(--sc-space-16) var(--sc-space-12) var(--sc-space-4);
-  color: var(--sc-color-on-surface-variant);
-    font: var(--sc-type-label-small);
+  display: flex;
+  align-items: center;
+  min-block-size: var(--sc-size-target-min);
+  margin: var(--sc-space-8) 0 0;
+  padding-inline: var(--sc-space-12);
+  color: var(--sc-color-on-surface);
+  font: var(--sc-type-title-small);
+  font-weight: var(--sc-font-weight-bold);
 }
 .pg-nav__group:first-child {
   margin-block-start: 0;
 }
 .pg-nav ul {
-  margin: 0;
+  margin-block: var(--sc-space-4) 0;
+  margin-inline: var(--sc-space-12) 0;
   padding: 0;
+  border-inline-start: var(--sc-size-border-hairline) solid var(--sc-color-outline-variant);
   list-style: none;
 }
 .pg-nav a {
-  display: block;
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-block-size: var(--sc-size-target-min);
   padding: var(--sc-space-8) var(--sc-space-12);
   border-radius: var(--sc-radius-control);
   color: var(--sc-color-on-surface);
   text-decoration: none;
-  font: var(--sc-type-body-small);
+  font: var(--sc-type-body-medium);
+  transition: background-color var(--sc-duration-fast) var(--sc-easing-hover);
 }
-.pg-nav a:hover {
-  background: var(--sc-color-surface-container);
+@media (hover: hover) and (pointer: fine) {
+  .pg-nav a:hover {
+    background: var(--sc-color-surface-container);
+  }
 }
 .pg-nav a[aria-current='page'] {
   background: var(--sc-color-primary-subtle);
   color: var(--sc-color-on-surface);
-    }
+  font-weight: var(--sc-font-weight-bold);
+}
+/* The indicator bar is the shape change (A11Y-06). */
+.pg-nav a[aria-current='page']::before {
+  content: '';
+  position: absolute;
+  inset-block: var(--sc-space-8);
+  inset-inline-start: 0;
+  inline-size: var(--sc-size-border-accent);
+  border-radius: var(--sc-radius-full);
+  background: var(--sc-color-primary);
+}
+@media (forced-colors: active) {
+  .pg-nav a[aria-current='page']::before {
+    background: CanvasText;
+  }
+}
 
 .pg-main {
-  padding: var(--sc-space-32) var(--sc-space-48) var(--sc-space-96);
-  max-inline-size: 1120px;
+  min-inline-size: 0;
+  padding-block: var(--sc-space-32) var(--sc-space-96);
   outline: none;
 }
 
 @media (max-width: 760px) {
   .pg-bar {
     flex-wrap: wrap;
-    padding-inline: var(--sc-space-16);
   }
   .pg-tools {
     margin-inline-start: 0;
@@ -181,6 +230,6 @@ html {
     padding-block-end: 0;
   }
   .pg-main {
-    padding: var(--sc-space-24) var(--sc-space-16) var(--sc-space-64);
+    padding-block: var(--sc-space-24) var(--sc-space-64);
   }
 }
