@@ -1,0 +1,7 @@
+schema_version: "1.1"
+name: custom-panel-with-tokens
+expected_outcome: |
+  A panel styled only with v2 --sc-* role tokens (no literal colours, no named-channel or palette tokens),
+  flat with a 1px outline-variant edge and 12px radius, type set through --sc-type roles, logical properties
+  only, status shown as an icon plus words, dark mode inherited from the tokens rather than a second palette,
+  and the 15 kept as a Latin digit in Arabic. Ideally it notes that sc-attention-card already covers this.
