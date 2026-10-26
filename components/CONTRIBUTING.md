@@ -6,7 +6,7 @@ Several people build components at the same time. **Only touch your own folders*
 
 ## Commands
 
-All from `design-system/components/`. Node 20+.
+All from `design-system/components/`. Node 22.23.4, 24.22.1 or 26.12.1 or later in its line (CVE-2026-111497; Node 18 and 20 get no fix).
 
 | Command | What it does |
 |---|---|

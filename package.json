@@ -5,7 +5,7 @@
   "description": "Generates the colour palettes and builds platform outputs from the DTCG design tokens in tokens/. No dependencies.",
   "type": "module",
   "engines": {
-    "node": ">=20"
+    "node": "^22.23.4 || ^24.22.1 || >=26.12.1"
   },
   "scripts": {
     "build": "npm run generate && npm run build:tokens && npm run check",

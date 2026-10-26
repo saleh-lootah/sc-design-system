@@ -32,7 +32,7 @@ cd design-system
 npm run build
 ```
 
-Node 20 or later, no dependencies. `npm run build` generates the palettes, builds every output and runs the checks, stopping at the first failure.
+Node 22.23.4, 24.22.1 or 26.12.1 or later in its line (earlier releases bundle a Brotli decoder with CVE-2026-111497, and Node 18 and 20 get no fix); no dependencies. `npm run build` generates the palettes, builds every output and runs the checks, stopping at the first failure.
 
 | Command | What it does |
 |---|---|
