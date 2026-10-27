@@ -11,10 +11,10 @@ This repository (`design-system/` in the Shared Channels workspace) holds the to
 
 The library has two generations, and they look nothing alike.
 
-- **v2** (direction E, "Dubai Design System, evolved") is the current direction. It lives on the `v2` integration branch and the `v2-*` branches cut from it. The "Native" look was retired on 21 October 2026.
-- **v1** ("Native": glass bars, pill buttons, gradient washes) is still on `main` and the live site until the user approves the switch.
+- **v2** (direction E, "Dubai Design System, evolved") is the current direction. It is on `main`, the `v2` integration branch and the `v2-*` branches cut from them. The "Native" look was retired on 21 October 2026.
+- **v1** ("Native": glass bars, pill buttons, gradient washes) survives only on older branches cut before v2 landed.
 
-Run `git branch --show-current`. On `v2` or a `v2-*` branch, everything here applies. On `main` or another v1 branch, `docs/v2/` won't exist: tell the user the work would be built on the retired v1 look and ask whether to move to a v2 branch before going on. Don't build new v1 work unless they say so.
+Check for the v2 docs, not the branch name: run `test -f docs/v2/decisions.md` from the repo root. If the file is there, everything here applies. If it isn't, the branch predates v2: tell the user the work would be built on the retired v1 look and ask whether to move to `main` or a v2 branch before going on. Don't build new v1 work unless they say so.
 
 ## Where the answers are (and which one wins)
 
@@ -139,7 +139,7 @@ For pages and boards that have no automated check, review them by hand:
 
 ## Git habits in this repository
 
-- Work on a `v2-<area>` branch cut from `v2`, in its own worktree.
+- Work on a `v2-<area>` branch cut from `v2` (or `main`), in its own worktree.
 - Commit work in progress instead of using `git stash`: the stash is shared across worktrees (W15).
 - Never push and never merge into `v2` or `main` yourself. The coordinator and the user do that.
 - End commit messages with the co-author line the session gives you.
