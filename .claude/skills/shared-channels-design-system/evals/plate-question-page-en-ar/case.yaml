@@ -1,0 +1,7 @@
+schema_version: "1.1"
+name: plate-question-page-en-ar
+expected_outcome: |
+  Two HTML pages built from v2 sc- components on the Transport channel: an error summary linking to the field,
+  an sc-text-input for the plate number with ltr and an error message that says what to do, one primary submit
+  button with a verb label, the Arabic page with lang="ar" dir="rtl", Latin digits and correct Arabic error wording,
+  sc.css linked, and no hard-coded colours.
